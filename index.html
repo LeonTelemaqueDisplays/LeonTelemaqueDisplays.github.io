@@ -93,6 +93,7 @@ nav{
   display:flex!important;align-items:center;gap:6px;
 }
 .nav-cta svg{width:14px;height:14px;opacity:.7}
+.nav-hamburger{display:none}
 
 /* ── DIAGONAL DIVIDER ── */
 .divider{
@@ -773,27 +774,183 @@ footer{
 }
 
 /* ── RESPONSIVE ── */
+
+/* ── 960px — Tablet ── */
 @media(max-width:960px){
-  .hero{grid-template-columns:1fr;min-height:auto;padding:80px 24px 0}
+  /* Nav */
+  nav{padding:0 24px}
+
+  /* Hero */
+  .hero{grid-template-columns:1fr;min-height:auto;padding:72px 24px 0}
+  .hero-left{padding:48px 0 40px}
   .hero-right{display:none}
   .hero-deco{display:none}
+
+  /* Sections */
+  .section{padding:60px 24px}
+  .cta-wrap{padding:80px 24px}
+
+  /* Work grids */
   .work-grid{grid-template-columns:1fr}
+  .hero-work-grid{grid-template-columns:1fr}
+  .support-grid{grid-template-columns:1fr 1fr}
+
+  /* About */
   .about-grid{grid-template-columns:1fr;gap:48px}
+
+  /* Approach */
   .approach-grid{grid-template-columns:1fr 1fr}
   .acard:nth-child(3n){border-right:1px solid var(--border)}
   .acard:nth-child(2n){border-right:none}
-  .section{padding:60px 24px}
-  .cta-wrap{padding:80px 24px}
-  nav{padding:0 24px}
-  footer{padding:20px 24px}
+
+  /* Snapshots */
+  .snapshots-head{padding:0 24px}
+  .snap-track{padding:0 24px}
+  .snap-nav{padding:0 24px}
+
+  /* Section head — stack on tablet */
+  .section-head{flex-direction:column;align-items:flex-start;gap:20px}
+
+  /* Footer */
+  footer{padding:20px 24px;flex-direction:column;align-items:flex-start;gap:24px}
+  .foot-links{gap:32px}
+
+  /* Modal */
+  .modal-frame{height:420px}
+  .modal-body{padding:24px 24px 32px}
+  .modal-title{font-size:1.3rem}
 }
-@media(max-width:600px){
+
+/* ── 768px — Large phone / small tablet ── */
+@media(max-width:768px){
+  /* Mobile nav — hamburger */
+  .nav-links{
+    display:none;
+    position:fixed;top:56px;left:0;right:0;bottom:0;
+    background:rgba(9,9,9,.97);
+    flex-direction:column;align-items:center;justify-content:center;
+    gap:32px;z-index:999;
+    backdrop-filter:blur(16px);
+  }
+  .nav-links.mobile-open{display:flex}
+  .nav-links li{width:100%;text-align:center}
+  .nav-links a{font-size:1.1rem;letter-spacing:.02em;padding:8px 0;display:block}
+  .nav-cta{display:inline-flex !important;margin:0 auto}
+
+  /* Show hamburger, hide desktop nav links */
+  .nav-hamburger{
+    display:flex;flex-direction:column;justify-content:center;gap:5px;
+    width:36px;height:36px;cursor:pointer;background:none;border:none;padding:4px;
+  }
+  .nav-links:not(.mobile-open){display:none}
+  .nav-hamburger span{
+    display:block;height:1.5px;background:var(--text);
+    transition:transform .2s,opacity .2s;transform-origin:center;
+  }
+  .nav-hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+  .nav-hamburger.open span:nth-child(2){opacity:0}
+  .nav-hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+  /* Hero */
+  .hero-headline{font-size:clamp(2.4rem,8vw,3.2rem)}
+  .hero-eyebrow{font-size:.85rem;margin-bottom:20px}
+  .hero-items{margin-bottom:32px}
+  .hero-item{font-size:.85rem}
+
+  /* Work section wrapper padding */
+  #work{padding:0 16px !important}
+  .hero-work-grid{grid-template-columns:1fr;gap:12px}
+  .support-grid{grid-template-columns:1fr}
+
+  /* pcard body padding */
+  .pcard-body{padding:16px 18px 20px}
+  .pcard-title{font-size:.95rem}
+  .pcard-desc{font-size:.78rem}
+
+  /* Snapshots */
+  .snapshots-head{padding:0 16px;flex-direction:column;align-items:flex-start;gap:12px}
+  .snap-track{padding:0 16px;gap:10px}
+  .snap-card{width:280px}
+  .snap-nav{padding:0 16px}
+
+  /* Section */
+  .section{padding:48px 16px}
+  .cta-wrap{padding:60px 16px}
+  .cta-big{font-size:clamp(1.8rem,7vw,2.8rem)}
+
+  /* About */
+  .about-text{font-size:1rem}
+
+  /* Stats */
+  .stats-boxes{grid-template-columns:1fr 1fr}
+
+  /* Approach */
   .approach-grid{grid-template-columns:1fr}
   .acard:nth-child(n){border-right:none}
+
+  /* Modal */
+  .modal-bg{padding:16px 8px 24px}
+  .modal-frame{height:340px}
+  .modal-body{padding:20px 16px 28px}
+  .modal-title{font-size:1.15rem}
+  .modal-desc{font-size:.82rem}
+  .modal-x{top:10px;right:10px}
+
+  /* Footer */
+  footer{padding:20px 16px}
+  .foot-links{flex-direction:column;gap:20px}
+}
+
+/* ── 480px — Phone portrait ── */
+@media(max-width:480px){
+  /* Nav */
+  nav{padding:0 16px}
+
+  /* Hero */
+  .hero{padding:64px 16px 0}
+  .hero-left{padding:36px 0 32px}
+  .hero-headline{font-size:clamp(2rem,9vw,2.6rem);margin-bottom:28px}
+  .hero-items{margin-bottom:24px}
+  .hero-item{font-size:.8rem;gap:12px}
+  .brand-row{gap:8px}
+  .brand-chip{font-size:.6rem;padding:.15rem .45rem}
+
+  /* Work */
+  #work{padding:0 12px !important}
+  .support-grid{grid-template-columns:1fr}
+  .pcard-body{padding:14px 14px 18px}
+  .pcard-title{font-size:.9rem}
+
+  /* Snapshots */
+  .snapshots-head{padding:0 12px}
+  .snap-track{padding:0 12px}
+  .snap-card{width:260px}
+  .snap-card-img{height:160px}
+  .snap-nav{padding:0 12px}
+
+  /* Section */
+  .section{padding:40px 12px}
+  .cta-wrap{padding:48px 12px}
+  .cta-big{font-size:clamp(1.6rem,8vw,2.2rem);line-height:1.2}
+  .section-head h2{font-size:1.3rem}
+
+  /* Stats */
   .stats-boxes{grid-template-columns:1fr}
-  .stat-box:nth-child(even){border-right:none;border-left:none}
-  .work-grid{grid-template-columns:1fr}
-  .foot-links{gap:28px}
+  .stat-box:nth-child(even){border-right:none}
+  .stat-num{font-size:2rem}
+
+  /* Modal */
+  .modal-bg{padding:8px 0 0}
+  .modal{border-left:none;border-right:none}
+  .modal-frame{height:280px}
+  .modal-body{padding:16px 14px 24px}
+  .modal-title{font-size:1.05rem;letter-spacing:-.015em}
+  .signals-list li{font-size:.78rem}
+  .modal-tools{gap:4px}
+
+  /* Footer */
+  footer{padding:20px 12px}
+  .foot-left{font-size:.68rem}
 }
 </style>
 </head>
@@ -805,18 +962,21 @@ footer{
 <!-- NAV -->
 <nav>
   <a class="logo" href="#">LT</a>
-  <ul class="nav-links">
-    <li><a href="#about">About me</a></li>
-    <li><a href="#work">Work</a></li>
-    <li><a href="#snapshots">Snapshots</a></li>
-    <li><a href="#skills">Skills</a></li>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about" onclick="closeNav()">About me</a></li>
+    <li><a href="#work" onclick="closeNav()">Work</a></li>
+    <li><a href="#snapshots" onclick="closeNav()">Snapshots</a></li>
+    <li><a href="#skills" onclick="closeNav()">Skills</a></li>
     <li>
-      <a href="mailto:leon.telemaque@gmail.com" class="nav-cta">
+      <a href="mailto:leon.telemaque@gmail.com" class="nav-cta" onclick="closeNav()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         Let's talk
       </a>
     </li>
   </ul>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Menu" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <!-- HERO -->
@@ -829,10 +989,10 @@ footer{
     <div class="hero-left">
       <p class="hero-eyebrow">I'm Leon — product analyst</p>
       <h1 class="hero-headline">
-        Building systems that<br>
-        explain <em>why players</em><br>
-        churn — and when<br>
-        to intervene.
+        Building systems that explain<br>
+        <em>how people make decisions</em>—<br>
+        and how better design<br>
+        can change outcomes.
       </h1>
       <ul class="hero-items">
         <li class="hero-item">
@@ -858,124 +1018,283 @@ footer{
     </div>
 
     <div class="hero-right">
-      <!-- Card 1: LiveOps Dashboard -->
-      <div class="hcard" onclick="openModal('churn')">
+      <!-- Card 1: Destiny 2 Raid Architecture -->
+      <div class="hcard" onclick="openModal('raids')">
         <div class="hcard-img">
           <svg viewBox="0 0 280 373" xmlns="http://www.w3.org/2000/svg">
-            <rect width="280" height="373" fill="#0a0f1e"/>
-            <text x="14" y="22" fill="#5b8fff" font-size="8" font-family="monospace" font-weight="bold" opacity=".8">RETENTION TELEMETRY</text>
-            <text x="14" y="33" fill="#333" font-size="6" font-family="monospace">D1 · D7 · D30 cohort signals</text>
-            <!-- heatmap rows -->
-            <rect x="14" y="44" width="22" height="9" fill="#5b8fff" opacity=".7" rx="1.5"/>
-            <rect x="38" y="44" width="22" height="9" fill="#5b8fff" opacity=".3" rx="1.5"/>
-            <rect x="62" y="44" width="22" height="9" fill="#ff4d4d" opacity=".55" rx="1.5"/>
-            <rect x="86" y="44" width="22" height="9" fill="#5b8fff" opacity=".2" rx="1.5"/>
-            <rect x="110" y="44" width="22" height="9" fill="#ff4d4d" opacity=".75" rx="1.5"/>
-            <rect x="134" y="44" width="22" height="9" fill="#5b8fff" opacity=".45" rx="1.5"/>
-            <rect x="158" y="44" width="22" height="9" fill="#ff4d4d" opacity=".35" rx="1.5"/>
-            <rect x="182" y="44" width="22" height="9" fill="#5b8fff" opacity=".6" rx="1.5"/>
-            <rect x="206" y="44" width="22" height="9" fill="#ff4d4d" opacity=".5" rx="1.5"/>
-            <rect x="230" y="44" width="22" height="9" fill="#5b8fff" opacity=".8" rx="1.5"/>
-            <rect x="14" y="55" width="22" height="9" fill="#5b8fff" opacity=".25" rx="1.5"/>
-            <rect x="38" y="55" width="22" height="9" fill="#ff4d4d" opacity=".65" rx="1.5"/>
-            <rect x="62" y="55" width="22" height="9" fill="#5b8fff" opacity=".5" rx="1.5"/>
-            <rect x="86" y="55" width="22" height="9" fill="#5b8fff" opacity=".85" rx="1.5"/>
-            <rect x="110" y="55" width="22" height="9" fill="#5b8fff" opacity=".3" rx="1.5"/>
-            <rect x="134" y="55" width="22" height="9" fill="#ff4d4d" opacity=".5" rx="1.5"/>
-            <rect x="158" y="55" width="22" height="9" fill="#5b8fff" opacity=".65" rx="1.5"/>
-            <rect x="182" y="55" width="22" height="9" fill="#5b8fff" opacity=".25" rx="1.5"/>
-            <rect x="206" y="55" width="22" height="9" fill="#ff4d4d" opacity=".6" rx="1.5"/>
-            <rect x="230" y="55" width="22" height="9" fill="#5b8fff" opacity=".4" rx="1.5"/>
-            <!-- stat pills -->
-            <rect x="14" y="74" width="70" height="20" fill="#0a1220" stroke="#5b8fff" stroke-width=".5" rx="2"/>
-            <text x="49" y="87" text-anchor="middle" fill="#5b8fff" font-size="7.5" font-family="monospace">D7: 42%</text>
-            <rect x="88" y="74" width="70" height="20" fill="#1a0808" stroke="#ff4d4d" stroke-width=".5" rx="2"/>
-            <text x="123" y="87" text-anchor="middle" fill="#ff4d4d" font-size="7.5" font-family="monospace">CHURN: 18%</text>
-            <rect x="162" y="74" width="70" height="20" fill="#0a0a0a" stroke="#333" stroke-width=".5" rx="2"/>
-            <text x="197" y="87" text-anchor="middle" fill="#666" font-size="7.5" font-family="monospace">C4 COHORT</text>
-            <!-- chart area -->
-            <line x1="14" y1="200" x2="256" y2="200" stroke="#1a2040" stroke-width=".5"/>
-            <line x1="14" y1="170" x2="256" y2="170" stroke="#1a2040" stroke-width=".5"/>
-            <line x1="14" y1="140" x2="256" y2="140" stroke="#1a2040" stroke-width=".5"/>
-            <line x1="14" y1="110" x2="256" y2="110" stroke="#1a2040" stroke-width=".5"/>
-            <!-- area -->
-            <polygon points="14,195 50,180 85,168 121,155 157,160 192,138 228,118 256,105 256,200 14,200" fill="#5b8fff" opacity=".07"/>
-            <polyline points="14,195 50,180 85,168 121,155 157,160 192,138 228,118 256,105" fill="none" stroke="#5b8fff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-            <polyline points="14,200 50,196 85,193 121,189 157,191 192,184 228,188 256,195" fill="none" stroke="#ff4d4d" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round" opacity=".55" stroke-dasharray="4 2"/>
-            <!-- key point -->
-            <circle cx="157" cy="160" r="4" fill="#5b8fff"/>
-            <circle cx="157" cy="160" r="8" fill="none" stroke="#5b8fff" stroke-width="1" opacity=".3"/>
-            <rect x="165" y="148" width="88" height="17" fill="#0a1220" stroke="#5b8fff" stroke-width=".5" rx="1.5"/>
-            <text x="171" y="159" fill="#5b8fff" font-size="6.5" font-family="monospace">↑ lifecycle drop</text>
-            <!-- x labels -->
-            <text x="14" y="215" fill="#2a2a2a" font-size="6" font-family="monospace">D1</text>
-            <text x="85" y="215" fill="#2a2a2a" font-size="6" font-family="monospace">D7</text>
-            <text x="157" y="215" fill="#2a2a2a" font-size="6" font-family="monospace">D30</text>
-            <text x="228" y="215" fill="#2a2a2a" font-size="6" font-family="monospace">D90</text>
-            <!-- bottom bars -->
-            <text x="14" y="235" fill="#2a2a2a" font-size="6" font-family="monospace">SESSION HEALTH</text>
-            <rect x="14" y="242" width="22" height="8" fill="#ff4d4d" opacity=".65" rx="1"/>
-            <rect x="38" y="242" width="22" height="8" fill="#ff4d4d" opacity=".45" rx="1"/>
-            <rect x="62" y="242" width="22" height="8" fill="#3de8a0" opacity=".4" rx="1"/>
-            <rect x="86" y="242" width="22" height="8" fill="#5b8fff" opacity=".5" rx="1"/>
-            <rect x="110" y="242" width="22" height="8" fill="#3de8a0" opacity=".6" rx="1"/>
-            <rect x="134" y="242" width="22" height="8" fill="#3de8a0" opacity=".35" rx="1"/>
-            <rect x="158" y="242" width="22" height="8" fill="#5b8fff" opacity=".55" rx="1"/>
-            <rect x="182" y="242" width="22" height="8" fill="#ff4d4d" opacity=".35" rx="1"/>
-            <!-- rage quit indicator -->
-            <rect x="14" y="258" width="120" height="18" fill="#1a0808" stroke="#ff4d4d" stroke-width=".5" rx="2"/>
-            <text x="20" y="270" fill="#ff4d4d" font-size="7" font-family="monospace">⚡ 3 rage quits today</text>
-            <rect x="138" y="258" width="100" height="18" fill="#0a1a0a" stroke="#3de8a0" stroke-width=".5" rx="2"/>
-            <text x="144" y="270" fill="#3de8a0" font-size="7" font-family="monospace">↑ D7 stable</text>
-            <!-- bottom numbers -->
-            <text x="14" y="300" fill="#1a2040" font-size="48" font-family="monospace" font-weight="bold" opacity=".6">42</text>
-            <text x="14" y="355" fill="#1a2040" font-size="48" font-family="monospace" font-weight="bold" opacity=".3">%</text>
+            <defs>
+              <radialGradient id="raidCore" cx="50%" cy="45%" r="45%">
+                <stop offset="0%" stop-color="#c9a84c" stop-opacity=".55"/>
+                <stop offset="45%" stop-color="#4a6faa" stop-opacity=".2"/>
+                <stop offset="100%" stop-color="#020408" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="sealGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#c9a84c" stop-opacity=".6"/>
+                <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="rglow4"><feGaussianBlur stdDeviation="4"/></filter>
+              <filter id="rglow7"><feGaussianBlur stdDeviation="7"/></filter>
+              <filter id="rglow2"><feGaussianBlur stdDeviation="2"/></filter>
+            </defs>
+
+            <!-- Deep space background -->
+            <rect width="280" height="373" fill="#020408"/>
+
+            <!-- Star field -->
+            <circle cx="22" cy="18" r=".8" fill="white" opacity=".5"/>
+            <circle cx="68" cy="32" r=".6" fill="white" opacity=".4"/>
+            <circle cx="130" cy="12" r="1" fill="white" opacity=".55"/>
+            <circle cx="210" cy="28" r=".7" fill="white" opacity=".4"/>
+            <circle cx="258" cy="15" r=".9" fill="white" opacity=".45"/>
+            <circle cx="45" cy="80" r=".6" fill="white" opacity=".3"/>
+            <circle cx="240" cy="65" r=".7" fill="white" opacity=".35"/>
+            <circle cx="18" cy="140" r=".5" fill="white" opacity=".25"/>
+            <circle cx="265" cy="110" r=".8" fill="white" opacity=".3"/>
+            <circle cx="12" cy="220" r=".6" fill="white" opacity=".2"/>
+            <circle cx="270" cy="200" r=".5" fill="white" opacity=".2"/>
+            <circle cx="100" cy="50" r=".5" fill="#c4b5fd" opacity=".5"/>
+            <circle cx="195" cy="42" r=".7" fill="#93c5fd" opacity=".45"/>
+            <circle cx="55" cy="155" r=".6" fill="white" opacity=".25"/>
+            <circle cx="252" cy="160" r=".5" fill="white" opacity=".2"/>
+            <circle cx="140" cy="22" r=".8" fill="#fde68a" opacity=".4"/>
+
+            <!-- Nebula glow behind seal -->
+            <ellipse cx="140" cy="158" rx="110" ry="100" fill="url(#raidCore)" filter="url(#rglow7)"/>
+
+            <!-- Top label -->
+            <text x="14" y="22" fill="rgba(201,168,76,.65)" font-size="7.5" font-family="monospace" font-weight="bold" letter-spacing="1.5">DESTINY 2</text>
+            <line x1="80" y1="17" x2="266" y2="17" stroke="rgba(201,168,76,.15)" stroke-width=".8"/>
+            <text x="14" y="33" fill="rgba(120,140,180,.45)" font-size="6" font-family="monospace" letter-spacing=".5">RAID ONBOARDING ARCHITECTURE</text>
+
+            <!-- Outer orbit ring -->
+            <circle cx="140" cy="158" r="98" fill="none" stroke="rgba(201,168,76,.1)" stroke-width="1"/>
+            <!-- tick marks on outer ring -->
+            <line x1="140" y1="60" x2="140" y2="68" stroke="rgba(201,168,76,.3)" stroke-width="1"/>
+            <line x1="140" y1="248" x2="140" y2="256" stroke="rgba(201,168,76,.3)" stroke-width="1"/>
+            <line x1="42" y1="158" x2="50" y2="158" stroke="rgba(201,168,76,.3)" stroke-width="1"/>
+            <line x1="230" y1="158" x2="238" y2="158" stroke="rgba(201,168,76,.3)" stroke-width="1"/>
+
+            <!-- Middle ring -->
+            <circle cx="140" cy="158" r="72" fill="none" stroke="rgba(201,168,76,.18)" stroke-width="1.5" stroke-dasharray="8 4"/>
+
+            <!-- Inner ring -->
+            <circle cx="140" cy="158" r="48" fill="none" stroke="rgba(201,168,76,.25)" stroke-width="1.2"/>
+
+            <!-- Seal glow -->
+            <circle cx="140" cy="158" r="32" fill="rgba(201,168,76,.08)" filter="url(#rglow4)"/>
+
+            <!-- Raid seal — Destiny-style geometric emblem -->
+            <!-- Outer hex border -->
+            <polygon points="140,126 166,141 166,175 140,190 114,175 114,141" fill="rgba(8,12,24,.9)" stroke="rgba(201,168,76,.6)" stroke-width="1.5"/>
+            <!-- Inner decoration lines -->
+            <line x1="140" y1="126" x2="140" y2="190" stroke="rgba(201,168,76,.15)" stroke-width=".8"/>
+            <line x1="114" y1="141" x2="166" y2="175" stroke="rgba(201,168,76,.15)" stroke-width=".8"/>
+            <line x1="166" y1="141" x2="114" y2="175" stroke="rgba(201,168,76,.15)" stroke-width=".8"/>
+            <!-- Center symbol — stylised ghost/traveller -->
+            <circle cx="140" cy="158" r="14" fill="none" stroke="rgba(201,168,76,.5)" stroke-width="1.2"/>
+            <circle cx="140" cy="158" r="7" fill="rgba(201,168,76,.2)" stroke="rgba(201,168,76,.7)" stroke-width="1"/>
+            <circle cx="140" cy="158" r="3" fill="rgba(201,168,76,.8)"/>
+            <!-- Corner nodes on hex -->
+            <circle cx="140" cy="126" r="2.5" fill="rgba(201,168,76,.7)"/>
+            <circle cx="166" cy="141" r="2.5" fill="rgba(201,168,76,.7)"/>
+            <circle cx="166" cy="175" r="2.5" fill="rgba(201,168,76,.7)"/>
+            <circle cx="140" cy="190" r="2.5" fill="rgba(201,168,76,.7)"/>
+            <circle cx="114" cy="175" r="2.5" fill="rgba(201,168,76,.7)"/>
+            <circle cx="114" cy="141" r="2.5" fill="rgba(201,168,76,.7)"/>
+
+            <!-- Orbiting node — Sherpa -->
+            <circle cx="212" cy="120" r="6" fill="rgba(201,168,76,.15)" stroke="rgba(201,168,76,.6)" stroke-width="1" filter="url(#rglow2)"/>
+            <circle cx="212" cy="120" r="3" fill="rgba(201,168,76,.8)"/>
+            <text x="222" y="117" fill="rgba(201,168,76,.55)" font-size="6" font-family="monospace">SHERPA</text>
+
+            <!-- Orbiting node — Guided player -->
+            <circle cx="75" cy="210" r="5" fill="rgba(120,160,255,.12)" stroke="rgba(120,160,255,.5)" stroke-width="1" filter="url(#rglow2)"/>
+            <circle cx="75" cy="210" r="2.5" fill="rgba(120,160,255,.7)"/>
+            <text x="84" y="207" fill="rgba(120,160,255,.5)" font-size="6" font-family="monospace">GUIDED</text>
+
+            <!-- Connector line between nodes -->
+            <line x1="212" y1="120" x2="166" y2="141" stroke="rgba(201,168,76,.2)" stroke-width=".8" stroke-dasharray="3 3"/>
+            <line x1="75" y1="210" x2="114" y2="175" stroke="rgba(120,160,255,.2)" stroke-width=".8" stroke-dasharray="3 3"/>
+
+            <!-- Two silhouettes below seal — veteran + new guardian -->
+            <!-- Veteran (left) — taller, armoured -->
+            <g transform="translate(92, 218)">
+              <ellipse cx="0" cy="34" rx="10" ry="18" fill="#0a1020" opacity=".9"/>
+              <circle cx="0" cy="12" r="10" fill="#0a1020" opacity=".9"/>
+              <!-- helmet crest -->
+              <rect x="-4" y="2" width="8" height="4" fill="#0f1828" rx="1"/>
+              <!-- shoulder pads -->
+              <ellipse cx="-12" cy="24" rx="6" ry="4" fill="#0d1525" opacity=".9"/>
+              <ellipse cx="12" cy="24" rx="6" ry="4" fill="#0d1525" opacity=".9"/>
+              <!-- gold accent on chest -->
+              <ellipse cx="0" cy="30" rx="4" ry="6" fill="rgba(201,168,76,.2)"/>
+              <!-- arms -->
+              <line x1="-10" y1="28" x2="-20" y2="46" stroke="#0a1020" stroke-width="6" stroke-linecap="round"/>
+              <line x1="10" y1="28" x2="18" y2="44" stroke="#0a1020" stroke-width="6" stroke-linecap="round"/>
+              <!-- legs -->
+              <line x1="-5" y1="52" x2="-8" y2="72" stroke="#0a1020" stroke-width="7" stroke-linecap="round"/>
+              <line x1="5" y1="52" x2="8" y2="72" stroke="#0a1020" stroke-width="7" stroke-linecap="round"/>
+              <!-- glow -->
+              <ellipse cx="0" cy="30" rx="14" ry="20" fill="rgba(201,168,76,.06)" filter="url(#rglow4)"/>
+            </g>
+
+            <!-- New guardian (right) — slightly smaller, less armour -->
+            <g transform="translate(190, 226)">
+              <ellipse cx="0" cy="30" rx="9" ry="16" fill="#080e1c" opacity=".85"/>
+              <circle cx="0" cy="11" r="9" fill="#080e1c" opacity=".85"/>
+              <!-- blue accent -->
+              <ellipse cx="0" cy="26" rx="3" ry="5" fill="rgba(100,150,255,.18)"/>
+              <!-- arms -->
+              <line x1="-9" y1="25" x2="-17" y2="40" stroke="#080e1c" stroke-width="6" stroke-linecap="round"/>
+              <line x1="9" y1="25" x2="15" y2="40" stroke="#080e1c" stroke-width="6" stroke-linecap="round"/>
+              <!-- legs -->
+              <line x1="-4" y1="46" x2="-7" y2="64" stroke="#080e1c" stroke-width="6" stroke-linecap="round"/>
+              <line x1="4" y1="46" x2="7" y2="64" stroke="#080e1c" stroke-width="6" stroke-linecap="round"/>
+              <ellipse cx="0" cy="26" rx="12" ry="18" fill="rgba(100,150,255,.05)" filter="url(#rglow4)"/>
+            </g>
+
+            <!-- Sherpa guidance beam between figures -->
+            <line x1="104" y1="262" x2="188" y2="266" stroke="rgba(201,168,76,.2)" stroke-width="1" stroke-dasharray="4 3"/>
+
+            <!-- Bottom stats panel -->
+            <rect x="0" y="320" width="280" height="53" fill="rgba(4,8,20,.95)"/>
+            <line x1="0" y1="320" x2="280" y2="320" stroke="rgba(201,168,76,.2)" stroke-width="1"/>
+
+            <!-- Stat row -->
+            <text x="14" y="336" fill="rgba(201,168,76,.45)" font-size="6" font-family="monospace" letter-spacing=".8">ABANDONMENT REDUCTION</text>
+            <text x="266" y="336" text-anchor="end" fill="rgba(201,168,76,.8)" font-size="10" font-family="monospace" font-weight="bold">−27pt</text>
+
+            <text x="14" y="352" fill="rgba(120,140,180,.4)" font-size="6" font-family="monospace" letter-spacing=".8">MODELLED COHORT · 500 SESSIONS</text>
+            <text x="266" y="352" text-anchor="end" fill="rgba(120,160,255,.65)" font-size="9" font-family="monospace">56→29%</text>
+
+            <text x="14" y="366" fill="rgba(80,100,150,.35)" font-size="6" font-family="monospace">5-LAYER LEARNING MODEL · DUAL-QUEUE SYSTEM</text>
           </svg>
         </div>
-        <div class="hcard-bar" style="background:linear-gradient(90deg,#5b8fff,#9b6dff)"></div>
+        <div class="hcard-bar" style="background:linear-gradient(90deg,#c9a84c,#4a6faa)"></div>
         <div class="hcard-info">
-          <div class="hcard-name">LiveOps Dashboard</div>
-          <div class="hcard-role">Player Frustration &amp; Churn System</div>
+          <div class="hcard-name">Destiny 2 · Raid Architecture</div>
+          <div class="hcard-role">Endgame Onboarding System</div>
         </div>
       </div>
 
-      <!-- Card 2: Analyst card -->
-      <div class="hcard" onclick="openModal('credit')">
+      <!-- Card 2: DBD Retention -->
+      <div class="hcard" onclick="openModal('retention')">
         <div class="hcard-img">
           <svg viewBox="0 0 280 373" xmlns="http://www.w3.org/2000/svg">
-            <rect width="280" height="373" fill="#0e0a1e"/>
-            <text x="14" y="22" fill="#9b6dff" font-size="8" font-family="monospace" font-weight="bold" opacity=".8">CREDIT DASHBOARD</text>
-            <text x="14" y="33" fill="#333" font-size="6" font-family="monospace">behavioural finance UX</text>
-            <!-- score arc -->
-            <circle cx="140" cy="120" r="72" fill="none" stroke="#1a1030" stroke-width="14"/>
-            <circle cx="140" cy="120" r="72" fill="none" stroke="#9b6dff" stroke-width="14" stroke-dasharray="300 152" stroke-dashoffset="114" stroke-linecap="round" opacity=".75"/>
-            <text x="140" y="114" text-anchor="middle" fill="#f2f2f2" font-size="28" font-weight="700" font-family="-apple-system,sans-serif">742</text>
-            <text x="140" y="130" text-anchor="middle" fill="#9b6dff" font-size="8" font-family="monospace">GOOD ↑</text>
-            <text x="140" y="142" text-anchor="middle" fill="#333" font-size="7" font-family="monospace">+12 this month</text>
-            <!-- why changed box -->
-            <rect x="14" y="208" width="252" height="52" fill="#110e20" stroke="#9b6dff" stroke-width=".5" rx="2"/>
-            <text x="22" y="223" fill="#9b6dff" font-size="7" font-family="monospace">WHY DID THIS CHANGE?</text>
-            <text x="22" y="237" fill="#777" font-size="7.5" font-family="-apple-system,sans-serif">Utilization dropped from 38% → 22%</text>
-            <text x="22" y="252" fill="#3de8a0" font-size="7" font-family="monospace">→ Keep below 30% to maintain score</text>
-            <!-- goal bars -->
-            <text x="14" y="278" fill="#333" font-size="7" font-family="monospace">PAYMENT HISTORY</text>
-            <rect x="14" y="283" width="252" height="5" fill="#1a1030" rx="2"/>
-            <rect x="14" y="283" width="228" height="5" fill="#9b6dff" rx="2" opacity=".65"/>
-            <text x="14" y="303" fill="#333" font-size="7" font-family="monospace">CREDIT UTILIZATION</text>
-            <rect x="14" y="308" width="252" height="5" fill="#1a1030" rx="2"/>
-            <rect x="14" y="308" width="132" height="5" fill="#3de8a0" rx="2" opacity=".65"/>
-            <text x="14" y="328" fill="#333" font-size="7" font-family="monospace">ACCOUNT AGE</text>
-            <rect x="14" y="333" width="252" height="5" fill="#1a1030" rx="2"/>
-            <rect x="14" y="333" width="186" height="5" fill="#9b6dff" rx="2" opacity=".45"/>
-            <!-- nudge -->
-            <rect x="14" y="350" width="252" height="16" fill="#0a140a" stroke="#3de8a0" stroke-width=".5" rx="2"/>
-            <text x="22" y="361" fill="#3de8a0" font-size="7" font-family="monospace">💡 Pay $200 on Card 3 → unlock loan eligibility</text>
+            <defs>
+              <radialGradient id="hFog" cx="50%" cy="100%" r="65%">
+                <stop offset="0%" stop-color="#6b0a0a" stop-opacity=".75"/>
+                <stop offset="55%" stop-color="#2a0404" stop-opacity=".4"/>
+                <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="hHookGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#c84848" stop-opacity=".4"/>
+                <stop offset="100%" stop-color="#c84848" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="hEyeR" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ff1a1a" stop-opacity=".9"/>
+                <stop offset="100%" stop-color="#ff1a1a" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="hblur5"><feGaussianBlur stdDeviation="5"/></filter>
+              <filter id="hblur9"><feGaussianBlur stdDeviation="9"/></filter>
+              <filter id="hblur2"><feGaussianBlur stdDeviation="2"/></filter>
+            </defs>
+
+            <!-- Void background -->
+            <rect width="280" height="373" fill="#040103"/>
+
+            <!-- Sickly moon -->
+            <circle cx="140" cy="52" r="38" fill="rgba(160,145,120,.035)" filter="url(#hblur9)"/>
+            <circle cx="140" cy="52" r="20" fill="rgba(180,165,140,.045)" filter="url(#hblur5)"/>
+            <circle cx="140" cy="52" r="10" fill="rgba(200,185,160,.055)"/>
+
+            <!-- Dead tree — left -->
+            <line x1="28" y1="373" x2="40" y2="200" stroke="#0c0606" stroke-width="11"/>
+            <line x1="40" y1="260" x2="15" y2="220" stroke="#0c0606" stroke-width="6"/>
+            <line x1="40" y1="238" x2="64" y2="208" stroke="#0c0606" stroke-width="5"/>
+            <line x1="40" y1="218" x2="28" y2="198" stroke="#0c0606" stroke-width="4"/>
+            <line x1="28" y1="198" x2="18" y2="182" stroke="#0c0606" stroke-width="3"/>
+            <line x1="28" y1="198" x2="38" y2="183" stroke="#0c0606" stroke-width="3"/>
+            <line x1="15" y1="220" x2="5" y2="208" stroke="#0c0606" stroke-width="3"/>
+            <line x1="64" y1="208" x2="76" y2="195" stroke="#0c0606" stroke-width="3"/>
+            <!-- roots -->
+            <line x1="28" y1="370" x2="8" y2="373" stroke="#0c0606" stroke-width="5"/>
+            <line x1="28" y1="370" x2="48" y2="373" stroke="#0c0606" stroke-width="4"/>
+
+            <!-- Dead tree — right -->
+            <line x1="252" y1="373" x2="240" y2="195" stroke="#0c0606" stroke-width="10"/>
+            <line x1="240" y1="255" x2="263" y2="218" stroke="#0c0606" stroke-width="6"/>
+            <line x1="240" y1="232" x2="218" y2="202" stroke="#0c0606" stroke-width="5"/>
+            <line x1="240" y1="210" x2="254" y2="190" stroke="#0c0606" stroke-width="4"/>
+            <line x1="254" y1="190" x2="262" y2="176" stroke="#0c0606" stroke-width="3"/>
+            <line x1="254" y1="190" x2="244" y2="175" stroke="#0c0606" stroke-width="3"/>
+            <line x1="263" y1="218" x2="274" y2="204" stroke="#0c0606" stroke-width="3"/>
+            <line x1="252" y1="370" x2="268" y2="373" stroke="#0c0606" stroke-width="5"/>
+            <line x1="252" y1="370" x2="234" y2="373" stroke="#0c0606" stroke-width="4"/>
+
+            <!-- Hook glow aura -->
+            <ellipse cx="140" cy="150" rx="55" ry="70" fill="url(#hHookGlow)" filter="url(#hblur9)"/>
+
+            <!-- The hook — centred, portrait format -->
+            <line x1="140" y1="14" x2="140" y2="158" stroke="#5a1414" stroke-width="4.5"/>
+            <line x1="140" y1="14" x2="140" y2="158" stroke="#2e0a0a" stroke-width="2.5"/>
+            <!-- horizontal bar -->
+            <line x1="118" y1="14" x2="162" y2="14" stroke="#4a1010" stroke-width="4.5"/>
+            <!-- hook curve -->
+            <path d="M 140 158 Q 140 196 116 204 Q 92 210 88 196 Q 84 182 98 178" stroke="#5a1414" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+            <path d="M 140 158 Q 140 196 116 204 Q 92 210 88 196 Q 84 182 98 178" stroke="#2e0a0a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <!-- hook tip -->
+            <path d="M 98 178 L 92 172 L 103 170" stroke="#7a1c1c" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+            <!-- Blood drips -->
+            <line x1="140" y1="162" x2="140" y2="183" stroke="#6b0000" stroke-width="1.8" opacity=".75"/>
+            <ellipse cx="140" cy="185" rx="2.5" ry="3.5" fill="#560000" opacity=".65"/>
+            <line x1="116" y1="206" x2="114" y2="224" stroke="#6b0000" stroke-width="1.5" opacity=".6"/>
+            <ellipse cx="114" cy="226" rx="2" ry="3" fill="#560000" opacity=".5"/>
+            <line x1="90" y1="196" x2="88" y2="212" stroke="#6b0000" stroke-width="1.2" opacity=".45"/>
+
+            <!-- Entity eyes — lurking -->
+            <!-- Pair left -->
+            <ellipse cx="52" cy="108" rx="4.5" ry="2.8" fill="url(#hEyeR)" filter="url(#hblur2)"/>
+            <ellipse cx="52" cy="108" rx="2.2" ry="1.4" fill="#ff1a1a"/>
+            <ellipse cx="66" cy="114" rx="3.5" ry="2.2" fill="url(#hEyeR)" filter="url(#hblur2)"/>
+            <ellipse cx="66" cy="114" rx="1.7" ry="1.1" fill="#ff1a1a"/>
+            <!-- Pair right -->
+            <ellipse cx="228" cy="104" rx="4.5" ry="2.8" fill="url(#hEyeR)" filter="url(#hblur2)"/>
+            <ellipse cx="228" cy="104" rx="2.2" ry="1.4" fill="#ff1a1a"/>
+            <ellipse cx="214" cy="110" rx="3.5" ry="2.2" fill="url(#hEyeR)" filter="url(#hblur2)"/>
+            <ellipse cx="214" cy="110" rx="1.7" ry="1.1" fill="#ff1a1a"/>
+            <!-- Single eye — top centre -->
+            <ellipse cx="140" cy="8" rx="5" ry="3" fill="url(#hEyeR)" filter="url(#hblur2)"/>
+            <ellipse cx="140" cy="8" rx="2.5" ry="1.5" fill="#ff2222"/>
+
+            <!-- Crow silhouette -->
+            <path d="M 102 72 L 108 67 L 113 70 L 117 65 L 121 68 L 113 77 Z" fill="#080404"/>
+            <path d="M 102 72 L 93 68 L 96 75 Z" fill="#080404"/>
+
+            <!-- Ground fog -->
+            <rect x="0" y="310" width="280" height="63" fill="#040103"/>
+            <rect x="0" y="295" width="280" height="80" fill="url(#hFog)"/>
+            <ellipse cx="140" cy="360" rx="130" ry="30" fill="rgba(70,5,5,.5)" filter="url(#hblur5)"/>
+
+            <!-- Bottom label band -->
+            <rect x="0" y="318" width="280" height="55" fill="rgba(3,1,1,.9)"/>
+            <line x1="0" y1="318" x2="280" y2="318" stroke="rgba(160,25,25,.3)" stroke-width="1"/>
+
+            <!-- Title -->
+            <text x="140" y="338" text-anchor="middle" fill="#c84848" font-size="12" font-family="'Georgia',serif" font-weight="bold" letter-spacing="2.5">DEAD BY DAYLIGHT</text>
+            <line x1="30" y1="344" x2="105" y2="344" stroke="rgba(160,25,25,.25)" stroke-width=".7"/>
+            <line x1="175" y1="344" x2="250" y2="344" stroke="rgba(160,25,25,.25)" stroke-width=".7"/>
+            <text x="140" y="344" text-anchor="middle" fill="rgba(160,25,25,.45)" font-size="6" font-family="monospace">✦</text>
+
+            <text x="140" y="358" text-anchor="middle" fill="rgba(150,100,100,.5)" font-size="7.5" font-family="monospace" letter-spacing="1">LIFECYCLE DROP-OFF MAPPING</text>
+            <text x="140" y="370" text-anchor="middle" fill="rgba(180,30,30,.4)" font-size="6.5" font-family="monospace">42.3% D7 · 68% CHURN SIGNAL · 4 COHORTS</text>
           </svg>
         </div>
-        <div class="hcard-bar" style="background:linear-gradient(90deg,#9b6dff,#5b8fff)"></div>
+        <div class="hcard-bar" style="background:linear-gradient(90deg,#c84848,#6b0a0a)"></div>
         <div class="hcard-info">
-          <div class="hcard-name">Leon Telemaque</div>
-          <div class="hcard-role">Product Analytics · Toronto</div>
+          <div class="hcard-name">Dead by Daylight · Retention</div>
+          <div class="hcard-role">Lifecycle Drop-Off Mapping</div>
         </div>
       </div>
     </div>
@@ -997,41 +1316,451 @@ footer{
   <!-- HERO PROJECTS -->
   <div class="hero-work-grid" style="padding-bottom:0">
 
-    <!-- P1: Frustration & Churn LiveOps — HERO -->
+    <!-- Marvel Rivals — HERO (coming soon) -->
+    <div class="pcard" onclick="openModal('marvel')" style="opacity:.75;">
+      <div class="pcard-preview" style="background:linear-gradient(135deg,#0a0c18 0%,#10121e 60%,#0c0e1a 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+          <defs>
+            <radialGradient id="clashCore" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity=".95"/>
+              <stop offset="15%" stop-color="#ffe066" stop-opacity=".85"/>
+              <stop offset="40%" stop-color="#e85d20" stop-opacity=".6"/>
+              <stop offset="70%" stop-color="#1a3aaa" stop-opacity=".3"/>
+              <stop offset="100%" stop-color="#050815" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="blueTeamGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#4488ff" stop-opacity=".7"/>
+              <stop offset="100%" stop-color="#4488ff" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="redTeamGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff3333" stop-opacity=".6"/>
+              <stop offset="100%" stop-color="#ff3333" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="mblur6">
+              <feGaussianBlur stdDeviation="6"/>
+            </filter>
+            <filter id="mblur12">
+              <feGaussianBlur stdDeviation="12"/>
+            </filter>
+            <filter id="mblur3">
+              <feGaussianBlur stdDeviation="3"/>
+            </filter>
+            <filter id="mblur2">
+              <feGaussianBlur stdDeviation="2"/>
+            </filter>
+          </defs>
+
+          <!-- Background — deep space-city -->
+          <rect width="680" height="400" fill="#040610"/>
+
+          <!-- City skyline silhouette — distant -->
+          <rect x="0" y="280" width="680" height="120" fill="#060812"/>
+          <rect x="20" y="240" width="30" height="60" fill="#060812"/>
+          <rect x="55" y="255" width="22" height="45" fill="#060812"/>
+          <rect x="80" y="230" width="35" height="70" fill="#060812"/>
+          <rect x="120" y="248" width="18" height="52" fill="#060812"/>
+          <rect x="560" y="245" width="30" height="55" fill="#060812"/>
+          <rect x="595" y="232" width="25" height="68" fill="#060812"/>
+          <rect x="625" y="250" width="20" height="50" fill="#060812"/>
+          <rect x="648" y="238" width="32" height="62" fill="#060812"/>
+
+          <!-- Building windows — tiny lights -->
+          <rect x="26" y="244" width="4" height="3" fill="rgba(255,220,100,.3)" rx="1"/>
+          <rect x="34" y="250" width="4" height="3" fill="rgba(100,180,255,.3)" rx="1"/>
+          <rect x="86" y="236" width="4" height="3" fill="rgba(255,220,100,.25)" rx="1"/>
+          <rect x="95" y="244" width="4" height="3" fill="rgba(255,220,100,.2)" rx="1"/>
+          <rect x="601" y="238" width="4" height="3" fill="rgba(100,180,255,.3)" rx="1"/>
+          <rect x="610" y="246" width="4" height="3" fill="rgba(255,220,100,.25)" rx="1"/>
+          <rect x="654" y="244" width="4" height="3" fill="rgba(100,180,255,.3)" rx="1"/>
+
+          <!-- Speed lines radiating from clash point (340, 185) — going outward -->
+          <!-- Blue team side — left -->
+          <line x1="340" y1="185" x2="30" y2="50" stroke="rgba(80,140,255,.18)" stroke-width="1.5"/>
+          <line x1="340" y1="185" x2="0" y2="140" stroke="rgba(80,140,255,.14)" stroke-width="1.2"/>
+          <line x1="340" y1="185" x2="10" y2="200" stroke="rgba(80,140,255,.16)" stroke-width="1.2"/>
+          <line x1="340" y1="185" x2="0" y2="260" stroke="rgba(80,140,255,.12)" stroke-width="1"/>
+          <line x1="340" y1="185" x2="50" y2="340" stroke="rgba(80,140,255,.1)" stroke-width="1"/>
+          <line x1="340" y1="185" x2="150" y2="0" stroke="rgba(80,140,255,.12)" stroke-width="1"/>
+          <line x1="340" y1="185" x2="80" y2="0" stroke="rgba(80,140,255,.1)" stroke-width="1"/>
+
+          <!-- Red/gold team side — right -->
+          <line x1="340" y1="185" x2="650" y2="50" stroke="rgba(255,140,30,.18)" stroke-width="1.5"/>
+          <line x1="340" y1="185" x2="680" y2="130" stroke="rgba(255,140,30,.14)" stroke-width="1.2"/>
+          <line x1="340" y1="185" x2="680" y2="210" stroke="rgba(255,140,30,.16)" stroke-width="1.2"/>
+          <line x1="340" y1="185" x2="680" y2="280" stroke="rgba(255,140,30,.12)" stroke-width="1"/>
+          <line x1="340" y1="185" x2="530" y2="350" stroke="rgba(255,140,30,.1)" stroke-width="1"/>
+          <line x1="340" y1="185" x2="520" y2="0" stroke="rgba(255,140,30,.12)" stroke-width="1"/>
+          <line x1="340" y1="185" x2="620" y2="0" stroke="rgba(255,140,30,.1)" stroke-width="1"/>
+
+          <!-- Blue team aura — left -->
+          <ellipse cx="160" cy="185" rx="120" ry="140" fill="url(#blueTeamGlow)" filter="url(#mblur12)"/>
+
+          <!-- Red/gold team aura — right -->
+          <ellipse cx="520" cy="185" rx="120" ry="140" fill="url(#redTeamGlow)" filter="url(#mblur12)"/>
+
+          <!-- Hero silhouettes — BLUE TEAM (left) -->
+          <!-- Hero 1 — central, crouching combat pose -->
+          <g transform="translate(130, 110)">
+            <!-- body -->
+            <ellipse cx="0" cy="55" rx="18" ry="28" fill="#0a1535" opacity=".9"/>
+            <!-- head -->
+            <circle cx="0" cy="22" r="14" fill="#0a1535" opacity=".9"/>
+            <!-- cape/wing left -->
+            <path d="M -18 40 Q -45 60 -38 90 Q -20 75 -18 65 Z" fill="#0d1a40" opacity=".85"/>
+            <!-- arm raised -->
+            <line x1="-18" y1="45" x2="-38" y2="25" stroke="#0a1535" stroke-width="8" stroke-linecap="round" opacity=".9"/>
+            <!-- energy hand glow -->
+            <circle cx="-38" cy="25" r="7" fill="rgba(80,150,255,.6)" filter="url(#mblur3)"/>
+            <circle cx="-38" cy="25" r="3" fill="rgba(180,220,255,.8)"/>
+            <!-- legs -->
+            <line x1="-8" y1="83" x2="-14" y2="110" stroke="#0a1535" stroke-width="9" stroke-linecap="round" opacity=".9"/>
+            <line x1="8" y1="83" x2="12" y2="108" stroke="#0a1535" stroke-width="9" stroke-linecap="round" opacity=".9"/>
+            <!-- team colour accent -->
+            <ellipse cx="0" cy="48" rx="6" ry="8" fill="rgba(80,140,255,.35)"/>
+          </g>
+
+          <!-- Hero 2 — blue team, left back -->
+          <g transform="translate(68, 130)" opacity=".7">
+            <ellipse cx="0" cy="50" rx="14" ry="22" fill="#081228"/>
+            <circle cx="0" cy="20" r="11" fill="#081228"/>
+            <!-- shield suggestion -->
+            <path d="M -16 30 Q -22 50 -16 70 Q -8 60 -8 48 Z" fill="#0d1e45"/>
+            <line x1="16" y1="38" x2="30" y2="20" stroke="#081228" stroke-width="7" stroke-linecap="round"/>
+            <line x1="-8" y1="72" x2="-12" y2="96" stroke="#081228" stroke-width="7" stroke-linecap="round"/>
+            <line x1="8" y1="72" x2="10" y2="95" stroke="#081228" stroke-width="7" stroke-linecap="round"/>
+          </g>
+
+          <!-- Hero silhouettes — RED/GOLD TEAM (right) -->
+          <!-- Hero 3 — central, attacking pose -->
+          <g transform="translate(550, 108)">
+            <ellipse cx="0" cy="55" rx="18" ry="28" fill="#2a0808" opacity=".9"/>
+            <circle cx="0" cy="22" r="14" fill="#2a0808" opacity=".9"/>
+            <!-- armour shoulder -->
+            <path d="M 18 35 Q 42 28 45 50 Q 35 58 18 52 Z" fill="#1f0a0a" opacity=".9"/>
+            <!-- arm blasting forward -->
+            <line x1="18" y1="45" x2="42" y2="30" stroke="#2a0808" stroke-width="8" stroke-linecap="round" opacity=".9"/>
+            <!-- repulsor blast -->
+            <circle cx="46" cy="28" r="9" fill="rgba(255,120,30,.55)" filter="url(#mblur3)"/>
+            <circle cx="46" cy="28" r="4" fill="rgba(255,220,100,.85)"/>
+            <!-- legs -->
+            <line x1="-8" y1="83" x2="-12" y2="110" stroke="#2a0808" stroke-width="9" stroke-linecap="round" opacity=".9"/>
+            <line x1="8" y1="83" x2="14" y2="108" stroke="#2a0808" stroke-width="9" stroke-linecap="round" opacity=".9"/>
+            <!-- team colour accent -->
+            <ellipse cx="0" cy="48" rx="6" ry="8" fill="rgba(255,80,30,.3)"/>
+          </g>
+
+          <!-- Hero 4 — red team, right back -->
+          <g transform="translate(610, 125)" opacity=".7">
+            <ellipse cx="0" cy="50" rx="14" ry="22" fill="#1e0606"/>
+            <circle cx="0" cy="20" r="11" fill="#1e0606"/>
+            <!-- cape -->
+            <path d="M -14 35 Q -18 55 -14 75 Q -6 62 -6 50 Z" fill="#2a0808"/>
+            <line x1="-16" y1="38" x2="-28" y2="20" stroke="#1e0606" stroke-width="7" stroke-linecap="round"/>
+            <line x1="-8" y1="72" x2="-10" y2="96" stroke="#1e0606" stroke-width="7" stroke-linecap="round"/>
+            <line x1="8" y1="72" x2="12" y2="95" stroke="#1e0606" stroke-width="7" stroke-linecap="round"/>
+          </g>
+
+          <!-- Energy beams converging to clash point -->
+          <!-- Blue beam -->
+          <path d="M 175 175 Q 260 182 330 185" stroke="rgba(80,160,255,.7)" stroke-width="8" fill="none" stroke-linecap="round" filter="url(#mblur2)"/>
+          <path d="M 175 175 Q 260 182 330 185" stroke="rgba(180,220,255,.9)" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+          <!-- Red/gold beam -->
+          <path d="M 505 178 Q 420 183 350 185" stroke="rgba(255,120,30,.65)" stroke-width="8" fill="none" stroke-linecap="round" filter="url(#mblur2)"/>
+          <path d="M 505 178 Q 420 183 350 185" stroke="rgba(255,220,100,.85)" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+          <!-- CLASH EXPLOSION — core -->
+          <circle cx="340" cy="185" r="55" fill="url(#clashCore)" filter="url(#mblur6)"/>
+          <circle cx="340" cy="185" r="30" fill="rgba(255,240,180,.15)" filter="url(#mblur3)"/>
+          <!-- Bright core -->
+          <circle cx="340" cy="185" r="10" fill="rgba(255,255,255,.7)"/>
+          <circle cx="340" cy="185" r="5" fill="white"/>
+
+          <!-- Clash shards -->
+          <line x1="340" y1="185" x2="320" y2="155" stroke="rgba(255,240,160,.6)" stroke-width="2"/>
+          <line x1="340" y1="185" x2="360" y2="152" stroke="rgba(255,240,160,.5)" stroke-width="2"/>
+          <line x1="340" y1="185" x2="310" y2="210" stroke="rgba(255,240,160,.5)" stroke-width="1.5"/>
+          <line x1="340" y1="185" x2="370" y2="208" stroke="rgba(255,240,160,.5)" stroke-width="1.5"/>
+          <line x1="340" y1="185" x2="295" y2="175" stroke="rgba(180,220,255,.55)" stroke-width="1.5"/>
+          <line x1="340" y1="185" x2="385" y2="172" stroke="rgba(255,160,50,.55)" stroke-width="1.5"/>
+
+          <!-- Team HUD indicators — left -->
+          <rect x="18" y="18" width="100" height="28" fill="rgba(5,10,30,.8)" rx="3" stroke="rgba(80,140,255,.3)" stroke-width="1"/>
+          <circle cx="32" cy="32" r="7" fill="rgba(80,140,255,.25)" stroke="rgba(80,140,255,.5)" stroke-width="1"/>
+          <text x="32" y="36" text-anchor="middle" fill="rgba(80,180,255,.8)" font-size="7" font-family="monospace" font-weight="bold">B</text>
+          <text x="46" y="27" fill="rgba(140,180,255,.7)" font-size="6.5" font-family="monospace">TEAM BLUE</text>
+          <text x="46" y="38" fill="rgba(80,140,255,.6)" font-size="6" font-family="monospace">MMR: 2,340</text>
+
+          <!-- Team HUD indicators — right -->
+          <rect x="562" y="18" width="100" height="28" fill="rgba(20,5,5,.8)" rx="3" stroke="rgba(255,80,30,.3)" stroke-width="1"/>
+          <circle cx="576" cy="32" r="7" fill="rgba(255,60,30,.2)" stroke="rgba(255,80,30,.5)" stroke-width="1"/>
+          <text x="576" y="36" text-anchor="middle" fill="rgba(255,120,50,.8)" font-size="7" font-family="monospace" font-weight="bold">R</text>
+          <text x="590" y="27" fill="rgba(255,160,100,.7)" font-size="6.5" font-family="monospace">TEAM RED</text>
+          <text x="590" y="38" fill="rgba(255,100,50,.6)" font-size="6" font-family="monospace">MMR: 2,318</text>
+
+          <!-- Match stat bar — top centre -->
+          <rect x="270" y="12" width="140" height="20" fill="rgba(8,10,22,.85)" rx="2" stroke="rgba(255,220,80,.2)" stroke-width=".8"/>
+          <text x="340" y="26" text-anchor="middle" fill="rgba(255,220,100,.7)" font-size="7.5" font-family="monospace" letter-spacing="1">MATCH IN PROGRESS</text>
+
+          <!-- Label band -->
+          <rect x="0" y="330" width="680" height="70" fill="rgba(4,6,16,.92)"/>
+          <line x1="0" y1="330" x2="680" y2="330" stroke="rgba(80,120,255,.2)" stroke-width="1"/>
+
+          <!-- Marvel M shield suggestion -->
+          <path d="M 320 347 L 326 344 L 340 350 L 354 344 L 360 347 L 360 358 Q 340 368 320 358 Z" fill="rgba(200,20,20,.7)" stroke="rgba(255,60,60,.4)" stroke-width=".8"/>
+          <text x="340" y="356" text-anchor="middle" fill="rgba(255,255,255,.6)" font-size="6" font-family="monospace" font-weight="bold">M</text>
+
+          <text x="340" y="375" text-anchor="middle" fill="rgba(220,190,255,.75)" font-size="14" font-family="'Georgia',serif" font-weight="bold" letter-spacing="3">MARVEL RIVALS</text>
+          <line x1="100" y1="380" x2="240" y2="380" stroke="rgba(80,120,255,.25)" stroke-width=".8"/>
+          <line x1="440" y1="380" x2="580" y2="380" stroke="rgba(255,80,30,.25)" stroke-width=".8"/>
+          <text x="340" y="380" text-anchor="middle" fill="rgba(180,140,255,.4)" font-size="7" font-family="monospace">✦</text>
+          <text x="340" y="394" text-anchor="middle" fill="rgba(130,140,180,.45)" font-size="8.5" font-family="monospace" letter-spacing="1">SESSION EQUITY · MATCHMAKING FAIRNESS · MMR CALIBRATION</text>
+        </svg>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title" style="color:var(--muted);">Session Equity &amp; Matchmaking Fairness — Marvel Rivals <span style="font-family:var(--mono);font-size:.62rem;color:var(--muted);border:1px solid var(--border2);padding:.1rem .4rem;margin-left:6px;vertical-align:middle;">IN PROGRESS</span></h3>
+        <p class="pcard-desc">Designing the systems that make every session feel fair. MMR calibration, role-queue balance, and session equity — the behavioural layer that determines whether players stay or churn after a single match.</p>
+        <div class="pcard-tags">
+          <span class="ptag ptag-blue">Gaming · Systems</span>
+          <span class="ptag">Matchmaking</span>
+          <span class="ptag">LiveOps</span>
+          <span class="ptag">Behavioural Systems</span>
+        </div>
+      </div>
+    </div>
+
+  <!-- P1: Frustration & Churn LiveOps — HERO -->
     <div class="pcard" onclick="openModal('churn')">
       <div class="pcard-preview">
         <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-          <rect width="680" height="400" fill="#090e1e"/>
-          <line x1="0" y1="80" x2="680" y2="80" stroke="#111a30" stroke-width="1"/>
-          <line x1="0" y1="160" x2="680" y2="160" stroke="#111a30" stroke-width="1"/>
-          <line x1="0" y1="240" x2="680" y2="240" stroke="#111a30" stroke-width="1"/>
-          <line x1="0" y1="320" x2="680" y2="320" stroke="#111a30" stroke-width="1"/>
-          <line x1="120" y1="0" x2="120" y2="400" stroke="#111a30" stroke-width="1"/>
-          <line x1="240" y1="0" x2="240" y2="400" stroke="#111a30" stroke-width="1"/>
-          <line x1="360" y1="0" x2="360" y2="400" stroke="#111a30" stroke-width="1"/>
-          <line x1="480" y1="0" x2="480" y2="400" stroke="#111a30" stroke-width="1"/>
-          <line x1="600" y1="0" x2="600" y2="400" stroke="#111a30" stroke-width="1"/>
-          <polygon points="20,340 80,300 160,278 240,255 320,265 400,220 480,178 560,145 640,120 640,400 20,400" fill="#5b8fff" opacity=".05"/>
-          <polyline points="20,340 80,300 160,278 240,255 320,265 400,220 480,178 560,145 640,120" fill="none" stroke="#5b8fff" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
-          <polyline points="20,375 80,362 160,355 240,345 320,350 400,337 480,343 560,350 640,360" fill="none" stroke="#ff4d4d" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity=".6" stroke-dasharray="6 3"/>
-          <circle cx="320" cy="265" r="6" fill="#5b8fff"/>
-          <circle cx="320" cy="265" r="13" fill="none" stroke="#5b8fff" stroke-width="1" opacity=".3"/>
-          <rect x="335" y="242" width="148" height="22" fill="#0a1220" stroke="#5b8fff" stroke-width=".5" rx="2" opacity=".92"/>
-          <text x="343" y="256" fill="#5b8fff" font-size="10" font-family="monospace">↑ lifecycle drop-off</text>
-          <text x="20" y="24" fill="#5b8fff" font-size="11" font-family="monospace" font-weight="bold">PLAYER RETENTION + FRUSTRATION SIGNALS</text>
-          <text x="20" y="40" fill="#333" font-size="9" font-family="monospace">PostgreSQL · Streamlit · LiveOps Telemetry</text>
-          <rect x="504" y="10" width="76" height="38" fill="#0a1220" stroke="#5b8fff" stroke-width=".5" rx="2"/>
-          <text x="542" y="26" text-anchor="middle" fill="#555" font-size="8" font-family="monospace">D7 RET</text>
-          <text x="542" y="40" text-anchor="middle" fill="#5b8fff" font-size="14" font-family="monospace" font-weight="bold">42%</text>
-          <rect x="586" y="10" width="80" height="38" fill="#1a0808" stroke="#ff4d4d" stroke-width=".5" rx="2"/>
-          <text x="626" y="26" text-anchor="middle" fill="#555" font-size="8" font-family="monospace">CHURN</text>
-          <text x="626" y="40" text-anchor="middle" fill="#ff4d4d" font-size="12" font-family="monospace" font-weight="bold">HIGH ●</text>
-          <text x="20" y="370" fill="#1a2040" font-size="6" font-family="monospace">D1</text>
-          <text x="115" y="370" fill="#1a2040" font-size="6" font-family="monospace">D7</text>
-          <text x="235" y="370" fill="#1a2040" font-size="6" font-family="monospace">D14</text>
-          <text x="355" y="370" fill="#1a2040" font-size="6" font-family="monospace">D30</text>
-          <text x="475" y="370" fill="#1a2040" font-size="6" font-family="monospace">D60</text>
-          <text x="595" y="370" fill="#1a2040" font-size="6" font-family="monospace">D90</text>
+          <defs>
+            <radialGradient id="alertGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff2020" stop-opacity=".5"/>
+              <stop offset="100%" stop-color="#ff2020" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="amberGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#f59e0b" stop-opacity=".4"/>
+              <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="cblur4"><feGaussianBlur stdDeviation="4"/></filter>
+            <filter id="cblur8"><feGaussianBlur stdDeviation="8"/></filter>
+            <filter id="cblur2"><feGaussianBlur stdDeviation="2"/></filter>
+          </defs>
+
+          <!-- Background — deep command black -->
+          <rect width="680" height="400" fill="#04060f"/>
+
+          <!-- Subtle scan-line texture -->
+          <line x1="0" y1="20" x2="680" y2="20" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="40" x2="680" y2="40" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="60" x2="680" y2="60" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="80" x2="680" y2="80" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="100" x2="680" y2="100" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="120" x2="680" y2="120" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="140" x2="680" y2="140" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="160" x2="680" y2="160" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="180" x2="680" y2="180" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="200" x2="680" y2="200" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="220" x2="680" y2="220" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="240" x2="680" y2="240" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="260" x2="680" y2="260" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="280" x2="680" y2="280" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="300" x2="680" y2="300" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="320" x2="680" y2="320" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="340" x2="680" y2="340" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="360" x2="680" y2="360" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="380" x2="680" y2="380" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+          <line x1="0" y1="400" x2="680" y2="400" stroke="rgba(255,255,255,.012)" stroke-width="2"/>
+
+          <!-- Top nav bar — war room terminal -->
+          <rect x="0" y="0" width="680" height="32" fill="#060912"/>
+          <line x1="0" y1="32" x2="680" y2="32" stroke="rgba(255,50,50,.25)" stroke-width="1"/>
+          <circle cx="16" cy="16" r="5" fill="rgba(255,50,50,.7)"/>
+          <circle cx="16" cy="16" r="3" fill="#ff2020"/>
+          <text x="28" y="20" fill="rgba(255,50,50,.85)" font-size="8.5" font-family="monospace" font-weight="bold" letter-spacing="1.5">LIVEOPS TELEMETRY — CHURN DETECTION ACTIVE</text>
+          <text x="580" y="12" fill="rgba(100,120,180,.5)" font-size="6.5" font-family="monospace">SYS:OK</text>
+          <text x="580" y="24" fill="rgba(100,120,180,.5)" font-size="6.5" font-family="monospace">10,012 PLAYERS</text>
+
+          <!-- Left panel — player feed -->
+          <rect x="0" y="32" width="200" height="248" fill="#060810"/>
+          <line x1="200" y1="32" x2="200" y2="280" stroke="rgba(80,100,160,.2)" stroke-width="1"/>
+          <text x="12" y="48" fill="rgba(80,120,200,.6)" font-size="7" font-family="monospace" letter-spacing="1">ACTIVE SESSIONS</text>
+
+          <!-- Player row 1 — safe -->
+          <rect x="8" y="54" width="184" height="28" fill="rgba(20,40,80,.4)" rx="2"/>
+          <circle cx="24" cy="68" r="5" fill="rgba(60,180,100,.5)" stroke="rgba(60,180,100,.8)" stroke-width="1"/>
+          <text x="36" y="65" fill="rgba(180,200,220,.7)" font-size="7" font-family="monospace">PLR_4821</text>
+          <text x="36" y="75" fill="rgba(60,180,100,.6)" font-size="6" font-family="monospace">ENGAGED · 48 matches</text>
+          <text x="165" y="70" text-anchor="end" fill="rgba(60,180,100,.7)" font-size="7" font-family="monospace">SAFE</text>
+
+          <!-- Player row 2 — watch -->
+          <rect x="8" y="86" width="184" height="28" fill="rgba(40,30,10,.4)" rx="2"/>
+          <circle cx="24" cy="100" r="5" fill="rgba(245,158,11,.5)" stroke="rgba(245,158,11,.8)" stroke-width="1"/>
+          <text x="36" y="97" fill="rgba(180,200,220,.7)" font-size="7" font-family="monospace">PLR_3817</text>
+          <text x="36" y="107" fill="rgba(245,158,11,.6)" font-size="6" font-family="monospace">LAPSING · 3-day gap</text>
+          <text x="165" y="102" text-anchor="end" fill="rgba(245,158,11,.8)" font-size="7" font-family="monospace">WATCH</text>
+
+          <!-- Player row 3 — CRITICAL (pulsing red) -->
+          <rect x="8" y="118" width="184" height="28" fill="rgba(80,10,10,.5)" rx="2" stroke="rgba(255,40,40,.3)" stroke-width="1"/>
+          <circle cx="24" cy="132" r="6" fill="rgba(255,40,40,.6)" filter="url(#cblur2)"/>
+          <circle cx="24" cy="132" r="4" fill="#ff2020"/>
+          <text x="36" y="129" fill="rgba(255,150,150,.85)" font-size="7" font-family="monospace" font-weight="bold">PLR_2847</text>
+          <text x="36" y="139" fill="rgba(255,80,80,.7)" font-size="6" font-family="monospace">LOSS STREAK · 5 consecutive</text>
+          <text x="165" y="134" text-anchor="end" fill="#ff2020" font-size="7" font-family="monospace" font-weight="bold">CRITICAL</text>
+
+          <!-- Player row 4 — at risk -->
+          <rect x="8" y="150" width="184" height="28" fill="rgba(60,15,10,.35)" rx="2"/>
+          <circle cx="24" cy="164" r="5" fill="rgba(255,80,40,.4)" stroke="rgba(255,80,40,.6)" stroke-width="1"/>
+          <text x="36" y="161" fill="rgba(180,200,220,.6)" font-size="7" font-family="monospace">PLR_1104</text>
+          <text x="36" y="171" fill="rgba(255,100,60,.55)" font-size="6" font-family="monospace">7d inactive · NEW player</text>
+          <text x="165" y="166" text-anchor="end" fill="rgba(255,80,40,.75)" font-size="7" font-family="monospace">AT RISK</text>
+
+          <!-- Player row 5 -->
+          <rect x="8" y="182" width="184" height="28" fill="rgba(20,40,80,.3)" rx="2"/>
+          <circle cx="24" cy="196" r="5" fill="rgba(60,180,100,.4)" stroke="rgba(60,180,100,.6)" stroke-width="1"/>
+          <text x="36" y="193" fill="rgba(180,200,220,.5)" font-size="7" font-family="monospace">PLR_0559</text>
+          <text x="36" y="203" fill="rgba(60,180,100,.5)" font-size="6" font-family="monospace">HIGH ENG · 214 matches</text>
+          <text x="165" y="198" text-anchor="end" fill="rgba(60,180,100,.6)" font-size="7" font-family="monospace">SAFE</text>
+
+          <!-- Player row 6 — churned -->
+          <rect x="8" y="214" width="184" height="28" fill="rgba(20,10,10,.3)" rx="2"/>
+          <circle cx="24" cy="228" r="5" fill="rgba(80,80,80,.3)" stroke="rgba(80,80,80,.4)" stroke-width="1"/>
+          <text x="36" y="225" fill="rgba(100,110,130,.5)" font-size="7" font-family="monospace">PLR_5509</text>
+          <text x="36" y="235" fill="rgba(80,80,80,.5)" font-size="6" font-family="monospace">CHURNED · session ended</text>
+          <text x="165" y="230" text-anchor="end" fill="rgba(80,80,80,.5)" font-size="7" font-family="monospace">OFFLINE</text>
+
+          <!-- Left panel bottom stats -->
+          <line x1="8" y1="250" x2="192" y2="250" stroke="rgba(80,100,160,.15)" stroke-width="1"/>
+          <text x="12" y="263" fill="rgba(80,100,160,.5)" font-size="6.5" font-family="monospace">AT-RISK: 3 players</text>
+          <text x="12" y="274" fill="rgba(80,100,160,.45)" font-size="6.5" font-family="monospace">INTERVENTION WINDOW OPEN</text>
+
+          <!-- Main panel — PLR_2847 deep dive -->
+          <rect x="200" y="32" width="480" height="248" fill="#050810"/>
+
+          <!-- Alert glow behind critical player panel -->
+          <ellipse cx="440" cy="155" rx="200" ry="100" fill="url(#alertGlow)" filter="url(#cblur8)" opacity=".5"/>
+
+          <!-- RAGE QUIT PREDICTED banner -->
+          <rect x="215" y="42" width="450" height="30" fill="rgba(180,15,15,.15)" rx="2" stroke="rgba(255,30,30,.5)" stroke-width="1"/>
+          <text x="440" y="61" text-anchor="middle" fill="#ff2020" font-size="11" font-family="monospace" font-weight="bold" letter-spacing="2">⚠  RAGE QUIT PREDICTED — PLR_2847  ⚠</text>
+
+          <!-- Engagement score gauge -->
+          <text x="225" y="92" fill="rgba(180,200,220,.5)" font-size="7" font-family="monospace" letter-spacing="1">ENGAGEMENT SCORE</text>
+          <!-- Score track -->
+          <rect x="225" y="98" width="220" height="10" fill="rgba(20,25,40,.8)" rx="5"/>
+          <!-- Score fill — critically low -->
+          <rect x="225" y="98" width="44" height="10" fill="#ff2020" rx="5"/>
+          <text x="452" y="108" fill="rgba(255,50,50,.8)" font-size="8" font-family="monospace">20 / 100</text>
+
+          <!-- Frustration score -->
+          <text x="225" y="124" fill="rgba(180,200,220,.5)" font-size="7" font-family="monospace" letter-spacing="1">FRUSTRATION INDEX</text>
+          <rect x="225" y="130" width="220" height="10" fill="rgba(20,25,40,.8)" rx="5"/>
+          <rect x="225" y="130" width="188" height="10" fill="rgba(245,158,11,.85)" rx="5"/>
+          <text x="452" y="140" fill="rgba(245,158,11,.8)" font-size="8" font-family="monospace">86 / 100</text>
+
+          <!-- Session activity heartbeat — goes flat -->
+          <text x="225" y="162" fill="rgba(180,200,220,.5)" font-size="7" font-family="monospace" letter-spacing="1">SESSION ACTIVITY — LAST 30 DAYS</text>
+          <!-- heartbeat line — active then crashing -->
+          <polyline points="225,200 248,200 255,178 262,215 270,185 278,200 285,200 295,192 305,208 315,200 325,200 335,200 345,200 358,200 370,200 385,200 400,200 415,200 430,200 445,200" fill="none" stroke="rgba(255,50,50,.7)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- flat-line section — player gone -->
+          <line x1="445" y1="200" x2="655" y2="200" stroke="rgba(255,50,50,.25)" stroke-width="1.5" stroke-dasharray="3 4"/>
+          <!-- line base -->
+          <line x1="225" y1="210" x2="655" y2="210" stroke="rgba(80,100,160,.15)" stroke-width="1"/>
+          <!-- dropout point circle -->
+          <circle cx="445" cy="200" r="5" fill="rgba(255,40,40,.4)" filter="url(#cblur2)"/>
+          <circle cx="445" cy="200" r="3" fill="#ff2020"/>
+          <!-- dropout label -->
+          <line x1="445" y1="200" x2="445" y2="168" stroke="rgba(255,50,50,.4)" stroke-width="1" stroke-dasharray="3 2"/>
+          <rect x="450" y="158" width="88" height="16" fill="rgba(60,5,5,.9)" stroke="rgba(255,40,40,.5)" stroke-width=".8" rx="2"/>
+          <text x="456" y="169" fill="#ff4040" font-size="7.5" font-family="monospace">SESSION ENDED</text>
+
+          <!-- Signal tiles row -->
+          <rect x="225" y="218" width="68" height="50" fill="rgba(180,15,15,.12)" rx="2" stroke="rgba(255,40,40,.25)" stroke-width=".8"/>
+          <text x="259" y="234" text-anchor="middle" fill="rgba(255,80,80,.5)" font-size="6" font-family="monospace">LOSS STREAK</text>
+          <text x="259" y="254" text-anchor="middle" fill="#ff2020" font-size="22" font-family="monospace" font-weight="bold">5</text>
+          <text x="259" y="263" text-anchor="middle" fill="rgba(255,80,80,.4)" font-size="6" font-family="monospace">consecutive</text>
+
+          <rect x="301" y="218" width="68" height="50" fill="rgba(160,80,10,.1)" rx="2" stroke="rgba(245,158,11,.25)" stroke-width=".8"/>
+          <text x="335" y="234" text-anchor="middle" fill="rgba(245,158,11,.5)" font-size="6" font-family="monospace">INACTIVITY</text>
+          <text x="335" y="254" text-anchor="middle" fill="rgba(245,158,11,.85)" font-size="22" font-family="monospace" font-weight="bold">7d</text>
+          <text x="335" y="263" text-anchor="middle" fill="rgba(245,158,11,.4)" font-size="6" font-family="monospace">gap building</text>
+
+          <rect x="377" y="218" width="68" height="50" fill="rgba(15,20,60,.3)" rx="2" stroke="rgba(80,120,255,.2)" stroke-width=".8"/>
+          <text x="411" y="234" text-anchor="middle" fill="rgba(80,140,255,.5)" font-size="6" font-family="monospace">CHURN PROB</text>
+          <text x="411" y="254" text-anchor="middle" fill="rgba(100,160,255,.85)" font-size="22" font-family="monospace" font-weight="bold">68%</text>
+          <text x="411" y="263" text-anchor="middle" fill="rgba(80,140,255,.4)" font-size="6" font-family="monospace">model output</text>
+
+          <rect x="453" y="218" width="96" height="50" fill="rgba(180,15,15,.18)" rx="2" stroke="rgba(255,40,40,.4)" stroke-width="1"/>
+          <text x="501" y="234" text-anchor="middle" fill="rgba(255,100,100,.6)" font-size="6" font-family="monospace">WINDOW</text>
+          <text x="501" y="250" text-anchor="middle" fill="#ff2020" font-size="11" font-family="monospace" font-weight="bold">4–6 MIN</text>
+          <text x="501" y="262" text-anchor="middle" fill="rgba(255,80,80,.5)" font-size="6" font-family="monospace">to intervene</text>
+
+          <!-- Bottom full-width signal bar -->
+          <rect x="0" y="280" width="680" height="120" fill="#050709"/>
+          <line x1="0" y1="280" x2="680" y2="280" stroke="rgba(80,100,160,.2)" stroke-width="1"/>
+
+          <!-- Bottom panel — aggregate telemetry -->
+          <text x="16" y="297" fill="rgba(80,120,200,.5)" font-size="7" font-family="monospace" letter-spacing="1">AGGREGATE TELEMETRY — ALL COHORTS</text>
+
+          <!-- Three mini charts bottom -->
+          <!-- Chart 1 — D7 retention trend -->
+          <rect x="16" y="304" width="196" height="84" fill="rgba(10,15,35,.5)" rx="2" stroke="rgba(80,100,160,.2)" stroke-width="1"/>
+          <text x="26" y="318" fill="rgba(100,140,220,.5)" font-size="6.5" font-family="monospace">D7 RETENTION TREND</text>
+          <line x1="26" y1="376" x2="200" y2="376" stroke="rgba(80,100,160,.2)" stroke-width=".8"/>
+          <!-- bars -->
+          <rect x="36" y="348" width="22" height="28" fill="rgba(80,120,255,.35)" rx="1"/>
+          <text x="47" y="345" text-anchor="middle" fill="rgba(80,140,255,.5)" font-size="6" font-family="monospace">38%</text>
+          <rect x="70" y="338" width="22" height="38" fill="rgba(80,120,255,.45)" rx="1"/>
+          <text x="81" y="335" text-anchor="middle" fill="rgba(80,140,255,.55)" font-size="6" font-family="monospace">42%</text>
+          <rect x="104" y="332" width="22" height="44" fill="rgba(80,120,255,.5)" rx="1"/>
+          <text x="115" y="329" text-anchor="middle" fill="rgba(80,140,255,.6)" font-size="6" font-family="monospace">45%</text>
+          <rect x="138" y="336" width="22" height="40" fill="rgba(80,120,255,.42)" rx="1"/>
+          <text x="149" y="333" text-anchor="middle" fill="rgba(80,140,255,.55)" font-size="6" font-family="monospace">42%</text>
+          <text x="36" y="385" fill="rgba(60,80,140,.5)" font-size="5.5" font-family="monospace">JAN</text>
+          <text x="70" y="385" fill="rgba(60,80,140,.5)" font-size="5.5" font-family="monospace">FEB</text>
+          <text x="104" y="385" fill="rgba(60,80,140,.5)" font-size="5.5" font-family="monospace">MAR</text>
+          <text x="138" y="385" fill="rgba(60,80,140,.5)" font-size="5.5" font-family="monospace">APR</text>
+
+          <!-- Chart 2 — churn signals distribution -->
+          <rect x="226" y="304" width="212" height="84" fill="rgba(10,15,35,.5)" rx="2" stroke="rgba(80,100,160,.2)" stroke-width="1"/>
+          <text x="236" y="318" fill="rgba(100,140,220,.5)" font-size="6.5" font-family="monospace">CHURN SIGNAL DISTRIBUTION</text>
+          <!-- Donut/ring suggestion -->
+          <circle cx="286" cy="352" r="28" fill="none" stroke="rgba(80,80,80,.3)" stroke-width="12"/>
+          <!-- Loss streak segment — largest -->
+          <circle cx="286" cy="352" r="28" fill="none" stroke="rgba(255,50,50,.65)" stroke-width="12" stroke-dasharray="62 114" stroke-dashoffset="-30"/>
+          <!-- inactivity segment -->
+          <circle cx="286" cy="352" r="28" fill="none" stroke="rgba(245,158,11,.55)" stroke-width="12" stroke-dasharray="42 134" stroke-dashoffset="-92"/>
+          <!-- other signals -->
+          <circle cx="286" cy="352" r="28" fill="none" stroke="rgba(80,120,255,.45)" stroke-width="12" stroke-dasharray="28 148" stroke-dashoffset="-134"/>
+          <text x="286" y="356" text-anchor="middle" fill="rgba(200,200,220,.6)" font-size="8" font-family="monospace">68%</text>
+          <!-- legend -->
+          <rect x="328" y="330" width="7" height="7" fill="rgba(255,50,50,.65)" rx="1"/>
+          <text x="340" y="338" fill="rgba(180,180,200,.55)" font-size="6.5" font-family="monospace">Loss streak</text>
+          <rect x="328" y="344" width="7" height="7" fill="rgba(245,158,11,.55)" rx="1"/>
+          <text x="340" y="352" fill="rgba(180,180,200,.55)" font-size="6.5" font-family="monospace">Inactivity gap</text>
+          <rect x="328" y="358" width="7" height="7" fill="rgba(80,120,255,.45)" rx="1"/>
+          <text x="340" y="366" fill="rgba(180,180,200,.55)" font-size="6.5" font-family="monospace">Other signals</text>
+
+          <!-- Chart 3 — intervention effectiveness -->
+          <rect x="452" y="304" width="212" height="84" fill="rgba(10,15,35,.5)" rx="2" stroke="rgba(80,100,160,.2)" stroke-width="1"/>
+          <text x="462" y="318" fill="rgba(100,140,220,.5)" font-size="6.5" font-family="monospace">SEGMENT CHURN RATE</text>
+          <!-- Horizontal bars -->
+          <text x="462" y="334" fill="rgba(160,160,180,.5)" font-size="6" font-family="monospace">New Player</text>
+          <rect x="528" y="326" width="120" height="10" fill="rgba(20,20,40,.6)" rx="2"/>
+          <rect x="528" y="326" width="86" height="10" fill="rgba(255,50,50,.55)" rx="2"/>
+          <text x="618" y="334" text-anchor="end" fill="rgba(255,80,80,.7)" font-size="6.5" font-family="monospace">72%</text>
+
+          <text x="462" y="351" fill="rgba(160,160,180,.5)" font-size="6" font-family="monospace">Casual</text>
+          <rect x="528" y="343" width="120" height="10" fill="rgba(20,20,40,.6)" rx="2"/>
+          <rect x="528" y="343" width="73" height="10" fill="rgba(245,158,11,.5)" rx="2"/>
+          <text x="618" y="351" text-anchor="end" fill="rgba(245,158,11,.7)" font-size="6.5" font-family="monospace">61%</text>
+
+          <text x="462" y="368" fill="rgba(160,160,180,.5)" font-size="6" font-family="monospace">High Eng.</text>
+          <rect x="528" y="360" width="120" height="10" fill="rgba(20,20,40,.6)" rx="2"/>
+          <rect x="528" y="360" width="23" height="10" fill="rgba(60,180,100,.5)" rx="2"/>
+          <text x="618" y="368" text-anchor="end" fill="rgba(60,180,100,.7)" font-size="6.5" font-family="monospace">19%</text>
+
+          <text x="462" y="385" fill="rgba(80,100,160,.4)" font-size="6" font-family="monospace">SQL · PostgreSQL · Streamlit · LiveOps</text>
         </svg>
       </div>
       <div class="pcard-body">
@@ -1043,118 +1772,6 @@ footer{
           <span class="ptag">Python</span>
           <span class="ptag">Streamlit</span>
           <span class="ptag ptag-live">● Live Dashboard</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- P4: Gacha Engagement Systems — HERO -->
-    <div class="pcard" onclick="openModal('gacha')">
-      <div class="pcard-preview" style="background:none;overflow:hidden;position:relative;">
-
-        <!-- Genshin Impact banner aesthetic -->
-        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0d0a2e 0%,#1a0e4a 30%,#2e1060 55%,#1a0a3a 80%,#080520 100%);"></div>
-
-        <!-- star field -->
-        <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-          <!-- stars -->
-          <circle cx="42" cy="28" r="1" fill="white" opacity=".6"/>
-          <circle cx="120" cy="55" r=".8" fill="white" opacity=".4"/>
-          <circle cx="200" cy="18" r="1.2" fill="white" opacity=".7"/>
-          <circle cx="310" cy="40" r=".7" fill="white" opacity=".5"/>
-          <circle cx="450" cy="22" r="1" fill="white" opacity=".6"/>
-          <circle cx="570" cy="50" r=".9" fill="white" opacity=".45"/>
-          <circle cx="630" cy="15" r="1.1" fill="white" opacity=".55"/>
-          <circle cx="80" cy="120" r=".7" fill="white" opacity=".3"/>
-          <circle cx="560" cy="110" r=".8" fill="white" opacity=".4"/>
-          <circle cx="660" cy="140" r=".6" fill="white" opacity=".35"/>
-          <circle cx="30" cy="200" r=".9" fill="white" opacity=".3"/>
-          <circle cx="640" cy="260" r=".7" fill="white" opacity=".3"/>
-          <circle cx="590" cy="340" r=".8" fill="white" opacity=".25"/>
-          <circle cx="100" cy="360" r=".6" fill="white" opacity=".2"/>
-          <!-- twinkling large stars -->
-          <circle cx="68" cy="72" r="1.5" fill="#c4b5fd" opacity=".7"/>
-          <circle cx="612" cy="88" r="1.8" fill="#93c5fd" opacity=".65"/>
-          <circle cx="340" cy="30" r="1.4" fill="#fde68a" opacity=".6"/>
-
-          <!-- Background elemental glow orbs -->
-          <circle cx="170" cy="200" r="90" fill="rgba(139,92,246,.06)"/>
-          <circle cx="510" cy="180" r="110" fill="rgba(56,189,248,.05)"/>
-          <circle cx="340" cy="300" r="80" fill="rgba(251,191,36,.04)"/>
-
-          <!-- ornate corner decorations (Genshin-style) -->
-          <!-- top-left ornament -->
-          <path d="M 0 0 L 60 0 L 60 4 L 4 4 L 4 60 L 0 60 Z" fill="rgba(196,181,253,.15)"/>
-          <circle cx="60" cy="4" r="3" fill="rgba(196,181,253,.3)"/>
-          <circle cx="4" cy="60" r="3" fill="rgba(196,181,253,.3)"/>
-          <!-- top-right ornament -->
-          <path d="M 680 0 L 620 0 L 620 4 L 676 4 L 676 60 L 680 60 Z" fill="rgba(196,181,253,.15)"/>
-          <circle cx="620" cy="4" r="3" fill="rgba(196,181,253,.3)"/>
-          <circle cx="676" cy="60" r="3" fill="rgba(196,181,253,.3)"/>
-          <!-- bottom decorative line -->
-          <line x1="40" y1="390" x2="640" y2="390" stroke="rgba(196,181,253,.12)" stroke-width="1"/>
-          <line x1="20" y1="394" x2="660" y2="394" stroke="rgba(196,181,253,.06)" stroke-width="1"/>
-          <!-- decorative diamond centres -->
-          <polygon points="340,388 344,392 340,396 336,392" fill="rgba(196,181,253,.3)"/>
-
-          <!-- Character silhouette (abstract Genshin-style figure) -->
-          <!-- flowing hair/cape -->
-          <ellipse cx="340" cy="160" rx="55" ry="70" fill="rgba(139,92,246,.18)" transform="rotate(-12,340,160)"/>
-          <ellipse cx="365" cy="170" rx="25" ry="55" fill="rgba(99,102,241,.15)" transform="rotate(8,365,170)"/>
-          <!-- body -->
-          <ellipse cx="340" cy="220" rx="28" ry="38" fill="rgba(167,139,250,.2)"/>
-          <!-- head glow -->
-          <circle cx="340" cy="130" r="32" fill="rgba(196,181,253,.12)"/>
-          <circle cx="340" cy="130" r="22" fill="rgba(221,214,254,.18)"/>
-          <!-- vision/element gem glow -->
-          <circle cx="340" cy="130" r="8" fill="rgba(167,139,250,.8)"/>
-          <circle cx="340" cy="130" r="5" fill="rgba(221,214,254,.9)"/>
-          <circle cx="340" cy="130" r="2.5" fill="white" opacity=".95"/>
-          <!-- elemental particle trails -->
-          <circle cx="290" cy="155" r="3" fill="rgba(167,139,250,.55)"/>
-          <circle cx="278" cy="175" r="2" fill="rgba(139,92,246,.45)"/>
-          <circle cx="268" cy="198" r="2.5" fill="rgba(196,181,253,.4)"/>
-          <circle cx="392" cy="148" r="2.5" fill="rgba(167,139,250,.5)"/>
-          <circle cx="404" cy="170" r="2" fill="rgba(139,92,246,.4)"/>
-          <circle cx="398" cy="195" r="3" fill="rgba(196,181,253,.45)"/>
-          <!-- sword/weapon hint -->
-          <line x1="368" y1="230" x2="410" y2="290" stroke="rgba(221,214,254,.35)" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="365" y1="227" x2="413" y2="287" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
-
-          <!-- TOP BANNER LABEL -->
-          <rect x="30" y="14" width="180" height="22" rx="3" fill="rgba(196,181,253,.08)" stroke="rgba(196,181,253,.2)" stroke-width=".5"/>
-          <text x="120" y="29" text-anchor="middle" fill="rgba(221,214,254,.7)" font-size="8" font-family="-apple-system,sans-serif" letter-spacing="1.5">CHARACTER EVENT WISH</text>
-
-          <!-- BANNER TITLE -->
-          <text x="340" y="310" text-anchor="middle" fill="rgba(255,255,255,.9)" font-size="18" font-weight="700" font-family="-apple-system,sans-serif" letter-spacing="-.3">Engagement Architecture</text>
-          <text x="340" y="328" text-anchor="middle" fill="rgba(196,181,253,.6)" font-size="9" font-family="-apple-system,sans-serif" letter-spacing="1">GENSHIN IMPACT  ·  BEHAVIOURAL SYSTEMS</text>
-
-          <!-- Pity / pull counter pills -->
-          <rect x="188" y="344" width="88" height="20" rx="10" fill="rgba(139,92,246,.25)" stroke="rgba(167,139,250,.4)" stroke-width=".8"/>
-          <text x="232" y="358" text-anchor="middle" fill="rgba(221,214,254,.85)" font-size="8.5" font-family="-apple-system,sans-serif">🔮 74 / 90 pity</text>
-          <rect x="284" y="344" width="104" height="20" rx="10" fill="rgba(56,189,248,.15)" stroke="rgba(125,211,252,.3)" stroke-width=".8"/>
-          <text x="336" y="358" text-anchor="middle" fill="rgba(186,230,253,.85)" font-size="8.5" font-family="-apple-system,sans-serif">⭐⭐⭐⭐⭐ 5-star</text>
-          <rect x="396" y="344" width="96" height="20" rx="10" fill="rgba(251,191,36,.12)" stroke="rgba(253,224,71,.3)" stroke-width=".8"/>
-          <text x="444" y="358" text-anchor="middle" fill="rgba(254,240,138,.85)" font-size="8.5" font-family="-apple-system,sans-serif">💎 160 primos</text>
-
-          <!-- elemental type badge top-right -->
-          <circle cx="634" cy="36" r="18" fill="rgba(139,92,246,.3)" stroke="rgba(167,139,250,.5)" stroke-width="1"/>
-          <text x="634" y="32" text-anchor="middle" font-size="14">🌀</text>
-          <text x="634" y="46" text-anchor="middle" fill="rgba(221,214,254,.7)" font-size="6" font-family="-apple-system,sans-serif">ANEMO</text>
-
-          <!-- bottom research label -->
-          <rect x="20" y="372" width="640" height="16" rx="2" fill="rgba(0,0,0,.3)"/>
-          <text x="340" y="383" text-anchor="middle" fill="rgba(196,181,253,.5)" font-size="7.5" font-family="-apple-system,sans-serif" letter-spacing=".5">REWARD PACING  ·  PROGRESSION LOOPS  ·  SCARCITY  ·  MONETIZATION TIMING</text>
-        </svg>
-      </div>
-      <div class="pcard-body">
-        <h3 class="pcard-title">Mid-Loop Engagement Architecture — Gacha Reward &amp; Retention Systems</h3>
-        <p class="pcard-desc">Mapping how live-service games sustain engagement between sessions. Reward pacing, pity mechanics, and monetisation timing as behavioural levers — case study: Genshin Impact.</p>
-        <div class="pcard-tags">
-          <span class="ptag ptag-blue">Gaming</span>
-          <span class="ptag">LiveOps</span>
-          <span class="ptag">Behavioural Systems</span>
-          <span class="ptag">Systems Mapping</span>
-          <span class="ptag" style="border-color:rgba(167,139,250,.4);color:#c4b5fd">Genshin Impact</span>
         </div>
       </div>
     </div>
@@ -1384,52 +2001,119 @@ footer{
       </div>
     </div>
 
-    <!-- Marvel Rivals — HERO (coming soon) -->
-    <div class="pcard" onclick="openModal('marvel')" style="opacity:.75;">
-      <div class="pcard-preview" style="background:linear-gradient(135deg,#0a0c18 0%,#10121e 60%,#0c0e1a 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
-        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
-          <rect width="680" height="400" fill="#08090f"/>
-          <!-- grid -->
-          <line x1="0" y1="80"  x2="680" y2="80"  stroke="#0e1020" stroke-width="1"/>
-          <line x1="0" y1="160" x2="680" y2="160" stroke="#0e1020" stroke-width="1"/>
-          <line x1="0" y1="240" x2="680" y2="240" stroke="#0e1020" stroke-width="1"/>
-          <line x1="0" y1="320" x2="680" y2="320" stroke="#0e1020" stroke-width="1"/>
-          <line x1="136" y1="0" x2="136" y2="400" stroke="#0e1020" stroke-width="1"/>
-          <line x1="272" y1="0" x2="272" y2="400" stroke="#0e1020" stroke-width="1"/>
-          <line x1="408" y1="0" x2="408" y2="400" stroke="#0e1020" stroke-width="1"/>
-          <line x1="544" y1="0" x2="544" y2="400" stroke="#0e1020" stroke-width="1"/>
-          <!-- hexagonal matchmaking grid suggestion -->
-          <polygon points="200,160 240,136 280,160 280,208 240,232 200,208" fill="none" stroke="rgba(91,143,255,.15)" stroke-width="1"/>
-          <polygon points="280,160 320,136 360,160 360,208 320,232 280,208" fill="none" stroke="rgba(91,143,255,.12)" stroke-width="1"/>
-          <polygon points="360,160 400,136 440,160 440,208 400,232 360,208" fill="none" stroke="rgba(91,143,255,.1)" stroke-width="1"/>
-          <polygon points="240,208 280,184 320,208 320,256 280,280 240,256" fill="none" stroke="rgba(91,143,255,.1)" stroke-width="1"/>
-          <polygon points="320,208 360,184 400,208 400,256 360,280 320,256" fill="none" stroke="rgba(91,143,255,.08)" stroke-width="1"/>
-          <!-- centre hex glow -->
-          <polygon points="280,160 320,136 360,160 360,208 320,232 280,208" fill="rgba(91,143,255,.04)" stroke="rgba(91,143,255,.25)" stroke-width="1.2"/>
-          <circle cx="320" cy="184" r="12" fill="rgba(91,143,255,.08)"/>
-          <circle cx="320" cy="184" r="6" fill="rgba(91,143,255,.15)"/>
-          <!-- lock icon -->
-          <rect x="310" y="178" width="20" height="14" rx="2" fill="none" stroke="rgba(91,143,255,.4)" stroke-width="1.2"/>
-          <path d="M 314 178 Q 314 172 320 172 Q 326 172 326 178" fill="none" stroke="rgba(91,143,255,.4)" stroke-width="1.2"/>
-          <!-- label -->
-          <rect x="0" y="340" width="680" height="60" fill="rgba(5,7,14,.8)"/>
-          <text x="340" y="368" text-anchor="middle" fill="rgba(91,143,255,.5)" font-size="11" font-family="monospace" font-weight="bold" letter-spacing="1">MARVEL RIVALS</text>
-          <text x="340" y="386" text-anchor="middle" fill="rgba(90,96,112,.5)" font-size="8.5" font-family="monospace">Matchmaking Fairness Systems  ·  Coming Soon</text>
+    <!-- P4: Gacha Engagement Systems — HERO -->
+    <div class="pcard" onclick="openModal('gacha')">
+      <div class="pcard-preview" style="background:none;overflow:hidden;position:relative;">
+
+        <!-- Genshin Impact banner aesthetic -->
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0d0a2e 0%,#1a0e4a 30%,#2e1060 55%,#1a0a3a 80%,#080520 100%);"></div>
+
+        <!-- star field -->
+        <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <!-- stars -->
+          <circle cx="42" cy="28" r="1" fill="white" opacity=".6"/>
+          <circle cx="120" cy="55" r=".8" fill="white" opacity=".4"/>
+          <circle cx="200" cy="18" r="1.2" fill="white" opacity=".7"/>
+          <circle cx="310" cy="40" r=".7" fill="white" opacity=".5"/>
+          <circle cx="450" cy="22" r="1" fill="white" opacity=".6"/>
+          <circle cx="570" cy="50" r=".9" fill="white" opacity=".45"/>
+          <circle cx="630" cy="15" r="1.1" fill="white" opacity=".55"/>
+          <circle cx="80" cy="120" r=".7" fill="white" opacity=".3"/>
+          <circle cx="560" cy="110" r=".8" fill="white" opacity=".4"/>
+          <circle cx="660" cy="140" r=".6" fill="white" opacity=".35"/>
+          <circle cx="30" cy="200" r=".9" fill="white" opacity=".3"/>
+          <circle cx="640" cy="260" r=".7" fill="white" opacity=".3"/>
+          <circle cx="590" cy="340" r=".8" fill="white" opacity=".25"/>
+          <circle cx="100" cy="360" r=".6" fill="white" opacity=".2"/>
+          <!-- twinkling large stars -->
+          <circle cx="68" cy="72" r="1.5" fill="#c4b5fd" opacity=".7"/>
+          <circle cx="612" cy="88" r="1.8" fill="#93c5fd" opacity=".65"/>
+          <circle cx="340" cy="30" r="1.4" fill="#fde68a" opacity=".6"/>
+
+          <!-- Background elemental glow orbs -->
+          <circle cx="170" cy="200" r="90" fill="rgba(139,92,246,.06)"/>
+          <circle cx="510" cy="180" r="110" fill="rgba(56,189,248,.05)"/>
+          <circle cx="340" cy="300" r="80" fill="rgba(251,191,36,.04)"/>
+
+          <!-- ornate corner decorations (Genshin-style) -->
+          <!-- top-left ornament -->
+          <path d="M 0 0 L 60 0 L 60 4 L 4 4 L 4 60 L 0 60 Z" fill="rgba(196,181,253,.15)"/>
+          <circle cx="60" cy="4" r="3" fill="rgba(196,181,253,.3)"/>
+          <circle cx="4" cy="60" r="3" fill="rgba(196,181,253,.3)"/>
+          <!-- top-right ornament -->
+          <path d="M 680 0 L 620 0 L 620 4 L 676 4 L 676 60 L 680 60 Z" fill="rgba(196,181,253,.15)"/>
+          <circle cx="620" cy="4" r="3" fill="rgba(196,181,253,.3)"/>
+          <circle cx="676" cy="60" r="3" fill="rgba(196,181,253,.3)"/>
+          <!-- bottom decorative line -->
+          <line x1="40" y1="390" x2="640" y2="390" stroke="rgba(196,181,253,.12)" stroke-width="1"/>
+          <line x1="20" y1="394" x2="660" y2="394" stroke="rgba(196,181,253,.06)" stroke-width="1"/>
+          <!-- decorative diamond centres -->
+          <polygon points="340,388 344,392 340,396 336,392" fill="rgba(196,181,253,.3)"/>
+
+          <!-- Character silhouette (abstract Genshin-style figure) -->
+          <!-- flowing hair/cape -->
+          <ellipse cx="340" cy="160" rx="55" ry="70" fill="rgba(139,92,246,.18)" transform="rotate(-12,340,160)"/>
+          <ellipse cx="365" cy="170" rx="25" ry="55" fill="rgba(99,102,241,.15)" transform="rotate(8,365,170)"/>
+          <!-- body -->
+          <ellipse cx="340" cy="220" rx="28" ry="38" fill="rgba(167,139,250,.2)"/>
+          <!-- head glow -->
+          <circle cx="340" cy="130" r="32" fill="rgba(196,181,253,.12)"/>
+          <circle cx="340" cy="130" r="22" fill="rgba(221,214,254,.18)"/>
+          <!-- vision/element gem glow -->
+          <circle cx="340" cy="130" r="8" fill="rgba(167,139,250,.8)"/>
+          <circle cx="340" cy="130" r="5" fill="rgba(221,214,254,.9)"/>
+          <circle cx="340" cy="130" r="2.5" fill="white" opacity=".95"/>
+          <!-- elemental particle trails -->
+          <circle cx="290" cy="155" r="3" fill="rgba(167,139,250,.55)"/>
+          <circle cx="278" cy="175" r="2" fill="rgba(139,92,246,.45)"/>
+          <circle cx="268" cy="198" r="2.5" fill="rgba(196,181,253,.4)"/>
+          <circle cx="392" cy="148" r="2.5" fill="rgba(167,139,250,.5)"/>
+          <circle cx="404" cy="170" r="2" fill="rgba(139,92,246,.4)"/>
+          <circle cx="398" cy="195" r="3" fill="rgba(196,181,253,.45)"/>
+          <!-- sword/weapon hint -->
+          <line x1="368" y1="230" x2="410" y2="290" stroke="rgba(221,214,254,.35)" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="365" y1="227" x2="413" y2="287" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+
+          <!-- TOP BANNER LABEL -->
+          <rect x="30" y="14" width="180" height="22" rx="3" fill="rgba(196,181,253,.08)" stroke="rgba(196,181,253,.2)" stroke-width=".5"/>
+          <text x="120" y="29" text-anchor="middle" fill="rgba(221,214,254,.7)" font-size="8" font-family="-apple-system,sans-serif" letter-spacing="1.5">CHARACTER EVENT WISH</text>
+
+          <!-- BANNER TITLE -->
+          <text x="340" y="310" text-anchor="middle" fill="rgba(255,255,255,.9)" font-size="18" font-weight="700" font-family="-apple-system,sans-serif" letter-spacing="-.3">Engagement Architecture</text>
+          <text x="340" y="328" text-anchor="middle" fill="rgba(196,181,253,.6)" font-size="9" font-family="-apple-system,sans-serif" letter-spacing="1">GENSHIN IMPACT  ·  BEHAVIOURAL SYSTEMS</text>
+
+          <!-- Pity / pull counter pills -->
+          <rect x="188" y="344" width="88" height="20" rx="10" fill="rgba(139,92,246,.25)" stroke="rgba(167,139,250,.4)" stroke-width=".8"/>
+          <text x="232" y="358" text-anchor="middle" fill="rgba(221,214,254,.85)" font-size="8.5" font-family="-apple-system,sans-serif">🔮 74 / 90 pity</text>
+          <rect x="284" y="344" width="104" height="20" rx="10" fill="rgba(56,189,248,.15)" stroke="rgba(125,211,252,.3)" stroke-width=".8"/>
+          <text x="336" y="358" text-anchor="middle" fill="rgba(186,230,253,.85)" font-size="8.5" font-family="-apple-system,sans-serif">⭐⭐⭐⭐⭐ 5-star</text>
+          <rect x="396" y="344" width="96" height="20" rx="10" fill="rgba(251,191,36,.12)" stroke="rgba(253,224,71,.3)" stroke-width=".8"/>
+          <text x="444" y="358" text-anchor="middle" fill="rgba(254,240,138,.85)" font-size="8.5" font-family="-apple-system,sans-serif">💎 160 primos</text>
+
+          <!-- elemental type badge top-right -->
+          <circle cx="634" cy="36" r="18" fill="rgba(139,92,246,.3)" stroke="rgba(167,139,250,.5)" stroke-width="1"/>
+          <text x="634" y="32" text-anchor="middle" font-size="14">🌀</text>
+          <text x="634" y="46" text-anchor="middle" fill="rgba(221,214,254,.7)" font-size="6" font-family="-apple-system,sans-serif">ANEMO</text>
+
+          <!-- bottom research label -->
+          <rect x="20" y="372" width="640" height="16" rx="2" fill="rgba(0,0,0,.3)"/>
+          <text x="340" y="383" text-anchor="middle" fill="rgba(196,181,253,.5)" font-size="7.5" font-family="-apple-system,sans-serif" letter-spacing=".5">REWARD PACING  ·  PROGRESSION LOOPS  ·  SCARCITY  ·  MONETIZATION TIMING</text>
         </svg>
       </div>
       <div class="pcard-body">
-        <h3 class="pcard-title" style="color:var(--muted);">Session Equity &amp; Matchmaking Fairness — Marvel Rivals <span style="font-family:var(--mono);font-size:.62rem;color:var(--muted);border:1px solid var(--border2);padding:.1rem .4rem;margin-left:6px;vertical-align:middle;">IN PROGRESS</span></h3>
-        <p class="pcard-desc">Designing the systems that make every session feel fair. MMR calibration, role-queue balance, and session equity — the behavioural layer that determines whether players stay or churn after a single match.</p>
+        <h3 class="pcard-title">Mid-Loop Engagement Architecture — Gacha Reward &amp; Retention Systems</h3>
+        <p class="pcard-desc">Mapping how live-service games sustain engagement between sessions. Reward pacing, pity mechanics, and monetisation timing as behavioural levers — case study: Genshin Impact.</p>
         <div class="pcard-tags">
-          <span class="ptag ptag-blue">Gaming · Systems</span>
-          <span class="ptag">Matchmaking</span>
+          <span class="ptag ptag-blue">Gaming</span>
           <span class="ptag">LiveOps</span>
           <span class="ptag">Behavioural Systems</span>
+          <span class="ptag">Systems Mapping</span>
+          <span class="ptag" style="border-color:rgba(167,139,250,.4);color:#c4b5fd">Genshin Impact</span>
         </div>
       </div>
     </div>
 
-  </div><!-- /hero-work-grid -->
+    </div><!-- /hero-work-grid -->
 
   <div class="support-label">The same behavioural systems thinking — applied beyond games</div>
   <div class="support-grid">
@@ -1438,69 +2122,156 @@ footer{
     <div class="pcard" onclick="openModal('retention')">
       <div class="pcard-preview">
         <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-          <rect width="680" height="400" fill="#090f0a"/>
-          <text x="20" y="24" fill="#3de8a0" font-size="11" font-family="monospace" font-weight="bold">DEAD BY DAYLIGHT — COHORT RETENTION MATRIX</text>
-          <text x="20" y="40" fill="#333" font-size="9" font-family="monospace">SQL · Tableau · Lifecycle Analysis</text>
-          <!-- cohort header row -->
-          <rect x="20" y="54" width="90" height="26" fill="#0f2a1f" stroke="#1a3a2a" stroke-width=".5"/>
-          <text x="65" y="71" text-anchor="middle" fill="#555" font-size="8" font-family="monospace">Cohort</text>
-          <rect x="112" y="54" width="70" height="26" fill="#3de8a0" opacity=".88" rx="1"/>
-          <text x="147" y="71" text-anchor="middle" fill="#062010" font-size="9" font-family="monospace" font-weight="bold">100%</text>
-          <rect x="184" y="54" width="70" height="26" fill="#3de8a0" opacity=".58" rx="1"/>
-          <text x="219" y="71" text-anchor="middle" fill="#062010" font-size="9" font-family="monospace">68%</text>
-          <rect x="256" y="54" width="70" height="26" fill="#3de8a0" opacity=".32" rx="1"/>
-          <text x="291" y="71" text-anchor="middle" fill="#aaa" font-size="9" font-family="monospace">41%</text>
-          <rect x="328" y="54" width="70" height="26" fill="#3de8a0" opacity=".14" rx="1"/>
-          <text x="363" y="71" text-anchor="middle" fill="#888" font-size="9" font-family="monospace">24%</text>
-          <rect x="400" y="54" width="70" height="26" fill="#ff4d4d" opacity=".28" rx="1"/>
-          <text x="435" y="71" text-anchor="middle" fill="#888" font-size="9" font-family="monospace">12%</text>
-          <rect x="472" y="54" width="70" height="26" fill="#ff4d4d" opacity=".42" rx="1"/>
-          <text x="507" y="71" text-anchor="middle" fill="#aaa" font-size="9" font-family="monospace">8%</text>
-          <!-- row 2 -->
-          <rect x="20" y="82" width="90" height="26" fill="#0f2a1f" stroke="#1a3a2a" stroke-width=".5"/>
-          <text x="65" y="99" text-anchor="middle" fill="#444" font-size="7.5" font-family="monospace">Jan 2026</text>
-          <rect x="112" y="82" width="70" height="26" fill="#3de8a0" opacity=".88" rx="1"/>
-          <rect x="184" y="82" width="70" height="26" fill="#3de8a0" opacity=".5" rx="1"/>
-          <text x="219" y="99" text-anchor="middle" fill="#062010" font-size="9" font-family="monospace">62%</text>
-          <rect x="256" y="82" width="70" height="26" fill="#3de8a0" opacity=".26" rx="1"/>
-          <text x="291" y="99" text-anchor="middle" fill="#aaa" font-size="9" font-family="monospace">37%</text>
-          <rect x="328" y="82" width="70" height="26" fill="#3de8a0" opacity=".1" rx="1"/>
-          <text x="363" y="99" text-anchor="middle" fill="#777" font-size="9" font-family="monospace">19%</text>
-          <rect x="400" y="82" width="70" height="26" fill="#ff4d4d" opacity=".18" rx="1"/>
-          <text x="435" y="99" text-anchor="middle" fill="#777" font-size="9" font-family="monospace">9%</text>
-          <!-- row 3 -->
-          <rect x="20" y="110" width="90" height="26" fill="#0f2a1f" stroke="#1a3a2a" stroke-width=".5"/>
-          <text x="65" y="127" text-anchor="middle" fill="#444" font-size="7.5" font-family="monospace">Feb 2026</text>
-          <rect x="112" y="110" width="70" height="26" fill="#3de8a0" opacity=".88" rx="1"/>
-          <rect x="184" y="110" width="70" height="26" fill="#3de8a0" opacity=".68" rx="1"/>
-          <text x="219" y="127" text-anchor="middle" fill="#062010" font-size="9" font-family="monospace">73%</text>
-          <rect x="256" y="110" width="70" height="26" fill="#3de8a0" opacity=".38" rx="1"/>
-          <text x="291" y="127" text-anchor="middle" fill="#062010" font-size="9" font-family="monospace">46%</text>
-          <rect x="328" y="110" width="70" height="26" fill="#3de8a0" opacity=".18" rx="1"/>
-          <!-- row 4 -->
-          <rect x="20" y="138" width="90" height="26" fill="#0f2a1f" stroke="#1a3a2a" stroke-width=".5"/>
-          <text x="65" y="155" text-anchor="middle" fill="#444" font-size="7.5" font-family="monospace">Mar 2026</text>
-          <rect x="112" y="138" width="70" height="26" fill="#3de8a0" opacity=".88" rx="1"/>
-          <rect x="184" y="138" width="70" height="26" fill="#3de8a0" opacity=".62" rx="1"/>
-          <text x="219" y="155" text-anchor="middle" fill="#062010" font-size="9" font-family="monospace">69%</text>
-          <rect x="256" y="138" width="70" height="26" fill="#3de8a0" opacity=".3" rx="1"/>
-          <!-- drop annotation -->
-          <line x1="400" y1="48" x2="400" y2="175" stroke="#ff4d4d" stroke-width="1" stroke-dasharray="4 3" opacity=".45"/>
-          <rect x="406" y="115" width="130" height="20" fill="#1a0808" stroke="#ff4d4d" stroke-width=".5" rx="2"/>
-          <text x="413" y="128" fill="#ff4d4d" font-size="8.5" font-family="monospace">↓ lifecycle transition</text>
-          <!-- session decay chart -->
-          <text x="20" y="200" fill="#333" font-size="9" font-family="monospace">SESSION FREQUENCY DECAY</text>
-          <line x1="20" y1="290" x2="660" y2="290" stroke="#1a2a1a" stroke-width=".5"/>
-          <polyline points="20,270 100,260 180,250 260,242 340,230 420,216 500,208 580,205 640,202" fill="none" stroke="#3de8a0" stroke-width="2.2" opacity=".65"/>
-          <polyline points="20,282 100,277 180,273 260,268 340,260 420,246 500,238 580,235 640,240" fill="none" stroke="#5b8fff" stroke-width="1.5" opacity=".45" stroke-dasharray="5 2"/>
-          <text x="20" y="308" fill="#1a3a1a" font-size="8" font-family="monospace">D1</text>
-          <text x="100" y="308" fill="#1a3a1a" font-size="8" font-family="monospace">D7</text>
-          <text x="200" y="308" fill="#1a3a1a" font-size="8" font-family="monospace">D14</text>
-          <text x="310" y="308" fill="#1a3a1a" font-size="8" font-family="monospace">D30</text>
-          <text x="470" y="308" fill="#1a3a1a" font-size="8" font-family="monospace">D60</text>
-          <text x="600" y="308" fill="#1a3a1a" font-size="8" font-family="monospace">D90</text>
-          <!-- large bg number -->
-          <text x="20" y="390" fill="#0f2a1f" font-size="90" font-family="monospace" font-weight="bold">68</text>
+          <defs>
+            <radialGradient id="dbdFog" cx="50%" cy="100%" r="70%">
+              <stop offset="0%" stop-color="#5a0a0a" stop-opacity=".7"/>
+              <stop offset="50%" stop-color="#2a0505" stop-opacity=".4"/>
+              <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="hookGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#c84848" stop-opacity=".35"/>
+              <stop offset="100%" stop-color="#c84848" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff2020" stop-opacity=".9"/>
+              <stop offset="60%" stop-color="#c84848" stop-opacity=".5"/>
+              <stop offset="100%" stop-color="#c84848" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="blur4">
+              <feGaussianBlur stdDeviation="4"/>
+            </filter>
+            <filter id="blur8">
+              <feGaussianBlur stdDeviation="8"/>
+            </filter>
+            <filter id="blur2">
+              <feGaussianBlur stdDeviation="2"/>
+            </filter>
+          </defs>
+
+          <!-- Sky — deep void black -->
+          <rect width="680" height="400" fill="#050205"/>
+
+          <!-- Distant moon glow — pale, sickly -->
+          <circle cx="340" cy="60" r="55" fill="rgba(180,160,130,.04)" filter="url(#blur8)"/>
+          <circle cx="340" cy="60" r="28" fill="rgba(200,180,150,.06)" filter="url(#blur4)"/>
+          <circle cx="340" cy="60" r="14" fill="rgba(220,200,170,.08)"/>
+
+          <!-- Dead tree — far left -->
+          <line x1="60" y1="400" x2="75" y2="220" stroke="#0f0808" stroke-width="14"/>
+          <line x1="75" y1="280" x2="40" y2="230" stroke="#0f0808" stroke-width="7"/>
+          <line x1="75" y1="260" x2="110" y2="215" stroke="#0f0808" stroke-width="6"/>
+          <line x1="40" y1="230" x2="20" y2="210" stroke="#0f0808" stroke-width="4"/>
+          <line x1="110" y1="215" x2="130" y2="195" stroke="#0f0808" stroke-width="4"/>
+          <line x1="75" y1="240" x2="55" y2="218" stroke="#0f0808" stroke-width="4"/>
+          <line x1="75" y1="220" x2="65" y2="200" stroke="#0f0808" stroke-width="5"/>
+          <line x1="65" y1="200" x2="50" y2="185" stroke="#0f0808" stroke-width="3"/>
+          <line x1="65" y1="200" x2="80" y2="182" stroke="#0f0808" stroke-width="3"/>
+          <!-- root suggestions -->
+          <line x1="60" y1="395" x2="30" y2="400" stroke="#0f0808" stroke-width="6"/>
+          <line x1="60" y1="395" x2="85" y2="400" stroke="#0f0808" stroke-width="5"/>
+
+          <!-- Dead tree — far right -->
+          <line x1="620" y1="400" x2="605" y2="210" stroke="#0f0808" stroke-width="13"/>
+          <line x1="605" y1="270" x2="640" y2="225" stroke="#0f0808" stroke-width="6"/>
+          <line x1="605" y1="250" x2="572" y2="210" stroke="#0f0808" stroke-width="6"/>
+          <line x1="640" y1="225" x2="660" y2="205" stroke="#0f0808" stroke-width="4"/>
+          <line x1="572" y1="210" x2="550" y2="192" stroke="#0f0808" stroke-width="4"/>
+          <line x1="605" y1="230" x2="625" y2="210" stroke="#0f0808" stroke-width="4"/>
+          <line x1="605" y1="210" x2="618" y2="192" stroke="#0f0808" stroke-width="4"/>
+          <line x1="618" y1="192" x2="608" y2="175" stroke="#0f0808" stroke-width="3"/>
+          <line x1="618" y1="192" x2="632" y2="178" stroke="#0f0808" stroke-width="3"/>
+          <line x1="620" y1="395" x2="645" y2="400" stroke="#0f0808" stroke-width="6"/>
+          <line x1="620" y1="395" x2="598" y2="400" stroke="#0f0808" stroke-width="5"/>
+
+          <!-- Mid trees — centre-left -->
+          <line x1="200" y1="400" x2="208" y2="260" stroke="#100808" stroke-width="9"/>
+          <line x1="208" y1="310" x2="182" y2="272" stroke="#100808" stroke-width="5"/>
+          <line x1="208" y1="290" x2="232" y2="258" stroke="#100808" stroke-width="5"/>
+          <line x1="208" y1="260" x2="195" y2="240" stroke="#100808" stroke-width="4"/>
+          <line x1="208" y1="260" x2="220" y2="242" stroke="#100808" stroke-width="4"/>
+
+          <!-- Mid trees — centre-right -->
+          <line x1="480" y1="400" x2="472" y2="255" stroke="#100808" stroke-width="9"/>
+          <line x1="472" y1="305" x2="498" y2="268" stroke="#100808" stroke-width="5"/>
+          <line x1="472" y1="285" x2="448" y2="252" stroke="#100808" stroke-width="5"/>
+          <line x1="472" y1="255" x2="485" y2="236" stroke="#100808" stroke-width="4"/>
+          <line x1="472" y1="255" x2="458" y2="238" stroke="#100808" stroke-width="4"/>
+
+          <!-- Ground — dark earth -->
+          <rect x="0" y="340" width="680" height="60" fill="#080404"/>
+          <!-- Ground texture lines -->
+          <line x1="0" y1="355" x2="680" y2="355" stroke="#0d0606" stroke-width="1"/>
+          <line x1="0" y1="368" x2="680" y2="368" stroke="#0d0606" stroke-width="1"/>
+
+          <!-- Red ground fog -->
+          <rect x="0" y="310" width="680" height="90" fill="url(#dbdFog)"/>
+          <ellipse cx="340" cy="380" rx="280" ry="40" fill="rgba(80,5,5,.5)" filter="url(#blur8)"/>
+          <ellipse cx="340" cy="370" rx="200" ry="25" fill="rgba(120,8,8,.3)" filter="url(#blur4)"/>
+
+          <!-- Hook glow aura -->
+          <ellipse cx="340" cy="155" rx="70" ry="80" fill="url(#hookGlow)" filter="url(#blur8)"/>
+
+          <!-- The hook — thick, rusted, iconic -->
+          <!-- Vertical shaft -->
+          <line x1="340" y1="30" x2="340" y2="170" stroke="#6b1a1a" stroke-width="5"/>
+          <line x1="340" y1="30" x2="340" y2="170" stroke="#3d0f0f" stroke-width="3"/>
+          <!-- Horizontal bar at top -->
+          <line x1="310" y1="30" x2="370" y2="30" stroke="#5a1515" stroke-width="5"/>
+          <!-- Hook curve -->
+          <path d="M 340 170 Q 340 210 310 220 Q 280 228 276 210 Q 272 192 290 188" stroke="#6b1a1a" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M 340 170 Q 340 210 310 220 Q 280 228 276 210 Q 272 192 290 188" stroke="#3d0f0f" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <!-- Hook tip point -->
+          <path d="M 290 188 L 284 182 L 295 180" stroke="#8b2020" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- Blood drip 1 -->
+          <line x1="340" y1="175" x2="340" y2="200" stroke="#8b0000" stroke-width="2" opacity=".8"/>
+          <ellipse cx="340" cy="202" rx="3" ry="4" fill="#6b0000" opacity=".7"/>
+          <!-- Blood drip 2 — off hook curve -->
+          <line x1="308" y1="222" x2="306" y2="245" stroke="#8b0000" stroke-width="1.5" opacity=".6"/>
+          <ellipse cx="306" cy="247" rx="2.5" ry="3.5" fill="#6b0000" opacity=".55"/>
+          <!-- Blood drip 3 -->
+          <line x1="278" y1="210" x2="275" y2="230" stroke="#8b0000" stroke-width="1.5" opacity=".5"/>
+          <ellipse cx="275" cy="232" rx="2" ry="3" fill="#6b0000" opacity=".45"/>
+
+          <!-- Entity eyes — lurking in darkness, top corners -->
+          <!-- Eye pair left -->
+          <ellipse cx="120" cy="110" rx="5" ry="3" fill="url(#eyeGlow)" filter="url(#blur2)"/>
+          <ellipse cx="120" cy="110" rx="2.5" ry="1.5" fill="#ff1a1a"/>
+          <ellipse cx="138" cy="116" rx="4" ry="2.5" fill="url(#eyeGlow)" filter="url(#blur2)"/>
+          <ellipse cx="138" cy="116" rx="2" ry="1.2" fill="#ff1a1a"/>
+
+          <!-- Eye pair right -->
+          <ellipse cx="558" cy="105" rx="5" ry="3" fill="url(#eyeGlow)" filter="url(#blur2)"/>
+          <ellipse cx="558" cy="105" rx="2.5" ry="1.5" fill="#ff1a1a"/>
+          <ellipse cx="542" cy="112" rx="4" ry="2.5" fill="url(#eyeGlow)" filter="url(#blur2)"/>
+          <ellipse cx="542" cy="112" rx="2" ry="1.2" fill="#ff1a1a"/>
+
+          <!-- Eye — centre top -->
+          <ellipse cx="340" cy="18" rx="6" ry="3.5" fill="url(#eyeGlow)" filter="url(#blur2)"/>
+          <ellipse cx="340" cy="18" rx="3" ry="1.8" fill="#ff2020"/>
+
+          <!-- Crow silhouette — left of hook -->
+          <path d="M 255 82 L 262 76 L 268 80 L 272 74 L 278 78 L 268 88 Z" fill="#0d0606"/>
+          <path d="M 255 82 L 245 78 L 248 86 Z" fill="#0d0606"/>
+          <!-- Crow — right -->
+          <path d="M 410 90 L 417 84 L 423 88 L 427 82 L 433 86 L 423 96 Z" fill="#0d0606"/>
+          <path d="M 410 90 L 400 86 L 403 94 Z" fill="#0d0606"/>
+
+          <!-- Label band at bottom -->
+          <rect x="0" y="330" width="680" height="70" fill="rgba(3,1,1,.88)"/>
+          <line x1="0" y1="330" x2="680" y2="330" stroke="rgba(180,30,30,.25)" stroke-width="1"/>
+
+          <!-- Title -->
+          <text x="340" y="354" text-anchor="middle" fill="#c84848" font-size="15" font-family="'Georgia',serif" font-weight="bold" letter-spacing="3">DEAD BY DAYLIGHT</text>
+          <line x1="140" y1="360" x2="270" y2="360" stroke="rgba(180,30,30,.3)" stroke-width=".8"/>
+          <line x1="410" y1="360" x2="540" y2="360" stroke="rgba(180,30,30,.3)" stroke-width=".8"/>
+          <text x="340" y="360" text-anchor="middle" fill="rgba(180,30,30,.5)" font-size="7" font-family="monospace" letter-spacing="2">✦</text>
+
+          <!-- Subtitle -->
+          <text x="340" y="375" text-anchor="middle" fill="rgba(160,120,120,.55)" font-size="8.5" font-family="monospace" letter-spacing="1.2">LIFECYCLE DROP-OFF MAPPING · COHORT RETENTION</text>
+
+          <!-- Stats bottom right -->
+          <text x="654" y="396" text-anchor="end" fill="rgba(180,30,30,.45)" font-size="7.5" font-family="monospace">42.3% D7 AVG · 68% CHURN SIGNAL · 10,012 PLAYERS</text>
         </svg>
       </div>
       <div class="pcard-body">
@@ -2347,6 +3118,26 @@ footer{
 </div>
 
 <script>
+/* ── MOBILE NAV ── */
+function toggleNav(){
+  const links = document.getElementById('navLinks');
+  const btn   = document.getElementById('navHamburger');
+  const open  = links.classList.toggle('mobile-open');
+  btn.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function closeNav(){
+  const links = document.getElementById('navLinks');
+  const btn   = document.getElementById('navHamburger');
+  links.classList.remove('mobile-open');
+  btn.classList.remove('open');
+  document.body.style.overflow = '';
+}
+// Close on resize back to desktop
+window.addEventListener('resize', () => {
+  if(window.innerWidth > 768) closeNav();
+});
+
 /* ── ANIMATED FILM GRAIN ── */
 (function(){
   const c=document.getElementById('grain');
@@ -2387,10 +3178,11 @@ const DATA={
     tag:'gaming',tagLabel:'Gaming · Retention',
     title:'Lifecycle Drop-Off Mapping — Dead by Daylight Retention',
     period:'Jan 2026 – Apr 2026',
+    embedUrl:'dbd-retention.html',
     streamlit:null,
     desc:'SQL + Tableau cohort retention analysis across 4 monthly cohorts (Jan–Apr 2026), tracking D1, D7, D14, D30, D60, and D90 retention for Dead by Daylight player segments. Mapped exactly where engagement collapses by lifecycle stage and identified which behavioural signals — session frequency decay, return-after-inactivity gaps — precede churn by 7–14 days.',
     insight:'Retention does not decay linearly. It drops in discrete events at lifecycle transition points — specifically at the D7 and D30 thresholds where content novelty expires. Knowing where the cliff is allows intervention 5–7 days before players reach it.',
-    signals:['4 monthly cohorts · D1/D7/D14/D30/D60/D90 retention tracked','D7 avg retention: 42% · D30: 24% · D60: 12% across cohorts','Session frequency decay curve modelled per cohort','Return-after-inactivity gap: 7+ day absence predicts 68% churn probability','Feb cohort outperformed Jan by +11pts D7 — correlated with content patch timing'],
+    signals:['4 cohorts · 10,012 players · D1/D7/D14/D30/D60/D90 fully tracked','D7 avg: 42.3% · D30: 23.3% · D90: 9.7% — 57pt cliff from D1 to D90','68% churn probability after a 7+ day inactivity gap — modelled via window function','Casual player churn: 61% vs High Engagement: 19% — 3.2x delta across segments','+3.7pt D7 retention lift in Feb cohort — correlated with Feb 12 content patch','Loss streak window function: 3+ consecutive losses in first 10 matches = 2.3x churn multiplier'],
     tools:['SQL','Tableau','Cohort Analysis','Retention Modelling','Lifecycle Analytics'],
     links:[{label:'View on LinkedIn',url:'https://www.linkedin.com/in/leontelemaque/overlay/Project/1910139586/treasury/?profileId=ACoAAF0mRoQB4h2gyM8q7dCnyWJlNPpmdBCXPxE'}]
   },

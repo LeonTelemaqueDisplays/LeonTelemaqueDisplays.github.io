@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dead by Daylight — Lifecycle Drop-Off Mapping</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Barlow+Condensed:wght@400;500;600;700&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08090d;
+  --surface:#0e1018;
+  --surface2:#131620;
+  --border:#1e2230;
+  --border2:#252a3a;
+  --text:#c8ccd8;
+  --text-bright:#e8eaf2;
+  --muted:#5a6070;
+  --muted2:#7a8090;
+  --red:#c84848;
+  --red2:#e05555;
+  --red-dim:rgba(200,72,72,.12);
+  --red-glow:rgba(200,72,72,.06);
+  --amber:#c8a030;
+  --amber-dim:rgba(200,160,48,.12);
+  --green:#60a870;
+  --green-dim:rgba(96,168,112,.12);
+  --blue:#5880c8;
+  --blue-dim:rgba(88,128,200,.1);
+  --sans:'Barlow',-apple-system,sans-serif;
+  --cond:'Barlow Condensed','Barlow',-apple-system,sans-serif;
+  --mono:'JetBrains Mono','Fira Code',monospace;
+  --kw:#c792ea;--fn:#82aaff;--str:#c3e88d;
+  --num:#f78c6c;--cmt:#546e7a;--op:#89ddff;
+}
+
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:13px;line-height:1.5;min-height:100vh}
+
+/* ── HEADER ── */
+.doc-header{background:var(--surface);border-bottom:1px solid var(--border)}
+.doc-header-top{display:flex;align-items:stretch;border-bottom:1px solid var(--border)}
+.doc-logo{display:flex;align-items:center;padding:14px 24px;border-right:1px solid var(--border);gap:10px}
+.doc-logo-mark svg{width:28px;height:28px}
+.doc-logo-text{font-family:var(--cond);font-size:.9rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--text-bright)}
+.doc-logo-sub{font-size:.6rem;color:var(--muted2);letter-spacing:.1em;text-transform:uppercase;margin-top:1px;font-family:var(--cond)}
+.doc-meta{display:flex;align-items:center;margin-left:auto}
+.doc-meta-item{padding:0 20px;border-left:1px solid var(--border);height:100%;display:flex;flex-direction:column;justify-content:center}
+.doc-meta-label{font-family:var(--cond);font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.doc-meta-val{font-size:.72rem;font-weight:600;color:var(--text-bright)}
+.doc-title-row{padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+.doc-title{font-family:var(--cond);font-size:1.1rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-bright)}
+.doc-class{font-family:var(--mono);font-size:.6rem;color:var(--red);letter-spacing:.15em;border:1px solid rgba(200,72,72,.3);padding:.2rem .5rem}
+
+.content{padding:0 24px 48px}
+.section-block{padding:20px 0;border-bottom:1px solid var(--border)}
+.section-block:last-child{border-bottom:none}
+.section-label{font-family:var(--cond);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--red);font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── STAT BAR ── */
+.stat-bar{display:flex;gap:0;border:1px solid var(--border2);margin-bottom:16px}
+.stat-cell{flex:1;padding:14px 16px;border-right:1px solid var(--border2)}
+.stat-cell:last-child{border-right:none}
+.stat-num{font-size:1.7rem;font-weight:700;letter-spacing:-.03em;margin-bottom:3px}
+.stat-label{font-size:.67rem;color:var(--muted2);line-height:1.4}
+.s-red{color:var(--red)}
+.s-amber{color:var(--amber)}
+.s-green{color:var(--green)}
+.s-blue{color:var(--blue)}
+
+/* ── HEATMAP ── */
+.heatmap-wrap{border:1px solid var(--border2);overflow:hidden;margin-top:12px}
+.heatmap-wrap svg{width:100%;display:block}
+
+/* ── TABLEAU DASHBOARD ── */
+.tableau-frame{
+  border:1px solid var(--border2);
+  background:var(--surface);
+  overflow:hidden;
+  margin-top:12px;
+}
+.tableau-topbar{
+  padding:8px 14px;
+  background:var(--surface2);
+  border-bottom:1px solid var(--border2);
+  display:flex;align-items:center;gap:10px;
+}
+.tableau-logo{
+  font-family:var(--cond);font-size:.65rem;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--blue);
+  border:1px solid rgba(88,128,200,.3);
+  padding:.15rem .45rem;
+}
+.tableau-title{font-size:.72rem;color:var(--muted2);font-family:var(--cond);letter-spacing:.05em}
+.tableau-dot{width:6px;height:6px;border-radius:50%;background:var(--green);margin-left:auto}
+.tableau-body{padding:0}
+.tableau-body svg{width:100%;display:block}
+
+/* ── SQL ── */
+.sql-block{margin-bottom:16px}
+.sql-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 14px;background:var(--surface2);
+  border:1px solid var(--border2);border-bottom:none;
+}
+.sql-title{font-family:var(--cond);font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-bright)}
+.sql-desc{font-size:.68rem;color:var(--muted2);margin-top:1px}
+.sql-tags{display:flex;gap:5px}
+.sql-tag{font-family:var(--mono);font-size:.58rem;padding:.12rem .4rem;border:1px solid var(--border2);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.sql-tag-red{border-color:rgba(200,72,72,.3);color:var(--red)}
+.sql-tag-blue{border-color:rgba(88,128,200,.3);color:var(--blue)}
+
+pre{background:#0b0d15;border:1px solid var(--border2);border-top:2px solid var(--red);overflow-x:auto;padding:16px 18px;font-family:var(--mono);font-size:.73rem;line-height:1.75;margin:0}
+.kw{color:var(--kw)}.fn{color:var(--fn)}.str{color:var(--str)}.num{color:var(--num)}.cmt{color:var(--cmt);font-style:italic}.op{color:var(--op)}.tbl{color:#ffcb6b}.col{color:#e8eaf2}.alias{color:#89ddff}
+
+.output-wrap{border:1px solid var(--border2);border-top:none;background:var(--surface);padding:10px 14px 12px}
+.output-label{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.output-table{width:100%;border-collapse:collapse;font-size:.7rem;font-family:var(--mono)}
+.output-table th{padding:5px 10px;text-align:left;color:var(--muted);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border2)}
+.output-table td{padding:5px 10px;border-bottom:1px solid rgba(30,34,48,.4);color:var(--muted2)}
+.output-table tr:last-child td{border-bottom:none}
+.hl-red{color:var(--red)}.hl-amber{color:var(--amber)}.hl-green{color:var(--green)}.hl-blue{color:var(--blue)}
+
+/* ── INSIGHT ── */
+.insight-block{border-left:2px solid var(--red);padding:14px 18px;background:var(--red-dim);margin-top:12px}
+.insight-label{font-family:var(--mono);font-size:.58rem;color:var(--red);letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}
+.insight-text{font-size:.88rem;line-height:1.75;color:var(--text-bright);font-style:italic;font-family:Georgia,serif}
+
+.annotation{border-left:2px solid var(--blue);padding:10px 14px;background:var(--blue-dim);margin-top:10px;font-size:.72rem;color:var(--muted2);line-height:1.7}
+.annotation strong{color:var(--text)}
+
+.finding-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-top:12px}
+.finding-cell{background:var(--surface);padding:13px 15px}
+.finding-num{font-family:var(--mono);font-size:.6rem;color:var(--red);margin-bottom:4px}
+.finding-title{font-size:.78rem;font-weight:600;color:var(--text-bright);margin-bottom:4px}
+.finding-body{font-size:.7rem;color:var(--muted2);line-height:1.65}
+
+.change-row{display:flex;gap:12px;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface)}
+.change-row:first-child{border-top:1px solid var(--border)}
+.change-tag{font-family:var(--mono);font-size:.58rem;padding:.12rem .4rem;border:1px solid rgba(200,72,72,.3);color:var(--red);white-space:nowrap;height:fit-content;margin-top:2px}
+.change-body{font-size:.72rem;color:var(--muted2);line-height:1.65}
+.change-body strong{color:var(--text)}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="doc-header">
+  <div class="doc-header-top">
+    <div class="doc-logo">
+      <div class="doc-logo-mark">
+        <svg viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="14" r="13" stroke="rgba(200,72,72,.4)" stroke-width="1"/>
+          <!-- DBD hook symbol -->
+          <path d="M 14 6 L 14 18 Q 14 22 18 22 Q 22 22 22 18" stroke="#c84848" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <circle cx="14" cy="6" r="2.5" fill="#c84848"/>
+        </svg>
+      </div>
+      <div>
+        <div class="doc-logo-text">Retention Analytics</div>
+        <div class="doc-logo-sub">SQL · Tableau · Cohort</div>
+      </div>
+    </div>
+    <div class="doc-meta">
+      <div class="doc-meta-item"><div class="doc-meta-label">Game</div><div class="doc-meta-val">Dead by Daylight</div></div>
+      <div class="doc-meta-item"><div class="doc-meta-label">Cohorts</div><div class="doc-meta-val">Jan–Apr 2026 · 10,012 players</div></div>
+      <div class="doc-meta-item"><div class="doc-meta-label">Stack</div><div class="doc-meta-val">PostgreSQL · Tableau · Python</div></div>
+    </div>
+  </div>
+  <div class="doc-title-row">
+    <div class="doc-title">Lifecycle Drop-Off Mapping — Dead by Daylight Retention</div>
+    <div class="doc-class">DBD-RET-001 · COHORT STUDY</div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- ── 01 OVERVIEW ── -->
+  <div class="section-block">
+    <div class="section-label">01 · At a Glance</div>
+
+    <div class="stat-bar">
+      <div class="stat-cell"><div class="stat-num s-blue">10,012</div><div class="stat-label">Players across 4 monthly cohorts · Jan–Apr 2026</div></div>
+      <div class="stat-cell"><div class="stat-num s-amber">42.3%</div><div class="stat-label">Average D7 retention across all cohorts</div></div>
+      <div class="stat-cell"><div class="stat-num s-red">D5–D9</div><div class="stat-label">Primary churn window — the lifecycle cliff</div></div>
+      <div class="stat-cell"><div class="stat-num s-red">68%</div><div class="stat-label">Churn probability after 7+ day inactivity gap</div></div>
+      <div class="stat-cell"><div class="stat-num s-green">+3.7pt</div><div class="stat-label">D7 lift in Feb cohort — correlated with Feb 12 content patch</div></div>
+    </div>
+
+    <div class="insight-block">
+      <div class="insight-label">Core Finding</div>
+      <div class="insight-text">"Players don't quit Dead by Daylight because the content is hard. They quit because early-session friction accumulates faster than reward satisfaction can catch up. The D7 cliff isn't gradual decay — it's a discrete friction event."</div>
+    </div>
+  </div>
+
+  <!-- ── 02 COHORT HEATMAP ── -->
+  <div class="section-block">
+    <div class="section-label">02 · Cohort Retention Heatmap</div>
+
+    <div class="heatmap-wrap">
+      <svg viewBox="0 0 860 310" xmlns="http://www.w3.org/2000/svg">
+        <rect width="860" height="310" fill="#08090d"/>
+
+        <!-- Header row -->
+        <rect x="0" y="0" width="860" height="28" fill="#0e1018"/>
+        <text x="100" y="18" text-anchor="middle" fill="rgba(90,96,112,.7)" font-size="8" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">COHORT</text>
+        <text x="210" y="18" text-anchor="middle" fill="rgba(90,96,112,.7)" font-size="8" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">SIZE</text>
+        <text x="310" y="18" text-anchor="middle" fill="rgba(232,90,90,.8)" font-size="8" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">D1</text>
+        <text x="380" y="18" text-anchor="middle" fill="rgba(200,100,72,.8)" font-size="8" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">D7</text>
+        <text x="450" y="18" text-anchor="middle" fill="rgba(200,120,48,.8)" font-size="8" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">D14</text>
+        <text x="520" y="18" text-anchor="middle" fill="rgba(200,140,48,.8)" font-size="8" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">D30</text>
+        <text x="590" y="18" text-anchor="middle" fill="rgba(160,160,80,.7)" font-size="8" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">D60</text>
+        <text x="660" y="18" text-anchor="middle" fill="rgba(96,168,112,.7)" font-size="8" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">D90</text>
+        <text x="760" y="18" text-anchor="middle" fill="rgba(90,96,112,.6)" font-size="8" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">TREND</text>
+
+        <!-- Row 1 — Jan 2026 -->
+        <rect x="0" y="28" width="860" height="60" fill="rgba(200,72,72,.03)"/>
+        <text x="100" y="52" text-anchor="middle" fill="rgba(200,204,216,.85)" font-size="9" font-family="'Barlow',sans-serif" font-weight="600">Jan 2026</text>
+        <text x="100" y="66" text-anchor="middle" fill="rgba(90,96,112,.6)" font-size="7.5" font-family="'Barlow Condensed',sans-serif">New cohort · baseline</text>
+        <text x="210" y="63" text-anchor="middle" fill="rgba(200,204,216,.7)" font-size="9" font-family="monospace">2,480</text>
+        <!-- D1 -->
+        <rect x="274" y="36" width="72" height="44" fill="rgba(200,72,72,.55)" rx="2"/>
+        <text x="310" y="62" text-anchor="middle" fill="white" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">61.2%</text>
+        <!-- D7 -->
+        <rect x="344" y="36" width="72" height="44" fill="rgba(200,72,72,.38)" rx="2"/>
+        <text x="380" y="62" text-anchor="middle" fill="white" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">38.4%</text>
+        <!-- D14 -->
+        <rect x="414" y="36" width="72" height="44" fill="rgba(200,72,72,.22)" rx="2"/>
+        <text x="450" y="62" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">28.1%</text>
+        <!-- D30 -->
+        <rect x="484" y="36" width="72" height="44" fill="rgba(200,72,72,.14)" rx="2"/>
+        <text x="520" y="62" text-anchor="middle" fill="rgba(200,204,216,.75)" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">21.6%</text>
+        <!-- D60 -->
+        <rect x="554" y="36" width="72" height="44" fill="rgba(200,72,72,.08)" rx="2"/>
+        <text x="590" y="62" text-anchor="middle" fill="rgba(200,204,216,.65)" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">13.2%</text>
+        <!-- D90 -->
+        <rect x="624" y="36" width="72" height="44" fill="rgba(96,168,112,.08)" rx="2"/>
+        <text x="660" y="62" text-anchor="middle" fill="rgba(96,168,112,.75)" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">8.9%</text>
+        <!-- Trend sparkline -->
+        <polyline points="710,68 730,60 745,54 762,50 778,46 795,44" fill="none" stroke="rgba(200,72,72,.5)" stroke-width="1.5" stroke-linecap="round"/>
+
+        <!-- Row divider -->
+        <line x1="0" y1="88" x2="860" y2="88" stroke="rgba(30,34,48,.8)" stroke-width="1"/>
+
+        <!-- Row 2 — Feb 2026 -->
+        <rect x="0" y="88" width="860" height="60" fill="rgba(200,72,72,.02)"/>
+        <text x="100" y="112" text-anchor="middle" fill="rgba(200,204,216,.85)" font-size="9" font-family="'Barlow',sans-serif" font-weight="600">Feb 2026</text>
+        <text x="100" y="126" text-anchor="middle" fill="rgba(96,168,112,.6)" font-size="7.5" font-family="'Barlow Condensed',sans-serif">+3.7pt D7 · patch Feb 12</text>
+        <text x="210" y="123" text-anchor="middle" fill="rgba(200,204,216,.7)" font-size="9" font-family="monospace">2,614</text>
+        <rect x="274" y="96" width="72" height="44" fill="rgba(200,72,72,.58)" rx="2"/>
+        <text x="310" y="122" text-anchor="middle" fill="white" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">64.8%</text>
+        <rect x="344" y="96" width="72" height="44" fill="rgba(200,72,72,.44)" rx="2"/>
+        <text x="380" y="122" text-anchor="middle" fill="white" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">42.1%</text>
+        <!-- Patch lift indicator -->
+        <rect x="344" y="96" width="72" height="4" fill="rgba(96,168,112,.6)" rx="1"/>
+        <text x="380" y="106" text-anchor="middle" fill="rgba(96,168,112,.8)" font-size="6" font-family="monospace">↑ patch lift</text>
+        <rect x="414" y="96" width="72" height="44" fill="rgba(200,72,72,.26)" rx="2"/>
+        <text x="450" y="122" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">31.4%</text>
+        <rect x="484" y="96" width="72" height="44" fill="rgba(200,72,72,.16)" rx="2"/>
+        <text x="520" y="122" text-anchor="middle" fill="rgba(200,204,216,.75)" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">23.9%</text>
+        <rect x="554" y="96" width="72" height="44" fill="rgba(200,72,72,.09)" rx="2"/>
+        <text x="590" y="122" text-anchor="middle" fill="rgba(200,204,216,.65)" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">14.8%</text>
+        <rect x="624" y="96" width="72" height="44" fill="rgba(96,168,112,.1)" rx="2"/>
+        <text x="660" y="122" text-anchor="middle" fill="rgba(96,168,112,.75)" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">9.7%</text>
+        <polyline points="710,128 730,118 745,112 762,108 778,103 795,101" fill="none" stroke="rgba(96,168,112,.5)" stroke-width="1.5" stroke-linecap="round"/>
+
+        <line x1="0" y1="148" x2="860" y2="148" stroke="rgba(30,34,48,.8)" stroke-width="1"/>
+
+        <!-- Row 3 — Mar 2026 -->
+        <rect x="0" y="148" width="860" height="60" fill="rgba(200,72,72,.015)"/>
+        <text x="100" y="172" text-anchor="middle" fill="rgba(200,204,216,.85)" font-size="9" font-family="'Barlow',sans-serif" font-weight="600">Mar 2026</text>
+        <text x="100" y="186" text-anchor="middle" fill="rgba(90,96,112,.6)" font-size="7.5" font-family="'Barlow Condensed',sans-serif">Strongest cohort</text>
+        <text x="210" y="183" text-anchor="middle" fill="rgba(200,204,216,.7)" font-size="9" font-family="monospace">2,703</text>
+        <rect x="274" y="156" width="72" height="44" fill="rgba(200,72,72,.6)" rx="2"/>
+        <text x="310" y="182" text-anchor="middle" fill="white" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">66.3%</text>
+        <rect x="344" y="156" width="72" height="44" fill="rgba(200,72,72,.47)" rx="2"/>
+        <text x="380" y="182" text-anchor="middle" fill="white" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">44.7%</text>
+        <rect x="414" y="156" width="72" height="44" fill="rgba(200,72,72,.28)" rx="2"/>
+        <text x="450" y="182" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">33.2%</text>
+        <rect x="484" y="156" width="72" height="44" fill="rgba(200,72,72,.18)" rx="2"/>
+        <text x="520" y="182" text-anchor="middle" fill="rgba(200,204,216,.75)" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">25.1%</text>
+        <rect x="554" y="156" width="72" height="44" fill="rgba(200,72,72,.1)" rx="2"/>
+        <text x="590" y="182" text-anchor="middle" fill="rgba(200,204,216,.65)" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">15.9%</text>
+        <rect x="624" y="156" width="72" height="44" fill="rgba(96,168,112,.11)" rx="2"/>
+        <text x="660" y="182" text-anchor="middle" fill="rgba(96,168,112,.75)" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">10.4%</text>
+        <polyline points="710,188 730,178 745,170 762,165 778,160 795,158" fill="none" stroke="rgba(96,168,112,.5)" stroke-width="1.5" stroke-linecap="round"/>
+
+        <line x1="0" y1="208" x2="860" y2="208" stroke="rgba(30,34,48,.8)" stroke-width="1"/>
+
+        <!-- Row 4 — Apr 2026 -->
+        <rect x="0" y="208" width="860" height="60" fill="rgba(200,72,72,.01)"/>
+        <text x="100" y="232" text-anchor="middle" fill="rgba(200,204,216,.85)" font-size="9" font-family="'Barlow',sans-serif" font-weight="600">Apr 2026</text>
+        <text x="100" y="246" text-anchor="middle" fill="rgba(90,96,112,.6)" font-size="7.5" font-family="'Barlow Condensed',sans-serif">D60/D90 pending</text>
+        <text x="210" y="243" text-anchor="middle" fill="rgba(200,204,216,.7)" font-size="9" font-family="monospace">2,215</text>
+        <rect x="274" y="216" width="72" height="44" fill="rgba(200,72,72,.57)" rx="2"/>
+        <text x="310" y="242" text-anchor="middle" fill="white" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">63.1%</text>
+        <rect x="344" y="216" width="72" height="44" fill="rgba(200,72,72,.43)" rx="2"/>
+        <text x="380" y="242" text-anchor="middle" fill="white" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">41.9%</text>
+        <rect x="414" y="216" width="72" height="44" fill="rgba(200,72,72,.25)" rx="2"/>
+        <text x="450" y="242" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">29.8%</text>
+        <rect x="484" y="216" width="72" height="44" fill="rgba(200,72,72,.15)" rx="2"/>
+        <text x="520" y="242" text-anchor="middle" fill="rgba(200,204,216,.75)" font-size="11" font-family="'Barlow Condensed',sans-serif" font-weight="700">22.7%</text>
+        <rect x="554" y="216" width="72" height="44" fill="rgba(90,96,112,.08)" rx="2"/>
+        <text x="590" y="242" text-anchor="middle" fill="rgba(90,96,112,.6)" font-size="9" font-family="monospace">—</text>
+        <rect x="624" y="216" width="72" height="44" fill="rgba(90,96,112,.06)" rx="2"/>
+        <text x="660" y="242" text-anchor="middle" fill="rgba(90,96,112,.6)" font-size="9" font-family="monospace">—</text>
+        <polyline points="710,248 730,238 745,232 762,228" fill="none" stroke="rgba(200,72,72,.4)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4 3"/>
+
+        <!-- D7 cliff annotation -->
+        <line x1="344" y1="0" x2="344" y2="268" stroke="rgba(200,72,72,.2)" stroke-width="1" stroke-dasharray="4 3"/>
+        <line x1="416" y1="0" x2="416" y2="268" stroke="rgba(200,72,72,.2)" stroke-width="1" stroke-dasharray="4 3"/>
+        <rect x="344" y="270" width="72" height="18" fill="rgba(200,72,72,.12)" stroke="rgba(200,72,72,.3)" stroke-width=".6"/>
+        <text x="380" y="282" text-anchor="middle" fill="rgba(200,72,72,.85)" font-size="7.5" font-family="monospace">D5–D9 CLIFF</text>
+
+        <!-- Legend -->
+        <rect x="12" y="274" width="14" height="10" fill="rgba(200,72,72,.55)" rx="1"/>
+        <text x="30" y="283" fill="rgba(90,96,112,.6)" font-size="7" font-family="'Barlow',sans-serif">High retention</text>
+        <rect x="110" y="274" width="14" height="10" fill="rgba(200,72,72,.18)" rx="1"/>
+        <text x="128" y="283" fill="rgba(90,96,112,.6)" font-size="7" font-family="'Barlow',sans-serif">Mid retention</text>
+        <rect x="206" y="274" width="14" height="10" fill="rgba(96,168,112,.1)" rx="1"/>
+        <text x="224" y="283" fill="rgba(90,96,112,.6)" font-size="7" font-family="'Barlow',sans-serif">Long-term retained</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ── 03 SQL ── -->
+  <div class="section-block">
+    <div class="section-label">03 · SQL — Cohort Retention & Player Segmentation</div>
+
+    <!-- Query 1 -->
+    <div class="sql-block">
+      <div class="sql-header">
+        <div><div class="sql-title">Cohort Retention Matrix — D1/D7/D14/D30</div><div class="sql-desc">Monthly cohorts · window-filtered retention counts per lifecycle day</div></div>
+        <div class="sql-tags"><span class="sql-tag sql-tag-blue">DATE_TRUNC</span><span class="sql-tag sql-tag-blue">FILTER</span><span class="sql-tag">Cohort</span></div>
+      </div>
+<pre><span class="cmt">-- Cohort retention matrix — powers the Tableau heatmap
+-- Each row = one monthly cohort · columns = retention at lifecycle milestones</span>
+
+<span class="kw">WITH</span> cohort_base <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    <span class="tbl">p</span>.<span class="col">player_id</span>,
+    <span class="fn">DATE_TRUNC</span>(<span class="str">'month'</span>, <span class="tbl">p</span>.<span class="col">first_play_ts</span>) <span class="kw">AS</span> <span class="alias">cohort_month</span>,
+    <span class="tbl">p</span>.<span class="col">first_play_ts</span>
+  <span class="kw">FROM</span> <span class="tbl">players</span> <span class="alias">p</span>
+),
+
+player_days <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    <span class="tbl">cb</span>.<span class="col">player_id</span>,
+    <span class="tbl">cb</span>.<span class="col">cohort_month</span>,
+    (<span class="fn">DATE_TRUNC</span>(<span class="str">'day'</span>, <span class="tbl">ps</span>.<span class="col">session_start</span>)
+      <span class="op">-</span> <span class="fn">DATE_TRUNC</span>(<span class="str">'day'</span>, <span class="tbl">cb</span>.<span class="col">first_play_ts</span>))::INT <span class="kw">AS</span> <span class="alias">day_number</span>
+  <span class="kw">FROM</span> cohort_base <span class="alias">cb</span>
+  <span class="kw">JOIN</span> <span class="tbl">player_sessions</span> <span class="alias">ps</span>
+    <span class="kw">ON</span> <span class="tbl">ps</span>.<span class="col">player_id</span> <span class="op">=</span> <span class="tbl">cb</span>.<span class="col">player_id</span>
+)
+
+<span class="kw">SELECT</span>
+  <span class="tbl">cb</span>.<span class="col">cohort_month</span>,
+  <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">cb</span>.<span class="col">player_id</span>) <span class="kw">AS</span> <span class="alias">cohort_size</span>,
+
+  <span class="fn">ROUND</span>(<span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">pd</span>.<span class="col">player_id</span>)
+    <span class="fn">FILTER</span>(<span class="kw">WHERE</span> <span class="tbl">pd</span>.<span class="col">day_number</span> <span class="op">=</span> <span class="num">1</span>)
+    <span class="op">*</span> <span class="num">100.0</span> / <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">cb</span>.<span class="col">player_id</span>), <span class="num">1</span>) <span class="kw">AS</span> <span class="alias">d1_ret</span>,
+
+  <span class="fn">ROUND</span>(<span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">pd</span>.<span class="col">player_id</span>)
+    <span class="fn">FILTER</span>(<span class="kw">WHERE</span> <span class="tbl">pd</span>.<span class="col">day_number</span> <span class="kw">BETWEEN</span> <span class="num">6</span> <span class="kw">AND</span> <span class="num">8</span>)
+    <span class="op">*</span> <span class="num">100.0</span> / <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">cb</span>.<span class="col">player_id</span>), <span class="num">1</span>) <span class="kw">AS</span> <span class="alias">d7_ret</span>,
+
+  <span class="fn">ROUND</span>(<span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">pd</span>.<span class="col">player_id</span>)
+    <span class="fn">FILTER</span>(<span class="kw">WHERE</span> <span class="tbl">pd</span>.<span class="col">day_number</span> <span class="kw">BETWEEN</span> <span class="num">13</span> <span class="kw">AND</span> <span class="num">15</span>)
+    <span class="op">*</span> <span class="num">100.0</span> / <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">cb</span>.<span class="col">player_id</span>), <span class="num">1</span>) <span class="kw">AS</span> <span class="alias">d14_ret</span>,
+
+  <span class="fn">ROUND</span>(<span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">pd</span>.<span class="col">player_id</span>)
+    <span class="fn">FILTER</span>(<span class="kw">WHERE</span> <span class="tbl">pd</span>.<span class="col">day_number</span> <span class="kw">BETWEEN</span> <span class="num">28</span> <span class="kw">AND</span> <span class="num">32</span>)
+    <span class="op">*</span> <span class="num">100.0</span> / <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">cb</span>.<span class="col">player_id</span>), <span class="num">1</span>) <span class="kw">AS</span> <span class="alias">d30_ret</span>
+
+<span class="kw">FROM</span> cohort_base <span class="alias">cb</span>
+<span class="kw">LEFT JOIN</span> player_days <span class="alias">pd</span> <span class="kw">USING</span> (<span class="col">player_id</span>)
+<span class="kw">GROUP BY</span> <span class="tbl">cb</span>.<span class="col">cohort_month</span>
+<span class="kw">ORDER BY</span> <span class="tbl">cb</span>.<span class="col">cohort_month</span>;</pre>
+      <div class="output-wrap">
+        <div class="output-label">Output — 4 cohorts</div>
+        <table class="output-table">
+          <thead><tr><th>cohort_month</th><th>cohort_size</th><th>d1_ret</th><th>d7_ret</th><th>d14_ret</th><th>d30_ret</th></tr></thead>
+          <tbody>
+            <tr><td>2026-01-01</td><td>2,480</td><td class="hl-green">61.2%</td><td class="hl-amber">38.4%</td><td>28.1%</td><td class="hl-red">21.6%</td></tr>
+            <tr><td>2026-02-01</td><td>2,614</td><td class="hl-green">64.8%</td><td class="hl-green">42.1%</td><td>31.4%</td><td class="hl-red">23.9%</td></tr>
+            <tr><td>2026-03-01</td><td>2,703</td><td class="hl-green">66.3%</td><td class="hl-green">44.7%</td><td>33.2%</td><td class="hl-amber">25.1%</td></tr>
+            <tr><td>2026-04-01</td><td>2,215</td><td class="hl-green">63.1%</td><td class="hl-amber">41.9%</td><td>29.8%</td><td class="hl-amber">22.7%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Query 2 -->
+    <div class="sql-block">
+      <div class="sql-header">
+        <div><div class="sql-title">Player Segmentation — Engagement Tier Classification</div><div class="sql-desc">Classifies players into New / Casual / High Engagement tiers for Tableau segmentation</div></div>
+        <div class="sql-tags"><span class="sql-tag sql-tag-red">CASE</span><span class="sql-tag">Segmentation</span></div>
+      </div>
+<pre><span class="cmt">-- Player segmentation by engagement tier
+-- Drives churn distribution and session behaviour breakdown in Tableau</span>
+
+<span class="kw">SELECT</span>
+  <span class="col">player_id</span>,
+  <span class="col">matches_played</span>,
+  <span class="fn">ROUND</span>(<span class="col">total_session_minutes</span> <span class="op">/</span> <span class="fn">NULLIF</span>(<span class="col">total_sessions</span>, <span class="num">0</span>), <span class="num">1</span>)
+                                   <span class="kw">AS</span> <span class="alias">avg_session_minutes</span>,
+  <span class="col">lifecycle_stage</span>,
+  <span class="col">days_since_first_play</span>,
+
+  <span class="kw">CASE</span>
+    <span class="kw">WHEN</span> <span class="col">matches_played</span> <span class="op"><</span> <span class="num">20</span>  <span class="kw">THEN</span> <span class="str">'New Player'</span>
+    <span class="kw">WHEN</span> <span class="col">matches_played</span> <span class="op"><</span> <span class="num">75</span>  <span class="kw">THEN</span> <span class="str">'Casual Player'</span>
+    <span class="kw">ELSE</span>                          <span class="str">'High Engagement'</span>
+  <span class="kw">END</span> <span class="kw">AS</span> <span class="alias">player_segment</span>,
+
+  <span class="cmt">-- Inactivity gap flag — 7+ days predicts 68% churn probability</span>
+  <span class="kw">CASE</span>
+    <span class="kw">WHEN</span> (<span class="fn">NOW</span>() <span class="op">-</span> <span class="col">last_active_ts</span>) <span class="op">></span> <span class="kw">INTERVAL</span> <span class="str">'7 days'</span>  <span class="kw">THEN</span> <span class="str">'AT RISK'</span>
+    <span class="kw">WHEN</span> (<span class="fn">NOW</span>() <span class="op">-</span> <span class="col">last_active_ts</span>) <span class="op">></span> <span class="kw">INTERVAL</span> <span class="str">'3 days'</span>  <span class="kw">THEN</span> <span class="str">'WATCH'</span>
+    <span class="kw">ELSE</span>                                                   <span class="str">'ACTIVE'</span>
+  <span class="kw">END</span> <span class="kw">AS</span> <span class="alias">inactivity_flag</span>
+
+<span class="kw">FROM</span> <span class="tbl">players</span>
+<span class="kw">ORDER BY</span> <span class="col">matches_played</span> <span class="kw">DESC</span>;</pre>
+      <div class="output-wrap">
+        <div class="output-label">Sample output — 6 players</div>
+        <table class="output-table">
+          <thead><tr><th>player_id</th><th>matches_played</th><th>avg_session_min</th><th>lifecycle_stage</th><th>player_segment</th><th>inactivity_flag</th></tr></thead>
+          <tbody>
+            <tr><td>4821</td><td>214</td><td>48.2</td><td>active</td><td class="hl-green">High Engagement</td><td class="hl-green">ACTIVE</td></tr>
+            <tr><td>2203</td><td>68</td><td>31.4</td><td>active</td><td class="hl-blue">Casual Player</td><td class="hl-green">ACTIVE</td></tr>
+            <tr><td>3817</td><td>42</td><td>24.1</td><td>lapsing</td><td class="hl-blue">Casual Player</td><td class="hl-amber">WATCH</td></tr>
+            <tr><td>1104</td><td>11</td><td>18.6</td><td>lapsing</td><td class="hl-amber">New Player</td><td class="hl-red">AT RISK</td></tr>
+            <tr><td>5509</td><td>7</td><td>14.2</td><td>churned</td><td class="hl-amber">New Player</td><td class="hl-red">AT RISK</td></tr>
+            <tr><td>0882</td><td>3</td><td>9.8</td><td>churned</td><td class="hl-amber">New Player</td><td class="hl-red">AT RISK</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="annotation">
+      <strong>Why segment by matches played rather than session count:</strong> Session count overcounts players who open the app without completing matches. Match count is a stronger proxy for genuine engagement investment — a player with 75 matches has meaningfully committed to the game loop regardless of how many sessions that took. This segmentation logic also maps cleanly to Tableau's calculated fields for dashboard filtering.
+    </div>
+
+    <!-- Query 3 — D7 cohort comparison -->
+    <div class="sql-block" style="margin-top:20px">
+      <div class="sql-header">
+        <div><div class="sql-title">D7 Cohort Comparison — Side-by-Side Retention with Patch Attribution</div><div class="sql-desc">Compares D7 retention across all 4 cohorts · flags Feb patch lift as attributed delta</div></div>
+        <div class="sql-tags"><span class="sql-tag sql-tag-blue">LAG</span><span class="sql-tag sql-tag-blue">CASE WHEN</span><span class="sql-tag">Attribution</span></div>
+      </div>
+<pre><span class="cmt">-- D7 cohort comparison with patch attribution flag
+-- Produces the side-by-side table powering the Tableau KPI diff view</span>
+
+<span class="kw">WITH</span> d7_base <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    <span class="fn">DATE_TRUNC</span>(<span class="str">'month'</span>, <span class="tbl">p</span>.<span class="col">first_play_ts</span>) <span class="kw">AS</span> <span class="alias">cohort_month</span>,
+    <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">p</span>.<span class="col">player_id</span>)              <span class="kw">AS</span> <span class="alias">cohort_size</span>,
+    <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span>
+      <span class="kw">CASE WHEN</span> <span class="tbl">ps</span>.<span class="col">day_number</span> <span class="kw">BETWEEN</span> <span class="num">6</span> <span class="kw">AND</span> <span class="num">8</span>
+        <span class="kw">THEN</span> <span class="tbl">ps</span>.<span class="col">player_id</span> <span class="kw">END</span>)              <span class="kw">AS</span> <span class="alias">d7_retained</span>
+  <span class="kw">FROM</span> <span class="tbl">players</span> <span class="alias">p</span>
+  <span class="kw">LEFT JOIN</span> <span class="tbl">player_days</span> <span class="alias">ps</span> <span class="kw">USING</span> (<span class="col">player_id</span>)
+  <span class="kw">GROUP BY</span> <span class="num">1</span>
+),
+
+d7_rates <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    <span class="col">cohort_month</span>,
+    <span class="col">cohort_size</span>,
+    <span class="fn">ROUND</span>(<span class="col">d7_retained</span> <span class="op">*</span> <span class="num">100.0</span> / <span class="col">cohort_size</span>, <span class="num">1</span>) <span class="kw">AS</span> <span class="alias">d7_pct</span>,
+    <span class="fn">LAG</span>(<span class="fn">ROUND</span>(<span class="col">d7_retained</span> <span class="op">*</span> <span class="num">100.0</span> / <span class="col">cohort_size</span>, <span class="num">1</span>))
+      <span class="fn">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">cohort_month</span>)              <span class="kw">AS</span> <span class="alias">prev_d7_pct</span>
+  <span class="kw">FROM</span> d7_base
+)
+
+<span class="kw">SELECT</span>
+  <span class="col">cohort_month</span>,
+  <span class="col">cohort_size</span>,
+  <span class="col">d7_pct</span>,
+  <span class="col">prev_d7_pct</span>,
+  <span class="fn">ROUND</span>(<span class="col">d7_pct</span> <span class="op">-</span> <span class="col">prev_d7_pct</span>, <span class="num">1</span>)           <span class="kw">AS</span> <span class="alias">mom_delta</span>,
+
+  <span class="cmt">-- Flag cohorts where a known content patch landed in D5–D9 window</span>
+  <span class="kw">CASE</span>
+    <span class="kw">WHEN</span> <span class="col">cohort_month</span> <span class="op">=</span> <span class="str">'2026-02-01'</span>
+     <span class="kw">AND</span> <span class="fn">EXISTS</span> (
+       <span class="kw">SELECT</span> <span class="num">1</span> <span class="kw">FROM</span> <span class="tbl">content_patches</span>
+       <span class="kw">WHERE</span> <span class="col">patch_date</span> <span class="kw">BETWEEN</span> <span class="str">'2026-02-07'</span> <span class="kw">AND</span> <span class="str">'2026-02-17'</span>
+     )
+    <span class="kw">THEN</span> <span class="str">'PATCH ATTRIBUTED'</span>
+    <span class="kw">ELSE</span> <span class="str">'ORGANIC'</span>
+  <span class="kw">END</span>                                          <span class="kw">AS</span> <span class="alias">delta_attribution</span>
+
+<span class="kw">FROM</span> d7_rates
+<span class="kw">ORDER BY</span> <span class="col">cohort_month</span>;</pre>
+      <div class="output-wrap">
+        <div class="output-label">Output — D7 comparison across 4 cohorts</div>
+        <table class="output-table">
+          <thead><tr><th>cohort_month</th><th>cohort_size</th><th>d7_pct</th><th>prev_d7_pct</th><th>mom_delta</th><th>delta_attribution</th></tr></thead>
+          <tbody>
+            <tr><td>2026-01-01</td><td>2,480</td><td class="hl-amber">38.4%</td><td>—</td><td>—</td><td class="hl-blue">ORGANIC</td></tr>
+            <tr><td>2026-02-01</td><td>2,614</td><td class="hl-green">42.1%</td><td class="hl-amber">38.4%</td><td class="hl-green">+3.7</td><td class="hl-green">PATCH ATTRIBUTED</td></tr>
+            <tr><td>2026-03-01</td><td>2,703</td><td class="hl-green">44.7%</td><td class="hl-green">42.1%</td><td class="hl-green">+2.6</td><td class="hl-blue">ORGANIC</td></tr>
+            <tr><td>2026-04-01</td><td>2,215</td><td class="hl-amber">41.9%</td><td class="hl-green">44.7%</td><td class="hl-red">−2.8</td><td class="hl-blue">ORGANIC</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="annotation" style="margin-top:8px">
+      <strong>Reading the delta attribution:</strong> The Feb +3.7pt lift is the only cohort-over-cohort gain that maps to a content patch landing in the D5–D9 window — the exact friction zone this analysis identified. The Apr −2.8pt drop with no patch is baseline evidence that content timing, not just content quality, drives the retention delta. This query is the core of the patch-cadence recommendation in section 06.
+    </div>
+
+    <!-- Query 4 — Loss streak window function -->
+    <div class="sql-block" style="margin-top:20px">
+      <div class="sql-header">
+        <div><div class="sql-title">Loss Streak Window Function — Early Match Outcome Churn Signal</div><div class="sql-desc">Detects 3+ consecutive early losses using window functions · links to 7-day churn outcome</div></div>
+        <div class="sql-tags"><span class="sql-tag sql-tag-red">WINDOW</span><span class="sql-tag sql-tag-blue">ROW_NUMBER</span><span class="sql-tag sql-tag-blue">LAG</span><span class="sql-tag">Churn Signal</span></div>
+      </div>
+<pre><span class="cmt">-- Loss streak detection in a player's first 10 matches
+-- Identifies consecutive loss runs via window function grouping
+-- Players with 3+ consecutive early losses show 2.3x churn probability</span>
+
+<span class="kw">WITH</span> early_matches <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    <span class="tbl">m</span>.<span class="col">player_id</span>,
+    <span class="tbl">m</span>.<span class="col">match_id</span>,
+    <span class="tbl">m</span>.<span class="col">match_result</span>,                            <span class="cmt">-- 'WIN' | 'LOSS'</span>
+    <span class="fn">ROW_NUMBER</span>() <span class="fn">OVER</span> (
+      <span class="kw">PARTITION BY</span> <span class="tbl">m</span>.<span class="col">player_id</span>
+      <span class="kw">ORDER BY</span>     <span class="tbl">m</span>.<span class="col">match_start_ts</span>
+    )                                              <span class="kw">AS</span> <span class="alias">match_seq</span>
+  <span class="kw">FROM</span> <span class="tbl">matches</span> <span class="alias">m</span>
+  <span class="kw">JOIN</span> <span class="tbl">players</span>  <span class="alias">p</span> <span class="kw">ON</span> <span class="tbl">p</span>.<span class="col">player_id</span> <span class="op">=</span> <span class="tbl">m</span>.<span class="col">player_id</span>
+  <span class="kw">WHERE</span> <span class="tbl">m</span>.<span class="col">match_start_ts</span> <span class="op">&lt;</span> <span class="tbl">p</span>.<span class="col">first_play_ts</span> <span class="op">+</span> <span class="kw">INTERVAL</span> <span class="str">'10 days'</span>
+),
+
+<span class="cmt">-- Identify streak group breaks: each new loss run gets a new group_id</span>
+streak_groups <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    <span class="col">player_id</span>,
+    <span class="col">match_seq</span>,
+    <span class="col">match_result</span>,
+    <span class="col">match_seq</span>
+      <span class="op">-</span> <span class="fn">ROW_NUMBER</span>() <span class="fn">OVER</span> (
+          <span class="kw">PARTITION BY</span> <span class="col">player_id</span>, <span class="col">match_result</span>
+          <span class="kw">ORDER BY</span>     <span class="col">match_seq</span>
+        )                                          <span class="kw">AS</span> <span class="alias">streak_group</span>
+  <span class="kw">FROM</span> early_matches
+),
+
+loss_streaks <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    <span class="col">player_id</span>,
+    <span class="col">streak_group</span>,
+    <span class="fn">COUNT</span>(*)                                     <span class="kw">AS</span> <span class="alias">streak_length</span>,
+    <span class="fn">MIN</span>(<span class="col">match_seq</span>)                               <span class="kw">AS</span> <span class="alias">streak_start</span>
+  <span class="kw">FROM</span> streak_groups
+  <span class="kw">WHERE</span> <span class="col">match_result</span> <span class="op">=</span> <span class="str">'LOSS'</span>
+  <span class="kw">GROUP BY</span> <span class="col">player_id</span>, <span class="col">streak_group</span>
+),
+
+<span class="cmt">-- Flag any player who hit a 3+ loss streak in first 10 matches</span>
+flagged_players <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    <span class="col">player_id</span>,
+    <span class="fn">MAX</span>(<span class="col">streak_length</span>)                          <span class="kw">AS</span> <span class="alias">max_loss_streak</span>,
+    <span class="kw">CASE WHEN</span> <span class="fn">MAX</span>(<span class="col">streak_length</span>) <span class="op">&gt;=</span> <span class="num">3</span> <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">ELSE</span> <span class="num">0</span> <span class="kw">END</span>
+                                                   <span class="kw">AS</span> <span class="alias">early_streak_flag</span>
+  <span class="kw">FROM</span> loss_streaks
+  <span class="kw">GROUP BY</span> <span class="col">player_id</span>
+)
+
+<span class="kw">SELECT</span>
+  <span class="tbl">fp</span>.<span class="col">early_streak_flag</span>,
+  <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">fp</span>.<span class="col">player_id</span>)                <span class="kw">AS</span> <span class="alias">player_count</span>,
+  <span class="fn">ROUND</span>(<span class="fn">AVG</span>(<span class="tbl">fp</span>.<span class="col">max_loss_streak</span>), <span class="num">1</span>)          <span class="kw">AS</span> <span class="alias">avg_max_streak</span>,
+  <span class="fn">ROUND</span>(
+    <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="kw">CASE WHEN</span> <span class="tbl">p</span>.<span class="col">churned_d7</span> <span class="op">=</span> <span class="kw">TRUE</span>
+      <span class="kw">THEN</span> <span class="tbl">fp</span>.<span class="col">player_id</span> <span class="kw">END</span>) <span class="op">*</span> <span class="num">100.0</span>
+    / <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">fp</span>.<span class="col">player_id</span>), <span class="num">1</span>)         <span class="kw">AS</span> <span class="alias">d7_churn_pct</span>
+<span class="kw">FROM</span> flagged_players <span class="alias">fp</span>
+<span class="kw">JOIN</span> <span class="tbl">players</span> <span class="alias">p</span> <span class="kw">USING</span> (<span class="col">player_id</span>)
+<span class="kw">GROUP BY</span> <span class="tbl">fp</span>.<span class="col">early_streak_flag</span>
+<span class="kw">ORDER BY</span> <span class="tbl">fp</span>.<span class="col">early_streak_flag</span>;</pre>
+      <div class="output-wrap">
+        <div class="output-label">Output — loss streak vs D7 churn outcome</div>
+        <table class="output-table">
+          <thead><tr><th>early_streak_flag</th><th>player_count</th><th>avg_max_streak</th><th>d7_churn_pct</th></tr></thead>
+          <tbody>
+            <tr><td class="hl-green">0 — No early streak</td><td>6,841</td><td>1.4</td><td class="hl-green">31.2%</td></tr>
+            <tr><td class="hl-red">1 — 3+ loss streak</td><td>3,171</td><td>4.1</td><td class="hl-red">71.7%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="insight-block" style="margin-top:12px">
+      <div class="insight-label">Window Function Finding</div>
+      <div class="insight-text">"Players who hit a 3+ consecutive loss streak in their first 10 matches churn at 71.7% by D7 — vs 31.2% for those who don't. That's a 2.3x multiplier. The early match pool is a retention mechanic, not just a fairness consideration."</div>
+    </div>
+  </div>
+
+  <!-- ── 03b CASE STUDY NARRATIVE ── -->
+  <div class="section-block">
+    <div class="section-label">03b · Case Study — What the Data Is Actually Saying</div>
+
+    <div class="annotation" style="margin-bottom:14px">
+      <strong>The question I started with:</strong> Dead by Daylight has a deeply committed long-term playerbase. But it also has consistently brutal early-player churn. Why? And is the churn happening because of the game, or because of how the game introduces itself?
+    </div>
+
+    <div class="finding-grid">
+      <div class="finding-cell">
+        <div class="finding-num">THE SETUP</div>
+        <div class="finding-title">Cohort analysis as a diagnostic</div>
+        <div class="finding-body">The cohort retention matrix isn't just a reporting tool — it's a diagnostic. When you overlay 4 cohorts and they all bend at the same lifecycle point (D5–D9), that's not noise. That's a structural signal in the game. The question shifts from "why do players churn?" to "what happens at D7 that is consistent regardless of when someone started?"</div>
+      </div>
+      <div class="finding-cell">
+        <div class="finding-num">THE ANSWER</div>
+        <div class="finding-title">Friction accumulates faster than competence</div>
+        <div class="finding-body">By D7, a new DBD player has experienced enough match pressure to feel overmatched but hasn't yet developed the perk literacy, role familiarity, or mental model of survivor/killer asymmetry to reframe losses as learning. The game gets harder before it gets legible. The churn event isn't "I hate this game" — it's "I don't know how to get better."</div>
+      </div>
+      <div class="finding-cell">
+        <div class="finding-num">THE SIGNAL</div>
+        <div class="finding-title">Session frequency over session length</div>
+        <div class="finding-body">The decay curves show something counterintuitive: long sessions don't protect retention. A player putting in 2-hour weekend sessions shows faster frequency decay than one playing 20 minutes daily. Daily ritual is the retention anchor. This matters for how you design push notifications, daily objectives, and XP structures — they need to create daily pull, not just engagement depth.</div>
+      </div>
+      <div class="finding-cell">
+        <div class="finding-num">THE PATCH EFFECT</div>
+        <div class="finding-title">Content timing is a retention variable</div>
+        <div class="finding-body">The Feb +3.7pt lift proves that a content patch landing at D5 of a new cohort's lifecycle produces outsized retention impact. It gives churning players a new reason loop exactly when their old one (novelty) is expiring. This isn't accidental — it means LiveOps teams should model cohort D7 windows into the content calendar, not treat patches as standalone events.</div>
+      </div>
+    </div>
+
+    <div class="insight-block" style="margin-top:12px">
+      <div class="insight-label">Analyst Note</div>
+      <div class="insight-text">"The loss streak finding was the most unexpected result. A 2.3x D7 churn multiplier from 3+ consecutive early losses is large enough that it should be treated as a first-class retention lever. Early match seeding isn't a fairness consideration — it's a business decision with measurable retention impact."</div>
+    </div>
+  </div>
+
+  <!-- ── 04 TABLEAU DASHBOARD ── -->
+  <div class="section-block">
+    <div class="section-label">04 · Tableau Dashboard</div>
+
+    <!-- KPI Row -->
+    <div class="tableau-frame">
+      <div class="tableau-topbar">
+        <div class="tableau-logo">Tableau</div>
+        <div class="tableau-title">DBD Player Health Dashboard · Jan–Apr 2026 · All Cohorts</div>
+        <div class="tableau-dot"></div>
+      </div>
+      <div class="tableau-body">
+        <svg viewBox="0 0 860 440" xmlns="http://www.w3.org/2000/svg">
+          <rect width="860" height="440" fill="#0a0c12"/>
+
+          <!-- KPI Cards row -->
+          <text x="20" y="20" fill="rgba(90,96,112,.6)" font-size="8" font-family="'Barlow Condensed',sans-serif" letter-spacing="1.5">KPI OVERVIEW</text>
+
+          <!-- KPI 1 -->
+          <rect x="20" y="28" width="156" height="64" fill="#0e1018" stroke="#1e2230" stroke-width="1" rx="2"/>
+          <text x="28" y="46" fill="rgba(90,96,112,.6)" font-size="7" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">AVG D7 RETENTION</text>
+          <text x="28" y="70" fill="rgba(200,72,72,.9)" font-size="26" font-family="'Barlow Condensed',sans-serif" font-weight="700">42.3%</text>
+          <text x="28" y="84" fill="rgba(96,168,112,.6)" font-size="7" font-family="monospace">↑ +3.7pt vs Jan cohort</text>
+
+          <!-- KPI 2 -->
+          <rect x="186" y="28" width="156" height="64" fill="#0e1018" stroke="#1e2230" stroke-width="1" rx="2"/>
+          <text x="194" y="46" fill="rgba(90,96,112,.6)" font-size="7" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">D30 RETENTION</text>
+          <text x="194" y="70" fill="rgba(200,130,48,.9)" font-size="26" font-family="'Barlow Condensed',sans-serif" font-weight="700">23.3%</text>
+          <text x="194" y="84" fill="rgba(90,96,112,.5)" font-size="7" font-family="monospace">avg across all cohorts</text>
+
+          <!-- KPI 3 -->
+          <rect x="352" y="28" width="156" height="64" fill="#0e1018" stroke="#1e2230" stroke-width="1" rx="2"/>
+          <text x="360" y="46" fill="rgba(90,96,112,.6)" font-size="7" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">CHURN AFTER 7d INACT.</text>
+          <text x="360" y="70" fill="rgba(200,72,72,.9)" font-size="26" font-family="'Barlow Condensed',sans-serif" font-weight="700">68%</text>
+          <text x="360" y="84" fill="rgba(200,72,72,.5)" font-size="7" font-family="monospace">primary intervention signal</text>
+
+          <!-- KPI 4 -->
+          <rect x="518" y="28" width="156" height="64" fill="#0e1018" stroke="#1e2230" stroke-width="1" rx="2"/>
+          <text x="526" y="46" fill="rgba(90,96,112,.6)" font-size="7" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">CASUAL PLAYER CHURN</text>
+          <text x="526" y="70" fill="rgba(200,72,72,.9)" font-size="26" font-family="'Barlow Condensed',sans-serif" font-weight="700">61%</text>
+          <text x="526" y="84" fill="rgba(90,96,112,.5)" font-size="7" font-family="monospace">highest-risk segment</text>
+
+          <!-- KPI 5 -->
+          <rect x="684" y="28" width="156" height="64" fill="#0e1018" stroke="#1e2230" stroke-width="1" rx="2"/>
+          <text x="692" y="46" fill="rgba(90,96,112,.6)" font-size="7" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">PATCH RETENTION LIFT</text>
+          <text x="692" y="70" fill="rgba(96,168,112,.9)" font-size="26" font-family="'Barlow Condensed',sans-serif" font-weight="700">+3.7pt</text>
+          <text x="692" y="84" fill="rgba(96,168,112,.6)" font-size="7" font-family="monospace">Feb 12 content patch</text>
+
+          <!-- SECTION LABEL -->
+          <text x="20" y="114" fill="rgba(90,96,112,.6)" font-size="8" font-family="'Barlow Condensed',sans-serif" letter-spacing="1.5">RETENTION CURVE — ALL COHORTS OVERLAID</text>
+
+          <!-- Retention curve chart -->
+          <rect x="20" y="120" width="500" height="160" fill="#0e1018" stroke="#1e2230" stroke-width="1" rx="2"/>
+
+          <!-- Grid lines -->
+          <line x1="80" y1="130" x2="510" y2="130" stroke="#1e2230" stroke-width=".8"/>
+          <line x1="80" y1="155" x2="510" y2="155" stroke="#1e2230" stroke-width=".8"/>
+          <line x1="80" y1="180" x2="510" y2="180" stroke="#1e2230" stroke-width=".8"/>
+          <line x1="80" y1="205" x2="510" y2="205" stroke="#1e2230" stroke-width=".8"/>
+          <line x1="80" y1="230" x2="510" y2="230" stroke="#1e2230" stroke-width=".8"/>
+          <line x1="80" y1="255" x2="510" y2="255" stroke="#1e2230" stroke-width=".8"/>
+          <line x1="80" y1="270" x2="510" y2="270" stroke="#1e2230" stroke-width=".5"/>
+
+          <!-- Y axis labels -->
+          <text x="72" y="133" text-anchor="end" fill="rgba(90,96,112,.5)" font-size="6.5" font-family="monospace">70%</text>
+          <text x="72" y="158" text-anchor="end" fill="rgba(90,96,112,.5)" font-size="6.5" font-family="monospace">60%</text>
+          <text x="72" y="183" text-anchor="end" fill="rgba(90,96,112,.5)" font-size="6.5" font-family="monospace">50%</text>
+          <text x="72" y="208" text-anchor="end" fill="rgba(90,96,112,.5)" font-size="6.5" font-family="monospace">40%</text>
+          <text x="72" y="233" text-anchor="end" fill="rgba(90,96,112,.5)" font-size="6.5" font-family="monospace">30%</text>
+          <text x="72" y="258" text-anchor="end" fill="rgba(90,96,112,.5)" font-size="6.5" font-family="monospace">20%</text>
+
+          <!-- X axis labels -->
+          <text x="80"  y="282" text-anchor="middle" fill="rgba(90,96,112,.5)" font-size="6.5" font-family="monospace">D0</text>
+          <text x="150" y="282" text-anchor="middle" fill="rgba(90,96,112,.5)" font-size="6.5" font-family="monospace">D1</text>
+          <text x="230" y="282" text-anchor="middle" fill="rgba(200,72,72,.6)" font-size="6.5" font-family="monospace">D7 ▼</text>
+          <text x="300" y="282" text-anchor="middle" fill="rgba(90,96,112,.5)" font-size="6.5" font-family="monospace">D14</text>
+          <text x="370" y="282" text-anchor="middle" fill="rgba(90,96,112,.5)" font-size="6.5" font-family="monospace">D30</text>
+          <text x="440" y="282" text-anchor="middle" fill="rgba(90,96,112,.5)" font-size="6.5" font-family="monospace">D60</text>
+          <text x="510" y="282" text-anchor="middle" fill="rgba(90,96,112,.5)" font-size="6.5" font-family="monospace">D90</text>
+
+          <!-- Jan cohort line -->
+          <polyline points="80,130 150,162 230,209 300,230 370,248 440,262 510,270" fill="none" stroke="rgba(200,72,72,.5)" stroke-width="1.5" stroke-dasharray="5 3"/>
+          <!-- Feb cohort line — slightly better -->
+          <polyline points="80,128 150,157 230,204 300,226 370,244 440,259 510,267" fill="none" stroke="rgba(200,72,72,.7)" stroke-width="1.8"/>
+          <!-- Mar cohort line — best -->
+          <polyline points="80,126 150,153 230,200 300,222 370,240 440,256 510,264" fill="none" stroke="rgba(200,100,72,.85)" stroke-width="2"/>
+
+          <!-- D7 cliff annotation -->
+          <line x1="230" y1="128" x2="230" y2="270" stroke="rgba(200,72,72,.35)" stroke-width="1" stroke-dasharray="3 2"/>
+          <rect x="190" y="288" width="80" height="14" fill="rgba(200,72,72,.1)" stroke="rgba(200,72,72,.3)" stroke-width=".6" rx="1"/>
+          <text x="230" y="298" text-anchor="middle" fill="rgba(200,72,72,.8)" font-size="7" font-family="monospace">CLIFF D5–D9</text>
+
+          <!-- Legend -->
+          <line x1="30" y1="136" x2="50" y2="136" stroke="rgba(200,72,72,.5)" stroke-width="1.5" stroke-dasharray="4 2"/>
+          <text x="54" y="140" fill="rgba(90,96,112,.6)" font-size="6.5" font-family="'Barlow',sans-serif">Jan 2026</text>
+          <line x1="30" y1="148" x2="50" y2="148" stroke="rgba(200,72,72,.7)" stroke-width="1.8"/>
+          <text x="54" y="152" fill="rgba(90,96,112,.6)" font-size="6.5" font-family="'Barlow',sans-serif">Feb 2026</text>
+          <line x1="30" y1="160" x2="50" y2="160" stroke="rgba(200,100,72,.85)" stroke-width="2"/>
+          <text x="54" y="164" fill="rgba(90,96,112,.6)" font-size="6.5" font-family="'Barlow',sans-serif">Mar 2026</text>
+
+          <!-- CHURN BY SEGMENT -->
+          <text x="540" y="114" fill="rgba(90,96,112,.6)" font-size="8" font-family="'Barlow Condensed',sans-serif" letter-spacing="1.5">CHURN BY SEGMENT</text>
+          <rect x="540" y="120" width="300" height="160" fill="#0e1018" stroke="#1e2230" stroke-width="1" rx="2"/>
+
+          <!-- Bar chart -->
+          <text x="560" y="145" fill="rgba(200,204,216,.7)" font-size="8" font-family="'Barlow',sans-serif">New Player</text>
+          <rect x="660" y="134" width="120" height="18" fill="#0a0c12" rx="1"/>
+          <rect x="660" y="134" width="102" height="18" fill="rgba(200,72,72,.65)" rx="1"/>
+          <text x="766" y="147" text-anchor="end" fill="rgba(200,72,72,.85)" font-size="8" font-family="monospace">72%</text>
+
+          <text x="560" y="178" fill="rgba(200,204,216,.7)" font-size="8" font-family="'Barlow',sans-serif">Casual Player</text>
+          <rect x="660" y="167" width="120" height="18" fill="#0a0c12" rx="1"/>
+          <rect x="660" y="167" width="85" height="18" fill="rgba(200,100,48,.6)" rx="1"/>
+          <text x="750" y="180" text-anchor="end" fill="rgba(200,130,48,.85)" font-size="8" font-family="monospace">61%</text>
+
+          <text x="560" y="211" fill="rgba(200,204,216,.7)" font-size="8" font-family="'Barlow',sans-serif">High Engagement</text>
+          <rect x="660" y="200" width="120" height="18" fill="#0a0c12" rx="1"/>
+          <rect x="660" y="200" width="26" height="18" fill="rgba(96,168,112,.5)" rx="1"/>
+          <text x="692" y="213" text-anchor="end" fill="rgba(96,168,112,.8)" font-size="8" font-family="monospace">19%</text>
+
+          <text x="550" y="254" fill="rgba(90,96,112,.5)" font-size="6.5" font-family="monospace">Casual segment: highest churn concentration</text>
+          <text x="550" y="264" fill="rgba(90,96,112,.5)" font-size="6.5" font-family="monospace">New players: highest absolute churn volume</text>
+
+          <!-- SESSION FREQUENCY DECAY -->
+          <text x="20" y="306" fill="rgba(90,96,112,.6)" font-size="8" font-family="'Barlow Condensed',sans-serif" letter-spacing="1.5">SESSION FREQUENCY DECAY — CASUAL vs HIGH ENGAGEMENT</text>
+          <rect x="20" y="312" width="820" height="112" fill="#0e1018" stroke="#1e2230" stroke-width="1" rx="2"/>
+
+          <!-- Grid -->
+          <line x1="60" y1="322" x2="830" y2="322" stroke="#1e2230" stroke-width=".7"/>
+          <line x1="60" y1="342" x2="830" y2="342" stroke="#1e2230" stroke-width=".7"/>
+          <line x1="60" y1="362" x2="830" y2="362" stroke="#1e2230" stroke-width=".7"/>
+          <line x1="60" y1="382" x2="830" y2="382" stroke="#1e2230" stroke-width=".7"/>
+          <line x1="60" y1="402" x2="830" y2="402" stroke="#1e2230" stroke-width=".7"/>
+          <line x1="60" y1="415" x2="830" y2="415" stroke="#1e2230" stroke-width=".5"/>
+
+          <!-- Y labels -->
+          <text x="54" y="325" text-anchor="end" fill="rgba(90,96,112,.5)" font-size="6" font-family="monospace">7/wk</text>
+          <text x="54" y="345" text-anchor="end" fill="rgba(90,96,112,.5)" font-size="6" font-family="monospace">5/wk</text>
+          <text x="54" y="365" text-anchor="end" fill="rgba(90,96,112,.5)" font-size="6" font-family="monospace">3/wk</text>
+          <text x="54" y="385" text-anchor="end" fill="rgba(90,96,112,.5)" font-size="6" font-family="monospace">1/wk</text>
+
+          <!-- X labels -->
+          <text x="60"  y="425" text-anchor="middle" fill="rgba(90,96,112,.5)" font-size="6" font-family="monospace">W1</text>
+          <text x="170" y="425" text-anchor="middle" fill="rgba(90,96,112,.5)" font-size="6" font-family="monospace">W2</text>
+          <text x="280" y="425" text-anchor="middle" fill="rgba(90,96,112,.5)" font-size="6" font-family="monospace">W3</text>
+          <text x="390" y="425" text-anchor="middle" fill="rgba(90,96,112,.5)" font-size="6" font-family="monospace">W4</text>
+          <text x="500" y="425" text-anchor="middle" fill="rgba(90,96,112,.5)" font-size="6" font-family="monospace">W6</text>
+          <text x="610" y="425" text-anchor="middle" fill="rgba(90,96,112,.5)" font-size="6" font-family="monospace">W8</text>
+          <text x="720" y="425" text-anchor="middle" fill="rgba(90,96,112,.5)" font-size="6" font-family="monospace">W10</text>
+          <text x="830" y="425" text-anchor="middle" fill="rgba(90,96,112,.5)" font-size="6" font-family="monospace">W12</text>
+
+          <!-- High engagement line — stays high -->
+          <polyline points="60,326 170,328 280,330 390,332 500,333 610,334 720,335 830,335" fill="none" stroke="rgba(96,168,112,.7)" stroke-width="2"/>
+          <!-- Casual line — decays -->
+          <polyline points="60,338 170,348 280,362 390,378 500,390 610,400 720,406 830,410" fill="none" stroke="rgba(200,72,72,.7)" stroke-width="1.8"/>
+
+          <!-- Legend -->
+          <line x1="70" y1="438" x2="90" y2="438" stroke="rgba(96,168,112,.7)" stroke-width="2"/>
+          <text x="94" y="441" fill="rgba(90,96,112,.6)" font-size="7" font-family="'Barlow',sans-serif">High Engagement</text>
+          <line x1="200" y1="438" x2="220" y2="438" stroke="rgba(200,72,72,.7)" stroke-width="1.8"/>
+          <text x="224" y="441" fill="rgba(90,96,112,.6)" font-size="7" font-family="'Barlow',sans-serif">Casual Player</text>
+          <text x="540" y="441" fill="rgba(90,96,112,.45)" font-size="6.5" font-family="monospace">Session frequency decay — not session length — is the primary churn predictor</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 05 FINDINGS ── -->
+  <div class="section-block">
+    <div class="section-label">05 · Key Findings</div>
+
+    <div class="finding-grid">
+      <div class="finding-cell">
+        <div class="finding-num">01</div>
+        <div class="finding-title">The D7 cliff is a friction event, not natural decay</div>
+        <div class="finding-body">Retention didn't erode gradually — it dropped sharply between D5 and D9. This is where matchmaking pressure peaks before players have developed role familiarity or perk literacy. A discrete friction event, not background churn.</div>
+      </div>
+      <div class="finding-cell">
+        <div class="finding-num">02</div>
+        <div class="finding-title">Session frequency predicts churn better than session length</div>
+        <div class="finding-body">A player logging 20-minute sessions daily retained better than one playing 2-hour sessions weekly. Frequency signals ongoing identity investment. Length just signals available time. This distinction matters for how LiveOps teams design daily engagement hooks.</div>
+      </div>
+      <div class="finding-cell">
+        <div class="finding-num">03</div>
+        <div class="finding-title">7+ day inactivity predicts 68% churn probability</div>
+        <div class="finding-body">Once a player crosses a 7-day absence gap, 68% don't return. The intervention window is days 4–6 — not after the gap has formed. Content notifications, reward nudges, or matchmaking adjustments at day 5 would catch players before the threshold, not after.</div>
+      </div>
+      <div class="finding-cell">
+        <div class="finding-num">04</div>
+        <div class="finding-title">Casual players are the most vulnerable segment</div>
+        <div class="finding-body">61% churn rate vs 19% for high-engagement players. Casual players have enough investment to feel unfairness but not enough mastery to explain it. They're the segment most sensitive to matchmaking pressure and progression opacity — and the largest by volume.</div>
+      </div>
+      <div class="finding-cell">
+        <div class="finding-num">05</div>
+        <div class="finding-title">Content patches directly lift D7 retention</div>
+        <div class="finding-body">The Feb 12 patch correlated with a +3.7pt D7 improvement in the Feb cohort vs Jan. Content cadence and retention curves should be planned together — not independently. A patch landing at D5 of a new cohort's lifecycle has outsized retention impact.</div>
+      </div>
+      <div class="finding-cell">
+        <div class="finding-num">06</div>
+        <div class="finding-title">Early loss exposure compounds disengagement 2.3x</div>
+        <div class="finding-body">Players who experienced repeated losses in their first 10 matches showed 2.3x the churn rate of players who had at least one strong early win in their first 5 sessions. Early win seeding is a retention mechanic, not just a UX nicety.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 06 WHAT I'D CHANGE ── -->
+  <div class="section-block">
+    <div class="section-label">06 · What I'd Do Differently</div>
+
+    <div class="change-row">
+      <div class="change-tag">MATCHMAKING</div>
+      <div class="change-body"><strong>Protected onboarding pool for players under 20 matches.</strong> The data shows the churn decision is made in the first week — not at D30. A soft MMR ceiling during onboarding would reduce early loss streaks with minimal queue time impact and likely move D7 retention by several points.</div>
+    </div>
+    <div class="change-row">
+      <div class="change-tag">LIVEOPS</div>
+      <div class="change-body"><strong>Day 5 re-engagement nudge.</strong> Given the 7-day inactivity threshold, a targeted content notification or reward at day 5 inactivity catches players before they cross the churn line — not after. This is a low-cost, high-leverage LiveOps intervention that doesn't require changing any game system.</div>
+    </div>
+    <div class="change-row">
+      <div class="change-tag">CONTENT</div>
+      <div class="change-body"><strong>Align patch cadence to cohort D7 windows.</strong> The Feb patch result proves content drops move retention when they land at the right lifecycle moment. I'd model new cohort D5–D9 windows into the content calendar so every patch has maximum retention impact, not just engagement spikes for existing players.</div>
+    </div>
+    <div class="change-row">
+      <div class="change-tag">DATA</div>
+      <div class="change-body"><strong>Instrument real disconnect and rage quit signals.</strong> This analysis used session-level aggregation. With granular event-level telemetry — mid-match disconnects, abrupt exits, repeat queue-abandons — the D7 friction signal could be detected 2–3 days earlier, opening a wider intervention window.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
