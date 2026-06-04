@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Eglinton Crosstown — UX Systems Analysis</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Barlow+Condensed:wght@400;500;600;700&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08090d;
+  --surface:#0e1018;
+  --surface2:#131620;
+  --surface3:#181c28;
+  --border:#1e2230;
+  --border2:#252a3a;
+  --text:#c8ccd8;
+  --text-bright:#e8eaf2;
+  --muted:#5a6070;
+  --muted2:#7a8090;
+  --amber:#d07830;
+  --amber2:#f59e0b;
+  --amber-dim:rgba(208,120,48,.12);
+  --red:#c84848;
+  --red-dim:rgba(200,72,72,.12);
+  --yellow:#c8a030;
+  --yellow-dim:rgba(200,160,48,.12);
+  --green:#60a870;
+  --green-dim:rgba(96,168,112,.12);
+  --teal:#4ab8c8;
+  --blue:#5880c8;
+  --sans:'Barlow',-apple-system,BlinkMacSystemFont,sans-serif;
+  --cond:'Barlow Condensed','Barlow',-apple-system,sans-serif;
+  --mono:'JetBrains Mono','Fira Code',monospace;
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:13px;
+  line-height:1.5;
+  min-height:100vh;
+}
+
+/* ── DOC HEADER ── */
+.doc-header{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+}
+.doc-header-top{
+  display:flex;align-items:stretch;
+  border-bottom:1px solid var(--border);
+}
+.doc-logo{
+  display:flex;align-items:center;
+  padding:14px 24px;
+  border-right:1px solid var(--border);
+  gap:10px;
+}
+.doc-logo-mark svg{width:28px;height:28px}
+.doc-logo-text{
+  font-family:var(--cond);font-size:.9rem;
+  font-weight:700;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--text-bright);
+}
+.doc-logo-sub{
+  font-size:.6rem;color:var(--muted2);
+  letter-spacing:.1em;text-transform:uppercase;
+  margin-top:1px;font-family:var(--cond);
+}
+.doc-meta{
+  display:flex;align-items:center;gap:0;
+  margin-left:auto;
+}
+.doc-meta-item{
+  padding:0 20px;
+  border-left:1px solid var(--border);
+  height:100%;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.doc-meta-label{
+  font-family:var(--cond);font-size:.55rem;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:2px;
+}
+.doc-meta-val{
+  font-size:.72rem;font-weight:600;
+  color:var(--text-bright);
+}
+.doc-title-row{
+  padding:16px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.doc-title{
+  font-family:var(--cond);font-size:1.15rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-bright);
+}
+.doc-classification{
+  font-family:var(--mono);font-size:.6rem;
+  color:var(--amber);letter-spacing:.15em;
+  border:1px solid rgba(208,120,48,.3);
+  padding:.2rem .5rem;
+}
+
+/* ── CONTENT ── */
+.content{padding:0 24px 40px}
+
+/* ── SECTION LABELS ── */
+.section-label{
+  font-family:var(--cond);font-size:.6rem;
+  letter-spacing:.15em;text-transform:uppercase;
+  color:var(--amber);font-weight:600;
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:10px;
+}
+.section-label::after{
+  content:'';flex:1;
+  height:1px;background:var(--border);
+}
+
+.section-block{
+  padding:20px 0;
+  border-bottom:1px solid var(--border);
+}
+.section-block:last-child{border-bottom:none}
+
+/* ── MAP SECTION ── */
+.map-wrap{
+  width:100%;
+  background:var(--surface);
+  border:1px solid var(--border);
+  overflow:hidden;
+  position:relative;
+}
+.map-wrap svg{width:100%;display:block}
+
+/* ── KEY FINDINGS ── */
+.findings-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  margin-top:12px;
+}
+.finding-cell{
+  background:var(--surface);
+  padding:14px 16px;
+}
+.finding-icon{
+  font-size:1.1rem;margin-bottom:6px;
+}
+.finding-title{
+  font-family:var(--cond);font-size:.75rem;
+  font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;
+  color:var(--text-bright);
+  margin-bottom:5px;
+}
+.finding-body{
+  font-size:.72rem;color:var(--muted2);
+  line-height:1.65;
+}
+.finding-tag{
+  display:inline-block;
+  font-family:var(--mono);font-size:.58rem;
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:.18rem .5rem;margin-top:8px;
+  border:1px solid rgba(208,120,48,.3);
+  color:var(--amber);
+}
+
+/* ── FRICTION JOURNEY ── */
+.journey-wrap{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:0 24px;
+  align-items:start;
+  margin-top:12px;
+}
+.journey-col-label{
+  font-family:var(--cond);font-size:.65rem;
+  letter-spacing:.12em;text-transform:uppercase;
+  font-weight:700;margin-bottom:12px;
+}
+.journey-col-label.before{color:var(--red)}
+.journey-col-label.after{color:var(--green)}
+.journey-col-sub{
+  font-size:.65rem;color:var(--muted);
+  text-transform:none;letter-spacing:0;
+  font-weight:400;margin-top:2px;
+}
+
+.journey-stage{
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  padding:12px 14px;
+  margin-bottom:6px;
+  position:relative;
+}
+.stage-title{
+  font-size:.78rem;font-weight:600;
+  color:var(--text-bright);margin-bottom:4px;
+}
+.stage-desc{
+  font-size:.68rem;color:var(--muted2);
+  line-height:1.6;margin-bottom:8px;
+}
+.friction-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.06em;text-transform:uppercase;
+  padding:.18rem .55rem;
+}
+.friction-high{
+  background:var(--red-dim);
+  border:1px solid rgba(200,72,72,.25);
+  color:var(--red);
+}
+.friction-med{
+  background:var(--yellow-dim);
+  border:1px solid rgba(200,160,48,.25);
+  color:var(--yellow);
+}
+.friction-low{
+  background:var(--green-dim);
+  border:1px solid rgba(96,168,112,.25);
+  color:var(--green);
+}
+.friction-dot{
+  width:6px;height:6px;border-radius:50%;
+  flex-shrink:0;
+}
+.dot-high{background:var(--red)}
+.dot-med{background:var(--yellow)}
+.dot-low{background:var(--green)}
+
+.stage-arrow{
+  text-align:center;
+  color:var(--muted);
+  font-size:1rem;
+  padding:4px 0 10px;
+}
+
+.journey-divider{
+  display:flex;flex-direction:column;
+  align-items:center;
+  padding-top:28px;
+  gap:12px;
+}
+.journey-arrow-big{
+  font-size:1.6rem;color:var(--border2);
+  writing-mode:horizontal-tb;
+}
+.journey-summary{
+  background:var(--amber-dim);
+  border:1px solid rgba(208,120,48,.2);
+  padding:14px;
+  text-align:center;
+  width:140px;
+}
+.journey-summary-head{
+  font-family:var(--cond);font-size:.65rem;
+  font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--amber);margin-bottom:6px;
+}
+.journey-summary-body{
+  font-size:.68rem;color:var(--muted2);
+  line-height:1.65;
+}
+
+/* ── INSIGHT BLOCK ── */
+.insight-block{
+  border-left:2px solid var(--amber);
+  padding:14px 18px;
+  background:var(--amber-dim);
+  margin-top:12px;
+}
+.insight-label{
+  font-family:var(--mono);font-size:.58rem;
+  color:var(--amber);letter-spacing:.12em;
+  text-transform:uppercase;margin-bottom:5px;
+}
+.insight-text{
+  font-size:.88rem;line-height:1.7;
+  color:var(--text-bright);font-weight:400;
+  font-style:italic;font-family:Georgia,serif;
+}
+
+/* ── ANALYST NOTE ── */
+.analyst-note{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  padding:14px 16px;
+  margin-top:12px;
+  display:flex;gap:12px;
+}
+.analyst-note-icon{
+  font-family:var(--mono);font-size:.65rem;
+  color:var(--amber2);letter-spacing:.06em;
+  white-space:nowrap;margin-top:2px;
+}
+.analyst-note-text{
+  font-size:.73rem;color:var(--muted2);
+  line-height:1.7;
+}
+.analyst-note-text strong{color:var(--text)}
+</style>
+</head>
+<body>
+
+<!-- DOC HEADER -->
+<div class="doc-header">
+  <div class="doc-header-top">
+    <div class="doc-logo">
+      <div class="doc-logo-mark">
+        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Stylized transit line / station mark -->
+          <circle cx="14" cy="14" r="13" stroke="rgba(208,120,48,.4)" stroke-width="1"/>
+          <line x1="4" y1="14" x2="24" y2="14" stroke="#d07830" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="8" cy="14" r="2.5" fill="none" stroke="#d07830" stroke-width="1.2"/>
+          <circle cx="14" cy="14" r="2.5" fill="#d07830"/>
+          <circle cx="20" cy="14" r="2.5" fill="none" stroke="#d07830" stroke-width="1.2"/>
+        </svg>
+      </div>
+      <div>
+        <div class="doc-logo-text">UX Systems</div>
+        <div class="doc-logo-sub">Behavioural Analysis</div>
+      </div>
+    </div>
+    <div class="doc-meta">
+      <div class="doc-meta-item">
+        <div class="doc-meta-label">Domain</div>
+        <div class="doc-meta-val">Urban Mobility · Service Design</div>
+      </div>
+      <div class="doc-meta-item">
+        <div class="doc-meta-label">Location</div>
+        <div class="doc-meta-val">Toronto, Ontario</div>
+      </div>
+      <div class="doc-meta-item">
+        <div class="doc-meta-label">Period</div>
+        <div class="doc-meta-val">Feb – Mar 2026</div>
+      </div>
+    </div>
+  </div>
+  <div class="doc-title-row">
+    <div class="doc-title">Eglinton Crosstown — Perceived Friction & Commuter Behaviour</div>
+    <div class="doc-classification">CASE STUDY · UX-TRN-001</div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- ── ROUTE MAP ── -->
+  <div class="section-block">
+    <div class="section-label">01 · Crosstown Accessibility Corridor</div>
+    <div class="map-wrap">
+      <svg viewBox="0 0 860 340" xmlns="http://www.w3.org/2000/svg">
+        <!-- Dark city grid background -->
+        <rect width="860" height="340" fill="#090c14"/>
+
+        <!-- Street grid — faint horizontal lines -->
+        <line x1="0" y1="60"  x2="860" y2="60"  stroke="#0e1220" stroke-width="1"/>
+        <line x1="0" y1="110" x2="860" y2="110" stroke="#0e1220" stroke-width="1"/>
+        <line x1="0" y1="160" x2="860" y2="160" stroke="#0e1220" stroke-width="1"/>
+        <line x1="0" y1="210" x2="860" y2="210" stroke="#0e1220" stroke-width="1"/>
+        <line x1="0" y1="260" x2="860" y2="260" stroke="#0e1220" stroke-width="1"/>
+        <line x1="0" y1="310" x2="860" y2="310" stroke="#0e1220" stroke-width="1"/>
+        <!-- Street grid — faint vertical lines -->
+        <line x1="86"  y1="0" x2="86"  y2="340" stroke="#0e1220" stroke-width="1"/>
+        <line x1="172" y1="0" x2="172" y2="340" stroke="#0e1220" stroke-width="1"/>
+        <line x1="258" y1="0" x2="258" y2="340" stroke="#0e1220" stroke-width="1"/>
+        <line x1="344" y1="0" x2="344" y2="340" stroke="#0e1220" stroke-width="1"/>
+        <line x1="430" y1="0" x2="430" y2="340" stroke="#0e1220" stroke-width="1"/>
+        <line x1="516" y1="0" x2="516" y2="340" stroke="#0e1220" stroke-width="1"/>
+        <line x1="602" y1="0" x2="602" y2="340" stroke="#0e1220" stroke-width="1"/>
+        <line x1="688" y1="0" x2="688" y2="340" stroke="#0e1220" stroke-width="1"/>
+        <line x1="774" y1="0" x2="774" y2="340" stroke="#0e1220" stroke-width="1"/>
+
+        <!-- Major roads — slightly brighter -->
+        <line x1="0" y1="168" x2="860" y2="168" stroke="#131828" stroke-width="2.5"/>
+        <line x1="430" y1="0" x2="430" y2="340" stroke="#131828" stroke-width="2"/>
+        <line x1="344" y1="0" x2="344" y2="340" stroke="#131828" stroke-width="1.5"/>
+        <line x1="602" y1="0" x2="602" y2="340" stroke="#131828" stroke-width="1.5"/>
+
+        <!-- Allen/DVP expressway hint -->
+        <path d="M 344 0 Q 350 80 344 168 Q 338 240 344 340" stroke="#131828" stroke-width="3" fill="none" opacity=".6"/>
+        <path d="M 602 0 Q 610 80 602 168 Q 594 240 602 340" stroke="#131828" stroke-width="3" fill="none" opacity=".6"/>
+
+        <!-- District fills — very subtle -->
+        <rect x="0"   y="0" width="130" height="340" fill="rgba(208,120,48,.025)"/>
+        <rect x="700" y="0" width="160" height="340" fill="rgba(88,128,200,.025)"/>
+
+        <!-- ── THE CROSSTOWN ROUTE ── -->
+        <!-- Shadow / glow -->
+        <line x1="60" y1="178" x2="820" y2="152" stroke="rgba(208,120,48,.15)" stroke-width="14" stroke-linecap="round"/>
+        <!-- Main line -->
+        <line x1="60" y1="178" x2="820" y2="152" stroke="#d07830" stroke-width="4" stroke-linecap="round" opacity=".9"/>
+        <!-- Bright top edge highlight -->
+        <line x1="60" y1="177" x2="820" y2="151" stroke="rgba(245,158,11,.5)" stroke-width="1.5" stroke-linecap="round"/>
+
+        <!-- Underground segments (dashed) -->
+        <line x1="60"  y1="178" x2="200" y2="173" stroke="#d07830" stroke-width="4" stroke-dasharray="8 4" opacity=".45"/>
+        <line x1="200" y1="173" x2="350" y2="168" stroke="#d07830" stroke-width="4" opacity=".9"/>
+        <line x1="350" y1="168" x2="500" y2="163" stroke="#d07830" stroke-width="4" stroke-dasharray="8 4" opacity=".45"/>
+        <line x1="500" y1="163" x2="820" y2="152" stroke="#d07830" stroke-width="4" opacity=".9"/>
+
+        <!-- ── STATIONS ── -->
+        <!-- Mt Dennis -->
+        <circle cx="78"  cy="179" r="7" fill="#090c14" stroke="#d07830" stroke-width="2"/>
+        <circle cx="78"  cy="179" r="3" fill="#d07830"/>
+        <!-- Keelesdale -->
+        <circle cx="148" cy="176" r="5" fill="#090c14" stroke="#d07830" stroke-width="1.5"/>
+        <!-- Caledonia -->
+        <circle cx="210" cy="174" r="5" fill="#090c14" stroke="#d07830" stroke-width="1.5"/>
+        <!-- Dufferin -->
+        <circle cx="272" cy="171" r="5" fill="#090c14" stroke="#d07830" stroke-width="1.5"/>
+        <!-- Avenue -->
+        <circle cx="344" cy="169" r="6" fill="#090c14" stroke="#d07830" stroke-width="2"/>
+        <circle cx="344" cy="169" r="2.5" fill="#d07830"/>
+        <!-- Leaside (Laird) -->
+        <circle cx="500" cy="163" r="9" fill="#090c14" stroke="#f59e0b" stroke-width="2.5"/>
+        <circle cx="500" cy="163" r="4" fill="#f59e0b"/>
+        <!-- Leaside glow -->
+        <circle cx="500" cy="163" r="18" fill="rgba(245,158,11,.08)"/>
+        <!-- Bayview -->
+        <circle cx="580" cy="160" r="6" fill="#090c14" stroke="#d07830" stroke-width="2"/>
+        <circle cx="580" cy="160" r="2.5" fill="#d07830"/>
+        <!-- Yonge (Eglinton) -->
+        <circle cx="650" cy="157" r="9" fill="#090c14" stroke="#f59e0b" stroke-width="2.5"/>
+        <circle cx="650" cy="157" r="4" fill="#f59e0b"/>
+        <!-- Yonge glow -->
+        <circle cx="650" cy="157" r="18" fill="rgba(245,158,11,.08)"/>
+        <!-- Flemingdon -->
+        <circle cx="760" cy="153" r="7" fill="#090c14" stroke="#d07830" stroke-width="2"/>
+        <circle cx="760" cy="153" r="3" fill="#d07830"/>
+        <!-- Science Centre -->
+        <circle cx="820" cy="152" r="5" fill="#090c14" stroke="#d07830" stroke-width="1.5"/>
+
+        <!-- ── STATION LABELS ── -->
+        <text x="78"  y="197" text-anchor="middle" fill="rgba(208,120,48,.7)" font-size="8" font-family="monospace">MT DENNIS</text>
+        <text x="344" y="188" text-anchor="middle" fill="rgba(208,120,48,.7)" font-size="8" font-family="monospace">AVENUE</text>
+        <text x="500" y="185" text-anchor="middle" fill="rgba(245,158,11,.85)" font-size="8.5" font-family="monospace" font-weight="bold">LAIRD ★</text>
+        <text x="580" y="178" text-anchor="middle" fill="rgba(208,120,48,.7)" font-size="8" font-family="monospace">BAYVIEW</text>
+        <text x="650" y="176" text-anchor="middle" fill="rgba(245,158,11,.85)" font-size="8.5" font-family="monospace" font-weight="bold">YONGE ★</text>
+        <text x="760" y="170" text-anchor="middle" fill="rgba(208,120,48,.7)" font-size="8" font-family="monospace">FLEMINGDON</text>
+
+        <!-- ── LEGEND: underground vs surface ── -->
+        <rect x="12" y="10" width="140" height="38" fill="rgba(9,12,20,.85)" stroke="rgba(30,34,56,.8)" stroke-width=".8" rx="2"/>
+        <text x="20" y="24" fill="rgba(208,120,48,.6)" font-size="7" font-family="monospace" letter-spacing=".5">EGLINTON CROSSTOWN LRT</text>
+        <line x1="20" y1="34" x2="46" y2="34" stroke="#d07830" stroke-width="2"/>
+        <text x="50" y="38" fill="rgba(120,128,144,.7)" font-size="6.5" font-family="monospace">Surface</text>
+        <line x1="84" y1="34" x2="110" y2="34" stroke="#d07830" stroke-width="2" stroke-dasharray="4 2.5"/>
+        <text x="114" y="38" fill="rgba(120,128,144,.7)" font-size="6.5" font-family="monospace">Tunnel</text>
+
+        <!-- ── ANNOTATION 1: Perceived Proximity (left zone) ── -->
+        <line x1="78" y1="172" x2="78" y2="110" stroke="rgba(208,120,48,.25)" stroke-width="1" stroke-dasharray="3 3"/>
+        <rect x="10" y="14" width="0" height="0" fill="none"/>
+        <!-- callout box -->
+        <rect x="10" y="48" width="175" height="56" fill="rgba(9,12,20,.92)" stroke="rgba(208,120,48,.3)" stroke-width=".8" rx="2"/>
+        <text x="18" y="63" fill="rgba(245,158,11,.85)" font-size="8.5" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing=".5">PERCEIVED PROXIMITY</text>
+        <text x="18" y="76" fill="rgba(122,128,144,.85)" font-size="7.5" font-family="'Barlow',sans-serif">LRT access makes western</text>
+        <text x="18" y="87" fill="rgba(122,128,144,.85)" font-size="7.5" font-family="'Barlow',sans-serif">neighbourhoods feel closer</text>
+        <text x="18" y="98" fill="rgba(122,128,144,.85)" font-size="7.5" font-family="'Barlow',sans-serif">— a behavioural, not physical, shift.</text>
+
+        <!-- ── ANNOTATION 2: Movement Efficiency (centre) ── -->
+        <line x1="430" y1="162" x2="430" y2="70" stroke="rgba(208,120,48,.25)" stroke-width="1" stroke-dasharray="3 3"/>
+        <rect x="320" y="14" width="218" height="50" fill="rgba(9,12,20,.92)" stroke="rgba(208,120,48,.3)" stroke-width=".8" rx="2"/>
+        <text x="328" y="30" fill="rgba(245,158,11,.85)" font-size="8.5" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing=".5">MOVEMENT EFFICIENCY</text>
+        <text x="328" y="43" fill="rgba(122,128,144,.85)" font-size="7.5" font-family="'Barlow',sans-serif">Direct east–west routing eliminates</text>
+        <text x="328" y="55" fill="rgba(122,128,144,.85)" font-size="7.5" font-family="'Barlow',sans-serif">transfer-heavy commuting patterns.</text>
+
+        <!-- ── ANNOTATION 3: Accessibility Spine (right) ── -->
+        <line x1="700" y1="154" x2="700" y2="82" stroke="rgba(208,120,48,.25)" stroke-width="1" stroke-dasharray="3 3"/>
+        <rect x="616" y="14" width="230" height="62" fill="rgba(9,12,20,.92)" stroke="rgba(208,120,48,.3)" stroke-width=".8" rx="2"/>
+        <text x="624" y="30" fill="rgba(245,158,11,.85)" font-size="8.5" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing=".5">ACCESSIBILITY SPINE</text>
+        <text x="624" y="43" fill="rgba(122,128,144,.85)" font-size="7.5" font-family="'Barlow',sans-serif">The Crosstown functions as a</text>
+        <text x="624" y="55" fill="rgba(122,128,144,.85)" font-size="7.5" font-family="'Barlow',sans-serif">movement corridor connecting</text>
+        <text x="624" y="67" fill="rgba(122,128,144,.85)" font-size="7.5" font-family="'Barlow',sans-serif">fragmented urban zones.</text>
+
+        <!-- ── District labels ── -->
+        <text x="78"  y="325" text-anchor="middle" fill="rgba(90,96,112,.45)" font-size="8" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">WEST END</text>
+        <text x="344" y="325" text-anchor="middle" fill="rgba(90,96,112,.45)" font-size="8" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">MIDTOWN</text>
+        <text x="620" y="325" text-anchor="middle" fill="rgba(90,96,112,.45)" font-size="8" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">EAST YORK</text>
+
+        <!-- ── perceived friction heatmap overlay (subtle) ── -->
+        <!-- High friction zone: left (before crosstown) -->
+        <rect x="0"   y="200" width="180" height="8" fill="rgba(200,72,72,.4)" rx="2"/>
+        <rect x="180" y="200" width="160" height="8" fill="rgba(200,160,48,.3)" rx="2"/>
+        <rect x="340" y="200" width="200" height="8" fill="rgba(245,158,11,.25)" rx="2"/>
+        <rect x="540" y="200" width="200" height="8" fill="rgba(96,168,112,.3)" rx="2"/>
+        <rect x="740" y="200" width="120" height="8" fill="rgba(96,168,112,.4)" rx="2"/>
+        <text x="12"  y="222" fill="rgba(200,72,72,.6)"  font-size="6.5" font-family="monospace">HIGH FRICTION</text>
+        <text x="224" y="222" fill="rgba(200,160,48,.6)" font-size="6.5" font-family="monospace">MED</text>
+        <text x="420" y="222" fill="rgba(245,158,11,.6)" font-size="6.5" font-family="monospace">TRANSITION ZONE</text>
+        <text x="620" y="222" fill="rgba(96,168,112,.6)" font-size="6.5" font-family="monospace">LOW FRICTION</text>
+        <text x="12" y="232" fill="rgba(90,96,112,.4)" font-size="6" font-family="monospace">PERCEIVED COMMUTER FRICTION GRADIENT →</text>
+
+        <!-- ── bottom ruler ── -->
+        <line x1="60" y1="295" x2="820" y2="295" stroke="rgba(30,34,56,.8)" stroke-width=".5"/>
+        <text x="60"  y="308" fill="rgba(90,96,112,.4)" font-size="6.5" font-family="monospace">MT DENNIS</text>
+        <text x="290" y="308" fill="rgba(90,96,112,.4)" font-size="6.5" font-family="monospace">MIDTOWN</text>
+        <text x="580" y="308" fill="rgba(90,96,112,.4)" font-size="6.5" font-family="monospace">BAYVIEW</text>
+        <text x="730" y="308" fill="rgba(90,96,112,.4)" font-size="6.5" font-family="monospace">FLEMINGDON PK</text>
+
+        <!-- ── East/West labels ── -->
+        <text x="24"  y="172" fill="rgba(90,96,112,.5)" font-size="7" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">← W</text>
+        <text x="834" y="152" fill="rgba(90,96,112,.5)" font-size="7" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">E →</text>
+      </svg>
+    </div>
+
+    <!-- 3 key findings -->
+    <div class="findings-grid">
+      <div class="finding-cell">
+        <div class="finding-icon">📍</div>
+        <div class="finding-title">Perceived Proximity</div>
+        <div class="finding-body">Improved transit access creates a psychological compression of distance. Commuters report western neighbourhoods feeling "closer" — even where physical distance is unchanged.</div>
+        <div class="finding-tag">Behavioural Shift</div>
+      </div>
+      <div class="finding-cell">
+        <div class="finding-icon">⟶</div>
+        <div class="finding-title">Movement Efficiency</div>
+        <div class="finding-body">Direct east–west LRT routing reduces reliance on transfer-heavy bus connections. Fewer decision points = lower cognitive load per commute trip.</div>
+        <div class="finding-tag">Friction Reduction</div>
+      </div>
+      <div class="finding-cell">
+        <div class="finding-icon">◈</div>
+        <div class="finding-title">Accessibility Spine</div>
+        <div class="finding-body">The Crosstown acts as a connective spine across fragmented urban zones — the route's value is less about speed and more about coherence of movement.</div>
+        <div class="finding-tag">Systems Framing</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COMMUTER FRICTION JOURNEY ── -->
+  <div class="section-block">
+    <div class="section-label">02 · Commuter Friction Journey — Before vs After Crosstown</div>
+
+    <div class="journey-wrap">
+
+      <!-- BEFORE column -->
+      <div>
+        <div class="journey-col-label before">
+          Before Crosstown
+          <div class="journey-col-sub">Fragmented movement · High cognitive load</div>
+        </div>
+
+        <div class="journey-stage">
+          <div class="stage-title">Transit Access</div>
+          <div class="stage-desc">Bus congestion and inconsistent service create accessibility friction across east–west routes. Multiple vehicles required for corridor movement.</div>
+          <span class="friction-pill friction-high"><span class="friction-dot dot-high"></span>High Friction</span>
+        </div>
+        <div class="stage-arrow">↓</div>
+
+        <div class="journey-stage">
+          <div class="stage-title">Transfers</div>
+          <div class="stage-desc">Multiple transfers increase navigation complexity and commuter fatigue. Each transfer point is a potential failure in the trip chain.</div>
+          <span class="friction-pill friction-high"><span class="friction-dot dot-high"></span>High Friction</span>
+        </div>
+        <div class="stage-arrow">↓</div>
+
+        <div class="journey-stage">
+          <div class="stage-title">Reliability</div>
+          <div class="stage-desc">Traffic delays create unpredictable commute times and movement uncertainty. Commuters cannot confidently plan around arrival windows.</div>
+          <span class="friction-pill friction-med"><span class="friction-dot dot-med"></span>Medium Friction</span>
+        </div>
+        <div class="stage-arrow">↓</div>
+
+        <div class="journey-stage">
+          <div class="stage-title">Navigation</div>
+          <div class="stage-desc">Transfer-heavy movement increases cognitive load during commuting. Route decisions compound fatigue across the trip.</div>
+          <span class="friction-pill friction-med"><span class="friction-dot dot-med"></span>Medium Friction</span>
+        </div>
+        <div class="stage-arrow">↓</div>
+
+        <div class="journey-stage">
+          <div class="stage-title">Destination Access</div>
+          <div class="stage-desc">Longer final travel stages reduce perceived convenience and neighbourhood accessibility — the "last mile" problem amplified by an already-fragmented system.</div>
+          <span class="friction-pill friction-med"><span class="friction-dot dot-med"></span>Medium Friction</span>
+        </div>
+      </div>
+
+      <!-- CENTRE divider -->
+      <div class="journey-divider">
+        <div style="color:var(--border2);font-size:.65rem;font-family:var(--mono);letter-spacing:.1em;writing-mode:vertical-rl;opacity:.6;margin-bottom:16px;">FRICTION DELTA</div>
+        <div class="journey-summary">
+          <div class="journey-summary-head">Before → After</div>
+          <div class="journey-summary-body">Reduced transit friction improves movement confidence by simplifying navigation and increasing perceived accessibility.</div>
+        </div>
+        <div style="font-size:1.4rem;color:var(--amber);opacity:.5;margin-top:8px;">↓</div>
+        <!-- Mini friction score bars -->
+        <div style="width:100%;margin-top:16px;">
+          <div style="font-family:var(--mono);font-size:.55rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;text-align:center;">Overall Friction Score</div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;">
+            <div style="font-size:.62rem;color:var(--muted);width:28px;text-align:right;font-family:var(--mono);">BEF</div>
+            <div style="flex:1;height:5px;background:var(--border);border-radius:2px;overflow:hidden;">
+              <div style="width:82%;height:100%;background:var(--red);opacity:.7;border-radius:2px;"></div>
+            </div>
+            <div style="font-size:.62rem;color:var(--red);font-family:var(--mono);width:22px;">82%</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <div style="font-size:.62rem;color:var(--muted);width:28px;text-align:right;font-family:var(--mono);">AFT</div>
+            <div style="flex:1;height:5px;background:var(--border);border-radius:2px;overflow:hidden;">
+              <div style="width:28%;height:100%;background:var(--green);opacity:.7;border-radius:2px;"></div>
+            </div>
+            <div style="font-size:.62rem;color:var(--green);font-family:var(--mono);width:22px;">28%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AFTER column -->
+      <div>
+        <div class="journey-col-label after">
+          After Crosstown
+          <div class="journey-col-sub">Streamlined movement · Reduced cognitive load</div>
+        </div>
+
+        <div class="journey-stage" style="border-color:rgba(96,168,112,.2);">
+          <div class="stage-title">Transit Access</div>
+          <div class="stage-desc">Direct LRT access improves movement efficiency across east–west corridors. Single-vehicle corridor traversal replaces multi-bus chains.</div>
+          <span class="friction-pill friction-low"><span class="friction-dot dot-low"></span>Low Friction</span>
+        </div>
+        <div class="stage-arrow">↓</div>
+
+        <div class="journey-stage" style="border-color:rgba(96,168,112,.2);">
+          <div class="stage-title">Transfers</div>
+          <div class="stage-desc">Simplified routing reduces commuter fatigue and navigation complexity. Fewer decision points means lower mental overhead per trip.</div>
+          <span class="friction-pill friction-low"><span class="friction-dot dot-low"></span>Low Friction</span>
+        </div>
+        <div class="stage-arrow">↓</div>
+
+        <div class="journey-stage" style="border-color:rgba(96,168,112,.2);">
+          <div class="stage-title">Reliability</div>
+          <div class="stage-desc">Separated transit infrastructure improves travel predictability and consistency. Commuters can plan with confidence around arrival windows.</div>
+          <span class="friction-pill friction-low"><span class="friction-dot dot-low"></span>Low Friction</span>
+        </div>
+        <div class="stage-arrow">↓</div>
+
+        <div class="journey-stage" style="border-color:rgba(96,168,112,.2);">
+          <div class="stage-title">Navigation</div>
+          <div class="stage-desc">Clearer movement systems reduce cognitive load during commuting. Straightforward routes lower decision fatigue across the trip chain.</div>
+          <span class="friction-pill friction-low"><span class="friction-dot dot-low"></span>Low Friction</span>
+        </div>
+        <div class="stage-arrow">↓</div>
+
+        <div class="journey-stage" style="border-color:rgba(96,168,112,.2);">
+          <div class="stage-title">Destination Access</div>
+          <div class="stage-desc">Improved neighbourhood connectivity increases perceived accessibility. The LRT terminus positions formerly-fragmented zones as reachable in the commuter mental model.</div>
+          <span class="friction-pill friction-low"><span class="friction-dot dot-low"></span>Low Friction</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── CORE INSIGHT ── -->
+  <div class="section-block">
+    <div class="section-label">03 · Analyst Note</div>
+    <div class="insight-block">
+      <div class="insight-label">Core Finding</div>
+      <div class="insight-text">"Commuter behaviour is driven more by perceived friction and decision complexity than by objective transit efficiency. The Crosstown's value is not primarily speed — it is the elimination of ambiguity."</div>
+    </div>
+
+    <div class="analyst-note">
+      <div class="analyst-note-icon">→ NOTE</div>
+      <div class="analyst-note-text">
+        <strong>Why this matters beyond transit:</strong> The same friction model applies to any onboarding or engagement system. In gaming, players churn not when content is hard — but when the path forward is ambiguous. In fintech, users avoid action not when stakes are high — but when decision complexity overwhelms context. The Crosstown analysis is, functionally, a retention problem framed in urban infrastructure.
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

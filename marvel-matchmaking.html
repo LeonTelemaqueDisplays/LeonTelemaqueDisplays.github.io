@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Marvel Rivals — Behavioural Matchmaking Fairness System</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Barlow+Condensed:wght@400;500;600;700&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08090d;
+  --surface:#0e1018;
+  --surface2:#131620;
+  --surface3:#181c28;
+  --border:#1e2230;
+  --border2:#252a3a;
+  --text:#c8ccd8;
+  --text-bright:#e8eaf2;
+  --muted:#5a6070;
+  --muted2:#7a8090;
+  --blue:#5880c8;
+  --blue2:#4a70c0;
+  --blue-dim:rgba(88,128,200,.12);
+  --blue-glow:rgba(88,128,200,.06);
+  --red:#c84848;
+  --red-dim:rgba(200,72,72,.12);
+  --green:#60a870;
+  --green-dim:rgba(96,168,112,.12);
+  --amber:#c8a030;
+  --amber-dim:rgba(200,160,48,.12);
+  --purple:#8060c8;
+  --purple-dim:rgba(128,96,200,.12);
+  --sans:'Barlow',-apple-system,BlinkMacSystemFont,sans-serif;
+  --cond:'Barlow Condensed','Barlow',-apple-system,sans-serif;
+  --mono:'JetBrains Mono','Fira Code',monospace;
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:13px;
+  line-height:1.5;
+  min-height:100vh;
+}
+
+/* ── DOC HEADER ── */
+.doc-header{background:var(--surface);border-bottom:1px solid var(--border)}
+.doc-header-top{display:flex;align-items:stretch;border-bottom:1px solid var(--border)}
+.doc-logo{display:flex;align-items:center;padding:14px 24px;border-right:1px solid var(--border);gap:10px}
+.doc-logo-mark svg{width:28px;height:28px}
+.doc-logo-text{font-family:var(--cond);font-size:.9rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--text-bright)}
+.doc-logo-sub{font-size:.6rem;color:var(--muted2);letter-spacing:.1em;text-transform:uppercase;margin-top:1px;font-family:var(--cond)}
+.doc-meta{display:flex;align-items:center;margin-left:auto}
+.doc-meta-item{padding:0 20px;border-left:1px solid var(--border);height:100%;display:flex;flex-direction:column;justify-content:center}
+.doc-meta-label{font-family:var(--cond);font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.doc-meta-val{font-size:.72rem;font-weight:600;color:var(--text-bright)}
+.doc-title-row{padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+.doc-title{font-family:var(--cond);font-size:1.15rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-bright)}
+.doc-classification{font-family:var(--mono);font-size:.6rem;color:var(--blue);letter-spacing:.15em;border:1px solid rgba(88,128,200,.3);padding:.2rem .5rem}
+
+/* ── CONTENT ── */
+.content{padding:0 24px 48px}
+
+.section-block{padding:20px 0;border-bottom:1px solid var(--border)}
+.section-block:last-child{border-bottom:none}
+
+.section-label{
+  font-family:var(--cond);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--blue);font-weight:600;
+  display:flex;align-items:center;gap:8px;margin-bottom:12px;
+}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── DIAGRAM WRAP ── */
+.diagram-wrap{
+  width:100%;background:var(--surface);
+  border:1px solid var(--border);overflow:hidden;
+  margin-top:12px;
+}
+.diagram-wrap svg{width:100%;display:block}
+
+/* ── PROBLEM GRID ── */
+.problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-top:12px}
+.prob-cell{background:var(--surface);padding:14px 16px}
+.prob-label{font-family:var(--cond);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;margin-bottom:5px}
+.prob-body{font-size:.72rem;color:var(--muted2);line-height:1.65}
+.label-red{color:var(--red)}
+.label-blue{color:var(--blue)}
+
+/* ── PRINCIPLE LIST ── */
+.principle-row{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:10px 14px;border-bottom:1px solid var(--border);
+  background:var(--surface);
+}
+.principle-row:first-child{border-top:1px solid var(--border)}
+.principle-num{font-family:var(--mono);font-size:.6rem;color:var(--muted);width:18px;flex-shrink:0;margin-top:2px}
+.principle-head{font-size:.78rem;font-weight:600;color:var(--text-bright);margin-bottom:3px}
+.principle-body{font-size:.7rem;color:var(--muted2);line-height:1.6}
+
+/* ── STRESS TABLE ── */
+.stress-table{width:100%;border-collapse:collapse;font-size:.72rem;margin-top:12px}
+.stress-table th{
+  padding:9px 12px;font-family:var(--cond);font-size:.58rem;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+  border-bottom:1px solid var(--border2);border-right:1px solid var(--border);
+  text-align:left;background:var(--surface);
+}
+.stress-table th:last-child{border-right:none}
+.stress-table td{
+  padding:10px 12px;border-bottom:1px solid rgba(30,34,48,.5);
+  border-right:1px solid var(--border);vertical-align:top;
+  line-height:1.55;color:var(--muted2);
+}
+.stress-table td:last-child{border-right:none}
+.stress-table tr:last-child td{border-bottom:none}
+.stress-table tr:hover td{background:rgba(255,255,255,.012)}
+.risk-badge{
+  display:inline-block;font-family:var(--mono);font-size:.58rem;
+  letter-spacing:.08em;text-transform:uppercase;padding:.18rem .5rem;
+}
+.risk-low{background:rgba(96,168,112,.1);border:1px solid rgba(96,168,112,.25);color:var(--green)}
+.risk-med{background:rgba(200,160,48,.1);border:1px solid rgba(200,160,48,.25);color:var(--amber)}
+.risk-high{background:rgba(200,72,72,.1);border:1px solid rgba(200,72,72,.25);color:var(--red)}
+.outcome-contained{color:var(--green)}
+.outcome-mitigated{color:var(--amber)}
+.outcome-partial{color:var(--red)}
+.layer-tag{
+  display:inline-block;font-family:var(--mono);font-size:.55rem;
+  padding:.1rem .38rem;border-radius:2px;margin-right:3px;margin-bottom:2px;
+}
+.lt-s{background:rgba(88,128,200,.12);color:var(--blue)}
+.lt-c{background:rgba(128,96,200,.12);color:var(--purple)}
+.lt-p{background:rgba(96,168,112,.12);color:var(--green)}
+.scenario-name{color:var(--text);font-weight:600;font-size:.75rem}
+
+/* ── INSIGHT ── */
+.insight-block{border-left:2px solid var(--blue);padding:14px 18px;background:var(--blue-dim);margin-top:12px}
+.insight-label{font-family:var(--mono);font-size:.58rem;color:var(--blue);letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}
+.insight-text{font-size:.88rem;line-height:1.75;color:var(--text-bright);font-style:italic;font-family:Georgia,serif}
+
+.limitation-note{
+  background:var(--surface2);border:1px solid var(--border);
+  padding:12px 16px;margin-top:12px;display:flex;gap:10px;
+}
+.limitation-note-icon{font-family:var(--mono);font-size:.62rem;color:var(--amber);white-space:nowrap;margin-top:1px}
+.limitation-note-text{font-size:.72rem;color:var(--muted2);line-height:1.7}
+.limitation-note-text strong{color:var(--text)}
+</style>
+</head>
+<body>
+
+<!-- DOC HEADER -->
+<div class="doc-header">
+  <div class="doc-header-top">
+    <div class="doc-logo">
+      <div class="doc-logo-mark">
+        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="14" cy="14" r="13" stroke="rgba(88,128,200,.4)" stroke-width="1"/>
+          <!-- Hexagonal matchmaking symbol -->
+          <polygon points="14,4 21,8.5 21,17.5 14,22 7,17.5 7,8.5" fill="none" stroke="#5880c8" stroke-width="1.2"/>
+          <polygon points="14,8 18,10.5 18,15.5 14,18 10,15.5 10,10.5" fill="rgba(88,128,200,.2)" stroke="#5880c8" stroke-width=".8"/>
+          <circle cx="14" cy="13" r="2" fill="#5880c8"/>
+        </svg>
+      </div>
+      <div>
+        <div class="doc-logo-text">LiveOps Systems</div>
+        <div class="doc-logo-sub">Behavioural Design</div>
+      </div>
+    </div>
+    <div class="doc-meta">
+      <div class="doc-meta-item">
+        <div class="doc-meta-label">Domain</div>
+        <div class="doc-meta-val">Matchmaking · Hero Shooter</div>
+      </div>
+      <div class="doc-meta-item">
+        <div class="doc-meta-label">Framework</div>
+        <div class="doc-meta-val">3-Layer Fairness Model</div>
+      </div>
+      <div class="doc-meta-item">
+        <div class="doc-meta-label">Status</div>
+        <div class="doc-meta-val">In Progress · 2026</div>
+      </div>
+    </div>
+  </div>
+  <div class="doc-title-row">
+    <div class="doc-title">Marvel Rivals — Behavioural Matchmaking Fairness System</div>
+    <div class="doc-classification">SYSTEMS DESIGN · MR-MATCH-001</div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- ── 01 PROBLEM ── -->
+  <div class="section-block">
+    <div class="section-label">01 · Why Matchmaking Fails</div>
+
+    <div class="problem-grid">
+      <div class="prob-cell">
+        <div class="prob-label label-red">The Assumption</div>
+        <div class="prob-body">Most matchmaking systems treat fairness as a statistics problem. Equal MMR = fair match. Win probability balanced to 50/50. The math checks out.</div>
+      </div>
+      <div class="prob-cell">
+        <div class="prob-label label-red">The Reality</div>
+        <div class="prob-body">Players don't experience statistics. They experience agency, readability, and coordination. A statistically balanced match feels deeply unfair when one team has a 5-stack and the other has five solos.</div>
+      </div>
+      <div class="prob-cell">
+        <div class="prob-label label-blue">The Actual Problem</div>
+        <div class="prob-body">Fairness in hero shooters fails across three dimensions: coordination asymmetry (solo vs stacks), composition volatility (chaotic team comps), and perception breakdown (players can't read why they lost).</div>
+      </div>
+      <div class="prob-cell">
+        <div class="prob-label label-blue">The Design Constraint</div>
+        <div class="prob-body">Role Queue solves coordination and composition — but destroys player identity and agency. Marvel Rivals is built on freedom. The system must preserve it while controlling variance.</div>
+      </div>
+    </div>
+
+    <!-- Perception vs Reality Diagram -->
+    <div class="diagram-wrap" style="margin-top:16px">
+      <svg viewBox="0 0 860 320" xmlns="http://www.w3.org/2000/svg">
+        <rect width="860" height="320" fill="#08090d"/>
+
+        <!-- Title -->
+        <text x="430" y="22" text-anchor="middle" fill="rgba(200,204,216,.7)" font-size="9" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing="2">STATISTICAL FAIRNESS  vs.  PLAYER PERCEPTION OF FAIRNESS</text>
+
+        <!-- LEFT COLUMN — Statistical Model -->
+        <rect x="20" y="34" width="260" height="270" fill="rgba(200,72,72,.04)" stroke="rgba(200,72,72,.25)" stroke-width="1" rx="2"/>
+        <rect x="20" y="34" width="260" height="24" fill="rgba(200,72,72,.1)" rx="2"/>
+        <text x="150" y="50" text-anchor="middle" fill="rgba(200,72,72,.85)" font-size="9" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing="2">STATISTICAL MODEL</text>
+
+        <!-- Statistical items -->
+        <g font-size="8" font-family="'Barlow',sans-serif">
+          <!-- MMR -->
+          <rect x="36" y="70" width="228" height="42" fill="rgba(200,72,72,.06)" stroke="rgba(200,72,72,.15)" stroke-width=".6" rx="1"/>
+          <text x="48" y="87" fill="rgba(200,204,216,.8)" font-weight="600">Skill Balance (MMR Signal)</text>
+          <text x="48" y="100" fill="rgba(122,128,144,.7)">Equal skill distribution across teams</text>
+
+          <!-- Win prob -->
+          <rect x="36" y="118" width="228" height="42" fill="rgba(200,72,72,.06)" stroke="rgba(200,72,72,.15)" stroke-width=".6" rx="1"/>
+          <text x="48" y="135" fill="rgba(200,204,216,.8)" font-weight="600">Win Probability ~50/50</text>
+          <text x="48" y="148" fill="rgba(122,128,144,.7)">Statistical parity between sides</text>
+
+          <!-- Composition -->
+          <rect x="36" y="166" width="228" height="42" fill="rgba(200,72,72,.06)" stroke="rgba(200,72,72,.15)" stroke-width=".6" rx="1"/>
+          <text x="48" y="183" fill="rgba(200,204,216,.8)" font-weight="600">Composition Equality</text>
+          <text x="48" y="196" fill="rgba(122,128,144,.7)">Role/hero distribution matched</text>
+
+          <!-- Objective -->
+          <rect x="36" y="214" width="228" height="42" fill="rgba(200,72,72,.06)" stroke="rgba(200,72,72,.15)" stroke-width=".6" rx="1"/>
+          <text x="48" y="231" fill="rgba(200,204,216,.8)" font-weight="600">Objective Fairness Metrics</text>
+          <text x="48" y="244" fill="rgba(122,128,144,.7)">Measurable, verifiable, post-match</text>
+
+          <!-- Result label -->
+          <rect x="36" y="262" width="228" height="26" fill="rgba(200,72,72,.12)" rx="1"/>
+          <text x="150" y="279" text-anchor="middle" fill="rgba(200,72,72,.85)" font-size="7.5" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing="1">MATCH WAS STATISTICALLY FAIR</text>
+        </g>
+
+        <!-- CENTER — Reality Distortion Gap -->
+        <rect x="300" y="34" width="260" height="270" fill="rgba(88,128,200,.03)" stroke="rgba(88,128,200,.2)" stroke-width="1" stroke-dasharray="4 3" rx="2"/>
+        <text x="430" y="58" text-anchor="middle" fill="rgba(88,128,200,.6)" font-size="8" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing="1.5">REALITY DISTORTION GAP</text>
+
+        <!-- Gap items -->
+        <g font-size="7.5" font-family="'Barlow',sans-serif" fill="rgba(122,128,144,.75)">
+          <rect x="316" y="68" width="228" height="32" fill="rgba(88,128,200,.05)" rx="1"/>
+          <text x="430" y="82" text-anchor="middle" fill="rgba(200,204,216,.7)" font-weight="600" font-size="8">Coordination Blindspot</text>
+          <text x="430" y="93" text-anchor="middle">5-stack comms vs 5 solos — invisible to MMR</text>
+
+          <rect x="316" y="106" width="228" height="32" fill="rgba(88,128,200,.05)" rx="1"/>
+          <text x="430" y="120" text-anchor="middle" fill="rgba(200,204,216,.7)" font-weight="600" font-size="8">Composition Readability Gap</text>
+          <text x="430" y="131" text-anchor="middle">Player can't diagnose why the match broke</text>
+
+          <rect x="316" y="144" width="228" height="32" fill="rgba(88,128,200,.05)" rx="1"/>
+          <text x="430" y="158" text-anchor="middle" fill="rgba(200,204,216,.7)" font-weight="600" font-size="8">Volatility Misinterpretation</text>
+          <text x="430" y="169" text-anchor="middle">Snowball losses read as unfairness, not variance</text>
+
+          <rect x="316" y="182" width="228" height="32" fill="rgba(88,128,200,.05)" rx="1"/>
+          <text x="430" y="196" text-anchor="middle" fill="rgba(200,204,216,.7)" font-weight="600" font-size="8">Agency Collapse</text>
+          <text x="430" y="207" text-anchor="middle">"Nothing I did mattered" — systemic identity loss</text>
+
+          <rect x="316" y="220" width="228" height="32" fill="rgba(88,128,200,.05)" rx="1"/>
+          <text x="430" y="234" text-anchor="middle" fill="rgba(200,204,216,.7)" font-weight="600" font-size="8">Attribution Error</text>
+          <text x="430" y="245" text-anchor="middle">Coordination gap blamed as skill gap</text>
+        </g>
+
+        <!-- Key insight box -->
+        <rect x="316" y="258" width="228" height="34" fill="rgba(88,128,200,.12)" stroke="rgba(88,128,200,.3)" stroke-width=".8" rx="1"/>
+        <text x="430" y="272" text-anchor="middle" fill="rgba(88,128,200,.85)" font-size="7.5" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing="1">EVEN A FAIR MATCH CAN</text>
+        <text x="430" y="284" text-anchor="middle" fill="rgba(88,128,200,.85)" font-size="7.5" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing="1">FEEL DEEPLY UNFAIR</text>
+
+        <!-- RIGHT COLUMN — Player Perception -->
+        <rect x="580" y="34" width="260" height="270" fill="rgba(96,168,112,.04)" stroke="rgba(96,168,112,.25)" stroke-width="1" rx="2"/>
+        <rect x="580" y="34" width="260" height="24" fill="rgba(96,168,112,.1)" rx="2"/>
+        <text x="710" y="50" text-anchor="middle" fill="rgba(96,168,112,.85)" font-size="9" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing="2">PERCEPTION MODEL</text>
+
+        <g font-size="8" font-family="'Barlow',sans-serif">
+          <rect x="596" y="70" width="228" height="42" fill="rgba(96,168,112,.06)" stroke="rgba(96,168,112,.15)" stroke-width=".6" rx="1"/>
+          <text x="608" y="87" fill="rgba(200,204,216,.8)" font-weight="600">Agency Feeling</text>
+          <text x="608" y="100" fill="rgba(122,128,144,.7)">"I could have changed the outcome"</text>
+
+          <rect x="596" y="118" width="228" height="42" fill="rgba(96,168,112,.06)" stroke="rgba(96,168,112,.15)" stroke-width=".6" rx="1"/>
+          <text x="608" y="135" fill="rgba(200,204,216,.8)" font-weight="600">Match Readability</text>
+          <text x="608" y="148" fill="rgba(122,128,144,.7)">"I understand why this happened"</text>
+
+          <rect x="596" y="166" width="228" height="42" fill="rgba(96,168,112,.06)" stroke="rgba(96,168,112,.15)" stroke-width=".6" rx="1"/>
+          <text x="608" y="183" fill="rgba(200,204,216,.8)" font-weight="600">Coordination Visibility</text>
+          <text x="608" y="196" fill="rgba(122,128,144,.7)">"Team dynamics were legible to me"</text>
+
+          <rect x="596" y="214" width="228" height="42" fill="rgba(96,168,112,.06)" stroke="rgba(96,168,112,.15)" stroke-width=".6" rx="1"/>
+          <text x="608" y="231" fill="rgba(200,204,216,.8)" font-weight="600">Volatility Interpretation</text>
+          <text x="608" y="244" fill="rgba(122,128,144,.7)">"The match stayed competitive long enough"</text>
+
+          <rect x="596" y="262" width="228" height="26" fill="rgba(96,168,112,.12)" rx="1"/>
+          <text x="710" y="279" text-anchor="middle" fill="rgba(96,168,112,.85)" font-size="7.5" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing="1">MATCH FELT FAIR</text>
+        </g>
+
+        <!-- Arrows between columns -->
+        <defs>
+          <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="rgba(88,128,200,.5)"/>
+          </marker>
+        </defs>
+        <line x1="280" y1="170" x2="298" y2="170" stroke="rgba(88,128,200,.4)" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="560" y1="170" x2="578" y2="170" stroke="rgba(96,168,112,.4)" stroke-width="1" marker-end="url(#arr)"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ── 02 SYSTEM ARCHITECTURE ── -->
+  <div class="section-block">
+    <div class="section-label">02 · 3-Layer System Architecture</div>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 860 460" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrd" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="rgba(88,128,200,.55)"/>
+          </marker>
+          <marker id="arru" markerWidth="6" markerHeight="6" refX="1" refY="3" orient="auto">
+            <path d="M6,0 L0,3 L6,6 Z" fill="rgba(96,168,112,.4)"/>
+          </marker>
+          <marker id="arro" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="rgba(200,160,48,.5)"/>
+          </marker>
+        </defs>
+        <rect width="860" height="460" fill="#08090d"/>
+
+        <!-- Title -->
+        <text x="430" y="18" text-anchor="middle" fill="rgba(200,204,216,.6)" font-size="9" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing="2">BEHAVIOURAL MATCHMAKING FAIRNESS — SYSTEM ARCHITECTURE</text>
+
+        <!-- ── INPUT SIGNALS (LEFT) ── -->
+        <text x="76" y="36" text-anchor="middle" fill="rgba(122,128,144,.6)" font-size="7.5" font-family="'Barlow Condensed',sans-serif" letter-spacing="1.5">INPUT SIGNALS</text>
+        <g font-size="7.5" font-family="'Barlow',sans-serif">
+          <rect x="14" y="44" width="124" height="26" fill="rgba(88,128,200,.08)" stroke="rgba(88,128,200,.2)" stroke-width=".7" rx="1"/>
+          <text x="76" y="61" text-anchor="middle" fill="rgba(200,204,216,.8)">Player Skill Signal</text>
+
+          <rect x="14" y="76" width="124" height="26" fill="rgba(88,128,200,.08)" stroke="rgba(88,128,200,.2)" stroke-width=".7" rx="1"/>
+          <text x="76" y="93" text-anchor="middle" fill="rgba(200,204,216,.8)">Party Size / Stack Type</text>
+
+          <rect x="14" y="108" width="124" height="26" fill="rgba(88,128,200,.08)" stroke="rgba(88,128,200,.2)" stroke-width=".7" rx="1"/>
+          <text x="76" y="125" text-anchor="middle" fill="rgba(200,204,216,.8)">Hero Selection</text>
+
+          <rect x="14" y="140" width="124" height="26" fill="rgba(88,128,200,.08)" stroke="rgba(88,128,200,.2)" stroke-width=".7" rx="1"/>
+          <text x="76" y="157" text-anchor="middle" fill="rgba(200,204,216,.8)">Historical Behaviour</text>
+
+          <rect x="14" y="172" width="124" height="26" fill="rgba(88,128,200,.08)" stroke="rgba(88,128,200,.2)" stroke-width=".7" rx="1"/>
+          <text x="76" y="189" text-anchor="middle" fill="rgba(200,204,216,.8)">Queue Type (solo / group)</text>
+        </g>
+        <!-- Input arrows to structural layer -->
+        <line x1="138" y1="57" x2="200" y2="100" stroke="rgba(88,128,200,.3)" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#arrd)"/>
+        <line x1="138" y1="89" x2="200" y2="108" stroke="rgba(88,128,200,.3)" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#arrd)"/>
+        <line x1="138" y1="121" x2="200" y2="116" stroke="rgba(88,128,200,.3)" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#arrd)"/>
+        <line x1="138" y1="153" x2="200" y2="124" stroke="rgba(88,128,200,.3)" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#arrd)"/>
+        <line x1="138" y1="185" x2="200" y2="132" stroke="rgba(88,128,200,.3)" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#arrd)"/>
+
+        <!-- ── LAYER 1: STRUCTURAL ── -->
+        <rect x="200" y="44" width="460" height="118" fill="rgba(88,128,200,.05)" stroke="rgba(88,128,200,.35)" stroke-width="1.2" rx="2"/>
+        <rect x="200" y="44" width="460" height="20" fill="rgba(88,128,200,.12)" rx="2"/>
+        <text x="430" y="58" text-anchor="middle" fill="rgba(88,128,200,.9)" font-size="8.5" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing="2">STRUCTURAL LAYER</text>
+
+        <!-- Structural components -->
+        <rect x="212" y="72" width="100" height="78" fill="rgba(88,128,200,.06)" stroke="rgba(88,128,200,.18)" stroke-width=".6" rx="1"/>
+        <text x="262" y="88" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow',sans-serif" font-weight="600">Skill Distribution</text>
+        <text x="262" y="101" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">MMR-like signal</text>
+        <text x="262" y="113" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Non-rigid ranking</text>
+        <text x="262" y="125" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Behavioral weighting</text>
+        <text x="262" y="139" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Rolling window signals</text>
+
+        <rect x="320" y="72" width="100" height="78" fill="rgba(88,128,200,.06)" stroke="rgba(88,128,200,.18)" stroke-width=".6" rx="1"/>
+        <text x="370" y="88" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow',sans-serif" font-weight="600">Composition Engine</text>
+        <text x="370" y="101" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Stability estimation</text>
+        <text x="370" y="113" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Role pressure model</text>
+        <text x="370" y="125" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">2-2-2 soft tendency</text>
+        <text x="370" y="139" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">No role lock enforced</text>
+
+        <rect x="428" y="72" width="100" height="78" fill="rgba(88,128,200,.06)" stroke="rgba(88,128,200,.18)" stroke-width=".6" rx="1"/>
+        <text x="478" y="88" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow',sans-serif" font-weight="600">Hero/Role Balance</text>
+        <text x="478" y="101" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Meta diversity signal</text>
+        <text x="478" y="113" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Counter-comp exposure</text>
+        <text x="478" y="125" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Spam detection</text>
+        <text x="478" y="139" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Distribution scoring</text>
+
+        <rect x="536" y="72" width="112" height="78" fill="rgba(88,128,200,.06)" stroke="rgba(88,128,200,.18)" stroke-width=".6" rx="1"/>
+        <text x="592" y="88" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow',sans-serif" font-weight="600">Volatility Estimation</text>
+        <text x="592" y="101" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Snowball risk model</text>
+        <text x="592" y="113" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Comp burst prediction</text>
+        <text x="592" y="125" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Match tempo forecast</text>
+        <text x="592" y="139" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Pre-match risk score</text>
+
+        <!-- Down arrow S→C -->
+        <line x1="430" y1="162" x2="430" y2="178" stroke="rgba(88,128,200,.45)" stroke-width="1.5" marker-end="url(#arrd)"/>
+
+        <!-- ── LAYER 2: COORDINATION ── -->
+        <rect x="200" y="180" width="460" height="118" fill="rgba(128,96,200,.05)" stroke="rgba(128,96,200,.35)" stroke-width="1.2" rx="2"/>
+        <rect x="200" y="180" width="460" height="20" fill="rgba(128,96,200,.12)" rx="2"/>
+        <text x="430" y="194" text-anchor="middle" fill="rgba(128,96,200,.9)" font-size="8.5" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing="2">COORDINATION LAYER</text>
+
+        <rect x="212" y="208" width="100" height="78" fill="rgba(128,96,200,.06)" stroke="rgba(128,96,200,.18)" stroke-width=".6" rx="1"/>
+        <text x="262" y="224" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow',sans-serif" font-weight="600">Stack Detection</text>
+        <text x="262" y="237" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Solo / Duo / Trio</text>
+        <text x="262" y="249" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">5-stack classification</text>
+        <text x="262" y="261" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Cross-session history</text>
+        <text x="262" y="273" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Coordination density</text>
+
+        <rect x="320" y="208" width="100" height="78" fill="rgba(128,96,200,.06)" stroke="rgba(128,96,200,.18)" stroke-width=".6" rx="1"/>
+        <text x="370" y="224" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow',sans-serif" font-weight="600">Sync Probability</text>
+        <text x="370" y="237" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Behavioural sync model</text>
+        <text x="370" y="249" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Comms proxy signals</text>
+        <text x="370" y="261" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Action coordination rate</text>
+        <text x="370" y="273" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Historical win patterns</text>
+
+        <rect x="428" y="208" width="100" height="78" fill="rgba(128,96,200,.06)" stroke="rgba(128,96,200,.18)" stroke-width=".6" rx="1"/>
+        <text x="478" y="224" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow',sans-serif" font-weight="600">Party Balancing</text>
+        <text x="478" y="237" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Solo vs stack pairing</text>
+        <text x="478" y="249" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Density equivalence</text>
+        <text x="478" y="261" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Mixed pool routing</text>
+        <text x="478" y="273" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Wait time tradeoffs</text>
+
+        <rect x="536" y="208" width="112" height="78" fill="rgba(128,96,200,.06)" stroke="rgba(128,96,200,.18)" stroke-width=".6" rx="1"/>
+        <text x="592" y="224" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow',sans-serif" font-weight="600">Expectation Bands</text>
+        <text x="592" y="237" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Coord. range buckets</text>
+        <text x="592" y="249" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Ceiling / floor control</text>
+        <text x="592" y="261" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Variance normalization</text>
+        <text x="592" y="273" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Pool expansion logic</text>
+
+        <!-- Down arrow C→P -->
+        <line x1="430" y1="298" x2="430" y2="314" stroke="rgba(128,96,200,.45)" stroke-width="1.5" marker-end="url(#arrd)"/>
+
+        <!-- ── LAYER 3: PERCEPTION ── -->
+        <rect x="200" y="316" width="460" height="118" fill="rgba(96,168,112,.04)" stroke="rgba(96,168,112,.3)" stroke-width="1.2" rx="2"/>
+        <rect x="200" y="316" width="460" height="20" fill="rgba(96,168,112,.1)" rx="2"/>
+        <text x="430" y="330" text-anchor="middle" fill="rgba(96,168,112,.9)" font-size="8.5" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing="2">PERCEPTION LAYER</text>
+
+        <rect x="212" y="344" width="100" height="78" fill="rgba(96,168,112,.05)" stroke="rgba(96,168,112,.15)" stroke-width=".6" rx="1"/>
+        <text x="262" y="360" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow',sans-serif" font-weight="600">Agency Scoring</text>
+        <text x="262" y="373" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Individual impact weight</text>
+        <text x="262" y="385" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Hero identity preservation</text>
+        <text x="262" y="397" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Freedom vs structure score</text>
+        <text x="262" y="409" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">"Could have won" test</text>
+
+        <rect x="320" y="344" width="100" height="78" fill="rgba(96,168,112,.05)" stroke="rgba(96,168,112,.15)" stroke-width=".6" rx="1"/>
+        <text x="370" y="360" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow',sans-serif" font-weight="600">Readability Model</text>
+        <text x="370" y="373" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Match narrative clarity</text>
+        <text x="370" y="385" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Loss attribution legibility</text>
+        <text x="370" y="397" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Momentum visibility</text>
+        <text x="370" y="409" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Turn-point detection</text>
+
+        <rect x="428" y="344" width="100" height="78" fill="rgba(96,168,112,.05)" stroke="rgba(96,168,112,.15)" stroke-width=".6" rx="1"/>
+        <text x="478" y="360" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow',sans-serif" font-weight="600">Volatility Smoothing</text>
+        <text x="478" y="373" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Snowball dampening</text>
+        <text x="478" y="385" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Tempo re-entry windows</text>
+        <text x="478" y="397" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Burst-comp mitigation</text>
+        <text x="478" y="409" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Catch-up probability</text>
+
+        <rect x="536" y="344" width="112" height="78" fill="rgba(96,168,112,.05)" stroke="rgba(96,168,112,.15)" stroke-width=".6" rx="1"/>
+        <text x="592" y="360" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow',sans-serif" font-weight="600">Fairness Perception</text>
+        <text x="592" y="373" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Post-match signal model</text>
+        <text x="592" y="385" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Rage quit predictor</text>
+        <text x="592" y="397" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Churn risk flag</text>
+        <text x="592" y="409" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Retention feedback loop</text>
+
+        <!-- ── OUTPUT SIGNALS (RIGHT) ── -->
+        <text x="784" y="36" text-anchor="middle" fill="rgba(122,128,144,.6)" font-size="7.5" font-family="'Barlow Condensed',sans-serif" letter-spacing="1.5">OUTPUTS</text>
+        <g font-size="7.5" font-family="'Barlow',sans-serif">
+          <rect x="724" y="44" width="122" height="26" fill="rgba(200,160,48,.07)" stroke="rgba(200,160,48,.2)" stroke-width=".7" rx="1"/>
+          <text x="785" y="61" text-anchor="middle" fill="rgba(200,204,216,.8)">Match Composition</text>
+
+          <rect x="724" y="76" width="122" height="26" fill="rgba(200,160,48,.07)" stroke="rgba(200,160,48,.2)" stroke-width=".7" rx="1"/>
+          <text x="785" y="93" text-anchor="middle" fill="rgba(200,204,216,.8)">Team Assignment</text>
+
+          <rect x="724" y="108" width="122" height="26" fill="rgba(200,160,48,.07)" stroke="rgba(200,160,48,.2)" stroke-width=".7" rx="1"/>
+          <text x="785" y="125" text-anchor="middle" fill="rgba(200,204,216,.8)">Volatility Adjustment</text>
+
+          <rect x="724" y="140" width="122" height="26" fill="rgba(200,160,48,.07)" stroke="rgba(200,160,48,.2)" stroke-width=".7" rx="1"/>
+          <text x="785" y="157" text-anchor="middle" fill="rgba(200,204,216,.8)">Coord-Normalized Teams</text>
+
+          <rect x="724" y="172" width="122" height="26" fill="rgba(200,160,48,.07)" stroke="rgba(200,160,48,.2)" stroke-width=".7" rx="1"/>
+          <text x="785" y="189" text-anchor="middle" fill="rgba(200,204,216,.8)">Post-match Signal</text>
+        </g>
+        <!-- Output arrows from perception layer -->
+        <line x1="660" y1="370" x2="722" y2="157" stroke="rgba(200,160,48,.25)" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#arro)"/>
+        <line x1="660" y1="383" x2="722" y2="169" stroke="rgba(200,160,48,.25)" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#arro)"/>
+        <line x1="660" y1="396" x2="722" y2="181" stroke="rgba(200,160,48,.25)" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#arro)"/>
+
+        <!-- Feedback loop arrows (right side, going up) -->
+        <path d="M 670 400 Q 700 400 700 280 Q 700 240 670 240" stroke="rgba(96,168,112,.25)" stroke-width="1" stroke-dasharray="3 2" fill="none" marker-end="url(#arru)"/>
+        <text x="706" y="325" fill="rgba(96,168,112,.4)" font-size="6" font-family="monospace" transform="rotate(90,706,325)">feedback</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ── 03 MATCHMAKING PIPELINE ── -->
+  <div class="section-block">
+    <div class="section-label">03 · End-to-End Matchmaking Pipeline</div>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 860 230" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="pArr" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+            <path d="M0,0 L6,2.5 L0,5 Z" fill="rgba(88,128,200,.6)"/>
+          </marker>
+          <marker id="fbArr" markerWidth="6" markerHeight="5" refX="1" refY="2.5" orient="auto">
+            <path d="M6,0 L0,2.5 L6,5 Z" fill="rgba(96,168,112,.4)"/>
+          </marker>
+        </defs>
+        <rect width="860" height="230" fill="#08090d"/>
+
+        <!-- Stage helper -->
+        <!-- Stages: x positions roughly 20, 120, 220, 320, 420, 520, 620, 720, 820 -->
+
+        <!-- Stage labels row -->
+        <g font-family="'Barlow Condensed',sans-serif" font-size="7" letter-spacing=".8" fill="rgba(122,128,144,.5)" text-anchor="middle">
+          <text x="52"  y="14">ENTER QUEUE</text>
+          <text x="148" y="14">SIGNAL COLLECT</text>
+          <text x="252" y="14">COORD CLASS.</text>
+          <text x="360" y="14">COMP RISK</text>
+          <text x="460" y="14">MATCH ASSEMBLY</text>
+          <text x="568" y="14">PERCEPTION PASS</text>
+          <text x="680" y="14">FINALIZE</text>
+          <text x="790" y="14">FEEDBACK LOOP</text>
+        </g>
+
+        <!-- Main pipeline boxes -->
+        <!-- S1: Player Enters Queue -->
+        <rect x="12" y="22" width="80" height="90" fill="rgba(88,128,200,.08)" stroke="rgba(88,128,200,.3)" stroke-width="1" rx="2"/>
+        <text x="52" y="45" text-anchor="middle" fill="rgba(88,128,200,.85)" font-size="8" font-family="'Barlow Condensed',sans-serif" font-weight="700">PLAYER</text>
+        <text x="52" y="56" text-anchor="middle" fill="rgba(88,128,200,.85)" font-size="8" font-family="'Barlow Condensed',sans-serif" font-weight="700">ENTERS QUEUE</text>
+        <text x="52" y="73" text-anchor="middle" fill="rgba(122,128,144,.65)" font-size="6.5" font-family="'Barlow',sans-serif">Solo / group</text>
+        <text x="52" y="84" text-anchor="middle" fill="rgba(122,128,144,.65)" font-size="6.5" font-family="'Barlow',sans-serif">Hero selected</text>
+        <text x="52" y="95" text-anchor="middle" fill="rgba(122,128,144,.65)" font-size="6.5" font-family="'Barlow',sans-serif">Mode chosen</text>
+        <line x1="92" y1="67" x2="108" y2="67" stroke="rgba(88,128,200,.45)" stroke-width="1.2" marker-end="url(#pArr)"/>
+
+        <!-- S2: Signal Collection -->
+        <rect x="108" y="22" width="80" height="90" fill="rgba(88,128,200,.06)" stroke="rgba(88,128,200,.25)" stroke-width="1" rx="2"/>
+        <text x="148" y="43" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow Condensed',sans-serif" font-weight="700">SIGNAL</text>
+        <text x="148" y="54" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow Condensed',sans-serif" font-weight="700">COLLECTION</text>
+        <text x="148" y="70" text-anchor="middle" fill="rgba(122,128,144,.65)" font-size="6.5" font-family="'Barlow',sans-serif">Skill estimate</text>
+        <text x="148" y="81" text-anchor="middle" fill="rgba(122,128,144,.65)" font-size="6.5" font-family="'Barlow',sans-serif">Party size</text>
+        <text x="148" y="92" text-anchor="middle" fill="rgba(122,128,144,.65)" font-size="6.5" font-family="'Barlow',sans-serif">Behaviour history</text>
+        <line x1="188" y1="67" x2="204" y2="67" stroke="rgba(88,128,200,.45)" stroke-width="1.2" marker-end="url(#pArr)"/>
+
+        <!-- S3: Coordination Classification -->
+        <rect x="204" y="22" width="96" height="90" fill="rgba(128,96,200,.06)" stroke="rgba(128,96,200,.3)" stroke-width="1" rx="2"/>
+        <text x="252" y="43" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow Condensed',sans-serif" font-weight="700">COORDINATION</text>
+        <text x="252" y="54" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow Condensed',sans-serif" font-weight="700">CLASSIFICATION</text>
+        <!-- Decision diamond -->
+        <polygon points="252,70 264,80 252,90 240,80" fill="rgba(128,96,200,.12)" stroke="rgba(128,96,200,.4)" stroke-width=".8"/>
+        <text x="252" y="83" text-anchor="middle" fill="rgba(128,96,200,.85)" font-size="5.5" font-family="'Barlow Condensed',sans-serif">STACK?</text>
+        <text x="252" y="102" text-anchor="middle" fill="rgba(122,128,144,.5)" font-size="5.5" font-family="'Barlow',sans-serif">→ pool adjust</text>
+        <line x1="300" y1="67" x2="315" y2="67" stroke="rgba(128,96,200,.45)" stroke-width="1.2" marker-end="url(#pArr)"/>
+
+        <!-- S4: Composition Risk -->
+        <rect x="315" y="22" width="90" height="90" fill="rgba(128,96,200,.06)" stroke="rgba(128,96,200,.25)" stroke-width="1" rx="2"/>
+        <text x="360" y="43" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow Condensed',sans-serif" font-weight="700">COMPOSITION</text>
+        <text x="360" y="54" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow Condensed',sans-serif" font-weight="700">RISK ANALYSIS</text>
+        <!-- Decision diamond -->
+        <polygon points="360,70 372,80 360,90 348,80" fill="rgba(128,96,200,.12)" stroke="rgba(128,96,200,.4)" stroke-width=".8"/>
+        <text x="360" y="83" text-anchor="middle" fill="rgba(128,96,200,.85)" font-size="5.5" font-family="'Barlow Condensed',sans-serif">HIGH VOL?</text>
+        <text x="360" y="102" text-anchor="middle" fill="rgba(122,128,144,.5)" font-size="5.5" font-family="'Barlow',sans-serif">→ stabilize</text>
+        <line x1="405" y1="67" x2="420" y2="67" stroke="rgba(128,96,200,.45)" stroke-width="1.2" marker-end="url(#pArr)"/>
+
+        <!-- S5: Match Assembly -->
+        <rect x="420" y="22" width="96" height="90" fill="rgba(88,128,200,.06)" stroke="rgba(88,128,200,.25)" stroke-width="1" rx="2"/>
+        <text x="468" y="43" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow Condensed',sans-serif" font-weight="700">MATCH</text>
+        <text x="468" y="54" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow Condensed',sans-serif" font-weight="700">ASSEMBLY</text>
+        <text x="468" y="70" text-anchor="middle" fill="rgba(122,128,144,.65)" font-size="6.5" font-family="'Barlow',sans-serif">Balanced coord.</text>
+        <text x="468" y="81" text-anchor="middle" fill="rgba(122,128,144,.65)" font-size="6.5" font-family="'Barlow',sans-serif">density pairing</text>
+        <text x="468" y="92" text-anchor="middle" fill="rgba(122,128,144,.65)" font-size="6.5" font-family="'Barlow',sans-serif">6v6 formed</text>
+        <line x1="516" y1="67" x2="532" y2="67" stroke="rgba(88,128,200,.45)" stroke-width="1.2" marker-end="url(#pArr)"/>
+
+        <!-- S6: Perception Pass -->
+        <rect x="532" y="22" width="96" height="90" fill="rgba(96,168,112,.05)" stroke="rgba(96,168,112,.3)" stroke-width="1" rx="2"/>
+        <text x="580" y="43" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow Condensed',sans-serif" font-weight="700">PERCEPTION</text>
+        <text x="580" y="54" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow Condensed',sans-serif" font-weight="700">BALANCE PASS</text>
+        <text x="580" y="70" text-anchor="middle" fill="rgba(122,128,144,.65)" font-size="6.5" font-family="'Barlow',sans-serif">Agency check</text>
+        <text x="580" y="81" text-anchor="middle" fill="rgba(122,128,144,.65)" font-size="6.5" font-family="'Barlow',sans-serif">Readability score</text>
+        <text x="580" y="92" text-anchor="middle" fill="rgba(122,128,144,.65)" font-size="6.5" font-family="'Barlow',sans-serif">Volatility adjust</text>
+        <line x1="628" y1="67" x2="644" y2="67" stroke="rgba(96,168,112,.5)" stroke-width="1.2" marker-end="url(#pArr)"/>
+
+        <!-- S7: Finalize -->
+        <rect x="644" y="22" width="72" height="90" fill="rgba(96,168,112,.08)" stroke="rgba(96,168,112,.3)" stroke-width="1" rx="2"/>
+        <text x="680" y="43" text-anchor="middle" fill="rgba(96,168,112,.9)" font-size="8" font-family="'Barlow Condensed',sans-serif" font-weight="700">MATCH</text>
+        <text x="680" y="54" text-anchor="middle" fill="rgba(96,168,112,.9)" font-size="8" font-family="'Barlow Condensed',sans-serif" font-weight="700">FINALIZED</text>
+        <text x="680" y="70" text-anchor="middle" fill="rgba(122,128,144,.65)" font-size="6.5" font-family="'Barlow',sans-serif">Teams locked</text>
+        <text x="680" y="81" text-anchor="middle" fill="rgba(122,128,144,.65)" font-size="6.5" font-family="'Barlow',sans-serif">Match begins</text>
+        <line x1="716" y1="67" x2="732" y2="67" stroke="rgba(96,168,112,.5)" stroke-width="1.2" marker-end="url(#pArr)"/>
+
+        <!-- S8: Feedback Loop -->
+        <rect x="732" y="22" width="116" height="90" fill="rgba(200,160,48,.06)" stroke="rgba(200,160,48,.3)" stroke-width="1" rx="2"/>
+        <text x="790" y="43" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow Condensed',sans-serif" font-weight="700">POST-MATCH</text>
+        <text x="790" y="54" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="7.5" font-family="'Barlow Condensed',sans-serif" font-weight="700">FEEDBACK LOOP</text>
+        <text x="790" y="70" text-anchor="middle" fill="rgba(122,128,144,.65)" font-size="6.5" font-family="'Barlow',sans-serif">Behaviour update</text>
+        <text x="790" y="81" text-anchor="middle" fill="rgba(122,128,144,.65)" font-size="6.5" font-family="'Barlow',sans-serif">Coord. score update</text>
+        <text x="790" y="92" text-anchor="middle" fill="rgba(122,128,144,.65)" font-size="6.5" font-family="'Barlow',sans-serif">Perception signals</text>
+
+        <!-- Feedback arc back to start -->
+        <path d="M 790 112 Q 790 160 52 160 Q 52 140 52 112" stroke="rgba(200,160,48,.25)" stroke-width="1.2" stroke-dasharray="4 3" fill="none" marker-end="url(#fbArr)"/>
+        <text x="430" y="178" text-anchor="middle" fill="rgba(200,160,48,.4)" font-size="7" font-family="monospace">← behavioural model updates feed next match cycle</text>
+
+        <!-- Layer colour indicators bottom row -->
+        <rect x="12"  y="198" width="8" height="8" fill="rgba(88,128,200,.5)" rx="1"/>
+        <text x="24"  y="207" fill="rgba(122,128,144,.6)" font-size="6.5" font-family="'Barlow',sans-serif">Structural</text>
+        <rect x="90"  y="198" width="8" height="8" fill="rgba(128,96,200,.5)" rx="1"/>
+        <text x="102" y="207" fill="rgba(122,128,144,.6)" font-size="6.5" font-family="'Barlow',sans-serif">Coordination</text>
+        <rect x="176" y="198" width="8" height="8" fill="rgba(96,168,112,.5)" rx="1"/>
+        <text x="188" y="207" fill="rgba(122,128,144,.6)" font-size="6.5" font-family="'Barlow',sans-serif">Perception</text>
+        <rect x="254" y="198" width="8" height="8" fill="rgba(200,160,48,.5)" rx="1"/>
+        <text x="266" y="207" fill="rgba(122,128,144,.6)" font-size="6.5" font-family="'Barlow',sans-serif">Feedback</text>
+        <polygon points="360,202 368,198 368,206" fill="none" stroke="rgba(122,128,144,.4)" stroke-width=".8"/>
+        <text x="374" y="207" fill="rgba(122,128,144,.5)" font-size="6.5" font-family="'Barlow',sans-serif">Decision point</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ── 04 COORDINATION BALANCING ── -->
+  <div class="section-block">
+    <div class="section-label">04 · Coordination Balancing Model</div>
+
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 860 280" xmlns="http://www.w3.org/2000/svg">
+        <rect width="860" height="280" fill="#08090d"/>
+        <text x="430" y="16" text-anchor="middle" fill="rgba(200,204,216,.6)" font-size="9" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing="2">COORDINATION DENSITY BALANCING — TEAM ASSIGNMENT MODEL</text>
+
+        <!-- LEFT TEAM A -->
+        <rect x="12" y="26" width="220" height="240" fill="rgba(88,128,200,.04)" stroke="rgba(88,128,200,.25)" stroke-width="1" rx="2"/>
+        <rect x="12" y="26" width="220" height="20" fill="rgba(88,128,200,.1)" rx="2"/>
+        <text x="122" y="40" text-anchor="middle" fill="rgba(88,128,200,.85)" font-size="8" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing="1.5">TEAM A INPUTS</text>
+
+        <!-- Player rows Team A -->
+        <g font-size="7.5" font-family="'Barlow',sans-serif">
+          <!-- P1 Solo -->
+          <rect x="22" y="54" width="200" height="30" fill="rgba(88,128,200,.05)" stroke="rgba(88,128,200,.12)" stroke-width=".5" rx="1"/>
+          <text x="34" y="69" fill="rgba(200,204,216,.8)" font-weight="600">Player 1</text>
+          <text x="34" y="79" fill="rgba(122,128,144,.65)">Solo queue</text>
+          <rect x="130" y="59" width="40" height="14" fill="rgba(88,128,200,.1)" rx="1"/>
+          <text x="150" y="70" text-anchor="middle" fill="rgba(88,128,200,.8)" font-size="6.5">SOLO</text>
+          <text x="182" y="70" text-anchor="middle" fill="rgba(122,128,144,.6)" font-size="6.5">CD: 0.2</text>
+
+          <!-- P2 Solo -->
+          <rect x="22" y="88" width="200" height="30" fill="rgba(88,128,200,.05)" stroke="rgba(88,128,200,.12)" stroke-width=".5" rx="1"/>
+          <text x="34" y="103" fill="rgba(200,204,216,.8)" font-weight="600">Player 2</text>
+          <text x="34" y="113" fill="rgba(122,128,144,.65)">Solo queue</text>
+          <rect x="130" y="93" width="40" height="14" fill="rgba(88,128,200,.1)" rx="1"/>
+          <text x="150" y="104" text-anchor="middle" fill="rgba(88,128,200,.8)" font-size="6.5">SOLO</text>
+          <text x="182" y="104" text-anchor="middle" fill="rgba(122,128,144,.6)" font-size="6.5">CD: 0.2</text>
+
+          <!-- P3 Duo -->
+          <rect x="22" y="122" width="200" height="30" fill="rgba(128,96,200,.05)" stroke="rgba(128,96,200,.12)" stroke-width=".5" rx="1"/>
+          <text x="34" y="137" fill="rgba(200,204,216,.8)" font-weight="600">Player 3</text>
+          <text x="34" y="147" fill="rgba(122,128,144,.65)">Duo with Player 4</text>
+          <rect x="130" y="127" width="40" height="14" fill="rgba(128,96,200,.1)" rx="1"/>
+          <text x="150" y="138" text-anchor="middle" fill="rgba(128,96,200,.8)" font-size="6.5">DUO</text>
+          <text x="182" y="138" text-anchor="middle" fill="rgba(122,128,144,.6)" font-size="6.5">CD: 0.5</text>
+
+          <rect x="22" y="156" width="200" height="30" fill="rgba(128,96,200,.05)" stroke="rgba(128,96,200,.12)" stroke-width=".5" rx="1"/>
+          <text x="34" y="171" fill="rgba(200,204,216,.8)" font-weight="600">Player 4</text>
+          <text x="34" y="181" fill="rgba(122,128,144,.65)">Duo with Player 3</text>
+          <rect x="130" y="161" width="40" height="14" fill="rgba(128,96,200,.1)" rx="1"/>
+          <text x="150" y="172" text-anchor="middle" fill="rgba(128,96,200,.8)" font-size="6.5">DUO</text>
+          <text x="182" y="172" text-anchor="middle" fill="rgba(122,128,144,.6)" font-size="6.5">CD: 0.5</text>
+
+          <!-- P5 Solo -->
+          <rect x="22" y="190" width="200" height="30" fill="rgba(88,128,200,.05)" stroke="rgba(88,128,200,.12)" stroke-width=".5" rx="1"/>
+          <text x="34" y="205" fill="rgba(200,204,216,.8)" font-weight="600">Player 5</text>
+          <text x="34" y="215" fill="rgba(122,128,144,.65)">Solo queue</text>
+          <rect x="130" y="195" width="40" height="14" fill="rgba(88,128,200,.1)" rx="1"/>
+          <text x="150" y="206" text-anchor="middle" fill="rgba(88,128,200,.8)" font-size="6.5">SOLO</text>
+          <text x="182" y="206" text-anchor="middle" fill="rgba(122,128,144,.6)" font-size="6.5">CD: 0.2</text>
+
+          <!-- Team A density total -->
+          <rect x="22" y="228" width="200" height="28" fill="rgba(88,128,200,.1)" stroke="rgba(88,128,200,.25)" stroke-width=".7" rx="1"/>
+          <text x="34"  y="241" fill="rgba(88,128,200,.7)" font-size="7" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">TEAM COORD DENSITY</text>
+          <text x="212" y="245" text-anchor="end" fill="rgba(88,128,200,.9)" font-size="12" font-family="'Barlow Condensed',sans-serif" font-weight="700">1.6 / 5.0</text>
+          <text x="34" y="251" fill="rgba(122,128,144,.55)" font-size="6">avg: 0.32 — Mixed solo/duo band</text>
+        </g>
+
+        <!-- CENTER — Processing -->
+        <rect x="244" y="26" width="372" height="240" fill="rgba(200,160,48,.03)" stroke="rgba(200,160,48,.2)" stroke-width="1" stroke-dasharray="4 3" rx="2"/>
+        <text x="430" y="44" text-anchor="middle" fill="rgba(200,160,48,.7)" font-size="9" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing="2">COORDINATION ENGINE</text>
+
+        <!-- Process boxes -->
+        <rect x="260" y="54" width="160" height="46" fill="rgba(200,160,48,.07)" stroke="rgba(200,160,48,.2)" stroke-width=".6" rx="1"/>
+        <text x="340" y="70" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="8" font-family="'Barlow Condensed',sans-serif" font-weight="700">STACK DETECTION</text>
+        <text x="340" y="83" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Classify each player's group size</text>
+        <text x="340" y="93" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">and coordination history signal</text>
+
+        <rect x="440" y="54" width="160" height="46" fill="rgba(200,160,48,.07)" stroke="rgba(200,160,48,.2)" stroke-width=".6" rx="1"/>
+        <text x="520" y="70" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="8" font-family="'Barlow Condensed',sans-serif" font-weight="700">SYNC PROBABILITY</text>
+        <text x="520" y="83" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">Model expected coordination</text>
+        <text x="520" y="93" text-anchor="middle" fill="rgba(122,128,144,.7)" font-size="6.5" font-family="'Barlow',sans-serif">output per player combination</text>
+
+        <!-- Central density metric -->
+        <circle cx="430" cy="165" r="52" fill="rgba(200,160,48,.06)" stroke="rgba(200,160,48,.3)" stroke-width="1.5"/>
+        <circle cx="430" cy="165" r="38" fill="rgba(200,160,48,.08)"/>
+        <text x="430" y="155" text-anchor="middle" fill="rgba(200,204,216,.7)" font-size="7" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">COORD.</text>
+        <text x="430" y="167" text-anchor="middle" fill="rgba(200,160,48,.95)" font-size="16" font-family="'Barlow Condensed',sans-serif" font-weight="700">DENSITY</text>
+        <text x="430" y="180" text-anchor="middle" fill="rgba(200,204,216,.7)" font-size="7" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">MATCHING</text>
+
+        <!-- Arrows from teams to center -->
+        <line x1="232" y1="160" x2="376" y2="160" stroke="rgba(88,128,200,.35)" stroke-width="1.2" marker-end="url(#arrd)"/>
+        <line x1="484" y1="160" x2="628" y2="160" stroke="rgba(96,168,112,.35)" stroke-width="1.2" marker-end="url(#arrd)"/>
+
+        <!-- Pairing logic -->
+        <rect x="260" y="228" width="340" height="28" fill="rgba(200,160,48,.1)" stroke="rgba(200,160,48,.25)" stroke-width=".7" rx="1"/>
+        <text x="430" y="240" text-anchor="middle" fill="rgba(200,160,48,.85)" font-size="8" font-family="'Barlow Condensed',sans-serif" font-weight="700">MATCH PAIRING RULE: |Team A CD − Team B CD| ≤ 0.4</text>
+        <text x="430" y="251" text-anchor="middle" fill="rgba(122,128,144,.6)" font-size="6.5" font-family="'Barlow',sans-serif">Teams within the same coordination band are paired — not solely by MMR</text>
+
+        <!-- RIGHT TEAM B -->
+        <rect x="628" y="26" width="220" height="240" fill="rgba(96,168,112,.04)" stroke="rgba(96,168,112,.25)" stroke-width="1" rx="2"/>
+        <rect x="628" y="26" width="220" height="20" fill="rgba(96,168,112,.1)" rx="2"/>
+        <text x="738" y="40" text-anchor="middle" fill="rgba(96,168,112,.85)" font-size="8" font-family="'Barlow Condensed',sans-serif" font-weight="700" letter-spacing="1.5">TEAM B INPUTS</text>
+
+        <g font-size="7.5" font-family="'Barlow',sans-serif">
+          <rect x="638" y="54" width="200" height="30" fill="rgba(88,128,200,.05)" stroke="rgba(88,128,200,.12)" stroke-width=".5" rx="1"/>
+          <text x="650" y="69" fill="rgba(200,204,216,.8)" font-weight="600">Player A</text>
+          <text x="650" y="79" fill="rgba(122,128,144,.65)">Solo queue</text>
+          <rect x="746" y="59" width="40" height="14" fill="rgba(88,128,200,.1)" rx="1"/>
+          <text x="766" y="70" text-anchor="middle" fill="rgba(88,128,200,.8)" font-size="6.5">SOLO</text>
+          <text x="798" y="70" text-anchor="middle" fill="rgba(122,128,144,.6)" font-size="6.5">CD: 0.2</text>
+
+          <!-- Trio B -->
+          <rect x="638" y="88" width="200" height="30" fill="rgba(200,160,48,.05)" stroke="rgba(200,160,48,.12)" stroke-width=".5" rx="1"/>
+          <text x="650" y="103" fill="rgba(200,204,216,.8)" font-weight="600">Player B</text>
+          <text x="650" y="113" fill="rgba(122,128,144,.65)">Trio with C + D</text>
+          <rect x="746" y="93" width="40" height="14" fill="rgba(200,160,48,.1)" rx="1"/>
+          <text x="766" y="104" text-anchor="middle" fill="rgba(200,160,48,.8)" font-size="6.5">TRIO</text>
+          <text x="798" y="104" text-anchor="middle" fill="rgba(122,128,144,.6)" font-size="6.5">CD: 0.7</text>
+
+          <rect x="638" y="122" width="200" height="30" fill="rgba(200,160,48,.05)" stroke="rgba(200,160,48,.12)" stroke-width=".5" rx="1"/>
+          <text x="650" y="137" fill="rgba(200,204,216,.8)" font-weight="600">Player C</text>
+          <text x="650" y="147" fill="rgba(122,128,144,.65)">Trio with B + D</text>
+          <rect x="746" y="127" width="40" height="14" fill="rgba(200,160,48,.1)" rx="1"/>
+          <text x="766" y="138" text-anchor="middle" fill="rgba(200,160,48,.8)" font-size="6.5">TRIO</text>
+          <text x="798" y="138" text-anchor="middle" fill="rgba(122,128,144,.6)" font-size="6.5">CD: 0.7</text>
+
+          <rect x="638" y="156" width="200" height="30" fill="rgba(200,160,48,.05)" stroke="rgba(200,160,48,.12)" stroke-width=".5" rx="1"/>
+          <text x="650" y="171" fill="rgba(200,204,216,.8)" font-weight="600">Player D</text>
+          <text x="650" y="181" fill="rgba(122,128,144,.65)">Trio with B + C</text>
+          <rect x="746" y="161" width="40" height="14" fill="rgba(200,160,48,.1)" rx="1"/>
+          <text x="766" y="172" text-anchor="middle" fill="rgba(200,160,48,.8)" font-size="6.5">TRIO</text>
+          <text x="798" y="172" text-anchor="middle" fill="rgba(122,128,144,.6)" font-size="6.5">CD: 0.7</text>
+
+          <rect x="638" y="190" width="200" height="30" fill="rgba(88,128,200,.05)" stroke="rgba(88,128,200,.12)" stroke-width=".5" rx="1"/>
+          <text x="650" y="205" fill="rgba(200,204,216,.8)" font-weight="600">Player E</text>
+          <text x="650" y="215" fill="rgba(122,128,144,.65)">Solo queue</text>
+          <rect x="746" y="195" width="40" height="14" fill="rgba(88,128,200,.1)" rx="1"/>
+          <text x="766" y="206" text-anchor="middle" fill="rgba(88,128,200,.8)" font-size="6.5">SOLO</text>
+          <text x="798" y="206" text-anchor="middle" fill="rgba(122,128,144,.6)" font-size="6.5">CD: 0.2</text>
+
+          <rect x="638" y="228" width="200" height="28" fill="rgba(96,168,112,.1)" stroke="rgba(96,168,112,.25)" stroke-width=".7" rx="1"/>
+          <text x="650" y="241" fill="rgba(96,168,112,.7)" font-size="7" font-family="'Barlow Condensed',sans-serif" letter-spacing="1">TEAM COORD DENSITY</text>
+          <text x="828" y="245" text-anchor="end" fill="rgba(96,168,112,.9)" font-size="12" font-family="'Barlow Condensed',sans-serif" font-weight="700">2.5 / 5.0</text>
+          <text x="650" y="251" fill="rgba(122,128,144,.55)" font-size="6">avg: 0.50 — ← NOT a valid pairing (delta: 0.18 ✓)</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ── 05 STRESS TEST ── -->
+  <div class="section-block">
+    <div class="section-label">05 · Adversarial Stress Test Validation</div>
+
+    <table class="stress-table">
+      <thead>
+        <tr>
+          <th style="width:18%">Scenario</th>
+          <th style="width:12%">Risk Type</th>
+          <th style="width:20%">System Response</th>
+          <th style="width:26%">Mechanism</th>
+          <th style="width:12%">Outcome</th>
+          <th style="width:12%">Residual Risk</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="scenario-name">1. Stack vs Solo Coordination Gap</div>
+            <div style="font-size:.65rem;color:var(--muted);margin-top:2px">5-stack vs 5 solos pairing</div>
+          </td>
+          <td><span class="layer-tag lt-c">Coordination</span></td>
+          <td>Stack detection routes 5-stacks into own expectation band. Forces stack vs stack or density-equivalent mixed pairing.</td>
+          <td>Coordination density delta threshold enforced at assembly. Pool expands before allowing cross-band pairing.</td>
+          <td class="outcome-contained">✓ Contained</td>
+          <td><span class="risk-badge risk-low">Low</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="scenario-name">2. Meta Hero Spam / Composition Collapse</div>
+            <div style="font-size:.65rem;color:var(--muted);margin-top:2px">Low hero diversity, 5x same hero</div>
+          </td>
+          <td><span class="layer-tag lt-s">Structural</span></td>
+          <td>Composition risk engine flags low diversity score. Soft role pressure model pushes toward 2-2-2 tendency without locking selections.</td>
+          <td>Hero distribution weighting deprioritizes same-hero heavy comps at assembly. No hard restrictions applied.</td>
+          <td class="outcome-mitigated">⚡ Mitigated</td>
+          <td><span class="risk-badge risk-med">Medium</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="scenario-name">3. Low Coordination Solo Queue Chaos</div>
+            <div style="font-size:.65rem;color:var(--muted);margin-top:2px">Full solo, minimal historical data</div>
+          </td>
+          <td><span class="layer-tag lt-c">Coordination</span><span class="layer-tag lt-p">Perception</span></td>
+          <td>Low sync probability detected. Volatility estimation raised. Match assembled within low-coordination band to ensure symmetric chaos across both teams.</td>
+          <td>Both teams receive similar coordination density score. Volatility smoothing layer reduces snowball probability in low-sync environments.</td>
+          <td class="outcome-contained">✓ Contained</td>
+          <td><span class="risk-badge risk-low">Low</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="scenario-name">4. High Skill / Low Coordination Mismatch</div>
+            <div style="font-size:.65rem;color:var(--muted);margin-top:2px">Smurfs, boosted accounts, skill outliers</div>
+          </td>
+          <td><span class="layer-tag lt-s">Structural</span><span class="layer-tag lt-p">Perception</span></td>
+          <td>Behavioural history signals divergence between raw skill metric and coordination output. Agency scoring run to protect player perception on the receiving team.</td>
+          <td>Skill signal weighted against recent performance, not peak MMR. Attribution clarity preserved so loss reads as mechanical, not systemic.</td>
+          <td class="outcome-mitigated">⚡ Mitigated</td>
+          <td><span class="risk-badge risk-med">Medium</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="scenario-name">5. High Volatility Burst / Snowball Comps</div>
+            <div style="font-size:.65rem;color:var(--muted);margin-top:2px">Burst-damage stacks, one-sided matches</div>
+          </td>
+          <td><span class="layer-tag lt-s">Structural</span><span class="layer-tag lt-c">Coordination</span><span class="layer-tag lt-p">Perception</span></td>
+          <td>Pre-match volatility score flags high-burst composition. Assembly deprioritizes comps predicted to produce &lt;5 min decisive advantages. Perception smoothing applied.</td>
+          <td>Snowball dampening creates re-entry windows at structural level. Catch-up probability model adjusts tempo expectations. Structural limits remain — snowball mechanics are inherent to the game.</td>
+          <td class="outcome-partial">↗ Partial</td>
+          <td><span class="risk-badge risk-high">High</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="limitation-note">
+      <div class="limitation-note-icon">! CONSTRAINT</div>
+      <div class="limitation-note-text">
+        <strong>Permanent structural limitations:</strong> Some failure modes cannot be eliminated — only normalized. Party system communication inequality, snowball mechanics from game design decisions, and player behavioural volatility are inherent constraints. The system focuses on <strong>coordination normalization</strong> and <strong>perception preservation</strong>, not structural removal. Fairness is achieved through interpretability, not elimination of variance.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 06 A/B TEST FRAMEWORK ── -->
+  <div class="section-block">
+    <div class="section-label">06 · Experimentation Design — Validating the System</div>
+
+    <div class="limitation-note" style="margin-top:0;margin-bottom:14px">
+      <div class="limitation-note-icon">→ WHY</div>
+      <div class="limitation-note-text">A system design without an experimentation plan is a hypothesis. This section defines how the coordination density matching model would be validated in production — including primary metrics, guardrail metrics, and what failure looks like.</div>
+    </div>
+
+    <!-- Experiment 1 -->
+    <div style="border:1px solid var(--border2);margin-bottom:12px;overflow:hidden">
+      <div style="padding:12px 16px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
+        <div>
+          <div style="font-family:var(--cond);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:4px">Experiment 01 — Core Fairness Hypothesis</div>
+          <div style="font-size:.85rem;font-weight:600;color:var(--text-bright)">Does coordination density matching improve perceived fairness?</div>
+        </div>
+        <div style="flex-shrink:0;font-family:var(--mono);font-size:.6rem;padding:.2rem .5rem;border:1px solid rgba(88,128,200,.3);color:var(--blue)">A/B · 50/50 SPLIT</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;background:var(--border)">
+        <div style="background:var(--surface);padding:12px 14px">
+          <div style="font-family:var(--cond);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Control (A)</div>
+          <div style="font-size:.72rem;color:var(--muted2);line-height:1.6">Standard MMR-only matchmaking. No coordination density scoring. Current production behaviour.</div>
+        </div>
+        <div style="background:var(--surface);padding:12px 14px;border-left:1px solid var(--border)">
+          <div style="font-family:var(--cond);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Treatment (B)</div>
+          <div style="font-size:.72rem;color:var(--muted2);line-height:1.6">Coordination density matching active. Teams assembled within ±0.4 coordination density band before MMR balancing applied.</div>
+        </div>
+        <div style="background:var(--surface);padding:12px 14px;border-left:1px solid var(--border)">
+          <div style="font-family:var(--cond);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Unit of Randomisation</div>
+          <div style="font-size:.72rem;color:var(--muted2);line-height:1.6">Player-level (not match-level) to avoid contamination. Player stays in assigned group for the full experiment window.</div>
+        </div>
+      </div>
+      <!-- Metrics -->
+      <div style="padding:12px 14px;border-top:1px solid var(--border)">
+        <div style="font-family:var(--cond);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Metrics</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>
+            <div style="font-size:.68rem;color:var(--green);font-family:var(--mono);margin-bottom:4px">PRIMARY (must move)</div>
+            <div style="font-size:.7rem;color:var(--muted2);line-height:1.8">
+              Post-match fairness rating (in-game prompt, 1–5)<br>
+              Rage quit rate per player per week<br>
+              D7 retention rate by cohort
+            </div>
+          </div>
+          <div>
+            <div style="font-size:.68rem;color:var(--amber);font-family:var(--mono);margin-bottom:4px">GUARDRAILS (must not regress)</div>
+            <div style="font-size:.7rem;color:var(--muted2);line-height:1.8">
+              Average queue wait time (≤ +15% tolerance)<br>
+              Match completion rate (no drop below 94%)<br>
+              Win rate distribution variance (± 2% ceiling)
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Power / Duration -->
+      <div style="padding:10px 14px;border-top:1px solid var(--border);background:var(--surface2);display:flex;gap:32px">
+        <div><div style="font-family:var(--mono);font-size:.58rem;color:var(--muted)">SAMPLE SIZE</div><div style="font-size:.78rem;color:var(--text-bright);font-weight:600;margin-top:2px">~5,000 players / group</div></div>
+        <div><div style="font-family:var(--mono);font-size:.58rem;color:var(--muted)">DURATION</div><div style="font-size:.78rem;color:var(--text-bright);font-weight:600;margin-top:2px">14 days (2 full play-weeks)</div></div>
+        <div><div style="font-family:var(--mono);font-size:.58rem;color:var(--muted)">POWER</div><div style="font-size:.78rem;color:var(--text-bright);font-weight:600;margin-top:2px">80% · α = 0.05 · MDE: 5% rage quit reduction</div></div>
+        <div><div style="font-family:var(--mono);font-size:.58rem;color:var(--muted)">NOVELTY BIAS CONTROL</div><div style="font-size:.78rem;color:var(--text-bright);font-weight:600;margin-top:2px">First 3 days excluded from primary analysis</div></div>
+      </div>
+    </div>
+
+    <!-- Experiment 2 -->
+    <div style="border:1px solid var(--border2);margin-bottom:12px;overflow:hidden">
+      <div style="padding:12px 16px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
+        <div>
+          <div style="font-family:var(--cond);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);margin-bottom:4px">Experiment 02 — Composition Pressure Hypothesis</div>
+          <div style="font-size:.85rem;font-weight:600;color:var(--text-bright)">Does soft 2-2-2 role pressure reduce early-game composition failures without reducing hero diversity?</div>
+        </div>
+        <div style="flex-shrink:0;font-family:var(--mono);font-size:.6rem;padding:.2rem .5rem;border:1px solid rgba(128,96,200,.3);color:var(--purple)">A/B/C · 3-WAY</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;background:var(--border)">
+        <div style="background:var(--surface);padding:12px 14px">
+          <div style="font-family:var(--cond);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Control (A) — No Pressure</div>
+          <div style="font-size:.72rem;color:var(--muted2);line-height:1.6">Free hero selection, no role weighting applied. Baseline composition volatility.</div>
+        </div>
+        <div style="background:var(--surface);padding:12px 14px;border-left:1px solid var(--border)">
+          <div style="font-family:var(--cond);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Treatment B — Soft Pressure</div>
+          <div style="font-size:.72rem;color:var(--muted2);line-height:1.6">Lobby UI shows team role distribution. Subtle prompt if composition is 4+ of one role. No restriction.</div>
+        </div>
+        <div style="background:var(--surface);padding:12px 14px;border-left:1px solid var(--border)">
+          <div style="font-family:var(--cond);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Treatment C — Matchmaking Weighting</div>
+          <div style="font-size:.72rem;color:var(--muted2);line-height:1.6">Matchmaking deprioritises extreme comp pairings (e.g. 5 DPS vs 3 DPS/2 tank). No hard locks.</div>
+        </div>
+      </div>
+      <div style="padding:10px 14px;border-top:1px solid var(--border);background:var(--surface2);display:flex;gap:32px">
+        <div><div style="font-family:var(--mono);font-size:.58rem;color:var(--muted)">PRIMARY METRIC</div><div style="font-size:.78rem;color:var(--text-bright);font-weight:600;margin-top:2px">Match completion rate · First-blood-to-surrender time</div></div>
+        <div><div style="font-family:var(--mono);font-size:.58rem;color:var(--muted)">GUARDRAIL</div><div style="font-size:.78rem;color:var(--text-bright);font-weight:600;margin-top:2px">Hero diversity index must not drop &gt;5%</div></div>
+        <div><div style="font-family:var(--mono);font-size:.58rem;color:var(--muted)">EXPECTED WINNER</div><div style="font-size:.78rem;color:var(--text-bright);font-weight:600;margin-top:2px">B or C — hypothesis is either works vs. doing nothing</div></div>
+      </div>
+    </div>
+
+    <!-- What failure looks like -->
+    <div class="limitation-note">
+      <div class="limitation-note-icon">! FAILURE MODES</div>
+      <div class="limitation-note-text">
+        <strong>What a failed experiment looks like:</strong> If queue times increase &gt;15% with no fairness rating improvement, the coordination band threshold (±0.4) is too tight — widen it. If rage quit rate drops but D7 retention doesn't move, the frustration signal is being suppressed not addressed — investigate match quality. If hero diversity index drops &gt;5% in Experiment 02-C, the composition weighting is too aggressive and restricting identity — back off the multiplier.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 07 CORE INSIGHT ── -->
+  <div class="section-block">
+    <div class="section-label">07 · Core Design Insight</div>
+
+    <div class="insight-block">
+      <div class="insight-label">Defining Claim</div>
+      <div class="insight-text">"Fairness in competitive matchmaking is not statistical equilibrium — it is interpretable agency under constraint. A player who loses but can say 'I could have played that differently' has experienced a fair match. A player who can't explain why they lost has not, regardless of what the numbers say."</div>
+    </div>
+
+    <div class="problem-grid" style="margin-top:12px">
+      <div class="prob-cell">
+        <div class="prob-label" style="color:var(--blue)">What The System Preserves</div>
+        <div class="prob-body">Hero freedom. Player identity. The ability to make meaningful individual decisions. No role locks, no hero bans, no forced queue type. The system controls variance — not expression.</div>
+      </div>
+      <div class="prob-cell">
+        <div class="prob-label" style="color:var(--purple)">What The System Controls</div>
+        <div class="prob-body">Coordination asymmetry between teams. Composition volatility extremes. Perceived unfairness from unreadable loss conditions. The gap between statistical balance and experienced balance.</div>
+      </div>
+      <div class="prob-cell">
+        <div class="prob-label" style="color:var(--green)">Why This Matters For Retention</div>
+        <div class="prob-body">Players churn when they feel powerless, not when they lose. A system that preserves agency and readability reduces rage-quit events, sustains mid-lifecycle engagement, and extends the perceived fairness window — the same lifecycle mechanics that apply in any live-service product.</div>
+      </div>
+      <div class="prob-cell">
+        <div class="prob-label" style="color:var(--amber)">Residual Design Tension</div>
+        <div class="prob-body">The system cannot fully eliminate coordination asymmetry — party-based communication is structural to the game. Some volatility, some mismatch, and some snowball outcomes are permanent. The system manages perception of these events, not their existence.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

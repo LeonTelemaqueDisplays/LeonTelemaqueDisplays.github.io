@@ -1,0 +1,2614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Leon Telemaque — Product Analytics</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#090909;
+  --card:#0f0f0f;
+  --card2:#131313;
+  --border:#1f1f1f;
+  --border2:#2a2a2a;
+  --text:#f2f2f2;
+  --muted:#6b6b6b;
+  --muted2:#999;
+  --accent:#ffffff;
+  --blue:#5b8fff;
+  --purple:#9b6dff;
+  --green:#3de8a0;
+  --red:#ff4d4d;
+  --amber:#f59e0b;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono','Fira Code','Courier New',monospace;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  line-height:1.5;
+  overflow-x:hidden;
+}
+
+/* ── GRAIN ── */
+#grain{
+  position:fixed;inset:0;z-index:9999;
+  pointer-events:none;
+  mix-blend-mode:screen;
+  opacity:.55;
+}
+
+/* ── BLUEPRINT GUIDE LINES ── */
+.guides{
+  position:fixed;inset:0;z-index:500;pointer-events:none;
+}
+.guide-line{
+  position:absolute;
+  background:var(--border);
+}
+.guide-h{height:1px;width:100%}
+.guide-v{width:1px;height:100%}
+.guide-top{top:56px}
+.guide-left{left:0;top:56px;height:calc(100% - 56px)}
+.guide-right{right:0;top:56px;height:calc(100% - 56px)}
+/* corner ticks */
+.tick{position:absolute;background:var(--border)}
+.tick-h{height:1px;width:20px}
+.tick-v{width:1px;height:20px}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 40px;
+  height:56px;
+  background:rgba(9,9,9,.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.logo{
+  font-family:var(--mono);font-size:.8rem;font-weight:600;
+  color:var(--text);letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--border2);
+  padding:.28rem .6rem;
+  text-decoration:none;
+}
+.nav-links{display:flex;gap:32px;list-style:none;align-items:center}
+.nav-links a{
+  color:var(--muted2);text-decoration:none;
+  font-size:.88rem;font-weight:400;
+  transition:color .15s;letter-spacing:.01em;
+}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{
+  display:flex!important;align-items:center;gap:6px;
+}
+.nav-cta svg{width:14px;height:14px;opacity:.7}
+
+/* ── DIAGONAL DIVIDER ── */
+.divider{
+  width:100%;
+  height:40px;
+  background:repeating-linear-gradient(
+    -50deg,
+    transparent,transparent 6px,
+    rgba(255,255,255,.018) 6px,rgba(255,255,255,.018) 12px
+  );
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  padding:56px 40px 0;
+  max-width:1440px;
+  margin:0 auto;
+  gap:60px;
+  position:relative;
+}
+.hero-left{padding:80px 0}
+.hero-eyebrow{
+  font-size:.95rem;font-weight:400;
+  color:var(--muted2);
+  margin-bottom:28px;
+  letter-spacing:.01em;
+}
+.hero-headline{
+  font-size:clamp(3rem,5.5vw,5rem);
+  font-weight:700;
+  line-height:1.08;
+  letter-spacing:-.04em;
+  margin-bottom:40px;
+  color:var(--text);
+}
+.hero-headline em{
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:400;
+  letter-spacing:-.02em;
+}
+.hero-items{
+  list-style:none;
+  display:flex;flex-direction:column;gap:0;
+  margin-bottom:48px;
+  border-top:1px solid var(--border);
+}
+.hero-item{
+  display:flex;align-items:baseline;gap:16px;
+  padding:14px 0;
+  border-bottom:1px solid var(--border);
+  color:var(--muted2);
+  font-size:.9rem;font-weight:400;
+}
+.hero-item-num{
+  font-family:var(--mono);
+  font-size:.72rem;color:var(--muted);
+  min-width:20px;
+}
+.brand-row{
+  display:flex;gap:12px;flex-wrap:wrap;
+  padding-top:4px;
+}
+.brand-chip{
+  font-family:var(--mono);font-size:.65rem;
+  color:var(--muted);
+  border:1px solid var(--border);
+  padding:.2rem .55rem;
+  letter-spacing:.06em;text-transform:uppercase;
+}
+
+/* ── HERO CARDS ── */
+.hero-right{
+  display:flex;gap:16px;align-items:flex-start;
+  padding:80px 0;
+  align-self:stretch;
+  align-items:center;
+}
+.hcard{
+  flex:1;
+  border:1px solid var(--border2);
+  background:var(--card);
+  overflow:hidden;
+  cursor:pointer;
+  transition:border-color .2s,transform .2s;
+  position:relative;
+}
+.hcard:hover{border-color:#444;transform:translateY(-4px)}
+.hcard:nth-child(2){margin-top:48px}
+.hcard-img{
+  width:100%;
+  aspect-ratio:.75;
+  overflow:hidden;
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.hcard-img svg{width:100%;height:100%;display:block}
+.hcard-bar{height:2px}
+.hcard-info{padding:12px 14px 16px}
+.hcard-name{font-size:.88rem;font-weight:600;margin-bottom:2px;color:var(--text)}
+.hcard-role{font-size:.72rem;color:var(--muted);letter-spacing:.01em}
+
+/* ── SECTION SHARED ── */
+.section{
+  padding:80px 40px;
+  max-width:1440px;
+  margin:0 auto;
+}
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  margin-bottom:48px;
+}
+.section-head h2{
+  font-size:clamp(1.5rem,2.8vw,2.2rem);
+  font-weight:700;
+  letter-spacing:-.03em;
+}
+.section-head p{
+  font-size:.85rem;color:var(--muted2);
+  margin-top:6px;
+}
+.view-all{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--card2);
+  border:1px solid var(--border2);
+  color:var(--text);text-decoration:none;
+  padding:10px 20px;
+  font-size:.8rem;font-weight:500;
+  border-radius:99px;
+  transition:border-color .2s;
+  cursor:pointer;white-space:nowrap;
+  font-family:var(--sans);
+  letter-spacing:.02em;
+}
+.view-all:hover{border-color:#555}
+
+/* ── WORK GRIDS ── */
+
+/* Hero projects — 2-col, tall previews */
+.hero-work-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+/* Support projects — 3-col, compact */
+.support-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.support-label{
+  font-family:var(--mono);font-size:.6rem;
+  color:var(--muted);letter-spacing:.12em;
+  text-transform:uppercase;
+  padding:20px 0 12px;
+  border-top:1px solid var(--border);
+  margin-top:32px;
+  display:flex;align-items:center;gap:12px;
+}
+.support-label::after{
+  content:'';flex:1;height:1px;background:var(--border);
+}
+
+/* Base card — shared */
+.pcard{
+  background:var(--card);
+  border:1px solid var(--border);
+  overflow:hidden;
+  cursor:pointer;
+  transition:border-color .2s,transform .18s;
+  display:flex;flex-direction:column;
+}
+.pcard:hover{border-color:#333;transform:translateY(-3px)}
+
+/* Hero card previews — taller */
+.hero-work-grid .pcard-preview{
+  aspect-ratio:16/9;
+}
+
+/* Support card previews — shorter, muted */
+.support-grid .pcard{
+  opacity:.82;
+  transition:border-color .2s,transform .18s,opacity .18s;
+}
+.support-grid .pcard:hover{
+  border-color:#2a2a2a;
+  transform:translateY(-2px);
+  opacity:1;
+}
+.support-grid .pcard-preview{
+  aspect-ratio:16/8;
+  filter:saturate(.7);
+}
+.support-grid .pcard:hover .pcard-preview{
+  filter:saturate(1);
+  transition:filter .2s;
+}
+.support-grid .pcard-body{
+  padding:14px 16px 18px;
+  gap:7px;
+}
+.support-grid .pcard-title{
+  font-size:.9rem;
+}
+.support-grid .pcard-desc{
+  font-size:.76rem;
+  /* clamp to 2 lines */
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+/* Shared preview / body */
+.pcard-preview{
+  width:100%;
+  aspect-ratio:16/9.5;
+  overflow:hidden;
+  position:relative;
+  background:var(--bg);
+}
+.pcard-preview svg{width:100%;height:100%;display:block;position:absolute;inset:0}
+.pcard-body{
+  padding:20px 24px 24px;
+  border-top:1px solid var(--border);
+  flex:1;display:flex;flex-direction:column;gap:10px;
+}
+.pcard-title{
+  font-size:1.05rem;font-weight:600;
+  color:var(--text);line-height:1.3;
+  letter-spacing:-.015em;
+}
+.pcard-desc{
+  font-size:.82rem;color:var(--muted2);
+  line-height:1.65;flex:1;
+}
+.pcard-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.ptag{
+  font-family:var(--mono);font-size:.62rem;
+  border:1px solid var(--border2);
+  padding:.18rem .5rem;
+  color:var(--muted);
+  text-transform:uppercase;letter-spacing:.05em;
+}
+.ptag-blue{border-color:rgba(91,143,255,.3);color:var(--blue)}
+.ptag-purple{border-color:rgba(155,109,255,.3);color:var(--purple)}
+.ptag-green{border-color:rgba(61,232,160,.25);color:var(--green)}
+.ptag-live{
+  border-color:rgba(61,232,160,.3);color:var(--green);
+  animation:blink 2s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* ── SNAPSHOTS ── */
+.snapshots-section{
+  padding:72px 0 80px;
+  border-top:1px solid var(--border);
+  overflow:hidden;
+}
+.snapshots-head{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  padding:0 40px;margin-bottom:36px;
+}
+.snapshots-head h2{font-size:clamp(1.4rem,2.4vw,2rem);font-weight:700;letter-spacing:-.03em}
+.snapshots-head p{font-size:.85rem;color:var(--muted2);margin-top:6px}
+.snap-track-wrap{
+  position:relative;
+}
+.snap-track-wrap::before,
+.snap-track-wrap::after{
+  content:'';
+  position:absolute;top:0;bottom:0;
+  width:80px;z-index:10;pointer-events:none;
+}
+.snap-track-wrap::before{left:0;background:linear-gradient(to right,var(--bg),transparent)}
+.snap-track-wrap::after{right:0;background:linear-gradient(to left,var(--bg),transparent)}
+.snap-track{
+  display:flex;gap:14px;
+  padding:0 40px;
+  overflow-x:auto;
+  scroll-behavior:smooth;
+  scrollbar-width:none;
+  cursor:grab;
+  user-select:none;
+}
+.snap-track::-webkit-scrollbar{display:none}
+.snap-track.dragging{cursor:grabbing;scroll-behavior:auto}
+.snap-card{
+  flex:0 0 auto;
+  width:320px;
+  background:var(--card);
+  border:1px solid var(--border);
+  overflow:hidden;
+  transition:border-color .2s,transform .18s;
+  position:relative;
+}
+.snap-card:hover{border-color:#333;transform:translateY(-3px)}
+.snap-card-img{
+  width:100%;height:200px;
+  overflow:hidden;position:relative;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+}
+.snap-card-img svg{width:100%;height:100%;display:block;position:absolute;inset:0}
+.snap-card-label{
+  padding:14px 16px 16px;
+  border-top:1px solid var(--border);
+}
+.snap-card-title{font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:3px}
+.snap-card-sub{font-size:.72rem;color:var(--muted2)}
+.snap-nav{
+  display:flex;gap:8px;
+  padding:0 40px;
+  margin-top:24px;
+}
+.snap-btn{
+  width:36px;height:36px;
+  border:1px solid var(--border2);
+  background:transparent;color:var(--muted2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:1rem;
+  transition:border-color .15s,color .15s;
+}
+.snap-btn:hover{border-color:var(--muted2);color:var(--text)}
+
+/* ── ABOUT / STATS ── */
+.about-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:start;
+}
+.about-text{
+  font-size:clamp(1rem,2vw,1.35rem);
+  font-weight:400;line-height:1.6;
+  color:var(--text);
+}
+.about-text em{font-style:italic;font-family:var(--serif);color:var(--muted2)}
+.about-text p+p{margin-top:1.2em}
+.read-more{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.75rem;font-weight:500;
+  color:var(--muted2);text-decoration:none;
+  text-transform:uppercase;letter-spacing:.1em;
+  margin-top:28px;
+  transition:color .15s;
+}
+.read-more:hover{color:var(--text)}
+.stats-boxes{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:0;
+  border:1px solid var(--border);
+}
+.stat-box{
+  padding:28px 24px;
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.stat-box:nth-child(even){border-right:none}
+.stat-box:nth-last-child(-n+2){border-bottom:none}
+.stat-num{
+  font-size:2.4rem;font-weight:700;
+  letter-spacing:-.04em;
+  color:var(--text);margin-bottom:6px;
+}
+.stat-label{font-size:.78rem;color:var(--muted2);line-height:1.4}
+
+/* ── APPROACH ── */
+.approach-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:0;
+  border:1px solid var(--border);
+}
+.acard{
+  padding:28px 24px 32px;
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  transition:background .2s;
+}
+.acard:hover{background:var(--card)}
+.acard:nth-child(3n){border-right:none}
+.acard:nth-last-child(-n+3){border-bottom:none}
+.acard h3{
+  font-size:.95rem;font-weight:600;
+  margin-bottom:12px;color:var(--text);
+}
+.acard p{
+  font-size:.8rem;color:var(--muted2);
+  line-height:1.7;margin-bottom:20px;
+}
+.acard-btn{
+  display:inline-block;
+  font-family:var(--mono);font-size:.7rem;
+  border:1px solid var(--border2);
+  padding:.3rem .65rem;color:var(--muted2);
+  text-decoration:none;cursor:pointer;
+  background:transparent;
+  transition:border-color .15s,color .15s;
+  letter-spacing:.04em;
+}
+.acard-btn:hover{border-color:var(--muted2);color:var(--text)}
+
+/* ── CTA ── */
+.cta-wrap{
+  padding:100px 40px;
+  max-width:1440px;margin:0 auto;
+}
+.cta-big{
+  font-size:clamp(2rem,5vw,3.8rem);
+  font-weight:700;letter-spacing:-.04em;
+  line-height:1.15;
+}
+.cta-muted{color:var(--muted2)}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid var(--border);
+  padding:24px 40px;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:16px;
+  max-width:100%;
+}
+.foot-left{
+  font-size:.75rem;color:var(--muted);
+  font-family:var(--mono);line-height:1.6;
+}
+.foot-links{display:flex;gap:48px}
+.foot-group{}
+.foot-label{
+  font-size:.62rem;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.1em;
+  margin-bottom:4px;
+}
+.foot-link{
+  display:flex;align-items:center;gap:4px;
+  font-size:.8rem;color:var(--muted2);
+  text-decoration:none;transition:color .15s;
+}
+.foot-link:hover{color:var(--text)}
+
+/* ── MODAL ── */
+.modal-bg{
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(0,0,0,.88);
+  backdrop-filter:blur(12px);
+  display:none;align-items:flex-start;
+  justify-content:center;
+  padding:40px 16px 40px;
+  overflow-y:auto;
+}
+.modal-bg.open{display:flex}
+.modal{
+  width:100%;max-width:920px;
+  background:var(--card);
+  border:1px solid var(--border2);
+  position:relative;
+  animation:rise .22s ease;
+}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.modal-x{
+  position:absolute;top:16px;right:16px;
+  width:32px;height:32px;
+  background:var(--card2);border:1px solid var(--border2);
+  color:var(--muted2);font-size:.9rem;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;z-index:5;
+  transition:color .15s,border-color .15s;
+}
+.modal-x:hover{color:var(--text);border-color:#555}
+.modal-frame{
+  width:100%;height:520px;
+  background:var(--bg);
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  border-bottom:1px solid var(--border);
+}
+.modal-frame iframe{width:100%;height:100%;border:none}
+.modal-placeholder{
+  display:flex;flex-direction:column;align-items:center;
+  gap:12px;color:var(--muted);font-size:.82rem;text-align:center;
+  padding:32px;
+}
+.modal-placeholder svg{opacity:.25;width:44px;height:44px}
+/* ── STREAMLIT CTA ── */
+.streamlit-cta{
+  width:100%;height:100%;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:0;
+  background:var(--bg);
+  padding:0;
+}
+.streamlit-cta-inner{
+  width:100%;max-width:540px;
+  border:1px solid var(--border2);
+  background:var(--card);
+  padding:28px 32px 32px;
+  text-align:left;
+}
+.streamlit-cta-eyebrow{
+  font-family:var(--mono);font-size:.6rem;
+  color:var(--green);letter-spacing:.12em;
+  text-transform:uppercase;margin-bottom:10px;
+  display:flex;align-items:center;gap:6px;
+}
+.streamlit-cta-eyebrow::before{
+  content:'';width:6px;height:6px;
+  border-radius:50%;background:var(--green);
+  animation:blink 1.8s ease-in-out infinite;
+}
+.streamlit-cta-title{
+  font-size:1.05rem;font-weight:600;
+  color:var(--text);margin-bottom:6px;
+  letter-spacing:-.01em;
+}
+.streamlit-cta-desc{
+  font-size:.78rem;color:var(--muted2);
+  line-height:1.65;margin-bottom:20px;
+}
+.streamlit-cta-desc strong{color:var(--muted2)}
+.streamlit-cta-input-row{
+  display:flex;gap:8px;width:100%;
+}
+.streamlit-cta-input{
+  flex:1;background:var(--bg);border:1px solid var(--border2);
+  color:var(--text);padding:9px 12px;
+  font-size:.78rem;font-family:var(--mono);
+  outline:none;transition:border-color .15s;
+}
+.streamlit-cta-input:focus{border-color:#444}
+.streamlit-cta-input::placeholder{color:var(--muted)}
+.streamlit-cta-btn{
+  font-family:var(--mono);font-size:.7rem;
+  padding:.5rem 1.1rem;cursor:pointer;
+  background:var(--text);color:var(--bg);
+  border:1px solid var(--text);
+  transition:opacity .15s;white-space:nowrap;
+  font-weight:600;
+}
+.streamlit-cta-btn:hover{opacity:.85}
+.streamlit-cta-note{
+  font-size:.68rem;color:var(--muted);
+  margin-top:10px;
+}
+.connect-btn{
+  font-family:var(--mono);font-size:.7rem;
+  border:1px solid var(--border2);
+  padding:.35rem .8rem;color:var(--muted2);
+  background:transparent;cursor:pointer;
+  margin-top:4px;transition:border-color .15s,color .15s;
+}
+.connect-btn:hover{border-color:var(--muted2);color:var(--text)}
+.modal-body{padding:32px 40px 40px}
+.modal-tag{
+  display:inline-block;
+  font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:.2rem .55rem;margin-bottom:14px;
+}
+.tag-gaming{background:rgba(91,143,255,.1);color:var(--blue);border:1px solid rgba(91,143,255,.2)}
+.tag-fintech{background:rgba(155,109,255,.1);color:var(--purple);border:1px solid rgba(155,109,255,.2)}
+.tag-ux{background:rgba(61,232,160,.08);color:var(--green);border:1px solid rgba(61,232,160,.15)}
+.modal-title{
+  font-size:1.55rem;font-weight:700;
+  letter-spacing:-.025em;line-height:1.2;
+  margin-bottom:8px;
+}
+.modal-period{
+  font-family:var(--mono);font-size:.7rem;
+  color:var(--muted);margin-bottom:20px;
+}
+.modal-desc{
+  font-size:.88rem;color:var(--muted2);
+  line-height:1.75;margin-bottom:20px;
+}
+.insight-block{
+  border-left:2px solid var(--blue);
+  padding:12px 16px;
+  background:rgba(91,143,255,.04);
+  margin-bottom:20px;
+}
+.insight-label{
+  font-family:var(--mono);font-size:.62rem;
+  color:var(--blue);letter-spacing:.1em;
+  text-transform:uppercase;margin-bottom:4px;
+}
+.insight-text{font-size:.85rem;line-height:1.6;color:var(--text)}
+.signals-head{
+  font-family:var(--mono);font-size:.65rem;
+  color:var(--muted);letter-spacing:.08em;
+  text-transform:uppercase;margin-bottom:10px;
+}
+.signals-list{
+  list-style:none;display:flex;flex-direction:column;gap:6px;
+  margin-bottom:20px;
+}
+.signals-list li{
+  font-size:.83rem;color:var(--muted2);
+  padding-left:16px;position:relative;
+}
+.signals-list li::before{
+  content:'→';position:absolute;left:0;
+  color:var(--blue);font-size:.72rem;top:1px;
+}
+.modal-tools{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.modal-links{display:flex;gap:16px;flex-wrap:wrap}
+.mlink{
+  font-size:.8rem;color:var(--blue);
+  text-decoration:none;
+  border-bottom:1px solid rgba(91,143,255,.25);
+  padding-bottom:1px;
+  transition:border-color .15s;
+}
+.mlink:hover{border-color:var(--blue)}
+
+/* URL dialog */
+.url-dlg{
+  position:fixed;inset:0;z-index:3000;
+  display:none;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.75);
+}
+.url-dlg.open{display:flex}
+.url-inner{
+  background:var(--card2);border:1px solid var(--border2);
+  padding:32px;width:100%;max-width:440px;
+}
+.url-inner h3{font-size:1rem;font-weight:600;margin-bottom:6px}
+.url-inner p{font-size:.8rem;color:var(--muted2);margin-bottom:20px;line-height:1.6}
+.url-input{
+  width:100%;background:var(--bg);border:1px solid var(--border2);
+  color:var(--text);padding:10px 12px;
+  font-size:.82rem;font-family:var(--mono);
+  outline:none;margin-bottom:12px;
+  transition:border-color .15s;
+}
+.url-input:focus{border-color:#555}
+.url-btns{display:flex;gap:8px}
+.ubtn{
+  font-size:.75rem;font-family:var(--mono);
+  padding:.45rem 1rem;cursor:pointer;
+  border:1px solid var(--border2);
+  background:transparent;color:var(--muted2);
+  transition:border-color .15s,color .15s;
+}
+.ubtn.pri{background:var(--text);color:var(--bg);border-color:var(--text)}
+.ubtn.pri:hover{opacity:.88}
+.ubtn:not(.pri):hover{border-color:#555;color:var(--text)}
+
+/* ── HERO GIF DECORATION ── */
+.hero-deco{
+  position:absolute;
+  top:72px;
+  right:18%;
+  width:220px;
+  z-index:10;
+  pointer-events:none;
+}
+.hero-deco img{
+  width:100%;
+  display:block;
+  mix-blend-mode:lighten;
+  filter:contrast(1.05) brightness(0.95);
+}
+/* fade bottom edge into the bg */
+.hero-deco::after{
+  content:'';
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:60px;
+  background:linear-gradient(to bottom,transparent,var(--bg));
+  pointer-events:none;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  .hero{grid-template-columns:1fr;min-height:auto;padding:80px 24px 0}
+  .hero-right{display:none}
+  .hero-deco{display:none}
+  .work-grid{grid-template-columns:1fr}
+  .about-grid{grid-template-columns:1fr;gap:48px}
+  .approach-grid{grid-template-columns:1fr 1fr}
+  .acard:nth-child(3n){border-right:1px solid var(--border)}
+  .acard:nth-child(2n){border-right:none}
+  .section{padding:60px 24px}
+  .cta-wrap{padding:80px 24px}
+  nav{padding:0 24px}
+  footer{padding:20px 24px}
+}
+@media(max-width:600px){
+  .approach-grid{grid-template-columns:1fr}
+  .acard:nth-child(n){border-right:none}
+  .stats-boxes{grid-template-columns:1fr}
+  .stat-box:nth-child(even){border-right:none;border-left:none}
+  .work-grid{grid-template-columns:1fr}
+  .foot-links{gap:28px}
+}
+</style>
+</head>
+<body>
+
+<!-- GRAIN CANVAS -->
+<canvas id="grain"></canvas>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">LT</a>
+  <ul class="nav-links">
+    <li><a href="#about">About me</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#snapshots">Snapshots</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li>
+      <a href="mailto:leon.telemaque@gmail.com" class="nav-cta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Let's talk
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div style="max-width:1440px;margin:0 auto;position:relative">
+  <!-- Hollow Knight decorative GIF — top right -->
+  <div class="hero-deco">
+    <img src="https://raw.githubusercontent.com/TanZng/TanZng/master/assets/hollor_knight3.gif" alt="" aria-hidden="true"/>
+  </div>
+  <div class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">I'm Leon — product analyst</p>
+      <h1 class="hero-headline">
+        Building systems that<br>
+        explain <em>why players</em><br>
+        churn — and when<br>
+        to intervene.
+      </h1>
+      <ul class="hero-items">
+        <li class="hero-item">
+          <span class="hero-item-num">1.</span>
+          LiveOps analytics &amp; behavioural modelling at Trent University
+        </li>
+        <li class="hero-item">
+          <span class="hero-item-num">2.</span>
+          SQL, Python, Streamlit — built from scratch, not templates
+        </li>
+        <li class="hero-item">
+          <span class="hero-item-num">3.</span>
+          Intersection of business, data, and game systems
+        </li>
+      </ul>
+      <div class="brand-row">
+        <span class="brand-chip">PostgreSQL</span>
+        <span class="brand-chip">Python</span>
+        <span class="brand-chip">Streamlit</span>
+        <span class="brand-chip">Tableau</span>
+        <span class="brand-chip">SQL</span>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <!-- Card 1: LiveOps Dashboard -->
+      <div class="hcard" onclick="openModal('churn')">
+        <div class="hcard-img">
+          <svg viewBox="0 0 280 373" xmlns="http://www.w3.org/2000/svg">
+            <rect width="280" height="373" fill="#0a0f1e"/>
+            <text x="14" y="22" fill="#5b8fff" font-size="8" font-family="monospace" font-weight="bold" opacity=".8">RETENTION TELEMETRY</text>
+            <text x="14" y="33" fill="#333" font-size="6" font-family="monospace">D1 · D7 · D30 cohort signals</text>
+            <!-- heatmap rows -->
+            <rect x="14" y="44" width="22" height="9" fill="#5b8fff" opacity=".7" rx="1.5"/>
+            <rect x="38" y="44" width="22" height="9" fill="#5b8fff" opacity=".3" rx="1.5"/>
+            <rect x="62" y="44" width="22" height="9" fill="#ff4d4d" opacity=".55" rx="1.5"/>
+            <rect x="86" y="44" width="22" height="9" fill="#5b8fff" opacity=".2" rx="1.5"/>
+            <rect x="110" y="44" width="22" height="9" fill="#ff4d4d" opacity=".75" rx="1.5"/>
+            <rect x="134" y="44" width="22" height="9" fill="#5b8fff" opacity=".45" rx="1.5"/>
+            <rect x="158" y="44" width="22" height="9" fill="#ff4d4d" opacity=".35" rx="1.5"/>
+            <rect x="182" y="44" width="22" height="9" fill="#5b8fff" opacity=".6" rx="1.5"/>
+            <rect x="206" y="44" width="22" height="9" fill="#ff4d4d" opacity=".5" rx="1.5"/>
+            <rect x="230" y="44" width="22" height="9" fill="#5b8fff" opacity=".8" rx="1.5"/>
+            <rect x="14" y="55" width="22" height="9" fill="#5b8fff" opacity=".25" rx="1.5"/>
+            <rect x="38" y="55" width="22" height="9" fill="#ff4d4d" opacity=".65" rx="1.5"/>
+            <rect x="62" y="55" width="22" height="9" fill="#5b8fff" opacity=".5" rx="1.5"/>
+            <rect x="86" y="55" width="22" height="9" fill="#5b8fff" opacity=".85" rx="1.5"/>
+            <rect x="110" y="55" width="22" height="9" fill="#5b8fff" opacity=".3" rx="1.5"/>
+            <rect x="134" y="55" width="22" height="9" fill="#ff4d4d" opacity=".5" rx="1.5"/>
+            <rect x="158" y="55" width="22" height="9" fill="#5b8fff" opacity=".65" rx="1.5"/>
+            <rect x="182" y="55" width="22" height="9" fill="#5b8fff" opacity=".25" rx="1.5"/>
+            <rect x="206" y="55" width="22" height="9" fill="#ff4d4d" opacity=".6" rx="1.5"/>
+            <rect x="230" y="55" width="22" height="9" fill="#5b8fff" opacity=".4" rx="1.5"/>
+            <!-- stat pills -->
+            <rect x="14" y="74" width="70" height="20" fill="#0a1220" stroke="#5b8fff" stroke-width=".5" rx="2"/>
+            <text x="49" y="87" text-anchor="middle" fill="#5b8fff" font-size="7.5" font-family="monospace">D7: 42%</text>
+            <rect x="88" y="74" width="70" height="20" fill="#1a0808" stroke="#ff4d4d" stroke-width=".5" rx="2"/>
+            <text x="123" y="87" text-anchor="middle" fill="#ff4d4d" font-size="7.5" font-family="monospace">CHURN: 18%</text>
+            <rect x="162" y="74" width="70" height="20" fill="#0a0a0a" stroke="#333" stroke-width=".5" rx="2"/>
+            <text x="197" y="87" text-anchor="middle" fill="#666" font-size="7.5" font-family="monospace">C4 COHORT</text>
+            <!-- chart area -->
+            <line x1="14" y1="200" x2="256" y2="200" stroke="#1a2040" stroke-width=".5"/>
+            <line x1="14" y1="170" x2="256" y2="170" stroke="#1a2040" stroke-width=".5"/>
+            <line x1="14" y1="140" x2="256" y2="140" stroke="#1a2040" stroke-width=".5"/>
+            <line x1="14" y1="110" x2="256" y2="110" stroke="#1a2040" stroke-width=".5"/>
+            <!-- area -->
+            <polygon points="14,195 50,180 85,168 121,155 157,160 192,138 228,118 256,105 256,200 14,200" fill="#5b8fff" opacity=".07"/>
+            <polyline points="14,195 50,180 85,168 121,155 157,160 192,138 228,118 256,105" fill="none" stroke="#5b8fff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+            <polyline points="14,200 50,196 85,193 121,189 157,191 192,184 228,188 256,195" fill="none" stroke="#ff4d4d" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round" opacity=".55" stroke-dasharray="4 2"/>
+            <!-- key point -->
+            <circle cx="157" cy="160" r="4" fill="#5b8fff"/>
+            <circle cx="157" cy="160" r="8" fill="none" stroke="#5b8fff" stroke-width="1" opacity=".3"/>
+            <rect x="165" y="148" width="88" height="17" fill="#0a1220" stroke="#5b8fff" stroke-width=".5" rx="1.5"/>
+            <text x="171" y="159" fill="#5b8fff" font-size="6.5" font-family="monospace">↑ lifecycle drop</text>
+            <!-- x labels -->
+            <text x="14" y="215" fill="#2a2a2a" font-size="6" font-family="monospace">D1</text>
+            <text x="85" y="215" fill="#2a2a2a" font-size="6" font-family="monospace">D7</text>
+            <text x="157" y="215" fill="#2a2a2a" font-size="6" font-family="monospace">D30</text>
+            <text x="228" y="215" fill="#2a2a2a" font-size="6" font-family="monospace">D90</text>
+            <!-- bottom bars -->
+            <text x="14" y="235" fill="#2a2a2a" font-size="6" font-family="monospace">SESSION HEALTH</text>
+            <rect x="14" y="242" width="22" height="8" fill="#ff4d4d" opacity=".65" rx="1"/>
+            <rect x="38" y="242" width="22" height="8" fill="#ff4d4d" opacity=".45" rx="1"/>
+            <rect x="62" y="242" width="22" height="8" fill="#3de8a0" opacity=".4" rx="1"/>
+            <rect x="86" y="242" width="22" height="8" fill="#5b8fff" opacity=".5" rx="1"/>
+            <rect x="110" y="242" width="22" height="8" fill="#3de8a0" opacity=".6" rx="1"/>
+            <rect x="134" y="242" width="22" height="8" fill="#3de8a0" opacity=".35" rx="1"/>
+            <rect x="158" y="242" width="22" height="8" fill="#5b8fff" opacity=".55" rx="1"/>
+            <rect x="182" y="242" width="22" height="8" fill="#ff4d4d" opacity=".35" rx="1"/>
+            <!-- rage quit indicator -->
+            <rect x="14" y="258" width="120" height="18" fill="#1a0808" stroke="#ff4d4d" stroke-width=".5" rx="2"/>
+            <text x="20" y="270" fill="#ff4d4d" font-size="7" font-family="monospace">⚡ 3 rage quits today</text>
+            <rect x="138" y="258" width="100" height="18" fill="#0a1a0a" stroke="#3de8a0" stroke-width=".5" rx="2"/>
+            <text x="144" y="270" fill="#3de8a0" font-size="7" font-family="monospace">↑ D7 stable</text>
+            <!-- bottom numbers -->
+            <text x="14" y="300" fill="#1a2040" font-size="48" font-family="monospace" font-weight="bold" opacity=".6">42</text>
+            <text x="14" y="355" fill="#1a2040" font-size="48" font-family="monospace" font-weight="bold" opacity=".3">%</text>
+          </svg>
+        </div>
+        <div class="hcard-bar" style="background:linear-gradient(90deg,#5b8fff,#9b6dff)"></div>
+        <div class="hcard-info">
+          <div class="hcard-name">LiveOps Dashboard</div>
+          <div class="hcard-role">Player Frustration &amp; Churn System</div>
+        </div>
+      </div>
+
+      <!-- Card 2: Analyst card -->
+      <div class="hcard" onclick="openModal('credit')">
+        <div class="hcard-img">
+          <svg viewBox="0 0 280 373" xmlns="http://www.w3.org/2000/svg">
+            <rect width="280" height="373" fill="#0e0a1e"/>
+            <text x="14" y="22" fill="#9b6dff" font-size="8" font-family="monospace" font-weight="bold" opacity=".8">CREDIT DASHBOARD</text>
+            <text x="14" y="33" fill="#333" font-size="6" font-family="monospace">behavioural finance UX</text>
+            <!-- score arc -->
+            <circle cx="140" cy="120" r="72" fill="none" stroke="#1a1030" stroke-width="14"/>
+            <circle cx="140" cy="120" r="72" fill="none" stroke="#9b6dff" stroke-width="14" stroke-dasharray="300 152" stroke-dashoffset="114" stroke-linecap="round" opacity=".75"/>
+            <text x="140" y="114" text-anchor="middle" fill="#f2f2f2" font-size="28" font-weight="700" font-family="-apple-system,sans-serif">742</text>
+            <text x="140" y="130" text-anchor="middle" fill="#9b6dff" font-size="8" font-family="monospace">GOOD ↑</text>
+            <text x="140" y="142" text-anchor="middle" fill="#333" font-size="7" font-family="monospace">+12 this month</text>
+            <!-- why changed box -->
+            <rect x="14" y="208" width="252" height="52" fill="#110e20" stroke="#9b6dff" stroke-width=".5" rx="2"/>
+            <text x="22" y="223" fill="#9b6dff" font-size="7" font-family="monospace">WHY DID THIS CHANGE?</text>
+            <text x="22" y="237" fill="#777" font-size="7.5" font-family="-apple-system,sans-serif">Utilization dropped from 38% → 22%</text>
+            <text x="22" y="252" fill="#3de8a0" font-size="7" font-family="monospace">→ Keep below 30% to maintain score</text>
+            <!-- goal bars -->
+            <text x="14" y="278" fill="#333" font-size="7" font-family="monospace">PAYMENT HISTORY</text>
+            <rect x="14" y="283" width="252" height="5" fill="#1a1030" rx="2"/>
+            <rect x="14" y="283" width="228" height="5" fill="#9b6dff" rx="2" opacity=".65"/>
+            <text x="14" y="303" fill="#333" font-size="7" font-family="monospace">CREDIT UTILIZATION</text>
+            <rect x="14" y="308" width="252" height="5" fill="#1a1030" rx="2"/>
+            <rect x="14" y="308" width="132" height="5" fill="#3de8a0" rx="2" opacity=".65"/>
+            <text x="14" y="328" fill="#333" font-size="7" font-family="monospace">ACCOUNT AGE</text>
+            <rect x="14" y="333" width="252" height="5" fill="#1a1030" rx="2"/>
+            <rect x="14" y="333" width="186" height="5" fill="#9b6dff" rx="2" opacity=".45"/>
+            <!-- nudge -->
+            <rect x="14" y="350" width="252" height="16" fill="#0a140a" stroke="#3de8a0" stroke-width=".5" rx="2"/>
+            <text x="22" y="361" fill="#3de8a0" font-size="7" font-family="monospace">💡 Pay $200 on Card 3 → unlock loan eligibility</text>
+          </svg>
+        </div>
+        <div class="hcard-bar" style="background:linear-gradient(90deg,#9b6dff,#5b8fff)"></div>
+        <div class="hcard-info">
+          <div class="hcard-name">Leon Telemaque</div>
+          <div class="hcard-role">Product Analytics · Toronto</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- WORK -->
+<div style="max-width:1440px;margin:0 auto;padding:0 40px" id="work">
+  <div class="section-head" style="padding-top:72px;margin-bottom:40px">
+    <div>
+      <h2 style="font-size:clamp(1.5rem,2.5vw,2rem);font-weight:700;letter-spacing:-.03em">Selected Work</h2>
+      <p style="font-size:.85rem;color:var(--muted2);margin-top:6px">Behavioural systems that shape player experience across the full lifecycle — onboarding, engagement, and churn.</p>
+    </div>
+    <a href="https://diamond-apparel-ca4.notion.site/Portfolio-36d20d328f448012af39c1beddca4704" target="_blank" class="view-all">VIEW ALL →</a>
+  </div>
+
+  <!-- HERO PROJECTS -->
+  <div class="hero-work-grid" style="padding-bottom:0">
+
+    <!-- P1: Frustration & Churn LiveOps — HERO -->
+    <div class="pcard" onclick="openModal('churn')">
+      <div class="pcard-preview">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <rect width="680" height="400" fill="#090e1e"/>
+          <line x1="0" y1="80" x2="680" y2="80" stroke="#111a30" stroke-width="1"/>
+          <line x1="0" y1="160" x2="680" y2="160" stroke="#111a30" stroke-width="1"/>
+          <line x1="0" y1="240" x2="680" y2="240" stroke="#111a30" stroke-width="1"/>
+          <line x1="0" y1="320" x2="680" y2="320" stroke="#111a30" stroke-width="1"/>
+          <line x1="120" y1="0" x2="120" y2="400" stroke="#111a30" stroke-width="1"/>
+          <line x1="240" y1="0" x2="240" y2="400" stroke="#111a30" stroke-width="1"/>
+          <line x1="360" y1="0" x2="360" y2="400" stroke="#111a30" stroke-width="1"/>
+          <line x1="480" y1="0" x2="480" y2="400" stroke="#111a30" stroke-width="1"/>
+          <line x1="600" y1="0" x2="600" y2="400" stroke="#111a30" stroke-width="1"/>
+          <polygon points="20,340 80,300 160,278 240,255 320,265 400,220 480,178 560,145 640,120 640,400 20,400" fill="#5b8fff" opacity=".05"/>
+          <polyline points="20,340 80,300 160,278 240,255 320,265 400,220 480,178 560,145 640,120" fill="none" stroke="#5b8fff" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+          <polyline points="20,375 80,362 160,355 240,345 320,350 400,337 480,343 560,350 640,360" fill="none" stroke="#ff4d4d" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity=".6" stroke-dasharray="6 3"/>
+          <circle cx="320" cy="265" r="6" fill="#5b8fff"/>
+          <circle cx="320" cy="265" r="13" fill="none" stroke="#5b8fff" stroke-width="1" opacity=".3"/>
+          <rect x="335" y="242" width="148" height="22" fill="#0a1220" stroke="#5b8fff" stroke-width=".5" rx="2" opacity=".92"/>
+          <text x="343" y="256" fill="#5b8fff" font-size="10" font-family="monospace">↑ lifecycle drop-off</text>
+          <text x="20" y="24" fill="#5b8fff" font-size="11" font-family="monospace" font-weight="bold">PLAYER RETENTION + FRUSTRATION SIGNALS</text>
+          <text x="20" y="40" fill="#333" font-size="9" font-family="monospace">PostgreSQL · Streamlit · LiveOps Telemetry</text>
+          <rect x="504" y="10" width="76" height="38" fill="#0a1220" stroke="#5b8fff" stroke-width=".5" rx="2"/>
+          <text x="542" y="26" text-anchor="middle" fill="#555" font-size="8" font-family="monospace">D7 RET</text>
+          <text x="542" y="40" text-anchor="middle" fill="#5b8fff" font-size="14" font-family="monospace" font-weight="bold">42%</text>
+          <rect x="586" y="10" width="80" height="38" fill="#1a0808" stroke="#ff4d4d" stroke-width=".5" rx="2"/>
+          <text x="626" y="26" text-anchor="middle" fill="#555" font-size="8" font-family="monospace">CHURN</text>
+          <text x="626" y="40" text-anchor="middle" fill="#ff4d4d" font-size="12" font-family="monospace" font-weight="bold">HIGH ●</text>
+          <text x="20" y="370" fill="#1a2040" font-size="6" font-family="monospace">D1</text>
+          <text x="115" y="370" fill="#1a2040" font-size="6" font-family="monospace">D7</text>
+          <text x="235" y="370" fill="#1a2040" font-size="6" font-family="monospace">D14</text>
+          <text x="355" y="370" fill="#1a2040" font-size="6" font-family="monospace">D30</text>
+          <text x="475" y="370" fill="#1a2040" font-size="6" font-family="monospace">D60</text>
+          <text x="595" y="370" fill="#1a2040" font-size="6" font-family="monospace">D90</text>
+        </svg>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">Lifecycle Churn System — Player Frustration &amp; LiveOps Telemetry</h3>
+        <p class="pcard-desc">Detecting the moment players decide to leave before they do. PostgreSQL + Streamlit telemetry system surfacing rage quits, loss streaks, and retention risk signals across lifecycle stages.</p>
+        <div class="pcard-tags">
+          <span class="ptag ptag-blue">Gaming</span>
+          <span class="ptag">PostgreSQL</span>
+          <span class="ptag">Python</span>
+          <span class="ptag">Streamlit</span>
+          <span class="ptag ptag-live">● Live Dashboard</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- P4: Gacha Engagement Systems — HERO -->
+    <div class="pcard" onclick="openModal('gacha')">
+      <div class="pcard-preview" style="background:none;overflow:hidden;position:relative;">
+
+        <!-- Genshin Impact banner aesthetic -->
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0d0a2e 0%,#1a0e4a 30%,#2e1060 55%,#1a0a3a 80%,#080520 100%);"></div>
+
+        <!-- star field -->
+        <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <!-- stars -->
+          <circle cx="42" cy="28" r="1" fill="white" opacity=".6"/>
+          <circle cx="120" cy="55" r=".8" fill="white" opacity=".4"/>
+          <circle cx="200" cy="18" r="1.2" fill="white" opacity=".7"/>
+          <circle cx="310" cy="40" r=".7" fill="white" opacity=".5"/>
+          <circle cx="450" cy="22" r="1" fill="white" opacity=".6"/>
+          <circle cx="570" cy="50" r=".9" fill="white" opacity=".45"/>
+          <circle cx="630" cy="15" r="1.1" fill="white" opacity=".55"/>
+          <circle cx="80" cy="120" r=".7" fill="white" opacity=".3"/>
+          <circle cx="560" cy="110" r=".8" fill="white" opacity=".4"/>
+          <circle cx="660" cy="140" r=".6" fill="white" opacity=".35"/>
+          <circle cx="30" cy="200" r=".9" fill="white" opacity=".3"/>
+          <circle cx="640" cy="260" r=".7" fill="white" opacity=".3"/>
+          <circle cx="590" cy="340" r=".8" fill="white" opacity=".25"/>
+          <circle cx="100" cy="360" r=".6" fill="white" opacity=".2"/>
+          <!-- twinkling large stars -->
+          <circle cx="68" cy="72" r="1.5" fill="#c4b5fd" opacity=".7"/>
+          <circle cx="612" cy="88" r="1.8" fill="#93c5fd" opacity=".65"/>
+          <circle cx="340" cy="30" r="1.4" fill="#fde68a" opacity=".6"/>
+
+          <!-- Background elemental glow orbs -->
+          <circle cx="170" cy="200" r="90" fill="rgba(139,92,246,.06)"/>
+          <circle cx="510" cy="180" r="110" fill="rgba(56,189,248,.05)"/>
+          <circle cx="340" cy="300" r="80" fill="rgba(251,191,36,.04)"/>
+
+          <!-- ornate corner decorations (Genshin-style) -->
+          <!-- top-left ornament -->
+          <path d="M 0 0 L 60 0 L 60 4 L 4 4 L 4 60 L 0 60 Z" fill="rgba(196,181,253,.15)"/>
+          <circle cx="60" cy="4" r="3" fill="rgba(196,181,253,.3)"/>
+          <circle cx="4" cy="60" r="3" fill="rgba(196,181,253,.3)"/>
+          <!-- top-right ornament -->
+          <path d="M 680 0 L 620 0 L 620 4 L 676 4 L 676 60 L 680 60 Z" fill="rgba(196,181,253,.15)"/>
+          <circle cx="620" cy="4" r="3" fill="rgba(196,181,253,.3)"/>
+          <circle cx="676" cy="60" r="3" fill="rgba(196,181,253,.3)"/>
+          <!-- bottom decorative line -->
+          <line x1="40" y1="390" x2="640" y2="390" stroke="rgba(196,181,253,.12)" stroke-width="1"/>
+          <line x1="20" y1="394" x2="660" y2="394" stroke="rgba(196,181,253,.06)" stroke-width="1"/>
+          <!-- decorative diamond centres -->
+          <polygon points="340,388 344,392 340,396 336,392" fill="rgba(196,181,253,.3)"/>
+
+          <!-- Character silhouette (abstract Genshin-style figure) -->
+          <!-- flowing hair/cape -->
+          <ellipse cx="340" cy="160" rx="55" ry="70" fill="rgba(139,92,246,.18)" transform="rotate(-12,340,160)"/>
+          <ellipse cx="365" cy="170" rx="25" ry="55" fill="rgba(99,102,241,.15)" transform="rotate(8,365,170)"/>
+          <!-- body -->
+          <ellipse cx="340" cy="220" rx="28" ry="38" fill="rgba(167,139,250,.2)"/>
+          <!-- head glow -->
+          <circle cx="340" cy="130" r="32" fill="rgba(196,181,253,.12)"/>
+          <circle cx="340" cy="130" r="22" fill="rgba(221,214,254,.18)"/>
+          <!-- vision/element gem glow -->
+          <circle cx="340" cy="130" r="8" fill="rgba(167,139,250,.8)"/>
+          <circle cx="340" cy="130" r="5" fill="rgba(221,214,254,.9)"/>
+          <circle cx="340" cy="130" r="2.5" fill="white" opacity=".95"/>
+          <!-- elemental particle trails -->
+          <circle cx="290" cy="155" r="3" fill="rgba(167,139,250,.55)"/>
+          <circle cx="278" cy="175" r="2" fill="rgba(139,92,246,.45)"/>
+          <circle cx="268" cy="198" r="2.5" fill="rgba(196,181,253,.4)"/>
+          <circle cx="392" cy="148" r="2.5" fill="rgba(167,139,250,.5)"/>
+          <circle cx="404" cy="170" r="2" fill="rgba(139,92,246,.4)"/>
+          <circle cx="398" cy="195" r="3" fill="rgba(196,181,253,.45)"/>
+          <!-- sword/weapon hint -->
+          <line x1="368" y1="230" x2="410" y2="290" stroke="rgba(221,214,254,.35)" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="365" y1="227" x2="413" y2="287" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+
+          <!-- TOP BANNER LABEL -->
+          <rect x="30" y="14" width="180" height="22" rx="3" fill="rgba(196,181,253,.08)" stroke="rgba(196,181,253,.2)" stroke-width=".5"/>
+          <text x="120" y="29" text-anchor="middle" fill="rgba(221,214,254,.7)" font-size="8" font-family="-apple-system,sans-serif" letter-spacing="1.5">CHARACTER EVENT WISH</text>
+
+          <!-- BANNER TITLE -->
+          <text x="340" y="310" text-anchor="middle" fill="rgba(255,255,255,.9)" font-size="18" font-weight="700" font-family="-apple-system,sans-serif" letter-spacing="-.3">Engagement Architecture</text>
+          <text x="340" y="328" text-anchor="middle" fill="rgba(196,181,253,.6)" font-size="9" font-family="-apple-system,sans-serif" letter-spacing="1">GENSHIN IMPACT  ·  BEHAVIOURAL SYSTEMS</text>
+
+          <!-- Pity / pull counter pills -->
+          <rect x="188" y="344" width="88" height="20" rx="10" fill="rgba(139,92,246,.25)" stroke="rgba(167,139,250,.4)" stroke-width=".8"/>
+          <text x="232" y="358" text-anchor="middle" fill="rgba(221,214,254,.85)" font-size="8.5" font-family="-apple-system,sans-serif">🔮 74 / 90 pity</text>
+          <rect x="284" y="344" width="104" height="20" rx="10" fill="rgba(56,189,248,.15)" stroke="rgba(125,211,252,.3)" stroke-width=".8"/>
+          <text x="336" y="358" text-anchor="middle" fill="rgba(186,230,253,.85)" font-size="8.5" font-family="-apple-system,sans-serif">⭐⭐⭐⭐⭐ 5-star</text>
+          <rect x="396" y="344" width="96" height="20" rx="10" fill="rgba(251,191,36,.12)" stroke="rgba(253,224,71,.3)" stroke-width=".8"/>
+          <text x="444" y="358" text-anchor="middle" fill="rgba(254,240,138,.85)" font-size="8.5" font-family="-apple-system,sans-serif">💎 160 primos</text>
+
+          <!-- elemental type badge top-right -->
+          <circle cx="634" cy="36" r="18" fill="rgba(139,92,246,.3)" stroke="rgba(167,139,250,.5)" stroke-width="1"/>
+          <text x="634" y="32" text-anchor="middle" font-size="14">🌀</text>
+          <text x="634" y="46" text-anchor="middle" fill="rgba(221,214,254,.7)" font-size="6" font-family="-apple-system,sans-serif">ANEMO</text>
+
+          <!-- bottom research label -->
+          <rect x="20" y="372" width="640" height="16" rx="2" fill="rgba(0,0,0,.3)"/>
+          <text x="340" y="383" text-anchor="middle" fill="rgba(196,181,253,.5)" font-size="7.5" font-family="-apple-system,sans-serif" letter-spacing=".5">REWARD PACING  ·  PROGRESSION LOOPS  ·  SCARCITY  ·  MONETIZATION TIMING</text>
+        </svg>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">Mid-Loop Engagement Architecture — Gacha Reward &amp; Retention Systems</h3>
+        <p class="pcard-desc">Mapping how live-service games sustain engagement between sessions. Reward pacing, pity mechanics, and monetisation timing as behavioural levers — case study: Genshin Impact.</p>
+        <div class="pcard-tags">
+          <span class="ptag ptag-blue">Gaming</span>
+          <span class="ptag">LiveOps</span>
+          <span class="ptag">Behavioural Systems</span>
+          <span class="ptag">Systems Mapping</span>
+          <span class="ptag" style="border-color:rgba(167,139,250,.4);color:#c4b5fd">Genshin Impact</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- P5: Destiny 2 Raid Onboarding — HERO -->
+    <div class="pcard" onclick="openModal('raids')">
+      <div class="pcard-preview">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <!-- Deep space background -->
+          <defs>
+            <radialGradient id="travelerGlow" cx="72%" cy="28%" r="22%">
+              <stop offset="0%" stop-color="#d4eaff" stop-opacity="0.9"/>
+              <stop offset="40%" stop-color="#a0c8f0" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#1a2a4a" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="lightBeam" cx="50%" cy="100%" r="60%">
+              <stop offset="0%" stop-color="#c8860a" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="#0a0c14" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="bgNebula" cx="30%" cy="60%" r="50%">
+              <stop offset="0%" stop-color="#0e1a38" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#080a12" stop-opacity="1"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Base space -->
+          <rect width="680" height="400" fill="#07090f"/>
+          <rect width="680" height="400" fill="url(#bgNebula)"/>
+
+          <!-- Nebula wisps -->
+          <ellipse cx="160" cy="180" rx="200" ry="100" fill="rgba(30,50,120,.08)" transform="rotate(-20,160,180)"/>
+          <ellipse cx="500" cy="250" rx="180" ry="80" fill="rgba(80,30,120,.07)" transform="rotate(15,500,250)"/>
+          <ellipse cx="340" cy="100" rx="300" ry="60" fill="rgba(20,40,100,.1)" transform="rotate(-5,340,100)"/>
+
+          <!-- Stars — varied sizes -->
+          <circle cx="18" cy="12" r=".8" fill="white" opacity=".7"/>
+          <circle cx="55" cy="38" r=".5" fill="white" opacity=".5"/>
+          <circle cx="102" cy="8" r="1" fill="white" opacity=".8"/>
+          <circle cx="140" cy="55" r=".6" fill="white" opacity=".4"/>
+          <circle cx="190" cy="22" r=".9" fill="white" opacity=".65"/>
+          <circle cx="230" cy="70" r=".5" fill="white" opacity=".45"/>
+          <circle cx="280" cy="14" r=".7" fill="white" opacity=".6"/>
+          <circle cx="330" cy="48" r=".5" fill="white" opacity=".35"/>
+          <circle cx="380" cy="20" r="1.1" fill="white" opacity=".75"/>
+          <circle cx="430" cy="60" r=".6" fill="white" opacity=".5"/>
+          <circle cx="480" cy="10" r=".8" fill="white" opacity=".6"/>
+          <circle cx="540" cy="42" r=".5" fill="white" opacity=".4"/>
+          <circle cx="600" cy="18" r="1" fill="white" opacity=".7"/>
+          <circle cx="645" cy="55" r=".7" fill="white" opacity=".55"/>
+          <circle cx="670" cy="30" r=".5" fill="white" opacity=".4"/>
+          <circle cx="32" cy="120" r=".6" fill="white" opacity=".3"/>
+          <circle cx="78" cy="160" r=".5" fill="white" opacity=".35"/>
+          <circle cx="580" cy="130" r=".7" fill="white" opacity=".4"/>
+          <circle cx="630" cy="180" r=".5" fill="white" opacity=".3"/>
+          <circle cx="660" cy="320" r=".6" fill="white" opacity=".25"/>
+          <circle cx="28" cy="300" r=".5" fill="white" opacity=".2"/>
+          <circle cx="80" cy="370" r=".7" fill="white" opacity=".2"/>
+          <!-- Blue-tinted stars -->
+          <circle cx="72" cy="82" r="1.4" fill="#a8c8ff" opacity=".7"/>
+          <circle cx="450" cy="35" r="1.6" fill="#c0d8ff" opacity=".6"/>
+          <circle cx="620" cy="90" r="1.2" fill="#b0ccff" opacity=".55"/>
+          <!-- Gold star -->
+          <circle cx="200" cy="50" r="1.5" fill="#ffe090" opacity=".65"/>
+
+          <!-- The Traveler — white sphere upper right -->
+          <circle cx="490" cy="110" r="72" fill="url(#travelerGlow)"/>
+          <circle cx="490" cy="110" r="68" fill="none" stroke="rgba(200,230,255,.15)" stroke-width="1"/>
+          <circle cx="490" cy="110" r="72" fill="none" stroke="rgba(200,230,255,.08)" stroke-width="3"/>
+          <!-- Traveler surface detail — subtle shadow hemisphere -->
+          <ellipse cx="490" cy="120" rx="60" ry="55" fill="rgba(10,18,40,.25)"/>
+          <!-- Traveler inner glow -->
+          <circle cx="478" cy="95" r="28" fill="rgba(220,240,255,.12)"/>
+          <!-- Traveler crack/scar (lore detail — the Darkness scarred it) -->
+          <path d="M 510 78 Q 525 95 515 115 Q 505 130 520 148" stroke="rgba(180,210,255,.2)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M 515 115 Q 530 118 542 108" stroke="rgba(180,210,255,.15)" stroke-width="1" fill="none" stroke-linecap="round"/>
+
+          <!-- Ground/platform glow (Light below) -->
+          <rect width="680" height="400" fill="url(#lightBeam)"/>
+
+          <!-- ── HUNTER GUARDIAN ── -->
+
+          <!-- Arc void light aura — Arcstrider energy (purple/blue instead of orange) -->
+          <ellipse cx="303" cy="310" rx="55" ry="90" fill="rgba(100,60,200,.06)"/>
+          <ellipse cx="303" cy="310" rx="32" ry="60" fill="rgba(120,80,220,.07)"/>
+
+          <!-- Hunter cloak — asymmetric, draped over left shoulder, long & flowing -->
+          <!-- Main cloak body, left-biased -->
+          <path d="M 270 228 Q 248 260 238 305 Q 232 340 240 375 L 270 375 Q 268 340 275 308 Q 282 275 288 248 Z" fill="rgba(12,16,32,.97)"/>
+          <!-- Cloak inner layer / lining — slight purple sheen -->
+          <path d="M 272 232 Q 252 264 244 308 Q 240 338 248 370 L 262 370 Q 260 338 268 308 Q 276 276 284 250 Z" fill="rgba(60,40,100,.45)"/>
+          <!-- Cloak edge highlight (worn leather look) -->
+          <path d="M 270 228 Q 248 260 238 305 Q 232 340 240 375" stroke="rgba(80,60,130,.4)" stroke-width="1" fill="none"/>
+          <!-- Cloak tail edge -->
+          <path d="M 240 375 Q 252 380 270 375" stroke="rgba(70,50,110,.35)" stroke-width=".8" fill="none"/>
+          <!-- Small cloak panel right side -->
+          <path d="M 318 238 Q 328 265 330 300 Q 332 330 326 365 L 338 365 Q 344 330 340 295 Q 336 260 326 232 Z" fill="rgba(14,18,36,.9)"/>
+
+          <!-- Legs — slim Hunter, slightly asymmetric stance -->
+          <!-- Left leg -->
+          <path d="M 284 338 Q 280 356 278 375 L 296 375 Q 297 356 298 338 Z" fill="rgba(20,26,50,.95)"/>
+          <!-- Right leg -->
+          <path d="M 308 338 Q 312 356 316 375 L 300 375 Q 299 356 298 338 Z" fill="rgba(18,24,46,.95)"/>
+          <!-- Boot details -->
+          <rect x="278" y="366" width="18" height="10" rx="2" fill="rgba(24,30,56,.95)"/>
+          <rect x="300" y="366" width="18" height="10" rx="2" fill="rgba(22,28,52,.95)"/>
+          <rect x="278" y="366" width="18" height="3" rx="1" fill="rgba(90,70,160,.25)"/>
+          <rect x="300" y="366" width="18" height="3" rx="1" fill="rgba(90,70,160,.25)"/>
+
+          <!-- Torso — slim Hunter chest, no massive pauldrons -->
+          <path d="M 284 224 L 282 338 Q 284 344 298 344 Q 312 344 318 338 L 318 224 Z" fill="rgba(16,22,44,.95)"/>
+          <!-- Chest armor plate — lighter panel -->
+          <path d="M 287 228 L 285 290 L 317 290 L 315 228 Z" fill="rgba(24,32,62,.88)"/>
+          <!-- Chest seams / detail lines -->
+          <line x1="301" y1="228" x2="301" y2="290" stroke="rgba(70,55,120,.35)" stroke-width=".8"/>
+          <line x1="287" y1="258" x2="315" y2="258" stroke="rgba(70,55,120,.25)" stroke-width=".6"/>
+          <!-- Chest emblem — Hunter knife / crescent mark -->
+          <path d="M 295 272 L 301 262 L 307 272 L 301 278 Z" fill="rgba(140,100,240,.5)" stroke="rgba(160,120,255,.4)" stroke-width=".7"/>
+
+          <!-- Left shoulder — smaller, no pauldron bulk -->
+          <path d="M 268 222 Q 262 218 260 228 L 260 258 Q 262 265 272 264 L 284 260 L 284 224 Z" fill="rgba(18,24,48,.95)"/>
+          <!-- Right shoulder — minimal -->
+          <path d="M 334 222 Q 340 218 340 228 L 340 258 Q 338 265 328 264 L 318 260 L 318 224 Z" fill="rgba(18,24,48,.95)"/>
+
+          <!-- Left arm — slim -->
+          <path d="M 260 256 L 256 318 Q 255 328 263 332 L 278 332 L 284 260 Z" fill="rgba(16,22,44,.95)"/>
+          <!-- Right arm — slightly raised, holding knife -->
+          <path d="M 340 256 L 348 308 Q 350 318 344 324 L 330 326 L 318 260 Z" fill="rgba(16,22,44,.95)"/>
+
+          <!-- Left gauntlet -->
+          <path d="M 255 316 Q 252 332 258 342 L 276 342 Q 284 334 284 324 L 270 316 Z" fill="rgba(22,28,54,.95)"/>
+          <!-- Right gauntlet — gripping blade -->
+          <path d="M 348 306 Q 354 320 350 332 L 334 334 Q 326 326 326 316 L 338 308 Z" fill="rgba(22,28,54,.95)"/>
+
+          <!-- Hunter knife — right hand, angled outward (iconic Hunter weapon) -->
+          <!-- Blade -->
+          <path d="M 350 318 L 380 288 L 384 292 L 356 324 Z" fill="rgba(180,190,210,.75)"/>
+          <!-- Blade edge highlight -->
+          <path d="M 350 318 L 380 288" stroke="rgba(220,230,255,.6)" stroke-width=".8" fill="none"/>
+          <!-- Blade fuller groove -->
+          <path d="M 352 319 L 378 292" stroke="rgba(140,150,180,.3)" stroke-width=".5" fill="none"/>
+          <!-- Guard -->
+          <rect x="348" y="316" width="8" height="6" rx="1" fill="rgba(80,65,120,.85)" transform="rotate(-42,352,319)"/>
+          <!-- Handle/grip wrap -->
+          <path d="M 340 326 L 350 318 L 356 324 L 346 332 Z" fill="rgba(50,38,80,.9)"/>
+          <line x1="341" y1="328" x2="348" y2="321" stroke="rgba(90,70,130,.5)" stroke-width="1.2"/>
+          <line x1="343" y1="330" x2="350" y2="323" stroke="rgba(90,70,130,.5)" stroke-width="1.2"/>
+          <!-- Knife Arc glow -->
+          <path d="M 350 318 L 380 288" stroke="rgba(120,100,255,.3)" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+          <!-- Neck / scarf wrap (Hunter signature) -->
+          <path d="M 288 210 Q 290 202 301 200 Q 312 200 314 210 L 316 222 Q 308 218 301 218 Q 294 218 286 222 Z" fill="rgba(45,32,80,.9)"/>
+          <!-- Scarf trailing end -->
+          <path d="M 286 218 Q 276 228 272 244 Q 268 258 270 270" stroke="rgba(60,44,100,.7)" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+          <!-- Hunter helmet — sleek cowl with brim / no ridge -->
+          <!-- Helm base — elongated, more organic than Titan -->
+          <path d="M 278 188 Q 276 162 301 156 Q 326 156 328 182 L 328 208 Q 316 216 301 216 Q 286 216 278 208 Z" fill="rgba(16,20,44,.96)"/>
+          <!-- Helm top — slight point, hood-like -->
+          <path d="M 284 168 Q 284 156 301 150 Q 318 150 322 162 L 324 172 Q 312 166 301 165 Q 290 165 282 170 Z" fill="rgba(20,26,52,.95)"/>
+          <!-- Brim — Hunter's distinctive hat-brim silhouette -->
+          <path d="M 272 200 Q 268 205 268 210 L 336 210 Q 336 205 332 200 Z" fill="rgba(14,18,40,.97)"/>
+          <path d="M 268 210 L 336 210" stroke="rgba(70,55,120,.4)" stroke-width=".8" fill="none"/>
+          <!-- Visor — narrow, angular slit (Arc light: blue-purple) -->
+          <path d="M 282 183 Q 282 174 301 173 Q 320 174 320 183 L 320 188 Q 320 193 301 193 Q 282 193 282 188 Z" fill="rgba(80,50,200,.88)"/>
+          <path d="M 285 184 Q 285 177 301 176 Q 317 177 317 184 L 317 188 Q 317 191 301 191 Q 285 191 285 188 Z" fill="rgba(120,90,255,.75)"/>
+          <!-- Visor inner glow — Arc electricity shimmer -->
+          <path d="M 288 185 Q 301 182 314 185 L 314 188 Q 301 189 288 188 Z" fill="rgba(160,130,255,.55)"/>
+          <!-- Arc spark along visor edge -->
+          <path d="M 284 186 L 289 184 L 287 187 L 292 185" stroke="rgba(180,160,255,.6)" stroke-width=".7" fill="none" stroke-linecap="round"/>
+          <!-- Helm side panels -->
+          <path d="M 278 192 Q 274 196 274 204 L 280 208" stroke="rgba(60,50,100,.5)" stroke-width="1" fill="none"/>
+          <path d="M 324 192 Q 328 196 328 204 L 322 208" stroke="rgba(60,50,100,.5)" stroke-width="1" fill="none"/>
+          <!-- Helm back ridge — subtle -->
+          <path d="M 295 150 Q 301 144 307 150" stroke="rgba(50,40,90,.6)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+          <!-- Ghost companion — floating at shoulder level right side -->
+          <g transform="translate(352,185) rotate(-10)">
+            <polygon points="0,-11 9,-4 9,7 0,12 -9,7 -9,-4" fill="rgba(230,240,255,.82)" stroke="rgba(160,180,255,.4)" stroke-width=".7"/>
+            <polygon points="0,-8 6,-3 6,5 0,9 -6,5 -6,-3" fill="rgba(110,80,220,.6)"/>
+            <circle cx="0" cy="1" r="3.5" fill="rgba(130,100,255,.9)"/>
+            <circle cx="0" cy="1" r="2" fill="rgba(190,170,255,.9)"/>
+            <circle cx="0" cy="1" r="1" fill="white" opacity=".95"/>
+            <line x1="-9" y1="-4" x2="9" y2="7" stroke="rgba(160,140,255,.25)" stroke-width=".5"/>
+            <line x1="9" y1="-4" x2="-9" y2="7" stroke="rgba(160,140,255,.25)" stroke-width=".5"/>
+          </g>
+          <!-- Ghost glow (Arc purple) -->
+          <circle cx="352" cy="184" r="18" fill="rgba(120,90,220,.07)"/>
+
+          <!-- Light pillar from ground -->
+          <polygon points="268,400 274,348 332,348 338,400" fill="rgba(90,60,180,.06)"/>
+          <polygon points="276,400 280,362 324,362 328,400" fill="rgba(100,70,200,.08)"/>
+
+          <!-- Ground platform (Arc glow) -->
+          <ellipse cx="303" cy="378" rx="52" ry="7" fill="rgba(110,80,210,.18)"/>
+          <ellipse cx="303" cy="378" rx="34" ry="4" fill="rgba(130,100,240,.22)"/>
+
+          <!-- UI overlay — top left label -->
+          <rect x="16" y="14" width="220" height="22" rx="2" fill="rgba(100,70,200,.1)" stroke="rgba(140,110,240,.28)" stroke-width=".6"/>
+          <text x="26" y="29" fill="rgba(190,170,255,.9)" font-size="9" font-family="monospace" font-weight="bold" letter-spacing="1.5">DESTINY 2  ·  RAID ONBOARDING</text>
+
+          <!-- UI overlay — bottom data strip -->
+          <rect x="0" y="356" width="680" height="44" fill="rgba(5,8,16,.78)"/>
+          <text x="20" y="375" fill="rgba(170,145,255,.92)" font-size="10" font-family="monospace" font-weight="bold">SHERPA SYSTEM REDESIGN</text>
+          <text x="20" y="392" fill="rgba(140,160,200,.55)" font-size="8" font-family="monospace">Behavioural UX  ·  Dual-Queue Architecture  ·  5-Layer Learning Model</text>
+          <!-- abandonment delta pill -->
+          <rect x="530" y="360" width="130" height="32" rx="3" fill="rgba(12,10,24,.85)" stroke="rgba(61,232,160,.25)" stroke-width=".7"/>
+          <text x="595" y="374" text-anchor="middle" fill="rgba(140,160,200,.6)" font-size="7.5" font-family="monospace">ABANDONMENT</text>
+          <text x="564" y="388" text-anchor="middle" fill="rgba(255,77,77,.75)" font-size="9" font-family="monospace">56%</text>
+          <text x="580" y="388" text-anchor="middle" fill="rgba(140,160,200,.5)" font-size="9" font-family="monospace">→</text>
+          <text x="598" y="388" text-anchor="middle" fill="rgba(61,232,160,.85)" font-size="9" font-family="monospace">29%</text>
+
+          <!-- Hunter class emblem — top right corner (crescent / arc motif) -->
+          <polygon points="648,14 668,14 668,44 648,44 638,29" fill="rgba(100,70,200,.14)" stroke="rgba(140,110,240,.32)" stroke-width=".8"/>
+          <text x="653" y="27" fill="rgba(180,160,255,.75)" font-size="7" font-family="monospace" font-weight="bold">HUNTER</text>
+          <text x="657" y="38" fill="rgba(120,100,210,.55)" font-size="6" font-family="monospace">CLASS</text>
+        </svg>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">Endgame Onboarding System — Destiny 2 Raid Social Architecture</h3>
+        <p class="pcard-desc">Solving the hardest onboarding problem in live-service: getting players into endgame content. A 5-layer behavioural learning model that verifies readiness through behaviour, not assumptions. Abandonment dropped from 56% to 29%.</p>
+        <div class="pcard-tags">
+          <span class="ptag ptag-blue">Gaming · UX</span>
+          <span class="ptag">Onboarding Architecture</span>
+          <span class="ptag">Behavioural Systems</span>
+          <span class="ptag">LiveOps Design</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Marvel Rivals — HERO (coming soon) -->
+    <div class="pcard" onclick="openModal('marvel')" style="opacity:.75;">
+      <div class="pcard-preview" style="background:linear-gradient(135deg,#0a0c18 0%,#10121e 60%,#0c0e1a 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+          <rect width="680" height="400" fill="#08090f"/>
+          <!-- grid -->
+          <line x1="0" y1="80"  x2="680" y2="80"  stroke="#0e1020" stroke-width="1"/>
+          <line x1="0" y1="160" x2="680" y2="160" stroke="#0e1020" stroke-width="1"/>
+          <line x1="0" y1="240" x2="680" y2="240" stroke="#0e1020" stroke-width="1"/>
+          <line x1="0" y1="320" x2="680" y2="320" stroke="#0e1020" stroke-width="1"/>
+          <line x1="136" y1="0" x2="136" y2="400" stroke="#0e1020" stroke-width="1"/>
+          <line x1="272" y1="0" x2="272" y2="400" stroke="#0e1020" stroke-width="1"/>
+          <line x1="408" y1="0" x2="408" y2="400" stroke="#0e1020" stroke-width="1"/>
+          <line x1="544" y1="0" x2="544" y2="400" stroke="#0e1020" stroke-width="1"/>
+          <!-- hexagonal matchmaking grid suggestion -->
+          <polygon points="200,160 240,136 280,160 280,208 240,232 200,208" fill="none" stroke="rgba(91,143,255,.15)" stroke-width="1"/>
+          <polygon points="280,160 320,136 360,160 360,208 320,232 280,208" fill="none" stroke="rgba(91,143,255,.12)" stroke-width="1"/>
+          <polygon points="360,160 400,136 440,160 440,208 400,232 360,208" fill="none" stroke="rgba(91,143,255,.1)" stroke-width="1"/>
+          <polygon points="240,208 280,184 320,208 320,256 280,280 240,256" fill="none" stroke="rgba(91,143,255,.1)" stroke-width="1"/>
+          <polygon points="320,208 360,184 400,208 400,256 360,280 320,256" fill="none" stroke="rgba(91,143,255,.08)" stroke-width="1"/>
+          <!-- centre hex glow -->
+          <polygon points="280,160 320,136 360,160 360,208 320,232 280,208" fill="rgba(91,143,255,.04)" stroke="rgba(91,143,255,.25)" stroke-width="1.2"/>
+          <circle cx="320" cy="184" r="12" fill="rgba(91,143,255,.08)"/>
+          <circle cx="320" cy="184" r="6" fill="rgba(91,143,255,.15)"/>
+          <!-- lock icon -->
+          <rect x="310" y="178" width="20" height="14" rx="2" fill="none" stroke="rgba(91,143,255,.4)" stroke-width="1.2"/>
+          <path d="M 314 178 Q 314 172 320 172 Q 326 172 326 178" fill="none" stroke="rgba(91,143,255,.4)" stroke-width="1.2"/>
+          <!-- label -->
+          <rect x="0" y="340" width="680" height="60" fill="rgba(5,7,14,.8)"/>
+          <text x="340" y="368" text-anchor="middle" fill="rgba(91,143,255,.5)" font-size="11" font-family="monospace" font-weight="bold" letter-spacing="1">MARVEL RIVALS</text>
+          <text x="340" y="386" text-anchor="middle" fill="rgba(90,96,112,.5)" font-size="8.5" font-family="monospace">Matchmaking Fairness Systems  ·  Coming Soon</text>
+        </svg>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title" style="color:var(--muted);">Session Equity &amp; Matchmaking Fairness — Marvel Rivals <span style="font-family:var(--mono);font-size:.62rem;color:var(--muted);border:1px solid var(--border2);padding:.1rem .4rem;margin-left:6px;vertical-align:middle;">IN PROGRESS</span></h3>
+        <p class="pcard-desc">Designing the systems that make every session feel fair. MMR calibration, role-queue balance, and session equity — the behavioural layer that determines whether players stay or churn after a single match.</p>
+        <div class="pcard-tags">
+          <span class="ptag ptag-blue">Gaming · Systems</span>
+          <span class="ptag">Matchmaking</span>
+          <span class="ptag">LiveOps</span>
+          <span class="ptag">Behavioural Systems</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /hero-work-grid -->
+
+  <div class="support-label">The same behavioural systems thinking — applied beyond games</div>
+  <div class="support-grid">
+
+    <!-- P2: Dead by Daylight Retention — SUPPORT -->
+    <div class="pcard" onclick="openModal('retention')">
+      <div class="pcard-preview">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <rect width="680" height="400" fill="#090f0a"/>
+          <text x="20" y="24" fill="#3de8a0" font-size="11" font-family="monospace" font-weight="bold">DEAD BY DAYLIGHT — COHORT RETENTION MATRIX</text>
+          <text x="20" y="40" fill="#333" font-size="9" font-family="monospace">SQL · Tableau · Lifecycle Analysis</text>
+          <!-- cohort header row -->
+          <rect x="20" y="54" width="90" height="26" fill="#0f2a1f" stroke="#1a3a2a" stroke-width=".5"/>
+          <text x="65" y="71" text-anchor="middle" fill="#555" font-size="8" font-family="monospace">Cohort</text>
+          <rect x="112" y="54" width="70" height="26" fill="#3de8a0" opacity=".88" rx="1"/>
+          <text x="147" y="71" text-anchor="middle" fill="#062010" font-size="9" font-family="monospace" font-weight="bold">100%</text>
+          <rect x="184" y="54" width="70" height="26" fill="#3de8a0" opacity=".58" rx="1"/>
+          <text x="219" y="71" text-anchor="middle" fill="#062010" font-size="9" font-family="monospace">68%</text>
+          <rect x="256" y="54" width="70" height="26" fill="#3de8a0" opacity=".32" rx="1"/>
+          <text x="291" y="71" text-anchor="middle" fill="#aaa" font-size="9" font-family="monospace">41%</text>
+          <rect x="328" y="54" width="70" height="26" fill="#3de8a0" opacity=".14" rx="1"/>
+          <text x="363" y="71" text-anchor="middle" fill="#888" font-size="9" font-family="monospace">24%</text>
+          <rect x="400" y="54" width="70" height="26" fill="#ff4d4d" opacity=".28" rx="1"/>
+          <text x="435" y="71" text-anchor="middle" fill="#888" font-size="9" font-family="monospace">12%</text>
+          <rect x="472" y="54" width="70" height="26" fill="#ff4d4d" opacity=".42" rx="1"/>
+          <text x="507" y="71" text-anchor="middle" fill="#aaa" font-size="9" font-family="monospace">8%</text>
+          <!-- row 2 -->
+          <rect x="20" y="82" width="90" height="26" fill="#0f2a1f" stroke="#1a3a2a" stroke-width=".5"/>
+          <text x="65" y="99" text-anchor="middle" fill="#444" font-size="7.5" font-family="monospace">Jan 2026</text>
+          <rect x="112" y="82" width="70" height="26" fill="#3de8a0" opacity=".88" rx="1"/>
+          <rect x="184" y="82" width="70" height="26" fill="#3de8a0" opacity=".5" rx="1"/>
+          <text x="219" y="99" text-anchor="middle" fill="#062010" font-size="9" font-family="monospace">62%</text>
+          <rect x="256" y="82" width="70" height="26" fill="#3de8a0" opacity=".26" rx="1"/>
+          <text x="291" y="99" text-anchor="middle" fill="#aaa" font-size="9" font-family="monospace">37%</text>
+          <rect x="328" y="82" width="70" height="26" fill="#3de8a0" opacity=".1" rx="1"/>
+          <text x="363" y="99" text-anchor="middle" fill="#777" font-size="9" font-family="monospace">19%</text>
+          <rect x="400" y="82" width="70" height="26" fill="#ff4d4d" opacity=".18" rx="1"/>
+          <text x="435" y="99" text-anchor="middle" fill="#777" font-size="9" font-family="monospace">9%</text>
+          <!-- row 3 -->
+          <rect x="20" y="110" width="90" height="26" fill="#0f2a1f" stroke="#1a3a2a" stroke-width=".5"/>
+          <text x="65" y="127" text-anchor="middle" fill="#444" font-size="7.5" font-family="monospace">Feb 2026</text>
+          <rect x="112" y="110" width="70" height="26" fill="#3de8a0" opacity=".88" rx="1"/>
+          <rect x="184" y="110" width="70" height="26" fill="#3de8a0" opacity=".68" rx="1"/>
+          <text x="219" y="127" text-anchor="middle" fill="#062010" font-size="9" font-family="monospace">73%</text>
+          <rect x="256" y="110" width="70" height="26" fill="#3de8a0" opacity=".38" rx="1"/>
+          <text x="291" y="127" text-anchor="middle" fill="#062010" font-size="9" font-family="monospace">46%</text>
+          <rect x="328" y="110" width="70" height="26" fill="#3de8a0" opacity=".18" rx="1"/>
+          <!-- row 4 -->
+          <rect x="20" y="138" width="90" height="26" fill="#0f2a1f" stroke="#1a3a2a" stroke-width=".5"/>
+          <text x="65" y="155" text-anchor="middle" fill="#444" font-size="7.5" font-family="monospace">Mar 2026</text>
+          <rect x="112" y="138" width="70" height="26" fill="#3de8a0" opacity=".88" rx="1"/>
+          <rect x="184" y="138" width="70" height="26" fill="#3de8a0" opacity=".62" rx="1"/>
+          <text x="219" y="155" text-anchor="middle" fill="#062010" font-size="9" font-family="monospace">69%</text>
+          <rect x="256" y="138" width="70" height="26" fill="#3de8a0" opacity=".3" rx="1"/>
+          <!-- drop annotation -->
+          <line x1="400" y1="48" x2="400" y2="175" stroke="#ff4d4d" stroke-width="1" stroke-dasharray="4 3" opacity=".45"/>
+          <rect x="406" y="115" width="130" height="20" fill="#1a0808" stroke="#ff4d4d" stroke-width=".5" rx="2"/>
+          <text x="413" y="128" fill="#ff4d4d" font-size="8.5" font-family="monospace">↓ lifecycle transition</text>
+          <!-- session decay chart -->
+          <text x="20" y="200" fill="#333" font-size="9" font-family="monospace">SESSION FREQUENCY DECAY</text>
+          <line x1="20" y1="290" x2="660" y2="290" stroke="#1a2a1a" stroke-width=".5"/>
+          <polyline points="20,270 100,260 180,250 260,242 340,230 420,216 500,208 580,205 640,202" fill="none" stroke="#3de8a0" stroke-width="2.2" opacity=".65"/>
+          <polyline points="20,282 100,277 180,273 260,268 340,260 420,246 500,238 580,235 640,240" fill="none" stroke="#5b8fff" stroke-width="1.5" opacity=".45" stroke-dasharray="5 2"/>
+          <text x="20" y="308" fill="#1a3a1a" font-size="8" font-family="monospace">D1</text>
+          <text x="100" y="308" fill="#1a3a1a" font-size="8" font-family="monospace">D7</text>
+          <text x="200" y="308" fill="#1a3a1a" font-size="8" font-family="monospace">D14</text>
+          <text x="310" y="308" fill="#1a3a1a" font-size="8" font-family="monospace">D30</text>
+          <text x="470" y="308" fill="#1a3a1a" font-size="8" font-family="monospace">D60</text>
+          <text x="600" y="308" fill="#1a3a1a" font-size="8" font-family="monospace">D90</text>
+          <!-- large bg number -->
+          <text x="20" y="390" fill="#0f2a1f" font-size="90" font-family="monospace" font-weight="bold">68</text>
+        </svg>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">Lifecycle Drop-Off Mapping — Dead by Daylight Retention</h3>
+        <p class="pcard-desc">Cohort retention analysis identifying exactly where in the player lifecycle engagement collapses — and which behavioural signals predict it before it happens.</p>
+        <div class="pcard-tags">
+          <span class="ptag ptag-blue">Gaming</span>
+          <span class="ptag">SQL</span>
+          <span class="ptag">Tableau</span>
+          <span class="ptag">Cohort Analysis</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- P3: Credit UX — SUPPORT -->
+    <div class="pcard" onclick="openModal('credit')">
+      <div class="pcard-preview" style="background:linear-gradient(135deg,#0c0918 0%,#111828 50%,#0a1a10 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+
+        <!-- background glow -->
+        <div style="position:absolute;left:28%;top:50%;transform:translate(-50%,-50%);width:200px;height:200px;background:rgba(192,39,45,.12);border-radius:50%;filter:blur(40px);pointer-events:none;"></div>
+        <div style="position:absolute;left:68%;top:50%;transform:translate(-50%,-50%);width:220px;height:220px;background:rgba(46,110,140,.14);border-radius:50%;filter:blur(40px);pointer-events:none;"></div>
+
+        <!-- BEFORE phone — rotated left, slightly behind -->
+        <div style="transform:rotate(-6deg) translateX(10px) scale(0.82);transform-origin:center bottom;flex-shrink:0;width:160px;height:346px;position:relative;z-index:1;margin-right:-28px;opacity:.85;">
+          <div style="position:absolute;inset:0;background:linear-gradient(160deg,#2a2a2a,#0d0d0d);border-radius:26px;box-shadow:0 0 0 1px #555,0 16px 48px rgba(0,0,0,.8);"></div>
+          <div style="position:absolute;top:5px;left:5px;right:5px;bottom:5px;background:#000;border-radius:22px;overflow:hidden;">
+            <div style="position:absolute;top:5px;left:50%;transform:translateX(-50%);width:45px;height:13px;background:#000;border-radius:8px;z-index:10;"></div>
+            <div style="width:100%;height:100%;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;background:#f2f2f2;">
+              <div style="padding:22px 8px 2px;background:#c0272d;flex-shrink:0;display:flex;justify-content:space-between;font-size:6px;font-weight:700;color:white;">
+                <span>9:41</span><span>5G 🔋</span>
+              </div>
+              <div style="background:#c0272d;padding:8px 8px 22px;flex-shrink:0;">
+                <div style="color:white;font-size:9px;font-weight:700;">Hello Maya</div>
+                <div style="color:rgba(255,255,255,.75);font-size:6px;">Here's your financial overview</div>
+              </div>
+              <div style="background:white;border-radius:7px;margin:-12px 6px 0;box-shadow:0 2px 7px rgba(0,0,0,.1);overflow:hidden;flex-shrink:0;">
+                <div style="display:flex;border-bottom:1px solid #f0f0f0;">
+                  <div style="flex:1;padding:5px 4px;text-align:center;font-size:5px;font-weight:700;color:#c0272d;border-bottom:2px solid #c0272d;">My Accounts</div>
+                  <div style="flex:1;padding:5px 4px;text-align:center;font-size:5px;font-weight:600;color:#555;">My Updates</div>
+                </div>
+              </div>
+              <div style="flex:1;overflow:hidden;padding:6px 6px 0;">
+                <div style="background:#b5a9a4;border-radius:6px;padding:6px 8px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+                  <span style="color:white;font-size:5.5px;font-weight:600;">Trans Credit Union Score</span>
+                  <span style="background:#6b2d5e;color:white;padding:2px 4px;border-radius:8px;font-size:4px;font-weight:700;">Updated</span>
+                </div>
+                <div style="background:#c0272d;border-radius:7px;padding:8px;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+                    <div style="color:white;font-size:8px;font-weight:700;">Updates</div>
+                    <span style="font-size:9px;">💡</span>
+                  </div>
+                  <div style="background:white;border-radius:5px;padding:5px 6px;display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+                    <span style="font-size:7px;">⚠️</span>
+                    <span style="font-size:4.5px;color:#333;line-height:1.4;">You are behind on credit payments — repeat failure may impact your credit score.</span>
+                  </div>
+                  <div style="background:white;border-radius:5px;padding:5px 6px;display:flex;align-items:center;gap:4px;">
+                    <span style="font-size:7px;">📢</span>
+                    <span style="font-size:4.5px;color:#333;line-height:1.4;">Customize the accounts on your home screen.</span>
+                  </div>
+                </div>
+              </div>
+              <!-- before label -->
+              <div style="background:#c0272d;padding:4px;text-align:center;flex-shrink:0;">
+                <span style="font-size:5px;font-weight:800;color:white;letter-spacing:1.5px;text-transform:uppercase;">BEFORE</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- arrow -->
+        <div style="position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;gap:4px;margin:0 4px;flex-shrink:0;">
+          <div style="font-size:18px;color:rgba(255,255,255,.3);">→</div>
+        </div>
+
+        <!-- AFTER phone — rotated right, in front -->
+        <div style="transform:rotate(4deg) translateX(-10px) scale(1);transform-origin:center bottom;flex-shrink:0;width:160px;height:346px;position:relative;z-index:3;margin-left:-28px;">
+          <div style="position:absolute;inset:0;background:linear-gradient(160deg,#2a2a2a,#0d0d0d);border-radius:26px;box-shadow:0 0 0 1px #555,0 0 0 2px #111,0 20px 60px rgba(46,110,140,.4),0 12px 40px rgba(0,0,0,.8);"></div>
+          <div style="position:absolute;top:5px;left:5px;right:5px;bottom:5px;background:#000;border-radius:22px;overflow:hidden;">
+            <div style="position:absolute;top:5px;left:50%;transform:translateX(-50%);width:45px;height:13px;background:#000;border-radius:8px;z-index:10;"></div>
+            <div style="width:100%;height:100%;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;background:#f2f2f2;">
+              <div style="padding:22px 8px 2px;background:#2e6e8c;flex-shrink:0;display:flex;justify-content:space-between;font-size:6px;font-weight:700;color:white;">
+                <span>9:41</span><span>5G 🔋</span>
+              </div>
+              <div style="background:#2e6e8c;padding:8px 8px 22px;flex-shrink:0;position:relative;">
+                <div style="color:white;font-size:9px;font-weight:700;">Hello Maya</div>
+                <div style="position:absolute;right:8px;top:6px;font-size:14px;">🐦</div>
+              </div>
+              <div style="background:white;border-radius:7px;margin:-12px 6px 0;box-shadow:0 2px 7px rgba(0,0,0,.1);overflow:hidden;flex-shrink:0;">
+                <div style="display:flex;border-bottom:1px solid #f0f0f0;">
+                  <div style="flex:1;padding:5px 4px;text-align:center;font-size:5px;font-weight:700;color:#c0272d;border-bottom:2px solid #c0272d;">My Accounts</div>
+                  <div style="flex:1;padding:5px 4px;text-align:center;font-size:5px;font-weight:600;color:#555;">My Updates</div>
+                </div>
+              </div>
+              <div style="flex:1;overflow:hidden;padding:6px 6px 0;">
+                <div style="background:#b5a9a4;border-radius:6px;padding:6px 8px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+                  <span style="color:white;font-size:5.5px;font-weight:600;">My Accounts</span>
+                  <span style="color:white;font-size:5px;opacity:.7;">3 accounts ⌄</span>
+                </div>
+                <div style="background:#2e6e8c;border-radius:7px;padding:8px;">
+                  <div style="color:white;font-size:7px;font-weight:700;margin-bottom:6px;">Credit Quick View</div>
+                  <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+                    <div style="position:relative;width:36px;height:36px;flex-shrink:0;">
+                      <svg width="36" height="36" viewBox="0 0 72 72">
+                        <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="6"/>
+                        <circle cx="36" cy="36" r="30" fill="none" stroke="white" stroke-width="6" stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="45" transform="rotate(-90 36 36)"/>
+                      </svg>
+                      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                        <div style="font-size:7px;font-weight:800;color:white;line-height:1;">742</div>
+                        <div style="font-size:4px;color:rgba(255,255,255,.5);">/850</div>
+                      </div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:3px;">
+                      <div style="font-size:5.5px;color:white;font-weight:600;">18% util · 100% on-time</div>
+                      <div style="font-size:5.5px;color:#4ade80;font-weight:700;">↑ +6 pts this month</div>
+                    </div>
+                  </div>
+                  <div style="background:white;border-radius:5px;padding:5px 6px;display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+                    <span style="font-size:9px;">🐦</span>
+                    <span style="font-size:4.5px;color:#333;line-height:1.4;">You're building healthy credit habits Maya!</span>
+                  </div>
+                  <div style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:5px;padding:5px 6px;">
+                    <div style="font-size:4.5px;color:#ffe082;font-weight:700;margin-bottom:2px;">⚡ YOUR NEXT ACTION</div>
+                    <div style="font-size:4.5px;color:rgba(255,255,255,.9);line-height:1.4;">Pay <strong style="color:white;">$200</strong> → gain est. <strong style="color:white;">+8 pts</strong></div>
+                    <div style="font-size:4.5px;color:#4fc3f7;font-weight:700;margin-top:2px;">Make a payment →</div>
+                  </div>
+                </div>
+              </div>
+              <!-- after label -->
+              <div style="background:#2e6e8c;padding:4px;text-align:center;flex-shrink:0;">
+                <span style="font-size:5px;font-weight:800;color:white;letter-spacing:1.5px;text-transform:uppercase;">AFTER</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- floating insight callout -->
+        <div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(10,8,18,.85);border:1px solid rgba(46,110,140,.4);border-radius:6px;padding:6px 14px;white-space:nowrap;backdrop-filter:blur(6px);z-index:20;">
+          <span style="font-size:.65rem;color:#9892b0;font-family:monospace;letter-spacing:.06em;">CREDIT ANXIETY → </span>
+          <span style="font-size:.65rem;color:#3de8a0;font-family:monospace;font-weight:700;">CONTEXT AT DECISION TIME</span>
+        </div>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">Behavioural Nudge Systems — Consumer Credit UX</h3>
+        <p class="pcard-desc">The same activation and engagement logic from live-service games — applied to fintech. Contextual nudges, goal-linked feedback, and friction reduction at the point of financial decision-making.</p>
+        <div class="pcard-tags">
+          <span class="ptag ptag-purple">Fintech</span>
+          <span class="ptag">UX Systems</span>
+          <span class="ptag">Behavioural Finance</span>
+          <span class="ptag">Product Design</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- P6: Transit UX — SUPPORT -->
+    <div class="pcard" onclick="openModal('transit')">
+      <div class="pcard-preview">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <!-- Dark city grid -->
+          <rect width="680" height="400" fill="#090c14"/>
+          <!-- Grid lines — streets -->
+          <line x1="0" y1="50"  x2="680" y2="50"  stroke="#0e1220" stroke-width="1"/>
+          <line x1="0" y1="100" x2="680" y2="100" stroke="#0e1220" stroke-width="1"/>
+          <line x1="0" y1="150" x2="680" y2="150" stroke="#0e1220" stroke-width="1"/>
+          <line x1="0" y1="200" x2="680" y2="200" stroke="#0e1220" stroke-width="1"/>
+          <line x1="0" y1="250" x2="680" y2="250" stroke="#0e1220" stroke-width="1"/>
+          <line x1="0" y1="300" x2="680" y2="300" stroke="#0e1220" stroke-width="1"/>
+          <line x1="0" y1="350" x2="680" y2="350" stroke="#0e1220" stroke-width="1"/>
+          <line x1="68"  y1="0" x2="68"  y2="400" stroke="#0e1220" stroke-width="1"/>
+          <line x1="136" y1="0" x2="136" y2="400" stroke="#0e1220" stroke-width="1"/>
+          <line x1="204" y1="0" x2="204" y2="400" stroke="#0e1220" stroke-width="1"/>
+          <line x1="272" y1="0" x2="272" y2="400" stroke="#0e1220" stroke-width="1"/>
+          <line x1="340" y1="0" x2="340" y2="400" stroke="#0e1220" stroke-width="1"/>
+          <line x1="408" y1="0" x2="408" y2="400" stroke="#0e1220" stroke-width="1"/>
+          <line x1="476" y1="0" x2="476" y2="400" stroke="#0e1220" stroke-width="1"/>
+          <line x1="544" y1="0" x2="544" y2="400" stroke="#0e1220" stroke-width="1"/>
+          <line x1="612" y1="0" x2="612" y2="400" stroke="#0e1220" stroke-width="1"/>
+          <!-- Major arterials brighter -->
+          <line x1="0" y1="200" x2="680" y2="200" stroke="#131828" stroke-width="2"/>
+          <line x1="340" y1="0" x2="340" y2="400" stroke="#131828" stroke-width="1.5"/>
+          <line x1="544" y1="0" x2="544" y2="400" stroke="#131828" stroke-width="1.5"/>
+
+          <!-- Perceived friction heatmap band -->
+          <rect x="20"  y="228" width="110" height="6" fill="#c84848" opacity=".55" rx="1.5"/>
+          <rect x="130" y="228" width="100" height="6" fill="#c8a030" opacity=".45" rx="1.5"/>
+          <rect x="230" y="228" width="120" height="6" fill="#d07830" opacity=".35" rx="1.5"/>
+          <rect x="350" y="228" width="160" height="6" fill="#60a870" opacity=".35" rx="1.5"/>
+          <rect x="510" y="228" width="150" height="6" fill="#60a870" opacity=".5" rx="1.5"/>
+          <text x="20"  y="244" fill="rgba(200,72,72,.55)"  font-size="6" font-family="monospace">HIGH</text>
+          <text x="148" y="244" fill="rgba(200,160,48,.5)"  font-size="6" font-family="monospace">MED</text>
+          <text x="510" y="244" fill="rgba(96,168,112,.55)" font-size="6" font-family="monospace">LOW FRICTION</text>
+          <text x="20"  y="255" fill="rgba(90,96,112,.35)"  font-size="5.5" font-family="monospace">PERCEIVED COMMUTER FRICTION →</text>
+
+          <!-- LRT line glow -->
+          <line x1="20" y1="172" x2="660" y2="155" stroke="rgba(208,120,48,.18)" stroke-width="16" stroke-linecap="round"/>
+          <!-- LRT main line -->
+          <line x1="20" y1="172" x2="660" y2="155" stroke="#d07830" stroke-width="4" stroke-linecap="round" opacity=".9"/>
+          <line x1="20" y1="171" x2="660" y2="154" stroke="rgba(245,158,11,.45)" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Underground dashes -->
+          <line x1="20"  y1="172" x2="160" y2="168" stroke="#d07830" stroke-width="4" stroke-dasharray="7 4" opacity=".4"/>
+          <line x1="160" y1="168" x2="310" y2="164" stroke="#d07830" stroke-width="4" opacity=".9"/>
+          <line x1="310" y1="164" x2="440" y2="161" stroke="#d07830" stroke-width="4" stroke-dasharray="7 4" opacity=".4"/>
+          <line x1="440" y1="161" x2="660" y2="155" stroke="#d07830" stroke-width="4" opacity=".9"/>
+
+          <!-- Stations -->
+          <circle cx="52"  cy="171" r="5.5" fill="#090c14" stroke="#d07830" stroke-width="1.8"/>
+          <circle cx="138" cy="168" r="5.5" fill="#090c14" stroke="#d07830" stroke-width="1.8"/>
+          <circle cx="204" cy="166" r="5.5" fill="#090c14" stroke="#d07830" stroke-width="1.8"/>
+          <circle cx="272" cy="164" r="5.5" fill="#090c14" stroke="#d07830" stroke-width="1.8"/>
+          <!-- Laird — major interchange -->
+          <circle cx="408" cy="161" r="9" fill="#090c14" stroke="#f59e0b" stroke-width="2.5"/>
+          <circle cx="408" cy="161" r="4"  fill="#f59e0b"/>
+          <circle cx="408" cy="161" r="16" fill="rgba(245,158,11,.07)"/>
+          <!-- Bayview -->
+          <circle cx="476" cy="159" r="5.5" fill="#090c14" stroke="#d07830" stroke-width="1.8"/>
+          <!-- Yonge -->
+          <circle cx="544" cy="157" r="9" fill="#090c14" stroke="#f59e0b" stroke-width="2.5"/>
+          <circle cx="544" cy="157" r="4"  fill="#f59e0b"/>
+          <circle cx="544" cy="157" r="16" fill="rgba(245,158,11,.07)"/>
+          <!-- Flemingdon -->
+          <circle cx="628" cy="155" r="6" fill="#090c14" stroke="#d07830" stroke-width="1.8"/>
+          <circle cx="628" cy="155" r="2.5" fill="#d07830"/>
+
+          <!-- Station labels -->
+          <text x="52"  y="185" text-anchor="middle" fill="rgba(208,120,48,.6)"  font-size="7" font-family="monospace">MT DENNIS</text>
+          <text x="272" y="153" text-anchor="middle" fill="rgba(208,120,48,.6)"  font-size="7" font-family="monospace">AVENUE</text>
+          <text x="408" y="148" text-anchor="middle" fill="rgba(245,158,11,.9)"  font-size="7.5" font-family="monospace" font-weight="bold">LAIRD ★</text>
+          <text x="544" y="144" text-anchor="middle" fill="rgba(245,158,11,.9)"  font-size="7.5" font-family="monospace" font-weight="bold">YONGE ★</text>
+          <text x="628" y="144" text-anchor="middle" fill="rgba(208,120,48,.6)"  font-size="7" font-family="monospace">FLEMINGDON</text>
+
+          <!-- Annotation: peak friction -->
+          <line x1="200" y1="162" x2="200" y2="120" stroke="rgba(200,72,72,.3)" stroke-width="1" stroke-dasharray="3 2"/>
+          <rect x="114" y="96" width="172" height="22" fill="rgba(16,8,8,.9)" stroke="rgba(200,72,72,.3)" stroke-width=".6" rx="2"/>
+          <text x="200" y="111" text-anchor="middle" fill="rgba(200,72,72,.75)" font-size="8.5" font-family="monospace">↑ peak friction zone</text>
+
+          <!-- Annotation: low friction -->
+          <line x1="580" y1="154" x2="580" y2="120" stroke="rgba(96,168,112,.3)" stroke-width="1" stroke-dasharray="3 2"/>
+          <rect x="512" y="96" width="136" height="22" fill="rgba(8,16,8,.9)" stroke="rgba(96,168,112,.3)" stroke-width=".6" rx="2"/>
+          <text x="580" y="111" text-anchor="middle" fill="rgba(96,168,112,.75)" font-size="8.5" font-family="monospace">low friction zone</text>
+
+          <!-- HEADER -->
+          <text x="20" y="22" fill="rgba(245,158,11,.9)"  font-size="11" font-family="monospace" font-weight="bold">EGLINTON CROSSTOWN — COMMUTER FRICTION ANALYSIS</text>
+          <text x="20" y="38" fill="rgba(90,96,112,.6)"   font-size="8.5" font-family="monospace">Behavioural UX · Service Design · Toronto</text>
+
+          <!-- Friction journey mini Before/After panel -->
+          <rect x="20" y="268" width="300" height="120" fill="rgba(9,12,20,.8)" stroke="rgba(30,34,56,.8)" stroke-width=".8" rx="2"/>
+          <text x="30" y="284" fill="rgba(90,96,112,.6)" font-size="7" font-family="monospace" letter-spacing=".5">FRICTION JOURNEY SUMMARY</text>
+          <!-- Before col -->
+          <text x="55" y="300" text-anchor="middle" fill="rgba(200,72,72,.7)" font-size="7" font-family="monospace">BEFORE</text>
+          <rect x="30" y="305" width="50" height="7" fill="rgba(200,72,72,.5)" rx="1"/>
+          <text x="30" y="322" fill="rgba(122,128,144,.55)" font-size="6.5" font-family="monospace">Access</text>
+          <rect x="30" y="326" width="50" height="7" fill="rgba(200,72,72,.5)" rx="1"/>
+          <text x="30" y="342" fill="rgba(122,128,144,.55)" font-size="6.5" font-family="monospace">Transfers</text>
+          <rect x="30" y="346" width="50" height="7" fill="rgba(200,160,48,.4)" rx="1"/>
+          <text x="30" y="362" fill="rgba(122,128,144,.55)" font-size="6.5" font-family="monospace">Reliability</text>
+          <rect x="30" y="366" width="50" height="7" fill="rgba(200,160,48,.4)" rx="1"/>
+          <text x="30" y="380" fill="rgba(122,128,144,.55)" font-size="6.5" font-family="monospace">Navigation</text>
+
+          <!-- arrow -->
+          <text x="100" y="345" text-anchor="middle" fill="rgba(208,120,48,.5)" font-size="14" font-family="monospace">→</text>
+
+          <!-- After col -->
+          <text x="190" y="300" text-anchor="middle" fill="rgba(96,168,112,.7)" font-size="7" font-family="monospace">AFTER</text>
+          <rect x="165" y="305" width="50" height="7" fill="rgba(96,168,112,.5)" rx="1"/>
+          <text x="165" y="322" fill="rgba(122,128,144,.55)" font-size="6.5" font-family="monospace">Access</text>
+          <rect x="165" y="326" width="50" height="7" fill="rgba(96,168,112,.5)" rx="1"/>
+          <text x="165" y="342" fill="rgba(122,128,144,.55)" font-size="6.5" font-family="monospace">Transfers</text>
+          <rect x="165" y="346" width="50" height="7" fill="rgba(96,168,112,.5)" rx="1"/>
+          <text x="165" y="362" fill="rgba(122,128,144,.55)" font-size="6.5" font-family="monospace">Reliability</text>
+          <rect x="165" y="366" width="50" height="7" fill="rgba(96,168,112,.5)" rx="1"/>
+          <text x="165" y="380" fill="rgba(122,128,144,.55)" font-size="6.5" font-family="monospace">Navigation</text>
+
+          <!-- Insight panel right -->
+          <rect x="336" y="268" width="324" height="120" fill="rgba(9,12,20,.8)" stroke="rgba(208,120,48,.2)" stroke-width=".8" rx="2"/>
+          <rect x="336" y="268" width="3"   height="120" fill="rgba(208,120,48,.5)" rx="1"/>
+          <text x="348" y="284" fill="rgba(208,120,48,.7)" font-size="6.5" font-family="monospace" letter-spacing=".5">CORE INSIGHT</text>
+          <text x="348" y="300" fill="rgba(200,204,216,.8)" font-size="8" font-family="Georgia,serif" font-style="italic">Commuters don't avoid slow</text>
+          <text x="348" y="313" fill="rgba(200,204,216,.8)" font-size="8" font-family="Georgia,serif" font-style="italic">transit — they avoid uncertain</text>
+          <text x="348" y="326" fill="rgba(200,204,216,.8)" font-size="8" font-family="Georgia,serif" font-style="italic">transit. Friction is cognitive,</text>
+          <text x="348" y="339" fill="rgba(200,204,216,.8)" font-size="8" font-family="Georgia,serif" font-style="italic">not just physical.</text>
+          <text x="348" y="360" fill="rgba(90,96,112,.55)" font-size="7" font-family="monospace">→ Same model as player churn</text>
+          <text x="348" y="372" fill="rgba(90,96,112,.55)" font-size="7" font-family="monospace">  and fintech drop-off.</text>
+        </svg>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">Friction-to-Churn Modelling — Urban Commuter Behaviour</h3>
+        <p class="pcard-desc">The same friction model that predicts when players quit — applied to commuter decisions. Perceived complexity drives disengagement whether the product is a game, an app, or a transit system.</p>
+        <div class="pcard-tags">
+          <span class="ptag ptag-green">UX · Systems</span>
+          <span class="ptag">Behavioural Analysis</span>
+          <span class="ptag">Service Design</span>
+          <span class="ptag">Toronto</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ABOUT / STATS -->
+<section class="section" id="about" style="padding-top:80px;padding-bottom:80px">
+  <div class="about-grid">
+    <div>
+      <div class="about-text">
+        <p>Building analytics systems from scratch — not just running queries, but designing <em>the infrastructure that makes behavioural data useful</em> to people making product decisions.</p>
+        <p>I think in LiveOps terms: <em>retention loops, session patterns, lifecycle transitions, churn signals.</em> That framing applies to a fintech onboarding funnel as much as it does to a live-service game.</p>
+      </div>
+      <a href="https://diamond-apparel-ca4.notion.site/Portfolio-36d20d328f448012af39c1beddca4704" target="_blank" class="read-more">READ MORE →</a>
+    </div>
+    <div class="stats-boxes">
+      <div class="stat-box">
+        <div class="stat-num">6 +</div>
+        <div class="stat-label">Projects built &amp; published</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Domains: gaming, fintech, urban UX</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">0→1</div>
+        <div class="stat-label">End-to-end — schema to dashboard</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">D7+</div>
+        <div class="stat-label">Retention-first product thinking</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SNAPSHOTS -->
+<section class="snapshots-section" id="snapshots">
+  <div class="snapshots-head">
+    <div>
+      <h2>Snapshots</h2>
+      <p>Screens, explorations and interfaces I've designed — curated and ongoing.</p>
+    </div>
+    <a href="https://diamond-apparel-ca4.notion.site/Portfolio-36d20d328f448012af39c1beddca4704" target="_blank" class="view-all">VIEW ALL →</a>
+  </div>
+
+  <div class="snap-track-wrap">
+    <div class="snap-track" id="snap-track">
+
+      <!-- Snap 1: Retention heatmap -->
+      <div class="snap-card" onclick="openModal('retention')">
+        <div class="snap-card-img">
+          <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <rect width="320" height="200" fill="#090f0a"/>
+            <text x="10" y="16" fill="#3de8a0" font-size="7" font-family="monospace" opacity=".8">COHORT RETENTION MATRIX</text>
+            <!-- heatmap grid -->
+            <rect x="10" y="24" width="44" height="16" fill="#3de8a0" opacity=".9" rx="1"/>
+            <rect x="56" y="24" width="44" height="16" fill="#3de8a0" opacity=".58" rx="1"/>
+            <rect x="102" y="24" width="44" height="16" fill="#3de8a0" opacity=".3" rx="1"/>
+            <rect x="148" y="24" width="44" height="16" fill="#3de8a0" opacity=".14" rx="1"/>
+            <rect x="194" y="24" width="44" height="16" fill="#ff4d4d" opacity=".28" rx="1"/>
+            <rect x="240" y="24" width="44" height="16" fill="#ff4d4d" opacity=".45" rx="1"/>
+            <rect x="10" y="42" width="44" height="16" fill="#3de8a0" opacity=".9" rx="1"/>
+            <rect x="56" y="42" width="44" height="16" fill="#3de8a0" opacity=".5" rx="1"/>
+            <rect x="102" y="42" width="44" height="16" fill="#3de8a0" opacity=".26" rx="1"/>
+            <rect x="148" y="42" width="44" height="16" fill="#3de8a0" opacity=".1" rx="1"/>
+            <rect x="194" y="42" width="44" height="16" fill="#ff4d4d" opacity=".18" rx="1"/>
+            <rect x="10" y="60" width="44" height="16" fill="#3de8a0" opacity=".9" rx="1"/>
+            <rect x="56" y="60" width="44" height="16" fill="#3de8a0" opacity=".68" rx="1"/>
+            <rect x="102" y="60" width="44" height="16" fill="#3de8a0" opacity=".38" rx="1"/>
+            <rect x="148" y="60" width="44" height="16" fill="#3de8a0" opacity=".18" rx="1"/>
+            <rect x="10" y="78" width="44" height="16" fill="#3de8a0" opacity=".9" rx="1"/>
+            <rect x="56" y="78" width="44" height="16" fill="#3de8a0" opacity=".62" rx="1"/>
+            <rect x="102" y="78" width="44" height="16" fill="#3de8a0" opacity=".32" rx="1"/>
+            <!-- drop annotation -->
+            <line x1="194" y1="20" x2="194" y2="110" stroke="#ff4d4d" stroke-width="1" stroke-dasharray="3 2" opacity=".4"/>
+            <rect x="198" y="58" width="80" height="14" fill="#1a0808" stroke="#ff4d4d" stroke-width=".5" rx="1"/>
+            <text x="204" y="68" fill="#ff4d4d" font-size="7" font-family="monospace">lifecycle cliff</text>
+            <!-- decay line -->
+            <polyline points="10,140 56,133 102,124 148,115 194,119 240,108 286,100 310,97" fill="none" stroke="#3de8a0" stroke-width="1.8" opacity=".6" stroke-linejoin="round"/>
+            <line x1="10" y1="165" x2="310" y2="165" stroke="#1a2a1a" stroke-width=".5"/>
+            <text x="10" y="177" fill="#1a2a1a" font-size="6" font-family="monospace">D1</text>
+            <text x="54" y="177" fill="#1a2a1a" font-size="6" font-family="monospace">D7</text>
+            <text x="102" y="177" fill="#1a2a1a" font-size="6" font-family="monospace">D14</text>
+            <text x="150" y="177" fill="#1a2a1a" font-size="6" font-family="monospace">D30</text>
+            <text x="238" y="177" fill="#1a2a1a" font-size="6" font-family="monospace">D60</text>
+            <!-- big bg number -->
+            <text x="10" y="200" fill="#0f2a1f" font-size="60" font-family="monospace" font-weight="bold">68</text>
+          </svg>
+        </div>
+        <div class="snap-card-label">
+          <div class="snap-card-title">Cohort Retention Heatmap</div>
+          <div class="snap-card-sub">Dead by Daylight · SQL + Tableau</div>
+        </div>
+      </div>
+
+      <!-- Snap 2: Frustration telemetry -->
+      <div class="snap-card" onclick="openModal('churn')">
+        <div class="snap-card-img">
+          <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <rect width="320" height="200" fill="#090e1e"/>
+            <text x="10" y="16" fill="#5b8fff" font-size="7" font-family="monospace" opacity=".8">FRUSTRATION TELEMETRY · LIVE</text>
+            <!-- session health bars -->
+            <rect x="10" y="24" width="18" height="8" fill="#ff4d4d" opacity=".7" rx="1"/>
+            <rect x="30" y="24" width="18" height="8" fill="#ff4d4d" opacity=".5" rx="1"/>
+            <rect x="50" y="24" width="18" height="8" fill="#3de8a0" opacity=".4" rx="1"/>
+            <rect x="70" y="24" width="18" height="8" fill="#5b8fff" opacity=".55" rx="1"/>
+            <rect x="90" y="24" width="18" height="8" fill="#3de8a0" opacity=".6" rx="1"/>
+            <rect x="110" y="24" width="18" height="8" fill="#3de8a0" opacity=".35" rx="1"/>
+            <rect x="130" y="24" width="18" height="8" fill="#5b8fff" opacity=".6" rx="1"/>
+            <rect x="150" y="24" width="18" height="8" fill="#ff4d4d" opacity=".45" rx="1"/>
+            <rect x="170" y="24" width="18" height="8" fill="#5b8fff" opacity=".7" rx="1"/>
+            <rect x="190" y="24" width="18" height="8" fill="#ff4d4d" opacity=".6" rx="1"/>
+            <rect x="210" y="24" width="18" height="8" fill="#3de8a0" opacity=".5" rx="1"/>
+            <rect x="230" y="24" width="18" height="8" fill="#5b8fff" opacity=".4" rx="1"/>
+            <rect x="250" y="24" width="18" height="8" fill="#ff4d4d" opacity=".35" rx="1"/>
+            <rect x="270" y="24" width="18" height="8" fill="#3de8a0" opacity=".65" rx="1"/>
+            <rect x="290" y="24" width="18" height="8" fill="#5b8fff" opacity=".5" rx="1"/>
+            <!-- stat pills -->
+            <rect x="10" y="42" width="62" height="18" fill="#0a1220" stroke="#5b8fff" stroke-width=".5" rx="2"/>
+            <text x="41" y="54" text-anchor="middle" fill="#5b8fff" font-size="7.5" font-family="monospace">D7: 42%</text>
+            <rect x="76" y="42" width="66" height="18" fill="#1a0808" stroke="#ff4d4d" stroke-width=".5" rx="2"/>
+            <text x="109" y="54" text-anchor="middle" fill="#ff4d4d" font-size="7.5" font-family="monospace">CHURN: HIGH</text>
+            <rect x="146" y="42" width="64" height="18" fill="#0a1a0a" stroke="#3de8a0" stroke-width=".5" rx="2"/>
+            <text x="178" y="54" text-anchor="middle" fill="#3de8a0" font-size="7.5" font-family="monospace">⚡ 3 RQ</text>
+            <!-- retention curve -->
+            <polygon points="10,160 55,145 100,133 145,120 190,126 235,107 280,88 310,76 310,170 10,170" fill="#5b8fff" opacity=".05"/>
+            <polyline points="10,160 55,145 100,133 145,120 190,126 235,107 280,88 310,76" fill="none" stroke="#5b8fff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+            <polyline points="10,168 55,162 100,157 145,150 190,153 235,145 280,148 310,155" fill="none" stroke="#ff4d4d" stroke-width="1.2" opacity=".5" stroke-dasharray="4 2" stroke-linejoin="round"/>
+            <circle cx="190" cy="126" r="4" fill="#5b8fff"/>
+            <circle cx="190" cy="126" r="8" fill="none" stroke="#5b8fff" stroke-width="1" opacity=".3"/>
+            <rect x="198" y="113" width="78" height="14" fill="#0a1220" stroke="#5b8fff" stroke-width=".5" rx="1"/>
+            <text x="204" y="123" fill="#5b8fff" font-size="6.5" font-family="monospace">↑ drop-off pt</text>
+          </svg>
+        </div>
+        <div class="snap-card-label">
+          <div class="snap-card-title">Frustration Signal Dashboard</div>
+          <div class="snap-card-sub">LiveOps · PostgreSQL + Streamlit</div>
+        </div>
+      </div>
+
+      <!-- Snap 3: Credit score gauge -->
+      <div class="snap-card" onclick="openModal('credit')">
+        <div class="snap-card-img">
+          <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <rect width="320" height="200" fill="#0c0918"/>
+            <text x="10" y="16" fill="#9b6dff" font-size="7" font-family="monospace" opacity=".8">CREDIT SCORE TRANSPARENCY</text>
+            <circle cx="100" cy="108" r="62" fill="none" stroke="#1a1030" stroke-width="13"/>
+            <circle cx="100" cy="108" r="62" fill="none" stroke="#9b6dff" stroke-width="13" stroke-dasharray="260 130" stroke-dashoffset="100" stroke-linecap="round" opacity=".72"/>
+            <text x="100" y="101" text-anchor="middle" fill="#f2f2f2" font-size="26" font-weight="700" font-family="-apple-system,sans-serif">742</text>
+            <text x="100" y="117" text-anchor="middle" fill="#9b6dff" font-size="8" font-family="monospace">GOOD ↑ +12</text>
+            <!-- nudge panel -->
+            <rect x="178" y="28" width="132" height="44" fill="#110e20" stroke="#9b6dff" stroke-width=".5" rx="2"/>
+            <text x="188" y="43" fill="#9b6dff" font-size="6.5" font-family="monospace">WHY DID THIS CHANGE?</text>
+            <text x="188" y="56" fill="#777" font-size="7" font-family="-apple-system,sans-serif">Utilization: 38% → 22%</text>
+            <text x="188" y="68" fill="#3de8a0" font-size="6.5" font-family="monospace">→ Stay below 30%</text>
+            <!-- goals -->
+            <rect x="178" y="82" width="60" height="40" fill="#0f0c22" stroke="#1e1a3a" stroke-width=".5" rx="2"/>
+            <text x="208" y="96" text-anchor="middle" fill="#555" font-size="6" font-family="monospace">RENT APT</text>
+            <text x="208" y="108" text-anchor="middle" fill="#f2f2f2" font-size="9" font-weight="600" font-family="-apple-system,sans-serif">On Track</text>
+            <rect x="250" y="82" width="60" height="40" fill="#0f0c22" stroke="#1e1a3a" stroke-width=".5" rx="2"/>
+            <text x="280" y="96" text-anchor="middle" fill="#555" font-size="6" font-family="monospace">CAR LOAN</text>
+            <text x="280" y="108" text-anchor="middle" fill="#9b6dff" font-size="8.5" font-weight="600" font-family="-apple-system,sans-serif">In Progress</text>
+            <!-- bars -->
+            <text x="10" y="158" fill="#333" font-size="6.5" font-family="monospace">PAYMENTS</text>
+            <rect x="10" y="163" width="140" height="4" fill="#1a1030" rx="2"/>
+            <rect x="10" y="163" width="124" height="4" fill="#9b6dff" rx="2" opacity=".65"/>
+            <text x="10" y="180" fill="#333" font-size="6.5" font-family="monospace">UTILIZATION</text>
+            <rect x="10" y="185" width="140" height="4" fill="#1a1030" rx="2"/>
+            <rect x="10" y="185" width="70" height="4" fill="#3de8a0" rx="2" opacity=".65"/>
+          </svg>
+        </div>
+        <div class="snap-card-label">
+          <div class="snap-card-title">Credit Transparency Dashboard</div>
+          <div class="snap-card-sub">Fintech UX · Behavioural Finance</div>
+        </div>
+      </div>
+
+      <!-- Snap 4: Gacha engagement loop -->
+      <div class="snap-card" onclick="openModal('gacha')">
+        <div class="snap-card-img">
+          <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <rect width="320" height="200" fill="#0e0a1e"/>
+            <text x="10" y="16" fill="#9b6dff" font-size="7" font-family="monospace" opacity=".8">GACHA ENGAGEMENT ARCHITECTURE</text>
+            <circle cx="160" cy="108" r="38" fill="#160e28" stroke="#9b6dff" stroke-width="1.5"/>
+            <text x="160" y="104" text-anchor="middle" fill="#9b6dff" font-size="9" font-family="monospace">ENGAGE</text>
+            <text x="160" y="116" text-anchor="middle" fill="#555" font-size="7.5" font-family="monospace">LOOP</text>
+            <circle cx="72" cy="66" r="24" fill="#100a1e" stroke="#5b8fff" stroke-width="1"/>
+            <text x="72" y="63" text-anchor="middle" fill="#5b8fff" font-size="7.5" font-family="monospace">REWARD</text>
+            <text x="72" y="73" text-anchor="middle" fill="#5b8fff" font-size="7.5" font-family="monospace">PACING</text>
+            <circle cx="248" cy="66" r="24" fill="#100a1e" stroke="#3de8a0" stroke-width="1"/>
+            <text x="248" y="63" text-anchor="middle" fill="#3de8a0" font-size="7.5" font-family="monospace">PROG.</text>
+            <text x="248" y="73" text-anchor="middle" fill="#3de8a0" font-size="7.5" font-family="monospace">LOOPS</text>
+            <circle cx="72" cy="152" r="24" fill="#100a1e" stroke="#ff4d4d" stroke-width="1"/>
+            <text x="72" y="149" text-anchor="middle" fill="#ff4d4d" font-size="7" font-family="monospace">SCARCITY</text>
+            <text x="72" y="159" text-anchor="middle" fill="#ff4d4d" font-size="7" font-family="monospace">MECH.</text>
+            <circle cx="248" cy="152" r="24" fill="#100a1e" stroke="#f59e0b" stroke-width="1"/>
+            <text x="248" y="149" text-anchor="middle" fill="#f59e0b" font-size="7" font-family="monospace">MONET.</text>
+            <text x="248" y="159" text-anchor="middle" fill="#f59e0b" font-size="7" font-family="monospace">TIMING</text>
+            <line x1="94" y1="78" x2="130" y2="95" stroke="#5b8fff" stroke-width="1" opacity=".3"/>
+            <line x1="226" y1="78" x2="190" y2="95" stroke="#3de8a0" stroke-width="1" opacity=".3"/>
+            <line x1="94" y1="140" x2="130" y2="122" stroke="#ff4d4d" stroke-width="1" opacity=".3"/>
+            <line x1="226" y1="140" x2="190" y2="122" stroke="#f59e0b" stroke-width="1" opacity=".3"/>
+            <rect x="280" y="55" width="28" height="105" fill="#1a1030" rx="2"/>
+            <rect x="280" y="90" width="28" height="70" fill="#9b6dff" rx="2" opacity=".6"/>
+          </svg>
+        </div>
+        <div class="snap-card-label">
+          <div class="snap-card-title">Gacha Engagement System Map</div>
+          <div class="snap-card-sub">LiveOps · Reward Architecture</div>
+        </div>
+      </div>
+
+      <!-- Snap 5: Raid onboarding flow -->
+      <div class="snap-card" onclick="openModal('raids')">
+        <div class="snap-card-img">
+          <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <rect width="320" height="200" fill="#090f09"/>
+            <text x="10" y="16" fill="#3de8a0" font-size="7" font-family="monospace" opacity=".8">DESTINY 2 · RAID ONBOARDING FLOW</text>
+            <!-- flow boxes -->
+            <rect x="10" y="30" width="80" height="24" fill="#0f2010" stroke="#3de8a0" stroke-width=".8" rx="2"/>
+            <text x="50" y="45" text-anchor="middle" fill="#3de8a0" font-size="8" font-family="monospace">NEW PLAYER</text>
+            <line x1="90" y1="42" x2="120" y2="42" stroke="#3de8a0" stroke-width="1" opacity=".4"/>
+            <rect x="120" y="30" width="88" height="24" fill="#0f2010" stroke="#3de8a0" stroke-width=".8" rx="2"/>
+            <text x="164" y="45" text-anchor="middle" fill="#3de8a0" font-size="8" font-family="monospace">GUIDED QUEUE</text>
+            <line x1="208" y1="42" x2="236" y2="78" stroke="#3de8a0" stroke-width="1" opacity=".4"/>
+            <circle cx="254" cy="92" r="22" fill="#0a1e0a" stroke="#3de8a0" stroke-width="1.5"/>
+            <text x="254" y="89" text-anchor="middle" fill="#3de8a0" font-size="7.5" font-family="monospace">DUAL</text>
+            <text x="254" y="99" text-anchor="middle" fill="#3de8a0" font-size="7.5" font-family="monospace">QUEUE</text>
+            <rect x="10" y="120" width="80" height="24" fill="#0a1030" stroke="#5b8fff" stroke-width=".8" rx="2"/>
+            <text x="50" y="135" text-anchor="middle" fill="#5b8fff" font-size="8" font-family="monospace">VETERAN</text>
+            <line x1="90" y1="132" x2="120" y2="132" stroke="#5b8fff" stroke-width="1" opacity=".4"/>
+            <rect x="120" y="120" width="88" height="24" fill="#0a1030" stroke="#5b8fff" stroke-width=".8" rx="2"/>
+            <text x="164" y="135" text-anchor="middle" fill="#5b8fff" font-size="8" font-family="monospace">SHERPA QUEUE</text>
+            <line x1="208" y1="132" x2="232" y2="108" stroke="#5b8fff" stroke-width="1" opacity=".4"/>
+            <!-- before/after -->
+            <rect x="10" y="162" width="24" height="28" fill="#150a0a" rx="2"/>
+            <rect x="10" y="178" width="24" height="12" fill="#ff4d4d" rx="2" opacity=".65"/>
+            <text x="22" y="197" text-anchor="middle" fill="#555" font-size="6" font-family="monospace">56%</text>
+            <rect x="38" y="162" width="24" height="28" fill="#0a150a" rx="2"/>
+            <rect x="38" y="185" width="24" height="5" fill="#3de8a0" rx="2" opacity=".65"/>
+            <text x="50" y="197" text-anchor="middle" fill="#3de8a0" font-size="6" font-family="monospace">29%</text>
+            <rect x="70" y="167" width="240" height="22" fill="#0a120a" stroke="#1a2a1a" stroke-width=".5" rx="2"/>
+            <text x="82" y="181" fill="#555" font-size="7.5" font-family="-apple-system,sans-serif">Structure removes friction, not challenge.</text>
+          </svg>
+        </div>
+        <div class="snap-card-label">
+          <div class="snap-card-title">Dual-Queue Onboarding Architecture</div>
+          <div class="snap-card-sub">Destiny 2 · Behavioural UX Design</div>
+        </div>
+      </div>
+
+      <!-- Snap 6: Transit map -->
+      <div class="snap-card" onclick="openModal('transit')">
+        <div class="snap-card-img">
+          <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <rect width="320" height="200" fill="#0c0c10"/>
+            <text x="10" y="16" fill="#f59e0b" font-size="7" font-family="monospace" opacity=".8">EGLINTON CROSSTOWN · UX MAP</text>
+            <line x1="20" y1="90" x2="300" y2="90" stroke="#f59e0b" stroke-width="4" opacity=".65" stroke-linecap="round"/>
+            <circle cx="40" cy="90" r="6" fill="#0c0c10" stroke="#f59e0b" stroke-width="1.8"/>
+            <circle cx="90" cy="90" r="6" fill="#0c0c10" stroke="#f59e0b" stroke-width="1.8"/>
+            <circle cx="140" cy="90" r="6" fill="#0c0c10" stroke="#f59e0b" stroke-width="1.8"/>
+            <circle cx="190" cy="90" r="9" fill="#f59e0b" opacity=".85"/>
+            <circle cx="240" cy="90" r="6" fill="#0c0c10" stroke="#f59e0b" stroke-width="1.8"/>
+            <circle cx="290" cy="90" r="6" fill="#0c0c10" stroke="#f59e0b" stroke-width="1.8"/>
+            <text x="40" y="78" text-anchor="middle" fill="#444" font-size="6.5" font-family="monospace">Kennedy</text>
+            <text x="90" y="78" text-anchor="middle" fill="#444" font-size="6.5" font-family="monospace">Sloane</text>
+            <text x="140" y="78" text-anchor="middle" fill="#444" font-size="6.5" font-family="monospace">Leaside</text>
+            <text x="190" y="70" text-anchor="middle" fill="#f59e0b" font-size="7" font-family="monospace">Laird ★</text>
+            <text x="240" y="78" text-anchor="middle" fill="#444" font-size="6.5" font-family="monospace">Bayview</text>
+            <text x="290" y="78" text-anchor="middle" fill="#444" font-size="6.5" font-family="monospace">Yonge</text>
+            <line x1="190" y1="99" x2="190" y2="120" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 2" opacity=".5"/>
+            <rect x="148" y="120" width="84" height="16" fill="#1a1200" stroke="#f59e0b" stroke-width=".5" rx="1"/>
+            <text x="190" y="131" text-anchor="middle" fill="#f59e0b" font-size="7" font-family="monospace">peak friction</text>
+            <!-- chart -->
+            <line x1="20" y1="190" x2="300" y2="190" stroke="#222" stroke-width=".5"/>
+            <polyline points="30,182 80,172 130,164 180,168 230,155 280,150" fill="none" stroke="#f59e0b" stroke-width="1.8" opacity=".65"/>
+            <polyline points="30,186 80,181 130,175 180,171 230,165 280,160" fill="none" stroke="#555" stroke-width="1.2" opacity=".4" stroke-dasharray="4 2"/>
+            <text x="285" y="150" fill="#f59e0b" font-size="6" font-family="monospace">felt</text>
+            <text x="285" y="161" fill="#444" font-size="6" font-family="monospace">real</text>
+          </svg>
+        </div>
+        <div class="snap-card-label">
+          <div class="snap-card-title">Eglinton Crosstown Friction Map</div>
+          <div class="snap-card-sub">Urban UX · Figma · Service Design</div>
+        </div>
+      </div>
+
+      <!-- Snap 7: Churn signals close-up -->
+      <div class="snap-card" onclick="openModal('churn')">
+        <div class="snap-card-img">
+          <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <rect width="320" height="200" fill="#090e1e"/>
+            <text x="10" y="16" fill="#ff4d4d" font-size="7" font-family="monospace" opacity=".8">RAGE QUIT DETECTION · REAL-TIME</text>
+            <!-- event timeline -->
+            <line x1="10" y1="60" x2="310" y2="60" stroke="#1a2040" stroke-width="1"/>
+            <!-- events -->
+            <circle cx="40" cy="60" r="5" fill="#ff4d4d" opacity=".8"/>
+            <line x1="40" y1="65" x2="40" y2="90" stroke="#ff4d4d" stroke-width=".8" opacity=".4"/>
+            <text x="40" y="102" text-anchor="middle" fill="#ff4d4d" font-size="6" font-family="monospace">RQ</text>
+            <circle cx="85" cy="60" r="3" fill="#5b8fff" opacity=".6"/>
+            <circle cx="130" cy="60" r="5" fill="#ff4d4d" opacity=".75"/>
+            <line x1="130" y1="65" x2="130" y2="90" stroke="#ff4d4d" stroke-width=".8" opacity=".4"/>
+            <text x="130" y="102" text-anchor="middle" fill="#ff4d4d" font-size="6" font-family="monospace">RQ</text>
+            <circle cx="175" cy="60" r="3" fill="#3de8a0" opacity=".6"/>
+            <circle cx="220" cy="60" r="5" fill="#ff4d4d" opacity=".9"/>
+            <line x1="220" y1="65" x2="220" y2="90" stroke="#ff4d4d" stroke-width=".8" opacity=".5"/>
+            <text x="220" y="102" text-anchor="middle" fill="#ff4d4d" font-size="6" font-family="monospace">RQ</text>
+            <circle cx="265" cy="60" r="3" fill="#5b8fff" opacity=".5"/>
+            <!-- alert box -->
+            <rect x="10" y="112" width="300" height="38" fill="#1a0808" stroke="#ff4d4d" stroke-width=".8" rx="2"/>
+            <text x="22" y="128" fill="#ff4d4d" font-size="8" font-family="monospace">⚡ CHURN RISK ELEVATED</text>
+            <text x="22" y="143" fill="#888" font-size="7.5" font-family="-apple-system,sans-serif">3 rage quits in 45 min session · Loss streak: 7 · Recommend: matchmaking adjustment</text>
+            <!-- loss streak bar -->
+            <text x="10" y="168" fill="#333" font-size="6.5" font-family="monospace">LOSS STREAK</text>
+            <rect x="10" y="173" width="300" height="5" fill="#1a1a1a" rx="2"/>
+            <rect x="10" y="173" width="210" height="5" fill="#ff4d4d" rx="2" opacity=".6"/>
+            <text x="225" y="180" fill="#ff4d4d" font-size="6.5" font-family="monospace">7/10</text>
+            <text x="10" y="196" fill="#333" font-size="6.5" font-family="monospace">SESSION INTENSITY</text>
+          </svg>
+        </div>
+        <div class="snap-card-label">
+          <div class="snap-card-title">Rage Quit & Churn Risk Alerts</div>
+          <div class="snap-card-sub">LiveOps · Real-time Telemetry</div>
+        </div>
+      </div>
+
+      <!-- Snap 5b: Destiny raid onboarding -->
+      <div class="snap-card" onclick="openModal('raids')">
+        <div class="snap-card-img">
+          <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <radialGradient id="sGlow" cx="75%" cy="30%" r="30%">
+                <stop offset="0%" stop-color="#c8d8f0" stop-opacity=".8"/>
+                <stop offset="100%" stop-color="#080a12" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="320" height="200" fill="#07090f"/>
+            <rect width="320" height="200" fill="url(#sGlow)"/>
+            <!-- stars -->
+            <circle cx="12" cy="8" r=".6" fill="white" opacity=".7"/>
+            <circle cx="45" cy="22" r=".5" fill="white" opacity=".5"/>
+            <circle cx="90" cy="6" r=".8" fill="white" opacity=".65"/>
+            <circle cx="180" cy="14" r=".6" fill="white" opacity=".6"/>
+            <circle cx="260" cy="10" r=".9" fill="white" opacity=".7"/>
+            <circle cx="300" cy="28" r=".5" fill="white" opacity=".45"/>
+            <circle cx="140" cy="30" r=".5" fill="white" opacity=".4"/>
+            <circle cx="30" cy="70" r=".4" fill="white" opacity=".3"/>
+            <circle cx="295" cy="80" r=".5" fill="white" opacity=".35"/>
+            <circle cx="50" cy="16" r="1.1" fill="#a8c8ff" opacity=".6"/>
+            <circle cx="230" cy="22" r="1.3" fill="#c0d8ff" opacity=".55"/>
+            <!-- The Traveler -->
+            <circle cx="240" cy="55" r="38" fill="rgba(200,220,255,.5)"/>
+            <circle cx="240" cy="55" r="36" fill="rgba(10,20,50,.3)"/>
+            <circle cx="232" cy="46" r="14" fill="rgba(220,235,255,.15)"/>
+            <!-- Guardian silhouette (small) -->
+            <ellipse cx="145" cy="152" rx="12" ry="18" fill="rgba(16,24,46,.95)"/>
+            <rect x="137" y="138" width="16" height="18" rx="2" fill="rgba(18,26,50,.95)"/>
+            <ellipse cx="145" cy="130" rx="10" ry="12" fill="rgba(18,26,50,.95)"/>
+            <path d="M 139 132 Q 139 127 145 127 Q 151 127 151 132 L 151 134 Q 151 137 145 137 Q 139 137 139 134 Z" fill="rgba(220,140,25,.75)"/>
+            <!-- ghost -->
+            <polygon points="130,125 136,128 136,135 130,138 124,135 124,128" fill="rgba(200,225,255,.7)" stroke="rgba(150,190,255,.3)" stroke-width=".5"/>
+            <circle cx="130" cy="131" r="3" fill="rgba(100,170,255,.9)"/>
+            <circle cx="130" cy="131" r="1.5" fill="white" opacity=".9"/>
+            <!-- ground glow -->
+            <ellipse cx="145" cy="170" rx="26" ry="4" fill="rgba(200,120,20,.2)"/>
+            <!-- Light pillar -->
+            <polygon points="133,200 137,168 153,168 157,200" fill="rgba(200,130,20,.07)"/>
+            <!-- UI top label -->
+            <rect x="8" y="7" width="108" height="14" rx="1.5" fill="rgba(200,120,20,.08)" stroke="rgba(200,120,20,.25)" stroke-width=".5"/>
+            <text x="13" y="17" fill="rgba(240,170,50,.8)" font-size="6" font-family="monospace" font-weight="bold" letter-spacing="1">RAID ONBOARDING</text>
+            <!-- dual queue flow -->
+            <rect x="8" y="32" width="58" height="16" fill="#0a1020" stroke="#5b8fff" stroke-width=".6" rx="2"/>
+            <text x="37" y="43" text-anchor="middle" fill="#5b8fff" font-size="6.5" font-family="monospace">NEW PLAYER</text>
+            <rect x="8" y="55" width="58" height="16" fill="#0a1020" stroke="rgba(200,120,20,.6)" stroke-width=".6" rx="2"/>
+            <text x="37" y="66" text-anchor="middle" fill="rgba(240,170,50,.85)" font-size="6.5" font-family="monospace">VETERAN</text>
+            <line x1="66" y1="40" x2="86" y2="49" stroke="#5b8fff" stroke-width=".8" opacity=".5"/>
+            <line x1="66" y1="63" x2="86" y2="55" stroke="rgba(200,130,20,.6)" stroke-width=".8" opacity=".5"/>
+            <circle cx="94" cy="52" r="12" fill="#080e1e" stroke="rgba(61,232,160,.6)" stroke-width="1"/>
+            <text x="94" y="49" text-anchor="middle" fill="rgba(61,232,160,.9)" font-size="5.5" font-family="monospace">DUAL</text>
+            <text x="94" y="58" text-anchor="middle" fill="rgba(61,232,160,.9)" font-size="5.5" font-family="monospace">QUEUE</text>
+            <!-- abandonment bars -->
+            <text x="8" y="100" fill="#2a3050" font-size="6" font-family="monospace">ABANDON RATE</text>
+            <rect x="8" y="105" width="14" height="40" fill="#150a0a" rx="1"/>
+            <rect x="8" y="127" width="14" height="18" fill="#ff4d4d" rx="1" opacity=".7"/>
+            <text x="15" y="152" text-anchor="middle" fill="#ff4d4d" font-size="6.5" font-family="monospace">56%</text>
+            <rect x="28" y="105" width="14" height="40" fill="#0a150a" rx="1"/>
+            <rect x="28" y="135" width="14" height="10" fill="#3de8a0" rx="1" opacity=".7"/>
+            <text x="35" y="152" text-anchor="middle" fill="#3de8a0" font-size="6.5" font-family="monospace">29%</text>
+            <!-- quote -->
+            <rect x="8" y="158" width="148" height="30" fill="#0a100a" stroke="#1a2a1a" stroke-width=".5" rx="1"/>
+            <text x="14" y="169" fill="#555" font-size="5.5" font-family="-apple-system,sans-serif">Friction is the churn driver,</text>
+            <text x="14" y="179" fill="#555" font-size="5.5" font-family="-apple-system,sans-serif">not content difficulty.</text>
+            <text x="14" y="182" fill="#3de8a0" font-size="5" font-family="monospace">→</text>
+          </svg>
+        </div>
+        <div class="snap-card-label">
+          <div class="snap-card-title">Raid Social Onboarding System</div>
+          <div class="snap-card-sub">Destiny 2 · Behavioural UX · Dual-Queue</div>
+        </div>
+      </div>
+
+      <!-- Snap 8: Credit recovery path -->
+      <div class="snap-card" onclick="openModal('credit')">
+        <div class="snap-card-img">
+          <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <rect width="320" height="200" fill="#0c0918"/>
+            <text x="10" y="16" fill="#3de8a0" font-size="7" font-family="monospace" opacity=".8">CREDIT RECOVERY PATHWAY</text>
+            <!-- milestone path -->
+            <line x1="30" y1="100" x2="290" y2="100" stroke="#1a1030" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="30" cy="100" r="10" fill="#9b6dff" opacity=".8"/>
+            <text x="30" y="120" text-anchor="middle" fill="#9b6dff" font-size="6.5" font-family="monospace">620</text>
+            <text x="30" y="130" text-anchor="middle" fill="#555" font-size="5.5" font-family="monospace">START</text>
+            <circle cx="100" cy="100" r="8" fill="#1a1030" stroke="#9b6dff" stroke-width="1.2"/>
+            <text x="100" y="120" text-anchor="middle" fill="#666" font-size="6.5" font-family="monospace">660</text>
+            <text x="100" y="130" text-anchor="middle" fill="#555" font-size="5.5" font-family="monospace">-30d</text>
+            <circle cx="170" cy="100" r="8" fill="#1a1030" stroke="#9b6dff" stroke-width="1.2"/>
+            <text x="170" y="120" text-anchor="middle" fill="#666" font-size="6.5" font-family="monospace">700</text>
+            <text x="170" y="130" text-anchor="middle" fill="#555" font-size="5.5" font-family="monospace">-60d</text>
+            <circle cx="240" cy="100" r="8" fill="#1a1030" stroke="#3de8a0" stroke-width="1.2"/>
+            <text x="240" y="120" text-anchor="middle" fill="#3de8a0" font-size="6.5" font-family="monospace">742</text>
+            <text x="240" y="130" text-anchor="middle" fill="#3de8a0" font-size="5.5" font-family="monospace">-90d</text>
+            <circle cx="290" cy="100" r="10" fill="#3de8a0" opacity=".75"/>
+            <text x="290" y="120" text-anchor="middle" fill="#3de8a0" font-size="6.5" font-family="monospace">780+</text>
+            <text x="290" y="130" text-anchor="middle" fill="#3de8a0" font-size="5.5" font-family="monospace">GOAL</text>
+            <!-- current indicator -->
+            <line x1="240" y1="82" x2="240" y2="62" stroke="#3de8a0" stroke-width=".8" opacity=".5"/>
+            <rect x="206" y="50" width="68" height="14" fill="#0a1a0a" stroke="#3de8a0" stroke-width=".5" rx="2"/>
+            <text x="240" y="60" text-anchor="middle" fill="#3de8a0" font-size="7" font-family="monospace">YOU ARE HERE</text>
+            <!-- next step -->
+            <rect x="10" y="148" width="300" height="38" fill="#0a140a" stroke="#3de8a0" stroke-width=".5" rx="2"/>
+            <text x="22" y="163" fill="#3de8a0" font-size="8" font-family="monospace">💡 NEXT STEP</text>
+            <text x="22" y="178" fill="#666" font-size="7.5" font-family="-apple-system,sans-serif">Pay $200 on Card 3 → unlock loan eligibility in 45 days.</text>
+          </svg>
+        </div>
+        <div class="snap-card-label">
+          <div class="snap-card-title">Credit Recovery Milestone Path</div>
+          <div class="snap-card-sub">Fintech UX · Goal-based Design</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="snap-nav">
+    <button class="snap-btn" id="snap-prev" aria-label="Previous">←</button>
+    <button class="snap-btn" id="snap-next" aria-label="Next">→</button>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS / APPROACH -->
+<section class="section" id="skills" style="padding-top:80px;padding-bottom:80px">
+  <div class="section-head">
+    <div>
+      <h2>Ways to work together</h2>
+      <p>What I bring to a team — pick what fits.</p>
+    </div>
+  </div>
+  <div class="approach-grid">
+    <div class="acard">
+      <h3>LiveOps Analytics</h3>
+      <p>I build the telemetry infrastructure and dashboards that tell you where players drop off — and why. Real-time signals, cohort views, frustration detection.</p>
+      <a href="#work" class="acard-btn">See Projects</a>
+    </div>
+    <div class="acard">
+      <h3>Behavioural Modelling</h3>
+      <p>Churn modelling, session decay, progression funnel breakdowns. I don't just identify when users leave — I map the signals that precede it.</p>
+      <a href="#work" class="acard-btn">See Projects</a>
+    </div>
+    <div class="acard">
+      <h3>Product Systems Design</h3>
+      <p>UX architecture for engagement systems — onboarding flows, reward loops, credit transparency. Connecting data findings to product decisions.</p>
+      <a href="#work" class="acard-btn">See Projects</a>
+    </div>
+    <div class="acard">
+      <h3>SQL + Python + Streamlit</h3>
+      <p>I write the queries, build the pipelines, and ship the dashboards. End-to-end — schema design through interactive front end.</p>
+      <a href="https://diamond-apparel-ca4.notion.site/Portfolio-36d20d328f448012af39c1beddca4704" target="_blank" class="acard-btn">Full Portfolio →</a>
+    </div>
+    <div class="acard">
+      <h3>Cohort &amp; Retention Analysis</h3>
+      <p>D1/D7/D30 retention tracking, engagement decay curves, lifecycle stage mapping. I find the inflection points where intervention moves the needle.</p>
+      <a href="#work" class="acard-btn">See Projects</a>
+    </div>
+    <div class="acard">
+      <h3>Fintech User Behaviour</h3>
+      <p>The same behavioural systems thinking from gaming maps directly to fintech — activation funnels, avoidance behaviour, engagement design for financial products.</p>
+      <a href="#work" class="acard-btn">See Projects</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CTA -->
+<div class="cta-wrap" id="contact">
+  <p class="cta-big">
+    Building something in live-service analytics?
+  </p>
+  <p class="cta-big cta-muted">Let's talk. 👋</p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-left">
+    © 2026 Leon Telemaque<br>
+    Currently based in Toronto, Ontario
+  </div>
+  <div class="foot-links">
+    <div class="foot-group">
+      <div class="foot-label">Portfolio</div>
+      <a href="https://diamond-apparel-ca4.notion.site/Portfolio-36d20d328f448012af39c1beddca4704" target="_blank" class="foot-link">Notion ↗</a>
+    </div>
+    <div class="foot-group">
+      <div class="foot-label">LinkedIn</div>
+      <a href="https://www.linkedin.com/in/leontelemaque/" target="_blank" class="foot-link">Connect ↗</a>
+    </div>
+    <div class="foot-group">
+      <div class="foot-label">Contact</div>
+      <a href="mailto:leon.telemaque@gmail.com" class="foot-link">Mail ↗</a>
+    </div>
+  </div>
+</footer>
+
+<!-- MODALS -->
+<div class="modal-bg" id="modal-bg" onclick="bgClick(event)">
+  <div class="modal" id="modal-inner">
+    <button class="modal-x" onclick="closeModal()">✕</button>
+    <div class="modal-frame" id="modal-frame"></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- URL DIALOG -->
+<div class="url-dlg" id="url-dlg">
+  <div class="url-inner">
+    <h3>Connect your Streamlit dashboard</h3>
+    <p>Paste the public URL of your deployed Streamlit app. It'll be embedded live in the project modal so visitors can interact with it directly.</p>
+    <input class="url-input" id="url-inp" type="url" placeholder="https://your-app.streamlit.app"/>
+    <div class="url-btns">
+      <button class="ubtn pri" onclick="saveUrl()">Save &amp; Embed</button>
+      <button class="ubtn" onclick="closeUrlDlg()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── ANIMATED FILM GRAIN ── */
+(function(){
+  const c=document.getElementById('grain');
+  const ctx=c.getContext('2d');
+  function resize(){c.width=window.innerWidth;c.height=window.innerHeight}
+  resize();
+  window.addEventListener('resize',resize);
+  function draw(){
+    const w=c.width,h=c.height;
+    const img=ctx.createImageData(w,h);
+    const d=img.data;
+    for(let i=0;i<d.length;i+=4){
+      const v=Math.random()*255|0;
+      d[i]=d[i+1]=d[i+2]=v;
+      d[i+3]=22;
+    }
+    ctx.putImageData(img,0,0);
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ── PROJECT DATA ── */
+const DATA={
+  churn:{
+    tag:'gaming',tagLabel:'Gaming · LiveOps',
+    title:'Lifecycle Churn System — Player Frustration & LiveOps Telemetry',
+    period:'Jan 2026 – Jun 2026',
+    embedUrl:'churn-sql-showcase.html',
+    streamlit:'streamlit_churn',
+    desc:'End-to-end PostgreSQL telemetry system and Streamlit dashboard monitoring player health across 10,000+ simulated sessions. Tracks loss streaks, rage quits, session exit timing, inactivity spikes, and match intensity in real time — transforming raw event data into LiveOps signals. Built schema-up: event ingestion → SQL aggregation → cohort modelling → live dashboard. <strong style="color:var(--green)">Live dashboard available — connect below.</strong>',
+    insight:'Retention breakdown occurs at specific lifecycle transition points — not as gradual decay. Frustration signals cluster at those same moments, making them predictive rather than reactive. Identifying the D7 drop-off inflection point enabled targeted intervention modelling.',
+    signals:['10,000+ session event log across simulated player cohorts','D1/D7/D30 retention curve with inflection point detection','Loss streak thresholds: 3-game flag, 5-game critical alert','Rage quit pattern clustering by session length and match outcome','Real-time match intensity pressure scoring (SQL window functions)','Cohort segmentation by engagement tier and lifecycle stage'],
+    tools:['PostgreSQL','Python','Streamlit','Window Functions','Cohort Analysis','Telemetry Schema Design'],
+    links:[{label:'View on LinkedIn',url:'https://www.linkedin.com/in/leontelemaque/overlay/Project/85894606/treasury/?profileId=ACoAAF0mRoQB4h2gyM8q7dCnyWJlNPpmdBCXPxE'},{label:'SQL Queries →',url:'#sql'}]
+  },
+  retention:{
+    tag:'gaming',tagLabel:'Gaming · Retention',
+    title:'Lifecycle Drop-Off Mapping — Dead by Daylight Retention',
+    period:'Jan 2026 – Apr 2026',
+    streamlit:null,
+    desc:'SQL + Tableau cohort retention analysis across 4 monthly cohorts (Jan–Apr 2026), tracking D1, D7, D14, D30, D60, and D90 retention for Dead by Daylight player segments. Mapped exactly where engagement collapses by lifecycle stage and identified which behavioural signals — session frequency decay, return-after-inactivity gaps — precede churn by 7–14 days.',
+    insight:'Retention does not decay linearly. It drops in discrete events at lifecycle transition points — specifically at the D7 and D30 thresholds where content novelty expires. Knowing where the cliff is allows intervention 5–7 days before players reach it.',
+    signals:['4 monthly cohorts · D1/D7/D14/D30/D60/D90 retention tracked','D7 avg retention: 42% · D30: 24% · D60: 12% across cohorts','Session frequency decay curve modelled per cohort','Return-after-inactivity gap: 7+ day absence predicts 68% churn probability','Feb cohort outperformed Jan by +11pts D7 — correlated with content patch timing'],
+    tools:['SQL','Tableau','Cohort Analysis','Retention Modelling','Lifecycle Analytics'],
+    links:[{label:'View on LinkedIn',url:'https://www.linkedin.com/in/leontelemaque/overlay/Project/1910139586/treasury/?profileId=ACoAAF0mRoQB4h2gyM8q7dCnyWJlNPpmdBCXPxE'}]
+  },
+  gacha:{
+    tag:'gaming',tagLabel:'Gaming · Systems · Genshin Impact',
+    title:'Mid-Loop Engagement Architecture — Gacha Reward & Retention Systems',
+    period:'Mar 2026 – May 2026 · Case study: Genshin Impact v4.0–4.2',
+    embedUrl:'gacha-interactive.html',
+    streamlit:null,
+    desc:'Systems analysis of Genshin Impact v4.0–4.2 (Fontaine arc, Aug–Nov 2023) — the Neuvillette and Furina banner cycle. Modelled soft pity mechanics against 10M+ community wish samples from paimon.moe, mapped spend tier distribution across F2P → Whale segments, and cross-referenced against Honkai: Star Rail across 8 design dimensions to isolate the effect of obligation mechanics on retention and revenue.',
+    insight:'HSR generates comparable revenue to Genshin while using significantly fewer obligation-based mechanics — the strongest real-world evidence that sustainable engagement is not in tension with monetisation. Obligation drives short-term spend; autonomy drives long-term retention.',
+    signals:['10M+ wish samples from paimon.moe — soft pity curve validation','Spend tier modelling: F2P / Welkin / BP / Dolphin / Whale distribution','8-dimension mechanic comparison: Genshin v4.x vs Honkai: Star Rail','D30 SQL retention model segmented by pity threshold crossing','Sensor Tower revenue data cross-referenced against patch cadence','5 LiveOps recommendations with estimated D30 retention impact'],
+    tools:['Behavioural Systems Analysis','SQL Modelling','LiveOps','Comparative Analysis','Systems Mapping'],
+    links:[{label:'Emotional Engagement Flow',url:'https://www.linkedin.com/in/leontelemaque/overlay/Project/1910294358/treasury/?profileId=ACoAAF0mRoQB4h2gyM8q7dCnyWJlNPpmdBCXPxE'}]
+  },
+  credit:{
+    tag:'fintech',tagLabel:'Fintech · UX Systems',
+    title:'Designing Transparency in Consumer Credit Platforms',
+    period:'Jun 2026',
+    embedUrl:'maya-before-after.html',
+    streamlit:null,
+    desc:'A UX systems case study on transparency-first design in consumer credit. Designed a conceptual experience with contextual "why did this change?" explanations, credit visibility within transaction flows, behavioural nudges tied to life goals, and embedded financial education at the point of action.',
+    insight:'Credit anxiety is driven less by lack of information and more by lack of context at the moment of financial decision-making. The fix isn\'t more data — it\'s better-timed explanation.',
+    signals:['Contextual "why did this change?" explanations','Credit visibility embedded in transaction flows','Behavioural nudges tied to life goals (renting, loans)','Credit recovery and rebuilding pathways','Financial education embedded at point of action'],
+    tools:['UX Systems Design','Behavioural Finance','Product Design','Service Design','Financial UX'],
+    links:[{label:'View on LinkedIn',url:'https://www.linkedin.com/in/leontelemaque/overlay/Project/97905190/treasury/?profileId=ACoAAF0mRoQB4h2gyM8q7dCnyWJlNPpmdBCXPxE'}]
+  },
+  raids:{
+    tag:'gaming-ux',tagLabel:'Gaming · Behavioural UX · LiveOps',
+    title:'Endgame Onboarding System — Destiny 2 Raid Social Architecture',
+    period:'2026 · Document RAID-ONB-ST-001 v2.4.1',
+    embedUrl:'destiny-raid-system.html',
+    streamlit:null,
+    desc:'Redesigning Bungie\'s Guided Games (Sherpa) system as a 5-layer behavioural learning architecture. Baseline analysis of the existing system identified a 56% first-raid abandonment rate — driven by coordination friction, not content difficulty. The redesigned dual-queue model (Guided Queue + Sherpa Queue) with confidence-gated progression reduced modelled abandonment to 29% across a 500-session stress test cohort.',
+    insight:'High-friction social coordination is the churn driver — not content difficulty. Players weren\'t leaving because raids were hard. They were leaving because the path to attempting them was broken. Structure removes friction without removing the challenge.',
+    signals:['Baseline: 56% abandonment rate on first-raid attempt · modelled cohort of 500+ sessions','Redesigned system: 29% abandonment — 27-point reduction','5-layer learning model: Exposure → Causal → Mastery → Temporal → Risk Control','Confidence scoring engine: multi-session smoothing across 3+ sessions before progression gate','Stress tested across 5 adversarial scenarios including communication collapse and experience-gap pairing','Dual-queue architecture: Guided Queue (new players) + Sherpa Queue (verified veterans)'],
+    tools:['UX Systems Design','Behavioural Learning Model','Onboarding Architecture','Stress Test Validation','LiveOps Design'],
+    links:[]
+  },
+  transit:{
+    tag:'ux',tagLabel:'UX · Systems Analysis · Toronto',
+    title:'Transit Accessibility & Urban UX Systems',
+    period:'Feb 2026 – Mar 2026 · Eglinton Crosstown LRT',
+    embedUrl:'transit-case-study.html',
+    streamlit:null,
+    desc:'Behavioural friction analysis of the Eglinton Crosstown — applying the same systems thinking I use for player churn and fintech drop-off to urban commuting. Maps the Before/After friction journey across five commuter touchpoints: transit access, transfers, reliability, navigation, and destination access.',
+    insight:'Commuters don\'t avoid slow transit — they avoid uncertain transit. Friction is cognitive, not just physical. The same model that predicts player churn at lifecycle transition points predicts commuter disengagement at transfer decision points.',
+    signals:['Commuter friction journey: 5-stage Before/After comparison','Perceived proximity shift across western neighbourhoods','Movement efficiency gain from direct east–west LRT routing','Cognitive load reduction through transfer elimination','Perceived vs. objective friction gap across the corridor'],
+    tools:['Behavioural Systems Analysis','UX Systems Mapping','Service Design','Figma','Urban Mobility Research'],
+    links:[{label:'Eglinton Crosstown Case Study',url:'https://www.linkedin.com/in/leontelemaque/overlay/Project/1909914223/treasury/?profileId=ACoAAF0mRoQB4h2gyM8q7dCnyWJlNPpmdBCXPxE'}]
+  },
+  marvel:{
+    tag:'gaming',tagLabel:'Gaming · LiveOps · Systems Design',
+    title:'Session Equity & Matchmaking Fairness — Marvel Rivals',
+    period:'2026 · In Progress · Document MR-MATCH-001',
+    embedUrl:'marvel-matchmaking.html',
+    streamlit:null,
+    desc:'A 3-layer behavioural matchmaking fairness system for a hero shooter — designed to preserve player agency and freedom while controlling coordination asymmetry and perceived unfairness. No role queue. No hero locks. Instead: coordination density balancing, composition volatility control, and a perception smoothing layer that determines whether a match felt fair.',
+    insight:'Fairness is not statistical equilibrium — it is interpretable agency under constraint. A player who can say "I could have played that differently" has experienced a fair match, regardless of what the numbers say.',
+    signals:['Structural layer: skill distribution, composition stability, volatility estimation','Coordination layer: stack detection, sync probability modelling, expectation bands','Perception layer: agency scoring, match readability, volatility smoothing','Stress tested against 5 adversarial scenarios including 5-stack vs solo, meta spam, and snowball comps','Soft 2-2-2 role pressure without queue locks — preserving hero identity'],
+    tools:['Behavioural Systems Design','Matchmaking Architecture','LiveOps Analytics','Coordination Modelling','UX Systems Design'],
+    links:[]
+  }
+};
+
+let activeKey=null;
+
+function openModal(key){
+  const p=DATA[key];
+  if(!p)return;
+  activeKey=key;
+
+  const frame=document.getElementById('modal-frame');
+  const stored=p.streamlit?localStorage.getItem(p.streamlit):null;
+  if(p.embedUrl && p.embedUrl2){
+    frame.innerHTML=`
+      <div style="display:flex;flex-direction:column;height:100%;">
+        <div style="display:flex;gap:2px;padding:8px 12px 0;background:var(--bg);flex-shrink:0;">
+          <button onclick="switchEmbed('embed-a','embed-b',this)" style="padding:5px 14px;font-size:.73rem;font-weight:600;background:var(--surface2);border:1px solid var(--border2);color:var(--text);cursor:pointer;border-radius:4px 4px 0 0;font-family:var(--sans);">${p.embedLabel}</button>
+          <button onclick="switchEmbed('embed-b','embed-a',this)" style="padding:5px 14px;font-size:.73rem;font-weight:500;background:transparent;border:1px solid transparent;color:var(--muted2);cursor:pointer;border-radius:4px 4px 0 0;font-family:var(--sans);">${p.embedLabel2}</button>
+        </div>
+        <div style="flex:1;position:relative;">
+          <iframe id="embed-a" src="${p.embedUrl}" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" allow="fullscreen" style="position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>
+          <iframe id="embed-b" src="${p.embedUrl2}" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" allow="fullscreen" style="position:absolute;inset:0;width:100%;height:100%;border:none;display:none;"></iframe>
+        </div>
+      </div>`;
+  } else if(p.embedUrl){
+    frame.innerHTML=`<iframe src="${p.embedUrl}" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" allow="fullscreen" style="width:100%;height:100%;border:none;"></iframe>`;
+  } else if(stored){
+    frame.innerHTML=`<iframe src="${stored}" sandbox="allow-scripts allow-same-origin allow-forms" allow="fullscreen"></iframe>`;
+  } else if(p.streamlit){
+    frame.innerHTML=`<div class="streamlit-cta">
+      <div class="streamlit-cta-inner">
+        <div class="streamlit-cta-eyebrow">Live Dashboard Available</div>
+        <div class="streamlit-cta-title">Player Frustration &amp; Churn — Streamlit Dashboard</div>
+        <div class="streamlit-cta-desc">
+          The live Streamlit app visualises real-time frustration signals, D1/D7/D30 retention curves, loss streak detection, and cohort breakdowns across 10,000+ sessions.
+          Built end-to-end: PostgreSQL schema → Python aggregation → deployed dashboard.<br><br>
+          <strong>Paste the deployed URL to embed it live:</strong>
+        </div>
+        <div class="streamlit-cta-input-row">
+          <input class="streamlit-cta-input" id="st-url-inp-${p.streamlit}" type="url" placeholder="https://your-app.streamlit.app"/>
+          <button class="streamlit-cta-btn" onclick="(function(){const u=document.getElementById('st-url-inp-${p.streamlit}').value.trim();if(u){localStorage.setItem('${p.streamlit}',u);location.reload();}})()">Embed →</button>
+        </div>
+        <div class="streamlit-cta-note">URL is saved locally — only visible to you. Reload the modal after embedding.</div>
+      </div>
+    </div>`;
+  } else {
+    frame.innerHTML=`<div class="modal-placeholder">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span>UX &amp; Systems case study — see links below</span>
+    </div>`;
+  }
+
+  const links=p.links.length
+    ?`<div class="modal-links">${p.links.map(l=>`<a href="${l.url}" target="_blank" class="mlink">↗ ${l.label}</a>`).join('')}</div>`
+    :'';
+
+  document.getElementById('modal-body').innerHTML=`
+    <span class="modal-tag tag-${p.tag}">${p.tagLabel}</span>
+    <h2 class="modal-title">${p.title}</h2>
+    <p class="modal-period">${p.period}</p>
+    <p class="modal-desc">${p.desc}</p>
+    <div class="insight-block">
+      <div class="insight-label">Key Insight</div>
+      <p class="insight-text">${p.insight}</p>
+    </div>
+    <p class="signals-head">Data Signals / System Components</p>
+    <ul class="signals-list">${p.signals.map(s=>`<li>${s}</li>`).join('')}</ul>
+    <div class="modal-tools">${p.tools.map(t=>`<span class="ptag">${t}</span>`).join('')}</div>
+    ${links}
+  `;
+
+  document.getElementById('modal-bg').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(){
+  document.getElementById('modal-bg').classList.remove('open');
+  document.body.style.overflow='';
+  document.getElementById('modal-frame').innerHTML='';
+}
+
+function bgClick(e){if(e.target===document.getElementById('modal-bg'))closeModal();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+/* URL DIALOG */
+let pendingKey=null;
+function openUrlDlg(key){
+  pendingKey=key;
+  document.getElementById('url-inp').value=localStorage.getItem(key)||'';
+  document.getElementById('url-dlg').classList.add('open');
+}
+function closeUrlDlg(){document.getElementById('url-dlg').classList.remove('open');pendingKey=null;}
+/* ── DUAL EMBED TAB SWITCH ── */
+function switchEmbed(showId, hideId, btn){
+  const show=document.getElementById(showId);
+  const hide=document.getElementById(hideId);
+  if(!show||!hide) return;
+  show.style.display='block';
+  hide.style.display='none';
+  // update button styles
+  const btns=btn.parentElement.querySelectorAll('button');
+  btns.forEach(b=>{
+    b.style.background='transparent';
+    b.style.borderColor='transparent';
+    b.style.color='var(--muted2)';
+    b.style.fontWeight='500';
+  });
+  btn.style.background='var(--surface2)';
+  btn.style.borderColor='var(--border2)';
+  btn.style.color='var(--text)';
+  btn.style.fontWeight='600';
+}
+
+/* ── SNAPSHOTS DRAG SCROLL ── */
+(function(){
+  const track = document.getElementById('snap-track');
+  if(!track) return;
+  let isDown=false, startX=0, scrollLeft=0;
+
+  track.addEventListener('mousedown', e=>{
+    isDown=true;
+    track.classList.add('dragging');
+    startX = e.pageX - track.offsetLeft;
+    scrollLeft = track.scrollLeft;
+  });
+  document.addEventListener('mouseup', ()=>{ isDown=false; track.classList.remove('dragging'); });
+  track.addEventListener('mouseleave', ()=>{ isDown=false; track.classList.remove('dragging'); });
+  track.addEventListener('mousemove', e=>{
+    if(!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - track.offsetLeft;
+    const walk = (x - startX) * 1.4;
+    track.scrollLeft = scrollLeft - walk;
+  });
+
+  // touch support
+  let touchStartX=0, touchScrollLeft=0;
+  track.addEventListener('touchstart', e=>{ touchStartX=e.touches[0].pageX; touchScrollLeft=track.scrollLeft; }, {passive:true});
+  track.addEventListener('touchmove', e=>{
+    const dx = e.touches[0].pageX - touchStartX;
+    track.scrollLeft = touchScrollLeft - dx;
+  }, {passive:true});
+
+  // arrow buttons
+  const STEP = 340;
+  document.getElementById('snap-prev').addEventListener('click', ()=>{ track.scrollBy({left:-STEP, behavior:'smooth'}); });
+  document.getElementById('snap-next').addEventListener('click', ()=>{ track.scrollBy({left:STEP, behavior:'smooth'}); });
+})();
+
+function saveUrl(){
+  const v=document.getElementById('url-inp').value.trim();
+  if(!v||!pendingKey)return;
+  localStorage.setItem(pendingKey,v);
+  closeUrlDlg();
+  openModal(activeKey);
+}
+</script>
+</body>
+</html>

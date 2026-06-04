@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maya Banking — Before & After</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #111;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 40px 24px;
+}
+
+/* Page header */
+.page-header {
+  text-align: center;
+  color: white;
+}
+.page-header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+.page-header p  { color: #888; font-size: 14px; margin-top: 6px; }
+
+/* Comparison row */
+.comparison {
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Label above each phone */
+.phone-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.phone-label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 20px;
+  border-radius: 20px;
+}
+.label-before { background: #c0272d; color: white; }
+.label-after  { background: #2e6e8c; color: white; }
+
+/* ── iPhone shell ── */
+.iphone-shell {
+  position: relative;
+  width: 320px;
+  height: 692px;
+  flex-shrink: 0;
+}
+.iphone-frame {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, #2a2a2a 0%, #1a1a1a 40%, #0d0d0d 100%);
+  border-radius: 50px;
+  box-shadow:
+    0 0 0 1px #555,
+    0 0 0 3px #111,
+    0 30px 80px rgba(0,0,0,0.7),
+    inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.btn-side {
+  position: absolute;
+  background: linear-gradient(90deg, #333, #222);
+  border-radius: 3px;
+}
+.btn-silent   { left:-3px; top:90px;  width:3px; height:28px; }
+.btn-vol-up   { left:-3px; top:130px; width:3px; height:48px; }
+.btn-vol-down { left:-3px; top:188px; width:3px; height:48px; }
+.btn-power    { right:-3px; top:148px; width:3px; height:60px; }
+.iphone-screen-bezel {
+  position: absolute;
+  top:10px; left:10px; right:10px; bottom:10px;
+  background: #000;
+  border-radius: 42px;
+  overflow: hidden;
+}
+.dynamic-island {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  height: 26px;
+  background: #000;
+  border-radius: 16px;
+  z-index: 10;
+}
+
+/* ── App shell ── */
+.app {
+  width: 100%;
+  height: 100%;
+  border-radius: 42px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #f2f2f2;
+}
+
+/* Status bar */
+.status-bar {
+  padding: 44px 16px 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+/* Screens */
+.screens { flex:1; position:relative; overflow:hidden; }
+.screen  { position:absolute; inset:0; display:none; flex-direction:column; overflow:hidden; }
+.screen.active { display:flex; }
+
+/* ── SHARED COMPONENTS ── */
+.scroll-body {
+  flex:1; overflow-y:auto; padding:12px 12px 0;
+  -webkit-overflow-scrolling: touch;
+}
+.scroll-body::-webkit-scrollbar { display:none; }
+
+.tab-card {
+  background: white;
+  border-radius: 14px;
+  margin: -28px 12px 0;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.tabs { display:flex; border-bottom:1px solid #f0f0f0; }
+.tab {
+  flex:1; padding:12px 8px 10px;
+  text-align:center; font-size:12px; font-weight:600; color:#555;
+  cursor:pointer; border-bottom:3px solid transparent;
+  user-select:none; transition:all 0.2s;
+}
+.dropdown-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:11px 14px; cursor:pointer; user-select:none;
+}
+.dropdown-row span { font-size:12px; font-weight:600; color:#222; }
+.chevron { color:#4fc3f7; font-size:13px; transition:transform 0.3s; }
+.chevron.open { transform:rotate(180deg); }
+.dd-content { display:none; padding:0 14px 10px; border-top:1px solid #f5f5f5; }
+.dd-content.open { display:block; }
+.stmt-row { display:flex; justify-content:space-between; padding:6px 0; font-size:11px; color:#555; }
+
+.account-pill {
+  background: #b5a9a4;
+  border-radius: 12px;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:14px 16px; margin-bottom:14px;
+  cursor:pointer; transition:transform 0.15s;
+}
+.account-pill:hover { transform:translateY(-1px); }
+.account-pill span { color:white; font-size:13px; font-weight:600; }
+
+/* ── BEFORE (RED) ── */
+.before-header { background:#c0272d; padding:16px 16px 44px; flex-shrink:0; }
+.before-header h1 { color:white; font-size:18px; font-weight:700; }
+.before-header p  { color:rgba(255,255,255,0.85); font-size:12px; margin-top:2px; }
+
+.tab-active-red { color:#c0272d !important; border-bottom-color:#c0272d !important; }
+.tab-inactive-red { border-bottom-color:#555; }
+
+.tu-pill {
+  background:#b5a9a4; border-radius:12px;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:14px 16px; margin-bottom:14px; cursor:pointer; transition:transform 0.15s;
+}
+.tu-pill:hover { transform:translateY(-1px); }
+.tu-pill span { color:white; font-size:12px; font-weight:600; }
+.badge { background:#6b2d5e; color:white; padding:4px 10px; border-radius:16px; font-size:10px; font-weight:700; }
+
+.updates-box { background:#c0272d; border-radius:14px; padding:16px; }
+.updates-box-hdr { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.updates-box h2 { color:white; font-size:16px; font-weight:700; }
+.update-card {
+  background:white; border-radius:10px; padding:10px 12px;
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:8px; cursor:pointer; transition:transform 0.15s;
+}
+.update-card:hover { transform:translateX(3px); }
+.update-card:last-child { margin-bottom:0; }
+.uc-icon { font-size:18px; flex-shrink:0; }
+.uc-text { font-size:11px; color:#333; line-height:1.4; }
+.uc-text a { color:#2e6e8c; font-weight:600; text-decoration:none; }
+
+/* Credit (before — red) */
+.before-credit-header { background:#c0272d; padding:12px 16px 14px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+.before-credit-header .bird { font-size:32px; }
+.credit-title-row { display:flex; align-items:center; gap:6px; }
+.credit-title-row h2 { color:white; font-size:16px; font-weight:700; }
+.help-circle { color:white; border:2px solid white; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; }
+
+/* ── AFTER (TEAL) ── */
+.after-header { background:#2e6e8c; padding:16px 16px 44px; position:relative; flex-shrink:0; }
+.after-header h1 { color:white; font-size:18px; font-weight:700; }
+.bird-mascot { position:absolute; right:12px; top:10px; font-size:28px; cursor:pointer; transition:transform 0.2s; }
+.bird-mascot:hover { transform:scale(1.15) rotate(-5deg); }
+
+.tab-active-teal { color:#c0272d !important; border-bottom-color:#c0272d !important; }
+
+.cqv { background:#2e6e8c; border-radius:14px; padding:16px; margin-bottom:8px; }
+.cqv h2 { color:white; font-size:16px; font-weight:700; margin-bottom:10px; }
+.cqv-stats { display:flex; gap:12px; margin-bottom:6px; flex-wrap:wrap; }
+.cqv-stat { color:white; font-size:11px; }
+.cqv-payment { color:white; font-size:11px; margin-bottom:12px; }
+.cqv-payment .check { color:#4CAF50; font-weight:700; }
+.insight-card {
+  background:white; border-radius:10px; padding:10px 12px;
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:8px; cursor:pointer; transition:transform 0.15s;
+}
+.insight-card:hover { transform:translateX(3px); }
+.insight-card:last-child { margin-bottom:0; }
+.ic-icon { font-size:20px; flex-shrink:0; }
+.ic-text { font-size:11px; color:#333; line-height:1.4; }
+
+/* Credit centre (after — teal) */
+.after-credit-header { background:#2e6e8c; padding:12px 16px 14px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+.after-credit-header .bird { font-size:32px; }
+
+.score-card { background:white; margin:10px 12px; border-radius:14px; padding:14px; box-shadow:0 2px 8px rgba(0,0,0,0.08); flex-shrink:0; }
+.score-hdr { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.score-title { font-size:12px; font-weight:700; color:#222; }
+.badge-sm { background:#6b2d5e; color:white; padding:4px 8px; border-radius:12px; font-size:10px; font-weight:700; }
+.speech-row { display:flex; justify-content:center; margin-bottom:10px; }
+.bubble { background:white; border:1.5px solid #ddd; border-radius:10px; padding:4px 10px; font-size:10px; font-weight:600; color:#333; }
+.gauge-bar { height:16px; border-radius:8px; background:linear-gradient(to right,#d32f2f,#e64a19,#f57c00,#fbc02d,#aed581,#66bb6a,#2e7d32); position:relative; margin-bottom:6px; }
+.needle { position:absolute; top:-4px; width:2px; height:24px; background:#222; border-radius:2px; left:60%; transition:left 0.8s cubic-bezier(0.34,1.56,0.64,1); }
+.gauge-labels { display:flex; justify-content:space-between; padding:0 2px; }
+.gm { display:flex; flex-direction:column; align-items:center; font-size:9px; color:#666; gap:1px; }
+.gm-icon { font-size:14px; }
+
+.menu-list { margin:8px 12px 0; }
+.menu-item {
+  background:#b5a9a4; border-radius:10px; padding:12px;
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:6px; cursor:pointer; transition:transform 0.15s;
+}
+.menu-item:hover { transform:translateX(4px); }
+.mi-icon { font-size:16px; }
+.mi-label { flex:1; color:white; font-size:11px; font-weight:600; }
+.mi-arrow { color:#4fc3f7; font-size:13px; }
+
+.insights-grid-wrap { margin:8px 12px 0; }
+.insights-lbl { font-size:11px; color:#555; margin-bottom:8px; }
+.insights-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.itile {
+  background:white; border-radius:12px; padding:10px;
+  font-size:10px; color:#333; line-height:1.4;
+  cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.06);
+  transition:transform 0.15s; min-height:70px;
+  display:flex; flex-direction:column; justify-content:space-between;
+}
+.itile:hover { transform:translateY(-2px); }
+.itile-icon { font-size:16px; align-self:flex-end; margin-top:4px; }
+
+/* Bottom nav */
+.bottom-nav {
+  background:white; display:flex;
+  border-top:1px solid #e8e8e8;
+  padding:6px 0 14px; flex-shrink:0;
+}
+.nav-item {
+  flex:1; display:flex; flex-direction:column;
+  align-items:center; gap:2px;
+  cursor:pointer; padding:3px; transition:transform 0.15s; user-select:none;
+}
+.nav-item:hover { transform:translateY(-2px); }
+.nav-icon { font-size:18px; }
+.nav-label { font-size:9px; color:#666; font-weight:500; }
+.nav-item.nav-active .nav-label { color:#c0272d; font-weight:700; }
+
+/* Toast */
+.toast {
+  position:fixed; bottom:40px; left:50%; transform:translateX(-50%);
+  background:rgba(0,0,0,0.8); color:white;
+  padding:8px 18px; border-radius:20px; font-size:12px;
+  opacity:0; pointer-events:none; transition:opacity 0.3s;
+  white-space:nowrap; z-index:1000;
+}
+.toast.show { opacity:1; }
+
+/* ── After credit dropdowns ── */
+.after-dd {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+  background: white;
+  border-radius: 0 0 10px 10px;
+  margin: -6px 0 6px;
+}
+.after-dd.open { max-height: 400px; }
+.after-dd-row {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 9px 12px;
+  border-bottom: 1px solid #f5f5f5;
+}
+.after-dd-row:last-child { border-bottom: none; }
+.after-dd-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.after-dd-title { font-size: 10px; font-weight: 700; color: #222; margin-bottom: 2px; }
+.after-dd-sub   { font-size: 9px; color: #777; line-height: 1.4; }
+
+.milestone-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #f5f5f5;
+}
+.milestone-row:last-child { border-bottom: none; }
+.milestone-row.completed .after-dd-title { color: #2e7d32; }
+.milestone-row.active     .after-dd-title { color: #f57c00; }
+.ms-check {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: #e8f5e9; color: #2e7d32;
+  border: 1.5px solid #2e7d32;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; flex-shrink: 0;
+}
+
+.learn-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 12px;
+  border-bottom: 1px solid #f5f5f5;
+  cursor: pointer; font-size: 10px; color: #333; font-weight: 500;
+  transition: background 0.15s;
+}
+.learn-pill:last-child { border-bottom: none; }
+.learn-pill:hover { background: #f9f9f9; }
+.learn-pill span:first-child { font-size: 14px; }
+
+/* Arrow rotation when open */
+.mi-arrow.open { transform: rotate(90deg); }
+
+/* ── Account rows ── */
+.acc-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 14px; cursor: pointer; transition: background 0.15s;
+}
+.acc-row:hover { background: rgba(255,255,255,0.06); }
+.acc-row-left { display: flex; align-items: center; gap: 10px; }
+.acc-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; font-size: 16px;
+}
+.acc-name { font-size: 12px; font-weight: 700; color: white; }
+.acc-sub  { font-size: 9px; color: rgba(255,255,255,0.5); margin-top: 1px; }
+.acc-amount { font-size: 12px; font-weight: 700; color: white; }
+.acc-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 0 14px; }
+
+/* ── Thesis panel ── */
+.thesis-panel {
+  max-width: 780px;
+  text-align: center;
+  padding: 20px 28px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  margin-bottom: 8px;
+}
+.thesis-quote {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  letter-spacing: -0.2px;
+}
+.thesis-sub {
+  font-size: 13px;
+  color: #888;
+  line-height: 1.7;
+}
+.thesis-sub em { color: #bbb; font-style: normal; font-weight: 600; }
+
+/* ── Annotation strip ── */
+.annotation-strip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  align-self: center;
+  padding: 0 4px;
+}
+.ann-arrow {
+  font-size: 28px;
+  color: #555;
+}
+.ann-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ann-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #666;
+  white-space: nowrap;
+}
+.ann-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.ann-dot.red { background: #c0272d; }
+
+/* ── Score ring ── */
+.score-ring-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.score-ring-wrap {
+  position: relative;
+  width: 72px; height: 72px;
+  flex-shrink: 0;
+}
+.ring-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.ring-score { font-size: 16px; font-weight: 800; color: white; line-height: 1; }
+.ring-max   { font-size: 8px; color: rgba(255,255,255,0.5); }
+.score-ring-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.ring-stat { display: flex; flex-direction: column; }
+.ring-stat-val { font-size: 13px; font-weight: 700; color: white; }
+.ring-stat-lbl { font-size: 9px; color: rgba(255,255,255,0.55); }
+
+/* ── Nudge card ── */
+.nudge-card {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.nudge-card:hover { transform: translateX(3px); }
+.nudge-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.nudge-icon { font-size: 13px; }
+.nudge-title { font-size: 10px; font-weight: 700; color: #ffe082; text-transform: uppercase; letter-spacing: 0.5px; }
+.nudge-body { font-size: 11px; color: rgba(255,255,255,0.9); line-height: 1.4; margin-bottom: 6px; }
+.nudge-body strong { color: white; }
+.nudge-cta { font-size: 10px; color: #4fc3f7; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Encouraging Credit Transparency</h1>
+  <p>Redesigning credit visibility for everyday users</p>
+</div>
+
+<!-- Thesis panel -->
+<div class="thesis-panel">
+  <div class="thesis-quote">"Most banks show you your credit score.<br>They don't show you what it means."</div>
+  <div class="thesis-sub">This case study explores how surfacing the <em>right</em> credit signals — in plain language, at the right moment — changes how users relate to their financial health. The Before reflects a typical bank experience: data-dense, jargon-heavy, passive. The After is built around behavioural transparency: clarity, momentum, and actionable next steps.</div>
+</div>
+
+<div class="comparison">
+
+  <!-- ═══════════════════ BEFORE (RED) ═══════════════════ -->
+  <div class="phone-col">
+    <div class="phone-label label-before">Before</div>
+    <div class="iphone-shell">
+      <div class="iphone-frame"></div>
+      <div class="btn-side btn-silent"></div>
+      <div class="btn-side btn-vol-up"></div>
+      <div class="btn-side btn-vol-down"></div>
+      <div class="btn-side btn-power"></div>
+      <div class="iphone-screen-bezel">
+        <div class="dynamic-island"></div>
+        <div class="app">
+          <div class="status-bar" id="sb-before" style="background:#c0272d;">
+            <span>00:00</span>
+            <div style="display:flex;gap:4px;align-items:center;font-size:10px;">
+              <span>5G</span><span>📶</span><span>🔋</span>
+            </div>
+          </div>
+
+          <div class="screens">
+            <!-- BEFORE: HOME -->
+            <div class="screen active" id="b-home">
+              <div class="before-header">
+                <h1>Hello Maya</h1>
+                <p>Here's your financial overview</p>
+              </div>
+              <div class="tab-card">
+                <div class="tabs">
+                  <div class="tab tab-active-red">My Accounts</div>
+                  <div class="tab tab-inactive-red">My Updates</div>
+                </div>
+                <div class="dropdown-row" onclick="toggleDD('b-dd','b-ch')">
+                  <span>Recent Statements</span>
+                  <span class="chevron" id="b-ch">⌄</span>
+                </div>
+                <div class="dd-content" id="b-dd">
+                  <div class="stmt-row"><span>June 2025</span><span style="color:#c0272d;font-weight:600">View →</span></div>
+                  <div class="stmt-row"><span>May 2025</span><span style="color:#c0272d;font-weight:600">View →</span></div>
+                </div>
+              </div>
+              <div class="scroll-body">
+                <div class="tu-pill" onclick="toggleCreditPanel()" style="cursor:pointer;">
+                  <span>Trans Credit Union Score</span>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <span class="badge">Updated</span>
+                    <span class="chevron">⌄</span>
+                  </div>
+                </div>
+                <!-- Confusing credit panel -->
+                <div id="credit-panel" style="
+                  max-height:0; overflow:hidden;
+                  transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1);
+                  background:#f9f9f9; border-radius:10px; margin-bottom:10px;
+                ">
+                  <div style="padding:10px 10px 6px; font-size:9px; color:#333;">
+                    <!-- Header row -->
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                      <span style="font-size:8px;font-weight:700;color:#555;letter-spacing:0.5px;">TRANS CREDIT UNION — RISK ASSESSMENT REPORT v4.2.1</span>
+                      <span style="font-size:7px;color:#aaa;">REF: TCU-2025-06-DELTA</span>
+                    </div>
+
+                    <!-- Score row with jargon -->
+                    <div style="background:#e8e8e8;border-radius:6px;padding:6px 8px;margin-bottom:6px;">
+                      <div style="display:flex;justify-content:space-between;font-size:8px;font-weight:700;color:#333;margin-bottom:3px;">
+                        <span>FICO® Score 8 (Bankcard Enhanced)</span>
+                        <span style="color:#555;">742 / 850</span>
+                      </div>
+                      <div style="display:flex;gap:2px;margin-bottom:3px;">
+                        <div style="flex:1.5;height:5px;background:#d32f2f;border-radius:2px 0 0 2px;"></div>
+                        <div style="flex:1;height:5px;background:#e64a19;"></div>
+                        <div style="flex:1;height:5px;background:#f57c00;"></div>
+                        <div style="flex:1;height:5px;background:#fbc02d;"></div>
+                        <div style="flex:2;height:5px;background:#66bb6a;"></div>
+                        <div style="flex:1;height:5px;background:#2e7d32;border-radius:0 2px 2px 0;position:relative;">
+                          <div style="position:absolute;top:-3px;left:10%;width:1px;height:11px;background:#111;"></div>
+                        </div>
+                      </div>
+                      <div style="display:flex;justify-content:space-between;font-size:6.5px;color:#888;">
+                        <span>300</span><span>Subprime</span><span>Near Prime</span><span>Prime</span><span>Super Prime</span><span>850</span>
+                      </div>
+                    </div>
+
+                    <!-- Dense table -->
+                    <div style="font-size:7.5px;font-weight:700;color:#444;margin-bottom:3px;">ACCOUNT SUMMARY (TRADELINE DETAIL)</div>
+                    <table style="width:100%;border-collapse:collapse;font-size:7px;color:#555;">
+                      <thead>
+                        <tr style="background:#eee;">
+                          <th style="padding:3px 2px;text-align:left;border:1px solid #ddd;">Creditor</th>
+                          <th style="padding:3px 2px;text-align:right;border:1px solid #ddd;">Bal.</th>
+                          <th style="padding:3px 2px;text-align:right;border:1px solid #ddd;">Lmt.</th>
+                          <th style="padding:3px 2px;text-align:right;border:1px solid #ddd;">Util%</th>
+                          <th style="padding:3px 2px;text-align:center;border:1px solid #ddd;">Stat.</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr><td style="padding:2px;border:1px solid #eee;">TCU VISA PLAT.</td><td style="padding:2px;text-align:right;border:1px solid #eee;">$1,240</td><td style="padding:2px;text-align:right;border:1px solid #eee;">$6,000</td><td style="padding:2px;text-align:right;border:1px solid #eee;color:#f57c00;">20.7%</td><td style="padding:2px;text-align:center;border:1px solid #eee;color:#2e7d32;">R1</td></tr>
+                        <tr style="background:#fafafa;"><td style="padding:2px;border:1px solid #eee;">AUTO LOAN 001</td><td style="padding:2px;text-align:right;border:1px solid #eee;">$8,450</td><td style="padding:2px;text-align:right;border:1px solid #eee;">$18,000</td><td style="padding:2px;text-align:right;border:1px solid #eee;">47.0%</td><td style="padding:2px;text-align:center;border:1px solid #eee;color:#2e7d32;">I1</td></tr>
+                        <tr><td style="padding:2px;border:1px solid #eee;">LOC PERSONAL</td><td style="padding:2px;text-align:right;border:1px solid #eee;">$0</td><td style="padding:2px;text-align:right;border:1px solid #eee;">$5,000</td><td style="padding:2px;text-align:right;border:1px solid #eee;color:#2e7d32;">0.0%</td><td style="padding:2px;text-align:center;border:1px solid #eee;color:#2e7d32;">O1</td></tr>
+                        <tr style="background:#fafafa;"><td style="padding:2px;border:1px solid #eee;">STU. LOAN (FED)</td><td style="padding:2px;text-align:right;border:1px solid #eee;">$12,300</td><td style="padding:2px;text-align:right;border:1px solid #eee;">$22,000</td><td style="padding:2px;text-align:right;border:1px solid #eee;">55.9%</td><td style="padding:2px;text-align:center;border:1px solid #eee;color:#2e7d32;">I1</td></tr>
+                      </tbody>
+                    </table>
+
+                    <!-- Footer disclaimer -->
+                    <div style="margin-top:6px;font-size:6px;color:#bbb;line-height:1.4;">
+                      * Score calculated using VantageScore 3.0 model. FICO® Score 8 may differ. Utilization ratios reflect statement balances. Δ denotes month-over-month change. AAoA = Average Age of Accounts. Hard inquiries older than 24 months excluded. R1=Revolving, I1=Installment, O1=Open. Data sourced from Trans Credit Union reporting bureau as of 2025-06-03. Not a guarantee of creditworthiness. For disputes contact bureau.compliance@tcu.ca
+                    </div>
+                  </div>
+                </div>
+
+                <div class="updates-box">
+                  <div class="updates-box-hdr">
+                    <h2>Updates</h2><span style="font-size:18px;">💡</span>
+                  </div>
+                  <div class="update-card" onclick="toast('Make a payment to stay on track')">
+                    <div class="uc-icon">⚠️</div>
+                    <div class="uc-text">You are behind on credit payments — repeat failure may impact your credit score.</div>
+                  </div>
+                  <div class="update-card" onclick="toast('Go to settings to customize')">
+                    <div class="uc-icon">📢</div>
+                    <div class="uc-text">Customize the accounts on your home screen. <a href="#">See how</a></div>
+                  </div>
+                </div>
+              </div>
+              <div class="bottom-nav">
+                <div class="nav-item nav-active" onclick="bNav('b-home','home')"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
+                <div class="nav-item" style="opacity:0.35;pointer-events:none"><div class="nav-icon">💸</div><div class="nav-label">Transfers</div></div>
+                <div class="nav-item" style="opacity:0.35;pointer-events:none"><div class="nav-icon">📄</div><div class="nav-label">Bills</div></div>
+                <div class="nav-item" style="opacity:0.35;pointer-events:none"><div class="nav-icon">💳</div><div class="nav-label">Cards</div></div>
+                <div class="nav-item" onclick="toast('More coming soon')"><div class="nav-icon">···</div><div class="nav-label">More</div></div>
+              </div>
+            </div>
+
+            <!-- BEFORE: CREDIT -->
+            <div class="screen" id="b-credit">
+              <div class="before-credit-header">
+                <div class="bird" onclick="toast('Tweet!')">🐤</div>
+                <div class="credit-title-row">
+                  <h2>Help Centre</h2>
+                  <div class="help-circle">?</div>
+                </div>
+              </div>
+              <div class="score-card">
+                <div class="score-hdr">
+                  <span class="score-title">TransUnion Credit Score</span>
+                  <span class="badge-sm">Updated</span>
+                </div>
+                <div class="speech-row">
+                  <div>
+                    <div class="bubble">Keep it up Maya!</div>
+                    <div style="text-align:center;font-size:24px;margin-top:2px;">🐧</div>
+                  </div>
+                </div>
+                <div class="gauge-bar">
+                  <div class="needle" id="b-needle" style="left:60%"></div>
+                </div>
+                <div class="gauge-labels">
+                  <div class="gm"><span class="gm-icon">🚗</span><span>640</span></div>
+                  <div class="gm"><span class="gm-icon">🏢</span><span>740</span></div>
+                  <div class="gm"><span class="gm-icon">✈️</span><span>810</span></div>
+                  <div class="gm"><span class="gm-icon">🏆</span><span>850+</span></div>
+                </div>
+              </div>
+              <div class="menu-list" style="flex:1;overflow-y:auto;">
+                <div class="menu-item" onclick="toast('Understand & Improve your score')"><span class="mi-icon">📈</span><span class="mi-label">Understand and Improve your score</span><span class="mi-arrow">›</span></div>
+                <div class="menu-item" onclick="toast('Credit Score History')"><span class="mi-icon">📘</span><span class="mi-label">Credit Score History</span><span class="mi-arrow">›</span></div>
+                <div class="menu-item" onclick="toast('Financial Milestones')"><span class="mi-icon">🏠</span><span class="mi-label">Financial Milestones</span><span class="mi-arrow">›</span></div>
+                <div class="menu-item" onclick="toast('Credit Learning Hub')"><span class="mi-icon">🐦</span><span class="mi-label">Credit Learning Hub</span><span class="mi-arrow">›</span></div>
+                <div class="insights-grid-wrap">
+                  <div class="insights-lbl">Based on your credit activity</div>
+                  <div class="insights-grid">
+                    <div class="itile" onclick="toast('742 qualifies for auto loans 🚗')">Dream car? Your score exceeds the average for vehicle financing.<div class="itile-icon">🐦</div></div>
+                    <div class="itile" onclick="toast('760+ in 6 months!')">Slow and steady — you may reach 760+ in 6 months.<div class="itile-icon">🕐</div></div>
+                  </div>
+                </div>
+                <div style="height:12px;"></div>
+              </div>
+              <div class="bottom-nav">
+                <div class="nav-item" onclick="bNav('b-home','home')"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
+                <div class="nav-item" style="opacity:0.35;pointer-events:none"><div class="nav-icon">💸</div><div class="nav-label">Transfers</div></div>
+                <div class="nav-item" style="opacity:0.35;pointer-events:none"><div class="nav-icon">📄</div><div class="nav-label">Bills</div></div>
+                <div class="nav-item" style="opacity:0.35;pointer-events:none"><div class="nav-icon">💳</div><div class="nav-label">Cards</div></div>
+                <div class="nav-item" onclick="toast('More coming soon')"><div class="nav-icon">···</div><div class="nav-label">More</div></div>
+              </div>
+            </div>
+          </div><!-- /screens -->
+        </div><!-- /app -->
+      </div><!-- /bezel -->
+    </div><!-- /shell -->
+  </div><!-- /phone-col -->
+
+  <!-- Annotation strip -->
+  <div class="annotation-strip">
+    <div class="ann-arrow">→</div>
+    <div class="ann-list">
+      <div class="ann-item">
+        <div class="ann-dot red"></div>
+        <span>Jargon table → plain-language insights</span>
+      </div>
+      <div class="ann-item">
+        <div class="ann-dot red"></div>
+        <span>Score hidden in reports → always visible on home</span>
+      </div>
+      <div class="ann-item">
+        <div class="ann-dot red"></div>
+        <span>Warning-only updates → positive + actionable nudges</span>
+      </div>
+      <div class="ann-item">
+        <div class="ann-dot red"></div>
+        <span>No credit section → dedicated Credit Centre</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ AFTER (TEAL) ═══════════════════ -->
+  <div class="phone-col">
+    <div class="phone-label label-after">After</div>
+    <div class="iphone-shell">
+      <div class="iphone-frame"></div>
+      <div class="btn-side btn-silent"></div>
+      <div class="btn-side btn-vol-up"></div>
+      <div class="btn-side btn-vol-down"></div>
+      <div class="btn-side btn-power"></div>
+      <div class="iphone-screen-bezel">
+        <div class="dynamic-island"></div>
+        <div class="app">
+          <div class="status-bar" id="sb-after" style="background:#2e6e8c;">
+            <span>00:00</span>
+            <div style="display:flex;gap:4px;align-items:center;font-size:10px;">
+              <span>5G</span><span>📶</span><span>🔋</span>
+            </div>
+          </div>
+
+          <div class="screens">
+            <!-- AFTER: HOME -->
+            <div class="screen active" id="a-home">
+              <div class="after-header">
+                <h1>Hello Maya</h1>
+                <div class="bird-mascot" onclick="toast('Tweet! Keep building those habits 🐦')">🐦</div>
+              </div>
+              <div class="tab-card">
+                <div class="tabs">
+                  <div class="tab tab-active-teal">My Accounts</div>
+                  <div class="tab" style="border-bottom-color:#555">My Updates</div>
+                </div>
+                <div class="dropdown-row" onclick="toggleDD('a-dd','a-ch')">
+                  <span>Recent Statements</span>
+                  <span class="chevron" id="a-ch">⌄</span>
+                </div>
+                <div class="dd-content" id="a-dd">
+                  <div class="stmt-row"><span>June 2025</span><span style="color:#2e6e8c;font-weight:600">View →</span></div>
+                  <div class="stmt-row"><span>May 2025</span><span style="color:#2e6e8c;font-weight:600">View →</span></div>
+                </div>
+              </div>
+              <div class="scroll-body">
+                <div class="account-pill" onclick="toggleAccounts()" style="border-radius:12px 12px 0 0;margin-bottom:0;">
+                  <span>My Accounts</span>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="color:white;font-size:11px;opacity:0.7;">3 accounts</span>
+                    <span class="chevron" id="acc-chevron">⌄</span>
+                  </div>
+                </div>
+                <div id="accounts-dd" style="background:rgba(255,255,255,0.08);border-radius:0 0 12px 12px;max-height:0;overflow:hidden;transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1);margin-bottom:14px;">
+                  <!-- Chequing -->
+                  <div class="acc-row" onclick="toast('Chequing — everyday spending account')">
+                    <div class="acc-row-left">
+                      <div class="acc-icon" style="background:rgba(255,255,255,0.15);">🏦</div>
+                      <div>
+                        <div class="acc-name">Chequing</div>
+                        <div class="acc-sub">Everyday account</div>
+                      </div>
+                    </div>
+                    <div class="acc-amount">$2,089.76</div>
+                  </div>
+                  <div class="acc-divider"></div>
+                  <!-- Savings -->
+                  <div class="acc-row" onclick="toast('Savings — earning 3.5% interest 🌱')">
+                    <div class="acc-row-left">
+                      <div class="acc-icon" style="background:rgba(76,175,80,0.25);">🌱</div>
+                      <div>
+                        <div class="acc-name">Savings</div>
+                        <div class="acc-sub">3.5% interest · TFSA</div>
+                      </div>
+                    </div>
+                    <div class="acc-amount" style="color:#4ade80;">$5,412.00</div>
+                  </div>
+                  <div class="acc-divider"></div>
+                  <!-- Credit Card -->
+                  <div class="acc-row" onclick="toast('Visa Platinum — 18% utilization 💳')">
+                    <div class="acc-row-left">
+                      <div class="acc-icon" style="background:rgba(255,193,7,0.2);">💳</div>
+                      <div>
+                        <div class="acc-name">Visa Platinum</div>
+                        <div class="acc-sub">$1,240 / $6,000 limit</div>
+                      </div>
+                    </div>
+                    <div class="acc-amount" style="color:#fbbf24;">-$1,240.00</div>
+                  </div>
+                </div>
+
+                <div class="cqv">
+                  <h2>Credit Quick View</h2>
+
+                  <!-- Animated score ring -->
+                  <div class="score-ring-row">
+                    <div class="score-ring-wrap">
+                      <svg width="72" height="72" viewBox="0 0 72 72">
+                        <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="6"/>
+                        <circle cx="36" cy="36" r="30" fill="none" stroke="white" stroke-width="6"
+                          stroke-linecap="round"
+                          stroke-dasharray="188.5"
+                          stroke-dashoffset="188.5"
+                          id="score-ring"
+                          transform="rotate(-90 36 36)"
+                          style="transition: stroke-dashoffset 1.4s cubic-bezier(0.4,0,0.2,1);"/>
+                      </svg>
+                      <div class="ring-label">
+                        <div class="ring-score" id="ring-score-num">742</div>
+                        <div class="ring-max">/ 850</div>
+                      </div>
+                    </div>
+                    <div class="score-ring-stats">
+                      <div class="ring-stat">
+                        <div class="ring-stat-val">18%</div>
+                        <div class="ring-stat-lbl">Utilization</div>
+                      </div>
+                      <div class="ring-stat">
+                        <div class="ring-stat-val" style="color:#4ade80;">100%</div>
+                        <div class="ring-stat-lbl">On-time pmts</div>
+                      </div>
+                      <div class="ring-stat">
+                        <div class="ring-stat-val" style="color:#4ade80;">↑ +6 pts</div>
+                        <div class="ring-stat-lbl">This month</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="insight-card" onclick="aNav('a-credit','credit')">
+                    <div class="ic-icon">🐦</div>
+                    <div class="ic-text">You're building healthy credit habits Maya. Check the credit portfolio to review your growth!</div>
+                  </div>
+                  <div class="insight-card" onclick="toast('Lower credit usage = higher score 🚗')">
+                    <div class="ic-icon">🚗</div>
+                    <div class="ic-text">Lower credit usage increased your score by 6 points. Future you will appreciate this!</div>
+                  </div>
+
+                  <!-- Behavioural nudge -->
+                  <div class="nudge-card" onclick="toast('Making that payment now could boost you to 750+ 💪')">
+                    <div class="nudge-header">
+                      <span class="nudge-icon">⚡</span>
+                      <span class="nudge-title">Your next action</span>
+                    </div>
+                    <div class="nudge-body">Pay <strong>$200</strong> toward your LOC to drop utilization to ~15% and gain an estimated <strong>+8 pts</strong>.</div>
+                    <div class="nudge-cta">Make a payment →</div>
+                  </div>
+                </div>
+              </div>
+              <div class="bottom-nav">
+                <div class="nav-item nav-active" onclick="aNav('a-home','home')"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
+                <div class="nav-item" style="opacity:0.35;pointer-events:none"><div class="nav-icon">💸</div><div class="nav-label">Transfers</div></div>
+                <div class="nav-item" style="opacity:0.35;pointer-events:none"><div class="nav-icon">📄</div><div class="nav-label">Bills</div></div>
+                <div class="nav-item" onclick="aNav('a-credit','credit')"><div class="nav-icon">💳</div><div class="nav-label">Credit</div></div>
+                <div class="nav-item" onclick="toast('More coming soon')"><div class="nav-icon">···</div><div class="nav-label">More</div></div>
+              </div>
+            </div>
+
+            <!-- AFTER: CREDIT -->
+            <div class="screen" id="a-credit">
+              <div class="after-credit-header">
+                <div class="bird" onclick="toast('Keep it up Maya! 🐦')">🐤</div>
+                <div class="credit-title-row">
+                  <h2>Help Centre</h2>
+                  <div class="help-circle">?</div>
+                </div>
+              </div>
+              <div class="score-card">
+                <div class="score-hdr">
+                  <span class="score-title">TransUnion Credit Score</span>
+                  <span class="badge-sm">Updated</span>
+                </div>
+                <div class="speech-row">
+                  <div>
+                    <div class="bubble">Keep it up Maya!</div>
+                    <div style="text-align:center;font-size:24px;margin-top:2px;">🐧</div>
+                  </div>
+                </div>
+                <div class="gauge-bar">
+                  <div class="needle" id="a-needle" style="left:60%"></div>
+                </div>
+                <div class="gauge-labels">
+                  <div class="gm"><span class="gm-icon">🚗</span><span>640</span></div>
+                  <div class="gm"><span class="gm-icon">🏢</span><span>740</span></div>
+                  <div class="gm"><span class="gm-icon">✈️</span><span>810</span></div>
+                  <div class="gm"><span class="gm-icon">🏆</span><span>850+</span></div>
+                </div>
+              </div>
+              <div style="flex:1;overflow-y:auto;">
+                <div class="menu-list">
+
+                  <!-- 1. Understand & Improve -->
+                  <div class="menu-item" onclick="toggleAfterDD('dd-improve', 'arr-improve')">
+                    <span class="mi-icon">📈</span>
+                    <span class="mi-label">Understand and Improve your score</span>
+                    <span class="mi-arrow" id="arr-improve" style="transition:transform 0.3s;">›</span>
+                  </div>
+                  <div id="dd-improve" class="after-dd">
+                    <div class="after-dd-row">
+                      <span class="after-dd-icon">✅</span>
+                      <div>
+                        <div class="after-dd-title">Pay on time</div>
+                        <div class="after-dd-sub">Your biggest score driver. Even one missed payment can drop your score by 60+ pts.</div>
+                      </div>
+                    </div>
+                    <div class="after-dd-row">
+                      <span class="after-dd-icon">📉</span>
+                      <div>
+                        <div class="after-dd-title">Keep utilization below 30%</div>
+                        <div class="after-dd-sub">You're at 18% — great! Below 10% is ideal for the highest scores.</div>
+                      </div>
+                    </div>
+                    <div class="after-dd-row">
+                      <span class="after-dd-icon">⏳</span>
+                      <div>
+                        <div class="after-dd-title">Don't close old accounts</div>
+                        <div class="after-dd-sub">Older accounts boost your average credit age, which helps your score.</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 2. Credit Score History -->
+                  <div class="menu-item" onclick="toggleAfterDD('dd-history', 'arr-history')">
+                    <span class="mi-icon">📘</span>
+                    <span class="mi-label">Credit Score History</span>
+                    <span class="mi-arrow" id="arr-history" style="transition:transform 0.3s;">›</span>
+                  </div>
+                  <div id="dd-history" class="after-dd">
+                    <div style="font-size:9px;color:#888;margin-bottom:6px;font-weight:600;">YOUR SCORE OVER TIME</div>
+                    <!-- Simple clean score history bars -->
+                    <div style="display:flex;align-items:flex-end;gap:5px;height:48px;margin-bottom:4px;">
+                      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;">
+                        <div style="font-size:7px;color:#aaa;">698</div>
+                        <div style="width:100%;background:#b5a9a4;border-radius:3px 3px 0 0;height:24px;"></div>
+                        <div style="font-size:7px;color:#aaa;">Jan</div>
+                      </div>
+                      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;">
+                        <div style="font-size:7px;color:#aaa;">705</div>
+                        <div style="width:100%;background:#b5a9a4;border-radius:3px 3px 0 0;height:28px;"></div>
+                        <div style="font-size:7px;color:#aaa;">Feb</div>
+                      </div>
+                      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;">
+                        <div style="font-size:7px;color:#aaa;">712</div>
+                        <div style="width:100%;background:#b5a9a4;border-radius:3px 3px 0 0;height:31px;"></div>
+                        <div style="font-size:7px;color:#aaa;">Mar</div>
+                      </div>
+                      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;">
+                        <div style="font-size:7px;color:#aaa;">719</div>
+                        <div style="width:100%;background:#b5a9a4;border-radius:3px 3px 0 0;height:34px;"></div>
+                        <div style="font-size:7px;color:#aaa;">Apr</div>
+                      </div>
+                      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;">
+                        <div style="font-size:7px;color:#aaa;">728</div>
+                        <div style="width:100%;background:#b5a9a4;border-radius:3px 3px 0 0;height:38px;"></div>
+                        <div style="font-size:7px;color:#aaa;">May</div>
+                      </div>
+                      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;">
+                        <div style="font-size:7px;color:#2e6e8c;font-weight:700;">742</div>
+                        <div style="width:100%;background:#2e6e8c;border-radius:3px 3px 0 0;height:44px;"></div>
+                        <div style="font-size:7px;color:#2e6e8c;font-weight:700;">Jun</div>
+                      </div>
+                    </div>
+                    <div style="font-size:9px;color:#2e7d32;font-weight:600;text-align:center;">↑ +44 points in 6 months 🎉</div>
+                  </div>
+
+                  <!-- 3. Financial Milestones -->
+                  <div class="menu-item" onclick="toggleAfterDD('dd-milestones', 'arr-milestones')">
+                    <span class="mi-icon">🏠</span>
+                    <span class="mi-label">Financial Milestones</span>
+                    <span class="mi-arrow" id="arr-milestones" style="transition:transform 0.3s;">›</span>
+                  </div>
+                  <div id="dd-milestones" class="after-dd">
+                    <div class="milestone-row completed">
+                      <div class="ms-check">✓</div>
+                      <div>
+                        <div class="after-dd-title">First credit card</div>
+                        <div class="after-dd-sub">Achieved · Building your history</div>
+                      </div>
+                    </div>
+                    <div class="milestone-row completed">
+                      <div class="ms-check">✓</div>
+                      <div>
+                        <div class="after-dd-title">Score above 700</div>
+                        <div class="after-dd-sub">Achieved · You qualify for most loans</div>
+                      </div>
+                    </div>
+                    <div class="milestone-row active">
+                      <div class="ms-check" style="background:#fff3e0;color:#f57c00;border-color:#f57c00;">→</div>
+                      <div>
+                        <div class="after-dd-title">Score above 760</div>
+                        <div class="after-dd-sub">In progress · ~6 months at this rate</div>
+                      </div>
+                    </div>
+                    <div class="milestone-row">
+                      <div class="ms-check" style="background:#f5f5f5;color:#bbb;border-color:#ddd;">○</div>
+                      <div>
+                        <div class="after-dd-title">Mortgage-ready (780+)</div>
+                        <div class="after-dd-sub">Unlocks best mortgage rates</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 4. Credit Learning Hub -->
+                  <div class="menu-item" onclick="toggleAfterDD('dd-learn', 'arr-learn')">
+                    <span class="mi-icon">🐦</span>
+                    <span class="mi-label">Credit Learning Hub</span>
+                    <span class="mi-arrow" id="arr-learn" style="transition:transform 0.3s;">›</span>
+                  </div>
+                  <div id="dd-learn" class="after-dd">
+                    <div class="learn-pill" onclick="toast('What is a credit score? 📖')">
+                      <span>📖</span><span>What is a credit score?</span>
+                    </div>
+                    <div class="learn-pill" onclick="toast('Why did my score change? 🤔')">
+                      <span>🤔</span><span>Why did my score change?</span>
+                    </div>
+                    <div class="learn-pill" onclick="toast('How to build credit fast ⚡')">
+                      <span>⚡</span><span>How to build credit fast</span>
+                    </div>
+                    <div class="learn-pill" onclick="toast('Credit vs. debit explained 💳')">
+                      <span>💳</span><span>Credit vs. debit explained</span>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="insights-grid-wrap">
+                  <div class="insights-lbl">Based on your credit activity</div>
+                  <div class="insights-grid">
+                    <div class="itile" onclick="toast('742 qualifies for auto loans 🚗')">Dream car? Your score exceeds the average for vehicle financing.<div class="itile-icon">🐦</div></div>
+                    <div class="itile" onclick="toast('760+ in 6 months!')">Slow and steady — you may reach 760+ in 6 months.<div class="itile-icon">🕐</div></div>
+                  </div>
+                </div>
+                <div style="height:12px;"></div>
+              </div>
+              <div class="bottom-nav">
+                <div class="nav-item" onclick="aNav('a-home','home')"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
+                <div class="nav-item" style="opacity:0.35;pointer-events:none"><div class="nav-icon">💸</div><div class="nav-label">Transfers</div></div>
+                <div class="nav-item" style="opacity:0.35;pointer-events:none"><div class="nav-icon">📄</div><div class="nav-label">Bills</div></div>
+                <div class="nav-item nav-active" onclick="aNav('a-credit','credit')"><div class="nav-icon">💳</div><div class="nav-label">Credit</div></div>
+                <div class="nav-item" onclick="toast('More coming soon')"><div class="nav-icon">···</div><div class="nav-label">More</div></div>
+              </div>
+            </div>
+          </div><!-- /screens -->
+        </div><!-- /app -->
+      </div><!-- /bezel -->
+    </div><!-- /shell -->
+  </div><!-- /phone-col -->
+
+</div><!-- /comparison -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── After credit section dropdowns ──
+  function toggleAfterDD(ddId, arrId) {
+    const dd  = document.getElementById(ddId);
+    const arr = document.getElementById(arrId);
+    const isOpen = dd.classList.contains('open');
+    // close all first
+    ['dd-improve','dd-history','dd-milestones','dd-learn'].forEach(id => {
+      document.getElementById(id).classList.remove('open');
+    });
+    ['arr-improve','arr-history','arr-milestones','arr-learn'].forEach(id => {
+      document.getElementById(id).style.transform = '';
+    });
+    if (!isOpen) {
+      dd.classList.add('open');
+      arr.style.transform = 'rotate(90deg)';
+    }
+  }
+
+  // ── Credit panel toggle (Before only) ──
+  let creditOpen = false;
+  function toggleCreditPanel() {
+    const panel = document.getElementById('credit-panel');
+    creditOpen = !creditOpen;
+    panel.style.maxHeight = creditOpen ? '600px' : '0';
+  }
+
+  // ── Before navigation ──
+  const beforeScreens = ['b-home','b-credit'];
+  function bNav(id, section) {
+    beforeScreens.forEach(s => { document.getElementById(s).classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
+    document.getElementById('sb-before').style.background = '#c0272d';
+    if (id === 'b-credit') setTimeout(() => { document.getElementById('b-needle').style.left = '60%'; }, 100);
+  }
+
+  // ── Accounts dropdown ──
+  let accOpen = false;
+  function toggleAccounts() {
+    const dd = document.getElementById('accounts-dd');
+    const ch = document.getElementById('acc-chevron');
+    accOpen = !accOpen;
+    dd.style.maxHeight = accOpen ? '200px' : '0';
+    ch.style.transform = accOpen ? 'rotate(180deg)' : '';
+    ch.style.transition = 'transform 0.3s';
+  }
+
+  // ── Score ring animation ──
+  function animateRing() {
+    const ring = document.getElementById('score-ring');
+    if (!ring) return;
+    const circumference = 188.5;
+    const score = 742, max = 850, min = 300;
+    const pct = (score - min) / (max - min);
+    const offset = circumference * (1 - pct);
+    ring.style.strokeDashoffset = circumference; // reset
+    setTimeout(() => { ring.style.strokeDashoffset = offset; }, 80);
+  }
+
+  // ── After navigation ──
+  const afterScreens = ['a-home','a-credit'];
+  function aNav(id, section) {
+    afterScreens.forEach(s => { document.getElementById(s).classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
+    document.getElementById('sb-after').style.background = '#2e6e8c';
+    if (id === 'a-credit') setTimeout(() => { document.getElementById('a-needle').style.left = '60%'; }, 100);
+    if (id === 'a-home') setTimeout(animateRing, 120);
+  }
+
+  // Animate on load
+  setTimeout(animateRing, 600);
+
+  // ── Dropdowns ──
+  function toggleDD(ddId, chId) {
+    document.getElementById(ddId).classList.toggle('open');
+    document.getElementById(chId).classList.toggle('open');
+  }
+
+  // ── Toast ──
+  let tt;
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(tt);
+    tt = setTimeout(() => t.classList.remove('show'), 2000);
+  }
+
+  // ── Clock ──
+  function clock() {
+    const d = new Date();
+    const t = String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+    document.querySelectorAll('.status-bar span:first-child').forEach(el => el.textContent = t);
+  }
+  clock(); setInterval(clock, 10000);
+</script>
+</body>
+</html>

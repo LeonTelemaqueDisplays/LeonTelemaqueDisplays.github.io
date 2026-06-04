@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Credit Clarity — Transparency Dashboard</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0812;
+  --surface:#110e1c;
+  --surface2:#18152a;
+  --border:#24203a;
+  --border2:#2e2a44;
+  --text:#f0eeff;
+  --muted:#6b6580;
+  --muted2:#9892b0;
+  --purple:#9b6dff;
+  --purple2:#7c4dff;
+  --green:#3de8a0;
+  --red:#ff5c5c;
+  --amber:#f59e0b;
+  --blue:#5b8fff;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono','Fira Code',monospace;
+}
+html,body{height:100%;overflow:hidden}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:13px;
+  line-height:1.5;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ── TOP BAR ── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 20px;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+.topbar-logo{
+  font-size:.78rem;font-weight:700;letter-spacing:.06em;
+  color:var(--purple);font-family:var(--mono);
+}
+.topbar-tabs{display:flex;gap:2px}
+.tab-btn{
+  padding:5px 14px;font-size:.75rem;font-weight:500;
+  background:transparent;border:none;color:var(--muted2);
+  cursor:pointer;border-radius:4px;transition:background .15s,color .15s;
+}
+.tab-btn.active{background:var(--surface2);color:var(--text)}
+.tab-btn:hover:not(.active){color:var(--text)}
+.topbar-score{
+  display:flex;align-items:center;gap:8px;
+  font-size:.78rem;color:var(--muted2);
+}
+.score-badge{
+  font-weight:700;font-size:.9rem;color:var(--purple);
+  font-family:var(--mono);
+}
+.score-delta{
+  font-size:.7rem;color:var(--green);
+  background:rgba(61,232,160,.1);
+  padding:2px 6px;border-radius:3px;
+}
+
+/* ── MAIN LAYOUT ── */
+.app{
+  display:flex;flex:1;overflow:hidden;
+}
+.sidebar{
+  width:220px;flex-shrink:0;
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  padding:16px 0;
+  overflow-y:auto;
+}
+.sidebar-section{
+  padding:0 12px;margin-bottom:20px;
+}
+.sidebar-label{
+  font-size:.62rem;font-family:var(--mono);
+  color:var(--muted);letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:8px;padding:0 8px;
+}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 12px;border-radius:6px;
+  cursor:pointer;transition:background .15s;
+  color:var(--muted2);font-size:.82rem;font-weight:500;
+  border:none;background:transparent;width:100%;text-align:left;
+}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:rgba(155,109,255,.12);color:var(--purple)}
+.nav-item svg{width:15px;height:15px;flex-shrink:0}
+.nav-dot{
+  width:7px;height:7px;border-radius:50%;
+  margin-left:auto;flex-shrink:0;
+}
+
+/* score arc in sidebar */
+.score-arc-wrap{
+  padding:16px 12px;
+  display:flex;flex-direction:column;align-items:center;
+  gap:8px;
+}
+.score-arc-wrap svg{width:130px;height:80px}
+.score-label{font-size:.7rem;color:var(--muted2);text-align:center}
+.score-label strong{color:var(--purple);font-family:var(--mono);font-size:.9rem;display:block}
+
+/* ── CONTENT ── */
+.content{
+  flex:1;overflow-y:auto;
+  padding:20px;
+  display:flex;flex-direction:column;gap:16px;
+}
+.content::-webkit-scrollbar{width:4px}
+.content::-webkit-scrollbar-track{background:transparent}
+.content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* panels */
+.panel{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  overflow:hidden;
+}
+.panel-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;
+  border-bottom:1px solid var(--border);
+}
+.panel-title{font-size:.82rem;font-weight:600;color:var(--text)}
+.panel-sub{font-size:.72rem;color:var(--muted2);margin-top:1px}
+.panel-body{padding:16px}
+
+/* grid layouts */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+
+/* stat cards */
+.stat-card{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:12px 14px;
+}
+.stat-card-label{font-size:.65rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;font-family:var(--mono)}
+.stat-card-val{font-size:1.4rem;font-weight:700;letter-spacing:-.02em;font-family:var(--mono)}
+.stat-card-delta{font-size:.68rem;margin-top:3px}
+.delta-up{color:var(--green)}
+.delta-down{color:var(--red)}
+.delta-flat{color:var(--muted2)}
+
+/* factor bars */
+.factor-row{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+  transition:background .12s;
+  border-radius:4px;
+  padding:8px 10px;
+  margin:0 -10px;
+}
+.factor-row:last-child{border-bottom:none}
+.factor-row:hover{background:var(--surface2)}
+.factor-name{font-size:.78rem;font-weight:500;min-width:120px;color:var(--text)}
+.factor-bar-wrap{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.factor-bar{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.factor-rating{font-size:.7rem;font-family:var(--mono);min-width:50px;text-align:right}
+.factor-weight{font-size:.65rem;color:var(--muted);min-width:28px;text-align:right}
+
+/* why changed panel */
+.why-card{
+  background:rgba(155,109,255,.06);
+  border:1px solid rgba(155,109,255,.2);
+  border-radius:6px;
+  padding:12px 14px;
+  cursor:pointer;
+  transition:border-color .15s,background .15s;
+  margin-bottom:8px;
+}
+.why-card:hover{border-color:rgba(155,109,255,.4);background:rgba(155,109,255,.1)}
+.why-card-header{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px}
+.why-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
+.why-title{font-size:.8rem;font-weight:600;color:var(--text)}
+.why-desc{font-size:.75rem;color:var(--muted2);line-height:1.55}
+.why-action{
+  font-size:.72rem;color:var(--green);
+  margin-top:6px;display:flex;align-items:center;gap:4px;
+}
+.why-detail{
+  display:none;
+  margin-top:10px;padding-top:10px;
+  border-top:1px solid rgba(155,109,255,.15);
+}
+.why-detail.open{display:block}
+.why-detail p{font-size:.75rem;color:var(--muted2);line-height:1.6}
+
+/* transactions */
+.txn-row{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 0;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+  transition:background .12s;
+  border-radius:4px;padding:9px 10px;margin:0 -10px;
+}
+.txn-row:last-child{border-bottom:none}
+.txn-row:hover{background:var(--surface2)}
+.txn-icon{
+  width:32px;height:32px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;flex-shrink:0;
+}
+.txn-info{flex:1}
+.txn-name{font-size:.8rem;font-weight:500;color:var(--text)}
+.txn-meta{font-size:.7rem;color:var(--muted2);margin-top:1px}
+.txn-amount{font-size:.82rem;font-weight:600;font-family:var(--mono);text-align:right}
+.txn-impact{
+  font-size:.65rem;font-family:var(--mono);
+  padding:2px 6px;border-radius:3px;margin-top:2px;text-align:right;
+}
+.impact-good{background:rgba(61,232,160,.1);color:var(--green)}
+.impact-bad{background:rgba(255,92,92,.1);color:var(--red)}
+.impact-neutral{background:rgba(107,101,128,.15);color:var(--muted2)}
+.txn-detail{
+  display:none;grid-column:1/-1;
+  padding:10px 12px;margin-top:4px;
+  background:var(--surface2);border-radius:6px;
+  border:1px solid var(--border);
+  font-size:.75rem;color:var(--muted2);line-height:1.6;
+}
+.txn-detail.open{display:block}
+
+/* goals */
+.goal-card{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:14px;
+  cursor:pointer;
+  transition:border-color .15s;
+}
+.goal-card:hover{border-color:var(--border2)}
+.goal-card.on-track{border-color:rgba(61,232,160,.2)}
+.goal-card.in-progress{border-color:rgba(155,109,255,.2)}
+.goal-card.at-risk{border-color:rgba(255,92,92,.2)}
+.goal-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
+.goal-name{font-size:.82rem;font-weight:600;color:var(--text)}
+.goal-status{
+  font-size:.65rem;font-family:var(--mono);
+  padding:2px 7px;border-radius:3px;
+  text-transform:uppercase;letter-spacing:.05em;
+}
+.status-on-track{background:rgba(61,232,160,.12);color:var(--green)}
+.status-in-progress{background:rgba(155,109,255,.12);color:var(--purple)}
+.status-at-risk{background:rgba(255,92,92,.1);color:var(--red)}
+.goal-target{font-size:.72rem;color:var(--muted2);margin-bottom:10px}
+.goal-progress-wrap{height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.goal-progress{height:100%;border-radius:3px;transition:width .7s cubic-bezier(.4,0,.2,1)}
+.goal-meta{display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted2)}
+.goal-detail{
+  display:none;margin-top:10px;padding-top:10px;
+  border-top:1px solid var(--border);
+}
+.goal-detail.open{display:block}
+.goal-steps{list-style:none;display:flex;flex-direction:column;gap:5px}
+.goal-step{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:.75rem;color:var(--muted2);
+}
+.goal-step-dot{
+  width:14px;height:14px;border-radius:50%;
+  flex-shrink:0;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.55rem;font-weight:700;
+}
+.step-done{background:rgba(61,232,160,.2);color:var(--green)}
+.step-current{background:rgba(155,109,255,.2);color:var(--purple)}
+.step-future{background:var(--border);color:var(--muted)}
+
+/* nudge banner */
+.nudge{
+  display:flex;align-items:flex-start;gap:12px;
+  background:rgba(61,232,160,.05);
+  border:1px solid rgba(61,232,160,.2);
+  border-radius:8px;
+  padding:14px 16px;
+  cursor:pointer;
+  transition:border-color .15s,background .15s;
+}
+.nudge:hover{border-color:rgba(61,232,160,.4);background:rgba(61,232,160,.08)}
+.nudge-icon{font-size:1.2rem;flex-shrink:0}
+.nudge-title{font-size:.82rem;font-weight:600;color:var(--green);margin-bottom:3px}
+.nudge-desc{font-size:.75rem;color:var(--muted2);line-height:1.55}
+.nudge-cta{
+  margin-left:auto;flex-shrink:0;
+  font-size:.72rem;font-family:var(--mono);
+  border:1px solid rgba(61,232,160,.3);
+  padding:5px 10px;color:var(--green);
+  background:transparent;cursor:pointer;border-radius:4px;
+  transition:background .15s,border-color .15s;align-self:center;
+}
+.nudge-cta:hover{background:rgba(61,232,160,.1);border-color:var(--green)}
+
+/* recovery timeline */
+.timeline{display:flex;align-items:center;padding:8px 0 4px;position:relative}
+.timeline::before{
+  content:'';position:absolute;
+  top:50%;left:0;right:0;height:2px;
+  background:var(--border);transform:translateY(-50%);
+  z-index:0;
+}
+.timeline-node{
+  display:flex;flex-direction:column;align-items:center;
+  flex:1;position:relative;z-index:1;cursor:pointer;
+}
+.timeline-dot{
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;font-weight:700;font-family:var(--mono);
+  border:2px solid var(--border);
+  background:var(--bg);
+  transition:transform .15s,border-color .15s;
+}
+.timeline-node:hover .timeline-dot{transform:scale(1.15)}
+.timeline-dot.done{border-color:var(--green);background:rgba(61,232,160,.1);color:var(--green)}
+.timeline-dot.current{border-color:var(--purple);background:rgba(155,109,255,.15);color:var(--purple);box-shadow:0 0 10px rgba(155,109,255,.3)}
+.timeline-dot.future{color:var(--muted)}
+.timeline-label{font-size:.65rem;font-family:var(--mono);margin-top:5px;color:var(--muted2)}
+.timeline-score{font-size:.78rem;font-weight:700;color:var(--text);font-family:var(--mono)}
+.timeline-time{font-size:.6rem;color:var(--muted);margin-top:1px}
+
+/* right panel */
+.right-panel{
+  width:240px;flex-shrink:0;
+  background:var(--surface);
+  border-left:1px solid var(--border);
+  padding:16px;
+  overflow-y:auto;
+  display:flex;flex-direction:column;gap:16px;
+}
+.right-panel::-webkit-scrollbar{width:3px}
+.right-panel::-webkit-scrollbar-thumb{background:var(--border2)}
+.rp-section-title{
+  font-size:.65rem;font-family:var(--mono);
+  color:var(--muted);letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:10px;
+}
+
+/* alert items */
+.alert-item{
+  display:flex;gap:8px;align-items:flex-start;
+  padding:8px 10px;border-radius:5px;
+  margin-bottom:6px;cursor:pointer;
+  transition:opacity .15s;
+}
+.alert-item:hover{opacity:.85}
+.alert-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.alert-text{font-size:.74rem;color:var(--muted2);line-height:1.45}
+.alert-text strong{color:var(--text);font-weight:600}
+.alert-purple{background:rgba(155,109,255,.08)}
+.alert-green{background:rgba(61,232,160,.06)}
+.alert-red{background:rgba(255,92,92,.06)}
+
+/* tip box */
+.tip-box{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:6px;padding:12px;
+}
+.tip-box-title{font-size:.72rem;font-weight:600;margin-bottom:6px;color:var(--text)}
+.tip-box p{font-size:.72rem;color:var(--muted2);line-height:1.55}
+.tip-score-impact{
+  display:flex;align-items:center;gap:6px;
+  margin-top:8px;font-size:.7rem;
+  color:var(--green);font-family:var(--mono);
+}
+
+/* simulate button */
+.sim-btn{
+  width:100%;padding:8px;
+  background:rgba(155,109,255,.12);
+  border:1px solid rgba(155,109,255,.25);
+  color:var(--purple);font-size:.75rem;font-weight:600;
+  border-radius:5px;cursor:pointer;
+  transition:background .15s,border-color .15s;
+  font-family:var(--sans);margin-top:2px;
+}
+.sim-btn:hover{background:rgba(155,109,255,.2);border-color:rgba(155,109,255,.4)}
+
+/* utilization meter */
+.util-meter{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:6px;padding:12px;
+}
+.util-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.util-title{font-size:.72rem;font-weight:600;color:var(--text)}
+.util-pct{font-size:.85rem;font-weight:700;font-family:var(--mono)}
+.util-bar-wrap{height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:6px}
+.util-bar{height:100%;border-radius:4px;transition:width .7s}
+.util-note{font-size:.68rem;color:var(--muted2)}
+
+/* tabs content */
+.tab-content{display:none}
+.tab-content.active{display:flex;flex-direction:column;gap:14px}
+
+/* simulate overlay */
+.sim-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
+  z-index:100;align-items:center;justify-content:center;
+}
+.sim-overlay.open{display:flex}
+.sim-box{
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:10px;
+  padding:24px;width:340px;
+}
+.sim-title{font-size:.95rem;font-weight:700;margin-bottom:4px}
+.sim-desc{font-size:.78rem;color:var(--muted2);margin-bottom:16px;line-height:1.55}
+.sim-row{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.sim-row label{font-size:.72rem;color:var(--muted2);font-family:var(--mono)}
+.sim-input{
+  background:var(--bg);border:1px solid var(--border2);
+  color:var(--text);padding:7px 10px;font-size:.82rem;
+  border-radius:4px;outline:none;font-family:var(--mono);
+  transition:border-color .15s;
+}
+.sim-input:focus{border-color:var(--purple)}
+.sim-result{
+  background:rgba(155,109,255,.08);
+  border:1px solid rgba(155,109,255,.2);
+  border-radius:6px;padding:12px;
+  margin-bottom:14px;display:none;
+}
+.sim-result.show{display:block}
+.sim-result-score{
+  font-size:1.5rem;font-weight:700;font-family:var(--mono);
+  color:var(--purple);
+}
+.sim-result-label{font-size:.75rem;color:var(--muted2);margin-top:2px}
+.sim-btns{display:flex;gap:8px}
+.sim-cancel{
+  flex:1;padding:8px;background:transparent;
+  border:1px solid var(--border2);color:var(--muted2);
+  border-radius:5px;cursor:pointer;font-size:.78rem;
+  transition:border-color .15s,color .15s;
+}
+.sim-cancel:hover{border-color:var(--muted2);color:var(--text)}
+.sim-run{
+  flex:1;padding:8px;
+  background:rgba(155,109,255,.15);
+  border:1px solid rgba(155,109,255,.3);
+  color:var(--purple);border-radius:5px;
+  cursor:pointer;font-size:.78rem;font-weight:600;
+  transition:background .15s;
+}
+.sim-run:hover{background:rgba(155,109,255,.25)}
+
+/* scrollbar */
+.content::-webkit-scrollbar{width:3px}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <span class="topbar-logo">CREDIT CLARITY</span>
+  <div class="topbar-tabs">
+    <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+    <button class="tab-btn" onclick="switchTab('transactions')">Transactions</button>
+    <button class="tab-btn" onclick="switchTab('goals')">Goals</button>
+    <button class="tab-btn" onclick="switchTab('recovery')">Recovery Path</button>
+  </div>
+  <div class="topbar-score">
+    Score <span class="score-badge" id="top-score">742</span>
+    <span class="score-delta" id="top-delta">↑ +12</span>
+  </div>
+</div>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="score-arc-wrap">
+    <svg viewBox="0 0 130 80" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#ff5c5c"/>
+          <stop offset="40%" stop-color="#f59e0b"/>
+          <stop offset="75%" stop-color="#9b6dff"/>
+          <stop offset="100%" stop-color="#3de8a0"/>
+        </linearGradient>
+      </defs>
+      <!-- track -->
+      <path d="M 15 70 A 50 50 0 0 1 115 70" fill="none" stroke="#24203a" stroke-width="9" stroke-linecap="round"/>
+      <!-- filled arc (742/850 = ~87%) -->
+      <path id="score-arc" d="M 15 70 A 50 50 0 0 1 115 70" fill="none" stroke="url(#arcGrad)" stroke-width="9" stroke-linecap="round"
+        stroke-dasharray="157" stroke-dashoffset="20"/>
+      <text x="65" y="58" text-anchor="middle" fill="#f0eeff" font-size="18" font-weight="700" font-family="monospace" id="arc-score">742</text>
+      <text x="65" y="70" text-anchor="middle" fill="#9b6dff" font-size="7" font-family="monospace">GOOD</text>
+    </svg>
+    <div class="score-label">
+      <span style="color:var(--muted2)">Range: </span><strong>300 – 850</strong>
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Navigate</div>
+    <button class="nav-item active" onclick="switchTab('overview');setActive(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Overview
+    </button>
+    <button class="nav-item" onclick="switchTab('transactions');setActive(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>
+      Transactions
+      <span class="nav-dot" style="background:var(--green)"></span>
+    </button>
+    <button class="nav-item" onclick="switchTab('goals');setActive(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      Goals
+    </button>
+    <button class="nav-item" onclick="switchTab('recovery');setActive(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      Recovery Path
+    </button>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Accounts</div>
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      Card 1 — 14%
+      <span class="nav-dot" style="background:var(--green)"></span>
+    </button>
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      Card 2 — 22%
+      <span class="nav-dot" style="background:var(--green)"></span>
+    </button>
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      Card 3 — 58%
+      <span class="nav-dot" style="background:var(--amber)"></span>
+    </button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="content">
+
+  <!-- ── OVERVIEW TAB ── -->
+  <div class="tab-content active" id="tab-overview">
+
+    <!-- nudge -->
+    <div class="nudge" onclick="openSim()">
+      <span class="nudge-icon">💡</span>
+      <div>
+        <div class="nudge-title">Next Best Action</div>
+        <div class="nudge-desc">Paying $200 on Card 3 would lower your utilization to 44% and unlock loan eligibility in ~45 days.</div>
+      </div>
+      <button class="nudge-cta">Simulate →</button>
+    </div>
+
+    <!-- stat cards -->
+    <div class="grid-3">
+      <div class="stat-card">
+        <div class="stat-card-label">Credit Score</div>
+        <div class="stat-card-val" style="color:var(--purple)">742</div>
+        <div class="stat-card-delta delta-up">↑ +12 this month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Total Utilization</div>
+        <div class="stat-card-val" style="color:var(--amber)" id="util-val">31%</div>
+        <div class="stat-card-delta delta-up">↓ from 38%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">On-Time Payments</div>
+        <div class="stat-card-val" style="color:var(--green)">100%</div>
+        <div class="stat-card-delta delta-flat">24 months streak</div>
+      </div>
+    </div>
+
+    <!-- why changed -->
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Why Did My Score Change?</div>
+          <div class="panel-sub">Tap each event to understand the impact</div>
+        </div>
+        <span style="font-size:.7rem;color:var(--purple);font-family:var(--mono)">+12 pts this month</span>
+      </div>
+      <div class="panel-body" style="display:flex;flex-direction:column;gap:0">
+        <div class="why-card" onclick="toggleWhy(this)">
+          <div class="why-card-header">
+            <span class="why-icon">📉</span>
+            <div>
+              <div class="why-title">Card 2 balance paid down</div>
+              <div class="why-desc">Utilization on Card 2 dropped from 38% → 22% after your $340 payment.</div>
+            </div>
+            <span style="font-size:.78rem;color:var(--green);font-family:var(--mono);margin-left:auto;flex-shrink:0">+8 pts</span>
+          </div>
+          <div class="why-action">→ Keep Card 2 below 30% to maintain this gain</div>
+          <div class="why-detail">
+            <p>Credit utilization accounts for 30% of your score. Lenders prefer to see each card below 30%. Your Card 2 is now in the ideal range. If it stays below 30% for 3+ months, you may see an additional 3–5 point improvement.</p>
+          </div>
+        </div>
+        <div class="why-card" onclick="toggleWhy(this)">
+          <div class="why-card-header">
+            <span class="why-icon">✅</span>
+            <div>
+              <div class="why-title">On-time payment — all 3 cards</div>
+              <div class="why-desc">Your 24-month payment streak continued. No late payments detected.</div>
+            </div>
+            <span style="font-size:.78rem;color:var(--green);font-family:var(--mono);margin-left:auto;flex-shrink:0">+4 pts</span>
+          </div>
+          <div class="why-action">→ Payment history is your strongest factor</div>
+          <div class="why-detail">
+            <p>Payment history is the single largest factor in your score (35%). Your 24-month streak puts you in the top 15% of cardholders. Even one missed payment can reduce your score by 60–110 points — so autopay is worth setting up.</p>
+          </div>
+        </div>
+        <div class="why-card" onclick="toggleWhy(this)">
+          <div class="why-card-header">
+            <span class="why-icon">🔍</span>
+            <div>
+              <div class="why-title">Hard inquiry — rent application</div>
+              <div class="why-desc">A hard pull was made by Skyline Properties on June 1st.</div>
+            </div>
+            <span style="font-size:.78rem;color:var(--red);font-family:var(--mono);margin-left:auto;flex-shrink:0">−3 pts</span>
+          </div>
+          <div class="why-action">→ This will fade completely within 12 months</div>
+          <div class="why-detail">
+            <p>Hard inquiries temporarily lower your score by 3–7 points. They stay on your report for 2 years but only impact your score for 12 months. Multiple inquiries within 14–45 days for the same loan type are usually counted as one — so rate shopping is safe.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- credit factors -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Credit Factor Breakdown</div>
+        <div class="panel-sub">Click a factor to learn what moves it</div>
+      </div>
+      <div class="panel-body">
+        <div class="factor-row" onclick="toggleFactor(this)" data-tip="Payment history is the biggest factor. One missed payment can drop your score 60–110 points. Setting autopay for minimum payments eliminates this risk entirely.">
+          <span class="factor-name">Payment History</span>
+          <div class="factor-bar-wrap"><div class="factor-bar" style="width:98%;background:var(--green)"></div></div>
+          <span class="factor-rating" style="color:var(--green)">Exceptional</span>
+          <span class="factor-weight">35%</span>
+        </div>
+        <div class="factor-row" onclick="toggleFactor(this)" data-tip="You're at 31% overall utilization. Ideal is under 10% for top scores, under 30% to avoid penalty. Paying down Card 3 from 58% to below 30% would be the highest-impact action you can take right now.">
+          <span class="factor-name">Utilization</span>
+          <div class="factor-bar-wrap"><div class="factor-bar" style="width:65%;background:var(--amber)"></div></div>
+          <span class="factor-rating" style="color:var(--amber)">Fair</span>
+          <span class="factor-weight">30%</span>
+        </div>
+        <div class="factor-row" onclick="toggleFactor(this)" data-tip="Your oldest account is 4 years old. The average age of your accounts is 2.8 years. This improves on its own over time — avoid closing old cards even if you don't use them.">
+          <span class="factor-name">Account Age</span>
+          <div class="factor-bar-wrap"><div class="factor-bar" style="width:55%;background:var(--purple)"></div></div>
+          <span class="factor-rating" style="color:var(--purple)">Good</span>
+          <span class="factor-weight">15%</span>
+        </div>
+        <div class="factor-row" onclick="toggleFactor(this)" data-tip="You have 3 credit cards and no installment loans. Adding a small credit-builder loan or auto loan can diversify your mix — but don't open new accounts just for this.">
+          <span class="factor-name">Credit Mix</span>
+          <div class="factor-bar-wrap"><div class="factor-bar" style="width:50%;background:var(--blue)"></div></div>
+          <span class="factor-rating" style="color:var(--blue)">Fair</span>
+          <span class="factor-weight">10%</span>
+        </div>
+        <div class="factor-row" onclick="toggleFactor(this)" data-tip="1 hard inquiry from Skyline Properties on June 1. This will stop affecting your score in 12 months. Avoid unnecessary applications in the next 90 days.">
+          <span class="factor-name">New Credit</span>
+          <div class="factor-bar-wrap"><div class="factor-bar" style="width:78%;background:var(--green)"></div></div>
+          <span class="factor-rating" style="color:var(--green)">Good</span>
+          <span class="factor-weight">10%</span>
+        </div>
+        <div id="factor-tip" style="display:none;margin-top:8px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:5px;font-size:.75rem;color:var(--muted2);line-height:1.6"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── TRANSACTIONS TAB ── -->
+  <div class="tab-content" id="tab-transactions">
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Recent Transactions</div>
+          <div class="panel-sub">Tap any transaction to see its credit impact</div>
+        </div>
+      </div>
+      <div class="panel-body" style="padding:8px 16px">
+        <div class="txn-row" onclick="toggleTxn(this)">
+          <div class="txn-icon" style="background:rgba(61,232,160,.1)">💳</div>
+          <div class="txn-info">
+            <div class="txn-name">Card 2 Payment</div>
+            <div class="txn-meta">Jun 3 · CIBC Online Banking</div>
+          </div>
+          <div>
+            <div class="txn-amount" style="color:var(--green)">−$340.00</div>
+            <div class="txn-impact impact-good">↑ +8 pts</div>
+          </div>
+        </div>
+        <div class="txn-detail">Paying down Card 2 lowered your utilization from 38% to 22%. This is below the 30% threshold that triggers score improvements. Consistent payments like this are why your payment history score is exceptional.</div>
+
+        <div class="txn-row" onclick="toggleTxn(this)">
+          <div class="txn-icon" style="background:rgba(245,158,11,.1)">🛒</div>
+          <div class="txn-info">
+            <div class="txn-name">Whole Foods Market</div>
+            <div class="txn-meta">Jun 2 · Card 3 · Groceries</div>
+          </div>
+          <div>
+            <div class="txn-amount" style="color:var(--red)">+$87.42</div>
+            <div class="txn-impact impact-bad">↑ util +1%</div>
+          </div>
+        </div>
+        <div class="txn-detail">This purchase added $87 to Card 3, which is already at 58% utilization. It didn't change your score directly, but keeping Card 3 above 30% is currently limiting your score by an estimated 15–20 points. Consider paying this off before your statement closes on Jun 15.</div>
+
+        <div class="txn-row" onclick="toggleTxn(this)">
+          <div class="txn-icon" style="background:rgba(91,143,255,.1)">🏠</div>
+          <div class="txn-info">
+            <div class="txn-name">Skyline Properties — Credit Check</div>
+            <div class="txn-meta">Jun 1 · Hard Inquiry</div>
+          </div>
+          <div>
+            <div class="txn-amount" style="color:var(--muted2)">—</div>
+            <div class="txn-impact impact-bad">↓ −3 pts</div>
+          </div>
+        </div>
+        <div class="txn-detail">Hard inquiries from landlord credit checks typically reduce your score by 3–7 points. This will fully recover within 12 months. Since you were rate-shopping for an apartment, other similar inquiries within 45 days would likely be counted as a single event.</div>
+
+        <div class="txn-row" onclick="toggleTxn(this)">
+          <div class="txn-icon" style="background:rgba(61,232,160,.1)">✅</div>
+          <div class="txn-info">
+            <div class="txn-name">Minimum Payment — Card 1</div>
+            <div class="txn-meta">May 28 · Auto-pay</div>
+          </div>
+          <div>
+            <div class="txn-amount" style="color:var(--green)">−$45.00</div>
+            <div class="txn-impact impact-good">Streak +1</div>
+          </div>
+        </div>
+        <div class="txn-detail">Your autopay made the minimum payment on Card 1 on time, extending your streak to 24 months. Your payment history score is now rated Exceptional — the highest tier. This factor alone accounts for 35% of your credit score.</div>
+
+        <div class="txn-row" onclick="toggleTxn(this)">
+          <div class="txn-icon" style="background:rgba(245,158,11,.1)">⛽</div>
+          <div class="txn-info">
+            <div class="txn-name">Shell Canada</div>
+            <div class="txn-meta">May 26 · Card 1 · Gas</div>
+          </div>
+          <div>
+            <div class="txn-amount" style="color:var(--red)">+$62.18</div>
+            <div class="txn-impact impact-neutral">No impact</div>
+          </div>
+        </div>
+        <div class="txn-detail">Card 1 is at 14% utilization — well within the ideal range. This purchase had no meaningful impact on your credit score. Keeping low-balance cards active with small purchases and paying them off monthly is actually good for your score over time.</div>
+
+        <div class="txn-row" onclick="toggleTxn(this)">
+          <div class="txn-icon" style="background:rgba(155,109,255,.1)">🍕</div>
+          <div class="txn-info">
+            <div class="txn-name">DoorDash</div>
+            <div class="txn-meta">May 24 · Card 3 · Food</div>
+          </div>
+          <div>
+            <div class="txn-amount" style="color:var(--red)">+$34.99</div>
+            <div class="txn-impact impact-bad">↑ util on C3</div>
+          </div>
+        </div>
+        <div class="txn-detail">Card 3 is your highest-utilization card at 58%. Each purchase here keeps it in the "high utilization" zone. If your goal is to qualify for an apartment or car loan, paying down Card 3 below 30% is the single highest-leverage action available to you right now.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── GOALS TAB ── -->
+  <div class="tab-content" id="tab-goals">
+    <div class="grid-2">
+      <div class="goal-card on-track" onclick="toggleGoal(this)">
+        <div class="goal-header">
+          <div class="goal-name">🏠 Rent an Apartment</div>
+          <span class="goal-status status-on-track">On Track</span>
+        </div>
+        <div class="goal-target">Target score: 680+ · You're at 742</div>
+        <div class="goal-progress-wrap"><div class="goal-progress" style="width:89%;background:var(--green)"></div></div>
+        <div class="goal-meta"><span>Progress: 89%</span><span>Est. ready: Now</span></div>
+        <div class="goal-detail">
+          <ul class="goal-steps">
+            <li class="goal-step"><span class="goal-step-dot step-done">✓</span>Score above 650 threshold</li>
+            <li class="goal-step"><span class="goal-step-dot step-done">✓</span>Payment history 12+ months clean</li>
+            <li class="goal-step"><span class="goal-step-dot step-done">✓</span>No bankruptcy or collections</li>
+            <li class="goal-step"><span class="goal-step-dot step-current">→</span>Resolve hard inquiry (fades Jun 2025)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="goal-card in-progress" onclick="toggleGoal(this)">
+        <div class="goal-header">
+          <div class="goal-name">🚗 Car Loan</div>
+          <span class="goal-status status-in-progress">In Progress</span>
+        </div>
+        <div class="goal-target">Target score: 700+ · You're at 742 ✓</div>
+        <div class="goal-progress-wrap"><div class="goal-progress" style="width:62%;background:var(--purple)"></div></div>
+        <div class="goal-meta"><span>Progress: 62%</span><span>Est. ready: ~45 days</span></div>
+        <div class="goal-detail">
+          <ul class="goal-steps">
+            <li class="goal-step"><span class="goal-step-dot step-done">✓</span>Score above 700 threshold</li>
+            <li class="goal-step"><span class="goal-step-dot step-done">✓</span>12-month payment history</li>
+            <li class="goal-step"><span class="goal-step-dot step-current">→</span>Reduce Card 3 utilization below 30%</li>
+            <li class="goal-step"><span class="goal-step-dot step-future">○</span>Debt-to-income ratio under 40%</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="goal-card in-progress" onclick="toggleGoal(this)">
+        <div class="goal-header">
+          <div class="goal-name">💳 Premium Travel Card</div>
+          <span class="goal-status status-in-progress">In Progress</span>
+        </div>
+        <div class="goal-target">Target score: 750+ · You need +8 pts</div>
+        <div class="goal-progress-wrap"><div class="goal-progress" style="width:50%;background:var(--blue)"></div></div>
+        <div class="goal-meta"><span>Progress: 50%</span><span>Est. ready: ~60 days</span></div>
+        <div class="goal-detail">
+          <ul class="goal-steps">
+            <li class="goal-step"><span class="goal-step-dot step-done">✓</span>Score above 700</li>
+            <li class="goal-step"><span class="goal-step-dot step-current">→</span>Reach 750+ (need +8 pts)</li>
+            <li class="goal-step"><span class="goal-step-dot step-future">○</span>Annual income verification</li>
+            <li class="goal-step"><span class="goal-step-dot step-future">○</span>No missed payments in 24 months</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="goal-card at-risk" onclick="toggleGoal(this)">
+        <div class="goal-header">
+          <div class="goal-name">🏦 Personal Loan ($5K)</div>
+          <span class="goal-status status-at-risk">At Risk</span>
+        </div>
+        <div class="goal-target">Target score: 720+ · Util must be &lt;30%</div>
+        <div class="goal-progress-wrap"><div class="goal-progress" style="width:38%;background:var(--red)"></div></div>
+        <div class="goal-meta"><span>Progress: 38%</span><span>Blocker: Card 3 at 58%</span></div>
+        <div class="goal-detail">
+          <ul class="goal-steps">
+            <li class="goal-step"><span class="goal-step-dot step-done">✓</span>Score above 720</li>
+            <li class="goal-step"><span class="goal-step-dot step-current">→</span>Reduce overall utilization below 30%</li>
+            <li class="goal-step"><span class="goal-step-dot step-future">○</span>Employment verification</li>
+            <li class="goal-step"><span class="goal-step-dot step-future">○</span>No hard inquiries in past 90 days</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RECOVERY PATH TAB ── -->
+  <div class="tab-content" id="tab-recovery">
+
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Your Score Trajectory</div>
+        <div class="panel-sub">Projected path based on current behaviour — click each milestone</div>
+      </div>
+      <div class="panel-body">
+        <div class="timeline">
+          <div class="timeline-node" onclick="selectMilestone(this, 'You started your credit journey with limited history. Your first card was opened 4 years ago.')">
+            <div class="timeline-dot done">✓</div>
+            <div class="timeline-score">620</div>
+            <div class="timeline-label">Start</div>
+            <div class="timeline-time">2022</div>
+          </div>
+          <div class="timeline-node" onclick="selectMilestone(this, 'After 12 months of on-time payments and keeping utilization under control, your score crossed the 680 threshold — enough for most apartment rentals.')">
+            <div class="timeline-dot done">✓</div>
+            <div class="timeline-score">681</div>
+            <div class="timeline-label">Rental</div>
+            <div class="timeline-time">2023</div>
+          </div>
+          <div class="timeline-node" onclick="selectMilestone(this, 'Consistent payments and a balanced credit mix pushed you into the \"Good\" range. This unlocked better interest rates on most products.')">
+            <div class="timeline-dot done">✓</div>
+            <div class="timeline-score">720</div>
+            <div class="timeline-label">Good</div>
+            <div class="timeline-time">2024</div>
+          </div>
+          <div class="timeline-node" onclick="selectMilestone(this, 'You are here. Score of 742 puts you in the top 35% of Canadian credit holders. Your next moves determine whether you plateau or reach \"Very Good\".')">
+            <div class="timeline-dot current">742</div>
+            <div class="timeline-score" style="color:var(--purple)">742</div>
+            <div class="timeline-label" style="color:var(--purple)">You</div>
+            <div class="timeline-time">Now</div>
+          </div>
+          <div class="timeline-node" onclick="selectMilestone(this, 'Paying Card 3 below 30% utilization and maintaining your streak for 45 more days will likely push you past 750 — qualifying you for premium card products.')">
+            <div class="timeline-dot future">750</div>
+            <div class="timeline-score">750</div>
+            <div class="timeline-label">Premium</div>
+            <div class="timeline-time">~45d</div>
+          </div>
+          <div class="timeline-node" onclick="selectMilestone(this, 'With all utilization below 10%, 36-month payment streak, and a diversified credit mix (e.g. adding a credit-builder loan), 800+ is achievable within 18 months.')">
+            <div class="timeline-dot future">800</div>
+            <div class="timeline-score">800</div>
+            <div class="timeline-label">Excellent</div>
+            <div class="timeline-time">~12mo</div>
+          </div>
+        </div>
+        <div id="milestone-detail" style="display:none;margin-top:16px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;font-size:.78rem;color:var(--muted2);line-height:1.6"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Action Plan</div>
+        <div class="panel-sub">Ranked by score impact</div>
+      </div>
+      <div class="panel-body" style="display:flex;flex-direction:column;gap:10px">
+        <div class="why-card" onclick="toggleWhy(this)" style="border-color:rgba(61,232,160,.2)">
+          <div class="why-card-header">
+            <span class="why-icon">🎯</span>
+            <div>
+              <div class="why-title">Pay Card 3 below 30% utilization</div>
+              <div class="why-desc">Currently at 58%. Paying ~$480 brings it to 29%. Estimated impact: +18 to +24 pts.</div>
+            </div>
+            <span style="font-size:.78rem;color:var(--green);font-family:var(--mono);margin-left:auto;flex-shrink:0">+18–24 pts</span>
+          </div>
+          <div class="why-detail">
+            <p>This is your highest-leverage action. Card 3 is the sole reason your utilization factor is rated "Fair" rather than "Good" or "Exceptional". The math: you need to bring the balance from ~$1,740 down to under $900. That's $480–$840 depending on your credit limit. Even $200 helps — every percentage point counts.</p>
+          </div>
+        </div>
+        <div class="why-card" onclick="toggleWhy(this)">
+          <div class="why-card-header">
+            <span class="why-icon">📅</span>
+            <div>
+              <div class="why-title">Maintain 30-month payment streak</div>
+              <div class="why-desc">6 more on-time payments moves you into a more resilient "Exceptional" tier.</div>
+            </div>
+            <span style="font-size:.78rem;color:var(--green);font-family:var(--mono);margin-left:auto;flex-shrink:0">+4–8 pts</span>
+          </div>
+          <div class="why-detail">
+            <p>Payment streaks have compounding value. At 24 months you're already Exceptional, but reaching 36 months provides additional resilience — meaning one missed payment would have less impact. Set autopay for the minimum on all cards to protect this streak.</p>
+          </div>
+        </div>
+        <div class="why-card" onclick="toggleWhy(this)">
+          <div class="why-card-header">
+            <span class="why-icon">🔒</span>
+            <div>
+              <div class="why-title">No new hard inquiries for 90 days</div>
+              <div class="why-desc">You have 1 active inquiry. Avoid new applications until it ages past the 12-month mark.</div>
+            </div>
+            <span style="font-size:.78rem;color:var(--green);font-family:var(--mono);margin-left:auto;flex-shrink:0">+2–5 pts</span>
+          </div>
+          <div class="why-detail">
+            <p>Your current inquiry from Skyline Properties will stop impacting your score in June 2025. Avoiding any additional hard pulls for 90 days prevents this from compounding. Pre-qualification checks (soft pulls) don't affect your score and are safe to use for rate shopping.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right-panel">
+  <div>
+    <div class="rp-section-title">Alerts</div>
+    <div class="alert-item alert-red">
+      <span class="alert-dot" style="background:var(--red)"></span>
+      <span class="alert-text"><strong>Card 3</strong> utilization is 58% — above the 30% threshold. This is limiting your score.</span>
+    </div>
+    <div class="alert-item alert-green">
+      <span class="alert-dot" style="background:var(--green)"></span>
+      <span class="alert-text"><strong>Card 2</strong> dropped to 22% after last payment. Score improvement recorded.</span>
+    </div>
+    <div class="alert-item alert-purple">
+      <span class="alert-dot" style="background:var(--purple)"></span>
+      <span class="alert-text"><strong>Statement closing</strong> on Card 3 in 12 days. Pay before then for best impact.</span>
+    </div>
+    <div class="alert-item alert-green">
+      <span class="alert-dot" style="background:var(--green)"></span>
+      <span class="alert-text"><strong>24-month streak</strong> milestone reached. Payment history: Exceptional.</span>
+    </div>
+  </div>
+
+  <div class="util-meter">
+    <div class="util-header">
+      <span class="util-title">Card 3 Utilization</span>
+      <span class="util-pct" style="color:var(--amber)" id="c3-util">58%</span>
+    </div>
+    <div class="util-bar-wrap">
+      <div class="util-bar" style="width:58%;background:var(--amber)" id="c3-bar"></div>
+    </div>
+    <div class="util-note">Target: below 30% · Need to pay ~$480</div>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-box-title">💡 Statement Closing Tip</div>
+    <p>Paying <strong style="color:var(--text)">before</strong> your statement closes — not just before the due date — means a lower balance gets reported to bureaus. This can add 5–15 points even if you pay in full each month.</p>
+    <div class="tip-score-impact">↑ Est. +5–15 pts if timed correctly</div>
+  </div>
+
+  <button class="sim-btn" onclick="openSim()">⚡ Simulate a Payment</button>
+
+  <div class="tip-box">
+    <div class="tip-box-title">📊 Score Breakdown</div>
+    <p style="margin-bottom:8px">Your score by factor:</p>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between;font-size:.72rem"><span style="color:var(--muted2)">Payments (35%)</span><span style="color:var(--green);font-family:var(--mono)">Exceptional</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:.72rem"><span style="color:var(--muted2)">Utilization (30%)</span><span style="color:var(--amber);font-family:var(--mono)">Fair</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:.72rem"><span style="color:var(--muted2)">Age (15%)</span><span style="color:var(--purple);font-family:var(--mono)">Good</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:.72rem"><span style="color:var(--muted2)">Mix (10%)</span><span style="color:var(--blue);font-family:var(--mono)">Fair</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:.72rem"><span style="color:var(--muted2)">New (10%)</span><span style="color:var(--green);font-family:var(--mono)">Good</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- SIMULATE OVERLAY -->
+<div class="sim-overlay" id="sim-overlay" onclick="simBgClick(event)">
+  <div class="sim-box">
+    <div class="sim-title">⚡ Payment Simulator</div>
+    <div class="sim-desc">See how a payment on Card 3 would affect your credit score before you make it.</div>
+    <div class="sim-row">
+      <label>PAYMENT AMOUNT ($)</label>
+      <input class="sim-input" id="sim-amount" type="number" placeholder="e.g. 200" min="0" max="2000" oninput="calcSim()"/>
+    </div>
+    <div class="sim-result" id="sim-result">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
+        <span style="font-size:.75rem;color:var(--muted2)">Projected score</span>
+        <span style="font-size:.72rem;font-family:var(--mono);color:var(--muted2)">Card 3 util</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <span class="sim-result-score" id="sim-score">742</span>
+        <span style="font-size:.85rem;font-weight:700;font-family:var(--mono);color:var(--amber)" id="sim-util">58%</span>
+      </div>
+      <div class="sim-result-label" id="sim-label">Enter an amount to see the impact</div>
+    </div>
+    <div class="sim-btns">
+      <button class="sim-cancel" onclick="closeSim()">Cancel</button>
+      <button class="sim-run" onclick="applySim()">Apply Simulation</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── TAB SWITCHING ──
+function switchTab(id){
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(el=>{
+    if(el.textContent.trim().toLowerCase().startsWith(id.substring(0,4))) el.classList.add('active');
+  });
+}
+
+function setActive(btn){
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── TOGGLES ──
+function toggleWhy(card){
+  const d=card.querySelector('.why-detail');
+  const wasOpen=d.classList.contains('open');
+  document.querySelectorAll('.why-detail').forEach(el=>el.classList.remove('open'));
+  if(!wasOpen) d.classList.add('open');
+}
+
+let activeFactor=null;
+function toggleFactor(row){
+  const tip=document.getElementById('factor-tip');
+  if(activeFactor===row){
+    tip.style.display='none';activeFactor=null;return;
+  }
+  tip.textContent=row.dataset.tip;
+  tip.style.display='block';
+  activeFactor=row;
+}
+
+function toggleTxn(row){
+  const next=row.nextElementSibling;
+  if(!next||!next.classList.contains('txn-detail')) return;
+  const wasOpen=next.classList.contains('open');
+  document.querySelectorAll('.txn-detail').forEach(el=>el.classList.remove('open'));
+  if(!wasOpen) next.classList.add('open');
+}
+
+function toggleGoal(card){
+  const d=card.querySelector('.goal-detail');
+  const wasOpen=d.classList.contains('open');
+  document.querySelectorAll('.goal-detail').forEach(el=>el.classList.remove('open'));
+  if(!wasOpen) d.classList.add('open');
+}
+
+function selectMilestone(node,text){
+  document.querySelectorAll('.timeline-dot').forEach(d=>d.style.boxShadow='');
+  node.querySelector('.timeline-dot').style.boxShadow='0 0 12px rgba(155,109,255,.5)';
+  const box=document.getElementById('milestone-detail');
+  box.textContent=text;box.style.display='block';
+}
+
+// ── SIMULATOR ──
+const BASE_SCORE=742;
+const C3_BALANCE=1740;
+const C3_LIMIT=3000;
+
+function openSim(){document.getElementById('sim-overlay').classList.add('open');}
+function closeSim(){document.getElementById('sim-overlay').classList.remove('open');}
+function simBgClick(e){if(e.target===document.getElementById('sim-overlay'))closeSim();}
+
+function calcSim(){
+  const amt=parseFloat(document.getElementById('sim-amount').value)||0;
+  const newBal=Math.max(0,C3_BALANCE-amt);
+  const newUtil=Math.round((newBal/C3_LIMIT)*100);
+  const oldUtil=Math.round((C3_BALANCE/C3_LIMIT)*100);
+
+  let scoreDelta=0;
+  if(newUtil<=10) scoreDelta=24;
+  else if(newUtil<=20) scoreDelta=18;
+  else if(newUtil<=30) scoreDelta=12;
+  else if(newUtil<=40) scoreDelta=6;
+  else if(newUtil<oldUtil) scoreDelta=Math.round((oldUtil-newUtil)*0.3);
+
+  const newScore=BASE_SCORE+scoreDelta;
+  document.getElementById('sim-score').textContent=newScore;
+  document.getElementById('sim-util').textContent=newUtil+'%';
+  document.getElementById('sim-util').style.color=newUtil<=30?'var(--green)':newUtil<=50?'var(--amber)':'var(--red)';
+
+  let label='';
+  if(amt<=0) label='Enter an amount to see the impact';
+  else if(scoreDelta>0) label=`↑ +${scoreDelta} projected points · Card 3 drops to ${newUtil}%`;
+  else label=`Utilization stays high — pay more for score impact`;
+  document.getElementById('sim-result').classList.add('show');
+  document.getElementById('sim-label').textContent=label;
+  document.getElementById('sim-label').style.color=scoreDelta>0?'var(--green)':'var(--muted2)';
+}
+
+function applySim(){
+  const amt=parseFloat(document.getElementById('sim-amount').value)||0;
+  if(!amt){closeSim();return;}
+  const newBal=Math.max(0,C3_BALANCE-amt);
+  const newUtil=Math.round((newBal/C3_LIMIT)*100);
+  let scoreDelta=0;
+  if(newUtil<=10) scoreDelta=24;
+  else if(newUtil<=20) scoreDelta=18;
+  else if(newUtil<=30) scoreDelta=12;
+  else if(newUtil<=40) scoreDelta=6;
+  else if(newUtil<Math.round((C3_BALANCE/C3_LIMIT)*100)) scoreDelta=Math.round((Math.round((C3_BALANCE/C3_LIMIT)*100)-newUtil)*0.3);
+
+  // update UI
+  const newScore=BASE_SCORE+scoreDelta;
+  document.getElementById('top-score').textContent=newScore;
+  document.getElementById('arc-score').textContent=newScore;
+  document.getElementById('top-delta').textContent=`↑ +${12+scoreDelta}`;
+  document.getElementById('c3-util').textContent=newUtil+'%';
+  document.getElementById('c3-util').style.color=newUtil<=30?'var(--green)':newUtil<=50?'var(--amber)':'var(--red)';
+  document.getElementById('c3-bar').style.width=newUtil+'%';
+  document.getElementById('c3-bar').style.background=newUtil<=30?'var(--green)':newUtil<=50?'var(--amber)':'var(--red)';
+  document.getElementById('util-val').textContent=Math.round(((newBal+420+280)/7000)*100)+'%';
+
+  // update score arc
+  const pct=(newScore-300)/550;
+  const dashOffset=Math.round(157*(1-pct));
+  document.getElementById('score-arc').setAttribute('stroke-dashoffset',dashOffset);
+  closeSim();
+  document.getElementById('sim-amount').value='';
+  document.getElementById('sim-result').classList.remove('show');
+}
+</script>
+</body>
+</html>

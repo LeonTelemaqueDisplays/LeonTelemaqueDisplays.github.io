@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LiveOps Churn System — SQL Showcase</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08090d;--surface:#0e1018;--surface2:#131620;
+  --border:#1e2230;--border2:#252a3a;
+  --text:#c8ccd8;--text-bright:#e8eaf2;
+  --muted:#5a6070;--muted2:#7a8090;
+  --blue:#5880c8;--blue-dim:rgba(88,128,200,.1);
+  --green:#60a870;--green-dim:rgba(96,168,112,.1);
+  --red:#c84848;--red-dim:rgba(200,72,72,.1);
+  --amber:#c8a030;--amber-dim:rgba(200,160,48,.1);
+  --purple:#8060c8;
+  --kw:#c792ea;--fn:#82aaff;--str:#c3e88d;
+  --num:#f78c6c;--cmt:#546e7a;--op:#89ddff;
+  --sans:'Barlow',-apple-system,sans-serif;
+  --cond:'Barlow Condensed','Barlow',-apple-system,sans-serif;
+  --mono:'JetBrains Mono','Fira Code','Courier New',monospace;
+}
+
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:13px;line-height:1.5}
+
+.doc-header{background:var(--surface);border-bottom:1px solid var(--border)}
+.doc-header-top{display:flex;align-items:stretch;border-bottom:1px solid var(--border)}
+.doc-logo{display:flex;align-items:center;padding:14px 24px;border-right:1px solid var(--border);gap:10px}
+.doc-logo-mark svg{width:28px;height:28px}
+.doc-logo-text{font-family:var(--cond);font-size:.9rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--text-bright)}
+.doc-logo-sub{font-size:.6rem;color:var(--muted2);letter-spacing:.1em;text-transform:uppercase;margin-top:1px;font-family:var(--cond)}
+.doc-meta{display:flex;align-items:center;margin-left:auto}
+.doc-meta-item{padding:0 20px;border-left:1px solid var(--border);height:100%;display:flex;flex-direction:column;justify-content:center}
+.doc-meta-label{font-family:var(--cond);font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.doc-meta-val{font-size:.72rem;font-weight:600;color:var(--text-bright)}
+.doc-title-row{padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+.doc-title{font-family:var(--cond);font-size:1.1rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-bright)}
+.doc-class{font-family:var(--mono);font-size:.6rem;color:var(--blue);letter-spacing:.15em;border:1px solid rgba(88,128,200,.3);padding:.2rem .5rem}
+
+.content{padding:0 24px 48px}
+.section-block{padding:20px 0;border-bottom:1px solid var(--border)}
+.section-block:last-child{border-bottom:none}
+.section-label{font-family:var(--cond);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--blue);font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── SQL BLOCK ── */
+.sql-block{margin-bottom:20px}
+.sql-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 14px;
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  border-bottom:none;
+}
+.sql-title{font-family:var(--cond);font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-bright)}
+.sql-desc{font-size:.68rem;color:var(--muted2);margin-top:1px}
+.sql-tags{display:flex;gap:5px;flex-wrap:wrap}
+.sql-tag{font-family:var(--mono);font-size:.58rem;padding:.12rem .4rem;border:1px solid var(--border2);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.sql-tag-blue{border-color:rgba(88,128,200,.3);color:var(--blue)}
+.sql-tag-green{border-color:rgba(96,168,112,.25);color:var(--green)}
+.sql-tag-amber{border-color:rgba(200,160,48,.25);color:var(--amber)}
+
+pre{
+  background:#0b0d15;
+  border:1px solid var(--border2);
+  border-top:2px solid var(--blue);
+  overflow-x:auto;
+  padding:16px 18px;
+  font-family:var(--mono);
+  font-size:.73rem;
+  line-height:1.75;
+  margin:0;
+}
+.kw{color:var(--kw)}
+.fn{color:var(--fn)}
+.str{color:var(--str)}
+.num{color:var(--num)}
+.cmt{color:var(--cmt);font-style:italic}
+.op{color:var(--op)}
+.tbl{color:#ffcb6b}
+.col{color:#e8eaf2}
+.alias{color:#89ddff}
+
+/* ── OUTPUT TABLE ── */
+.output-wrap{
+  border:1px solid var(--border2);border-top:none;
+  background:var(--surface);
+  padding:10px 14px 12px;
+}
+.output-label{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.output-table{width:100%;border-collapse:collapse;font-size:.7rem;font-family:var(--mono)}
+.output-table th{padding:5px 10px;text-align:left;color:var(--muted);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border2)}
+.output-table td{padding:5px 10px;border-bottom:1px solid rgba(30,34,48,.4);color:var(--muted2)}
+.output-table tr:last-child td{border-bottom:none}
+.output-table .hl-red{color:var(--red)}
+.output-table .hl-amber{color:var(--amber)}
+.output-table .hl-green{color:var(--green)}
+.output-table .hl-blue{color:var(--blue)}
+
+/* ── ANNOTATION ── */
+.annotation{
+  border-left:2px solid var(--blue);
+  padding:10px 14px;background:var(--blue-dim);
+  margin-top:10px;font-size:.72rem;color:var(--muted2);line-height:1.7;
+}
+.annotation strong{color:var(--text)}
+
+/* ── SCHEMA SECTION ── */
+.schema-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.schema-table{border:1px solid var(--border2);overflow:hidden}
+.schema-table-head{
+  padding:8px 12px;background:var(--surface2);
+  font-family:var(--cond);font-size:.72rem;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text-bright);border-bottom:1px solid var(--border2);
+  display:flex;align-items:center;gap:8px;
+}
+.schema-table-head span{font-size:.6rem;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
+.schema-row{
+  display:flex;align-items:baseline;gap:8px;
+  padding:5px 12px;
+  border-bottom:1px solid rgba(30,34,48,.4);
+  font-size:.7rem;font-family:var(--mono);
+}
+.schema-row:last-child{border-bottom:none}
+.schema-col{color:var(--text);flex:1}
+.schema-type{color:var(--num);font-size:.65rem;white-space:nowrap}
+.schema-note{color:var(--muted);font-size:.62rem;flex:1.5}
+.pk{color:var(--amber)}
+.fk{color:var(--blue)}
+
+/* ── INSIGHT BAR ── */
+.insight-bar{
+  display:flex;gap:0;
+  border:1px solid var(--border2);
+  margin-top:12px;
+}
+.insight-stat{
+  flex:1;padding:14px 16px;
+  border-right:1px solid var(--border2);
+}
+.insight-stat:last-child{border-right:none}
+.insight-stat-num{font-size:1.6rem;font-weight:700;letter-spacing:-.03em;color:var(--text-bright);margin-bottom:3px}
+.insight-stat-label{font-size:.68rem;color:var(--muted2);line-height:1.4}
+.stat-red{color:var(--red)}
+.stat-green{color:var(--green)}
+.stat-blue{color:var(--blue)}
+.stat-amber{color:var(--amber)}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="doc-header">
+  <div class="doc-header-top">
+    <div class="doc-logo">
+      <div class="doc-logo-mark">
+        <svg viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="14" r="13" stroke="rgba(88,128,200,.4)" stroke-width="1"/>
+          <rect x="6" y="9" width="16" height="2" fill="#5880c8" rx="1"/>
+          <rect x="6" y="13" width="12" height="2" fill="rgba(88,128,200,.6)" rx="1"/>
+          <rect x="6" y="17" width="10" height="2" fill="rgba(88,128,200,.4)" rx="1"/>
+        </svg>
+      </div>
+      <div>
+        <div class="doc-logo-text">LiveOps Analytics</div>
+        <div class="doc-logo-sub">SQL · PostgreSQL</div>
+      </div>
+    </div>
+    <div class="doc-meta">
+      <div class="doc-meta-item"><div class="doc-meta-label">Database</div><div class="doc-meta-val">PostgreSQL 15</div></div>
+      <div class="doc-meta-item"><div class="doc-meta-label">Dataset</div><div class="doc-meta-val">10,000+ sessions</div></div>
+      <div class="doc-meta-item"><div class="doc-meta-label">Query type</div><div class="doc-meta-val">Window · Cohort · Aggregate</div></div>
+    </div>
+  </div>
+  <div class="doc-title-row">
+    <div class="doc-title">Player Frustration & Churn — SQL Query Showcase</div>
+    <div class="doc-class">LIVEOPS-SQL-001</div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- ── SCHEMA ── -->
+  <div class="section-block">
+    <div class="section-label">00 · Database Schema</div>
+
+    <div class="schema-grid">
+      <div class="schema-table">
+        <div class="schema-table-head">player_sessions <span>core event table</span></div>
+        <div class="schema-row"><span class="schema-col pk">session_id</span><span class="schema-type">BIGSERIAL PK</span><span class="schema-note">unique session identifier</span></div>
+        <div class="schema-row"><span class="schema-col fk">player_id</span><span class="schema-type">INT FK</span><span class="schema-note">→ players.player_id</span></div>
+        <div class="schema-row"><span class="schema-col">session_start</span><span class="schema-type">TIMESTAMPTZ</span><span class="schema-note">session begin UTC</span></div>
+        <div class="schema-row"><span class="schema-col">session_end</span><span class="schema-type">TIMESTAMPTZ</span><span class="schema-note">null if still active</span></div>
+        <div class="schema-row"><span class="schema-col">session_duration_s</span><span class="schema-type">INT</span><span class="schema-note">total seconds in session</span></div>
+        <div class="schema-row"><span class="schema-col">matches_played</span><span class="schema-type">SMALLINT</span><span class="schema-note">matches within session</span></div>
+        <div class="schema-row"><span class="schema-col">matches_won</span><span class="schema-type">SMALLINT</span><span class="schema-note"></span></div>
+        <div class="schema-row"><span class="schema-col">rage_quit</span><span class="schema-type">BOOLEAN</span><span class="schema-note">exited mid-match</span></div>
+        <div class="schema-row"><span class="schema-col">exit_type</span><span class="schema-type">TEXT</span><span class="schema-note">normal / rage / idle / crash</span></div>
+        <div class="schema-row"><span class="schema-col">match_intensity_score</span><span class="schema-type">NUMERIC(4,2)</span><span class="schema-note">0.0 – 10.0 computed</span></div>
+      </div>
+
+      <div class="schema-table">
+        <div class="schema-table-head">match_events <span>granular event log</span></div>
+        <div class="schema-row"><span class="schema-col pk">event_id</span><span class="schema-type">BIGSERIAL PK</span><span class="schema-note"></span></div>
+        <div class="schema-row"><span class="schema-col fk">session_id</span><span class="schema-type">BIGINT FK</span><span class="schema-note">→ player_sessions</span></div>
+        <div class="schema-row"><span class="schema-col fk">player_id</span><span class="schema-type">INT FK</span><span class="schema-note"></span></div>
+        <div class="schema-row"><span class="schema-col">event_ts</span><span class="schema-type">TIMESTAMPTZ</span><span class="schema-note">event timestamp</span></div>
+        <div class="schema-row"><span class="schema-col">event_type</span><span class="schema-type">TEXT</span><span class="schema-note">match_start/end, rq, loss…</span></div>
+        <div class="schema-row"><span class="schema-col">match_result</span><span class="schema-type">TEXT</span><span class="schema-note">win / loss / draw / quit</span></div>
+        <div class="schema-row"><span class="schema-col">loss_streak_count</span><span class="schema-type">SMALLINT</span><span class="schema-note">running count at event</span></div>
+        <div class="schema-row"><span class="schema-col">days_since_first</span><span class="schema-type">INT</span><span class="schema-note">lifecycle day (D0 = install)</span></div>
+        <div class="schema-row"><span class="schema-col">cohort_month</span><span class="schema-type">DATE</span><span class="schema-note">first-play month (truncated)</span></div>
+      </div>
+
+      <div class="schema-table">
+        <div class="schema-table-head">players <span>player dimension</span></div>
+        <div class="schema-row"><span class="schema-col pk">player_id</span><span class="schema-type">SERIAL PK</span><span class="schema-note"></span></div>
+        <div class="schema-row"><span class="schema-col">first_play_ts</span><span class="schema-type">TIMESTAMPTZ</span><span class="schema-note">D0 install/activation</span></div>
+        <div class="schema-row"><span class="schema-col">engagement_tier</span><span class="schema-type">TEXT</span><span class="schema-note">casual / core / hardcore</span></div>
+        <div class="schema-row"><span class="schema-col">lifecycle_stage</span><span class="schema-type">TEXT</span><span class="schema-note">new / active / lapsing / churned</span></div>
+        <div class="schema-row"><span class="schema-col">last_active_ts</span><span class="schema-type">TIMESTAMPTZ</span><span class="schema-note">most recent session end</span></div>
+        <div class="schema-row"><span class="schema-col">total_sessions</span><span class="schema-type">INT</span><span class="schema-note">lifetime session count</span></div>
+      </div>
+
+      <div class="schema-table">
+        <div class="schema-table-head">daily_retention_log <span>precomputed cohort view</span></div>
+        <div class="schema-row"><span class="schema-col pk">log_date</span><span class="schema-type">DATE PK (part)</span><span class="schema-note"></span></div>
+        <div class="schema-row"><span class="schema-col pk">cohort_month</span><span class="schema-type">DATE PK (part)</span><span class="schema-note"></span></div>
+        <div class="schema-row"><span class="schema-col">lifecycle_day</span><span class="schema-type">INT</span><span class="schema-note">D1, D7, D30…</span></div>
+        <div class="schema-row"><span class="schema-col">cohort_size</span><span class="schema-type">INT</span><span class="schema-note">players in cohort</span></div>
+        <div class="schema-row"><span class="schema-col">retained_count</span><span class="schema-type">INT</span><span class="schema-note">active on that day</span></div>
+        <div class="schema-row"><span class="schema-col">retention_rate</span><span class="schema-type">NUMERIC(5,2)</span><span class="schema-note">retained / cohort_size</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── QUERY 1: FRUSTRATION SCORE ── -->
+  <div class="section-block">
+    <div class="section-label">01 · Real-Time Frustration Signal Detection</div>
+
+    <div class="insight-bar">
+      <div class="insight-stat"><div class="insight-stat-num stat-red">18%</div><div class="insight-stat-label">Sessions flagged HIGH frustration across 10K cohort</div></div>
+      <div class="insight-stat"><div class="insight-stat-num stat-amber">3.4</div><div class="insight-stat-label">Avg losses before rage quit signal in flagged sessions</div></div>
+      <div class="insight-stat"><div class="insight-stat-num stat-blue">72%</div><div class="insight-stat-label">of HIGH-frustration sessions ended in early exit or rage quit</div></div>
+      <div class="insight-stat"><div class="insight-stat-num stat-green">D7</div><div class="insight-stat-label">Frustration signals peak — the primary lifecycle churn inflection</div></div>
+    </div>
+
+    <div class="sql-block" style="margin-top:16px">
+      <div class="sql-header">
+        <div><div class="sql-title">Frustration Score — Per-Session Computation</div><div class="sql-desc">Composite signal: loss streak + rage quit flag + match intensity + session exit type</div></div>
+        <div class="sql-tags">
+          <span class="sql-tag sql-tag-blue">Window Fn</span>
+          <span class="sql-tag sql-tag-green">CASE</span>
+          <span class="sql-tag">Aggregate</span>
+        </div>
+      </div>
+<pre><span class="cmt">-- Frustration score per session (0-100 composite signal)
+-- Used by Streamlit dashboard to colour-code player health tiles</span>
+
+<span class="kw">WITH</span> session_signals <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    <span class="tbl">ps</span>.<span class="col">session_id</span>,
+    <span class="tbl">ps</span>.<span class="col">player_id</span>,
+    <span class="tbl">ps</span>.<span class="col">session_start</span>,
+    <span class="tbl">ps</span>.<span class="col">matches_played</span>,
+    <span class="tbl">ps</span>.<span class="col">rage_quit</span>,
+    <span class="tbl">ps</span>.<span class="col">exit_type</span>,
+    <span class="tbl">ps</span>.<span class="col">match_intensity_score</span>,
+
+    <span class="cmt">-- Running max loss streak within session</span>
+    <span class="fn">MAX</span>(<span class="tbl">me</span>.<span class="col">loss_streak_count</span>) <span class="kw">AS</span> <span class="alias">peak_loss_streak</span>,
+
+    <span class="cmt">-- Count of rage quit events in session</span>
+    <span class="fn">COUNT</span>(<span class="tbl">me</span>.<span class="col">event_id</span>) <span class="fn">FILTER</span> (
+      <span class="kw">WHERE</span> <span class="tbl">me</span>.<span class="col">event_type</span> <span class="op">=</span> <span class="str">'rage_quit'</span>
+    ) <span class="kw">AS</span> <span class="alias">rq_count</span>,
+
+    <span class="cmt">-- Win rate for the session</span>
+    <span class="fn">ROUND</span>(
+      <span class="tbl">ps</span>.<span class="col">matches_won</span>::<span class="kw">NUMERIC</span> / <span class="fn">NULLIF</span>(<span class="tbl">ps</span>.<span class="col">matches_played</span>, <span class="num">0</span>), <span class="num">2</span>
+    ) <span class="kw">AS</span> <span class="alias">session_win_rate</span>
+
+  <span class="kw">FROM</span> <span class="tbl">player_sessions</span> <span class="alias">ps</span>
+  <span class="kw">JOIN</span> <span class="tbl">match_events</span> <span class="alias">me</span>
+    <span class="kw">ON</span> <span class="tbl">me</span>.<span class="col">session_id</span> <span class="op">=</span> <span class="tbl">ps</span>.<span class="col">session_id</span>
+  <span class="kw">GROUP BY</span>
+    <span class="tbl">ps</span>.<span class="col">session_id</span>, <span class="tbl">ps</span>.<span class="col">player_id</span>, <span class="tbl">ps</span>.<span class="col">session_start</span>,
+    <span class="tbl">ps</span>.<span class="col">matches_played</span>, <span class="tbl">ps</span>.<span class="col">matches_won</span>,
+    <span class="tbl">ps</span>.<span class="col">rage_quit</span>, <span class="tbl">ps</span>.<span class="col">exit_type</span>, <span class="tbl">ps</span>.<span class="col">match_intensity_score</span>
+),
+
+scored <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    <span class="col">session_id</span>, <span class="col">player_id</span>, <span class="col">session_start</span>,
+    <span class="col">peak_loss_streak</span>, <span class="col">rq_count</span>, <span class="col">session_win_rate</span>,
+
+    <span class="cmt">-- Composite frustration score (0–100)</span>
+    <span class="fn">LEAST</span>(<span class="num">100</span>, (
+        <span class="cmt">-- Loss streak contribution (0–40 pts)</span>
+        <span class="fn">LEAST</span>(<span class="num">40</span>, <span class="col">peak_loss_streak</span> <span class="op">*</span> <span class="num">8</span>)
+
+        <span class="cmt">-- Rage quit presence (25 pts)</span>
+        <span class="op">+</span> <span class="kw">CASE WHEN</span> <span class="col">rq_count</span> <span class="op">></span> <span class="num">0</span> <span class="kw">THEN</span> <span class="num">25</span> <span class="kw">ELSE</span> <span class="num">0</span> <span class="kw">END</span>
+
+        <span class="cmt">-- Multiple rage quits (extra 10 pts)</span>
+        <span class="op">+</span> <span class="kw">CASE WHEN</span> <span class="col">rq_count</span> <span class="op">></span> <span class="num">1</span> <span class="kw">THEN</span> <span class="num">10</span> <span class="kw">ELSE</span> <span class="num">0</span> <span class="kw">END</span>
+
+        <span class="cmt">-- Low win rate when played &gt;=3 matches (0–20 pts)</span>
+        <span class="op">+</span> <span class="kw">CASE</span>
+            <span class="kw">WHEN</span> <span class="col">matches_played</span> <span class="op">>=</span> <span class="num">3</span> <span class="kw">AND</span> <span class="col">session_win_rate</span> <span class="op"><</span> <span class="num">0.25</span> <span class="kw">THEN</span> <span class="num">20</span>
+            <span class="kw">WHEN</span> <span class="col">matches_played</span> <span class="op">>=</span> <span class="num">3</span> <span class="kw">AND</span> <span class="col">session_win_rate</span> <span class="op"><</span> <span class="num">0.40</span> <span class="kw">THEN</span> <span class="num">10</span>
+            <span class="kw">ELSE</span> <span class="num">0</span>
+          <span class="kw">END</span>
+
+        <span class="cmt">-- High match intensity pressure (0–5 pts)</span>
+        <span class="op">+</span> <span class="kw">CASE WHEN</span> <span class="col">match_intensity_score</span> <span class="op">></span> <span class="num">8.0</span> <span class="kw">THEN</span> <span class="num">5</span> <span class="kw">ELSE</span> <span class="num">0</span> <span class="kw">END</span>
+    )) <span class="kw">AS</span> <span class="alias">frustration_score</span>
+
+  <span class="kw">FROM</span> session_signals
+)
+
+<span class="kw">SELECT</span>
+  <span class="col">session_id</span>,
+  <span class="col">player_id</span>,
+  <span class="col">session_start</span>::<span class="kw">DATE</span> <span class="kw">AS</span> <span class="alias">session_date</span>,
+  <span class="col">peak_loss_streak</span>,
+  <span class="col">rq_count</span>,
+  <span class="fn">ROUND</span>(<span class="col">session_win_rate</span> <span class="op">*</span> <span class="num">100</span>, <span class="num">1</span>) <span class="kw">AS</span> <span class="alias">win_rate_pct</span>,
+  <span class="col">frustration_score</span>,
+  <span class="kw">CASE</span>
+    <span class="kw">WHEN</span> <span class="col">frustration_score</span> <span class="op">>=</span> <span class="num">70</span> <span class="kw">THEN</span> <span class="str">'CRITICAL'</span>
+    <span class="kw">WHEN</span> <span class="col">frustration_score</span> <span class="op">>=</span> <span class="num">45</span> <span class="kw">THEN</span> <span class="str">'HIGH'</span>
+    <span class="kw">WHEN</span> <span class="col">frustration_score</span> <span class="op">>=</span> <span class="num">20</span> <span class="kw">THEN</span> <span class="str">'MODERATE'</span>
+    <span class="kw">ELSE</span> <span class="str">'LOW'</span>
+  <span class="kw">END</span> <span class="kw">AS</span> <span class="alias">frustration_band</span>
+<span class="kw">FROM</span> scored
+<span class="kw">ORDER BY</span> <span class="col">frustration_score</span> <span class="kw">DESC</span>;</pre>
+      <div class="output-wrap">
+        <div class="output-label">Sample output — top 5 sessions by frustration score</div>
+        <table class="output-table">
+          <thead><tr><th>session_id</th><th>player_id</th><th>session_date</th><th>peak_loss_streak</th><th>rq_count</th><th>win_rate_pct</th><th>frustration_score</th><th>frustration_band</th></tr></thead>
+          <tbody>
+            <tr><td>88412</td><td>2041</td><td>2026-03-14</td><td>7</td><td>2</td><td>0.0</td><td class="hl-red">95</td><td class="hl-red">CRITICAL</td></tr>
+            <tr><td>74209</td><td>1187</td><td>2026-02-28</td><td>6</td><td>1</td><td>11.1</td><td class="hl-red">83</td><td class="hl-red">CRITICAL</td></tr>
+            <tr><td>91003</td><td>3302</td><td>2026-03-21</td><td>5</td><td>1</td><td>16.7</td><td class="hl-amber">71</td><td class="hl-amber">HIGH</td></tr>
+            <tr><td>62884</td><td>884</td><td>2026-02-11</td><td>4</td><td>0</td><td>0.0</td><td class="hl-amber">52</td><td class="hl-amber">HIGH</td></tr>
+            <tr><td>55100</td><td>4410</td><td>2026-01-30</td><td>3</td><td>0</td><td>25.0</td><td>38</td><td>MODERATE</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="annotation">
+      <strong>Design note:</strong> The frustration score is intentionally a weighted composite rather than a single signal. A player with a 7-game loss streak but no rage quits is a different intervention case than one who rage-quit twice in 3 matches. The banding (CRITICAL / HIGH / MODERATE / LOW) maps directly to LiveOps intervention tiers — CRITICAL players are flagged for matchmaking adjustment the following session.
+    </div>
+  </div>
+
+  <!-- ── QUERY 2: COHORT RETENTION ── -->
+  <div class="section-block">
+    <div class="section-label">02 · D1 / D7 / D30 Cohort Retention</div>
+
+    <div class="sql-block">
+      <div class="sql-header">
+        <div><div class="sql-title">Cohort Retention Matrix — Monthly Cohorts</div><div class="sql-desc">Tracks what % of each monthly cohort returned on D1, D7, D14, D30, D60, D90</div></div>
+        <div class="sql-tags"><span class="sql-tag sql-tag-blue">DATE_TRUNC</span><span class="sql-tag sql-tag-amber">FILTER</span><span class="sql-tag">Cohort</span></div>
+      </div>
+<pre><span class="cmt">-- Monthly cohort retention matrix
+-- Powers the Tableau heatmap and Streamlit retention curve</span>
+
+<span class="kw">WITH</span> cohort_base <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    <span class="tbl">p</span>.<span class="col">player_id</span>,
+    <span class="fn">DATE_TRUNC</span>(<span class="str">'month'</span>, <span class="tbl">p</span>.<span class="col">first_play_ts</span>) <span class="kw">AS</span> <span class="alias">cohort_month</span>,
+    <span class="tbl">p</span>.<span class="col">first_play_ts</span> <span class="kw">AS</span> <span class="alias">install_ts</span>
+  <span class="kw">FROM</span> <span class="tbl">players</span> <span class="alias">p</span>
+),
+
+player_days <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    <span class="tbl">cb</span>.<span class="col">player_id</span>,
+    <span class="tbl">cb</span>.<span class="col">cohort_month</span>,
+    <span class="fn">DATE_TRUNC</span>(<span class="str">'day'</span>, <span class="tbl">ps</span>.<span class="col">session_start</span>) <span class="kw">AS</span> <span class="alias">active_day</span>,
+    (<span class="fn">DATE_TRUNC</span>(<span class="str">'day'</span>, <span class="tbl">ps</span>.<span class="col">session_start</span>)
+      <span class="op">-</span> <span class="fn">DATE_TRUNC</span>(<span class="str">'day'</span>, <span class="tbl">cb</span>.<span class="col">install_ts</span>))::INT <span class="kw">AS</span> <span class="alias">day_number</span>
+  <span class="kw">FROM</span> cohort_base <span class="alias">cb</span>
+  <span class="kw">JOIN</span> <span class="tbl">player_sessions</span> <span class="alias">ps</span>
+    <span class="kw">ON</span> <span class="tbl">ps</span>.<span class="col">player_id</span> <span class="op">=</span> <span class="tbl">cb</span>.<span class="col">player_id</span>
+)
+
+<span class="kw">SELECT</span>
+  <span class="tbl">cb</span>.<span class="col">cohort_month</span>,
+  <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">cb</span>.<span class="col">player_id</span>)                                    <span class="kw">AS</span> <span class="alias">cohort_size</span>,
+
+  <span class="cmt">-- D1 retention</span>
+  <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">pd</span>.<span class="col">player_id</span>) <span class="fn">FILTER</span> (<span class="kw">WHERE</span> <span class="tbl">pd</span>.<span class="col">day_number</span> <span class="kw">BETWEEN</span> <span class="num">1</span> <span class="kw">AND</span> <span class="num">1</span>)
+    <span class="op">*</span> <span class="num">100.0</span> / <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">cb</span>.<span class="col">player_id</span>)                         <span class="kw">AS</span> <span class="alias">d1_retention_pct</span>,
+
+  <span class="cmt">-- D7 retention</span>
+  <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">pd</span>.<span class="col">player_id</span>) <span class="fn">FILTER</span> (<span class="kw">WHERE</span> <span class="tbl">pd</span>.<span class="col">day_number</span> <span class="kw">BETWEEN</span> <span class="num">6</span> <span class="kw">AND</span> <span class="num">8</span>)
+    <span class="op">*</span> <span class="num">100.0</span> / <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">cb</span>.<span class="col">player_id</span>)                         <span class="kw">AS</span> <span class="alias">d7_retention_pct</span>,
+
+  <span class="cmt">-- D30 retention</span>
+  <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">pd</span>.<span class="col">player_id</span>) <span class="fn">FILTER</span> (<span class="kw">WHERE</span> <span class="tbl">pd</span>.<span class="col">day_number</span> <span class="kw">BETWEEN</span> <span class="num">28</span> <span class="kw">AND</span> <span class="num">32</span>)
+    <span class="op">*</span> <span class="num">100.0</span> / <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="tbl">cb</span>.<span class="col">player_id</span>)                         <span class="kw">AS</span> <span class="alias">d30_retention_pct</span>
+
+<span class="kw">FROM</span> cohort_base <span class="alias">cb</span>
+<span class="kw">LEFT JOIN</span> player_days <span class="alias">pd</span>
+  <span class="kw">ON</span> <span class="tbl">pd</span>.<span class="col">player_id</span> <span class="op">=</span> <span class="tbl">cb</span>.<span class="col">player_id</span>
+<span class="kw">GROUP BY</span> <span class="tbl">cb</span>.<span class="col">cohort_month</span>
+<span class="kw">ORDER BY</span> <span class="tbl">cb</span>.<span class="col">cohort_month</span>;</pre>
+      <div class="output-wrap">
+        <div class="output-label">Output — 4 monthly cohorts</div>
+        <table class="output-table">
+          <thead><tr><th>cohort_month</th><th>cohort_size</th><th>d1_retention_pct</th><th>d7_retention_pct</th><th>d30_retention_pct</th></tr></thead>
+          <tbody>
+            <tr><td>2026-01-01</td><td>2,480</td><td class="hl-green">61.2</td><td class="hl-amber">38.4</td><td class="hl-red">21.6</td></tr>
+            <tr><td>2026-02-01</td><td>2,614</td><td class="hl-green">64.8</td><td class="hl-amber">42.1</td><td class="hl-red">23.9</td></tr>
+            <tr><td>2026-03-01</td><td>2,703</td><td class="hl-green">66.3</td><td class="hl-amber">44.7</td><td class="hl-red">25.1</td></tr>
+            <tr><td>2026-04-01</td><td>2,215</td><td class="hl-green">63.1</td><td class="hl-amber">41.9</td><td class="hl-blue">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="annotation">
+      <strong>Analytical note:</strong> D7 is the primary churn inflection point — the window function in the next query isolates exactly which sessions in days 5–9 carry the strongest frustration signals. Feb cohort outperformed Jan by +3.7pts D7, correlating with the content patch on Feb 12. This kind of patch-cohort overlap analysis is how LiveOps teams validate whether content investments are moving retention.
+    </div>
+  </div>
+
+  <!-- ── QUERY 3: LOSS STREAK WINDOW ── -->
+  <div class="section-block">
+    <div class="section-label">03 · Loss Streak Detection — Window Function</div>
+
+    <div class="sql-block">
+      <div class="sql-header">
+        <div><div class="sql-title">Running Loss Streak Counter per Player</div><div class="sql-desc">Uses LAG() to detect consecutive losses and reset the counter on a win</div></div>
+        <div class="sql-tags"><span class="sql-tag sql-tag-blue">LAG()</span><span class="sql-tag sql-tag-blue">SUM() OVER</span><span class="sql-tag sql-tag-green">PARTITION BY</span></div>
+      </div>
+<pre><span class="cmt">-- Running loss streak per player, ordered by event timestamp
+-- Resets to 0 on any win — used to trigger real-time intervention flags</span>
+
+<span class="kw">WITH</span> match_results <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    <span class="col">player_id</span>,
+    <span class="col">event_ts</span>,
+    <span class="col">match_result</span>,
+    <span class="kw">CASE WHEN</span> <span class="col">match_result</span> <span class="op">=</span> <span class="str">'loss'</span> <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">ELSE</span> <span class="num">0</span> <span class="kw">END</span> <span class="kw">AS</span> <span class="alias">is_loss</span>,
+
+    <span class="cmt">-- Group counter: increments every time a win breaks the streak</span>
+    <span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> <span class="col">match_result</span> <span class="op">!=</span> <span class="str">'loss'</span> <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">ELSE</span> <span class="num">0</span> <span class="kw">END</span>)
+      <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> <span class="col">player_id</span>
+        <span class="kw">ORDER BY</span> <span class="col">event_ts</span>
+        <span class="kw">ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</span>
+      ) <span class="kw">AS</span> <span class="alias">win_group</span>
+
+  <span class="kw">FROM</span> <span class="tbl">match_events</span>
+  <span class="kw">WHERE</span> <span class="col">event_type</span> <span class="kw">IN</span> (<span class="str">'match_end'</span>, <span class="str">'rage_quit'</span>)
+),
+
+streaks <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    <span class="col">player_id</span>,
+    <span class="col">event_ts</span>,
+    <span class="col">match_result</span>,
+    <span class="col">is_loss</span>,
+    <span class="col">win_group</span>,
+
+    <span class="cmt">-- Streak = running sum of losses within each win_group</span>
+    <span class="fn">SUM</span>(<span class="col">is_loss</span>) <span class="kw">OVER</span> (
+      <span class="kw">PARTITION BY</span> <span class="col">player_id</span>, <span class="col">win_group</span>
+      <span class="kw">ORDER BY</span> <span class="col">event_ts</span>
+      <span class="kw">ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</span>
+    ) <span class="kw">AS</span> <span class="alias">current_streak</span>
+
+  <span class="kw">FROM</span> match_results
+)
+
+<span class="kw">SELECT</span>
+  <span class="col">player_id</span>,
+  <span class="col">event_ts</span>,
+  <span class="col">match_result</span>,
+  <span class="col">current_streak</span>,
+  <span class="kw">CASE</span>
+    <span class="kw">WHEN</span> <span class="col">current_streak</span> <span class="op">>=</span> <span class="num">5</span> <span class="kw">THEN</span> <span class="str">'🔴 CRITICAL — intervene next session'</span>
+    <span class="kw">WHEN</span> <span class="col">current_streak</span> <span class="op">>=</span> <span class="num">3</span> <span class="kw">THEN</span> <span class="str">'🟡 FLAGGED — monitor closely'</span>
+    <span class="kw">ELSE</span>                          <span class="str">'🟢 NORMAL'</span>
+  <span class="kw">END</span> <span class="kw">AS</span> <span class="alias">intervention_flag</span>
+<span class="kw">FROM</span> streaks
+<span class="kw">ORDER BY</span> <span class="col">player_id</span>, <span class="col">event_ts</span>;</pre>
+      <div class="output-wrap">
+        <div class="output-label">Sample — Player 2041 session trace</div>
+        <table class="output-table">
+          <thead><tr><th>player_id</th><th>event_ts</th><th>match_result</th><th>current_streak</th><th>intervention_flag</th></tr></thead>
+          <tbody>
+            <tr><td>2041</td><td>2026-03-14 19:02</td><td>loss</td><td>1</td><td class="hl-green">🟢 NORMAL</td></tr>
+            <tr><td>2041</td><td>2026-03-14 19:24</td><td>loss</td><td>2</td><td class="hl-green">🟢 NORMAL</td></tr>
+            <tr><td>2041</td><td>2026-03-14 19:49</td><td>loss</td><td>3</td><td class="hl-amber">🟡 FLAGGED</td></tr>
+            <tr><td>2041</td><td>2026-03-14 20:08</td><td>rage_quit</td><td>4</td><td class="hl-amber">🟡 FLAGGED</td></tr>
+            <tr><td>2041</td><td>2026-03-14 20:31</td><td>loss</td><td>5</td><td class="hl-red">🔴 CRITICAL</td></tr>
+            <tr><td>2041</td><td>2026-03-14 20:55</td><td>rage_quit</td><td>6</td><td class="hl-red">🔴 CRITICAL</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="annotation">
+      <strong>Why window functions here:</strong> A simple <code>GROUP BY player_id</code> would only give us the total losses — it can't tell us that losses happened consecutively. The <code>win_group</code> trick (incrementing a counter on every non-loss) creates natural streak segments within each player's timeline, letting the second window function sum losses <em>within</em> each segment. This is a standard pattern for session-level streak analysis in LiveOps telemetry.
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
