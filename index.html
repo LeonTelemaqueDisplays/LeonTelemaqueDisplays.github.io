@@ -1387,8 +1387,8 @@ footer{
   <div class="hero-work-grid" style="padding-bottom:0">
 
     <!-- GTA ONLINE — OPERATION: LAST RIDE — HERO #1 -->
-    <div class="pcard" onclick="openModal('gta')" style="grid-column:1/-1">
-      <div class="pcard-preview" style="aspect-ratio:21/8;overflow:hidden;position:relative;">
+    <div class="pcard" onclick="openModal('gta')">
+      <div class="pcard-preview">
         <svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
           <defs>
             <radialGradient id="cityGlow" cx="50%" cy="100%" r="70%">
@@ -1640,186 +1640,16 @@ footer{
           <text x="235" y="371" text-anchor="middle" fill="rgba(255,77,77,.75)" font-size="6.5" font-family="monospace">War Room →</text>
         </svg>
       </div>
-      <div class="pcard-body" style="flex-direction:row;align-items:center;gap:32px;flex-wrap:wrap">
-        <div style="flex:1;min-width:200px">
+      <div class="pcard-body">
           <h3 class="pcard-title">Operation: Last Ride — GTA Online Pre-Launch Retention</h3>
           <p class="pcard-desc">18.3M MAU. GTA VI drops November 2026. This is the war room: who leaves, when, why, and which LiveOps levers exist to slow the bleed before the sequel erases the player base.</p>
-        </div>
-        <div class="pcard-tags" style="margin-top:0">
+        <div class="pcard-tags">
           <span class="ptag ptag-blue">Gaming · LiveOps</span>
           <span class="ptag">SQL</span>
           <span class="ptag">Cohort Analysis</span>
           <span class="ptag">Churn Modelling</span>
           <span class="ptag">Economy Analysis</span>
           <span class="ptag" style="border-color:rgba(245,158,11,.4);color:#f59e0b">GTA Online</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- P2: Dead by Daylight Retention — SUPPORT -->
-    <div class="pcard" onclick="openModal('retention')">
-      <div class="pcard-preview">
-        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-          <defs>
-            <radialGradient id="dbdFog" cx="50%" cy="100%" r="70%">
-              <stop offset="0%" stop-color="#5a0a0a" stop-opacity=".7"/>
-              <stop offset="50%" stop-color="#2a0505" stop-opacity=".4"/>
-              <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="hookGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#c84848" stop-opacity=".35"/>
-              <stop offset="100%" stop-color="#c84848" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#ff2020" stop-opacity=".9"/>
-              <stop offset="60%" stop-color="#c84848" stop-opacity=".5"/>
-              <stop offset="100%" stop-color="#c84848" stop-opacity="0"/>
-            </radialGradient>
-            <filter id="blur4">
-              <feGaussianBlur stdDeviation="4"/>
-            </filter>
-            <filter id="blur8">
-              <feGaussianBlur stdDeviation="8"/>
-            </filter>
-            <filter id="blur2">
-              <feGaussianBlur stdDeviation="2"/>
-            </filter>
-          </defs>
-
-          <!-- Sky — deep void black -->
-          <rect width="680" height="400" fill="#050205"/>
-
-          <!-- Distant moon glow — pale, sickly -->
-          <circle cx="340" cy="60" r="55" fill="rgba(180,160,130,.04)" filter="url(#blur8)"/>
-          <circle cx="340" cy="60" r="28" fill="rgba(200,180,150,.06)" filter="url(#blur4)"/>
-          <circle cx="340" cy="60" r="14" fill="rgba(220,200,170,.08)"/>
-
-          <!-- Dead tree — far left -->
-          <line x1="60" y1="400" x2="75" y2="220" stroke="#0f0808" stroke-width="14"/>
-          <line x1="75" y1="280" x2="40" y2="230" stroke="#0f0808" stroke-width="7"/>
-          <line x1="75" y1="260" x2="110" y2="215" stroke="#0f0808" stroke-width="6"/>
-          <line x1="40" y1="230" x2="20" y2="210" stroke="#0f0808" stroke-width="4"/>
-          <line x1="110" y1="215" x2="130" y2="195" stroke="#0f0808" stroke-width="4"/>
-          <line x1="75" y1="240" x2="55" y2="218" stroke="#0f0808" stroke-width="4"/>
-          <line x1="75" y1="220" x2="65" y2="200" stroke="#0f0808" stroke-width="5"/>
-          <line x1="65" y1="200" x2="50" y2="185" stroke="#0f0808" stroke-width="3"/>
-          <line x1="65" y1="200" x2="80" y2="182" stroke="#0f0808" stroke-width="3"/>
-          <!-- root suggestions -->
-          <line x1="60" y1="395" x2="30" y2="400" stroke="#0f0808" stroke-width="6"/>
-          <line x1="60" y1="395" x2="85" y2="400" stroke="#0f0808" stroke-width="5"/>
-
-          <!-- Dead tree — far right -->
-          <line x1="620" y1="400" x2="605" y2="210" stroke="#0f0808" stroke-width="13"/>
-          <line x1="605" y1="270" x2="640" y2="225" stroke="#0f0808" stroke-width="6"/>
-          <line x1="605" y1="250" x2="572" y2="210" stroke="#0f0808" stroke-width="6"/>
-          <line x1="640" y1="225" x2="660" y2="205" stroke="#0f0808" stroke-width="4"/>
-          <line x1="572" y1="210" x2="550" y2="192" stroke="#0f0808" stroke-width="4"/>
-          <line x1="605" y1="230" x2="625" y2="210" stroke="#0f0808" stroke-width="4"/>
-          <line x1="605" y1="210" x2="618" y2="192" stroke="#0f0808" stroke-width="4"/>
-          <line x1="618" y1="192" x2="608" y2="175" stroke="#0f0808" stroke-width="3"/>
-          <line x1="618" y1="192" x2="632" y2="178" stroke="#0f0808" stroke-width="3"/>
-          <line x1="620" y1="395" x2="645" y2="400" stroke="#0f0808" stroke-width="6"/>
-          <line x1="620" y1="395" x2="598" y2="400" stroke="#0f0808" stroke-width="5"/>
-
-          <!-- Mid trees — centre-left -->
-          <line x1="200" y1="400" x2="208" y2="260" stroke="#100808" stroke-width="9"/>
-          <line x1="208" y1="310" x2="182" y2="272" stroke="#100808" stroke-width="5"/>
-          <line x1="208" y1="290" x2="232" y2="258" stroke="#100808" stroke-width="5"/>
-          <line x1="208" y1="260" x2="195" y2="240" stroke="#100808" stroke-width="4"/>
-          <line x1="208" y1="260" x2="220" y2="242" stroke="#100808" stroke-width="4"/>
-
-          <!-- Mid trees — centre-right -->
-          <line x1="480" y1="400" x2="472" y2="255" stroke="#100808" stroke-width="9"/>
-          <line x1="472" y1="305" x2="498" y2="268" stroke="#100808" stroke-width="5"/>
-          <line x1="472" y1="285" x2="448" y2="252" stroke="#100808" stroke-width="5"/>
-          <line x1="472" y1="255" x2="485" y2="236" stroke="#100808" stroke-width="4"/>
-          <line x1="472" y1="255" x2="458" y2="238" stroke="#100808" stroke-width="4"/>
-
-          <!-- Ground — dark earth -->
-          <rect x="0" y="340" width="680" height="60" fill="#080404"/>
-          <!-- Ground texture lines -->
-          <line x1="0" y1="355" x2="680" y2="355" stroke="#0d0606" stroke-width="1"/>
-          <line x1="0" y1="368" x2="680" y2="368" stroke="#0d0606" stroke-width="1"/>
-
-          <!-- Red ground fog -->
-          <rect x="0" y="310" width="680" height="90" fill="url(#dbdFog)"/>
-          <ellipse cx="340" cy="380" rx="280" ry="40" fill="rgba(80,5,5,.5)" filter="url(#blur8)"/>
-          <ellipse cx="340" cy="370" rx="200" ry="25" fill="rgba(120,8,8,.3)" filter="url(#blur4)"/>
-
-          <!-- Hook glow aura -->
-          <ellipse cx="340" cy="155" rx="70" ry="80" fill="url(#hookGlow)" filter="url(#blur8)"/>
-
-          <!-- The hook — thick, rusted, iconic -->
-          <!-- Vertical shaft -->
-          <line x1="340" y1="30" x2="340" y2="170" stroke="#6b1a1a" stroke-width="5"/>
-          <line x1="340" y1="30" x2="340" y2="170" stroke="#3d0f0f" stroke-width="3"/>
-          <!-- Horizontal bar at top -->
-          <line x1="310" y1="30" x2="370" y2="30" stroke="#5a1515" stroke-width="5"/>
-          <!-- Hook curve -->
-          <path d="M 340 170 Q 340 210 310 220 Q 280 228 276 210 Q 272 192 290 188" stroke="#6b1a1a" stroke-width="5" fill="none" stroke-linecap="round"/>
-          <path d="M 340 170 Q 340 210 310 220 Q 280 228 276 210 Q 272 192 290 188" stroke="#3d0f0f" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <!-- Hook tip point -->
-          <path d="M 290 188 L 284 182 L 295 180" stroke="#8b2020" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-
-          <!-- Blood drip 1 -->
-          <line x1="340" y1="175" x2="340" y2="200" stroke="#8b0000" stroke-width="2" opacity=".8"/>
-          <ellipse cx="340" cy="202" rx="3" ry="4" fill="#6b0000" opacity=".7"/>
-          <!-- Blood drip 2 — off hook curve -->
-          <line x1="308" y1="222" x2="306" y2="245" stroke="#8b0000" stroke-width="1.5" opacity=".6"/>
-          <ellipse cx="306" cy="247" rx="2.5" ry="3.5" fill="#6b0000" opacity=".55"/>
-          <!-- Blood drip 3 -->
-          <line x1="278" y1="210" x2="275" y2="230" stroke="#8b0000" stroke-width="1.5" opacity=".5"/>
-          <ellipse cx="275" cy="232" rx="2" ry="3" fill="#6b0000" opacity=".45"/>
-
-          <!-- Entity eyes — lurking in darkness, top corners -->
-          <!-- Eye pair left -->
-          <ellipse cx="120" cy="110" rx="5" ry="3" fill="url(#eyeGlow)" filter="url(#blur2)"/>
-          <ellipse cx="120" cy="110" rx="2.5" ry="1.5" fill="#ff1a1a"/>
-          <ellipse cx="138" cy="116" rx="4" ry="2.5" fill="url(#eyeGlow)" filter="url(#blur2)"/>
-          <ellipse cx="138" cy="116" rx="2" ry="1.2" fill="#ff1a1a"/>
-
-          <!-- Eye pair right -->
-          <ellipse cx="558" cy="105" rx="5" ry="3" fill="url(#eyeGlow)" filter="url(#blur2)"/>
-          <ellipse cx="558" cy="105" rx="2.5" ry="1.5" fill="#ff1a1a"/>
-          <ellipse cx="542" cy="112" rx="4" ry="2.5" fill="url(#eyeGlow)" filter="url(#blur2)"/>
-          <ellipse cx="542" cy="112" rx="2" ry="1.2" fill="#ff1a1a"/>
-
-          <!-- Eye — centre top -->
-          <ellipse cx="340" cy="18" rx="6" ry="3.5" fill="url(#eyeGlow)" filter="url(#blur2)"/>
-          <ellipse cx="340" cy="18" rx="3" ry="1.8" fill="#ff2020"/>
-
-          <!-- Crow silhouette — left of hook -->
-          <path d="M 255 82 L 262 76 L 268 80 L 272 74 L 278 78 L 268 88 Z" fill="#0d0606"/>
-          <path d="M 255 82 L 245 78 L 248 86 Z" fill="#0d0606"/>
-          <!-- Crow — right -->
-          <path d="M 410 90 L 417 84 L 423 88 L 427 82 L 433 86 L 423 96 Z" fill="#0d0606"/>
-          <path d="M 410 90 L 400 86 L 403 94 Z" fill="#0d0606"/>
-
-          <!-- Label band at bottom -->
-          <rect x="0" y="330" width="680" height="70" fill="rgba(3,1,1,.88)"/>
-          <line x1="0" y1="330" x2="680" y2="330" stroke="rgba(180,30,30,.25)" stroke-width="1"/>
-
-          <!-- Title -->
-          <text x="340" y="354" text-anchor="middle" fill="#c84848" font-size="15" font-family="'Georgia',serif" font-weight="bold" letter-spacing="3">DEAD BY DAYLIGHT</text>
-          <line x1="140" y1="360" x2="270" y2="360" stroke="rgba(180,30,30,.3)" stroke-width=".8"/>
-          <line x1="410" y1="360" x2="540" y2="360" stroke="rgba(180,30,30,.3)" stroke-width=".8"/>
-          <text x="340" y="360" text-anchor="middle" fill="rgba(180,30,30,.5)" font-size="7" font-family="monospace" letter-spacing="2">✦</text>
-
-          <!-- Subtitle -->
-          <text x="340" y="375" text-anchor="middle" fill="rgba(160,120,120,.55)" font-size="8.5" font-family="monospace" letter-spacing="1.2">LIFECYCLE DROP-OFF MAPPING · COHORT RETENTION</text>
-
-          <!-- Stats bottom right -->
-          <text x="654" y="396" text-anchor="end" fill="rgba(180,30,30,.45)" font-size="7.5" font-family="monospace">42.3% D7 AVG · 68% CHURN SIGNAL · 10,012 PLAYERS</text>
-        </svg>
-      </div>
-      <div class="pcard-body">
-        <h3 class="pcard-title">Lifecycle Drop-Off Mapping — Dead by Daylight Retention</h3>
-        <p class="pcard-desc">Cohort retention analysis identifying exactly where in the player lifecycle engagement collapses — and which behavioural signals predict it before it happens.</p>
-        <div class="pcard-tags">
-          <span class="ptag ptag-blue">Gaming</span>
-          <span class="ptag">SQL</span>
-          <span class="ptag">Tableau</span>
-          <span class="ptag">Cohort Analysis</span>
         </div>
       </div>
     </div>
@@ -2296,121 +2126,9 @@ footer{
       </div>
     </div>
 
-    <!-- P4: Gacha Engagement Systems — HERO -->
-    <div class="pcard" onclick="openModal('gacha')">
-      <div class="pcard-preview" style="background:none;overflow:hidden;position:relative;">
-
-        <!-- Genshin Impact banner aesthetic -->
-        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0d0a2e 0%,#1a0e4a 30%,#2e1060 55%,#1a0a3a 80%,#080520 100%);"></div>
-
-        <!-- star field -->
-        <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-          <!-- stars -->
-          <circle cx="42" cy="28" r="1" fill="white" opacity=".6"/>
-          <circle cx="120" cy="55" r=".8" fill="white" opacity=".4"/>
-          <circle cx="200" cy="18" r="1.2" fill="white" opacity=".7"/>
-          <circle cx="310" cy="40" r=".7" fill="white" opacity=".5"/>
-          <circle cx="450" cy="22" r="1" fill="white" opacity=".6"/>
-          <circle cx="570" cy="50" r=".9" fill="white" opacity=".45"/>
-          <circle cx="630" cy="15" r="1.1" fill="white" opacity=".55"/>
-          <circle cx="80" cy="120" r=".7" fill="white" opacity=".3"/>
-          <circle cx="560" cy="110" r=".8" fill="white" opacity=".4"/>
-          <circle cx="660" cy="140" r=".6" fill="white" opacity=".35"/>
-          <circle cx="30" cy="200" r=".9" fill="white" opacity=".3"/>
-          <circle cx="640" cy="260" r=".7" fill="white" opacity=".3"/>
-          <circle cx="590" cy="340" r=".8" fill="white" opacity=".25"/>
-          <circle cx="100" cy="360" r=".6" fill="white" opacity=".2"/>
-          <!-- twinkling large stars -->
-          <circle cx="68" cy="72" r="1.5" fill="#c4b5fd" opacity=".7"/>
-          <circle cx="612" cy="88" r="1.8" fill="#93c5fd" opacity=".65"/>
-          <circle cx="340" cy="30" r="1.4" fill="#fde68a" opacity=".6"/>
-
-          <!-- Background elemental glow orbs -->
-          <circle cx="170" cy="200" r="90" fill="rgba(139,92,246,.06)"/>
-          <circle cx="510" cy="180" r="110" fill="rgba(56,189,248,.05)"/>
-          <circle cx="340" cy="300" r="80" fill="rgba(251,191,36,.04)"/>
-
-          <!-- ornate corner decorations (Genshin-style) -->
-          <!-- top-left ornament -->
-          <path d="M 0 0 L 60 0 L 60 4 L 4 4 L 4 60 L 0 60 Z" fill="rgba(196,181,253,.15)"/>
-          <circle cx="60" cy="4" r="3" fill="rgba(196,181,253,.3)"/>
-          <circle cx="4" cy="60" r="3" fill="rgba(196,181,253,.3)"/>
-          <!-- top-right ornament -->
-          <path d="M 680 0 L 620 0 L 620 4 L 676 4 L 676 60 L 680 60 Z" fill="rgba(196,181,253,.15)"/>
-          <circle cx="620" cy="4" r="3" fill="rgba(196,181,253,.3)"/>
-          <circle cx="676" cy="60" r="3" fill="rgba(196,181,253,.3)"/>
-          <!-- bottom decorative line -->
-          <line x1="40" y1="390" x2="640" y2="390" stroke="rgba(196,181,253,.12)" stroke-width="1"/>
-          <line x1="20" y1="394" x2="660" y2="394" stroke="rgba(196,181,253,.06)" stroke-width="1"/>
-          <!-- decorative diamond centres -->
-          <polygon points="340,388 344,392 340,396 336,392" fill="rgba(196,181,253,.3)"/>
-
-          <!-- Character silhouette (abstract Genshin-style figure) -->
-          <!-- flowing hair/cape -->
-          <ellipse cx="340" cy="160" rx="55" ry="70" fill="rgba(139,92,246,.18)" transform="rotate(-12,340,160)"/>
-          <ellipse cx="365" cy="170" rx="25" ry="55" fill="rgba(99,102,241,.15)" transform="rotate(8,365,170)"/>
-          <!-- body -->
-          <ellipse cx="340" cy="220" rx="28" ry="38" fill="rgba(167,139,250,.2)"/>
-          <!-- head glow -->
-          <circle cx="340" cy="130" r="32" fill="rgba(196,181,253,.12)"/>
-          <circle cx="340" cy="130" r="22" fill="rgba(221,214,254,.18)"/>
-          <!-- vision/element gem glow -->
-          <circle cx="340" cy="130" r="8" fill="rgba(167,139,250,.8)"/>
-          <circle cx="340" cy="130" r="5" fill="rgba(221,214,254,.9)"/>
-          <circle cx="340" cy="130" r="2.5" fill="white" opacity=".95"/>
-          <!-- elemental particle trails -->
-          <circle cx="290" cy="155" r="3" fill="rgba(167,139,250,.55)"/>
-          <circle cx="278" cy="175" r="2" fill="rgba(139,92,246,.45)"/>
-          <circle cx="268" cy="198" r="2.5" fill="rgba(196,181,253,.4)"/>
-          <circle cx="392" cy="148" r="2.5" fill="rgba(167,139,250,.5)"/>
-          <circle cx="404" cy="170" r="2" fill="rgba(139,92,246,.4)"/>
-          <circle cx="398" cy="195" r="3" fill="rgba(196,181,253,.45)"/>
-          <!-- sword/weapon hint -->
-          <line x1="368" y1="230" x2="410" y2="290" stroke="rgba(221,214,254,.35)" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="365" y1="227" x2="413" y2="287" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
-
-          <!-- TOP BANNER LABEL -->
-          <rect x="30" y="14" width="180" height="22" rx="3" fill="rgba(196,181,253,.08)" stroke="rgba(196,181,253,.2)" stroke-width=".5"/>
-          <text x="120" y="29" text-anchor="middle" fill="rgba(221,214,254,.7)" font-size="8" font-family="-apple-system,sans-serif" letter-spacing="1.5">CHARACTER EVENT WISH</text>
-
-          <!-- BANNER TITLE -->
-          <text x="340" y="310" text-anchor="middle" fill="rgba(255,255,255,.9)" font-size="18" font-weight="700" font-family="-apple-system,sans-serif" letter-spacing="-.3">Engagement Architecture</text>
-          <text x="340" y="328" text-anchor="middle" fill="rgba(196,181,253,.6)" font-size="9" font-family="-apple-system,sans-serif" letter-spacing="1">GENSHIN IMPACT  ·  BEHAVIOURAL SYSTEMS</text>
-
-          <!-- Pity / pull counter pills -->
-          <rect x="188" y="344" width="88" height="20" rx="10" fill="rgba(139,92,246,.25)" stroke="rgba(167,139,250,.4)" stroke-width=".8"/>
-          <text x="232" y="358" text-anchor="middle" fill="rgba(221,214,254,.85)" font-size="8.5" font-family="-apple-system,sans-serif">🔮 74 / 90 pity</text>
-          <rect x="284" y="344" width="104" height="20" rx="10" fill="rgba(56,189,248,.15)" stroke="rgba(125,211,252,.3)" stroke-width=".8"/>
-          <text x="336" y="358" text-anchor="middle" fill="rgba(186,230,253,.85)" font-size="8.5" font-family="-apple-system,sans-serif">⭐⭐⭐⭐⭐ 5-star</text>
-          <rect x="396" y="344" width="96" height="20" rx="10" fill="rgba(251,191,36,.12)" stroke="rgba(253,224,71,.3)" stroke-width=".8"/>
-          <text x="444" y="358" text-anchor="middle" fill="rgba(254,240,138,.85)" font-size="8.5" font-family="-apple-system,sans-serif">💎 160 primos</text>
-
-          <!-- elemental type badge top-right -->
-          <circle cx="634" cy="36" r="18" fill="rgba(139,92,246,.3)" stroke="rgba(167,139,250,.5)" stroke-width="1"/>
-          <text x="634" y="32" text-anchor="middle" font-size="14">🌀</text>
-          <text x="634" y="46" text-anchor="middle" fill="rgba(221,214,254,.7)" font-size="6" font-family="-apple-system,sans-serif">ANEMO</text>
-
-          <!-- bottom research label -->
-          <rect x="20" y="372" width="640" height="16" rx="2" fill="rgba(0,0,0,.3)"/>
-          <text x="340" y="383" text-anchor="middle" fill="rgba(196,181,253,.5)" font-size="7.5" font-family="-apple-system,sans-serif" letter-spacing=".5">REWARD PACING  ·  PROGRESSION LOOPS  ·  SCARCITY  ·  MONETIZATION TIMING</text>
-        </svg>
-      </div>
-      <div class="pcard-body">
-        <h3 class="pcard-title">Mid-Loop Engagement Architecture — Gacha Reward &amp; Retention Systems</h3>
-        <p class="pcard-desc">Mapping how live-service games sustain engagement between sessions. Reward pacing, pity mechanics, and monetisation timing as behavioural levers — case study: Genshin Impact.</p>
-        <div class="pcard-tags">
-          <span class="ptag ptag-blue">Gaming</span>
-          <span class="ptag">LiveOps</span>
-          <span class="ptag">Behavioural Systems</span>
-          <span class="ptag">Systems Mapping</span>
-          <span class="ptag" style="border-color:rgba(167,139,250,.4);color:#c4b5fd">Genshin Impact</span>
-        </div>
-      </div>
-    </div>
-
     </div><!-- /hero-work-grid -->
 
-  <div class="support-label">Supporting work — cross-domain behavioural systems</div>
+  <div class="support-label">More projects — gaming systems, fintech &amp; cross-domain</div>
   <div class="support-grid">
 
     <!-- Marvel Rivals — HERO -->
@@ -2626,7 +2344,287 @@ footer{
       </div>
     </div>
 
-  <!-- P3: Credit UX — SUPPORT -->
+  <!-- P2: Dead by Daylight Retention — SUPPORT -->
+    <div class="pcard" onclick="openModal('retention')">
+      <div class="pcard-preview">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <radialGradient id="dbdFog" cx="50%" cy="100%" r="70%">
+              <stop offset="0%" stop-color="#5a0a0a" stop-opacity=".7"/>
+              <stop offset="50%" stop-color="#2a0505" stop-opacity=".4"/>
+              <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="hookGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#c84848" stop-opacity=".35"/>
+              <stop offset="100%" stop-color="#c84848" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff2020" stop-opacity=".9"/>
+              <stop offset="60%" stop-color="#c84848" stop-opacity=".5"/>
+              <stop offset="100%" stop-color="#c84848" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="blur4">
+              <feGaussianBlur stdDeviation="4"/>
+            </filter>
+            <filter id="blur8">
+              <feGaussianBlur stdDeviation="8"/>
+            </filter>
+            <filter id="blur2">
+              <feGaussianBlur stdDeviation="2"/>
+            </filter>
+          </defs>
+
+          <!-- Sky — deep void black -->
+          <rect width="680" height="400" fill="#050205"/>
+
+          <!-- Distant moon glow — pale, sickly -->
+          <circle cx="340" cy="60" r="55" fill="rgba(180,160,130,.04)" filter="url(#blur8)"/>
+          <circle cx="340" cy="60" r="28" fill="rgba(200,180,150,.06)" filter="url(#blur4)"/>
+          <circle cx="340" cy="60" r="14" fill="rgba(220,200,170,.08)"/>
+
+          <!-- Dead tree — far left -->
+          <line x1="60" y1="400" x2="75" y2="220" stroke="#0f0808" stroke-width="14"/>
+          <line x1="75" y1="280" x2="40" y2="230" stroke="#0f0808" stroke-width="7"/>
+          <line x1="75" y1="260" x2="110" y2="215" stroke="#0f0808" stroke-width="6"/>
+          <line x1="40" y1="230" x2="20" y2="210" stroke="#0f0808" stroke-width="4"/>
+          <line x1="110" y1="215" x2="130" y2="195" stroke="#0f0808" stroke-width="4"/>
+          <line x1="75" y1="240" x2="55" y2="218" stroke="#0f0808" stroke-width="4"/>
+          <line x1="75" y1="220" x2="65" y2="200" stroke="#0f0808" stroke-width="5"/>
+          <line x1="65" y1="200" x2="50" y2="185" stroke="#0f0808" stroke-width="3"/>
+          <line x1="65" y1="200" x2="80" y2="182" stroke="#0f0808" stroke-width="3"/>
+          <!-- root suggestions -->
+          <line x1="60" y1="395" x2="30" y2="400" stroke="#0f0808" stroke-width="6"/>
+          <line x1="60" y1="395" x2="85" y2="400" stroke="#0f0808" stroke-width="5"/>
+
+          <!-- Dead tree — far right -->
+          <line x1="620" y1="400" x2="605" y2="210" stroke="#0f0808" stroke-width="13"/>
+          <line x1="605" y1="270" x2="640" y2="225" stroke="#0f0808" stroke-width="6"/>
+          <line x1="605" y1="250" x2="572" y2="210" stroke="#0f0808" stroke-width="6"/>
+          <line x1="640" y1="225" x2="660" y2="205" stroke="#0f0808" stroke-width="4"/>
+          <line x1="572" y1="210" x2="550" y2="192" stroke="#0f0808" stroke-width="4"/>
+          <line x1="605" y1="230" x2="625" y2="210" stroke="#0f0808" stroke-width="4"/>
+          <line x1="605" y1="210" x2="618" y2="192" stroke="#0f0808" stroke-width="4"/>
+          <line x1="618" y1="192" x2="608" y2="175" stroke="#0f0808" stroke-width="3"/>
+          <line x1="618" y1="192" x2="632" y2="178" stroke="#0f0808" stroke-width="3"/>
+          <line x1="620" y1="395" x2="645" y2="400" stroke="#0f0808" stroke-width="6"/>
+          <line x1="620" y1="395" x2="598" y2="400" stroke="#0f0808" stroke-width="5"/>
+
+          <!-- Mid trees — centre-left -->
+          <line x1="200" y1="400" x2="208" y2="260" stroke="#100808" stroke-width="9"/>
+          <line x1="208" y1="310" x2="182" y2="272" stroke="#100808" stroke-width="5"/>
+          <line x1="208" y1="290" x2="232" y2="258" stroke="#100808" stroke-width="5"/>
+          <line x1="208" y1="260" x2="195" y2="240" stroke="#100808" stroke-width="4"/>
+          <line x1="208" y1="260" x2="220" y2="242" stroke="#100808" stroke-width="4"/>
+
+          <!-- Mid trees — centre-right -->
+          <line x1="480" y1="400" x2="472" y2="255" stroke="#100808" stroke-width="9"/>
+          <line x1="472" y1="305" x2="498" y2="268" stroke="#100808" stroke-width="5"/>
+          <line x1="472" y1="285" x2="448" y2="252" stroke="#100808" stroke-width="5"/>
+          <line x1="472" y1="255" x2="485" y2="236" stroke="#100808" stroke-width="4"/>
+          <line x1="472" y1="255" x2="458" y2="238" stroke="#100808" stroke-width="4"/>
+
+          <!-- Ground — dark earth -->
+          <rect x="0" y="340" width="680" height="60" fill="#080404"/>
+          <!-- Ground texture lines -->
+          <line x1="0" y1="355" x2="680" y2="355" stroke="#0d0606" stroke-width="1"/>
+          <line x1="0" y1="368" x2="680" y2="368" stroke="#0d0606" stroke-width="1"/>
+
+          <!-- Red ground fog -->
+          <rect x="0" y="310" width="680" height="90" fill="url(#dbdFog)"/>
+          <ellipse cx="340" cy="380" rx="280" ry="40" fill="rgba(80,5,5,.5)" filter="url(#blur8)"/>
+          <ellipse cx="340" cy="370" rx="200" ry="25" fill="rgba(120,8,8,.3)" filter="url(#blur4)"/>
+
+          <!-- Hook glow aura -->
+          <ellipse cx="340" cy="155" rx="70" ry="80" fill="url(#hookGlow)" filter="url(#blur8)"/>
+
+          <!-- The hook — thick, rusted, iconic -->
+          <!-- Vertical shaft -->
+          <line x1="340" y1="30" x2="340" y2="170" stroke="#6b1a1a" stroke-width="5"/>
+          <line x1="340" y1="30" x2="340" y2="170" stroke="#3d0f0f" stroke-width="3"/>
+          <!-- Horizontal bar at top -->
+          <line x1="310" y1="30" x2="370" y2="30" stroke="#5a1515" stroke-width="5"/>
+          <!-- Hook curve -->
+          <path d="M 340 170 Q 340 210 310 220 Q 280 228 276 210 Q 272 192 290 188" stroke="#6b1a1a" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M 340 170 Q 340 210 310 220 Q 280 228 276 210 Q 272 192 290 188" stroke="#3d0f0f" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <!-- Hook tip point -->
+          <path d="M 290 188 L 284 182 L 295 180" stroke="#8b2020" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- Blood drip 1 -->
+          <line x1="340" y1="175" x2="340" y2="200" stroke="#8b0000" stroke-width="2" opacity=".8"/>
+          <ellipse cx="340" cy="202" rx="3" ry="4" fill="#6b0000" opacity=".7"/>
+          <!-- Blood drip 2 — off hook curve -->
+          <line x1="308" y1="222" x2="306" y2="245" stroke="#8b0000" stroke-width="1.5" opacity=".6"/>
+          <ellipse cx="306" cy="247" rx="2.5" ry="3.5" fill="#6b0000" opacity=".55"/>
+          <!-- Blood drip 3 -->
+          <line x1="278" y1="210" x2="275" y2="230" stroke="#8b0000" stroke-width="1.5" opacity=".5"/>
+          <ellipse cx="275" cy="232" rx="2" ry="3" fill="#6b0000" opacity=".45"/>
+
+          <!-- Entity eyes — lurking in darkness, top corners -->
+          <!-- Eye pair left -->
+          <ellipse cx="120" cy="110" rx="5" ry="3" fill="url(#eyeGlow)" filter="url(#blur2)"/>
+          <ellipse cx="120" cy="110" rx="2.5" ry="1.5" fill="#ff1a1a"/>
+          <ellipse cx="138" cy="116" rx="4" ry="2.5" fill="url(#eyeGlow)" filter="url(#blur2)"/>
+          <ellipse cx="138" cy="116" rx="2" ry="1.2" fill="#ff1a1a"/>
+
+          <!-- Eye pair right -->
+          <ellipse cx="558" cy="105" rx="5" ry="3" fill="url(#eyeGlow)" filter="url(#blur2)"/>
+          <ellipse cx="558" cy="105" rx="2.5" ry="1.5" fill="#ff1a1a"/>
+          <ellipse cx="542" cy="112" rx="4" ry="2.5" fill="url(#eyeGlow)" filter="url(#blur2)"/>
+          <ellipse cx="542" cy="112" rx="2" ry="1.2" fill="#ff1a1a"/>
+
+          <!-- Eye — centre top -->
+          <ellipse cx="340" cy="18" rx="6" ry="3.5" fill="url(#eyeGlow)" filter="url(#blur2)"/>
+          <ellipse cx="340" cy="18" rx="3" ry="1.8" fill="#ff2020"/>
+
+          <!-- Crow silhouette — left of hook -->
+          <path d="M 255 82 L 262 76 L 268 80 L 272 74 L 278 78 L 268 88 Z" fill="#0d0606"/>
+          <path d="M 255 82 L 245 78 L 248 86 Z" fill="#0d0606"/>
+          <!-- Crow — right -->
+          <path d="M 410 90 L 417 84 L 423 88 L 427 82 L 433 86 L 423 96 Z" fill="#0d0606"/>
+          <path d="M 410 90 L 400 86 L 403 94 Z" fill="#0d0606"/>
+
+          <!-- Label band at bottom -->
+          <rect x="0" y="330" width="680" height="70" fill="rgba(3,1,1,.88)"/>
+          <line x1="0" y1="330" x2="680" y2="330" stroke="rgba(180,30,30,.25)" stroke-width="1"/>
+
+          <!-- Title -->
+          <text x="340" y="354" text-anchor="middle" fill="#c84848" font-size="15" font-family="'Georgia',serif" font-weight="bold" letter-spacing="3">DEAD BY DAYLIGHT</text>
+          <line x1="140" y1="360" x2="270" y2="360" stroke="rgba(180,30,30,.3)" stroke-width=".8"/>
+          <line x1="410" y1="360" x2="540" y2="360" stroke="rgba(180,30,30,.3)" stroke-width=".8"/>
+          <text x="340" y="360" text-anchor="middle" fill="rgba(180,30,30,.5)" font-size="7" font-family="monospace" letter-spacing="2">✦</text>
+
+          <!-- Subtitle -->
+          <text x="340" y="375" text-anchor="middle" fill="rgba(160,120,120,.55)" font-size="8.5" font-family="monospace" letter-spacing="1.2">LIFECYCLE DROP-OFF MAPPING · COHORT RETENTION</text>
+
+          <!-- Stats bottom right -->
+          <text x="654" y="396" text-anchor="end" fill="rgba(180,30,30,.45)" font-size="7.5" font-family="monospace">42.3% D7 AVG · 68% CHURN SIGNAL · 10,012 PLAYERS</text>
+        </svg>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">Lifecycle Drop-Off Mapping — Dead by Daylight Retention</h3>
+        <p class="pcard-desc">Cohort retention analysis identifying exactly where in the player lifecycle engagement collapses — and which behavioural signals predict it before it happens.</p>
+        <div class="pcard-tags">
+          <span class="ptag ptag-blue">Gaming</span>
+          <span class="ptag">SQL</span>
+          <span class="ptag">Tableau</span>
+          <span class="ptag">Cohort Analysis</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- P4: Gacha Engagement Systems — HERO -->
+    <div class="pcard" onclick="openModal('gacha')">
+      <div class="pcard-preview" style="background:none;overflow:hidden;position:relative;">
+
+        <!-- Genshin Impact banner aesthetic -->
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0d0a2e 0%,#1a0e4a 30%,#2e1060 55%,#1a0a3a 80%,#080520 100%);"></div>
+
+        <!-- star field -->
+        <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <!-- stars -->
+          <circle cx="42" cy="28" r="1" fill="white" opacity=".6"/>
+          <circle cx="120" cy="55" r=".8" fill="white" opacity=".4"/>
+          <circle cx="200" cy="18" r="1.2" fill="white" opacity=".7"/>
+          <circle cx="310" cy="40" r=".7" fill="white" opacity=".5"/>
+          <circle cx="450" cy="22" r="1" fill="white" opacity=".6"/>
+          <circle cx="570" cy="50" r=".9" fill="white" opacity=".45"/>
+          <circle cx="630" cy="15" r="1.1" fill="white" opacity=".55"/>
+          <circle cx="80" cy="120" r=".7" fill="white" opacity=".3"/>
+          <circle cx="560" cy="110" r=".8" fill="white" opacity=".4"/>
+          <circle cx="660" cy="140" r=".6" fill="white" opacity=".35"/>
+          <circle cx="30" cy="200" r=".9" fill="white" opacity=".3"/>
+          <circle cx="640" cy="260" r=".7" fill="white" opacity=".3"/>
+          <circle cx="590" cy="340" r=".8" fill="white" opacity=".25"/>
+          <circle cx="100" cy="360" r=".6" fill="white" opacity=".2"/>
+          <!-- twinkling large stars -->
+          <circle cx="68" cy="72" r="1.5" fill="#c4b5fd" opacity=".7"/>
+          <circle cx="612" cy="88" r="1.8" fill="#93c5fd" opacity=".65"/>
+          <circle cx="340" cy="30" r="1.4" fill="#fde68a" opacity=".6"/>
+
+          <!-- Background elemental glow orbs -->
+          <circle cx="170" cy="200" r="90" fill="rgba(139,92,246,.06)"/>
+          <circle cx="510" cy="180" r="110" fill="rgba(56,189,248,.05)"/>
+          <circle cx="340" cy="300" r="80" fill="rgba(251,191,36,.04)"/>
+
+          <!-- ornate corner decorations (Genshin-style) -->
+          <!-- top-left ornament -->
+          <path d="M 0 0 L 60 0 L 60 4 L 4 4 L 4 60 L 0 60 Z" fill="rgba(196,181,253,.15)"/>
+          <circle cx="60" cy="4" r="3" fill="rgba(196,181,253,.3)"/>
+          <circle cx="4" cy="60" r="3" fill="rgba(196,181,253,.3)"/>
+          <!-- top-right ornament -->
+          <path d="M 680 0 L 620 0 L 620 4 L 676 4 L 676 60 L 680 60 Z" fill="rgba(196,181,253,.15)"/>
+          <circle cx="620" cy="4" r="3" fill="rgba(196,181,253,.3)"/>
+          <circle cx="676" cy="60" r="3" fill="rgba(196,181,253,.3)"/>
+          <!-- bottom decorative line -->
+          <line x1="40" y1="390" x2="640" y2="390" stroke="rgba(196,181,253,.12)" stroke-width="1"/>
+          <line x1="20" y1="394" x2="660" y2="394" stroke="rgba(196,181,253,.06)" stroke-width="1"/>
+          <!-- decorative diamond centres -->
+          <polygon points="340,388 344,392 340,396 336,392" fill="rgba(196,181,253,.3)"/>
+
+          <!-- Character silhouette (abstract Genshin-style figure) -->
+          <!-- flowing hair/cape -->
+          <ellipse cx="340" cy="160" rx="55" ry="70" fill="rgba(139,92,246,.18)" transform="rotate(-12,340,160)"/>
+          <ellipse cx="365" cy="170" rx="25" ry="55" fill="rgba(99,102,241,.15)" transform="rotate(8,365,170)"/>
+          <!-- body -->
+          <ellipse cx="340" cy="220" rx="28" ry="38" fill="rgba(167,139,250,.2)"/>
+          <!-- head glow -->
+          <circle cx="340" cy="130" r="32" fill="rgba(196,181,253,.12)"/>
+          <circle cx="340" cy="130" r="22" fill="rgba(221,214,254,.18)"/>
+          <!-- vision/element gem glow -->
+          <circle cx="340" cy="130" r="8" fill="rgba(167,139,250,.8)"/>
+          <circle cx="340" cy="130" r="5" fill="rgba(221,214,254,.9)"/>
+          <circle cx="340" cy="130" r="2.5" fill="white" opacity=".95"/>
+          <!-- elemental particle trails -->
+          <circle cx="290" cy="155" r="3" fill="rgba(167,139,250,.55)"/>
+          <circle cx="278" cy="175" r="2" fill="rgba(139,92,246,.45)"/>
+          <circle cx="268" cy="198" r="2.5" fill="rgba(196,181,253,.4)"/>
+          <circle cx="392" cy="148" r="2.5" fill="rgba(167,139,250,.5)"/>
+          <circle cx="404" cy="170" r="2" fill="rgba(139,92,246,.4)"/>
+          <circle cx="398" cy="195" r="3" fill="rgba(196,181,253,.45)"/>
+          <!-- sword/weapon hint -->
+          <line x1="368" y1="230" x2="410" y2="290" stroke="rgba(221,214,254,.35)" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="365" y1="227" x2="413" y2="287" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+
+          <!-- TOP BANNER LABEL -->
+          <rect x="30" y="14" width="180" height="22" rx="3" fill="rgba(196,181,253,.08)" stroke="rgba(196,181,253,.2)" stroke-width=".5"/>
+          <text x="120" y="29" text-anchor="middle" fill="rgba(221,214,254,.7)" font-size="8" font-family="-apple-system,sans-serif" letter-spacing="1.5">CHARACTER EVENT WISH</text>
+
+          <!-- BANNER TITLE -->
+          <text x="340" y="310" text-anchor="middle" fill="rgba(255,255,255,.9)" font-size="18" font-weight="700" font-family="-apple-system,sans-serif" letter-spacing="-.3">Engagement Architecture</text>
+          <text x="340" y="328" text-anchor="middle" fill="rgba(196,181,253,.6)" font-size="9" font-family="-apple-system,sans-serif" letter-spacing="1">GENSHIN IMPACT  ·  BEHAVIOURAL SYSTEMS</text>
+
+          <!-- Pity / pull counter pills -->
+          <rect x="188" y="344" width="88" height="20" rx="10" fill="rgba(139,92,246,.25)" stroke="rgba(167,139,250,.4)" stroke-width=".8"/>
+          <text x="232" y="358" text-anchor="middle" fill="rgba(221,214,254,.85)" font-size="8.5" font-family="-apple-system,sans-serif">🔮 74 / 90 pity</text>
+          <rect x="284" y="344" width="104" height="20" rx="10" fill="rgba(56,189,248,.15)" stroke="rgba(125,211,252,.3)" stroke-width=".8"/>
+          <text x="336" y="358" text-anchor="middle" fill="rgba(186,230,253,.85)" font-size="8.5" font-family="-apple-system,sans-serif">⭐⭐⭐⭐⭐ 5-star</text>
+          <rect x="396" y="344" width="96" height="20" rx="10" fill="rgba(251,191,36,.12)" stroke="rgba(253,224,71,.3)" stroke-width=".8"/>
+          <text x="444" y="358" text-anchor="middle" fill="rgba(254,240,138,.85)" font-size="8.5" font-family="-apple-system,sans-serif">💎 160 primos</text>
+
+          <!-- elemental type badge top-right -->
+          <circle cx="634" cy="36" r="18" fill="rgba(139,92,246,.3)" stroke="rgba(167,139,250,.5)" stroke-width="1"/>
+          <text x="634" y="32" text-anchor="middle" font-size="14">🌀</text>
+          <text x="634" y="46" text-anchor="middle" fill="rgba(221,214,254,.7)" font-size="6" font-family="-apple-system,sans-serif">ANEMO</text>
+
+          <!-- bottom research label -->
+          <rect x="20" y="372" width="640" height="16" rx="2" fill="rgba(0,0,0,.3)"/>
+          <text x="340" y="383" text-anchor="middle" fill="rgba(196,181,253,.5)" font-size="7.5" font-family="-apple-system,sans-serif" letter-spacing=".5">REWARD PACING  ·  PROGRESSION LOOPS  ·  SCARCITY  ·  MONETIZATION TIMING</text>
+        </svg>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">Mid-Loop Engagement Architecture — Gacha Reward &amp; Retention Systems</h3>
+        <p class="pcard-desc">Mapping how live-service games sustain engagement between sessions. Reward pacing, pity mechanics, and monetisation timing as behavioural levers — case study: Genshin Impact.</p>
+        <div class="pcard-tags">
+          <span class="ptag ptag-blue">Gaming</span>
+          <span class="ptag">LiveOps</span>
+          <span class="ptag">Behavioural Systems</span>
+          <span class="ptag">Systems Mapping</span>
+          <span class="ptag" style="border-color:rgba(167,139,250,.4);color:#c4b5fd">Genshin Impact</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- P3: Credit UX — SUPPORT -->
     <div class="pcard" onclick="openModal('credit')">
       <div class="pcard-preview" style="background:linear-gradient(135deg,#0c0918 0%,#111828 50%,#0a1a10 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
 
