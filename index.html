@@ -2424,6 +2424,22 @@ footer{
       </div>
     </div>
 
+  </div><!-- /workCarousel -->
+  </div><!-- /work-carousel-wrap -->
+
+  <!-- MORE PROJECTS -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:40px 0 16px;border-top:1px solid var(--border);margin-top:40px">
+    <div>
+      <p style="font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px">More Projects</p>
+      <p style="font-size:.82rem;color:var(--muted2)">Gaming systems, fintech &amp; cross-domain behavioural work</p>
+    </div>
+    <div class="carousel-arrows">
+      <button class="carousel-btn" onclick="scrollMore(-1)" aria-label="Previous">←</button>
+      <button class="carousel-btn" onclick="scrollMore(1)" aria-label="Next">→</button>
+    </div>
+  </div>
+  <div class="work-carousel-wrap">
+  <div class="work-carousel" id="moreCarousel">
 
     <!-- P2: Dead by Daylight Retention — SUPPORT -->
     <div class="pcard" onclick="openModal('retention')">
@@ -2986,8 +3002,8 @@ footer{
       </div>
     </div>
 
-  </div><!-- /work-carousel -->
-  </div><!-- /work-carousel-wrap -->
+  </div><!-- /moreCarousel -->
+  </div><!-- /more-carousel-wrap -->
 </div>
 
 <div class="divider"></div>
@@ -3797,14 +3813,12 @@ function switchEmbed(showId, hideId, btn){
   btn.style.fontWeight='600';
 }
 
-/* ── WORK CAROUSEL SCROLL + DRAG ── */
-function scrollWork(dir){
-  const c=document.getElementById('workCarousel');
-  if(c) c.scrollBy({left:dir*416,behavior:'smooth'});
-}
-(function(){
-  const c=document.getElementById('workCarousel');
-  if(!c) return;
+/* ── WORK CAROUSELS SCROLL + DRAG ── */
+function scrollWork(dir){const c=document.getElementById('workCarousel');if(c)c.scrollBy({left:dir*416,behavior:'smooth'});}
+function scrollMore(dir){const c=document.getElementById('moreCarousel');if(c)c.scrollBy({left:dir*416,behavior:'smooth'});}
+function makeDraggable(id){
+  const c=document.getElementById(id);
+  if(!c)return;
   let isDown=false,startX=0,scrollLeft=0;
   c.addEventListener('mousedown',e=>{isDown=true;c.classList.add('dragging');startX=e.pageX-c.offsetLeft;scrollLeft=c.scrollLeft;});
   document.addEventListener('mouseup',()=>{isDown=false;c.classList.remove('dragging');});
@@ -3813,7 +3827,9 @@ function scrollWork(dir){
   let tx=0,ts=0;
   c.addEventListener('touchstart',e=>{tx=e.touches[0].pageX;ts=c.scrollLeft;},{passive:true});
   c.addEventListener('touchmove',e=>{c.scrollLeft=ts-(e.touches[0].pageX-tx);},{passive:true});
-})();
+}
+makeDraggable('workCarousel');
+makeDraggable('moreCarousel');
 
 /* ── SNAPSHOTS DRAG SCROLL ── */
 (function(){
