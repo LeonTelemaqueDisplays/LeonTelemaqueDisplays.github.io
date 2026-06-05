@@ -253,51 +253,52 @@ nav{
 
 /* ── WORK GRIDS ── */
 
-/* Hero projects — 2-col, tall previews */
-.hero-work-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-/* Support projects — 3-col, compact */
-.support-grid-wrap{
+/* ── WORK CAROUSEL ── */
+.work-carousel-wrap{
   position:relative;
 }
-.support-grid-wrap::before,
-.support-grid-wrap::after{
+.work-carousel-wrap::after{
   content:'';
-  position:absolute;top:0;bottom:0;
-  width:60px;z-index:10;pointer-events:none;
+  position:absolute;
+  right:0;top:0;bottom:4px;
+  width:80px;
+  background:linear-gradient(to left,var(--bg) 0%,transparent 100%);
+  pointer-events:none;
+  z-index:10;
 }
-.support-grid-wrap::before{left:0;background:linear-gradient(to right,var(--bg),transparent)}
-.support-grid-wrap::after{right:0;background:linear-gradient(to left,var(--bg),transparent)}
-.support-grid{
+.work-carousel{
   display:flex;
-  gap:12px;
+  gap:16px;
   overflow-x:auto;
   scroll-behavior:smooth;
+  scroll-snap-type:x mandatory;
   scrollbar-width:none;
   cursor:grab;
   user-select:none;
   padding-bottom:4px;
 }
-.support-grid::-webkit-scrollbar{display:none}
-.support-grid.dragging{cursor:grabbing;scroll-behavior:auto}
-.support-grid .pcard{
-  flex:0 0 340px;
+.work-carousel::-webkit-scrollbar{display:none}
+.work-carousel.dragging{cursor:grabbing;scroll-behavior:auto}
+.work-carousel .pcard{
+  flex:0 0 400px;
+  scroll-snap-align:start;
 }
-.support-label{
-  font-family:var(--mono);font-size:.6rem;
-  color:var(--muted);letter-spacing:.12em;
-  text-transform:uppercase;
-  padding:20px 0 12px;
-  border-top:1px solid var(--border);
-  margin-top:32px;
-  display:flex;align-items:center;gap:12px;
+.work-carousel .pcard-preview{
+  aspect-ratio:16/9;
 }
-.support-label::after{
-  content:'';flex:1;height:1px;background:var(--border);
+/* Carousel arrows */
+.carousel-arrows{display:flex;gap:8px}
+.carousel-btn{
+  background:var(--card);
+  border:1px solid var(--border2);
+  color:var(--muted2);
+  width:32px;height:32px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:.9rem;
+  transition:border-color .2s,color .2s;
+  flex-shrink:0;
 }
+.carousel-btn:hover{border-color:#444;color:var(--text)}
 
 /* Base card — shared */
 .pcard{
@@ -310,44 +311,7 @@ nav{
 }
 .pcard:hover{border-color:#333;transform:translateY(-3px)}
 
-/* Hero card previews — taller */
-.hero-work-grid .pcard-preview{
-  aspect-ratio:16/9;
-}
-
-/* Support card previews — shorter, muted */
-.support-grid .pcard{
-  opacity:.82;
-  transition:border-color .2s,transform .18s,opacity .18s;
-}
-.support-grid .pcard:hover{
-  border-color:#2a2a2a;
-  transform:translateY(-2px);
-  opacity:1;
-}
-.support-grid .pcard-preview{
-  aspect-ratio:16/8;
-  filter:saturate(.7);
-}
-.support-grid .pcard:hover .pcard-preview{
-  filter:saturate(1);
-  transition:filter .2s;
-}
-.support-grid .pcard-body{
-  padding:14px 16px 18px;
-  gap:7px;
-}
-.support-grid .pcard-title{
-  font-size:.9rem;
-}
-.support-grid .pcard-desc{
-  font-size:.76rem;
-  /* clamp to 2 lines */
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
-}
+/* All cards uniform in carousel */
 
 /* Shared preview / body */
 .pcard-preview{
@@ -826,8 +790,8 @@ footer{
 
   /* Work grids */
   .work-grid{grid-template-columns:1fr}
-  .hero-work-grid{grid-template-columns:1fr}
-  .support-grid .pcard{flex:0 0 300px}
+  .work-carousel .pcard{flex:0 0 320px}
+  .work-carousel .pcard{flex:0 0 290px}
 
   /* About */
   .about-grid{grid-template-columns:1fr;gap:48px}
@@ -894,7 +858,7 @@ footer{
   /* Work section wrapper padding */
   #work{padding:0 16px !important}
   .hero-work-grid{grid-template-columns:1fr;gap:12px}
-  .support-grid{grid-template-columns:1fr}
+  .work-carousel .pcard{flex:0 0 280px}
 
   /* pcard body padding */
   .pcard-body{padding:16px 18px 20px}
@@ -951,7 +915,7 @@ footer{
 
   /* Work */
   #work{padding:0 12px !important}
-  .support-grid{grid-template-columns:1fr}
+  .work-carousel .pcard{flex:0 0 280px}
   .pcard-body{padding:14px 14px 18px}
   .pcard-title{font-size:.9rem}
 
@@ -1396,16 +1360,116 @@ footer{
 
 <!-- WORK -->
 <div style="max-width:1440px;margin:0 auto;padding:0 40px" id="work">
-  <div class="section-head" style="padding-top:72px;margin-bottom:40px">
+  <div class="section-head" style="padding-top:72px;margin-bottom:28px">
     <div>
       <h2 style="font-size:clamp(1.5rem,2.5vw,2rem);font-weight:700;letter-spacing:-.03em">Selected Work</h2>
-      <p style="font-size:.85rem;color:var(--muted2);margin-top:6px">Behavioural systems that shape player experience across the full lifecycle — onboarding, engagement, and churn.</p>
+      <p style="font-size:.85rem;color:var(--muted2);margin-top:6px">Behavioural systems, strategy research, and product thinking — across games, fintech, and urban UX.</p>
     </div>
-    <a href="https://diamond-apparel-ca4.notion.site/Portfolio-36d20d328f448012af39c1beddca4704" target="_blank" class="view-all">Full case studies →</a>
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="carousel-arrows">
+        <button class="carousel-btn" onclick="scrollWork(-1)" aria-label="Previous">←</button>
+        <button class="carousel-btn" onclick="scrollWork(1)" aria-label="Next">→</button>
+      </div>
+      <a href="https://diamond-apparel-ca4.notion.site/Portfolio-36d20d328f448012af39c1beddca4704" target="_blank" class="view-all">Full case studies →</a>
+    </div>
   </div>
 
-  <!-- HERO PROJECTS -->
-  <div class="hero-work-grid" style="padding-bottom:0">
+  <!-- ALL PROJECTS — single carousel -->
+  <div class="work-carousel-wrap">
+  <div class="work-carousel" id="workCarousel">
+
+    <!-- THE COLLISION — Strategy Analysis -->
+    <div class="pcard" onclick="window.open('https://diamond-apparel-ca4.notion.site/Portfolio-36d20d328f448012af39c1beddca4704','_blank')">
+      <div class="pcard-preview">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <radialGradient id="crackGlow2" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff6b6b" stop-opacity=".5"/>
+              <stop offset="100%" stop-color="#ff6b6b" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect width="680" height="400" fill="#06080f"/>
+          <!-- grid -->
+          <line x1="0" y1="80"  x2="680" y2="80"  stroke="#0d1020" stroke-width="1"/>
+          <line x1="0" y1="160" x2="680" y2="160" stroke="#0d1020" stroke-width="1"/>
+          <line x1="0" y1="240" x2="680" y2="240" stroke="#0d1020" stroke-width="1"/>
+          <line x1="0" y1="320" x2="680" y2="320" stroke="#0d1020" stroke-width="1"/>
+          <line x1="136" y1="0" x2="136" y2="400" stroke="#0d1020" stroke-width="1"/>
+          <line x1="272" y1="0" x2="272" y2="400" stroke="#0d1020" stroke-width="1"/>
+          <line x1="408" y1="0" x2="408" y2="400" stroke="#0d1020" stroke-width="1"/>
+          <line x1="544" y1="0" x2="544" y2="400" stroke="#0d1020" stroke-width="1"/>
+          <!-- LEFT: Console tinted zone -->
+          <rect x="0" y="0" width="318" height="400" fill="rgba(59,91,219,.03)"/>
+          <!-- Console price bars -->
+          <rect x="30"  y="310" width="36" height="58"  fill="rgba(59,91,219,.18)" stroke="rgba(59,91,219,.3)"  stroke-width=".7"/>
+          <text x="48"  y="305" text-anchor="middle" fill="rgba(59,91,219,.6)"  font-size="7" font-family="monospace">$299</text>
+          <text x="48"  y="383" text-anchor="middle" fill="rgba(90,96,120,.45)" font-size="6" font-family="monospace">PS1</text>
+          <rect x="80"  y="290" width="36" height="78"  fill="rgba(59,91,219,.22)" stroke="rgba(59,91,219,.35)" stroke-width=".7"/>
+          <text x="98"  y="285" text-anchor="middle" fill="rgba(59,91,219,.65)" font-size="7" font-family="monospace">$399</text>
+          <text x="98"  y="383" text-anchor="middle" fill="rgba(90,96,120,.45)" font-size="6" font-family="monospace">PS4</text>
+          <rect x="130" y="258" width="36" height="110" fill="rgba(59,91,219,.28)" stroke="rgba(59,91,219,.4)"  stroke-width=".7"/>
+          <text x="148" y="253" text-anchor="middle" fill="rgba(91,143,255,.75)" font-size="7" font-family="monospace">$499</text>
+          <text x="148" y="383" text-anchor="middle" fill="rgba(90,96,120,.45)" font-size="6" font-family="monospace">PS5</text>
+          <rect x="180" y="188" width="36" height="180" fill="rgba(90,60,255,.22)" stroke="rgba(255,80,80,.5)"  stroke-width=".7"/>
+          <text x="198" y="183" text-anchor="middle" fill="rgba(255,80,80,.9)"  font-size="7.5" font-family="monospace" font-weight="bold">$900</text>
+          <text x="198" y="383" text-anchor="middle" fill="rgba(255,80,80,.5)"  font-size="6" font-family="monospace">Pro</text>
+          <!-- price trend line -->
+          <polyline points="48,340 98,320 148,295 198,240" fill="none" stroke="rgba(59,91,219,.5)" stroke-width="1.5" stroke-dasharray="4 3" stroke-linecap="round"/>
+          <polygon points="198,230 194,242 204,240" fill="rgba(59,91,219,.6)"/>
+          <!-- CONSOLE label -->
+          <text x="30" y="24" fill="rgba(59,91,219,.55)" font-size="8.5" font-family="monospace" font-weight="bold" letter-spacing="1.5">CONSOLE</text>
+          <text x="30" y="38" fill="rgba(90,96,120,.4)" font-size="6.5" font-family="monospace">HARDWARE PRICE TRAJECTORY ↑</text>
+          <rect x="28" y="50" width="130" height="22" rx="2" fill="rgba(59,91,219,.08)" stroke="rgba(59,91,219,.2)" stroke-width=".6"/>
+          <text x="33" y="62" fill="rgba(90,120,255,.5)"  font-size="6.5" font-family="monospace">PS5 sales ↓50% · Q1 2026</text>
+          <text x="33" y="73" fill="rgba(90,96,120,.35)" font-size="6"   font-family="monospace">YoY decline accelerating</text>
+          <!-- RIGHT: Mobile tinted zone -->
+          <rect x="362" y="0" width="318" height="400" fill="rgba(249,115,22,.03)"/>
+          <!-- Mobile growth curve -->
+          <polygon points="390,370 430,340 470,310 510,275 550,240 590,210 640,185 640,370" fill="rgba(249,115,22,.06)"/>
+          <polyline points="390,370 430,340 470,310 510,275 550,240 590,210 640,185" fill="none" stroke="rgba(249,115,22,.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="430" cy="340" r="3.5" fill="rgba(249,115,22,.8)"/>
+          <text x="437" y="338" fill="rgba(249,115,22,.55)" font-size="6.5" font-family="monospace">1B</text>
+          <circle cx="510" cy="275" r="3.5" fill="rgba(249,115,22,.8)"/>
+          <text x="517" y="273" fill="rgba(249,115,22,.6)"  font-size="6.5" font-family="monospace">2B</text>
+          <circle cx="640" cy="185" r="3.5" fill="rgba(249,115,22,.9)"/>
+          <text x="618" y="175" fill="rgba(249,115,22,.85)" font-size="7.5" font-family="monospace" font-weight="bold">3.3B</text>
+          <!-- MOBILE label -->
+          <text x="400" y="24" fill="rgba(249,115,22,.55)" font-size="8.5" font-family="monospace" font-weight="bold" letter-spacing="1.5">MOBILE</text>
+          <text x="400" y="38" fill="rgba(90,96,120,.4)"   font-size="6.5" font-family="monospace">GLOBAL PLAYER BASE ↑</text>
+          <rect x="398" y="50" width="144" height="22" rx="2" fill="rgba(249,115,22,.08)" stroke="rgba(249,115,22,.2)" stroke-width=".6"/>
+          <text x="403" y="62" fill="rgba(249,115,22,.5)"  font-size="6.5" font-family="monospace">5× console audience</text>
+          <text x="403" y="73" fill="rgba(90,96,120,.35)"  font-size="6"   font-family="monospace">$103B mobile revenue</text>
+          <!-- CENTRE crack -->
+          <rect x="328" y="0" width="24" height="400" fill="url(#crackGlow2)" opacity=".6"/>
+          <line x1="340" y1="0"   x2="340" y2="110"  stroke="rgba(255,100,100,.7)"  stroke-width="1.5"/>
+          <line x1="340" y1="110" x2="332" y2="160"  stroke="rgba(255,100,100,.6)"  stroke-width="1.5"/>
+          <line x1="332" y1="160" x2="348" y2="220"  stroke="rgba(255,100,100,.6)"  stroke-width="1.5"/>
+          <line x1="348" y1="220" x2="336" y2="280"  stroke="rgba(255,100,100,.55)" stroke-width="1.5"/>
+          <line x1="336" y1="280" x2="342" y2="400"  stroke="rgba(255,100,100,.4)"  stroke-width="1.5"/>
+          <circle cx="340" cy="200" r="10" fill="rgba(255,100,100,.15)" stroke="rgba(255,100,100,.4)" stroke-width="1"/>
+          <circle cx="340" cy="200" r="4"  fill="rgba(255,150,150,.6)"/>
+          <line x1="340" y1="200" x2="320" y2="185" stroke="rgba(255,100,100,.5)"  stroke-width="1"   stroke-linecap="round"/>
+          <line x1="340" y1="200" x2="360" y2="215" stroke="rgba(255,100,100,.5)"  stroke-width="1"   stroke-linecap="round"/>
+          <line x1="340" y1="200" x2="325" y2="218" stroke="rgba(255,100,100,.35)" stroke-width=".8"  stroke-linecap="round"/>
+          <line x1="340" y1="200" x2="355" y2="183" stroke="rgba(255,100,100,.35)" stroke-width=".8"  stroke-linecap="round"/>
+          <!-- BOTTOM bar -->
+          <rect x="0" y="355" width="680" height="45" fill="rgba(5,7,14,.85)"/>
+          <text x="340" y="376" text-anchor="middle" fill="rgba(255,255,255,.92)" font-size="15" font-family="-apple-system,sans-serif" font-weight="700" letter-spacing="-.3">THE COLLISION</text>
+          <text x="340" y="392" text-anchor="middle" fill="rgba(140,148,168,.55)" font-size="7.5" font-family="monospace" letter-spacing="1">CONSOLE PRICING · MARKET BIFURCATION · STUDIO SURVIVAL</text>
+        </svg>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">The Collision — Console Hardware Pricing &amp; the Fracturing Player Base</h3>
+        <p class="pcard-desc">A 9-section strategy analysis of why rising console prices aren't a retention problem — they're a structural market collision between two incompatible gaming ecosystems. Includes survival playbooks for Western live service and mobile-first studios.</p>
+        <div class="pcard-tags">
+          <span class="ptag" style="border-color:rgba(255,100,100,.3);color:rgba(255,120,120,.8)">Strategy</span>
+          <span class="ptag">Market Analysis</span>
+          <span class="ptag">LiveOps</span>
+          <span class="ptag">Games Industry</span>
+          <span class="ptag ptag-live" style="border-color:rgba(255,100,100,.3);color:rgba(255,120,120,.7)">● In Progress</span>
+        </div>
+      </div>
+    </div>
 
     <!-- GTA ONLINE — OPERATION: LAST RIDE — HERO #1 -->
     <div class="pcard" onclick="openModal('gta')">
@@ -2360,11 +2424,6 @@ footer{
       </div>
     </div>
 
-  </div><!-- /hero-work-grid -->
-
-  <div class="support-label">More projects — gaming systems, fintech &amp; cross-domain</div>
-  <div class="support-grid-wrap">
-  <div class="support-grid" id="support-track">
 
     <!-- P2: Dead by Daylight Retention — SUPPORT -->
     <div class="pcard" onclick="openModal('retention')">
@@ -2927,8 +2986,8 @@ footer{
       </div>
     </div>
 
-  </div>
-  </div><!-- /support-grid-wrap -->
+  </div><!-- /work-carousel -->
+  </div><!-- /work-carousel-wrap -->
 </div>
 
 <div class="divider"></div>
@@ -3737,6 +3796,24 @@ function switchEmbed(showId, hideId, btn){
   btn.style.color='var(--text)';
   btn.style.fontWeight='600';
 }
+
+/* ── WORK CAROUSEL SCROLL + DRAG ── */
+function scrollWork(dir){
+  const c=document.getElementById('workCarousel');
+  if(c) c.scrollBy({left:dir*416,behavior:'smooth'});
+}
+(function(){
+  const c=document.getElementById('workCarousel');
+  if(!c) return;
+  let isDown=false,startX=0,scrollLeft=0;
+  c.addEventListener('mousedown',e=>{isDown=true;c.classList.add('dragging');startX=e.pageX-c.offsetLeft;scrollLeft=c.scrollLeft;});
+  document.addEventListener('mouseup',()=>{isDown=false;c.classList.remove('dragging');});
+  c.addEventListener('mouseleave',()=>{isDown=false;c.classList.remove('dragging');});
+  c.addEventListener('mousemove',e=>{if(!isDown)return;e.preventDefault();const x=e.pageX-c.offsetLeft;c.scrollLeft=scrollLeft-(x-startX)*1.4;});
+  let tx=0,ts=0;
+  c.addEventListener('touchstart',e=>{tx=e.touches[0].pageX;ts=c.scrollLeft;},{passive:true});
+  c.addEventListener('touchmove',e=>{c.scrollLeft=ts-(e.touches[0].pageX-tx);},{passive:true});
+})();
 
 /* ── SNAPSHOTS DRAG SCROLL ── */
 (function(){
