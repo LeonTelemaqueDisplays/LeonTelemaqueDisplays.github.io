@@ -1333,6 +1333,276 @@ footer{
   <!-- HERO PROJECTS -->
   <div class="hero-work-grid" style="padding-bottom:0">
 
+    <!-- GTA ONLINE — OPERATION: LAST RIDE — HERO #1 -->
+    <div class="pcard" onclick="openModal('gta')" style="grid-column:1/-1">
+      <div class="pcard-preview" style="aspect-ratio:21/8;overflow:hidden;position:relative;">
+        <svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+          <defs>
+            <radialGradient id="cityGlow" cx="50%" cy="100%" r="70%">
+              <stop offset="0%" stop-color="#f59e0b" stop-opacity=".18"/>
+              <stop offset="60%" stop-color="#9b1c1c" stop-opacity=".08"/>
+              <stop offset="100%" stop-color="#060814" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#f59e0b" stop-opacity=".7"/>
+              <stop offset="40%" stop-color="#f59e0b" stop-opacity=".2"/>
+              <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#04050e"/>
+              <stop offset="45%" stop-color="#0a0d20"/>
+              <stop offset="100%" stop-color="#12091a"/>
+            </linearGradient>
+            <linearGradient id="groundGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#0c0a14"/>
+              <stop offset="100%" stop-color="#060410"/>
+            </linearGradient>
+            <filter id="gblur3"><feGaussianBlur stdDeviation="3"/></filter>
+            <filter id="gblur8"><feGaussianBlur stdDeviation="8"/></filter>
+            <filter id="gblur1"><feGaussianBlur stdDeviation="1.5"/></filter>
+          </defs>
+
+          <!-- Sky -->
+          <rect width="1200" height="400" fill="url(#skyGrad)"/>
+
+          <!-- Stars -->
+          <circle cx="80" cy="30" r=".8" fill="white" opacity=".5"/><circle cx="200" cy="18" r=".6" fill="white" opacity=".4"/>
+          <circle cx="340" cy="45" r=".9" fill="white" opacity=".55"/><circle cx="480" cy="22" r=".7" fill="white" opacity=".4"/>
+          <circle cx="620" cy="35" r=".5" fill="white" opacity=".35"/><circle cx="760" cy="15" r=".8" fill="white" opacity=".5"/>
+          <circle cx="900" cy="40" r=".6" fill="white" opacity=".4"/><circle cx="1050" cy="25" r=".9" fill="white" opacity=".45"/>
+          <circle cx="150" cy="70" r=".5" fill="white" opacity=".3"/><circle cx="1100" cy="60" r=".6" fill="white" opacity=".35"/>
+          <circle cx="420" cy="12" r=".7" fill="#fde68a" opacity=".5"/><circle cx="850" cy="28" r=".6" fill="#c4b5fd" opacity=".45"/>
+
+          <!-- Distant city glow on horizon -->
+          <ellipse cx="600" cy="240" rx="500" ry="80" fill="url(#cityGlow)" filter="url(#gblur8)"/>
+
+          <!-- Los Santos skyline silhouette — left cluster -->
+          <rect x="30" y="185" width="18" height="95" fill="#0a0816"/>
+          <rect x="52" y="155" width="24" height="125" fill="#0c0a1a"/>
+          <rect x="80" y="170" width="14" height="110" fill="#0a0816"/>
+          <rect x="98" y="140" width="30" height="140" fill="#0d0b1e"/>
+          <!-- antenna -->
+          <rect x="111" y="125" width="2" height="20" fill="#0f0d22"/>
+          <rect x="132" y="160" width="20" height="120" fill="#0b0918"/>
+          <rect x="156" y="175" width="16" height="105" fill="#0a0816"/>
+          <rect x="176" y="148" width="26" height="132" fill="#0d0b1e"/>
+          <!-- windows left cluster -->
+          <rect x="55" y="162" width="4" height="3" fill="rgba(245,158,11,.45)" rx="1"/>
+          <rect x="62" y="162" width="4" height="3" fill="rgba(245,158,11,.35)" rx="1"/>
+          <rect x="55" y="170" width="4" height="3" fill="rgba(245,158,11,.3)" rx="1"/>
+          <rect x="62" y="170" width="4" height="3" fill="rgba(155,109,255,.4)" rx="1"/>
+          <rect x="101" y="148" width="4" height="3" fill="rgba(245,158,11,.5)" rx="1"/>
+          <rect x="109" y="148" width="4" height="3" fill="rgba(245,158,11,.4)" rx="1"/>
+          <rect x="117" y="148" width="4" height="3" fill="rgba(245,158,11,.3)" rx="1"/>
+          <rect x="101" y="156" width="4" height="3" fill="rgba(91,143,255,.35)" rx="1"/>
+          <rect x="109" y="156" width="4" height="3" fill="rgba(245,158,11,.45)" rx="1"/>
+          <rect x="179" y="155" width="4" height="3" fill="rgba(245,158,11,.45)" rx="1"/>
+          <rect x="187" y="155" width="4" height="3" fill="rgba(245,158,11,.3)" rx="1"/>
+          <rect x="197" y="155" width="4" height="3" fill="rgba(155,109,255,.35)" rx="1"/>
+
+          <!-- Centre-left buildings -->
+          <rect x="220" y="130" width="35" height="150" fill="#0e0c20"/>
+          <rect x="225" y="115" width="4" height="20" fill="#100e24"/>
+          <circle cx="227" cy="113" r="2" fill="rgba(255,77,77,.6)"/>
+          <rect x="260" y="150" width="22" height="130" fill="#0c0a1c"/>
+          <rect x="286" y="120" width="40" height="160" fill="#0f0d22"/>
+          <!-- Iconic tower shape -->
+          <polygon points="306,100 316,120 326,120" fill="#110f26"/>
+          <rect x="310" y="78" width="4" height="26" fill="#110f26"/>
+          <circle cx="312" cy="76" r="2.5" fill="rgba(255,77,77,.7)"/>
+          <rect x="330" y="145" width="28" height="135" fill="#0d0b1e"/>
+          <rect x="362" y="165" width="18" height="115" fill="#0b0918"/>
+          <rect x="384" y="135" width="32" height="145" fill="#100e22"/>
+
+          <!-- Windows centre-left -->
+          <rect x="223" y="138" width="5" height="4" fill="rgba(245,158,11,.5)" rx="1"/>
+          <rect x="231" y="138" width="5" height="4" fill="rgba(245,158,11,.4)" rx="1"/>
+          <rect x="239" y="138" width="5" height="4" fill="rgba(91,143,255,.4)" rx="1"/>
+          <rect x="247" y="138" width="5" height="4" fill="rgba(245,158,11,.35)" rx="1"/>
+          <rect x="223" y="148" width="5" height="4" fill="rgba(245,158,11,.3)" rx="1"/>
+          <rect x="231" y="148" width="5" height="4" fill="rgba(155,109,255,.4)" rx="1"/>
+          <rect x="289" y="128" width="5" height="4" fill="rgba(245,158,11,.55)" rx="1"/>
+          <rect x="297" y="128" width="5" height="4" fill="rgba(245,158,11,.45)" rx="1"/>
+          <rect x="305" y="128" width="5" height="4" fill="rgba(245,158,11,.4)" rx="1"/>
+          <rect x="313" y="128" width="5" height="4" fill="rgba(91,143,255,.35)" rx="1"/>
+          <rect x="289" y="138" width="5" height="4" fill="rgba(245,158,11,.3)" rx="1"/>
+          <rect x="297" y="138" width="5" height="4" fill="rgba(245,158,11,.45)" rx="1"/>
+
+          <!-- Centre — tallest tower (landmark) -->
+          <rect x="430" y="80" width="48" height="200" fill="#110f26"/>
+          <rect x="440" y="60" width="28" height="26" fill="#130f28"/>
+          <rect x="448" y="42" width="12" height="22" fill="#150f2a"/>
+          <rect x="452" y="28" width="4" height="18" fill="#150f2a"/>
+          <circle cx="454" cy="26" r="3" fill="rgba(255,77,77,.85)"/>
+          <!-- Tower windows (grid) -->
+          <rect x="434" y="88" width="6" height="5" fill="rgba(245,158,11,.6)" rx="1"/>
+          <rect x="443" y="88" width="6" height="5" fill="rgba(245,158,11,.5)" rx="1"/>
+          <rect x="452" y="88" width="6" height="5" fill="rgba(245,158,11,.45)" rx="1"/>
+          <rect x="461" y="88" width="6" height="5" fill="rgba(91,143,255,.5)" rx="1"/>
+          <rect x="470" y="88" width="6" height="5" fill="rgba(245,158,11,.4)" rx="1"/>
+          <rect x="434" y="98" width="6" height="5" fill="rgba(245,158,11,.4)" rx="1"/>
+          <rect x="443" y="98" width="6" height="5" fill="rgba(155,109,255,.5)" rx="1"/>
+          <rect x="452" y="98" width="6" height="5" fill="rgba(245,158,11,.55)" rx="1"/>
+          <rect x="461" y="98" width="6" height="5" fill="rgba(245,158,11,.35)" rx="1"/>
+          <rect x="470" y="98" width="6" height="5" fill="rgba(245,158,11,.45)" rx="1"/>
+          <rect x="434" y="108" width="6" height="5" fill="rgba(91,143,255,.4)" rx="1"/>
+          <rect x="443" y="108" width="6" height="5" fill="rgba(245,158,11,.5)" rx="1"/>
+          <rect x="452" y="108" width="6" height="5" fill="rgba(245,158,11,.3)" rx="1"/>
+          <rect x="461" y="108" width="6" height="5" fill="rgba(155,109,255,.4)" rx="1"/>
+          <rect x="470" y="108" width="6" height="5" fill="rgba(245,158,11,.5)" rx="1"/>
+
+          <!-- Centre-right buildings -->
+          <rect x="490" y="145" width="30" height="135" fill="#0e0c1e"/>
+          <rect x="524" y="110" width="42" height="170" fill="#100e24"/>
+          <rect x="528" y="95" width="4" height="18" fill="#120f26"/>
+          <circle cx="530" cy="93" r="2" fill="rgba(255,77,77,.6)"/>
+          <rect x="570" y="130" width="35" height="150" fill="#0f0d22"/>
+          <rect x="609" y="155" width="22" height="125" fill="#0c0a1c"/>
+          <rect x="635" y="125" width="38" height="155" fill="#100e24"/>
+
+          <!-- Right cluster buildings -->
+          <rect x="690" y="160" width="28" height="120" fill="#0d0b1e"/>
+          <rect x="722" y="140" width="32" height="140" fill="#0f0d22"/>
+          <rect x="730" y="125" width="3" height="18" fill="#110f24"/>
+          <circle cx="731" cy="123" r="2" fill="rgba(255,77,77,.55)"/>
+          <rect x="758" y="168" width="20" height="112" fill="#0b0918"/>
+          <rect x="782" y="148" width="30" height="132" fill="#0e0c20"/>
+          <rect x="816" y="170" width="22" height="110" fill="#0c0a1a"/>
+          <rect x="842" y="155" width="28" height="125" fill="#0d0b1e"/>
+          <rect x="874" y="172" width="18" height="108" fill="#0a0818"/>
+          <rect x="896" y="145" width="35" height="135" fill="#0f0d22"/>
+          <rect x="935" y="175" width="20" height="105" fill="#0b0918"/>
+          <rect x="959" y="160" width="26" height="120" fill="#0d0b1e"/>
+
+          <!-- Windows right cluster -->
+          <rect x="527" y="118" width="6" height="5" fill="rgba(245,158,11,.55)" rx="1"/>
+          <rect x="537" y="118" width="6" height="5" fill="rgba(245,158,11,.45)" rx="1"/>
+          <rect x="547" y="118" width="6" height="5" fill="rgba(91,143,255,.4)" rx="1"/>
+          <rect x="557" y="118" width="6" height="5" fill="rgba(245,158,11,.5)" rx="1"/>
+          <rect x="527" y="128" width="6" height="5" fill="rgba(245,158,11,.35)" rx="1"/>
+          <rect x="537" y="128" width="6" height="5" fill="rgba(155,109,255,.4)" rx="1"/>
+          <rect x="637" y="132" width="5" height="4" fill="rgba(245,158,11,.5)" rx="1"/>
+          <rect x="645" y="132" width="5" height="4" fill="rgba(245,158,11,.4)" rx="1"/>
+          <rect x="653" y="132" width="5" height="4" fill="rgba(91,143,255,.35)" rx="1"/>
+          <rect x="661" y="132" width="5" height="4" fill="rgba(245,158,11,.45)" rx="1"/>
+          <rect x="724" y="148" width="5" height="4" fill="rgba(245,158,11,.5)" rx="1"/>
+          <rect x="732" y="148" width="5" height="4" fill="rgba(245,158,11,.4)" rx="1"/>
+          <rect x="740" y="148" width="5" height="4" fill="rgba(155,109,255,.35)" rx="1"/>
+          <rect x="785" y="155" width="5" height="4" fill="rgba(245,158,11,.45)" rx="1"/>
+          <rect x="793" y="155" width="5" height="4" fill="rgba(245,158,11,.5)" rx="1"/>
+          <rect x="899" y="152" width="5" height="4" fill="rgba(245,158,11,.45)" rx="1"/>
+          <rect x="907" y="152" width="5" height="4" fill="rgba(91,143,255,.4)" rx="1"/>
+          <rect x="915" y="152" width="5" height="4" fill="rgba(245,158,11,.35)" rx="1"/>
+          <rect x="962" y="167" width="5" height="4" fill="rgba(245,158,11,.4)" rx="1"/>
+          <rect x="970" y="167" width="5" height="4" fill="rgba(155,109,255,.35)" rx="1"/>
+
+          <!-- Far right fades -->
+          <rect x="990" y="180" width="22" height="100" fill="#0a0816" opacity=".9"/>
+          <rect x="1016" y="195" width="18" height="85" fill="#090714" opacity=".8"/>
+          <rect x="1038" y="200" width="25" height="80" fill="#080612" opacity=".7"/>
+          <rect x="1068" y="210" width="20" height="70" fill="#07050f" opacity=".6"/>
+          <rect x="1092" y="215" width="30" height="65" fill="#070510" opacity=".5"/>
+          <rect x="1126" y="220" width="24" height="60" fill="#060410" opacity=".4"/>
+          <rect x="1154" y="225" width="46" height="55" fill="#05030e" opacity=".3"/>
+
+          <!-- Ground / road -->
+          <rect x="0" y="280" width="1200" height="120" fill="url(#groundGrad)"/>
+          <!-- Road surface -->
+          <rect x="0" y="290" width="1200" height="12" fill="rgba(15,12,28,.8)"/>
+          <!-- Road lane lines -->
+          <line x1="0" y1="296" x2="1200" y2="296" stroke="rgba(245,158,11,.08)" stroke-width="1"/>
+          <!-- Neon reflections in wet road -->
+          <rect x="200" y="292" width="60" height="8" fill="rgba(245,158,11,.06)" rx="2"/>
+          <rect x="400" y="292" width="40" height="8" fill="rgba(155,109,255,.05)" rx="2"/>
+          <rect x="580" y="292" width="80" height="8" fill="rgba(91,143,255,.05)" rx="2"/>
+          <rect x="800" y="292" width="50" height="8" fill="rgba(245,158,11,.06)" rx="2"/>
+
+          <!-- Ambient city glow bottom -->
+          <rect x="0" y="270" width="1200" height="30" fill="rgba(14,10,30,.6)"/>
+
+          <!-- LEFT PANEL — mission brief overlay -->
+          <rect x="0" y="0" width="380" height="400" fill="rgba(6,4,14,.85)"/>
+          <line x1="380" y1="0" x2="380" y2="400" stroke="rgba(245,158,11,.2)" stroke-width="1"/>
+
+          <!-- Mission classification badge -->
+          <rect x="24" y="24" width="140" height="18" fill="rgba(245,158,11,.08)" stroke="rgba(245,158,11,.35)" stroke-width=".8" rx="1"/>
+          <circle cx="34" cy="33" r="3" fill="rgba(245,158,11,.8)"/>
+          <text x="42" y="37" fill="rgba(245,158,11,.85)" font-size="7.5" font-family="monospace" font-weight="bold" letter-spacing="1.5">CLASSIFIED · LIVEOPS</text>
+
+          <!-- Operation title -->
+          <text x="24" y="72" fill="rgba(245,158,11,.5)" font-size="8" font-family="monospace" letter-spacing="2">OPERATION</text>
+          <text x="24" y="98" fill="rgba(242,242,242,.95)" font-size="26" font-family="'Georgia',serif" font-weight="bold" letter-spacing="-1">Last Ride</text>
+          <line x1="24" y1="106" x2="356" y2="106" stroke="rgba(245,158,11,.25)" stroke-width="1"/>
+
+          <!-- Game label -->
+          <text x="24" y="124" fill="rgba(155,109,255,.7)" font-size="8.5" font-family="monospace" letter-spacing="1">GTA ONLINE · PRE-LAUNCH RETENTION</text>
+
+          <!-- Key metrics -->
+          <text x="24" y="155" fill="rgba(100,100,130,.6)" font-size="6.5" font-family="monospace" letter-spacing="1">MONTHLY ACTIVE USERS</text>
+          <text x="24" y="172" fill="rgba(242,242,242,.9)" font-size="20" font-family="monospace" font-weight="bold">18.3M</text>
+
+          <text x="140" y="155" fill="rgba(100,100,130,.6)" font-size="6.5" font-family="monospace" letter-spacing="1">DAYS TO GTA VI</text>
+          <text x="140" y="172" fill="rgba(255,77,77,.9)" font-size="20" font-family="monospace" font-weight="bold" id="gtaDays">169</text>
+
+          <text x="256" y="155" fill="rgba(100,100,130,.6)" font-size="6.5" font-family="monospace" letter-spacing="1">REVENUE AT RISK</text>
+          <text x="256" y="172" fill="rgba(245,158,11,.9)" font-size="20" font-family="monospace" font-weight="bold">$310M</text>
+
+          <!-- Divider -->
+          <line x1="24" y1="185" x2="356" y2="185" stroke="rgba(245,158,11,.12)" stroke-width="1"/>
+
+          <!-- Churn risk bars by segment -->
+          <text x="24" y="202" fill="rgba(100,100,130,.6)" font-size="6.5" font-family="monospace" letter-spacing="1">CHURN RISK BY SEGMENT</text>
+
+          <text x="24" y="220" fill="rgba(200,200,220,.65)" font-size="7.5" font-family="monospace">Console Grinders</text>
+          <rect x="24" y="224" width="200" height="6" fill="rgba(20,18,40,.6)" rx="2"/>
+          <rect x="24" y="224" width="154" height="6" fill="rgba(255,77,77,.65)" rx="2"/>
+          <text x="228" y="230" fill="rgba(255,77,77,.8)" font-size="7" font-family="monospace">77%</text>
+
+          <text x="24" y="244" fill="rgba(200,200,220,.65)" font-size="7.5" font-family="monospace">Casual Session Players</text>
+          <rect x="24" y="248" width="200" height="6" fill="rgba(20,18,40,.6)" rx="2"/>
+          <rect x="24" y="248" width="118" height="6" fill="rgba(245,158,11,.6)" rx="2"/>
+          <text x="228" y="254" fill="rgba(245,158,11,.8)" font-size="7" font-family="monospace">59%</text>
+
+          <text x="24" y="268" fill="rgba(200,200,220,.65)" font-size="7.5" font-family="monospace">Economy Players (PC)</text>
+          <rect x="24" y="272" width="200" height="6" fill="rgba(20,18,40,.6)" rx="2"/>
+          <rect x="24" y="272" width="66" height="6" fill="rgba(91,143,255,.55)" rx="2"/>
+          <text x="228" y="278" fill="rgba(91,143,255,.8)" font-size="7" font-family="monospace">33%</text>
+
+          <text x="24" y="292" fill="rgba(200,200,220,.65)" font-size="7.5" font-family="monospace">Social / Crew Players</text>
+          <rect x="24" y="296" width="200" height="6" fill="rgba(20,18,40,.6)" rx="2"/>
+          <rect x="24" y="296" width="36" height="6" fill="rgba(61,232,160,.5)" rx="2"/>
+          <text x="228" y="302" fill="rgba(61,232,160,.75)" font-size="7" font-family="monospace">18%</text>
+
+          <!-- Bottom label -->
+          <line x1="24" y1="318" x2="356" y2="318" stroke="rgba(245,158,11,.12)" stroke-width="1"/>
+          <text x="24" y="334" fill="rgba(100,100,130,.5)" font-size="6" font-family="monospace">SQL · PYTHON · COHORT ANALYSIS · LIVEOPS MODELLING</text>
+          <text x="24" y="348" fill="rgba(100,100,130,.45)" font-size="6" font-family="monospace">TAKE-TWO FINANCIAL DATA · STEAMSPY · COMMUNITY TELEMETRY</text>
+
+          <!-- Sub-pages pill row -->
+          <rect x="24" y="360" width="78" height="16" fill="rgba(245,158,11,.08)" stroke="rgba(245,158,11,.3)" stroke-width=".8" rx="8"/>
+          <text x="63" y="371" text-anchor="middle" fill="rgba(245,158,11,.75)" font-size="6.5" font-family="monospace">Economy →</text>
+          <rect x="110" y="360" width="82" height="16" fill="rgba(155,109,255,.08)" stroke="rgba(155,109,255,.3)" stroke-width=".8" rx="8"/>
+          <text x="151" y="371" text-anchor="middle" fill="rgba(155,109,255,.75)" font-size="6.5" font-family="monospace">Session Decay →</text>
+          <rect x="200" y="360" width="70" height="16" fill="rgba(255,77,77,.08)" stroke="rgba(255,77,77,.3)" stroke-width=".8" rx="8"/>
+          <text x="235" y="371" text-anchor="middle" fill="rgba(255,77,77,.75)" font-size="6.5" font-family="monospace">War Room →</text>
+        </svg>
+      </div>
+      <div class="pcard-body" style="flex-direction:row;align-items:center;gap:32px;flex-wrap:wrap">
+        <div style="flex:1;min-width:200px">
+          <h3 class="pcard-title">Operation: Last Ride — GTA Online Pre-Launch Retention</h3>
+          <p class="pcard-desc">18.3M MAU. GTA VI drops November 2026. This is the war room: who leaves, when, why, and which LiveOps levers exist to slow the bleed before the sequel erases the player base.</p>
+        </div>
+        <div class="pcard-tags" style="margin-top:0">
+          <span class="ptag ptag-blue">Gaming · LiveOps</span>
+          <span class="ptag">SQL</span>
+          <span class="ptag">Cohort Analysis</span>
+          <span class="ptag">Churn Modelling</span>
+          <span class="ptag">Economy Analysis</span>
+          <span class="ptag" style="border-color:rgba(245,158,11,.4);color:#f59e0b">GTA Online</span>
+        </div>
+      </div>
+    </div>
+
     <!-- P2: Dead by Daylight Retention — SUPPORT -->
     <div class="pcard" onclick="openModal('retention')">
       <div class="pcard-preview">
@@ -3179,6 +3449,25 @@ window.addEventListener('resize', () => {
 
 /* ── PROJECT DATA ── */
 const DATA={
+  gta:{
+    tag:'gaming',tagLabel:'Gaming · LiveOps · GTA Online',
+    title:'Operation: Last Ride — GTA Online Pre-Launch Retention Analysis',
+    period:'Jun 2026 – Nov 2026 · GTA VI Launch Window',
+    embedUrl:'operation_last_ride_v2.html',
+    streamlit:null,
+    desc:'GTA VI launches November 19, 2026 — console only. With 18.3M MAU and a 169-day countdown, this is the pre-launch retention war room: who leaves, when, why, and what LiveOps levers exist to slow the bleed before the sequel drops. Full churn scoring model, economy analysis, session decay curves, and revenue risk quantification (~$310M at stake).',
+    insight:'Console players face 77% churn risk the moment GTA VI is available — not because GTA Online gets worse, but because the sequel becomes the better version of the same product. The intervention window is pre-launch, not post-launch. Once players leave for GTA VI they don\'t come back.',
+    signals:[
+      '18.3M MAU across PC + console · platform divergence is the core churn driver',
+      'Console Grinders: 77% churn risk · Casual Players: 59% · Economy/PC: 33% · Social: 18%',
+      'SQL churn scoring model: platform weight × session decay × economy engagement × social anchoring',
+      '~$310M Shark Card revenue at risk if console base migrates on launch day',
+      'Historical parallel: Destiny → Destiny 2 showed 20–35% soft churn 6–8 weeks pre-launch',
+      '3-page analysis: War Room hub · Economy & Monetization deep dive · Session Decay modelling'
+    ],
+    tools:['SQL','Python','Cohort Analysis','Churn Modelling','Economy Modelling','LiveOps Strategy','Take-Two Financial Data','SteamSpy Telemetry'],
+    links:[{label:'Economy & Monetization →',url:'economy_monetization.html'},{label:'Session Decay Analysis →',url:'session_decay.html'}]
+  },
   churn:{
     tag:'gaming',tagLabel:'Gaming · LiveOps',
     title:'Lifecycle Churn System — Player Frustration & LiveOps Telemetry',

@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operation: Last Ride — GTA Online Retention Risk · Leon Telemaque</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#090909;
+  --card:#0f0f0f;
+  --card2:#131313;
+  --border:#1f1f1f;
+  --border2:#2a2a2a;
+  --text:#f2f2f2;
+  --muted:#6b6b6b;
+  --muted2:#999;
+  --blue:#5b8fff;
+  --purple:#9b6dff;
+  --green:#3de8a0;
+  --red:#ff4d4d;
+  --amber:#f59e0b;
+  --sans:'Inter',-apple-system,sans-serif;
+  --mono:'JetBrains Mono','Fira Code',monospace;
+  --serif:Georgia,'Times New Roman',serif;
+}
+
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.5;overflow-x:hidden}
+
+/* GRAIN */
+#grain{position:fixed;inset:0;z-index:9999;pointer-events:none;mix-blend-mode:screen;opacity:.45}
+
+/* NAV — matches portfolio exactly */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 40px;height:56px;
+  background:rgba(9,9,9,.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.logo{
+  font-family:var(--mono);font-size:.8rem;font-weight:600;
+  color:var(--text);letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--border2);padding:.28rem .6rem;
+  text-decoration:none;
+}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center}
+.nav-links a{
+  color:var(--muted2);text-decoration:none;
+  font-size:.82rem;font-weight:400;
+  transition:color .15s;letter-spacing:.01em;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-op-badge{
+  font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--red);border:1px solid rgba(255,77,77,.3);
+  padding:.2rem .55rem;
+  animation:pulse-red 2s ease-in-out infinite;
+}
+@keyframes pulse-red{0%,100%{border-color:rgba(255,77,77,.3)}50%{border-color:rgba(255,77,77,.7);box-shadow:0 0 6px rgba(255,77,77,.2)}}
+
+/* SUB-NAV — project page nav */
+.sub-nav{
+  position:sticky;top:56px;z-index:900;
+  background:var(--bg);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;
+  gap:0;
+  padding:0 40px;
+  height:40px;
+}
+.sub-nav-back{
+  display:flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:.68rem;
+  color:var(--muted);text-decoration:none;
+  letter-spacing:.06em;text-transform:uppercase;
+  transition:color .15s;
+  padding-right:20px;
+  border-right:1px solid var(--border);
+  margin-right:20px;
+}
+.sub-nav-back:hover{color:var(--text)}
+.sub-nav-pages{display:flex;gap:0}
+.sub-nav-page{
+  font-family:var(--mono);font-size:.68rem;
+  color:var(--muted);text-decoration:none;
+  letter-spacing:.06em;text-transform:uppercase;
+  padding:0 16px;height:40px;
+  display:flex;align-items:center;
+  border-right:1px solid var(--border);
+  transition:color .15s,background .15s;
+}
+.sub-nav-page:hover{color:var(--text);background:var(--card)}
+.sub-nav-page.active{color:var(--text);background:var(--card);border-bottom:2px solid var(--blue)}
+
+/* MAIN */
+.main{padding:32px 40px 80px;max-width:1400px;margin:0 auto}
+
+/* HERO BLOCK */
+.project-hero{
+  padding:48px 0 40px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:40px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:40px;
+  align-items:end;
+}
+.project-eyebrow{
+  font-family:var(--mono);font-size:.65rem;
+  color:var(--muted);letter-spacing:.12em;
+  text-transform:uppercase;margin-bottom:12px;
+  display:flex;align-items:center;gap:10px;
+}
+.project-eyebrow::before{
+  content:'';width:20px;height:1px;background:var(--border2);
+}
+.project-title{
+  font-size:clamp(1.8rem,3.5vw,3rem);
+  font-weight:700;letter-spacing:-.04em;
+  line-height:1.1;margin-bottom:16px;
+}
+.project-title em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--muted2)}
+.project-desc{
+  font-size:.9rem;color:var(--muted2);
+  line-height:1.75;max-width:640px;
+}
+.project-meta{
+  display:flex;flex-direction:column;gap:8px;
+  align-items:flex-end;text-align:right;
+}
+.meta-item{
+  font-family:var(--mono);font-size:.65rem;
+  color:var(--muted);letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.meta-val{color:var(--text)}
+
+/* SECTION LABELS */
+.sec-label{
+  font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.12em;color:var(--muted);
+  text-transform:uppercase;
+  margin-bottom:16px;
+  display:flex;align-items:center;gap:12px;
+}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* KPI ROW */
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);margin-bottom:40px}
+.kpi{background:var(--card);padding:20px 20px 18px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:1px}
+.kpi.k-blue::before{background:var(--blue)}
+.kpi.k-amber::before{background:var(--amber)}
+.kpi.k-red::before{background:var(--red)}
+.kpi.k-green::before{background:var(--green)}
+.kpi-label{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+.kpi-val{font-size:1.8rem;font-weight:700;letter-spacing:-.03em;line-height:1;margin-bottom:6px}
+.kpi.k-blue .kpi-val{color:var(--blue)}
+.kpi.k-amber .kpi-val{color:var(--amber)}
+.kpi.k-red .kpi-val{color:var(--red)}
+.kpi.k-green .kpi-val{color:var(--green)}
+.kpi-delta{font-family:var(--mono);font-size:.62rem;color:var(--muted);line-height:1.4}
+.kpi-delta.neg{color:var(--red)}
+.kpi-delta.pos{color:var(--green)}
+
+/* PANELS */
+.grid-2{display:grid;grid-template-columns:2fr 1fr;gap:1px;background:var(--border);margin-bottom:1px}
+.grid-2b{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:1px}
+.panel{background:var(--card);padding:24px}
+.panel-full{background:var(--card);padding:24px;margin-bottom:1px;border:1px solid var(--border)}
+.panel-label{
+  font-family:var(--mono);font-size:.6rem;
+  color:var(--muted);letter-spacing:.1em;
+  text-transform:uppercase;margin-bottom:16px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.panel-badge{
+  font-family:var(--mono);font-size:.58rem;
+  padding:.18rem .5rem;border:1px solid;letter-spacing:.06em;
+}
+.pb-blue{color:var(--blue);border-color:rgba(91,143,255,.25);background:rgba(91,143,255,.04)}
+.pb-red{color:var(--red);border-color:rgba(255,77,77,.25);background:rgba(255,77,77,.04)}
+.pb-green{color:var(--green);border-color:rgba(61,232,160,.2);background:rgba(61,232,160,.04)}
+.pb-amber{color:var(--amber);border-color:rgba(245,158,11,.25);background:rgba(245,158,11,.04)}
+
+/* CHART SVGs */
+svg{width:100%;display:block}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{
+  font-family:var(--mono);font-size:.58rem;
+  color:var(--muted);letter-spacing:.1em;text-transform:uppercase;
+  text-align:left;padding:8px 12px;
+  border-bottom:1px solid var(--border2);
+}
+.data-table td{
+  padding:10px 12px;
+  border-bottom:1px solid rgba(31,31,31,.8);
+  font-family:var(--mono);font-size:.72rem;
+  color:var(--muted2);
+}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:rgba(255,255,255,.015);color:var(--text)}
+.risk-track{height:4px;background:var(--border2);margin-top:4px}
+.risk-fill{height:4px}
+.rf-red{background:var(--red)}
+.rf-amber{background:var(--amber)}
+.rf-green{background:var(--green)}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:16px}
+.tab{
+  font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:8px 16px;background:none;border:none;
+  color:var(--muted);cursor:pointer;
+  border-bottom:1px solid transparent;margin-bottom:-1px;
+  transition:color .15s;
+}
+.tab.on{color:var(--text);border-bottom-color:var(--blue)}
+.tab:hover:not(.on){color:var(--muted2)}
+.tab-pane{display:none}
+.tab-pane.on{display:block}
+
+/* LEVER CARDS */
+.lever-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.lever{
+  background:var(--card2);padding:18px;
+  transition:background .15s;cursor:default;
+}
+.lever:hover{background:var(--card)}
+.lever-p{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.lever-title{font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:5px}
+.lever-desc{font-size:.78rem;color:var(--muted2);line-height:1.6}
+.lever-when{font-family:var(--mono);font-size:.6rem;color:var(--blue);margin-top:8px;letter-spacing:.04em}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:18px}
+.tl::before{content:'';position:absolute;left:3px;top:6px;bottom:6px;width:1px;background:var(--border2)}
+.tl-item{position:relative;margin-bottom:20px}
+.tl-dot{
+  position:absolute;left:-18px;top:5px;
+  width:7px;height:7px;border-radius:50%;border:1px solid;
+}
+.tl-now{background:var(--red);border-color:var(--red);box-shadow:0 0 6px rgba(255,77,77,.4)}
+.tl-warn{background:transparent;border-color:var(--amber)}
+.tl-info{background:transparent;border-color:var(--blue)}
+.tl-go{background:transparent;border-color:var(--green)}
+.tl-date{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.06em;margin-bottom:3px}
+.tl-event{font-size:.82rem;font-weight:600;margin-bottom:3px}
+.tl-detail{font-size:.76rem;color:var(--muted2);line-height:1.5}
+
+/* PROJECTION SUMMARY */
+.proj-row{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:16px}
+.proj-box{background:var(--card2);padding:16px}
+.proj-box-label{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.proj-box-val{font-size:1.6rem;font-weight:700;letter-spacing:-.03em;line-height:1;margin-bottom:4px}
+.proj-box-sub{font-family:var(--mono);font-size:.62rem;color:var(--muted)}
+
+/* CODE BLOCK */
+.code-block{
+  background:var(--bg);border:1px solid var(--border2);
+  padding:20px;font-family:var(--mono);font-size:.72rem;
+  line-height:1.9;overflow-x:auto;
+}
+.kw{color:var(--blue)}
+.fn{color:var(--green)}
+.str{color:var(--amber)}
+.cm{color:var(--muted)}
+
+/* DEEP-DIVE NAV CARDS */
+.deep-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:40px;margin-bottom:1px}
+.deep-card{
+  background:var(--card);padding:28px 28px 24px;
+  display:flex;flex-direction:column;gap:12px;
+  text-decoration:none;
+  transition:background .15s;
+  border-bottom:1px solid var(--border);
+}
+.deep-card:hover{background:var(--card2)}
+.deep-card-eyebrow{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.deep-card-title{font-size:1.1rem;font-weight:600;color:var(--text);letter-spacing:-.02em;line-height:1.3}
+.deep-card-desc{font-size:.8rem;color:var(--muted2);line-height:1.65;flex:1}
+.deep-card-arrow{
+  font-family:var(--mono);font-size:.7rem;
+  color:var(--blue);letter-spacing:.06em;
+  margin-top:4px;
+}
+
+/* LIVE DOT */
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--red);display:inline-block;animation:blink 1.2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* FOOTER */
+.project-footer{
+  border-top:1px solid var(--border);
+  margin-top:60px;padding-top:24px;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:16px;
+}
+.pf-copy{font-family:var(--mono);font-size:.65rem;color:var(--muted);line-height:1.7}
+.pf-sources{font-family:var(--mono);font-size:.6rem;color:var(--muted);opacity:.5;line-height:1.7;max-width:600px;text-align:right}
+
+@media(max-width:960px){
+  nav{padding:0 20px}
+  .sub-nav{padding:0 20px}
+  .main{padding:24px 20px 60px}
+  .kpi-row{grid-template-columns:repeat(3,1fr)}
+  .grid-2,.grid-2b{grid-template-columns:1fr}
+  .deep-grid{grid-template-columns:1fr}
+  .lever-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<canvas id="grain"></canvas>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="leon-portfolio.html">LT</a>
+  <ul class="nav-links">
+    <li><a href="leon-portfolio.html#about">About</a></li>
+    <li><a href="leon-portfolio.html#work">Work</a></li>
+    <li><span class="nav-op-badge"><span class="live-dot" style="margin-right:5px"></span>Operation: Last Ride</span></li>
+    <li><a href="mailto:leon.telemaque@gmail.com">Let's talk</a></li>
+  </ul>
+</nav>
+
+<!-- SUB-NAV -->
+<div class="sub-nav">
+  <a class="sub-nav-back" href="leon-portfolio.html">← Portfolio</a>
+  <div class="sub-nav-pages">
+    <a class="sub-nav-page active" href="operation_last_ride_v2.html">01 · Retention Risk</a>
+    <a class="sub-nav-page" href="economy_monetization.html">02 · Economy &amp; Monetization</a>
+    <a class="sub-nav-page" href="session_decay.html">03 · Session Decay</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- PROJECT HERO -->
+  <div class="project-hero">
+    <div>
+      <div class="project-eyebrow">GTA Online · Live Ops Case Study · Document GTA-RET-001</div>
+      <h1 class="project-title">Operation: <em>Last Ride</em><br>Retention Risk — The GTA VI Transition</h1>
+      <p class="project-desc">GTA VI launches November 19, 2026 — console only. With 18.3M MAU and <span id="days-hero">169</span> days left, this is the pre-launch retention war room: who leaves, when, why, and what levers exist to slow the bleed before the sequel drops.</p>
+    </div>
+    <div class="project-meta">
+      <div class="meta-item">Period<br><span class="meta-val">Jun 2026 — Nov 2026</span></div>
+      <div class="meta-item">Status<br><span class="meta-val" style="color:var(--red)">● Active Window</span></div>
+      <div class="meta-item">GTA VI Launch<br><span class="meta-val">Nov 19, 2026</span></div>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="sec-label">Current State</div>
+  <div class="kpi-row" style="margin-bottom:40px">
+    <div class="kpi k-blue">
+      <div class="kpi-label">Monthly Active Users</div>
+      <div class="kpi-val">18.3M</div>
+      <div class="kpi-delta neg">↓ 42% from Dec 2023 peak</div>
+    </div>
+    <div class="kpi k-amber">
+      <div class="kpi-label">Steam Avg Concurrents</div>
+      <div class="kpi-val">159K</div>
+      <div class="kpi-delta">Legacy + Enhanced · Feb 2026</div>
+    </div>
+    <div class="kpi k-red">
+      <div class="kpi-label">At-Risk Players</div>
+      <div class="kpi-val">9.9M</div>
+      <div class="kpi-delta neg">54% of MAU · modelled</div>
+    </div>
+    <div class="kpi k-green">
+      <div class="kpi-label">FY2025 Revenue</div>
+      <div class="kpi-val">$710M</div>
+      <div class="kpi-delta pos">GTA franchise · Take-Two</div>
+    </div>
+    <div class="kpi k-red">
+      <div class="kpi-label">Days to GTA VI</div>
+      <div class="kpi-val" id="kpi-days">169</div>
+      <div class="kpi-delta neg">⚠ Critical window open</div>
+    </div>
+  </div>
+
+  <!-- CHART + TIMELINE -->
+  <div class="sec-label">Player Count History</div>
+  <div class="grid-2" style="margin-bottom:40px">
+    <div class="panel">
+      <div class="panel-label">
+        Steam Concurrent Players — GTA Online 2022–2026
+        <span class="panel-badge pb-blue">Real Data · SteamDB / SteamCharts</span>
+      </div>
+      <svg viewBox="0 0 660 230" style="overflow:visible">
+        <defs>
+          <linearGradient id="ag" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#5b8fff" stop-opacity=".18"/>
+            <stop offset="100%" stop-color="#5b8fff" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <!-- grid -->
+        <line x1="0" y1="190" x2="660" y2="190" stroke="#1f1f1f" stroke-width="1"/>
+        <line x1="0" y1="143" x2="660" y2="143" stroke="#1f1f1f" stroke-width=".5" stroke-dasharray="3,4"/>
+        <line x1="0" y1="96" x2="660" y2="96" stroke="#1f1f1f" stroke-width=".5" stroke-dasharray="3,4"/>
+        <line x1="0" y1="49" x2="660" y2="49" stroke="#1f1f1f" stroke-width=".5" stroke-dasharray="3,4"/>
+        <!-- y labels -->
+        <text x="665" y="193" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace">0</text>
+        <text x="665" y="146" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace">100K</text>
+        <text x="665" y="99" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace">200K</text>
+        <text x="665" y="52" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace">300K</text>
+        <!-- area + line: 0K=190, 400K=10. scale: 1K=0.45px -->
+        <!-- Jan22=75K(156), Jul22=82K(153), Dec22=90K(149), Mar23=95K(147),
+             Jul23=88K(150), Dec23=217K(92), Mar24=145K(124),
+             Jul24=102K(144), Dec24=217K(92), Mar25=342K(36),
+             Apr25=180K(109), Jul25=102K(144), Dec25=160K(118), Feb26=159K(118), Jun26=145K(124) -->
+        <polygon points="0,156 50,153 100,149 150,147 200,150 253,92 306,124 360,144 413,92 460,36 490,109 530,144 575,118 615,118 650,124 650,190 0,190"
+          fill="url(#ag)"/>
+        <polyline points="0,156 50,153 100,149 150,147 200,150 253,92 306,124 360,144 413,92 460,36 490,109 530,144 575,118 615,118 650,124"
+          fill="none" stroke="#5b8fff" stroke-width="1.5" stroke-linejoin="round"/>
+        <!-- event: trailer -->
+        <line x1="253" y1="10" x2="253" y2="190" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,3" opacity=".6"/>
+        <circle cx="253" cy="92" r="3.5" fill="#f59e0b"/>
+        <text x="144" y="20" fill="#f59e0b" font-size="7.5" font-family="JetBrains Mono,monospace">GTA VI TRAILER · DEC 2023</text>
+        <text x="144" y="30" fill="#f59e0b" font-size="7.5" font-family="JetBrains Mono,monospace">+78% MAU · 31.4M peak</text>
+        <!-- event: enhanced -->
+        <line x1="460" y1="10" x2="460" y2="190" stroke="#3de8a0" stroke-width="1" stroke-dasharray="3,3" opacity=".6"/>
+        <circle cx="460" cy="36" r="3.5" fill="#3de8a0"/>
+        <text x="464" y="20" fill="#3de8a0" font-size="7.5" font-family="JetBrains Mono,monospace">ENHANCED EDITION · MAR 2025</text>
+        <text x="464" y="30" fill="#3de8a0" font-size="7.5" font-family="JetBrains Mono,monospace">342K peak · Steam combined</text>
+        <!-- today -->
+        <line x1="650" y1="10" x2="650" y2="190" stroke="#ff4d4d" stroke-width="1.5" stroke-dasharray="3,3" opacity=".7"/>
+        <circle cx="650" cy="124" r="4" fill="none" stroke="#ff4d4d" stroke-width="1.5"/>
+        <circle cx="650" cy="124" r="1.5" fill="#ff4d4d"/>
+        <!-- x labels -->
+        <text x="0" y="207" fill="#6b6b6b" font-size="7.5" font-family="JetBrains Mono,monospace">2022</text>
+        <text x="200" y="207" fill="#6b6b6b" font-size="7.5" font-family="JetBrains Mono,monospace">2023</text>
+        <text x="355" y="207" fill="#6b6b6b" font-size="7.5" font-family="JetBrains Mono,monospace">2024</text>
+        <text x="456" y="207" fill="#6b6b6b" font-size="7.5" font-family="JetBrains Mono,monospace">2025</text>
+        <text x="630" y="207" fill="#ff4d4d" font-size="7.5" font-family="JetBrains Mono,monospace">NOW</text>
+        <!-- legend -->
+        <line x1="0" y1="222" x2="16" y2="222" stroke="#5b8fff" stroke-width="1.5"/>
+        <text x="20" y="225" fill="#6b6b6b" font-size="7" font-family="JetBrains Mono,monospace">STEAM PEAK CONCURRENTS · LEGACY + ENHANCED · SOURCE: STEAMDB</text>
+      </svg>
+    </div>
+    <div class="panel">
+      <div class="panel-label">Retention Battle Calendar</div>
+      <div class="tl">
+        <div class="tl-item">
+          <div class="tl-dot tl-now"></div>
+          <div class="tl-date">JUN 2026 — NOW</div>
+          <div class="tl-event" style="color:var(--red)">⚠ Critical Window Opens</div>
+          <div class="tl-detail">18.3M MAU, down 42% from peak. Players begin weighing GTA Online vs waiting for GTA VI.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot tl-warn"></div>
+          <div class="tl-date">AUG 2026</div>
+          <div class="tl-event" style="color:var(--amber)">Marketing Surge</div>
+          <div class="tl-detail">Take-Two confirmed GTA VI marketing ramp summer 2026. Hype = churn accelerant for console players.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot tl-warn"></div>
+          <div class="tl-date">SEP – OCT 2026</div>
+          <div class="tl-event" style="color:var(--amber)">Pre-Launch Churn Wave</div>
+          <div class="tl-detail">Historical pattern (Destiny→D2, OW→OW2): 20–35% soft churn 6–8 weeks pre-launch.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot tl-info"></div>
+          <div class="tl-date">NOV 19, 2026</div>
+          <div class="tl-event" style="color:var(--blue)">GTA VI Console Launch</div>
+          <div class="tl-detail">PS5 + Xbox Series X|S only. PC players remain in GTA Online — platform retention diverges sharply.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot tl-go"></div>
+          <div class="tl-date">FEB 2027 (EST.)</div>
+          <div class="tl-event" style="color:var(--green)">GTA VI PC Release</div>
+          <div class="tl-detail">Ex-Rockstar devs cite Feb 2027. True end-state for Steam GTA Online. PC winback window permanently closes.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COHORT TABLE -->
+  <div class="sec-label">Behavioral Segmentation</div>
+  <div class="panel-full">
+    <div class="panel-label">
+      Player Cohort Risk Matrix — 18.3M MAU segmented by behavioral signals
+      <span class="panel-badge pb-red">Churn Model v2.1</span>
+    </div>
+    <div class="tabs">
+      <button class="tab on" onclick="switchTab('all',this)">All Cohorts</button>
+      <button class="tab" onclick="switchTab('bubble',this)">Risk vs Impact</button>
+      <button class="tab" onclick="switchTab('model',this)">Model Logic</button>
+    </div>
+    <div id="tab-all" class="tab-pane on">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Segment</th><th>Est. Size</th><th>% MAU</th>
+            <th>Behavioral Signals</th><th>Risk Tier</th>
+            <th>Score</th><th>Primary Lever</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:var(--red);font-weight:600">Console Veterans</td>
+            <td>4.8M</td><td>26%</td>
+            <td>8+ yr playtime · high GTA+ · low PC ownership</td>
+            <td style="color:var(--red)">● CRITICAL</td>
+            <td><div class="risk-track"><div class="risk-fill rf-red" style="width:91%"></div></div><span style="font-size:.6rem">91/100</span></td>
+            <td style="color:var(--blue)">Last Ride Event + Legacy Items</td>
+          </tr>
+          <tr>
+            <td style="color:var(--red)">Casual Returners</td>
+            <td>3.1M</td><td>17%</td>
+            <td>2–4 sessions/mo · event-spiked · no GTA+</td>
+            <td style="color:var(--red)">● HIGH</td>
+            <td><div class="risk-track"><div class="risk-fill rf-red" style="width:78%"></div></div><span style="font-size:.6rem">78/100</span></td>
+            <td style="color:var(--blue)">FOMO Events + Login Streaks</td>
+          </tr>
+          <tr>
+            <td style="color:var(--amber)">Business Grinders</td>
+            <td>2.9M</td><td>16%</td>
+            <td>Daily login · CEO/MC · large GTA$ hoards</td>
+            <td style="color:var(--amber)">● MEDIUM</td>
+            <td><div class="risk-track"><div class="risk-fill rf-amber" style="width:54%"></div></div><span style="font-size:.6rem">54/100</span></td>
+            <td style="color:var(--blue)">GTA+ Value Pack + New Business</td>
+          </tr>
+          <tr>
+            <td style="color:var(--amber)">Competitive PvP</td>
+            <td>1.9M</td><td>10%</td>
+            <td>Arena War · KD-focused · high Shark Card spend</td>
+            <td style="color:var(--amber)">● MEDIUM</td>
+            <td><div class="risk-track"><div class="risk-fill rf-amber" style="width:48%"></div></div><span style="font-size:.6rem">48/100</span></td>
+            <td style="color:var(--blue)">Ranked Season End Rewards</td>
+          </tr>
+          <tr>
+            <td style="color:var(--green)">PC Content Creators</td>
+            <td>1.4M</td><td>8%</td>
+            <td>Rockstar Editor · long sessions · mod-adjacent</td>
+            <td style="color:var(--green)">● LOW</td>
+            <td><div class="risk-track"><div class="risk-fill rf-green" style="width:22%"></div></div><span style="font-size:.6rem">22/100</span></td>
+            <td style="color:var(--green)">Natural anchor — no GTA VI PC at launch</td>
+          </tr>
+          <tr>
+            <td style="color:var(--green)">Social / Crew</td>
+            <td>2.2M</td><td>12%</td>
+            <td>Crew activity · login correlated to friends</td>
+            <td style="color:var(--green)">● LOW</td>
+            <td><div class="risk-track"><div class="risk-fill rf-green" style="width:18%"></div></div><span style="font-size:.6rem">18/100</span></td>
+            <td style="color:var(--green)">Crew Challenges + Social Rewards</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted2)">GTA+ Subscribers</td>
+            <td>2.0M</td><td>11%</td>
+            <td>Paid sub · monthly benefit collection · cross-segment</td>
+            <td style="color:var(--amber)">● MEDIUM</td>
+            <td><div class="risk-track"><div class="risk-fill rf-amber" style="width:41%"></div></div><span style="font-size:.6rem">41/100</span></td>
+            <td style="color:var(--blue)">Sub Value Escalation + Bridge Perk</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="tab-bubble" class="tab-pane">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">Segment Size (x) vs Churn Score (y)</div>
+          <svg viewBox="0 0 300 230">
+            <line x1="35" y1="10" x2="35" y2="195" stroke="#1f1f1f" stroke-width="1"/>
+            <line x1="35" y1="195" x2="295" y2="195" stroke="#1f1f1f" stroke-width="1"/>
+            <line x1="35" y1="100" x2="295" y2="100" stroke="#1f1f1f" stroke-width=".5" stroke-dasharray="3,3"/>
+            <line x1="165" y1="10" x2="165" y2="195" stroke="#1f1f1f" stroke-width=".5" stroke-dasharray="3,3"/>
+            <text x="0" y="198" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace">0%</text>
+            <text x="0" y="104" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace">50%</text>
+            <text x="0" y="14" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace">100%</text>
+            <!-- CV: 4.8M, 91% -->
+            <circle cx="278" cy="20" r="17" fill="rgba(255,77,77,.1)" stroke="#ff4d4d" stroke-width="1.5"/>
+            <text x="278" y="24" fill="#ff4d4d" font-size="8" font-family="JetBrains Mono,monospace" text-anchor="middle">CV</text>
+            <!-- CR: 3.1M, 78% -->
+            <circle cx="190" cy="42" r="13" fill="rgba(255,77,77,.08)" stroke="#ff4d4d" stroke-width="1.5"/>
+            <text x="190" y="46" fill="#ff4d4d" font-size="8" font-family="JetBrains Mono,monospace" text-anchor="middle">CR</text>
+            <!-- BG: 2.9M, 54% -->
+            <circle cx="182" cy="97" r="12" fill="rgba(245,158,11,.08)" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="182" y="101" fill="#f59e0b" font-size="8" font-family="JetBrains Mono,monospace" text-anchor="middle">BG</text>
+            <!-- PvP: 1.9M, 48% -->
+            <circle cx="141" cy="106" r="10" fill="rgba(245,158,11,.06)" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="141" y="110" fill="#f59e0b" font-size="8" font-family="JetBrains Mono,monospace" text-anchor="middle">PvP</text>
+            <!-- SC: 2.2M, 18% -->
+            <circle cx="155" cy="159" r="11" fill="rgba(61,232,160,.06)" stroke="#3de8a0" stroke-width="1.5"/>
+            <text x="155" y="163" fill="#3de8a0" font-size="8" font-family="JetBrains Mono,monospace" text-anchor="middle">SC</text>
+            <!-- PC: 1.4M, 22% -->
+            <circle cx="113" cy="150" r="9" fill="rgba(61,232,160,.06)" stroke="#3de8a0" stroke-width="1.5"/>
+            <text x="113" y="154" fill="#3de8a0" font-size="8" font-family="JetBrains Mono,monospace" text-anchor="middle">PC</text>
+            <!-- G+: 2.0M, 41% -->
+            <circle cx="148" cy="119" r="10" fill="rgba(245,158,11,.04)" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,2"/>
+            <text x="148" y="123" fill="#f59e0b" font-size="8" font-family="JetBrains Mono,monospace" text-anchor="middle">G+</text>
+            <text x="160" y="22" fill="rgba(255,77,77,.35)" font-size="8" font-family="JetBrains Mono,monospace">HIGH RISK · HIGH IMPACT</text>
+          </svg>
+        </div>
+        <div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">Projected Churn Volume — 90 Days Pre-Launch</div>
+          <svg viewBox="0 0 280 210">
+            <text x="0" y="18" fill="#ff4d4d" font-size="8.5" font-family="JetBrains Mono,monospace">Console Veterans</text>
+            <rect x="0" y="22" width="200" height="12" fill="rgba(255,77,77,.1)" stroke="#ff4d4d" stroke-width=".5"/>
+            <text x="204" y="32" fill="#ff4d4d" font-size="8" font-family="JetBrains Mono,monospace">4.4M</text>
+            <text x="0" y="52" fill="#ff4d4d" font-size="8.5" font-family="JetBrains Mono,monospace">Casual Returners</text>
+            <rect x="0" y="56" width="168" height="12" fill="rgba(255,77,77,.08)" stroke="#ff4d4d" stroke-width=".5"/>
+            <text x="172" y="66" fill="#ff4d4d" font-size="8" font-family="JetBrains Mono,monospace">2.4M</text>
+            <text x="0" y="86" fill="#f59e0b" font-size="8.5" font-family="JetBrains Mono,monospace">Business Grinders</text>
+            <rect x="0" y="90" width="110" height="12" fill="rgba(245,158,11,.08)" stroke="#f59e0b" stroke-width=".5"/>
+            <text x="114" y="100" fill="#f59e0b" font-size="8" font-family="JetBrains Mono,monospace">1.6M</text>
+            <text x="0" y="120" fill="#f59e0b" font-size="8.5" font-family="JetBrains Mono,monospace">Competitive PvP</text>
+            <rect x="0" y="124" width="63" height="12" fill="rgba(245,158,11,.06)" stroke="#f59e0b" stroke-width=".5"/>
+            <text x="67" y="134" fill="#f59e0b" font-size="8" font-family="JetBrains Mono,monospace">0.9M</text>
+            <text x="0" y="154" fill="#3de8a0" font-size="8.5" font-family="JetBrains Mono,monospace">Social + PC (Low Risk)</text>
+            <rect x="0" y="158" width="38" height="12" fill="rgba(61,232,160,.06)" stroke="#3de8a0" stroke-width=".5"/>
+            <text x="42" y="168" fill="#3de8a0" font-size="8" font-family="JetBrains Mono,monospace">0.6M</text>
+            <line x1="0" y1="184" x2="240" y2="184" stroke="#1f1f1f" stroke-width="1"/>
+            <text x="0" y="196" fill="#6b6b6b" font-size="7.5" font-family="JetBrains Mono,monospace">EST. TOTAL AT-RISK: 9.9M · Revenue exposure: ~$310M</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div id="tab-model" class="tab-pane">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">Churn Score Formula</div>
+          <div class="code-block">
+<span class="cm">-- ChurnScore range: 0.0 → 1.0</span>
+<span class="kw">ChurnScore</span> =
+  (<span class="fn">platform_risk</span>      × 0.30) +
+  (<span class="fn">session_decay_90d</span>  × 0.25) +
+  (<span class="fn">days_since_login</span>   × 0.25) +
+  (<span class="fn">monetization_depth</span> × −0.20)
+
+<span class="cm">-- platform_risk: console=1.0, PC=0.2</span>
+<span class="cm">-- session_decay: &lt;6 sess/90d = 1.0</span>
+<span class="cm">-- days_since_login: &gt;30d = 1.0</span>
+<span class="cm">-- monetization: spend &gt;$50 = guard</span></div>
+          <div style="margin-top:16px;font-size:.75rem;color:var(--muted2);line-height:1.65">Full SQL implementation in the artifact block below. See the <a href="session_decay.html" style="color:var(--blue);text-decoration:none">Session Decay</a> deep-dive for the behavioral decay curves that power the <code style="font-family:var(--mono);font-size:.7rem;color:var(--green)">session_decay_90d</code> feature.</div>
+        </div>
+        <div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">Comparable Sequel Launch Churn</div>
+          <div style="display:flex;flex-direction:column;gap:0;border:1px solid var(--border)">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-bottom:1px solid var(--border)">
+              <span style="font-family:var(--mono);font-size:.7rem;width:110px;flex-shrink:0">Destiny → D2</span>
+              <div style="flex:1;height:4px;background:var(--border2)"><div style="width:88%;height:4px;background:var(--red)"></div></div>
+              <span style="font-family:var(--mono);font-size:.7rem;color:var(--red);width:60px;text-align:right">−35% MAU</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-bottom:1px solid var(--border)">
+              <span style="font-family:var(--mono);font-size:.7rem;width:110px;flex-shrink:0">WoW → TBC</span>
+              <div style="flex:1;height:4px;background:var(--border2)"><div style="width:72%;height:4px;background:var(--red)"></div></div>
+              <span style="font-family:var(--mono);font-size:.7rem;color:var(--red);width:60px;text-align:right">−28% DAU</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-bottom:1px solid var(--border)">
+              <span style="font-family:var(--mono);font-size:.7rem;width:110px;flex-shrink:0">OW → OW2</span>
+              <div style="flex:1;height:4px;background:var(--border2)"><div style="width:60%;height:4px;background:var(--amber)"></div></div>
+              <span style="font-family:var(--mono);font-size:.7rem;color:var(--amber);width:60px;text-align:right">−22% DAU</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 12px">
+              <span style="font-family:var(--mono);font-size:.7rem;width:110px;flex-shrink:0">GTA IV → GTA V</span>
+              <div style="flex:1;height:4px;background:var(--border2)"><div style="width:94%;height:4px;background:var(--green)"></div></div>
+              <span style="font-family:var(--mono);font-size:.7rem;color:var(--green);width:60px;text-align:right">+62% net</span>
+            </div>
+          </div>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:10px;line-height:1.6;font-family:var(--mono)">⚠ GTA V is anomalous — GTA Online launched WITH the game. GTA VI has no confirmed GTA Online equivalent, making this a true replacement scenario.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEVERS + PROJECTION -->
+  <div class="sec-label" style="margin-top:40px">Intervention Playbook</div>
+  <div class="grid-2b" style="margin-bottom:40px">
+    <div class="panel">
+      <div class="panel-label">Live Ops Retention Lever Playbook <span class="panel-badge pb-amber"><span class="live-dot" style="margin-right:4px"></span><span id="days-lever">169</span>d remaining</span></div>
+      <div class="lever-grid">
+        <div class="lever">
+          <div class="lever-p" style="color:var(--red)">P0 — Immediate</div>
+          <div class="lever-title">🏁 "Last Ride" Event Series</div>
+          <div class="lever-desc">Exclusive cosmetics, vehicles and achievements earnable only pre-GTA VI. Manufactured scarcity + nostalgia targeting Console Veterans.</div>
+          <div class="lever-when">Deploy: Jul → Oct 2026</div>
+        </div>
+        <div class="lever">
+          <div class="lever-p" style="color:var(--red)">P0 — Immediate</div>
+          <div class="lever-title">💳 GTA+ Bridge Bundle</div>
+          <div class="lever-desc">Lock subs with a "GTA VI Early Access" perk promise. Transferable in-game content. Monetization depth as churn guard.</div>
+          <div class="lever-when">Deploy: Aug 2026</div>
+        </div>
+        <div class="lever">
+          <div class="lever-p" style="color:var(--amber)">P1 — High Priority</div>
+          <div class="lever-title">🖥️ PC Exclusivity Play</div>
+          <div class="lever-desc">GTA VI won't be on PC at launch. Double down on PC-specific content — captive audience with nowhere to go until Feb 2027.</div>
+          <div class="lever-when">Deploy: Sep 2026 · PC segment</div>
+        </div>
+        <div class="lever">
+          <div class="lever-p" style="color:var(--amber)">P1 — High Priority</div>
+          <div class="lever-title">📊 Business Grinder Drop</div>
+          <div class="lever-desc">New passive income business + 2× CEO/MC payouts. Reduce the cognitive cost of choosing to "wait for GTA VI."</div>
+          <div class="lever-when">Deploy: Oct 2026</div>
+        </div>
+        <div class="lever">
+          <div class="lever-p" style="color:var(--blue)">P2 — Medium</div>
+          <div class="lever-title">👥 Crew Re-engagement</div>
+          <div class="lever-desc">Time-limited crew challenge leaderboards. Social players sit at 18% churn risk — lean into network effects to maintain social anchoring.</div>
+          <div class="lever-when">Deploy: Aug–Nov 2026</div>
+        </div>
+        <div class="lever">
+          <div class="lever-p" style="color:var(--blue)">P2 — Medium</div>
+          <div class="lever-title">🔄 Lapsed Win-Back</div>
+          <div class="lever-desc">"The city needs you one last time." Push + free Shark Card + 2× GTA$ first session. Target 2–6 month lapsed cohort before pre-launch hype kills reactivation.</div>
+          <div class="lever-when">Deploy: Sep 2026 · Lapsed cohort</div>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-label">MAU Projection — Do Nothing vs With Levers <span class="panel-badge pb-green">Modelled</span></div>
+      <svg viewBox="0 0 320 240">
+        <defs>
+          <linearGradient id="pg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#3de8a0" stop-opacity=".12"/>
+            <stop offset="100%" stop-color="#3de8a0" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="ng" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ff4d4d" stop-opacity=".1"/>
+            <stop offset="100%" stop-color="#ff4d4d" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <line x1="45" y1="10" x2="45" y2="200" stroke="#1f1f1f" stroke-width="1"/>
+        <line x1="45" y1="200" x2="315" y2="200" stroke="#1f1f1f" stroke-width="1"/>
+        <line x1="45" y1="60" x2="315" y2="60" stroke="#1f1f1f" stroke-width=".5" stroke-dasharray="3,3"/>
+        <line x1="45" y1="110" x2="315" y2="110" stroke="#1f1f1f" stroke-width=".5" stroke-dasharray="3,3"/>
+        <line x1="45" y1="155" x2="315" y2="155" stroke="#1f1f1f" stroke-width=".5" stroke-dasharray="3,3"/>
+        <text x="0" y="203" fill="#6b6b6b" font-size="7.5" font-family="JetBrains Mono,monospace">0</text>
+        <text x="0" y="158" fill="#6b6b6b" font-size="7.5" font-family="JetBrains Mono,monospace">10M</text>
+        <text x="0" y="113" fill="#6b6b6b" font-size="7.5" font-family="JetBrains Mono,monospace">15M</text>
+        <text x="0" y="63" fill="#6b6b6b" font-size="7.5" font-family="JetBrains Mono,monospace">18M</text>
+        <!-- x: Jun=45, Aug=90, Oct=135, Nov19=178, Feb27=240, Jun27=315 -->
+        <text x="36" y="215" fill="#5b8fff" font-size="7" font-family="JetBrains Mono,monospace">NOW</text>
+        <text x="80" y="215" fill="#6b6b6b" font-size="7" font-family="JetBrains Mono,monospace">AUG</text>
+        <text x="124" y="215" fill="#6b6b6b" font-size="7" font-family="JetBrains Mono,monospace">OCT</text>
+        <text x="163" y="215" fill="#ff4d4d" font-size="7" font-family="JetBrains Mono,monospace">GTA VI</text>
+        <text x="228" y="215" fill="#6b6b6b" font-size="7" font-family="JetBrains Mono,monospace">FEB27</text>
+        <text x="300" y="215" fill="#6b6b6b" font-size="7" font-family="JetBrains Mono,monospace">JUN27</text>
+        <line x1="178" y1="10" x2="178" y2="200" stroke="#ff4d4d" stroke-width="1.5" stroke-dasharray="4,3" opacity=".6"/>
+        <!-- do nothing: 18.3M(60), 16M(79), 13M(102), 9M(139), 7M(152), 6M(158) -->
+        <polygon points="45,60 90,79 135,102 178,139 240,152 315,158 315,200 45,200" fill="url(#ng)"/>
+        <polyline points="45,60 90,79 135,102 178,139 240,152 315,158" fill="none" stroke="#ff4d4d" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <!-- with levers: 18.3M(60), 17.5M(65), 16.5M(73), 14.5M(90), 13.5M(97), 13M(101) -->
+        <polygon points="45,60 90,65 135,73 178,90 240,97 315,101 315,200 45,200" fill="url(#pg)"/>
+        <polyline points="45,60 90,65 135,73 178,90 240,97 315,101" fill="none" stroke="#3de8a0" stroke-width="2"/>
+        <circle cx="45" cy="60" r="3.5" fill="#5b8fff" stroke="var(--bg)" stroke-width="1.5"/>
+        <!-- delta callout -->
+        <line x1="178" y1="90" x2="178" y2="139" stroke="#f2f2f2" stroke-width=".8" opacity=".2"/>
+        <text x="183" y="116" fill="#f2f2f2" font-size="7.5" font-family="JetBrains Mono,monospace" opacity=".5">+5.5M</text>
+        <text x="183" y="126" fill="#f2f2f2" font-size="7.5" font-family="JetBrains Mono,monospace" opacity=".5">retained</text>
+        <!-- legend -->
+        <line x1="50" y1="232" x2="64" y2="232" stroke="#3de8a0" stroke-width="2"/>
+        <text x="68" y="235" fill="#6b6b6b" font-size="7" font-family="JetBrains Mono,monospace">With Levers</text>
+        <line x1="160" y1="232" x2="174" y2="232" stroke="#ff4d4d" stroke-width="1.5" stroke-dasharray="4,2"/>
+        <text x="178" y="235" fill="#6b6b6b" font-size="7" font-family="JetBrains Mono,monospace">Do Nothing</text>
+      </svg>
+      <div class="proj-row">
+        <div class="proj-box">
+          <div class="proj-box-label" style="color:var(--green)">With Levers @ Launch</div>
+          <div class="proj-box-val" style="color:var(--green)">14.5M</div>
+          <div class="proj-box-sub">−21% · manageable decline</div>
+        </div>
+        <div class="proj-box">
+          <div class="proj-box-label" style="color:var(--red)">Do Nothing @ Launch</div>
+          <div class="proj-box-val" style="color:var(--red)">9.0M</div>
+          <div class="proj-box-sub">−51% · ~$310M revenue risk</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SQL ARTIFACT -->
+  <div class="sec-label">Technical Artifact</div>
+  <div class="panel-full" style="margin-bottom:40px">
+    <div class="panel-label">
+      SQL — Cohort Churn Risk Scoring Query
+      <span class="panel-badge pb-blue">Portfolio Artifact · Production-Grade</span>
+    </div>
+    <div class="code-block">
+<span class="cm">-- GTA Online: Pre-GTA VI Churn Risk Scoring · Operation Last Ride</span>
+<span class="cm">-- Segments 18.3M MAU by behavioral signals, 90-day lookback</span>
+
+<span class="kw">WITH</span> session_metrics <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    player_id,
+    platform,                          <span class="cm">-- 'console' | 'pc'</span>
+    <span class="fn">COUNT</span>(*)                          <span class="kw">AS</span> sessions_90d,
+    <span class="fn">AVG</span>(session_minutes)             <span class="kw">AS</span> avg_session_len,
+    <span class="fn">SUM</span>(real_money_spend_usd)        <span class="kw">AS</span> total_spend_90d,
+    <span class="fn">DATEDIFF</span>(<span class="str">'2026-06-04'</span>, <span class="fn">MAX</span>(login_date)) <span class="kw">AS</span> days_since_login
+  <span class="kw">FROM</span> player_sessions
+  <span class="kw">WHERE</span> session_date <span class="kw">BETWEEN</span> <span class="str">'2026-03-06'</span> <span class="kw">AND</span> <span class="str">'2026-06-04'</span>
+  <span class="kw">GROUP BY</span> 1, 2
+),
+churn_scored <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> player_id, platform,
+    <span class="fn">ROUND</span>(
+      <span class="cm">/* Platform: console players migrate to GTA VI on launch day */</span>
+      (<span class="kw">CASE WHEN</span> platform = <span class="str">'console'</span> <span class="kw">THEN</span> 1.0 <span class="kw">ELSE</span> 0.2 <span class="kw">END</span>) * 0.30 +
+      <span class="cm">/* Session frequency decay — see session_decay.html for full model */</span>
+      (<span class="kw">CASE WHEN</span> sessions_90d &lt; 6 <span class="kw">THEN</span> 1.0 <span class="kw">WHEN</span> sessions_90d &lt; 12 <span class="kw">THEN</span> 0.6 <span class="kw">ELSE</span> 0.2 <span class="kw">END</span>) * 0.25 +
+      <span class="cm">/* Recency */</span>
+      (<span class="kw">CASE WHEN</span> days_since_login &gt; 30 <span class="kw">THEN</span> 1.0 <span class="kw">WHEN</span> days_since_login &gt; 14 <span class="kw">THEN</span> 0.5 <span class="kw">ELSE</span> 0.1 <span class="kw">END</span>) * 0.25 +
+      <span class="cm">/* Monetization depth — see economy_monetization.html for Shark Card model */</span>
+      (<span class="kw">CASE WHEN</span> total_spend_90d &gt; 50 <span class="kw">THEN</span> -0.20 <span class="kw">ELSE</span> 0 <span class="kw">END</span>)
+    , 3) <span class="kw">AS</span> churn_score
+  <span class="kw">FROM</span> session_metrics
+)
+<span class="kw">SELECT</span>
+  <span class="kw">CASE WHEN</span> churn_score &gt;= 0.75 <span class="kw">THEN</span> <span class="str">'CRITICAL'</span>
+       <span class="kw">WHEN</span> churn_score &gt;= 0.45 <span class="kw">THEN</span> <span class="str">'HIGH'</span>
+       <span class="kw">ELSE</span> <span class="str">'MONITOR'</span> <span class="kw">END AS</span> risk_tier,
+  <span class="fn">COUNT</span>(*) <span class="kw">AS</span> player_count,
+  <span class="fn">ROUND</span>(<span class="fn">AVG</span>(churn_score), 3) <span class="kw">AS</span> avg_score,
+  <span class="kw">CASE</span> risk_tier
+    <span class="kw">WHEN</span> <span class="str">'CRITICAL'</span> <span class="kw">THEN</span> <span class="str">'Last Ride Event + GTA+ Bridge Bundle'</span>
+    <span class="kw">WHEN</span> <span class="str">'HIGH'</span>     <span class="kw">THEN</span> <span class="str">'FOMO Event + Win-Back Push'</span>
+    <span class="kw">ELSE</span>                  <span class="str">'Monitor + Standard Content Calendar'</span>
+  <span class="kw">END AS</span> recommended_lever
+<span class="kw">FROM</span> churn_scored
+<span class="kw">GROUP BY</span> 1 <span class="kw">ORDER BY</span> avg_score <span class="kw">DESC</span>;</div>
+  </div>
+
+  <!-- DEEP DIVE LINKS -->
+  <div class="sec-label">Deep Dives</div>
+  <div class="deep-grid">
+    <a class="deep-card" href="economy_monetization.html">
+      <div class="deep-card-eyebrow">02 · Economy &amp; Monetization Design</div>
+      <div class="deep-card-title">Shark Card Pricing vs In-Game Grind — How Economic Friction Drives or Kills Engagement</div>
+      <div class="deep-card-desc">How GTA Online's economy is engineered to create spending pressure. Grind cost modeling, Shark Card value analysis, friction thresholds by player segment, and the relationship between economic frustration and churn acceleration.</div>
+      <div class="deep-card-arrow">View deep dive →</div>
+    </a>
+    <a class="deep-card" href="session_decay.html">
+      <div class="deep-card-eyebrow">03 · Session Decay Modelling</div>
+      <div class="deep-card-title">GTA Online Player Lifecycle — From New Player to Grinder to Churned</div>
+      <div class="deep-card-desc">The well-documented GTA Online player lifecycle modeled as behavioral decay curves. Session frequency, playtime distribution, lifecycle stage transitions, and the inflection points where players become at-risk — all feeding directly into the churn score above.</div>
+      <div class="deep-card-arrow">View deep dive →</div>
+    </a>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="project-footer">
+    <div class="pf-copy">Leon Telemaque · Live Ops Behavioral Systems Portfolio · 2026<br>Operation: Last Ride · Document GTA-RET-001</div>
+    <div class="pf-sources">Sources: SteamDB · SteamCharts · Take-Two FY2025 Earnings · Rockstar Newswire (Nov 19 2026 confirmed) · ex-Rockstar developer disclosures · Bungie/Blizzard investor reports · Behavioral segmentation and projections are modelled estimates based on published live ops research.</div>
+  </div>
+
+</div>
+
+<script>
+// GRAIN
+(function(){
+  const c=document.getElementById('grain');
+  const ctx=c.getContext('2d');
+  function resize(){c.width=window.innerWidth;c.height=window.innerHeight}
+  resize();window.addEventListener('resize',resize);
+  function draw(){
+    const w=c.width,h=c.height;
+    const img=ctx.createImageData(w,h);
+    const d=img.data;
+    for(let i=0;i<d.length;i+=4){const v=Math.random()*255|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=18;}
+    ctx.putImageData(img,0,0);requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// COUNTDOWN
+function updateDays(){
+  const launch=new Date('2026-11-19T00:00:00');
+  const days=Math.max(0,Math.floor((launch-new Date())/(1000*60*60*24)));
+  ['days-hero','kpi-days','days-lever'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=days;});
+}
+updateDays();
+
+// TABS
+function switchTab(id,btn){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('tab-'+id).classList.add('on');
+  btn.classList.add('on');
+}
+</script>
+</body>
+</html>
