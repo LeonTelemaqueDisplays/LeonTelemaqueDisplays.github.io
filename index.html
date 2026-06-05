@@ -659,6 +659,7 @@ footer{
 }
 .tag-gaming{background:rgba(91,143,255,.1);color:var(--blue);border:1px solid rgba(91,143,255,.2)}
 .tag-fintech{background:rgba(155,109,255,.1);color:var(--purple);border:1px solid rgba(155,109,255,.2)}
+.tag-strategy{background:rgba(255,100,100,.1);color:#ff8080;border:1px solid rgba(255,100,100,.25)}
 .tag-ux{background:rgba(61,232,160,.08);color:var(--green);border:1px solid rgba(61,232,160,.15)}
 .modal-title{
   font-size:1.55rem;font-weight:700;
@@ -1379,7 +1380,7 @@ footer{
   <div class="work-carousel" id="workCarousel">
 
     <!-- THE COLLISION — Strategy Analysis -->
-    <div class="pcard" onclick="window.open('https://diamond-apparel-ca4.notion.site/Portfolio-36d20d328f448012af39c1beddca4704','_blank')">
+    <div class="pcard" onclick="openModal('collision')">
       <div class="pcard-preview">
         <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
           <defs>
@@ -3598,6 +3599,27 @@ window.addEventListener('resize', () => {
 
 /* ── PROJECT DATA ── */
 const DATA={
+  collision:{
+    tag:'strategy',tagLabel:'Strategy · Market Analysis · Games Industry',
+    title:'The Collision — How Console Hardware Pricing Is Fracturing the Global Player Base',
+    period:'Jun 2026 · Ongoing — 9-section strategy analysis',
+    embedUrl:null,
+    streamlit:null,
+    desc:'A strategy-first analysis of why the console pricing crisis isn\'t a retention problem — it\'s a structural market collision between two gaming ecosystems with incompatible architectures. Covers the hardware arms race, the pre-existing mobile world, the PC bridge, developer exodus, live service paradox, social gravity, generational expiry, and studio survival playbooks. Built for a games analytics audience at Ubisoft Toronto, Riot Games, HoYoverse, and PlayStation.',
+    insight:'The collision has already happened. The question is no longer whether the gaming landscape bifurcates — it\'s whether the studios on the wrong side of the split recognise it in time to cross over. Studios trying to solve social gravity with a price cut are applying a product intervention to an ecosystem problem.',
+    signals:[
+      'PS5 Pro price: $499 → $699 → $900 — mid-cycle refresh, not a new generation',
+      'PS5 Q1 2026 sales down 50% YoY · November 2025 hardware worst since 1995',
+      '3.3B mobile gamers vs 630M console players — console is a minority of the global market',
+      'Capture vs. coexistence model — why Western live service architecture keeps failing',
+      'Social gravity: players with 3+ in-game friends are 70% more likely to return weekly',
+      'Roblox: 144M DAU, $1B+ creator earnings in 2025 — next-gen talent pipeline forming',
+      'Sega cancelled its $880M Super Game in May 2026 — the market proved the thesis',
+      '9 sections: displacement → market → PC bridge → developer exodus → live service → social → generational expiry → survival playbook → studio implications'
+    ],
+    tools:['Market Analysis','LiveOps Strategy','Competitive Intelligence','Games Industry Research','Strategic Frameworks'],
+    links:[{label:'Full Case Study on Notion →',url:'https://diamond-apparel-ca4.notion.site/Portfolio-36d20d328f448012af39c1beddca4704'}]
+  },
   gta:{
     tag:'gaming',tagLabel:'Gaming · LiveOps · GTA Online',
     title:'Operation: Last Ride — GTA Online Pre-Launch Retention Analysis',
