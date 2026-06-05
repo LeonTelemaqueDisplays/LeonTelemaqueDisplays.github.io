@@ -174,7 +174,11 @@ body{display:flex;flex-direction:column;overflow:hidden}
   </div>
   <div class="nav-item" onclick="show('s9',this)">
     <div class="nav-num">09</div>
-    <div><div class="nav-label">Studio Implications</div><span class="nav-badge badge-wip">IN PROGRESS</span></div>
+    <div><div class="nav-label">Studio Implications</div><span class="nav-badge badge-done">DONE</span></div>
+  </div>
+  <div class="nav-item" onclick="show('conclusion',this)">
+    <div class="nav-num">↗</div>
+    <div><div class="nav-label">Conclusion</div><span class="nav-badge badge-done">DONE</span></div>
   </div>
 </nav>
 
@@ -188,7 +192,7 @@ body{display:flex;flex-direction:column;overflow:hidden}
   <div class="panel-sub">How Console Hardware Pricing Is Fracturing the Global Player Base — and Which Studios Are Built to Survive It</div>
   <div class="conclusion-box">
     <p>The console pricing crisis isn't a retention problem — it's a structural market collision between two gaming ecosystems with fundamentally different architectures. The studios that understand which ecosystem they belong to and act accordingly are the ones that survive.</p>
-    <p>Navigate the sections on the left to read the full analysis. 8 of 9 sections complete.</p>
+    <p>Navigate the sections on the left to read the full analysis. All 9 sections + conclusion complete.</p>
   </div>
   <div class="stats-grid">
     <div class="scard"><div class="scard-label">PS5 Pro (2026)</div><div class="scard-val red">$900</div><div class="scard-sub">From $499 launch · mid-cycle refresh</div></div>
@@ -439,13 +443,78 @@ body{display:flex;flex-direction:column;overflow:hidden}
 
 <!-- S9 -->
 <div class="panel" id="panel-s9">
-  <div class="eyebrow">Section 09 · In Progress</div>
+  <div class="eyebrow">Section 09</div>
   <div class="panel-title">Strategic Implications by Studio Type</div>
   <div class="panel-sub">AAA console studios · mobile-first Super Game builders · platform holders · emerging studios</div>
-  <div class="coming-soon">
-    <div class="icon">⚡</div>
-    <p>THIS SECTION IS BEING WRITTEN</p>
-    <p style="margin-top:6px;font-size:.65rem;color:var(--muted)">Specific recommendations for each studio archetype — coming soon</p>
+  <div class="panel-body">
+
+    <h3>AAA Console Studios — Embrace the Niche, Kill the Extension Trap</h3>
+    <p><em style="color:var(--muted2)">Naughty Dog, Insomniac, Rockstar, CD Projekt Red, FromSoftware, Remedy</em></p>
+    <p>The premium single-player experience isn't dying. It's concentrating. The audience willing to pay $70–90 for a cinematic, 30-hour narrative game still exists — it's just smaller than it was and getting smaller as hardware prices compound the access barrier. The correct strategic response is to <strong>accept that smaller addressable market explicitly</strong>, and build to serve it at high quality rather than desperately expanding it via live service tacking.</p>
+    <p>Scope down, not up. A $80M single-player game with a defined completion arc, sold at premium price to a known audience, is a viable business. A $200M single-player game that also tries to launch a Battle Pass, a cosmetic store, and a content cadence the studio has no infrastructure to run is not. Concord proved it at $200M.</p>
+    <p>The second move is <strong>IP expansion beyond hardware</strong>. The mistake was treating PlayStation franchises as console-exclusive value propositions rather than globally valuable IP that could travel across formats. The Last of Us as prestige TV demonstrated that PlayStation IP has mainstream cultural resonance that extends far beyond the console audience. <strong>The IP is the asset. The hardware is the current vessel.</strong></p>
+
+    <hr class="section-divider"/>
+
+    <h3>Mobile-First Super Game Builders — Compound the Moat, Don't Coast on It</h3>
+    <p><em style="color:var(--muted2)">HoYoverse, Supercell, Tencent mobile, Garena, Niantic, Dream Games</em></p>
+    <p>You're already winning — but two specific risks: <strong>1)</strong> Mistaking the arrival of console players for validation of console-adjacent design. Don't redesign for them. Your coexistence architecture is correct. <strong>2)</strong> Failing to compound the IP while the window is open. Pokémon TCG Pocket generated $1B in seven months because 30 years of IP compounding made the characters emotionally meaningful before the first card was turned over.</p>
+    <p>Invest in format expansion aggressively: merchandise, animated content, card games, every format that deepens the emotional relationship between player and IP. Build the social infrastructure as a product, not a feature. The 70% weekly return rate for players with 3+ in-game friends is your most important retention metric.</p>
+
+    <hr class="section-divider"/>
+
+    <h3>Platform Holders — The Hardware Moat Is Eroding. The Brand Moat Isn't Yet.</h3>
+    <p><strong>Nintendo</strong> is in the strongest position. Switch 2 record sales while Sony dropped 50% is the clearest empirical evidence that the arms race is a choice, not a necessity. The risk: complacency. Nintendo's mobile strategy has been inconsistent — the company undersells its IP on mobile and should revisit that.</p>
+    <p><strong>Microsoft</strong> effectively deleted the hardware incentive by releasing all first-party titles day-one on PC. The correct path is to stop thinking of itself as a hardware company and commit fully to being a gaming services company: Game Pass on every platform, first-party games day-one everywhere, the Xbox brand as a quality signal rather than a hardware gate.</p>
+    <p><strong>Sony</strong> faces the most painful reckoning. The hardware moat is eroding. The PC porting strategy educated players that exclusives come to Steam. The install base is tracking behind PS4. <strong>Sony's survival path requires treating PlayStation as a content and entertainment brand rather than a hardware brand.</strong> A Sony that thinks of itself as an entertainment IP company — with a premium gaming console as its highest-expression product, not its moat — has a durable future. A Sony that tries to defend the hardware moat through price escalation in a market where the price has already become structurally prohibitive is in managed decline.</p>
+
+    <hr class="section-divider"/>
+
+    <h3>Emerging Studios — The Best Position Nobody Talks About</h3>
+    <p><em style="color:var(--muted2)">New studios 2024–2026, small teams 5–50 people, Roblox-native creators moving to standalone development</em></p>
+    <p>Emerging studios in 2026 have access to proof of concept for every viable business model, Steam with 147M MAU, mobile distribution reaching 3.3B players, Unreal Engine 5 free until commercial release, and 45,000 displaced industry professionals with genuine craft skills. <strong>The mistake is building small versions of AAA</strong> — scoped-down console-first games or stripped-down live service attempts — rather than building things only a small team can build.</p>
+    <p>Build coexistence-first: design for the player who has 20 minutes. The audience for 20-minute complete sessions is 3.3 billion. Build cross-platform from day one — PC + mobile as equal priorities at launch. And <strong>build IP, not just product</strong>: name your characters, give them personalities, build communities around them before you have a reason to. The IP that will generate Pokémon TCG Pocket-type returns in 2040 is being built right now by teams treating their games as the first chapter of a franchise, not a product with a release date.</p>
+
+    <div class="key-insight">
+      <div class="label">Key Insight</div>
+      <p>Watch Roblox as a distribution and marketing channel. Studios that build presence on Roblox are building awareness with the generation that will be the dominant gaming demographic in 2035. This is the cheapest Gen Alpha marketing that exists.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CONCLUSION -->
+<div class="panel" id="panel-conclusion">
+  <div class="eyebrow">Conclusion</div>
+  <div class="panel-title">The Collision Has Already Happened</div>
+  <div class="panel-sub">The question is what you build next</div>
+  <div class="panel-body">
+
+    <p>There's a version of this analysis that ends with a warning. A careful hedge about how these trends <em>could</em> develop. This isn't that version.</p>
+    <p><strong>The collision has already happened.</strong> The PS5 Pro costs $900. November 2025 hardware sales were the lowest in thirty years. The hero shooter market has lost 40% of its MAU since 2021. Sega spent $880M trying to build a live service Super Game and cancelled it in May 2026. The 45,000 developers displaced from AAA between 2022 and 2025 are already somewhere else, building something else, teaching the next generation a completely different set of instincts about how games are made.</p>
+
+    <h3>What the Split Actually Looks Like</h3>
+    <p>The split isn't between console and mobile. That understates it. The split is between two ecosystems with incompatible architectures — incompatible unit economics, incompatible social graphs, incompatible velocity expectations, and incompatible theories about what a game is <em>for</em>.</p>
+    <p>The console ecosystem was built on hardware gates, premium pricing, launch milestones, and the assumption that players would stay because there was nowhere better to go. That assumption held for thirty years. It expired around 2018 — quietly, as 3.3 billion people built a parallel gaming world from scratch in markets the console industry largely ignored.</p>
+
+    <h3>Who's Already on the Right Side</h3>
+    <p>HoYoverse is doing it. Roblox is doing it. The Pokémon Company has been doing it for 30 years. Nintendo is doing it. These companies understand — in different ways, with different models — that the IP is the asset and the platform is the current vessel. They are building things that travel across hardware transitions rather than things that expire with their console generation.</p>
+
+    <h3>The Map of Who Survives</h3>
+    <p>It looks nothing like the traditional console gaming hierarchy. At the top: studios that mastered coexistence at scale and built IP with genuine cross-generational resonance. Alongside them: platform-agnostic live service operations that built social graphs surviving every platform transition by existing on all of them simultaneously. And defining the next cycle: Roblox-native development teams building with coexistence instincts from the start, and former AAA developers building smaller, faster, platform-agnostic titles with craft skills and none of the institutional inertia.</p>
+
+    <div class="conclusion-box">
+      <p>The question is no longer whether the gaming landscape bifurcates — it's whether the studios on the wrong side of the split recognise it in time to cross over.</p>
+      <p>Gen Alpha's gaming habits are being formed right now. The social graphs that will govern where people play in 2035 are being established now. The IP that will generate nostalgic re-engagement in 2040 is being built now — on platforms that never needed a $600 box to exist.</p>
+      <p>The collision has already happened. The question is what you build next.</p>
+    </div>
+
+    <div style="border-top:1px solid var(--border);padding-top:20px;margin-top:8px">
+      <p style="font-family:var(--mono);font-size:.62rem;color:var(--muted);line-height:1.8">
+        A strategy-first portfolio project by <strong style="color:var(--muted2)">Leon Telemaque</strong><br>
+        Games Analytics &amp; LiveOps · Trent University<br>
+        Targeting Summer 2027: Ubisoft Toronto · Riot Games · HoYoverse · PlayStation
+      </p>
+    </div>
   </div>
 </div>
 
