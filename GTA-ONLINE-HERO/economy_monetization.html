@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Economy &amp; Monetization — GTA Online · Leon Telemaque</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#090909;--card:#0f0f0f;--card2:#131313;
+  --border:#1f1f1f;--border2:#2a2a2a;
+  --text:#f2f2f2;--muted:#6b6b6b;--muted2:#999;
+  --blue:#5b8fff;--purple:#9b6dff;--green:#3de8a0;
+  --red:#ff4d4d;--amber:#f59e0b;
+  --sans:'Inter',-apple-system,sans-serif;
+  --mono:'JetBrains Mono','Fira Code',monospace;
+  --serif:Georgia,'Times New Roman',serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.5;overflow-x:hidden}
+#grain{position:fixed;inset:0;z-index:9999;pointer-events:none;mix-blend-mode:screen;opacity:.45}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:0 40px;height:56px;background:rgba(9,9,9,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{font-family:var(--mono);font-size:.8rem;font-weight:600;color:var(--text);letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--border2);padding:.28rem .6rem;text-decoration:none}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center}
+.nav-links a{color:var(--muted2);text-decoration:none;font-size:.82rem;transition:color .15s}
+.nav-links a:hover{color:var(--text)}
+.nav-op-badge{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);border:1px solid rgba(245,158,11,.3);padding:.2rem .55rem}
+.sub-nav{position:sticky;top:56px;z-index:900;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0;padding:0 40px;height:40px}
+.sub-nav-back{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:.68rem;color:var(--muted);text-decoration:none;letter-spacing:.06em;text-transform:uppercase;transition:color .15s;padding-right:20px;border-right:1px solid var(--border);margin-right:20px}
+.sub-nav-back:hover{color:var(--text)}
+.sub-nav-pages{display:flex;gap:0}
+.sub-nav-page{font-family:var(--mono);font-size:.68rem;color:var(--muted);text-decoration:none;letter-spacing:.06em;text-transform:uppercase;padding:0 16px;height:40px;display:flex;align-items:center;border-right:1px solid var(--border);transition:color .15s,background .15s}
+.sub-nav-page:hover{color:var(--text);background:var(--card)}
+.sub-nav-page.active{color:var(--text);background:var(--card);border-bottom:2px solid var(--amber)}
+.main{padding:32px 40px 80px;max-width:1400px;margin:0 auto}
+.project-hero{padding:48px 0 40px;border-bottom:1px solid var(--border);margin-bottom:40px}
+.project-eyebrow{font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.project-eyebrow::before{content:'';width:20px;height:1px;background:var(--border2)}
+.project-title{font-size:clamp(1.8rem,3.5vw,3rem);font-weight:700;letter-spacing:-.04em;line-height:1.1;margin-bottom:16px}
+.project-title em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--muted2)}
+.project-desc{font-size:.9rem;color:var(--muted2);line-height:1.75;max-width:680px}
+.sec-label{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.insight-block{border-left:2px solid var(--amber);padding:14px 18px;background:rgba(245,158,11,.04);margin-bottom:32px}
+.insight-label{font-family:var(--mono);font-size:.6rem;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.insight-text{font-size:.88rem;line-height:1.65;color:var(--text)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:1px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);margin-bottom:1px}
+.grid-2b{display:grid;grid-template-columns:2fr 1fr;gap:1px;background:var(--border);margin-bottom:1px}
+.panel{background:var(--card);padding:24px}
+.panel-full{background:var(--card);padding:24px;border:1px solid var(--border);margin-bottom:1px}
+.panel-label{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.panel-badge{font-family:var(--mono);font-size:.58rem;padding:.18rem .5rem;border:1px solid;letter-spacing:.06em}
+.pb-amber{color:var(--amber);border-color:rgba(245,158,11,.25);background:rgba(245,158,11,.04)}
+.pb-blue{color:var(--blue);border-color:rgba(91,143,255,.25);background:rgba(91,143,255,.04)}
+.pb-red{color:var(--red);border-color:rgba(255,77,77,.25);background:rgba(255,77,77,.04)}
+.pb-green{color:var(--green);border-color:rgba(61,232,160,.2);background:rgba(61,232,160,.04)}
+svg{width:100%;display:block}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-bottom:40px}
+.kpi{background:var(--card);padding:20px 20px 18px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:1px}
+.kpi.k-amber::before{background:var(--amber)}.kpi.k-red::before{background:var(--red)}.kpi.k-green::before{background:var(--green)}.kpi.k-blue::before{background:var(--blue)}
+.kpi-label{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+.kpi-val{font-size:1.8rem;font-weight:700;letter-spacing:-.03em;line-height:1;margin-bottom:6px}
+.kpi.k-amber .kpi-val{color:var(--amber)}.kpi.k-red .kpi-val{color:var(--red)}.kpi.k-green .kpi-val{color:var(--green)}.kpi.k-blue .kpi-val{color:var(--blue)}
+.kpi-delta{font-family:var(--mono);font-size:.62rem;color:var(--muted);line-height:1.4}
+.kpi-delta.neg{color:var(--red)}.kpi-delta.pos{color:var(--green)}
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;text-align:left;padding:8px 12px;border-bottom:1px solid var(--border2)}
+.data-table td{padding:10px 12px;border-bottom:1px solid rgba(31,31,31,.8);font-family:var(--mono);font-size:.72rem;color:var(--muted2)}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:rgba(255,255,255,.015);color:var(--text)}
+.code-block{background:var(--bg);border:1px solid var(--border2);padding:20px;font-family:var(--mono);font-size:.72rem;line-height:1.9;overflow-x:auto}
+.kw{color:var(--blue)}.fn{color:var(--green)}.str{color:var(--amber)}.cm{color:var(--muted)}
+.segment-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.segment-row:last-child{border-bottom:none}
+.seg-name{font-family:var(--mono);font-size:.72rem;color:var(--text);width:130px;flex-shrink:0}
+.seg-bar-wrap{flex:1}
+.seg-bar-label{font-family:var(--mono);font-size:.58rem;color:var(--muted);margin-bottom:4px;display:flex;justify-content:space-between}
+.seg-bar-track{height:6px;background:var(--border2)}
+.seg-bar-fill{height:6px}
+.seg-stat{font-family:var(--mono);font-size:.72rem;width:70px;text-align:right;flex-shrink:0}
+.nav-cards{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:40px}
+.nav-card{background:var(--card);padding:24px;text-decoration:none;transition:background .15s;display:flex;flex-direction:column;gap:8px}
+.nav-card:hover{background:var(--card2)}
+.nav-card-dir{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.nav-card-title{font-size:.95rem;font-weight:600;color:var(--text);letter-spacing:-.01em}
+.nav-card-arr{font-family:var(--mono);font-size:.7rem;color:var(--blue)}
+.project-footer{border-top:1px solid var(--border);margin-top:60px;padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.pf-copy{font-family:var(--mono);font-size:.65rem;color:var(--muted);line-height:1.7}
+.pf-sources{font-family:var(--mono);font-size:.6rem;color:var(--muted);opacity:.5;line-height:1.7;max-width:600px;text-align:right}
+@media(max-width:960px){nav{padding:0 20px}.sub-nav{padding:0 20px}.main{padding:24px 20px 60px}.kpi-row{grid-template-columns:1fr 1fr}.grid-2,.grid-2b,.grid-3{grid-template-columns:1fr}.nav-cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<canvas id="grain"></canvas>
+
+<nav>
+  <a class="logo" href="leon-portfolio.html">LT</a>
+  <ul class="nav-links">
+    <li><a href="leon-portfolio.html#about">About</a></li>
+    <li><a href="leon-portfolio.html#work">Work</a></li>
+    <li><span class="nav-op-badge">Operation: Last Ride</span></li>
+    <li><a href="mailto:leon.telemaque@gmail.com">Let's talk</a></li>
+  </ul>
+</nav>
+
+<div class="sub-nav">
+  <a class="sub-nav-back" href="leon-portfolio.html">← Portfolio</a>
+  <div class="sub-nav-pages">
+    <a class="sub-nav-page" href="operation_last_ride_v2.html">01 · Retention Risk</a>
+    <a class="sub-nav-page active" href="economy_monetization.html">02 · Economy &amp; Monetization</a>
+    <a class="sub-nav-page" href="session_decay.html">03 · Session Decay</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="project-hero">
+    <div class="project-eyebrow">GTA Online · Economy Design · Document GTA-ECO-002</div>
+    <h1 class="project-title">Shark Cards vs <em>The Grind</em><br>How Economic Friction Drives or Kills Engagement</h1>
+    <p class="project-desc">GTA Online's economy is deliberately engineered to make legitimate play feel slow — creating pressure toward Shark Card purchases. This analysis models grind costs, Shark Card value, friction thresholds by player segment, and how economic frustration accelerates churn in the GTA VI transition window.</p>
+  </div>
+
+  <div class="insight-block">
+    <div class="insight-label">Core Insight</div>
+    <div class="insight-text">Economic friction isn't a bug — it's the monetization model. The danger is calibration: too much friction churns players before they convert to spenders. As GTA VI approaches, friction tolerance collapses — players who previously absorbed grind costs now have an exit. The economy doesn't just drive spending; it sets the rate at which the game loses people.</div>
+  </div>
+
+  <div class="sec-label">Economy Snapshot</div>
+  <div class="kpi-row">
+    <div class="kpi k-amber">
+      <div class="kpi-label">Shark Card Revenue Share</div>
+      <div class="kpi-val">~80%</div>
+      <div class="kpi-delta">of recurrent consumer spending · FY2025</div>
+    </div>
+    <div class="kpi k-red">
+      <div class="kpi-label">Cheapest Grind Vehicle</div>
+      <div class="kpi-val">~14h</div>
+      <div class="kpi-delta neg">Oppressor Mk II · $3.89M / ~$280K/hr</div>
+    </div>
+    <div class="kpi k-green">
+      <div class="kpi-label">Megalodon Shark Card</div>
+      <div class="kpi-val">$99.99</div>
+      <div class="kpi-delta pos">= $8M GTA$ · ~2 grind sessions</div>
+    </div>
+    <div class="kpi k-blue">
+      <div class="kpi-label">GTA+ Monthly Sub</div>
+      <div class="kpi-val">$7.99</div>
+      <div class="kpi-delta">$500K bonus cash + benefits/month</div>
+    </div>
+  </div>
+
+  <!-- GRIND COST TABLE -->
+  <div class="sec-label">Grind Cost Model</div>
+  <div class="panel-full" style="margin-bottom:40px">
+    <div class="panel-label">
+      High-Value Asset Acquisition Cost — Grind Hours vs Shark Card Equivalent
+      <span class="panel-badge pb-amber">Modelled · Community Data Sources</span>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Asset</th><th>GTA$ Cost</th>
+          <th>Grind Hours (Solo)</th><th>Optimal Business Method</th>
+          <th>Shark Card Equiv.</th><th>USD Cost</th>
+          <th>Friction Tier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--text);font-weight:600">Kosatka Submarine</td>
+          <td>$2.2M</td><td style="color:var(--red)">~8h</td>
+          <td>Cayo Perico Heist setup</td>
+          <td>Great White ($20)</td><td style="color:var(--amber)">$19.99</td>
+          <td style="color:var(--amber)">● MEDIUM</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-weight:600">Oppressor Mk II</td>
+          <td>$3.89M</td><td style="color:var(--red)">~14h</td>
+          <td>MC Businesses + Bunker</td>
+          <td>Megalodon ($100)</td><td style="color:var(--red)">$99.99</td>
+          <td style="color:var(--red)">● HIGH</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-weight:600">Arcade (base)</td>
+          <td>$1.32M</td><td style="color:var(--amber)">~5h</td>
+          <td>Contact missions + sales</td>
+          <td>Whale Shark ($50)</td><td style="color:var(--amber)">$49.99</td>
+          <td style="color:var(--amber)">● MEDIUM</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-weight:600">Agency (Dr. Dre DLC)</td>
+          <td>$2.0M</td><td style="color:var(--red)">~7h</td>
+          <td>Cayo + passive income</td>
+          <td>Great White ($20) ×2</td><td style="color:var(--amber)">$39.98</td>
+          <td style="color:var(--amber)">● MEDIUM</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-weight:600">High-End Apartment</td>
+          <td>$500K</td><td style="color:var(--green)">~2h</td>
+          <td>Heist host requirement</td>
+          <td>Red Shark ($10)</td><td style="color:var(--green)">$9.99</td>
+          <td style="color:var(--green)">● LOW</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-weight:600">Fully upgraded Bunker</td>
+          <td>$2.7M</td><td style="color:var(--red)">~10h</td>
+          <td>Passive production (AFK-able)</td>
+          <td>Megalodon ($100)</td><td style="color:var(--red)">$99.99</td>
+          <td style="color:var(--red)">● HIGH</td>
+        </tr>
+        <tr>
+          <td style="color:var(--text);font-weight:600">Full CEO Setup</td>
+          <td>$6.0M+</td><td style="color:var(--red)">~22h</td>
+          <td>Optimal income loop start</td>
+          <td>Megalodon ×2+</td><td style="color:var(--red)">$180+</td>
+          <td style="color:var(--red)">● CRITICAL</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FRICTION vs SPEND CHART + SEGMENT -->
+  <div class="sec-label">Economic Friction by Player Segment</div>
+  <div class="grid-2" style="margin-bottom:40px">
+    <div class="panel">
+      <div class="panel-label">
+        Grind-to-Purchase Conversion Model — Friction vs Spend Rate
+        <span class="panel-badge pb-amber">Modelled</span>
+      </div>
+      <svg viewBox="0 0 420 260">
+        <defs>
+          <linearGradient id="convGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#3de8a0" stop-opacity=".15"/>
+            <stop offset="60%" stop-color="#f59e0b" stop-opacity=".15"/>
+            <stop offset="100%" stop-color="#ff4d4d" stop-opacity=".15"/>
+          </linearGradient>
+        </defs>
+        <!-- axes -->
+        <line x1="50" y1="200" x2="400" y2="200" stroke="#1f1f1f" stroke-width="1"/>
+        <line x1="50" y1="10" x2="50" y2="200" stroke="#1f1f1f" stroke-width="1"/>
+        <!-- grid -->
+        <line x1="50" y1="150" x2="400" y2="150" stroke="#1f1f1f" stroke-width=".5" stroke-dasharray="3,3"/>
+        <line x1="50" y1="100" x2="400" y2="100" stroke="#1f1f1f" stroke-width=".5" stroke-dasharray="3,3"/>
+        <line x1="50" y1="50" x2="400" y2="50" stroke="#1f1f1f" stroke-width=".5" stroke-dasharray="3,3"/>
+        <!-- y: Conversion rate 0-100% -->
+        <text x="0" y="203" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace">0%</text>
+        <text x="0" y="153" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace">25%</text>
+        <text x="0" y="103" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace">50%</text>
+        <text x="0" y="53" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace">75%</text>
+        <!-- x: Friction hours 0-25h -->
+        <text x="47" y="215" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace">0h</text>
+        <text x="115" y="215" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace">5h</text>
+        <text x="185" y="215" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace">10h</text>
+        <text x="255" y="215" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace">15h</text>
+        <text x="325" y="215" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace">20h</text>
+        <text x="390" y="215" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace">25h</text>
+        <!-- x axis label -->
+        <text x="200" y="230" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace" text-anchor="middle">Grind Hours Required for Asset</text>
+        <text x="18" y="110" fill="#6b6b6b" font-size="8" font-family="JetBrains Mono,monospace" transform="rotate(-90,18,110)">Convert to Spend %</text>
+        <!-- friction zone background -->
+        <rect x="185" y="10" width="215" height="190" fill="rgba(255,77,77,.03)"/>
+        <text x="250" y="24" fill="rgba(255,77,77,.3)" font-size="8" font-family="JetBrains Mono,monospace">HIGH CHURN ZONE</text>
+        <!-- Conversion curve: rises then falls (sweet spot ~8-10h, then churn replaces convert) -->
+        <!-- grind=0(50,200), 2h(78,140), 5h(120,85), 8h(163,60), 10h(190,62), 14h(246,88), 18h(302,140), 22h(358,178), 25h(400,192) -->
+        <polyline points="50,200 78,140 120,85 163,60 190,62 246,88 302,140 358,178 400,192"
+          fill="none" stroke="#f59e0b" stroke-width="2" stroke-linejoin="round"/>
+        <!-- Optimal conversion zone -->
+        <rect x="120" y="55" width="100" height="145" fill="rgba(61,232,160,.04)" stroke="rgba(61,232,160,.15)" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="135" y="48" fill="rgba(61,232,160,.6)" font-size="7.5" font-family="JetBrains Mono,monospace">OPTIMAL FRICTION ZONE</text>
+        <!-- Key item annotations -->
+        <circle cx="120" cy="85" r="3.5" fill="var(--green)" stroke="var(--bg)"/>
+        <text x="124" y="82" fill="var(--green)" font-size="7.5" font-family="JetBrains Mono,monospace">Apartment (2h)</text>
+        <circle cx="163" cy="60" r="3.5" fill="var(--amber)" stroke="var(--bg)"/>
+        <text x="167" y="57" fill="var(--amber)" font-size="7.5" font-family="JetBrains Mono,monospace">Kosatka (8h)</text>
+        <circle cx="246" cy="88" r="3.5" fill="var(--red)" stroke="var(--bg)"/>
+        <text x="250" y="85" fill="var(--red)" font-size="7.5" font-family="JetBrains Mono,monospace">Oppressor (14h)</text>
+        <circle cx="358" cy="178" r="3.5" fill="var(--red)" stroke="var(--bg)"/>
+        <text x="310" y="175" fill="var(--red)" font-size="7.5" font-family="JetBrains Mono,monospace">Full CEO (22h+)</text>
+        <!-- legend -->
+        <line x1="55" y1="246" x2="75" y2="246" stroke="var(--amber)" stroke-width="2"/>
+        <text x="79" y="249" fill="#6b6b6b" font-size="7.5" font-family="JetBrains Mono,monospace">Shark Card conversion probability by grind cost</text>
+      </svg>
+    </div>
+    <div class="panel">
+      <div class="panel-label">Friction Tolerance by Player Segment</div>
+      <div style="padding-top:4px">
+        <div class="segment-row">
+          <div class="seg-name">New Players</div>
+          <div class="seg-bar-wrap">
+            <div class="seg-bar-label"><span>Friction tolerance</span><span style="color:var(--red)">Low</span></div>
+            <div class="seg-bar-track"><div class="seg-bar-fill" style="width:22%;background:var(--red)"></div></div>
+          </div>
+          <div class="seg-stat" style="color:var(--red)">22%</div>
+        </div>
+        <div class="segment-row">
+          <div class="seg-name">Casual Returners</div>
+          <div class="seg-bar-wrap">
+            <div class="seg-bar-label"><span>Friction tolerance</span><span style="color:var(--amber)">Low-Med</span></div>
+            <div class="seg-bar-track"><div class="seg-bar-fill" style="width:35%;background:var(--amber)"></div></div>
+          </div>
+          <div class="seg-stat" style="color:var(--amber)">35%</div>
+        </div>
+        <div class="segment-row">
+          <div class="seg-name">Business Grinders</div>
+          <div class="seg-bar-wrap">
+            <div class="seg-bar-label"><span>Friction tolerance</span><span style="color:var(--green)">High</span></div>
+            <div class="seg-bar-track"><div class="seg-bar-fill" style="width:78%;background:var(--green)"></div></div>
+          </div>
+          <div class="seg-stat" style="color:var(--green)">78%</div>
+        </div>
+        <div class="segment-row">
+          <div class="seg-name">Console Veterans</div>
+          <div class="seg-bar-wrap">
+            <div class="seg-bar-label"><span>Friction tolerance</span><span style="color:var(--green)">Very High</span></div>
+            <div class="seg-bar-track"><div class="seg-bar-fill" style="width:85%;background:var(--green)"></div></div>
+          </div>
+          <div class="seg-stat" style="color:var(--green)">85%</div>
+        </div>
+        <div class="segment-row">
+          <div class="seg-name">Competitive PvP</div>
+          <div class="seg-bar-wrap">
+            <div class="seg-bar-label"><span>Friction tolerance</span><span style="color:var(--amber)">Medium</span></div>
+            <div class="seg-bar-track"><div class="seg-bar-fill" style="width:55%;background:var(--amber)"></div></div>
+          </div>
+          <div class="seg-stat" style="color:var(--amber)">55%</div>
+        </div>
+        <div class="segment-row">
+          <div class="seg-name">GTA+ Subscribers</div>
+          <div class="seg-bar-wrap">
+            <div class="seg-bar-label"><span>Friction tolerance</span><span style="color:var(--green)">Med-High</span></div>
+            <div class="seg-bar-track"><div class="seg-bar-fill" style="width:68%;background:var(--green)"></div></div>
+          </div>
+          <div class="seg-stat" style="color:var(--green)">68%</div>
+        </div>
+      </div>
+      <div style="margin-top:20px;border-top:1px solid var(--border);padding-top:16px">
+        <div style="font-family:var(--mono);font-size:.62rem;color:var(--muted);line-height:1.7">
+          ⚠ <span style="color:var(--amber)">Pre-GTA VI effect:</span> Friction tolerance compresses across all segments when a sequel is on the horizon. Players who previously accepted 14h grinds will not accept them when GTA VI releases in <span id="days-eco">169</span> days. This is the core economic churn accelerant.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHARK CARD VALUE ANALYSIS -->
+  <div class="sec-label">Shark Card Value Analysis</div>
+  <div class="grid-2" style="margin-bottom:40px">
+    <div class="panel">
+      <div class="panel-label">
+        Shark Card Tiers — Real Money vs GTA$ Value
+        <span class="panel-badge pb-amber">Real Pricing · Rockstar Storefront</span>
+      </div>
+      <svg viewBox="0 0 400 260">
+        <!-- Bars: GTA$ per $1 USD ratio, normalized -->
+        <!-- Ratio: Bull(500K/$9.99=50K/$), Great(1.25M/$19.99=62.5K/$), Super(2.1M/$29.99=70K/$), 
+             Whale(3.5M/$49.99=70K/$), Megalodon(8M/$99.99=80K/$) -->
+        <line x1="40" y1="200" x2="380" y2="200" stroke="#1f1f1f" stroke-width="1"/>
+        <line x1="40" y1="10" x2="40" y2="200" stroke="#1f1f1f" stroke-width="1"/>
+        <line x1="40" y1="80" x2="380" y2="80" stroke="#1f1f1f" stroke-width=".5" stroke-dasharray="3,3"/>
+        <line x1="40" y1="140" x2="380" y2="140" stroke="#1f1f1f" stroke-width=".5" stroke-dasharray="3,3"/>
+        <!-- bars -->
+        <!-- Bull Shark: 50K/$, height=112; Great White: 62.5K/$, height=140; Super: 70K/, ht=157 -->
+        <!-- Whale: 70K/, ht=157; Megalodon: 80K/$, ht=180 -->
+        <rect x="55" y="88" width="46" height="112" fill="rgba(255,77,77,.15)" stroke="#ff4d4d" stroke-width=".5"/>
+        <text x="78" y="84" fill="#ff4d4d" font-size="7.5" font-family="JetBrains Mono,monospace" text-anchor="middle">50K</text>
+        <rect x="120" y="60" width="46" height="140" fill="rgba(245,158,11,.12)" stroke="#f59e0b" stroke-width=".5"/>
+        <text x="143" y="56" fill="#f59e0b" font-size="7.5" font-family="JetBrains Mono,monospace" text-anchor="middle">62.5K</text>
+        <rect x="185" y="43" width="46" height="157" fill="rgba(245,158,11,.15)" stroke="#f59e0b" stroke-width=".5"/>
+        <text x="208" y="39" fill="#f59e0b" font-size="7.5" font-family="JetBrains Mono,monospace" text-anchor="middle">70K</text>
+        <rect x="250" y="43" width="46" height="157" fill="rgba(61,232,160,.1)" stroke="#3de8a0" stroke-width=".5"/>
+        <text x="273" y="39" fill="#3de8a0" font-size="7.5" font-family="JetBrains Mono,monospace" text-anchor="middle">70K</text>
+        <rect x="315" y="20" width="46" height="180" fill="rgba(91,143,255,.12)" stroke="#5b8fff" stroke-width=".5"/>
+        <text x="338" y="16" fill="#5b8fff" font-size="7.5" font-family="JetBrains Mono,monospace" text-anchor="middle">80K</text>
+        <!-- x labels -->
+        <text x="78" y="215" fill="#6b6b6b" font-size="7" font-family="JetBrains Mono,monospace" text-anchor="middle">Bull</text>
+        <text x="78" y="224" fill="#6b6b6b" font-size="7" font-family="JetBrains Mono,monospace" text-anchor="middle">$9.99</text>
+        <text x="143" y="215" fill="#6b6b6b" font-size="7" font-family="JetBrains Mono,monospace" text-anchor="middle">Great White</text>
+        <text x="143" y="224" fill="#6b6b6b" font-size="7" font-family="JetBrains Mono,monospace" text-anchor="middle">$19.99</text>
+        <text x="208" y="215" fill="#6b6b6b" font-size="7" font-family="JetBrains Mono,monospace" text-anchor="middle">Super</text>
+        <text x="208" y="224" fill="#6b6b6b" font-size="7" font-family="JetBrains Mono,monospace" text-anchor="middle">$29.99</text>
+        <text x="273" y="215" fill="#6b6b6b" font-size="7" font-family="JetBrains Mono,monospace" text-anchor="middle">Whale Shark</text>
+        <text x="273" y="224" fill="#6b6b6b" font-size="7" font-family="JetBrains Mono,monospace" text-anchor="middle">$49.99</text>
+        <text x="338" y="215" fill="#5b8fff" font-size="7" font-family="JetBrains Mono,monospace" text-anchor="middle">Megalodon</text>
+        <text x="338" y="224" fill="#5b8fff" font-size="7" font-family="JetBrains Mono,monospace" text-anchor="middle">$99.99</text>
+        <!-- y labels -->
+        <text x="0" y="83" fill="#6b6b6b" font-size="7.5" font-family="JetBrains Mono,monospace">40K</text>
+        <text x="0" y="143" fill="#6b6b6b" font-size="7.5" font-family="JetBrains Mono,monospace">20K</text>
+        <text x="135" y="244" fill="#6b6b6b" font-size="7.5" font-family="JetBrains Mono,monospace">GTA$ per $1 USD spent — higher = better value</text>
+      </svg>
+    </div>
+    <div class="panel">
+      <div class="panel-label">Economic Design Findings</div>
+      <div style="display:flex;flex-direction:column;gap:16px;padding-top:4px">
+        <div style="border-left:2px solid var(--amber);padding:10px 14px;background:rgba(245,158,11,.03)">
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--amber);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Finding 01</div>
+          <div style="font-size:.82rem;color:var(--text);font-weight:500;margin-bottom:4px">Grind is deliberately uncompetitive with real money</div>
+          <div style="font-size:.76rem;color:var(--muted2);line-height:1.6">The most-desired assets (Oppressor Mk II, full CEO setup) require 14–22h of optimal grinding — but a Megalodon Shark Card ($100) buys them outright. The time/money ratio is engineered to feel punishing above ~10h.</div>
+        </div>
+        <div style="border-left:2px solid var(--blue);padding:10px 14px;background:rgba(91,143,255,.03)">
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--blue);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Finding 02</div>
+          <div style="font-size:.82rem;color:var(--text);font-weight:500;margin-bottom:4px">Volume discount trains towards Megalodon</div>
+          <div style="font-size:.76rem;color:var(--muted2);line-height:1.6">The GTA$ per $1 USD ratio improves significantly at the Megalodon tier. This isn't incidental — it's a psychological price anchor that makes the $100 purchase feel "efficient" compared to smaller cards.</div>
+        </div>
+        <div style="border-left:2px solid var(--red);padding:10px 14px;background:rgba(255,77,77,.03)">
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--red);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Finding 03 — GTA VI Risk</div>
+          <div style="font-size:.82rem;color:var(--text);font-weight:500;margin-bottom:4px">Friction tolerance collapses pre-sequel</div>
+          <div style="font-size:.76rem;color:var(--muted2);line-height:1.6">Players accept friction when the game has no end. Once GTA VI is announced with a real date, the "sunk cost" logic inverts — the same 14h grind now competes against a new game. Spend conversion drops; churn accelerates.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SQL ARTIFACT -->
+  <div class="sec-label">Technical Artifact</div>
+  <div class="panel-full" style="margin-bottom:40px">
+    <div class="panel-label">
+      SQL — Economic Friction Score per Player + Spend Propensity
+      <span class="panel-badge pb-blue">Portfolio Artifact</span>
+    </div>
+    <div class="code-block">
+<span class="cm">-- GTA Online Economy Model: Friction Score + Shark Card Propensity</span>
+<span class="cm">-- Identifies players at the grind-to-purchase conversion inflection point</span>
+
+<span class="kw">WITH</span> player_economy <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    player_id,
+    platform,
+    <span class="fn">SUM</span>(session_minutes) / 60.0          <span class="kw">AS</span> total_grind_hours_90d,
+    <span class="fn">SUM</span>(real_money_spend_usd)            <span class="kw">AS</span> real_spend_90d,
+    <span class="fn">MAX</span>(gta_cash_balance)               <span class="kw">AS</span> current_balance,
+    <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> high_value_asset_id) <span class="kw">AS</span> assets_owned,
+    <span class="fn">AVG</span>(income_per_hour_gta)            <span class="kw">AS</span> avg_gta_earn_rate
+  <span class="kw">FROM</span> player_sessions ps
+  <span class="kw">LEFT JOIN</span> player_assets pa <span class="kw">USING</span> (player_id)
+  <span class="kw">WHERE</span> session_date &gt;= <span class="fn">DATEADD</span>(<span class="str">'day'</span>, -90, <span class="fn">CURRENT_DATE</span>())
+  <span class="kw">GROUP BY</span> 1, 2
+),
+friction_model <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> *,
+    <span class="cm">/* Hours needed for next desired asset at current earn rate */</span>
+    <span class="fn">ROUND</span>(3890000.0 / <span class="fn">NULLIF</span>(avg_gta_earn_rate, 0), 1) <span class="kw">AS</span> hours_to_oppressor,
+    <span class="cm">/* Friction score: rises with grind hours, falls with spend history */</span>
+    <span class="fn">LEAST</span>(1.0, <span class="fn">GREATEST</span>(0,
+      (total_grind_hours_90d / 20.0) * 0.6 +
+      (<span class="kw">CASE WHEN</span> current_balance &lt; 500000 <span class="kw">THEN</span> 0.4 <span class="kw">ELSE</span> 0 <span class="kw">END</span>) -
+      (<span class="kw">CASE WHEN</span> real_spend_90d &gt; 20 <span class="kw">THEN</span> 0.3 <span class="kw">ELSE</span> 0 <span class="kw">END</span>)
+    )) <span class="kw">AS</span> friction_score
+  <span class="kw">FROM</span> player_economy
+)
+<span class="kw">SELECT</span>
+  <span class="kw">CASE</span>
+    <span class="kw">WHEN</span> friction_score &gt;= 0.7 <span class="kw">AND</span> real_spend_90d = 0
+      <span class="kw">THEN</span> <span class="str">'High-friction non-spender — Shark Card target'</span>
+    <span class="kw">WHEN</span> friction_score &gt;= 0.7 <span class="kw">AND</span> real_spend_90d &gt; 0
+      <span class="kw">THEN</span> <span class="str">'Repeat spender — GTA+ conversion candidate'</span>
+    <span class="kw">WHEN</span> friction_score &lt; 0.3
+      <span class="kw">THEN</span> <span class="str">'Low friction — engaged grinder, retention priority'</span>
+    <span class="kw">ELSE</span> <span class="str">'Medium friction — monitor for pre-GTA VI drop'</span>
+  <span class="kw">END AS</span> player_segment,
+  <span class="fn">COUNT</span>(*) <span class="kw">AS</span> players,
+  <span class="fn">ROUND</span>(<span class="fn">AVG</span>(friction_score), 3) <span class="kw">AS</span> avg_friction,
+  <span class="fn">ROUND</span>(<span class="fn">AVG</span>(real_spend_90d), 2) <span class="kw">AS</span> avg_spend_usd,
+  <span class="fn">ROUND</span>(<span class="fn">AVG</span>(hours_to_oppressor), 1) <span class="kw">AS</span> avg_hours_to_next_asset
+<span class="kw">FROM</span> friction_model
+<span class="kw">GROUP BY</span> 1 <span class="kw">ORDER BY</span> avg_friction <span class="kw">DESC</span>;</div>
+  </div>
+
+  <!-- NAV CARDS -->
+  <div class="nav-cards">
+    <a class="nav-card" href="operation_last_ride_v2.html">
+      <div class="nav-card-dir">← 01 · Retention Risk</div>
+      <div class="nav-card-title">GTA VI Transition — Retention Risk Analysis</div>
+      <div class="nav-card-arr">← Back</div>
+    </a>
+    <a class="nav-card" href="session_decay.html">
+      <div class="nav-card-dir">03 · Session Decay →</div>
+      <div class="nav-card-title">Player Lifecycle — From New Player to Churned</div>
+      <div class="nav-card-arr">View deep dive →</div>
+    </a>
+  </div>
+
+  <div class="project-footer">
+    <div class="pf-copy">Leon Telemaque · Live Ops Behavioral Systems Portfolio · 2026<br>Operation: Last Ride · Economy &amp; Monetization · Document GTA-ECO-002</div>
+    <div class="pf-sources">Sources: Rockstar Games store pricing (current) · Community grind rate data (GTAForums, Reddit r/gtaonline) · Take-Two FY2025 recurrent consumer spending disclosure · Shark Card value ratios: real storefront data · Grind hours: community-sourced estimates based on optimal income methods · Friction model and conversion estimates are modelled.</div>
+  </div>
+
+</div>
+
+<script>
+(function(){const c=document.getElementById('grain');const ctx=c.getContext('2d');function resize(){c.width=window.innerWidth;c.height=window.innerHeight}resize();window.addEventListener('resize',resize);function draw(){const w=c.width,h=c.height;const img=ctx.createImageData(w,h);const d=img.data;for(let i=0;i<d.length;i+=4){const v=Math.random()*255|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=18;}ctx.putImageData(img,0,0);requestAnimationFrame(draw);}draw();})();
+function updateDays(){const launch=new Date('2026-11-19T00:00:00');const days=Math.max(0,Math.floor((launch-new Date())/(1000*60*60*24)));const el=document.getElementById('days-eco');if(el)el.textContent=days;}
+updateDays();
+</script>
+</body>
+</html>

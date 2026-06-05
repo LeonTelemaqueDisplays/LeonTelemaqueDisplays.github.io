@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+body{width:1584px;height:396px;overflow:hidden;background:#090909;font-family:'Inter',-apple-system,sans-serif}
+
+.banner{
+  width:1584px;height:396px;
+  background:#090909;
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;
+}
+
+/* grain */
+.grain{
+  position:absolute;inset:0;z-index:1;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:.4;pointer-events:none;
+}
+
+/* guide lines matching portfolio */
+.guide-h{position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.04)}
+.guide-v{position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.04)}
+
+/* LEFT content */
+.left{
+  position:relative;z-index:10;
+  padding:0 72px;
+  flex-shrink:0;
+  width:660px;
+}
+
+.eyebrow{
+  font-family:'JetBrains Mono','Fira Code',monospace;
+  font-size:10px;color:rgba(107,107,107,1);
+  letter-spacing:.18em;text-transform:uppercase;
+  margin-bottom:18px;
+  display:flex;align-items:center;gap:10px;
+}
+.eyebrow::before{
+  content:'';width:24px;height:1px;background:rgba(107,107,107,.6);
+}
+
+.name{
+  font-size:58px;font-weight:700;
+  color:#f2f2f2;line-height:1.0;
+  letter-spacing:-.035em;
+  margin-bottom:16px;
+}
+.name em{
+  font-style:italic;font-weight:300;
+  font-family:Georgia,'Times New Roman',serif;
+  color:#f2f2f2;
+}
+
+.tagline{
+  font-size:13px;font-weight:400;
+  color:rgba(153,153,153,1);
+  line-height:1.6;
+  margin-bottom:24px;
+  max-width:480px;
+}
+.tagline strong{color:#f2f2f2;font-weight:500}
+
+.chips{
+  display:flex;gap:8px;flex-wrap:wrap;
+  margin-bottom:24px;
+}
+.chip{
+  font-family:'JetBrains Mono','Fira Code',monospace;
+  font-size:9px;color:rgba(107,107,107,1);
+  border:1px solid rgba(31,31,31,1);
+  padding:4px 10px;
+  letter-spacing:.08em;text-transform:uppercase;
+}
+.chip-blue{border-color:rgba(91,143,255,.35);color:#5b8fff}
+.chip-green{border-color:rgba(61,232,160,.25);color:#3de8a0}
+.chip-purple{border-color:rgba(155,109,255,.3);color:#9b6dff}
+
+.url-row{
+  display:flex;align-items:center;gap:8px;
+  font-family:'JetBrains Mono','Fira Code',monospace;
+  font-size:10px;color:rgba(107,107,107,.8);
+  letter-spacing:.06em;
+}
+.url-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:#3de8a0;
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* DIVIDER */
+.divider{
+  position:absolute;left:640px;top:10%;bottom:10%;
+  width:1px;background:rgba(31,31,31,1);z-index:5;
+}
+
+/* RIGHT — lifecycle diagram */
+.right{
+  position:relative;z-index:10;
+  flex:1;height:100%;
+  display:flex;align-items:center;
+  justify-content:center;
+  padding:32px 48px 32px 56px;
+}
+
+.lifecycle{
+  width:100%;height:100%;
+  position:relative;
+}
+
+/* SVG diagram */
+.lifecycle svg{
+  width:100%;height:100%;
+}
+</style>
+</head>
+<body>
+<div class="banner">
+  <div class="grain"></div>
+
+  <!-- guide lines -->
+  <div class="guide-h" style="top:56px"></div>
+  <div class="guide-h" style="bottom:56px"></div>
+  <div class="guide-v" style="left:640px"></div>
+
+  <!-- LEFT -->
+  <div class="left">
+    <div class="eyebrow">Product Analytics · LiveOps</div>
+    <div class="name">Leon<br><em>Telemaque</em></div>
+    <div class="tagline">
+      <strong>Designing behavioural systems</strong> that shape player experience<br>
+      across the full lifecycle of live-service games —<br>
+      from onboarding to engagement to churn.
+    </div>
+    <div class="chips">
+      <span class="chip chip-blue">LiveOps Analytics</span>
+      <span class="chip chip-green">Retention Systems</span>
+      <span class="chip chip-purple">Onboarding Architecture</span>
+      <span class="chip">PostgreSQL · Python · Streamlit</span>
+    </div>
+    <div class="url-row">
+      <div class="url-dot"></div>
+      leontelemaquedisplays.github.io
+    </div>
+  </div>
+
+  <!-- DIVIDER -->
+  <div class="divider"></div>
+
+  <!-- RIGHT — Lifecycle system diagram -->
+  <div class="right">
+    <div class="lifecycle">
+      <svg viewBox="0 0 860 310" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+
+        <!-- Background grid -->
+        <line x1="0" y1="0" x2="860" y2="0" stroke="rgba(31,31,31,.6)" stroke-width="1"/>
+        <line x1="0" y1="310" x2="860" y2="310" stroke="rgba(31,31,31,.6)" stroke-width="1"/>
+        <line x1="0" y1="77" x2="860" y2="77" stroke="rgba(31,31,31,.4)" stroke-width="1"/>
+        <line x1="0" y1="154" x2="860" y2="154" stroke="rgba(31,31,31,.4)" stroke-width="1"/>
+        <line x1="0" y1="231" x2="860" y2="231" stroke="rgba(31,31,31,.4)" stroke-width="1"/>
+        <line x1="172" y1="0" x2="172" y2="310" stroke="rgba(31,31,31,.4)" stroke-width="1"/>
+        <line x1="344" y1="0" x2="344" y2="310" stroke="rgba(31,31,31,.4)" stroke-width="1"/>
+        <line x1="516" y1="0" x2="516" y2="310" stroke="rgba(31,31,31,.4)" stroke-width="1"/>
+        <line x1="688" y1="0" x2="688" y2="310" stroke="rgba(31,31,31,.4)" stroke-width="1"/>
+
+        <!-- Title -->
+        <text x="430" y="20" text-anchor="middle" fill="rgba(107,107,107,.7)" font-size="8.5" font-family="'JetBrains Mono',monospace" letter-spacing="2">PLAYER LIFECYCLE — BEHAVIOURAL SYSTEMS MAP</text>
+
+        <!-- ── STAGE NODES ── -->
+
+        <!-- 1. ACQUISITION -->
+        <rect x="20" y="100" width="130" height="50" fill="rgba(15,15,15,1)" stroke="rgba(42,42,42,1)" stroke-width="1" rx="2"/>
+        <text x="85" y="120" text-anchor="middle" fill="rgba(107,107,107,.8)" font-size="7" font-family="'JetBrains Mono',monospace" letter-spacing="1">ACQUISITION</text>
+        <text x="85" y="134" text-anchor="middle" fill="rgba(153,153,153,.7)" font-size="9" font-family="'Inter',sans-serif">New Player Activation</text>
+        <text x="85" y="146" text-anchor="middle" fill="rgba(107,107,107,.6)" font-size="7" font-family="'JetBrains Mono',monospace">D0 install signal</text>
+
+        <!-- Arrow 1→2 -->
+        <line x1="150" y1="125" x2="188" y2="125" stroke="rgba(91,143,255,.4)" stroke-width="1.5"/>
+        <polygon points="188,121 196,125 188,129" fill="rgba(91,143,255,.5)"/>
+
+        <!-- 2. ONBOARDING -->
+        <rect x="196" y="80" width="140" height="90" fill="rgba(15,15,15,1)" stroke="rgba(91,143,255,.4)" stroke-width="1.2" rx="2"/>
+        <rect x="196" y="80" width="140" height="3" fill="rgba(91,143,255,.6)" rx="1"/>
+        <text x="266" y="100" text-anchor="middle" fill="rgba(91,143,255,.85)" font-size="7" font-family="'JetBrains Mono',monospace" letter-spacing="1">ONBOARDING</text>
+        <text x="266" y="115" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="9.5" font-family="'Inter',sans-serif" font-weight="500">Social &amp; Endgame</text>
+        <text x="266" y="128" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="9.5" font-family="'Inter',sans-serif" font-weight="500">Architecture</text>
+        <text x="266" y="143" text-anchor="middle" fill="rgba(107,107,107,.7)" font-size="7" font-family="'JetBrains Mono',monospace">Destiny 2 · 56%→29% abandon</text>
+        <text x="266" y="163" text-anchor="middle" fill="rgba(91,143,255,.6)" font-size="6.5" font-family="'JetBrains Mono',monospace">5-LAYER LEARNING MODEL</text>
+
+        <!-- Arrow 2→3 -->
+        <line x1="336" y1="125" x2="374" y2="125" stroke="rgba(155,109,255,.4)" stroke-width="1.5"/>
+        <polygon points="374,121 382,125 374,129" fill="rgba(155,109,255,.5)"/>
+
+        <!-- 3. ENGAGEMENT -->
+        <rect x="382" y="80" width="140" height="90" fill="rgba(15,15,15,1)" stroke="rgba(155,109,255,.4)" stroke-width="1.2" rx="2"/>
+        <rect x="382" y="80" width="140" height="3" fill="rgba(155,109,255,.6)" rx="1"/>
+        <text x="452" y="100" text-anchor="middle" fill="rgba(155,109,255,.85)" font-size="7" font-family="'JetBrains Mono',monospace" letter-spacing="1">MID-LOOP ENGAGEMENT</text>
+        <text x="452" y="115" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="9.5" font-family="'Inter',sans-serif" font-weight="500">Reward &amp; Retention</text>
+        <text x="452" y="128" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="9.5" font-family="'Inter',sans-serif" font-weight="500">Architecture</text>
+        <text x="452" y="143" text-anchor="middle" fill="rgba(107,107,107,.7)" font-size="7" font-family="'JetBrains Mono',monospace">Genshin · 10M+ wish samples</text>
+        <text x="452" y="163" text-anchor="middle" fill="rgba(155,109,255,.6)" font-size="6.5" font-family="'JetBrains Mono',monospace">PITY · PACING · OBLIGATION</text>
+
+        <!-- Arrow 3→4 -->
+        <line x1="522" y1="125" x2="560" y2="125" stroke="rgba(61,232,160,.35)" stroke-width="1.5"/>
+        <polygon points="560,121 568,125 560,129" fill="rgba(61,232,160,.45)"/>
+
+        <!-- 4. RETENTION / CHURN -->
+        <rect x="568" y="80" width="140" height="90" fill="rgba(15,15,15,1)" stroke="rgba(61,232,160,.35)" stroke-width="1.2" rx="2"/>
+        <rect x="568" y="80" width="140" height="3" fill="rgba(61,232,160,.55)" rx="1"/>
+        <text x="638" y="100" text-anchor="middle" fill="rgba(61,232,160,.85)" font-size="7" font-family="'JetBrains Mono',monospace" letter-spacing="1">CHURN DETECTION</text>
+        <text x="638" y="115" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="9.5" font-family="'Inter',sans-serif" font-weight="500">LiveOps Frustration</text>
+        <text x="638" y="128" text-anchor="middle" fill="rgba(200,204,216,.8)" font-size="9.5" font-family="'Inter',sans-serif" font-weight="500">Telemetry System</text>
+        <text x="638" y="143" text-anchor="middle" fill="rgba(107,107,107,.7)" font-size="7" font-family="'JetBrains Mono',monospace">10K+ sessions · D7 inflection</text>
+        <text x="638" y="163" text-anchor="middle" fill="rgba(61,232,160,.6)" font-size="6.5" font-family="'JetBrains Mono',monospace">PostgreSQL · STREAMLIT</text>
+
+        <!-- Arrow 4→5 -->
+        <line x1="708" y1="125" x2="746" y2="125" stroke="rgba(245,158,11,.35)" stroke-width="1.5"/>
+        <polygon points="746,121 754,125 746,129" fill="rgba(245,158,11,.45)"/>
+
+        <!-- 5. SESSION EQUITY -->
+        <rect x="754" y="100" width="90" height="50" fill="rgba(15,15,15,1)" stroke="rgba(42,42,42,1)" stroke-width="1" rx="2"/>
+        <text x="799" y="120" text-anchor="middle" fill="rgba(107,107,107,.8)" font-size="7" font-family="'JetBrains Mono',monospace" letter-spacing="1">SESSION</text>
+        <text x="799" y="131" text-anchor="middle" fill="rgba(107,107,107,.8)" font-size="7" font-family="'JetBrains Mono',monospace" letter-spacing="1">EQUITY</text>
+        <text x="799" y="144" text-anchor="middle" fill="rgba(107,107,107,.6)" font-size="7" font-family="'JetBrains Mono',monospace">Matchmaking</text>
+
+        <!-- Feedback loop arc -->
+        <path d="M 799 150 Q 799 240 430 240 Q 85 240 85 150" stroke="rgba(42,42,42,.7)" stroke-width="1" stroke-dasharray="5 4" fill="none"/>
+        <polygon points="85,150 81,158 89,158" fill="rgba(42,42,42,.7)"/>
+        <text x="430" y="258" text-anchor="middle" fill="rgba(107,107,107,.45)" font-size="7.5" font-family="'JetBrains Mono',monospace" letter-spacing="1">← RETENTION FEEDBACK LOOP — BEHAVIOURAL SIGNALS CYCLE BACK</text>
+
+        <!-- D-day markers -->
+        <text x="85"  y="72" text-anchor="middle" fill="rgba(42,42,42,.9)" font-size="8" font-family="'JetBrains Mono',monospace">D0–D1</text>
+        <text x="266" y="72" text-anchor="middle" fill="rgba(91,143,255,.5)" font-size="8" font-family="'JetBrains Mono',monospace">D1–D7</text>
+        <text x="452" y="72" text-anchor="middle" fill="rgba(155,109,255,.5)" font-size="8" font-family="'JetBrains Mono',monospace">D7–D30</text>
+        <text x="638" y="72" text-anchor="middle" fill="rgba(61,232,160,.5)" font-size="8" font-family="'JetBrains Mono',monospace">D30+</text>
+        <text x="799" y="92" text-anchor="middle" fill="rgba(107,107,107,.5)" font-size="8" font-family="'JetBrains Mono',monospace">ONGOING</text>
+
+        <!-- Bottom stat pills -->
+        <rect x="196" y="280" width="140" height="22" fill="rgba(91,143,255,.06)" stroke="rgba(91,143,255,.15)" stroke-width=".6" rx="1"/>
+        <text x="266" y="295" text-anchor="middle" fill="rgba(91,143,255,.7)" font-size="7.5" font-family="'JetBrains Mono',monospace">Abandon: 56% → 29%</text>
+
+        <rect x="382" y="280" width="140" height="22" fill="rgba(155,109,255,.06)" stroke="rgba(155,109,255,.15)" stroke-width=".6" rx="1"/>
+        <text x="452" y="295" text-anchor="middle" fill="rgba(155,109,255,.7)" font-size="7.5" font-family="'JetBrains Mono',monospace">10M+ wish samples</text>
+
+        <rect x="568" y="280" width="140" height="22" fill="rgba(61,232,160,.05)" stroke="rgba(61,232,160,.15)" stroke-width=".6" rx="1"/>
+        <text x="638" y="295" text-anchor="middle" fill="rgba(61,232,160,.7)" font-size="7.5" font-family="'JetBrains Mono',monospace">D7 ret: 42% · churn: 18%</text>
+      </svg>
+    </div>
+  </div>
+</div>
+</body>
+</html>
