@@ -1284,11 +1284,11 @@ footer{
             <ellipse cx="50" cy="200" rx="22" ry="18" fill="#283820" opacity=".9"/>
             <ellipse cx="225" cy="155" rx="18" ry="14" fill="#2a3a1e" opacity=".9"/>
 
-            <!-- SCAN LINE overlay — gives it that GTA map screen texture -->
-            <rect width="280" height="373" fill="url(#gtaScanlines)" opacity=".08"/>
-
-            <!-- Dark vignette overlay — edges -->
-            <rect width="280" height="373" fill="rgba(0,0,0,0)" stroke="rgba(0,0,0,.55)" stroke-width="40"/>
+            <!-- Dark vignette overlay — inset edges, no overflow -->
+            <rect x="0"   y="0"   width="280" height="12"  fill="rgba(0,0,0,.45)"/>
+            <rect x="0"   y="361" width="280" height="12"  fill="rgba(0,0,0,.45)"/>
+            <rect x="0"   y="0"   width="12"  height="373" fill="rgba(0,0,0,.45)"/>
+            <rect x="268" y="0"   width="12"  height="373" fill="rgba(0,0,0,.45)"/>
 
             <!-- Mission markers — yellow stars (GTA style) -->
             <!-- Star 1 — upper area -->
@@ -1359,98 +1359,6 @@ footer{
             <text x="140" y="343" text-anchor="middle" fill="rgba(244,197,66,.35)" font-size="6" font-family="monospace">◆</text>
             <text x="140" y="357" text-anchor="middle" fill="rgba(200,170,80,.5)" font-size="7.5" font-family="monospace" letter-spacing="1">GTA ONLINE · PRE-LAUNCH RETENTION</text>
             <text x="140" y="369" text-anchor="middle" fill="rgba(180,150,60,.35)" font-size="6" font-family="monospace">18.3M MAU · $310M AT RISK · 169 DAYS</text>
-          </svg>
-        </div>
-
-            <!-- Void background -->
-            <rect width="280" height="373" fill="#040103"/>
-
-            <!-- Sickly moon -->
-            <circle cx="140" cy="52" r="38" fill="rgba(160,145,120,.035)" filter="url(#hblur9)"/>
-            <circle cx="140" cy="52" r="20" fill="rgba(180,165,140,.045)" filter="url(#hblur5)"/>
-            <circle cx="140" cy="52" r="10" fill="rgba(200,185,160,.055)"/>
-
-            <!-- Dead tree — left -->
-            <line x1="28" y1="373" x2="40" y2="200" stroke="#0c0606" stroke-width="11"/>
-            <line x1="40" y1="260" x2="15" y2="220" stroke="#0c0606" stroke-width="6"/>
-            <line x1="40" y1="238" x2="64" y2="208" stroke="#0c0606" stroke-width="5"/>
-            <line x1="40" y1="218" x2="28" y2="198" stroke="#0c0606" stroke-width="4"/>
-            <line x1="28" y1="198" x2="18" y2="182" stroke="#0c0606" stroke-width="3"/>
-            <line x1="28" y1="198" x2="38" y2="183" stroke="#0c0606" stroke-width="3"/>
-            <line x1="15" y1="220" x2="5" y2="208" stroke="#0c0606" stroke-width="3"/>
-            <line x1="64" y1="208" x2="76" y2="195" stroke="#0c0606" stroke-width="3"/>
-            <!-- roots -->
-            <line x1="28" y1="370" x2="8" y2="373" stroke="#0c0606" stroke-width="5"/>
-            <line x1="28" y1="370" x2="48" y2="373" stroke="#0c0606" stroke-width="4"/>
-
-            <!-- Dead tree — right -->
-            <line x1="252" y1="373" x2="240" y2="195" stroke="#0c0606" stroke-width="10"/>
-            <line x1="240" y1="255" x2="263" y2="218" stroke="#0c0606" stroke-width="6"/>
-            <line x1="240" y1="232" x2="218" y2="202" stroke="#0c0606" stroke-width="5"/>
-            <line x1="240" y1="210" x2="254" y2="190" stroke="#0c0606" stroke-width="4"/>
-            <line x1="254" y1="190" x2="262" y2="176" stroke="#0c0606" stroke-width="3"/>
-            <line x1="254" y1="190" x2="244" y2="175" stroke="#0c0606" stroke-width="3"/>
-            <line x1="263" y1="218" x2="274" y2="204" stroke="#0c0606" stroke-width="3"/>
-            <line x1="252" y1="370" x2="268" y2="373" stroke="#0c0606" stroke-width="5"/>
-            <line x1="252" y1="370" x2="234" y2="373" stroke="#0c0606" stroke-width="4"/>
-
-            <!-- Hook glow aura -->
-            <ellipse cx="140" cy="150" rx="55" ry="70" fill="url(#hHookGlow)" filter="url(#hblur9)"/>
-
-            <!-- The hook — centred, portrait format -->
-            <line x1="140" y1="14" x2="140" y2="158" stroke="#5a1414" stroke-width="4.5"/>
-            <line x1="140" y1="14" x2="140" y2="158" stroke="#2e0a0a" stroke-width="2.5"/>
-            <!-- horizontal bar -->
-            <line x1="118" y1="14" x2="162" y2="14" stroke="#4a1010" stroke-width="4.5"/>
-            <!-- hook curve -->
-            <path d="M 140 158 Q 140 196 116 204 Q 92 210 88 196 Q 84 182 98 178" stroke="#5a1414" stroke-width="4.5" fill="none" stroke-linecap="round"/>
-            <path d="M 140 158 Q 140 196 116 204 Q 92 210 88 196 Q 84 182 98 178" stroke="#2e0a0a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-            <!-- hook tip -->
-            <path d="M 98 178 L 92 172 L 103 170" stroke="#7a1c1c" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-
-            <!-- Blood drips -->
-            <line x1="140" y1="162" x2="140" y2="183" stroke="#6b0000" stroke-width="1.8" opacity=".75"/>
-            <ellipse cx="140" cy="185" rx="2.5" ry="3.5" fill="#560000" opacity=".65"/>
-            <line x1="116" y1="206" x2="114" y2="224" stroke="#6b0000" stroke-width="1.5" opacity=".6"/>
-            <ellipse cx="114" cy="226" rx="2" ry="3" fill="#560000" opacity=".5"/>
-            <line x1="90" y1="196" x2="88" y2="212" stroke="#6b0000" stroke-width="1.2" opacity=".45"/>
-
-            <!-- Entity eyes — lurking -->
-            <!-- Pair left -->
-            <ellipse cx="52" cy="108" rx="4.5" ry="2.8" fill="url(#hEyeR)" filter="url(#hblur2)"/>
-            <ellipse cx="52" cy="108" rx="2.2" ry="1.4" fill="#ff1a1a"/>
-            <ellipse cx="66" cy="114" rx="3.5" ry="2.2" fill="url(#hEyeR)" filter="url(#hblur2)"/>
-            <ellipse cx="66" cy="114" rx="1.7" ry="1.1" fill="#ff1a1a"/>
-            <!-- Pair right -->
-            <ellipse cx="228" cy="104" rx="4.5" ry="2.8" fill="url(#hEyeR)" filter="url(#hblur2)"/>
-            <ellipse cx="228" cy="104" rx="2.2" ry="1.4" fill="#ff1a1a"/>
-            <ellipse cx="214" cy="110" rx="3.5" ry="2.2" fill="url(#hEyeR)" filter="url(#hblur2)"/>
-            <ellipse cx="214" cy="110" rx="1.7" ry="1.1" fill="#ff1a1a"/>
-            <!-- Single eye — top centre -->
-            <ellipse cx="140" cy="8" rx="5" ry="3" fill="url(#hEyeR)" filter="url(#hblur2)"/>
-            <ellipse cx="140" cy="8" rx="2.5" ry="1.5" fill="#ff2222"/>
-
-            <!-- Crow silhouette -->
-            <path d="M 102 72 L 108 67 L 113 70 L 117 65 L 121 68 L 113 77 Z" fill="#080404"/>
-            <path d="M 102 72 L 93 68 L 96 75 Z" fill="#080404"/>
-
-            <!-- Ground fog -->
-            <rect x="0" y="310" width="280" height="63" fill="#040103"/>
-            <rect x="0" y="295" width="280" height="80" fill="url(#hFog)"/>
-            <ellipse cx="140" cy="360" rx="130" ry="30" fill="rgba(70,5,5,.5)" filter="url(#hblur5)"/>
-
-            <!-- Bottom label band -->
-            <rect x="0" y="318" width="280" height="55" fill="rgba(3,1,1,.9)"/>
-            <line x1="0" y1="318" x2="280" y2="318" stroke="rgba(160,25,25,.3)" stroke-width="1"/>
-
-            <!-- Title -->
-            <text x="140" y="338" text-anchor="middle" fill="#c84848" font-size="12" font-family="'Georgia',serif" font-weight="bold" letter-spacing="2.5">DEAD BY DAYLIGHT</text>
-            <line x1="30" y1="344" x2="105" y2="344" stroke="rgba(160,25,25,.25)" stroke-width=".7"/>
-            <line x1="175" y1="344" x2="250" y2="344" stroke="rgba(160,25,25,.25)" stroke-width=".7"/>
-            <text x="140" y="344" text-anchor="middle" fill="rgba(160,25,25,.45)" font-size="6" font-family="monospace">✦</text>
-
-            <text x="140" y="358" text-anchor="middle" fill="rgba(150,100,100,.5)" font-size="7.5" font-family="monospace" letter-spacing="1">LIFECYCLE DROP-OFF MAPPING</text>
-            <text x="140" y="370" text-anchor="middle" fill="rgba(180,30,30,.4)" font-size="6.5" font-family="monospace">42.3% D7 · 68% CHURN SIGNAL · 4 COHORTS</text>
           </svg>
         </div>
         <div class="hcard-bar" style="background:linear-gradient(90deg,#f4c542,#c8860a)"></div>
