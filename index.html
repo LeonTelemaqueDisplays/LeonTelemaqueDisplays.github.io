@@ -163,6 +163,19 @@ nav{
   display:flex;gap:12px;flex-wrap:wrap;
   padding-top:4px;
 }
+.hero-availability{
+  margin-top:20px;
+  font-size:.8rem;
+  color:var(--muted);
+  display:flex;align-items:center;gap:8px;
+  font-family:var(--mono);
+  letter-spacing:.01em;
+}
+.avail-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--green);flex-shrink:0;
+  animation:blink 2.2s ease-in-out infinite;
+}
 .brand-chip{
   font-family:var(--mono);font-size:.65rem;
   color:var(--muted);
@@ -987,10 +1000,10 @@ footer{
   </div>
   <div class="hero">
     <div class="hero-left">
-      <p class="hero-eyebrow">I'm Leon — product analyst</p>
+      <p class="hero-eyebrow">I'm Leon — games &amp; LiveOps analyst</p>
       <h1 class="hero-headline">
         Building systems that explain<br>
-        <em>how people make decisions</em>—<br>
+        <em>how players make decisions</em>—<br>
         and how better design<br>
         can change outcomes.
       </h1>
@@ -1015,6 +1028,10 @@ footer{
         <span class="brand-chip">Tableau</span>
         <span class="brand-chip">SQL</span>
       </div>
+      <p class="hero-availability">
+        <span class="avail-dot"></span>
+        Seeking Summer 2027 internship in games analytics or LiveOps — Toronto-based, open to remote and international.
+      </p>
     </div>
 
     <div class="hero-right">
@@ -1310,226 +1327,406 @@ footer{
       <h2 style="font-size:clamp(1.5rem,2.5vw,2rem);font-weight:700;letter-spacing:-.03em">Selected Work</h2>
       <p style="font-size:.85rem;color:var(--muted2);margin-top:6px">Behavioural systems that shape player experience across the full lifecycle — onboarding, engagement, and churn.</p>
     </div>
-    <a href="https://diamond-apparel-ca4.notion.site/Portfolio-36d20d328f448012af39c1beddca4704" target="_blank" class="view-all">VIEW ALL →</a>
+    <a href="https://diamond-apparel-ca4.notion.site/Portfolio-36d20d328f448012af39c1beddca4704" target="_blank" class="view-all">Full case studies →</a>
   </div>
 
   <!-- HERO PROJECTS -->
   <div class="hero-work-grid" style="padding-bottom:0">
 
-    <!-- Marvel Rivals — HERO (coming soon) -->
-    <div class="pcard" onclick="openModal('marvel')" style="opacity:.75;">
-      <div class="pcard-preview" style="background:linear-gradient(135deg,#0a0c18 0%,#10121e 60%,#0c0e1a 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
-        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+    <!-- P2: Dead by Daylight Retention — SUPPORT -->
+    <div class="pcard" onclick="openModal('retention')">
+      <div class="pcard-preview">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
           <defs>
-            <radialGradient id="clashCore" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#ffffff" stop-opacity=".95"/>
-              <stop offset="15%" stop-color="#ffe066" stop-opacity=".85"/>
-              <stop offset="40%" stop-color="#e85d20" stop-opacity=".6"/>
-              <stop offset="70%" stop-color="#1a3aaa" stop-opacity=".3"/>
-              <stop offset="100%" stop-color="#050815" stop-opacity="0"/>
+            <radialGradient id="dbdFog" cx="50%" cy="100%" r="70%">
+              <stop offset="0%" stop-color="#5a0a0a" stop-opacity=".7"/>
+              <stop offset="50%" stop-color="#2a0505" stop-opacity=".4"/>
+              <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
             </radialGradient>
-            <radialGradient id="blueTeamGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#4488ff" stop-opacity=".7"/>
-              <stop offset="100%" stop-color="#4488ff" stop-opacity="0"/>
+            <radialGradient id="hookGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#c84848" stop-opacity=".35"/>
+              <stop offset="100%" stop-color="#c84848" stop-opacity="0"/>
             </radialGradient>
-            <radialGradient id="redTeamGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#ff3333" stop-opacity=".6"/>
-              <stop offset="100%" stop-color="#ff3333" stop-opacity="0"/>
+            <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff2020" stop-opacity=".9"/>
+              <stop offset="60%" stop-color="#c84848" stop-opacity=".5"/>
+              <stop offset="100%" stop-color="#c84848" stop-opacity="0"/>
             </radialGradient>
-            <filter id="mblur6">
-              <feGaussianBlur stdDeviation="6"/>
+            <filter id="blur4">
+              <feGaussianBlur stdDeviation="4"/>
             </filter>
-            <filter id="mblur12">
-              <feGaussianBlur stdDeviation="12"/>
+            <filter id="blur8">
+              <feGaussianBlur stdDeviation="8"/>
             </filter>
-            <filter id="mblur3">
-              <feGaussianBlur stdDeviation="3"/>
-            </filter>
-            <filter id="mblur2">
+            <filter id="blur2">
               <feGaussianBlur stdDeviation="2"/>
             </filter>
           </defs>
 
-          <!-- Background — deep space-city -->
-          <rect width="680" height="400" fill="#040610"/>
+          <!-- Sky — deep void black -->
+          <rect width="680" height="400" fill="#050205"/>
 
-          <!-- City skyline silhouette — distant -->
-          <rect x="0" y="280" width="680" height="120" fill="#060812"/>
-          <rect x="20" y="240" width="30" height="60" fill="#060812"/>
-          <rect x="55" y="255" width="22" height="45" fill="#060812"/>
-          <rect x="80" y="230" width="35" height="70" fill="#060812"/>
-          <rect x="120" y="248" width="18" height="52" fill="#060812"/>
-          <rect x="560" y="245" width="30" height="55" fill="#060812"/>
-          <rect x="595" y="232" width="25" height="68" fill="#060812"/>
-          <rect x="625" y="250" width="20" height="50" fill="#060812"/>
-          <rect x="648" y="238" width="32" height="62" fill="#060812"/>
+          <!-- Distant moon glow — pale, sickly -->
+          <circle cx="340" cy="60" r="55" fill="rgba(180,160,130,.04)" filter="url(#blur8)"/>
+          <circle cx="340" cy="60" r="28" fill="rgba(200,180,150,.06)" filter="url(#blur4)"/>
+          <circle cx="340" cy="60" r="14" fill="rgba(220,200,170,.08)"/>
 
-          <!-- Building windows — tiny lights -->
-          <rect x="26" y="244" width="4" height="3" fill="rgba(255,220,100,.3)" rx="1"/>
-          <rect x="34" y="250" width="4" height="3" fill="rgba(100,180,255,.3)" rx="1"/>
-          <rect x="86" y="236" width="4" height="3" fill="rgba(255,220,100,.25)" rx="1"/>
-          <rect x="95" y="244" width="4" height="3" fill="rgba(255,220,100,.2)" rx="1"/>
-          <rect x="601" y="238" width="4" height="3" fill="rgba(100,180,255,.3)" rx="1"/>
-          <rect x="610" y="246" width="4" height="3" fill="rgba(255,220,100,.25)" rx="1"/>
-          <rect x="654" y="244" width="4" height="3" fill="rgba(100,180,255,.3)" rx="1"/>
+          <!-- Dead tree — far left -->
+          <line x1="60" y1="400" x2="75" y2="220" stroke="#0f0808" stroke-width="14"/>
+          <line x1="75" y1="280" x2="40" y2="230" stroke="#0f0808" stroke-width="7"/>
+          <line x1="75" y1="260" x2="110" y2="215" stroke="#0f0808" stroke-width="6"/>
+          <line x1="40" y1="230" x2="20" y2="210" stroke="#0f0808" stroke-width="4"/>
+          <line x1="110" y1="215" x2="130" y2="195" stroke="#0f0808" stroke-width="4"/>
+          <line x1="75" y1="240" x2="55" y2="218" stroke="#0f0808" stroke-width="4"/>
+          <line x1="75" y1="220" x2="65" y2="200" stroke="#0f0808" stroke-width="5"/>
+          <line x1="65" y1="200" x2="50" y2="185" stroke="#0f0808" stroke-width="3"/>
+          <line x1="65" y1="200" x2="80" y2="182" stroke="#0f0808" stroke-width="3"/>
+          <!-- root suggestions -->
+          <line x1="60" y1="395" x2="30" y2="400" stroke="#0f0808" stroke-width="6"/>
+          <line x1="60" y1="395" x2="85" y2="400" stroke="#0f0808" stroke-width="5"/>
 
-          <!-- Speed lines radiating from clash point (340, 185) — going outward -->
-          <!-- Blue team side — left -->
-          <line x1="340" y1="185" x2="30" y2="50" stroke="rgba(80,140,255,.18)" stroke-width="1.5"/>
-          <line x1="340" y1="185" x2="0" y2="140" stroke="rgba(80,140,255,.14)" stroke-width="1.2"/>
-          <line x1="340" y1="185" x2="10" y2="200" stroke="rgba(80,140,255,.16)" stroke-width="1.2"/>
-          <line x1="340" y1="185" x2="0" y2="260" stroke="rgba(80,140,255,.12)" stroke-width="1"/>
-          <line x1="340" y1="185" x2="50" y2="340" stroke="rgba(80,140,255,.1)" stroke-width="1"/>
-          <line x1="340" y1="185" x2="150" y2="0" stroke="rgba(80,140,255,.12)" stroke-width="1"/>
-          <line x1="340" y1="185" x2="80" y2="0" stroke="rgba(80,140,255,.1)" stroke-width="1"/>
+          <!-- Dead tree — far right -->
+          <line x1="620" y1="400" x2="605" y2="210" stroke="#0f0808" stroke-width="13"/>
+          <line x1="605" y1="270" x2="640" y2="225" stroke="#0f0808" stroke-width="6"/>
+          <line x1="605" y1="250" x2="572" y2="210" stroke="#0f0808" stroke-width="6"/>
+          <line x1="640" y1="225" x2="660" y2="205" stroke="#0f0808" stroke-width="4"/>
+          <line x1="572" y1="210" x2="550" y2="192" stroke="#0f0808" stroke-width="4"/>
+          <line x1="605" y1="230" x2="625" y2="210" stroke="#0f0808" stroke-width="4"/>
+          <line x1="605" y1="210" x2="618" y2="192" stroke="#0f0808" stroke-width="4"/>
+          <line x1="618" y1="192" x2="608" y2="175" stroke="#0f0808" stroke-width="3"/>
+          <line x1="618" y1="192" x2="632" y2="178" stroke="#0f0808" stroke-width="3"/>
+          <line x1="620" y1="395" x2="645" y2="400" stroke="#0f0808" stroke-width="6"/>
+          <line x1="620" y1="395" x2="598" y2="400" stroke="#0f0808" stroke-width="5"/>
 
-          <!-- Red/gold team side — right -->
-          <line x1="340" y1="185" x2="650" y2="50" stroke="rgba(255,140,30,.18)" stroke-width="1.5"/>
-          <line x1="340" y1="185" x2="680" y2="130" stroke="rgba(255,140,30,.14)" stroke-width="1.2"/>
-          <line x1="340" y1="185" x2="680" y2="210" stroke="rgba(255,140,30,.16)" stroke-width="1.2"/>
-          <line x1="340" y1="185" x2="680" y2="280" stroke="rgba(255,140,30,.12)" stroke-width="1"/>
-          <line x1="340" y1="185" x2="530" y2="350" stroke="rgba(255,140,30,.1)" stroke-width="1"/>
-          <line x1="340" y1="185" x2="520" y2="0" stroke="rgba(255,140,30,.12)" stroke-width="1"/>
-          <line x1="340" y1="185" x2="620" y2="0" stroke="rgba(255,140,30,.1)" stroke-width="1"/>
+          <!-- Mid trees — centre-left -->
+          <line x1="200" y1="400" x2="208" y2="260" stroke="#100808" stroke-width="9"/>
+          <line x1="208" y1="310" x2="182" y2="272" stroke="#100808" stroke-width="5"/>
+          <line x1="208" y1="290" x2="232" y2="258" stroke="#100808" stroke-width="5"/>
+          <line x1="208" y1="260" x2="195" y2="240" stroke="#100808" stroke-width="4"/>
+          <line x1="208" y1="260" x2="220" y2="242" stroke="#100808" stroke-width="4"/>
 
-          <!-- Blue team aura — left -->
-          <ellipse cx="160" cy="185" rx="120" ry="140" fill="url(#blueTeamGlow)" filter="url(#mblur12)"/>
+          <!-- Mid trees — centre-right -->
+          <line x1="480" y1="400" x2="472" y2="255" stroke="#100808" stroke-width="9"/>
+          <line x1="472" y1="305" x2="498" y2="268" stroke="#100808" stroke-width="5"/>
+          <line x1="472" y1="285" x2="448" y2="252" stroke="#100808" stroke-width="5"/>
+          <line x1="472" y1="255" x2="485" y2="236" stroke="#100808" stroke-width="4"/>
+          <line x1="472" y1="255" x2="458" y2="238" stroke="#100808" stroke-width="4"/>
 
-          <!-- Red/gold team aura — right -->
-          <ellipse cx="520" cy="185" rx="120" ry="140" fill="url(#redTeamGlow)" filter="url(#mblur12)"/>
+          <!-- Ground — dark earth -->
+          <rect x="0" y="340" width="680" height="60" fill="#080404"/>
+          <!-- Ground texture lines -->
+          <line x1="0" y1="355" x2="680" y2="355" stroke="#0d0606" stroke-width="1"/>
+          <line x1="0" y1="368" x2="680" y2="368" stroke="#0d0606" stroke-width="1"/>
 
-          <!-- Hero silhouettes — BLUE TEAM (left) -->
-          <!-- Hero 1 — central, crouching combat pose -->
-          <g transform="translate(130, 110)">
-            <!-- body -->
-            <ellipse cx="0" cy="55" rx="18" ry="28" fill="#0a1535" opacity=".9"/>
-            <!-- head -->
-            <circle cx="0" cy="22" r="14" fill="#0a1535" opacity=".9"/>
-            <!-- cape/wing left -->
-            <path d="M -18 40 Q -45 60 -38 90 Q -20 75 -18 65 Z" fill="#0d1a40" opacity=".85"/>
-            <!-- arm raised -->
-            <line x1="-18" y1="45" x2="-38" y2="25" stroke="#0a1535" stroke-width="8" stroke-linecap="round" opacity=".9"/>
-            <!-- energy hand glow -->
-            <circle cx="-38" cy="25" r="7" fill="rgba(80,150,255,.6)" filter="url(#mblur3)"/>
-            <circle cx="-38" cy="25" r="3" fill="rgba(180,220,255,.8)"/>
-            <!-- legs -->
-            <line x1="-8" y1="83" x2="-14" y2="110" stroke="#0a1535" stroke-width="9" stroke-linecap="round" opacity=".9"/>
-            <line x1="8" y1="83" x2="12" y2="108" stroke="#0a1535" stroke-width="9" stroke-linecap="round" opacity=".9"/>
-            <!-- team colour accent -->
-            <ellipse cx="0" cy="48" rx="6" ry="8" fill="rgba(80,140,255,.35)"/>
-          </g>
+          <!-- Red ground fog -->
+          <rect x="0" y="310" width="680" height="90" fill="url(#dbdFog)"/>
+          <ellipse cx="340" cy="380" rx="280" ry="40" fill="rgba(80,5,5,.5)" filter="url(#blur8)"/>
+          <ellipse cx="340" cy="370" rx="200" ry="25" fill="rgba(120,8,8,.3)" filter="url(#blur4)"/>
 
-          <!-- Hero 2 — blue team, left back -->
-          <g transform="translate(68, 130)" opacity=".7">
-            <ellipse cx="0" cy="50" rx="14" ry="22" fill="#081228"/>
-            <circle cx="0" cy="20" r="11" fill="#081228"/>
-            <!-- shield suggestion -->
-            <path d="M -16 30 Q -22 50 -16 70 Q -8 60 -8 48 Z" fill="#0d1e45"/>
-            <line x1="16" y1="38" x2="30" y2="20" stroke="#081228" stroke-width="7" stroke-linecap="round"/>
-            <line x1="-8" y1="72" x2="-12" y2="96" stroke="#081228" stroke-width="7" stroke-linecap="round"/>
-            <line x1="8" y1="72" x2="10" y2="95" stroke="#081228" stroke-width="7" stroke-linecap="round"/>
-          </g>
+          <!-- Hook glow aura -->
+          <ellipse cx="340" cy="155" rx="70" ry="80" fill="url(#hookGlow)" filter="url(#blur8)"/>
 
-          <!-- Hero silhouettes — RED/GOLD TEAM (right) -->
-          <!-- Hero 3 — central, attacking pose -->
-          <g transform="translate(550, 108)">
-            <ellipse cx="0" cy="55" rx="18" ry="28" fill="#2a0808" opacity=".9"/>
-            <circle cx="0" cy="22" r="14" fill="#2a0808" opacity=".9"/>
-            <!-- armour shoulder -->
-            <path d="M 18 35 Q 42 28 45 50 Q 35 58 18 52 Z" fill="#1f0a0a" opacity=".9"/>
-            <!-- arm blasting forward -->
-            <line x1="18" y1="45" x2="42" y2="30" stroke="#2a0808" stroke-width="8" stroke-linecap="round" opacity=".9"/>
-            <!-- repulsor blast -->
-            <circle cx="46" cy="28" r="9" fill="rgba(255,120,30,.55)" filter="url(#mblur3)"/>
-            <circle cx="46" cy="28" r="4" fill="rgba(255,220,100,.85)"/>
-            <!-- legs -->
-            <line x1="-8" y1="83" x2="-12" y2="110" stroke="#2a0808" stroke-width="9" stroke-linecap="round" opacity=".9"/>
-            <line x1="8" y1="83" x2="14" y2="108" stroke="#2a0808" stroke-width="9" stroke-linecap="round" opacity=".9"/>
-            <!-- team colour accent -->
-            <ellipse cx="0" cy="48" rx="6" ry="8" fill="rgba(255,80,30,.3)"/>
-          </g>
+          <!-- The hook — thick, rusted, iconic -->
+          <!-- Vertical shaft -->
+          <line x1="340" y1="30" x2="340" y2="170" stroke="#6b1a1a" stroke-width="5"/>
+          <line x1="340" y1="30" x2="340" y2="170" stroke="#3d0f0f" stroke-width="3"/>
+          <!-- Horizontal bar at top -->
+          <line x1="310" y1="30" x2="370" y2="30" stroke="#5a1515" stroke-width="5"/>
+          <!-- Hook curve -->
+          <path d="M 340 170 Q 340 210 310 220 Q 280 228 276 210 Q 272 192 290 188" stroke="#6b1a1a" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M 340 170 Q 340 210 310 220 Q 280 228 276 210 Q 272 192 290 188" stroke="#3d0f0f" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <!-- Hook tip point -->
+          <path d="M 290 188 L 284 182 L 295 180" stroke="#8b2020" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
 
-          <!-- Hero 4 — red team, right back -->
-          <g transform="translate(610, 125)" opacity=".7">
-            <ellipse cx="0" cy="50" rx="14" ry="22" fill="#1e0606"/>
-            <circle cx="0" cy="20" r="11" fill="#1e0606"/>
-            <!-- cape -->
-            <path d="M -14 35 Q -18 55 -14 75 Q -6 62 -6 50 Z" fill="#2a0808"/>
-            <line x1="-16" y1="38" x2="-28" y2="20" stroke="#1e0606" stroke-width="7" stroke-linecap="round"/>
-            <line x1="-8" y1="72" x2="-10" y2="96" stroke="#1e0606" stroke-width="7" stroke-linecap="round"/>
-            <line x1="8" y1="72" x2="12" y2="95" stroke="#1e0606" stroke-width="7" stroke-linecap="round"/>
-          </g>
+          <!-- Blood drip 1 -->
+          <line x1="340" y1="175" x2="340" y2="200" stroke="#8b0000" stroke-width="2" opacity=".8"/>
+          <ellipse cx="340" cy="202" rx="3" ry="4" fill="#6b0000" opacity=".7"/>
+          <!-- Blood drip 2 — off hook curve -->
+          <line x1="308" y1="222" x2="306" y2="245" stroke="#8b0000" stroke-width="1.5" opacity=".6"/>
+          <ellipse cx="306" cy="247" rx="2.5" ry="3.5" fill="#6b0000" opacity=".55"/>
+          <!-- Blood drip 3 -->
+          <line x1="278" y1="210" x2="275" y2="230" stroke="#8b0000" stroke-width="1.5" opacity=".5"/>
+          <ellipse cx="275" cy="232" rx="2" ry="3" fill="#6b0000" opacity=".45"/>
 
-          <!-- Energy beams converging to clash point -->
-          <!-- Blue beam -->
-          <path d="M 175 175 Q 260 182 330 185" stroke="rgba(80,160,255,.7)" stroke-width="8" fill="none" stroke-linecap="round" filter="url(#mblur2)"/>
-          <path d="M 175 175 Q 260 182 330 185" stroke="rgba(180,220,255,.9)" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- Entity eyes — lurking in darkness, top corners -->
+          <!-- Eye pair left -->
+          <ellipse cx="120" cy="110" rx="5" ry="3" fill="url(#eyeGlow)" filter="url(#blur2)"/>
+          <ellipse cx="120" cy="110" rx="2.5" ry="1.5" fill="#ff1a1a"/>
+          <ellipse cx="138" cy="116" rx="4" ry="2.5" fill="url(#eyeGlow)" filter="url(#blur2)"/>
+          <ellipse cx="138" cy="116" rx="2" ry="1.2" fill="#ff1a1a"/>
 
-          <!-- Red/gold beam -->
-          <path d="M 505 178 Q 420 183 350 185" stroke="rgba(255,120,30,.65)" stroke-width="8" fill="none" stroke-linecap="round" filter="url(#mblur2)"/>
-          <path d="M 505 178 Q 420 183 350 185" stroke="rgba(255,220,100,.85)" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- Eye pair right -->
+          <ellipse cx="558" cy="105" rx="5" ry="3" fill="url(#eyeGlow)" filter="url(#blur2)"/>
+          <ellipse cx="558" cy="105" rx="2.5" ry="1.5" fill="#ff1a1a"/>
+          <ellipse cx="542" cy="112" rx="4" ry="2.5" fill="url(#eyeGlow)" filter="url(#blur2)"/>
+          <ellipse cx="542" cy="112" rx="2" ry="1.2" fill="#ff1a1a"/>
 
-          <!-- CLASH EXPLOSION — core -->
-          <circle cx="340" cy="185" r="55" fill="url(#clashCore)" filter="url(#mblur6)"/>
-          <circle cx="340" cy="185" r="30" fill="rgba(255,240,180,.15)" filter="url(#mblur3)"/>
-          <!-- Bright core -->
-          <circle cx="340" cy="185" r="10" fill="rgba(255,255,255,.7)"/>
-          <circle cx="340" cy="185" r="5" fill="white"/>
+          <!-- Eye — centre top -->
+          <ellipse cx="340" cy="18" rx="6" ry="3.5" fill="url(#eyeGlow)" filter="url(#blur2)"/>
+          <ellipse cx="340" cy="18" rx="3" ry="1.8" fill="#ff2020"/>
 
-          <!-- Clash shards -->
-          <line x1="340" y1="185" x2="320" y2="155" stroke="rgba(255,240,160,.6)" stroke-width="2"/>
-          <line x1="340" y1="185" x2="360" y2="152" stroke="rgba(255,240,160,.5)" stroke-width="2"/>
-          <line x1="340" y1="185" x2="310" y2="210" stroke="rgba(255,240,160,.5)" stroke-width="1.5"/>
-          <line x1="340" y1="185" x2="370" y2="208" stroke="rgba(255,240,160,.5)" stroke-width="1.5"/>
-          <line x1="340" y1="185" x2="295" y2="175" stroke="rgba(180,220,255,.55)" stroke-width="1.5"/>
-          <line x1="340" y1="185" x2="385" y2="172" stroke="rgba(255,160,50,.55)" stroke-width="1.5"/>
+          <!-- Crow silhouette — left of hook -->
+          <path d="M 255 82 L 262 76 L 268 80 L 272 74 L 278 78 L 268 88 Z" fill="#0d0606"/>
+          <path d="M 255 82 L 245 78 L 248 86 Z" fill="#0d0606"/>
+          <!-- Crow — right -->
+          <path d="M 410 90 L 417 84 L 423 88 L 427 82 L 433 86 L 423 96 Z" fill="#0d0606"/>
+          <path d="M 410 90 L 400 86 L 403 94 Z" fill="#0d0606"/>
 
-          <!-- Team HUD indicators — left -->
-          <rect x="18" y="18" width="100" height="28" fill="rgba(5,10,30,.8)" rx="3" stroke="rgba(80,140,255,.3)" stroke-width="1"/>
-          <circle cx="32" cy="32" r="7" fill="rgba(80,140,255,.25)" stroke="rgba(80,140,255,.5)" stroke-width="1"/>
-          <text x="32" y="36" text-anchor="middle" fill="rgba(80,180,255,.8)" font-size="7" font-family="monospace" font-weight="bold">B</text>
-          <text x="46" y="27" fill="rgba(140,180,255,.7)" font-size="6.5" font-family="monospace">TEAM BLUE</text>
-          <text x="46" y="38" fill="rgba(80,140,255,.6)" font-size="6" font-family="monospace">MMR: 2,340</text>
+          <!-- Label band at bottom -->
+          <rect x="0" y="330" width="680" height="70" fill="rgba(3,1,1,.88)"/>
+          <line x1="0" y1="330" x2="680" y2="330" stroke="rgba(180,30,30,.25)" stroke-width="1"/>
 
-          <!-- Team HUD indicators — right -->
-          <rect x="562" y="18" width="100" height="28" fill="rgba(20,5,5,.8)" rx="3" stroke="rgba(255,80,30,.3)" stroke-width="1"/>
-          <circle cx="576" cy="32" r="7" fill="rgba(255,60,30,.2)" stroke="rgba(255,80,30,.5)" stroke-width="1"/>
-          <text x="576" y="36" text-anchor="middle" fill="rgba(255,120,50,.8)" font-size="7" font-family="monospace" font-weight="bold">R</text>
-          <text x="590" y="27" fill="rgba(255,160,100,.7)" font-size="6.5" font-family="monospace">TEAM RED</text>
-          <text x="590" y="38" fill="rgba(255,100,50,.6)" font-size="6" font-family="monospace">MMR: 2,318</text>
+          <!-- Title -->
+          <text x="340" y="354" text-anchor="middle" fill="#c84848" font-size="15" font-family="'Georgia',serif" font-weight="bold" letter-spacing="3">DEAD BY DAYLIGHT</text>
+          <line x1="140" y1="360" x2="270" y2="360" stroke="rgba(180,30,30,.3)" stroke-width=".8"/>
+          <line x1="410" y1="360" x2="540" y2="360" stroke="rgba(180,30,30,.3)" stroke-width=".8"/>
+          <text x="340" y="360" text-anchor="middle" fill="rgba(180,30,30,.5)" font-size="7" font-family="monospace" letter-spacing="2">✦</text>
 
-          <!-- Match stat bar — top centre -->
-          <rect x="270" y="12" width="140" height="20" fill="rgba(8,10,22,.85)" rx="2" stroke="rgba(255,220,80,.2)" stroke-width=".8"/>
-          <text x="340" y="26" text-anchor="middle" fill="rgba(255,220,100,.7)" font-size="7.5" font-family="monospace" letter-spacing="1">MATCH IN PROGRESS</text>
+          <!-- Subtitle -->
+          <text x="340" y="375" text-anchor="middle" fill="rgba(160,120,120,.55)" font-size="8.5" font-family="monospace" letter-spacing="1.2">LIFECYCLE DROP-OFF MAPPING · COHORT RETENTION</text>
 
-          <!-- Label band -->
-          <rect x="0" y="330" width="680" height="70" fill="rgba(4,6,16,.92)"/>
-          <line x1="0" y1="330" x2="680" y2="330" stroke="rgba(80,120,255,.2)" stroke-width="1"/>
-
-          <!-- Marvel M shield suggestion -->
-          <path d="M 320 347 L 326 344 L 340 350 L 354 344 L 360 347 L 360 358 Q 340 368 320 358 Z" fill="rgba(200,20,20,.7)" stroke="rgba(255,60,60,.4)" stroke-width=".8"/>
-          <text x="340" y="356" text-anchor="middle" fill="rgba(255,255,255,.6)" font-size="6" font-family="monospace" font-weight="bold">M</text>
-
-          <text x="340" y="375" text-anchor="middle" fill="rgba(220,190,255,.75)" font-size="14" font-family="'Georgia',serif" font-weight="bold" letter-spacing="3">MARVEL RIVALS</text>
-          <line x1="100" y1="380" x2="240" y2="380" stroke="rgba(80,120,255,.25)" stroke-width=".8"/>
-          <line x1="440" y1="380" x2="580" y2="380" stroke="rgba(255,80,30,.25)" stroke-width=".8"/>
-          <text x="340" y="380" text-anchor="middle" fill="rgba(180,140,255,.4)" font-size="7" font-family="monospace">✦</text>
-          <text x="340" y="394" text-anchor="middle" fill="rgba(130,140,180,.45)" font-size="8.5" font-family="monospace" letter-spacing="1">SESSION EQUITY · MATCHMAKING FAIRNESS · MMR CALIBRATION</text>
+          <!-- Stats bottom right -->
+          <text x="654" y="396" text-anchor="end" fill="rgba(180,30,30,.45)" font-size="7.5" font-family="monospace">42.3% D7 AVG · 68% CHURN SIGNAL · 10,012 PLAYERS</text>
         </svg>
       </div>
       <div class="pcard-body">
-        <h3 class="pcard-title" style="color:var(--muted);">Session Equity &amp; Matchmaking Fairness — Marvel Rivals <span style="font-family:var(--mono);font-size:.62rem;color:var(--muted);border:1px solid var(--border2);padding:.1rem .4rem;margin-left:6px;vertical-align:middle;">IN PROGRESS</span></h3>
-        <p class="pcard-desc">Designing the systems that make every session feel fair. MMR calibration, role-queue balance, and session equity — the behavioural layer that determines whether players stay or churn after a single match.</p>
+        <h3 class="pcard-title">Lifecycle Drop-Off Mapping — Dead by Daylight Retention</h3>
+        <p class="pcard-desc">Cohort retention analysis identifying exactly where in the player lifecycle engagement collapses — and which behavioural signals predict it before it happens.</p>
         <div class="pcard-tags">
-          <span class="ptag ptag-blue">Gaming · Systems</span>
-          <span class="ptag">Matchmaking</span>
-          <span class="ptag">LiveOps</span>
-          <span class="ptag">Behavioural Systems</span>
+          <span class="ptag ptag-blue">Gaming</span>
+          <span class="ptag">SQL</span>
+          <span class="ptag">Tableau</span>
+          <span class="ptag">Cohort Analysis</span>
         </div>
       </div>
     </div>
 
-  <!-- P1: Frustration & Churn LiveOps — HERO -->
+    <!-- P5: Destiny 2 Raid Onboarding — HERO -->
+    <div class="pcard" onclick="openModal('raids')">
+      <div class="pcard-preview">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <!-- Deep space background -->
+          <defs>
+            <radialGradient id="travelerGlow" cx="72%" cy="28%" r="22%">
+              <stop offset="0%" stop-color="#d4eaff" stop-opacity="0.9"/>
+              <stop offset="40%" stop-color="#a0c8f0" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#1a2a4a" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="lightBeam" cx="50%" cy="100%" r="60%">
+              <stop offset="0%" stop-color="#c8860a" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="#0a0c14" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="bgNebula" cx="30%" cy="60%" r="50%">
+              <stop offset="0%" stop-color="#0e1a38" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#080a12" stop-opacity="1"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Base space -->
+          <rect width="680" height="400" fill="#07090f"/>
+          <rect width="680" height="400" fill="url(#bgNebula)"/>
+
+          <!-- Nebula wisps -->
+          <ellipse cx="160" cy="180" rx="200" ry="100" fill="rgba(30,50,120,.08)" transform="rotate(-20,160,180)"/>
+          <ellipse cx="500" cy="250" rx="180" ry="80" fill="rgba(80,30,120,.07)" transform="rotate(15,500,250)"/>
+          <ellipse cx="340" cy="100" rx="300" ry="60" fill="rgba(20,40,100,.1)" transform="rotate(-5,340,100)"/>
+
+          <!-- Stars — varied sizes -->
+          <circle cx="18" cy="12" r=".8" fill="white" opacity=".7"/>
+          <circle cx="55" cy="38" r=".5" fill="white" opacity=".5"/>
+          <circle cx="102" cy="8" r="1" fill="white" opacity=".8"/>
+          <circle cx="140" cy="55" r=".6" fill="white" opacity=".4"/>
+          <circle cx="190" cy="22" r=".9" fill="white" opacity=".65"/>
+          <circle cx="230" cy="70" r=".5" fill="white" opacity=".45"/>
+          <circle cx="280" cy="14" r=".7" fill="white" opacity=".6"/>
+          <circle cx="330" cy="48" r=".5" fill="white" opacity=".35"/>
+          <circle cx="380" cy="20" r="1.1" fill="white" opacity=".75"/>
+          <circle cx="430" cy="60" r=".6" fill="white" opacity=".5"/>
+          <circle cx="480" cy="10" r=".8" fill="white" opacity=".6"/>
+          <circle cx="540" cy="42" r=".5" fill="white" opacity=".4"/>
+          <circle cx="600" cy="18" r="1" fill="white" opacity=".7"/>
+          <circle cx="645" cy="55" r=".7" fill="white" opacity=".55"/>
+          <circle cx="670" cy="30" r=".5" fill="white" opacity=".4"/>
+          <circle cx="32" cy="120" r=".6" fill="white" opacity=".3"/>
+          <circle cx="78" cy="160" r=".5" fill="white" opacity=".35"/>
+          <circle cx="580" cy="130" r=".7" fill="white" opacity=".4"/>
+          <circle cx="630" cy="180" r=".5" fill="white" opacity=".3"/>
+          <circle cx="660" cy="320" r=".6" fill="white" opacity=".25"/>
+          <circle cx="28" cy="300" r=".5" fill="white" opacity=".2"/>
+          <circle cx="80" cy="370" r=".7" fill="white" opacity=".2"/>
+          <!-- Blue-tinted stars -->
+          <circle cx="72" cy="82" r="1.4" fill="#a8c8ff" opacity=".7"/>
+          <circle cx="450" cy="35" r="1.6" fill="#c0d8ff" opacity=".6"/>
+          <circle cx="620" cy="90" r="1.2" fill="#b0ccff" opacity=".55"/>
+          <!-- Gold star -->
+          <circle cx="200" cy="50" r="1.5" fill="#ffe090" opacity=".65"/>
+
+          <!-- The Traveler — white sphere upper right -->
+          <circle cx="490" cy="110" r="72" fill="url(#travelerGlow)"/>
+          <circle cx="490" cy="110" r="68" fill="none" stroke="rgba(200,230,255,.15)" stroke-width="1"/>
+          <circle cx="490" cy="110" r="72" fill="none" stroke="rgba(200,230,255,.08)" stroke-width="3"/>
+          <!-- Traveler surface detail — subtle shadow hemisphere -->
+          <ellipse cx="490" cy="120" rx="60" ry="55" fill="rgba(10,18,40,.25)"/>
+          <!-- Traveler inner glow -->
+          <circle cx="478" cy="95" r="28" fill="rgba(220,240,255,.12)"/>
+          <!-- Traveler crack/scar (lore detail — the Darkness scarred it) -->
+          <path d="M 510 78 Q 525 95 515 115 Q 505 130 520 148" stroke="rgba(180,210,255,.2)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M 515 115 Q 530 118 542 108" stroke="rgba(180,210,255,.15)" stroke-width="1" fill="none" stroke-linecap="round"/>
+
+          <!-- Ground/platform glow (Light below) -->
+          <rect width="680" height="400" fill="url(#lightBeam)"/>
+
+          <!-- ── HUNTER GUARDIAN ── -->
+
+          <!-- Arc void light aura — Arcstrider energy (purple/blue instead of orange) -->
+          <ellipse cx="303" cy="310" rx="55" ry="90" fill="rgba(100,60,200,.06)"/>
+          <ellipse cx="303" cy="310" rx="32" ry="60" fill="rgba(120,80,220,.07)"/>
+
+          <!-- Hunter cloak — asymmetric, draped over left shoulder, long & flowing -->
+          <!-- Main cloak body, left-biased -->
+          <path d="M 270 228 Q 248 260 238 305 Q 232 340 240 375 L 270 375 Q 268 340 275 308 Q 282 275 288 248 Z" fill="rgba(12,16,32,.97)"/>
+          <!-- Cloak inner layer / lining — slight purple sheen -->
+          <path d="M 272 232 Q 252 264 244 308 Q 240 338 248 370 L 262 370 Q 260 338 268 308 Q 276 276 284 250 Z" fill="rgba(60,40,100,.45)"/>
+          <!-- Cloak edge highlight (worn leather look) -->
+          <path d="M 270 228 Q 248 260 238 305 Q 232 340 240 375" stroke="rgba(80,60,130,.4)" stroke-width="1" fill="none"/>
+          <!-- Cloak tail edge -->
+          <path d="M 240 375 Q 252 380 270 375" stroke="rgba(70,50,110,.35)" stroke-width=".8" fill="none"/>
+          <!-- Small cloak panel right side -->
+          <path d="M 318 238 Q 328 265 330 300 Q 332 330 326 365 L 338 365 Q 344 330 340 295 Q 336 260 326 232 Z" fill="rgba(14,18,36,.9)"/>
+
+          <!-- Legs — slim Hunter, slightly asymmetric stance -->
+          <!-- Left leg -->
+          <path d="M 284 338 Q 280 356 278 375 L 296 375 Q 297 356 298 338 Z" fill="rgba(20,26,50,.95)"/>
+          <!-- Right leg -->
+          <path d="M 308 338 Q 312 356 316 375 L 300 375 Q 299 356 298 338 Z" fill="rgba(18,24,46,.95)"/>
+          <!-- Boot details -->
+          <rect x="278" y="366" width="18" height="10" rx="2" fill="rgba(24,30,56,.95)"/>
+          <rect x="300" y="366" width="18" height="10" rx="2" fill="rgba(22,28,52,.95)"/>
+          <rect x="278" y="366" width="18" height="3" rx="1" fill="rgba(90,70,160,.25)"/>
+          <rect x="300" y="366" width="18" height="3" rx="1" fill="rgba(90,70,160,.25)"/>
+
+          <!-- Torso — slim Hunter chest, no massive pauldrons -->
+          <path d="M 284 224 L 282 338 Q 284 344 298 344 Q 312 344 318 338 L 318 224 Z" fill="rgba(16,22,44,.95)"/>
+          <!-- Chest armor plate — lighter panel -->
+          <path d="M 287 228 L 285 290 L 317 290 L 315 228 Z" fill="rgba(24,32,62,.88)"/>
+          <!-- Chest seams / detail lines -->
+          <line x1="301" y1="228" x2="301" y2="290" stroke="rgba(70,55,120,.35)" stroke-width=".8"/>
+          <line x1="287" y1="258" x2="315" y2="258" stroke="rgba(70,55,120,.25)" stroke-width=".6"/>
+          <!-- Chest emblem — Hunter knife / crescent mark -->
+          <path d="M 295 272 L 301 262 L 307 272 L 301 278 Z" fill="rgba(140,100,240,.5)" stroke="rgba(160,120,255,.4)" stroke-width=".7"/>
+
+          <!-- Left shoulder — smaller, no pauldron bulk -->
+          <path d="M 268 222 Q 262 218 260 228 L 260 258 Q 262 265 272 264 L 284 260 L 284 224 Z" fill="rgba(18,24,48,.95)"/>
+          <!-- Right shoulder — minimal -->
+          <path d="M 334 222 Q 340 218 340 228 L 340 258 Q 338 265 328 264 L 318 260 L 318 224 Z" fill="rgba(18,24,48,.95)"/>
+
+          <!-- Left arm — slim -->
+          <path d="M 260 256 L 256 318 Q 255 328 263 332 L 278 332 L 284 260 Z" fill="rgba(16,22,44,.95)"/>
+          <!-- Right arm — slightly raised, holding knife -->
+          <path d="M 340 256 L 348 308 Q 350 318 344 324 L 330 326 L 318 260 Z" fill="rgba(16,22,44,.95)"/>
+
+          <!-- Left gauntlet -->
+          <path d="M 255 316 Q 252 332 258 342 L 276 342 Q 284 334 284 324 L 270 316 Z" fill="rgba(22,28,54,.95)"/>
+          <!-- Right gauntlet — gripping blade -->
+          <path d="M 348 306 Q 354 320 350 332 L 334 334 Q 326 326 326 316 L 338 308 Z" fill="rgba(22,28,54,.95)"/>
+
+          <!-- Hunter knife — right hand, angled outward (iconic Hunter weapon) -->
+          <!-- Blade -->
+          <path d="M 350 318 L 380 288 L 384 292 L 356 324 Z" fill="rgba(180,190,210,.75)"/>
+          <!-- Blade edge highlight -->
+          <path d="M 350 318 L 380 288" stroke="rgba(220,230,255,.6)" stroke-width=".8" fill="none"/>
+          <!-- Blade fuller groove -->
+          <path d="M 352 319 L 378 292" stroke="rgba(140,150,180,.3)" stroke-width=".5" fill="none"/>
+          <!-- Guard -->
+          <rect x="348" y="316" width="8" height="6" rx="1" fill="rgba(80,65,120,.85)" transform="rotate(-42,352,319)"/>
+          <!-- Handle/grip wrap -->
+          <path d="M 340 326 L 350 318 L 356 324 L 346 332 Z" fill="rgba(50,38,80,.9)"/>
+          <line x1="341" y1="328" x2="348" y2="321" stroke="rgba(90,70,130,.5)" stroke-width="1.2"/>
+          <line x1="343" y1="330" x2="350" y2="323" stroke="rgba(90,70,130,.5)" stroke-width="1.2"/>
+          <!-- Knife Arc glow -->
+          <path d="M 350 318 L 380 288" stroke="rgba(120,100,255,.3)" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+          <!-- Neck / scarf wrap (Hunter signature) -->
+          <path d="M 288 210 Q 290 202 301 200 Q 312 200 314 210 L 316 222 Q 308 218 301 218 Q 294 218 286 222 Z" fill="rgba(45,32,80,.9)"/>
+          <!-- Scarf trailing end -->
+          <path d="M 286 218 Q 276 228 272 244 Q 268 258 270 270" stroke="rgba(60,44,100,.7)" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+          <!-- Hunter helmet — sleek cowl with brim / no ridge -->
+          <!-- Helm base — elongated, more organic than Titan -->
+          <path d="M 278 188 Q 276 162 301 156 Q 326 156 328 182 L 328 208 Q 316 216 301 216 Q 286 216 278 208 Z" fill="rgba(16,20,44,.96)"/>
+          <!-- Helm top — slight point, hood-like -->
+          <path d="M 284 168 Q 284 156 301 150 Q 318 150 322 162 L 324 172 Q 312 166 301 165 Q 290 165 282 170 Z" fill="rgba(20,26,52,.95)"/>
+          <!-- Brim — Hunter's distinctive hat-brim silhouette -->
+          <path d="M 272 200 Q 268 205 268 210 L 336 210 Q 336 205 332 200 Z" fill="rgba(14,18,40,.97)"/>
+          <path d="M 268 210 L 336 210" stroke="rgba(70,55,120,.4)" stroke-width=".8" fill="none"/>
+          <!-- Visor — narrow, angular slit (Arc light: blue-purple) -->
+          <path d="M 282 183 Q 282 174 301 173 Q 320 174 320 183 L 320 188 Q 320 193 301 193 Q 282 193 282 188 Z" fill="rgba(80,50,200,.88)"/>
+          <path d="M 285 184 Q 285 177 301 176 Q 317 177 317 184 L 317 188 Q 317 191 301 191 Q 285 191 285 188 Z" fill="rgba(120,90,255,.75)"/>
+          <!-- Visor inner glow — Arc electricity shimmer -->
+          <path d="M 288 185 Q 301 182 314 185 L 314 188 Q 301 189 288 188 Z" fill="rgba(160,130,255,.55)"/>
+          <!-- Arc spark along visor edge -->
+          <path d="M 284 186 L 289 184 L 287 187 L 292 185" stroke="rgba(180,160,255,.6)" stroke-width=".7" fill="none" stroke-linecap="round"/>
+          <!-- Helm side panels -->
+          <path d="M 278 192 Q 274 196 274 204 L 280 208" stroke="rgba(60,50,100,.5)" stroke-width="1" fill="none"/>
+          <path d="M 324 192 Q 328 196 328 204 L 322 208" stroke="rgba(60,50,100,.5)" stroke-width="1" fill="none"/>
+          <!-- Helm back ridge — subtle -->
+          <path d="M 295 150 Q 301 144 307 150" stroke="rgba(50,40,90,.6)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+          <!-- Ghost companion — floating at shoulder level right side -->
+          <g transform="translate(352,185) rotate(-10)">
+            <polygon points="0,-11 9,-4 9,7 0,12 -9,7 -9,-4" fill="rgba(230,240,255,.82)" stroke="rgba(160,180,255,.4)" stroke-width=".7"/>
+            <polygon points="0,-8 6,-3 6,5 0,9 -6,5 -6,-3" fill="rgba(110,80,220,.6)"/>
+            <circle cx="0" cy="1" r="3.5" fill="rgba(130,100,255,.9)"/>
+            <circle cx="0" cy="1" r="2" fill="rgba(190,170,255,.9)"/>
+            <circle cx="0" cy="1" r="1" fill="white" opacity=".95"/>
+            <line x1="-9" y1="-4" x2="9" y2="7" stroke="rgba(160,140,255,.25)" stroke-width=".5"/>
+            <line x1="9" y1="-4" x2="-9" y2="7" stroke="rgba(160,140,255,.25)" stroke-width=".5"/>
+          </g>
+          <!-- Ghost glow (Arc purple) -->
+          <circle cx="352" cy="184" r="18" fill="rgba(120,90,220,.07)"/>
+
+          <!-- Light pillar from ground -->
+          <polygon points="268,400 274,348 332,348 338,400" fill="rgba(90,60,180,.06)"/>
+          <polygon points="276,400 280,362 324,362 328,400" fill="rgba(100,70,200,.08)"/>
+
+          <!-- Ground platform (Arc glow) -->
+          <ellipse cx="303" cy="378" rx="52" ry="7" fill="rgba(110,80,210,.18)"/>
+          <ellipse cx="303" cy="378" rx="34" ry="4" fill="rgba(130,100,240,.22)"/>
+
+          <!-- UI overlay — top left label -->
+          <rect x="16" y="14" width="220" height="22" rx="2" fill="rgba(100,70,200,.1)" stroke="rgba(140,110,240,.28)" stroke-width=".6"/>
+          <text x="26" y="29" fill="rgba(190,170,255,.9)" font-size="9" font-family="monospace" font-weight="bold" letter-spacing="1.5">DESTINY 2  ·  RAID ONBOARDING</text>
+
+          <!-- UI overlay — bottom data strip -->
+          <rect x="0" y="356" width="680" height="44" fill="rgba(5,8,16,.78)"/>
+          <text x="20" y="375" fill="rgba(170,145,255,.92)" font-size="10" font-family="monospace" font-weight="bold">SHERPA SYSTEM REDESIGN</text>
+          <text x="20" y="392" fill="rgba(140,160,200,.55)" font-size="8" font-family="monospace">Behavioural UX  ·  Dual-Queue Architecture  ·  5-Layer Learning Model</text>
+          <!-- abandonment delta pill -->
+          <rect x="530" y="360" width="130" height="32" rx="3" fill="rgba(12,10,24,.85)" stroke="rgba(61,232,160,.25)" stroke-width=".7"/>
+          <text x="595" y="374" text-anchor="middle" fill="rgba(140,160,200,.6)" font-size="7.5" font-family="monospace">ABANDONMENT</text>
+          <text x="564" y="388" text-anchor="middle" fill="rgba(255,77,77,.75)" font-size="9" font-family="monospace">56%</text>
+          <text x="580" y="388" text-anchor="middle" fill="rgba(140,160,200,.5)" font-size="9" font-family="monospace">→</text>
+          <text x="598" y="388" text-anchor="middle" fill="rgba(61,232,160,.85)" font-size="9" font-family="monospace">29%</text>
+
+          <!-- Hunter class emblem — top right corner (crescent / arc motif) -->
+          <polygon points="648,14 668,14 668,44 648,44 638,29" fill="rgba(100,70,200,.14)" stroke="rgba(140,110,240,.32)" stroke-width=".8"/>
+          <text x="653" y="27" fill="rgba(180,160,255,.75)" font-size="7" font-family="monospace" font-weight="bold">HUNTER</text>
+          <text x="657" y="38" fill="rgba(120,100,210,.55)" font-size="6" font-family="monospace">CLASS</text>
+        </svg>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">Endgame Onboarding System — Destiny 2 Raid Social Architecture</h3>
+        <p class="pcard-desc">Solving the hardest onboarding problem in live-service: getting players into endgame content. A 5-layer behavioural learning model that verifies readiness through behaviour, not assumptions. Abandonment dropped from 56% to 29%.</p>
+        <div class="pcard-tags">
+          <span class="ptag ptag-blue">Gaming · UX</span>
+          <span class="ptag">Onboarding Architecture</span>
+          <span class="ptag">Behavioural Systems</span>
+          <span class="ptag">LiveOps Design</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- P1: Frustration & Churn LiveOps — HERO -->
     <div class="pcard" onclick="openModal('churn')">
       <div class="pcard-preview">
         <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
@@ -1776,231 +1973,6 @@ footer{
       </div>
     </div>
 
-    <!-- P5: Destiny 2 Raid Onboarding — HERO -->
-    <div class="pcard" onclick="openModal('raids')">
-      <div class="pcard-preview">
-        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-          <!-- Deep space background -->
-          <defs>
-            <radialGradient id="travelerGlow" cx="72%" cy="28%" r="22%">
-              <stop offset="0%" stop-color="#d4eaff" stop-opacity="0.9"/>
-              <stop offset="40%" stop-color="#a0c8f0" stop-opacity="0.4"/>
-              <stop offset="100%" stop-color="#1a2a4a" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="lightBeam" cx="50%" cy="100%" r="60%">
-              <stop offset="0%" stop-color="#c8860a" stop-opacity="0.35"/>
-              <stop offset="100%" stop-color="#0a0c14" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="bgNebula" cx="30%" cy="60%" r="50%">
-              <stop offset="0%" stop-color="#0e1a38" stop-opacity="0.9"/>
-              <stop offset="100%" stop-color="#080a12" stop-opacity="1"/>
-            </radialGradient>
-          </defs>
-
-          <!-- Base space -->
-          <rect width="680" height="400" fill="#07090f"/>
-          <rect width="680" height="400" fill="url(#bgNebula)"/>
-
-          <!-- Nebula wisps -->
-          <ellipse cx="160" cy="180" rx="200" ry="100" fill="rgba(30,50,120,.08)" transform="rotate(-20,160,180)"/>
-          <ellipse cx="500" cy="250" rx="180" ry="80" fill="rgba(80,30,120,.07)" transform="rotate(15,500,250)"/>
-          <ellipse cx="340" cy="100" rx="300" ry="60" fill="rgba(20,40,100,.1)" transform="rotate(-5,340,100)"/>
-
-          <!-- Stars — varied sizes -->
-          <circle cx="18" cy="12" r=".8" fill="white" opacity=".7"/>
-          <circle cx="55" cy="38" r=".5" fill="white" opacity=".5"/>
-          <circle cx="102" cy="8" r="1" fill="white" opacity=".8"/>
-          <circle cx="140" cy="55" r=".6" fill="white" opacity=".4"/>
-          <circle cx="190" cy="22" r=".9" fill="white" opacity=".65"/>
-          <circle cx="230" cy="70" r=".5" fill="white" opacity=".45"/>
-          <circle cx="280" cy="14" r=".7" fill="white" opacity=".6"/>
-          <circle cx="330" cy="48" r=".5" fill="white" opacity=".35"/>
-          <circle cx="380" cy="20" r="1.1" fill="white" opacity=".75"/>
-          <circle cx="430" cy="60" r=".6" fill="white" opacity=".5"/>
-          <circle cx="480" cy="10" r=".8" fill="white" opacity=".6"/>
-          <circle cx="540" cy="42" r=".5" fill="white" opacity=".4"/>
-          <circle cx="600" cy="18" r="1" fill="white" opacity=".7"/>
-          <circle cx="645" cy="55" r=".7" fill="white" opacity=".55"/>
-          <circle cx="670" cy="30" r=".5" fill="white" opacity=".4"/>
-          <circle cx="32" cy="120" r=".6" fill="white" opacity=".3"/>
-          <circle cx="78" cy="160" r=".5" fill="white" opacity=".35"/>
-          <circle cx="580" cy="130" r=".7" fill="white" opacity=".4"/>
-          <circle cx="630" cy="180" r=".5" fill="white" opacity=".3"/>
-          <circle cx="660" cy="320" r=".6" fill="white" opacity=".25"/>
-          <circle cx="28" cy="300" r=".5" fill="white" opacity=".2"/>
-          <circle cx="80" cy="370" r=".7" fill="white" opacity=".2"/>
-          <!-- Blue-tinted stars -->
-          <circle cx="72" cy="82" r="1.4" fill="#a8c8ff" opacity=".7"/>
-          <circle cx="450" cy="35" r="1.6" fill="#c0d8ff" opacity=".6"/>
-          <circle cx="620" cy="90" r="1.2" fill="#b0ccff" opacity=".55"/>
-          <!-- Gold star -->
-          <circle cx="200" cy="50" r="1.5" fill="#ffe090" opacity=".65"/>
-
-          <!-- The Traveler — white sphere upper right -->
-          <circle cx="490" cy="110" r="72" fill="url(#travelerGlow)"/>
-          <circle cx="490" cy="110" r="68" fill="none" stroke="rgba(200,230,255,.15)" stroke-width="1"/>
-          <circle cx="490" cy="110" r="72" fill="none" stroke="rgba(200,230,255,.08)" stroke-width="3"/>
-          <!-- Traveler surface detail — subtle shadow hemisphere -->
-          <ellipse cx="490" cy="120" rx="60" ry="55" fill="rgba(10,18,40,.25)"/>
-          <!-- Traveler inner glow -->
-          <circle cx="478" cy="95" r="28" fill="rgba(220,240,255,.12)"/>
-          <!-- Traveler crack/scar (lore detail — the Darkness scarred it) -->
-          <path d="M 510 78 Q 525 95 515 115 Q 505 130 520 148" stroke="rgba(180,210,255,.2)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-          <path d="M 515 115 Q 530 118 542 108" stroke="rgba(180,210,255,.15)" stroke-width="1" fill="none" stroke-linecap="round"/>
-
-          <!-- Ground/platform glow (Light below) -->
-          <rect width="680" height="400" fill="url(#lightBeam)"/>
-
-          <!-- ── HUNTER GUARDIAN ── -->
-
-          <!-- Arc void light aura — Arcstrider energy (purple/blue instead of orange) -->
-          <ellipse cx="303" cy="310" rx="55" ry="90" fill="rgba(100,60,200,.06)"/>
-          <ellipse cx="303" cy="310" rx="32" ry="60" fill="rgba(120,80,220,.07)"/>
-
-          <!-- Hunter cloak — asymmetric, draped over left shoulder, long & flowing -->
-          <!-- Main cloak body, left-biased -->
-          <path d="M 270 228 Q 248 260 238 305 Q 232 340 240 375 L 270 375 Q 268 340 275 308 Q 282 275 288 248 Z" fill="rgba(12,16,32,.97)"/>
-          <!-- Cloak inner layer / lining — slight purple sheen -->
-          <path d="M 272 232 Q 252 264 244 308 Q 240 338 248 370 L 262 370 Q 260 338 268 308 Q 276 276 284 250 Z" fill="rgba(60,40,100,.45)"/>
-          <!-- Cloak edge highlight (worn leather look) -->
-          <path d="M 270 228 Q 248 260 238 305 Q 232 340 240 375" stroke="rgba(80,60,130,.4)" stroke-width="1" fill="none"/>
-          <!-- Cloak tail edge -->
-          <path d="M 240 375 Q 252 380 270 375" stroke="rgba(70,50,110,.35)" stroke-width=".8" fill="none"/>
-          <!-- Small cloak panel right side -->
-          <path d="M 318 238 Q 328 265 330 300 Q 332 330 326 365 L 338 365 Q 344 330 340 295 Q 336 260 326 232 Z" fill="rgba(14,18,36,.9)"/>
-
-          <!-- Legs — slim Hunter, slightly asymmetric stance -->
-          <!-- Left leg -->
-          <path d="M 284 338 Q 280 356 278 375 L 296 375 Q 297 356 298 338 Z" fill="rgba(20,26,50,.95)"/>
-          <!-- Right leg -->
-          <path d="M 308 338 Q 312 356 316 375 L 300 375 Q 299 356 298 338 Z" fill="rgba(18,24,46,.95)"/>
-          <!-- Boot details -->
-          <rect x="278" y="366" width="18" height="10" rx="2" fill="rgba(24,30,56,.95)"/>
-          <rect x="300" y="366" width="18" height="10" rx="2" fill="rgba(22,28,52,.95)"/>
-          <rect x="278" y="366" width="18" height="3" rx="1" fill="rgba(90,70,160,.25)"/>
-          <rect x="300" y="366" width="18" height="3" rx="1" fill="rgba(90,70,160,.25)"/>
-
-          <!-- Torso — slim Hunter chest, no massive pauldrons -->
-          <path d="M 284 224 L 282 338 Q 284 344 298 344 Q 312 344 318 338 L 318 224 Z" fill="rgba(16,22,44,.95)"/>
-          <!-- Chest armor plate — lighter panel -->
-          <path d="M 287 228 L 285 290 L 317 290 L 315 228 Z" fill="rgba(24,32,62,.88)"/>
-          <!-- Chest seams / detail lines -->
-          <line x1="301" y1="228" x2="301" y2="290" stroke="rgba(70,55,120,.35)" stroke-width=".8"/>
-          <line x1="287" y1="258" x2="315" y2="258" stroke="rgba(70,55,120,.25)" stroke-width=".6"/>
-          <!-- Chest emblem — Hunter knife / crescent mark -->
-          <path d="M 295 272 L 301 262 L 307 272 L 301 278 Z" fill="rgba(140,100,240,.5)" stroke="rgba(160,120,255,.4)" stroke-width=".7"/>
-
-          <!-- Left shoulder — smaller, no pauldron bulk -->
-          <path d="M 268 222 Q 262 218 260 228 L 260 258 Q 262 265 272 264 L 284 260 L 284 224 Z" fill="rgba(18,24,48,.95)"/>
-          <!-- Right shoulder — minimal -->
-          <path d="M 334 222 Q 340 218 340 228 L 340 258 Q 338 265 328 264 L 318 260 L 318 224 Z" fill="rgba(18,24,48,.95)"/>
-
-          <!-- Left arm — slim -->
-          <path d="M 260 256 L 256 318 Q 255 328 263 332 L 278 332 L 284 260 Z" fill="rgba(16,22,44,.95)"/>
-          <!-- Right arm — slightly raised, holding knife -->
-          <path d="M 340 256 L 348 308 Q 350 318 344 324 L 330 326 L 318 260 Z" fill="rgba(16,22,44,.95)"/>
-
-          <!-- Left gauntlet -->
-          <path d="M 255 316 Q 252 332 258 342 L 276 342 Q 284 334 284 324 L 270 316 Z" fill="rgba(22,28,54,.95)"/>
-          <!-- Right gauntlet — gripping blade -->
-          <path d="M 348 306 Q 354 320 350 332 L 334 334 Q 326 326 326 316 L 338 308 Z" fill="rgba(22,28,54,.95)"/>
-
-          <!-- Hunter knife — right hand, angled outward (iconic Hunter weapon) -->
-          <!-- Blade -->
-          <path d="M 350 318 L 380 288 L 384 292 L 356 324 Z" fill="rgba(180,190,210,.75)"/>
-          <!-- Blade edge highlight -->
-          <path d="M 350 318 L 380 288" stroke="rgba(220,230,255,.6)" stroke-width=".8" fill="none"/>
-          <!-- Blade fuller groove -->
-          <path d="M 352 319 L 378 292" stroke="rgba(140,150,180,.3)" stroke-width=".5" fill="none"/>
-          <!-- Guard -->
-          <rect x="348" y="316" width="8" height="6" rx="1" fill="rgba(80,65,120,.85)" transform="rotate(-42,352,319)"/>
-          <!-- Handle/grip wrap -->
-          <path d="M 340 326 L 350 318 L 356 324 L 346 332 Z" fill="rgba(50,38,80,.9)"/>
-          <line x1="341" y1="328" x2="348" y2="321" stroke="rgba(90,70,130,.5)" stroke-width="1.2"/>
-          <line x1="343" y1="330" x2="350" y2="323" stroke="rgba(90,70,130,.5)" stroke-width="1.2"/>
-          <!-- Knife Arc glow -->
-          <path d="M 350 318 L 380 288" stroke="rgba(120,100,255,.3)" stroke-width="3" fill="none" stroke-linecap="round"/>
-
-          <!-- Neck / scarf wrap (Hunter signature) -->
-          <path d="M 288 210 Q 290 202 301 200 Q 312 200 314 210 L 316 222 Q 308 218 301 218 Q 294 218 286 222 Z" fill="rgba(45,32,80,.9)"/>
-          <!-- Scarf trailing end -->
-          <path d="M 286 218 Q 276 228 272 244 Q 268 258 270 270" stroke="rgba(60,44,100,.7)" stroke-width="4" fill="none" stroke-linecap="round"/>
-
-          <!-- Hunter helmet — sleek cowl with brim / no ridge -->
-          <!-- Helm base — elongated, more organic than Titan -->
-          <path d="M 278 188 Q 276 162 301 156 Q 326 156 328 182 L 328 208 Q 316 216 301 216 Q 286 216 278 208 Z" fill="rgba(16,20,44,.96)"/>
-          <!-- Helm top — slight point, hood-like -->
-          <path d="M 284 168 Q 284 156 301 150 Q 318 150 322 162 L 324 172 Q 312 166 301 165 Q 290 165 282 170 Z" fill="rgba(20,26,52,.95)"/>
-          <!-- Brim — Hunter's distinctive hat-brim silhouette -->
-          <path d="M 272 200 Q 268 205 268 210 L 336 210 Q 336 205 332 200 Z" fill="rgba(14,18,40,.97)"/>
-          <path d="M 268 210 L 336 210" stroke="rgba(70,55,120,.4)" stroke-width=".8" fill="none"/>
-          <!-- Visor — narrow, angular slit (Arc light: blue-purple) -->
-          <path d="M 282 183 Q 282 174 301 173 Q 320 174 320 183 L 320 188 Q 320 193 301 193 Q 282 193 282 188 Z" fill="rgba(80,50,200,.88)"/>
-          <path d="M 285 184 Q 285 177 301 176 Q 317 177 317 184 L 317 188 Q 317 191 301 191 Q 285 191 285 188 Z" fill="rgba(120,90,255,.75)"/>
-          <!-- Visor inner glow — Arc electricity shimmer -->
-          <path d="M 288 185 Q 301 182 314 185 L 314 188 Q 301 189 288 188 Z" fill="rgba(160,130,255,.55)"/>
-          <!-- Arc spark along visor edge -->
-          <path d="M 284 186 L 289 184 L 287 187 L 292 185" stroke="rgba(180,160,255,.6)" stroke-width=".7" fill="none" stroke-linecap="round"/>
-          <!-- Helm side panels -->
-          <path d="M 278 192 Q 274 196 274 204 L 280 208" stroke="rgba(60,50,100,.5)" stroke-width="1" fill="none"/>
-          <path d="M 324 192 Q 328 196 328 204 L 322 208" stroke="rgba(60,50,100,.5)" stroke-width="1" fill="none"/>
-          <!-- Helm back ridge — subtle -->
-          <path d="M 295 150 Q 301 144 307 150" stroke="rgba(50,40,90,.6)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-
-          <!-- Ghost companion — floating at shoulder level right side -->
-          <g transform="translate(352,185) rotate(-10)">
-            <polygon points="0,-11 9,-4 9,7 0,12 -9,7 -9,-4" fill="rgba(230,240,255,.82)" stroke="rgba(160,180,255,.4)" stroke-width=".7"/>
-            <polygon points="0,-8 6,-3 6,5 0,9 -6,5 -6,-3" fill="rgba(110,80,220,.6)"/>
-            <circle cx="0" cy="1" r="3.5" fill="rgba(130,100,255,.9)"/>
-            <circle cx="0" cy="1" r="2" fill="rgba(190,170,255,.9)"/>
-            <circle cx="0" cy="1" r="1" fill="white" opacity=".95"/>
-            <line x1="-9" y1="-4" x2="9" y2="7" stroke="rgba(160,140,255,.25)" stroke-width=".5"/>
-            <line x1="9" y1="-4" x2="-9" y2="7" stroke="rgba(160,140,255,.25)" stroke-width=".5"/>
-          </g>
-          <!-- Ghost glow (Arc purple) -->
-          <circle cx="352" cy="184" r="18" fill="rgba(120,90,220,.07)"/>
-
-          <!-- Light pillar from ground -->
-          <polygon points="268,400 274,348 332,348 338,400" fill="rgba(90,60,180,.06)"/>
-          <polygon points="276,400 280,362 324,362 328,400" fill="rgba(100,70,200,.08)"/>
-
-          <!-- Ground platform (Arc glow) -->
-          <ellipse cx="303" cy="378" rx="52" ry="7" fill="rgba(110,80,210,.18)"/>
-          <ellipse cx="303" cy="378" rx="34" ry="4" fill="rgba(130,100,240,.22)"/>
-
-          <!-- UI overlay — top left label -->
-          <rect x="16" y="14" width="220" height="22" rx="2" fill="rgba(100,70,200,.1)" stroke="rgba(140,110,240,.28)" stroke-width=".6"/>
-          <text x="26" y="29" fill="rgba(190,170,255,.9)" font-size="9" font-family="monospace" font-weight="bold" letter-spacing="1.5">DESTINY 2  ·  RAID ONBOARDING</text>
-
-          <!-- UI overlay — bottom data strip -->
-          <rect x="0" y="356" width="680" height="44" fill="rgba(5,8,16,.78)"/>
-          <text x="20" y="375" fill="rgba(170,145,255,.92)" font-size="10" font-family="monospace" font-weight="bold">SHERPA SYSTEM REDESIGN</text>
-          <text x="20" y="392" fill="rgba(140,160,200,.55)" font-size="8" font-family="monospace">Behavioural UX  ·  Dual-Queue Architecture  ·  5-Layer Learning Model</text>
-          <!-- abandonment delta pill -->
-          <rect x="530" y="360" width="130" height="32" rx="3" fill="rgba(12,10,24,.85)" stroke="rgba(61,232,160,.25)" stroke-width=".7"/>
-          <text x="595" y="374" text-anchor="middle" fill="rgba(140,160,200,.6)" font-size="7.5" font-family="monospace">ABANDONMENT</text>
-          <text x="564" y="388" text-anchor="middle" fill="rgba(255,77,77,.75)" font-size="9" font-family="monospace">56%</text>
-          <text x="580" y="388" text-anchor="middle" fill="rgba(140,160,200,.5)" font-size="9" font-family="monospace">→</text>
-          <text x="598" y="388" text-anchor="middle" fill="rgba(61,232,160,.85)" font-size="9" font-family="monospace">29%</text>
-
-          <!-- Hunter class emblem — top right corner (crescent / arc motif) -->
-          <polygon points="648,14 668,14 668,44 648,44 638,29" fill="rgba(100,70,200,.14)" stroke="rgba(140,110,240,.32)" stroke-width=".8"/>
-          <text x="653" y="27" fill="rgba(180,160,255,.75)" font-size="7" font-family="monospace" font-weight="bold">HUNTER</text>
-          <text x="657" y="38" fill="rgba(120,100,210,.55)" font-size="6" font-family="monospace">CLASS</text>
-        </svg>
-      </div>
-      <div class="pcard-body">
-        <h3 class="pcard-title">Endgame Onboarding System — Destiny 2 Raid Social Architecture</h3>
-        <p class="pcard-desc">Solving the hardest onboarding problem in live-service: getting players into endgame content. A 5-layer behavioural learning model that verifies readiness through behaviour, not assumptions. Abandonment dropped from 56% to 29%.</p>
-        <div class="pcard-tags">
-          <span class="ptag ptag-blue">Gaming · UX</span>
-          <span class="ptag">Onboarding Architecture</span>
-          <span class="ptag">Behavioural Systems</span>
-          <span class="ptag">LiveOps Design</span>
-        </div>
-      </div>
-    </div>
-
     <!-- P4: Gacha Engagement Systems — HERO -->
     <div class="pcard" onclick="openModal('gacha')">
       <div class="pcard-preview" style="background:none;overflow:hidden;position:relative;">
@@ -2115,178 +2087,223 @@ footer{
 
     </div><!-- /hero-work-grid -->
 
-  <div class="support-label">The same behavioural systems thinking — applied beyond games</div>
+  <div class="support-label">Supporting work — cross-domain behavioural systems</div>
   <div class="support-grid">
 
-    <!-- P2: Dead by Daylight Retention — SUPPORT -->
-    <div class="pcard" onclick="openModal('retention')">
-      <div class="pcard-preview">
-        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <!-- Marvel Rivals — HERO -->
+    <div class="pcard" onclick="openModal('marvel')" style="">
+      <div class="pcard-preview" style="background:linear-gradient(135deg,#0a0c18 0%,#10121e 60%,#0c0e1a 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
           <defs>
-            <radialGradient id="dbdFog" cx="50%" cy="100%" r="70%">
-              <stop offset="0%" stop-color="#5a0a0a" stop-opacity=".7"/>
-              <stop offset="50%" stop-color="#2a0505" stop-opacity=".4"/>
-              <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+            <radialGradient id="clashCore" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity=".95"/>
+              <stop offset="15%" stop-color="#ffe066" stop-opacity=".85"/>
+              <stop offset="40%" stop-color="#e85d20" stop-opacity=".6"/>
+              <stop offset="70%" stop-color="#1a3aaa" stop-opacity=".3"/>
+              <stop offset="100%" stop-color="#050815" stop-opacity="0"/>
             </radialGradient>
-            <radialGradient id="hookGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#c84848" stop-opacity=".35"/>
-              <stop offset="100%" stop-color="#c84848" stop-opacity="0"/>
+            <radialGradient id="blueTeamGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#4488ff" stop-opacity=".7"/>
+              <stop offset="100%" stop-color="#4488ff" stop-opacity="0"/>
             </radialGradient>
-            <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#ff2020" stop-opacity=".9"/>
-              <stop offset="60%" stop-color="#c84848" stop-opacity=".5"/>
-              <stop offset="100%" stop-color="#c84848" stop-opacity="0"/>
+            <radialGradient id="redTeamGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff3333" stop-opacity=".6"/>
+              <stop offset="100%" stop-color="#ff3333" stop-opacity="0"/>
             </radialGradient>
-            <filter id="blur4">
-              <feGaussianBlur stdDeviation="4"/>
+            <filter id="mblur6">
+              <feGaussianBlur stdDeviation="6"/>
             </filter>
-            <filter id="blur8">
-              <feGaussianBlur stdDeviation="8"/>
+            <filter id="mblur12">
+              <feGaussianBlur stdDeviation="12"/>
             </filter>
-            <filter id="blur2">
+            <filter id="mblur3">
+              <feGaussianBlur stdDeviation="3"/>
+            </filter>
+            <filter id="mblur2">
               <feGaussianBlur stdDeviation="2"/>
             </filter>
           </defs>
 
-          <!-- Sky — deep void black -->
-          <rect width="680" height="400" fill="#050205"/>
+          <!-- Background — deep space-city -->
+          <rect width="680" height="400" fill="#040610"/>
 
-          <!-- Distant moon glow — pale, sickly -->
-          <circle cx="340" cy="60" r="55" fill="rgba(180,160,130,.04)" filter="url(#blur8)"/>
-          <circle cx="340" cy="60" r="28" fill="rgba(200,180,150,.06)" filter="url(#blur4)"/>
-          <circle cx="340" cy="60" r="14" fill="rgba(220,200,170,.08)"/>
+          <!-- City skyline silhouette — distant -->
+          <rect x="0" y="280" width="680" height="120" fill="#060812"/>
+          <rect x="20" y="240" width="30" height="60" fill="#060812"/>
+          <rect x="55" y="255" width="22" height="45" fill="#060812"/>
+          <rect x="80" y="230" width="35" height="70" fill="#060812"/>
+          <rect x="120" y="248" width="18" height="52" fill="#060812"/>
+          <rect x="560" y="245" width="30" height="55" fill="#060812"/>
+          <rect x="595" y="232" width="25" height="68" fill="#060812"/>
+          <rect x="625" y="250" width="20" height="50" fill="#060812"/>
+          <rect x="648" y="238" width="32" height="62" fill="#060812"/>
 
-          <!-- Dead tree — far left -->
-          <line x1="60" y1="400" x2="75" y2="220" stroke="#0f0808" stroke-width="14"/>
-          <line x1="75" y1="280" x2="40" y2="230" stroke="#0f0808" stroke-width="7"/>
-          <line x1="75" y1="260" x2="110" y2="215" stroke="#0f0808" stroke-width="6"/>
-          <line x1="40" y1="230" x2="20" y2="210" stroke="#0f0808" stroke-width="4"/>
-          <line x1="110" y1="215" x2="130" y2="195" stroke="#0f0808" stroke-width="4"/>
-          <line x1="75" y1="240" x2="55" y2="218" stroke="#0f0808" stroke-width="4"/>
-          <line x1="75" y1="220" x2="65" y2="200" stroke="#0f0808" stroke-width="5"/>
-          <line x1="65" y1="200" x2="50" y2="185" stroke="#0f0808" stroke-width="3"/>
-          <line x1="65" y1="200" x2="80" y2="182" stroke="#0f0808" stroke-width="3"/>
-          <!-- root suggestions -->
-          <line x1="60" y1="395" x2="30" y2="400" stroke="#0f0808" stroke-width="6"/>
-          <line x1="60" y1="395" x2="85" y2="400" stroke="#0f0808" stroke-width="5"/>
+          <!-- Building windows — tiny lights -->
+          <rect x="26" y="244" width="4" height="3" fill="rgba(255,220,100,.3)" rx="1"/>
+          <rect x="34" y="250" width="4" height="3" fill="rgba(100,180,255,.3)" rx="1"/>
+          <rect x="86" y="236" width="4" height="3" fill="rgba(255,220,100,.25)" rx="1"/>
+          <rect x="95" y="244" width="4" height="3" fill="rgba(255,220,100,.2)" rx="1"/>
+          <rect x="601" y="238" width="4" height="3" fill="rgba(100,180,255,.3)" rx="1"/>
+          <rect x="610" y="246" width="4" height="3" fill="rgba(255,220,100,.25)" rx="1"/>
+          <rect x="654" y="244" width="4" height="3" fill="rgba(100,180,255,.3)" rx="1"/>
 
-          <!-- Dead tree — far right -->
-          <line x1="620" y1="400" x2="605" y2="210" stroke="#0f0808" stroke-width="13"/>
-          <line x1="605" y1="270" x2="640" y2="225" stroke="#0f0808" stroke-width="6"/>
-          <line x1="605" y1="250" x2="572" y2="210" stroke="#0f0808" stroke-width="6"/>
-          <line x1="640" y1="225" x2="660" y2="205" stroke="#0f0808" stroke-width="4"/>
-          <line x1="572" y1="210" x2="550" y2="192" stroke="#0f0808" stroke-width="4"/>
-          <line x1="605" y1="230" x2="625" y2="210" stroke="#0f0808" stroke-width="4"/>
-          <line x1="605" y1="210" x2="618" y2="192" stroke="#0f0808" stroke-width="4"/>
-          <line x1="618" y1="192" x2="608" y2="175" stroke="#0f0808" stroke-width="3"/>
-          <line x1="618" y1="192" x2="632" y2="178" stroke="#0f0808" stroke-width="3"/>
-          <line x1="620" y1="395" x2="645" y2="400" stroke="#0f0808" stroke-width="6"/>
-          <line x1="620" y1="395" x2="598" y2="400" stroke="#0f0808" stroke-width="5"/>
+          <!-- Speed lines radiating from clash point (340, 185) — going outward -->
+          <!-- Blue team side — left -->
+          <line x1="340" y1="185" x2="30" y2="50" stroke="rgba(80,140,255,.18)" stroke-width="1.5"/>
+          <line x1="340" y1="185" x2="0" y2="140" stroke="rgba(80,140,255,.14)" stroke-width="1.2"/>
+          <line x1="340" y1="185" x2="10" y2="200" stroke="rgba(80,140,255,.16)" stroke-width="1.2"/>
+          <line x1="340" y1="185" x2="0" y2="260" stroke="rgba(80,140,255,.12)" stroke-width="1"/>
+          <line x1="340" y1="185" x2="50" y2="340" stroke="rgba(80,140,255,.1)" stroke-width="1"/>
+          <line x1="340" y1="185" x2="150" y2="0" stroke="rgba(80,140,255,.12)" stroke-width="1"/>
+          <line x1="340" y1="185" x2="80" y2="0" stroke="rgba(80,140,255,.1)" stroke-width="1"/>
 
-          <!-- Mid trees — centre-left -->
-          <line x1="200" y1="400" x2="208" y2="260" stroke="#100808" stroke-width="9"/>
-          <line x1="208" y1="310" x2="182" y2="272" stroke="#100808" stroke-width="5"/>
-          <line x1="208" y1="290" x2="232" y2="258" stroke="#100808" stroke-width="5"/>
-          <line x1="208" y1="260" x2="195" y2="240" stroke="#100808" stroke-width="4"/>
-          <line x1="208" y1="260" x2="220" y2="242" stroke="#100808" stroke-width="4"/>
+          <!-- Red/gold team side — right -->
+          <line x1="340" y1="185" x2="650" y2="50" stroke="rgba(255,140,30,.18)" stroke-width="1.5"/>
+          <line x1="340" y1="185" x2="680" y2="130" stroke="rgba(255,140,30,.14)" stroke-width="1.2"/>
+          <line x1="340" y1="185" x2="680" y2="210" stroke="rgba(255,140,30,.16)" stroke-width="1.2"/>
+          <line x1="340" y1="185" x2="680" y2="280" stroke="rgba(255,140,30,.12)" stroke-width="1"/>
+          <line x1="340" y1="185" x2="530" y2="350" stroke="rgba(255,140,30,.1)" stroke-width="1"/>
+          <line x1="340" y1="185" x2="520" y2="0" stroke="rgba(255,140,30,.12)" stroke-width="1"/>
+          <line x1="340" y1="185" x2="620" y2="0" stroke="rgba(255,140,30,.1)" stroke-width="1"/>
 
-          <!-- Mid trees — centre-right -->
-          <line x1="480" y1="400" x2="472" y2="255" stroke="#100808" stroke-width="9"/>
-          <line x1="472" y1="305" x2="498" y2="268" stroke="#100808" stroke-width="5"/>
-          <line x1="472" y1="285" x2="448" y2="252" stroke="#100808" stroke-width="5"/>
-          <line x1="472" y1="255" x2="485" y2="236" stroke="#100808" stroke-width="4"/>
-          <line x1="472" y1="255" x2="458" y2="238" stroke="#100808" stroke-width="4"/>
+          <!-- Blue team aura — left -->
+          <ellipse cx="160" cy="185" rx="120" ry="140" fill="url(#blueTeamGlow)" filter="url(#mblur12)"/>
 
-          <!-- Ground — dark earth -->
-          <rect x="0" y="340" width="680" height="60" fill="#080404"/>
-          <!-- Ground texture lines -->
-          <line x1="0" y1="355" x2="680" y2="355" stroke="#0d0606" stroke-width="1"/>
-          <line x1="0" y1="368" x2="680" y2="368" stroke="#0d0606" stroke-width="1"/>
+          <!-- Red/gold team aura — right -->
+          <ellipse cx="520" cy="185" rx="120" ry="140" fill="url(#redTeamGlow)" filter="url(#mblur12)"/>
 
-          <!-- Red ground fog -->
-          <rect x="0" y="310" width="680" height="90" fill="url(#dbdFog)"/>
-          <ellipse cx="340" cy="380" rx="280" ry="40" fill="rgba(80,5,5,.5)" filter="url(#blur8)"/>
-          <ellipse cx="340" cy="370" rx="200" ry="25" fill="rgba(120,8,8,.3)" filter="url(#blur4)"/>
+          <!-- Hero silhouettes — BLUE TEAM (left) -->
+          <!-- Hero 1 — central, crouching combat pose -->
+          <g transform="translate(130, 110)">
+            <!-- body -->
+            <ellipse cx="0" cy="55" rx="18" ry="28" fill="#0a1535" opacity=".9"/>
+            <!-- head -->
+            <circle cx="0" cy="22" r="14" fill="#0a1535" opacity=".9"/>
+            <!-- cape/wing left -->
+            <path d="M -18 40 Q -45 60 -38 90 Q -20 75 -18 65 Z" fill="#0d1a40" opacity=".85"/>
+            <!-- arm raised -->
+            <line x1="-18" y1="45" x2="-38" y2="25" stroke="#0a1535" stroke-width="8" stroke-linecap="round" opacity=".9"/>
+            <!-- energy hand glow -->
+            <circle cx="-38" cy="25" r="7" fill="rgba(80,150,255,.6)" filter="url(#mblur3)"/>
+            <circle cx="-38" cy="25" r="3" fill="rgba(180,220,255,.8)"/>
+            <!-- legs -->
+            <line x1="-8" y1="83" x2="-14" y2="110" stroke="#0a1535" stroke-width="9" stroke-linecap="round" opacity=".9"/>
+            <line x1="8" y1="83" x2="12" y2="108" stroke="#0a1535" stroke-width="9" stroke-linecap="round" opacity=".9"/>
+            <!-- team colour accent -->
+            <ellipse cx="0" cy="48" rx="6" ry="8" fill="rgba(80,140,255,.35)"/>
+          </g>
 
-          <!-- Hook glow aura -->
-          <ellipse cx="340" cy="155" rx="70" ry="80" fill="url(#hookGlow)" filter="url(#blur8)"/>
+          <!-- Hero 2 — blue team, left back -->
+          <g transform="translate(68, 130)" opacity=".7">
+            <ellipse cx="0" cy="50" rx="14" ry="22" fill="#081228"/>
+            <circle cx="0" cy="20" r="11" fill="#081228"/>
+            <!-- shield suggestion -->
+            <path d="M -16 30 Q -22 50 -16 70 Q -8 60 -8 48 Z" fill="#0d1e45"/>
+            <line x1="16" y1="38" x2="30" y2="20" stroke="#081228" stroke-width="7" stroke-linecap="round"/>
+            <line x1="-8" y1="72" x2="-12" y2="96" stroke="#081228" stroke-width="7" stroke-linecap="round"/>
+            <line x1="8" y1="72" x2="10" y2="95" stroke="#081228" stroke-width="7" stroke-linecap="round"/>
+          </g>
 
-          <!-- The hook — thick, rusted, iconic -->
-          <!-- Vertical shaft -->
-          <line x1="340" y1="30" x2="340" y2="170" stroke="#6b1a1a" stroke-width="5"/>
-          <line x1="340" y1="30" x2="340" y2="170" stroke="#3d0f0f" stroke-width="3"/>
-          <!-- Horizontal bar at top -->
-          <line x1="310" y1="30" x2="370" y2="30" stroke="#5a1515" stroke-width="5"/>
-          <!-- Hook curve -->
-          <path d="M 340 170 Q 340 210 310 220 Q 280 228 276 210 Q 272 192 290 188" stroke="#6b1a1a" stroke-width="5" fill="none" stroke-linecap="round"/>
-          <path d="M 340 170 Q 340 210 310 220 Q 280 228 276 210 Q 272 192 290 188" stroke="#3d0f0f" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <!-- Hook tip point -->
-          <path d="M 290 188 L 284 182 L 295 180" stroke="#8b2020" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Hero silhouettes — RED/GOLD TEAM (right) -->
+          <!-- Hero 3 — central, attacking pose -->
+          <g transform="translate(550, 108)">
+            <ellipse cx="0" cy="55" rx="18" ry="28" fill="#2a0808" opacity=".9"/>
+            <circle cx="0" cy="22" r="14" fill="#2a0808" opacity=".9"/>
+            <!-- armour shoulder -->
+            <path d="M 18 35 Q 42 28 45 50 Q 35 58 18 52 Z" fill="#1f0a0a" opacity=".9"/>
+            <!-- arm blasting forward -->
+            <line x1="18" y1="45" x2="42" y2="30" stroke="#2a0808" stroke-width="8" stroke-linecap="round" opacity=".9"/>
+            <!-- repulsor blast -->
+            <circle cx="46" cy="28" r="9" fill="rgba(255,120,30,.55)" filter="url(#mblur3)"/>
+            <circle cx="46" cy="28" r="4" fill="rgba(255,220,100,.85)"/>
+            <!-- legs -->
+            <line x1="-8" y1="83" x2="-12" y2="110" stroke="#2a0808" stroke-width="9" stroke-linecap="round" opacity=".9"/>
+            <line x1="8" y1="83" x2="14" y2="108" stroke="#2a0808" stroke-width="9" stroke-linecap="round" opacity=".9"/>
+            <!-- team colour accent -->
+            <ellipse cx="0" cy="48" rx="6" ry="8" fill="rgba(255,80,30,.3)"/>
+          </g>
 
-          <!-- Blood drip 1 -->
-          <line x1="340" y1="175" x2="340" y2="200" stroke="#8b0000" stroke-width="2" opacity=".8"/>
-          <ellipse cx="340" cy="202" rx="3" ry="4" fill="#6b0000" opacity=".7"/>
-          <!-- Blood drip 2 — off hook curve -->
-          <line x1="308" y1="222" x2="306" y2="245" stroke="#8b0000" stroke-width="1.5" opacity=".6"/>
-          <ellipse cx="306" cy="247" rx="2.5" ry="3.5" fill="#6b0000" opacity=".55"/>
-          <!-- Blood drip 3 -->
-          <line x1="278" y1="210" x2="275" y2="230" stroke="#8b0000" stroke-width="1.5" opacity=".5"/>
-          <ellipse cx="275" cy="232" rx="2" ry="3" fill="#6b0000" opacity=".45"/>
+          <!-- Hero 4 — red team, right back -->
+          <g transform="translate(610, 125)" opacity=".7">
+            <ellipse cx="0" cy="50" rx="14" ry="22" fill="#1e0606"/>
+            <circle cx="0" cy="20" r="11" fill="#1e0606"/>
+            <!-- cape -->
+            <path d="M -14 35 Q -18 55 -14 75 Q -6 62 -6 50 Z" fill="#2a0808"/>
+            <line x1="-16" y1="38" x2="-28" y2="20" stroke="#1e0606" stroke-width="7" stroke-linecap="round"/>
+            <line x1="-8" y1="72" x2="-10" y2="96" stroke="#1e0606" stroke-width="7" stroke-linecap="round"/>
+            <line x1="8" y1="72" x2="12" y2="95" stroke="#1e0606" stroke-width="7" stroke-linecap="round"/>
+          </g>
 
-          <!-- Entity eyes — lurking in darkness, top corners -->
-          <!-- Eye pair left -->
-          <ellipse cx="120" cy="110" rx="5" ry="3" fill="url(#eyeGlow)" filter="url(#blur2)"/>
-          <ellipse cx="120" cy="110" rx="2.5" ry="1.5" fill="#ff1a1a"/>
-          <ellipse cx="138" cy="116" rx="4" ry="2.5" fill="url(#eyeGlow)" filter="url(#blur2)"/>
-          <ellipse cx="138" cy="116" rx="2" ry="1.2" fill="#ff1a1a"/>
+          <!-- Energy beams converging to clash point -->
+          <!-- Blue beam -->
+          <path d="M 175 175 Q 260 182 330 185" stroke="rgba(80,160,255,.7)" stroke-width="8" fill="none" stroke-linecap="round" filter="url(#mblur2)"/>
+          <path d="M 175 175 Q 260 182 330 185" stroke="rgba(180,220,255,.9)" stroke-width="2" fill="none" stroke-linecap="round"/>
 
-          <!-- Eye pair right -->
-          <ellipse cx="558" cy="105" rx="5" ry="3" fill="url(#eyeGlow)" filter="url(#blur2)"/>
-          <ellipse cx="558" cy="105" rx="2.5" ry="1.5" fill="#ff1a1a"/>
-          <ellipse cx="542" cy="112" rx="4" ry="2.5" fill="url(#eyeGlow)" filter="url(#blur2)"/>
-          <ellipse cx="542" cy="112" rx="2" ry="1.2" fill="#ff1a1a"/>
+          <!-- Red/gold beam -->
+          <path d="M 505 178 Q 420 183 350 185" stroke="rgba(255,120,30,.65)" stroke-width="8" fill="none" stroke-linecap="round" filter="url(#mblur2)"/>
+          <path d="M 505 178 Q 420 183 350 185" stroke="rgba(255,220,100,.85)" stroke-width="2" fill="none" stroke-linecap="round"/>
 
-          <!-- Eye — centre top -->
-          <ellipse cx="340" cy="18" rx="6" ry="3.5" fill="url(#eyeGlow)" filter="url(#blur2)"/>
-          <ellipse cx="340" cy="18" rx="3" ry="1.8" fill="#ff2020"/>
+          <!-- CLASH EXPLOSION — core -->
+          <circle cx="340" cy="185" r="55" fill="url(#clashCore)" filter="url(#mblur6)"/>
+          <circle cx="340" cy="185" r="30" fill="rgba(255,240,180,.15)" filter="url(#mblur3)"/>
+          <!-- Bright core -->
+          <circle cx="340" cy="185" r="10" fill="rgba(255,255,255,.7)"/>
+          <circle cx="340" cy="185" r="5" fill="white"/>
 
-          <!-- Crow silhouette — left of hook -->
-          <path d="M 255 82 L 262 76 L 268 80 L 272 74 L 278 78 L 268 88 Z" fill="#0d0606"/>
-          <path d="M 255 82 L 245 78 L 248 86 Z" fill="#0d0606"/>
-          <!-- Crow — right -->
-          <path d="M 410 90 L 417 84 L 423 88 L 427 82 L 433 86 L 423 96 Z" fill="#0d0606"/>
-          <path d="M 410 90 L 400 86 L 403 94 Z" fill="#0d0606"/>
+          <!-- Clash shards -->
+          <line x1="340" y1="185" x2="320" y2="155" stroke="rgba(255,240,160,.6)" stroke-width="2"/>
+          <line x1="340" y1="185" x2="360" y2="152" stroke="rgba(255,240,160,.5)" stroke-width="2"/>
+          <line x1="340" y1="185" x2="310" y2="210" stroke="rgba(255,240,160,.5)" stroke-width="1.5"/>
+          <line x1="340" y1="185" x2="370" y2="208" stroke="rgba(255,240,160,.5)" stroke-width="1.5"/>
+          <line x1="340" y1="185" x2="295" y2="175" stroke="rgba(180,220,255,.55)" stroke-width="1.5"/>
+          <line x1="340" y1="185" x2="385" y2="172" stroke="rgba(255,160,50,.55)" stroke-width="1.5"/>
 
-          <!-- Label band at bottom -->
-          <rect x="0" y="330" width="680" height="70" fill="rgba(3,1,1,.88)"/>
-          <line x1="0" y1="330" x2="680" y2="330" stroke="rgba(180,30,30,.25)" stroke-width="1"/>
+          <!-- Team HUD indicators — left -->
+          <rect x="18" y="18" width="100" height="28" fill="rgba(5,10,30,.8)" rx="3" stroke="rgba(80,140,255,.3)" stroke-width="1"/>
+          <circle cx="32" cy="32" r="7" fill="rgba(80,140,255,.25)" stroke="rgba(80,140,255,.5)" stroke-width="1"/>
+          <text x="32" y="36" text-anchor="middle" fill="rgba(80,180,255,.8)" font-size="7" font-family="monospace" font-weight="bold">B</text>
+          <text x="46" y="27" fill="rgba(140,180,255,.7)" font-size="6.5" font-family="monospace">TEAM BLUE</text>
+          <text x="46" y="38" fill="rgba(80,140,255,.6)" font-size="6" font-family="monospace">MMR: 2,340</text>
 
-          <!-- Title -->
-          <text x="340" y="354" text-anchor="middle" fill="#c84848" font-size="15" font-family="'Georgia',serif" font-weight="bold" letter-spacing="3">DEAD BY DAYLIGHT</text>
-          <line x1="140" y1="360" x2="270" y2="360" stroke="rgba(180,30,30,.3)" stroke-width=".8"/>
-          <line x1="410" y1="360" x2="540" y2="360" stroke="rgba(180,30,30,.3)" stroke-width=".8"/>
-          <text x="340" y="360" text-anchor="middle" fill="rgba(180,30,30,.5)" font-size="7" font-family="monospace" letter-spacing="2">✦</text>
+          <!-- Team HUD indicators — right -->
+          <rect x="562" y="18" width="100" height="28" fill="rgba(20,5,5,.8)" rx="3" stroke="rgba(255,80,30,.3)" stroke-width="1"/>
+          <circle cx="576" cy="32" r="7" fill="rgba(255,60,30,.2)" stroke="rgba(255,80,30,.5)" stroke-width="1"/>
+          <text x="576" y="36" text-anchor="middle" fill="rgba(255,120,50,.8)" font-size="7" font-family="monospace" font-weight="bold">R</text>
+          <text x="590" y="27" fill="rgba(255,160,100,.7)" font-size="6.5" font-family="monospace">TEAM RED</text>
+          <text x="590" y="38" fill="rgba(255,100,50,.6)" font-size="6" font-family="monospace">MMR: 2,318</text>
 
-          <!-- Subtitle -->
-          <text x="340" y="375" text-anchor="middle" fill="rgba(160,120,120,.55)" font-size="8.5" font-family="monospace" letter-spacing="1.2">LIFECYCLE DROP-OFF MAPPING · COHORT RETENTION</text>
+          <!-- Match stat bar — top centre -->
+          <rect x="270" y="12" width="140" height="20" fill="rgba(8,10,22,.85)" rx="2" stroke="rgba(255,220,80,.2)" stroke-width=".8"/>
+          <text x="340" y="26" text-anchor="middle" fill="rgba(255,220,100,.7)" font-size="7.5" font-family="monospace" letter-spacing="1">LIVE MATCH</text>
 
-          <!-- Stats bottom right -->
-          <text x="654" y="396" text-anchor="end" fill="rgba(180,30,30,.45)" font-size="7.5" font-family="monospace">42.3% D7 AVG · 68% CHURN SIGNAL · 10,012 PLAYERS</text>
+          <!-- Label band -->
+          <rect x="0" y="330" width="680" height="70" fill="rgba(4,6,16,.92)"/>
+          <line x1="0" y1="330" x2="680" y2="330" stroke="rgba(80,120,255,.2)" stroke-width="1"/>
+
+          <!-- Marvel M shield suggestion -->
+          <path d="M 320 347 L 326 344 L 340 350 L 354 344 L 360 347 L 360 358 Q 340 368 320 358 Z" fill="rgba(200,20,20,.7)" stroke="rgba(255,60,60,.4)" stroke-width=".8"/>
+          <text x="340" y="356" text-anchor="middle" fill="rgba(255,255,255,.6)" font-size="6" font-family="monospace" font-weight="bold">M</text>
+
+          <text x="340" y="375" text-anchor="middle" fill="rgba(220,190,255,.75)" font-size="14" font-family="'Georgia',serif" font-weight="bold" letter-spacing="3">MARVEL RIVALS</text>
+          <line x1="100" y1="380" x2="240" y2="380" stroke="rgba(80,120,255,.25)" stroke-width=".8"/>
+          <line x1="440" y1="380" x2="580" y2="380" stroke="rgba(255,80,30,.25)" stroke-width=".8"/>
+          <text x="340" y="380" text-anchor="middle" fill="rgba(180,140,255,.4)" font-size="7" font-family="monospace">✦</text>
+          <text x="340" y="394" text-anchor="middle" fill="rgba(130,140,180,.45)" font-size="8.5" font-family="monospace" letter-spacing="1">SESSION EQUITY · MATCHMAKING FAIRNESS · MMR CALIBRATION</text>
         </svg>
       </div>
       <div class="pcard-body">
-        <h3 class="pcard-title">Lifecycle Drop-Off Mapping — Dead by Daylight Retention</h3>
-        <p class="pcard-desc">Cohort retention analysis identifying exactly where in the player lifecycle engagement collapses — and which behavioural signals predict it before it happens.</p>
+        <h3 class="pcard-title">Session Equity &amp; Matchmaking Fairness — Marvel Rivals</h3>
+        <p class="pcard-desc">Designing the systems that make every session feel fair. MMR calibration, role-queue balance, and session equity — the behavioural layer that determines whether players stay or churn after a single match.</p>
         <div class="pcard-tags">
-          <span class="ptag ptag-blue">Gaming</span>
-          <span class="ptag">SQL</span>
-          <span class="ptag">Tableau</span>
-          <span class="ptag">Cohort Analysis</span>
+          <span class="ptag ptag-blue">Gaming · Systems</span>
+          <span class="ptag">Matchmaking</span>
+          <span class="ptag">LiveOps</span>
+          <span class="ptag">Behavioural Systems</span>
         </div>
       </div>
     </div>
 
-    <!-- P3: Credit UX — SUPPORT -->
+  <!-- P3: Credit UX — SUPPORT -->
     <div class="pcard" onclick="openModal('credit')">
       <div class="pcard-preview" style="background:linear-gradient(135deg,#0c0918 0%,#111828 50%,#0a1a10 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
 
@@ -2415,7 +2432,7 @@ footer{
       </div>
       <div class="pcard-body">
         <h3 class="pcard-title">Behavioural Nudge Systems — Consumer Credit UX</h3>
-        <p class="pcard-desc">The same activation and engagement logic from live-service games — applied to fintech. Contextual nudges, goal-linked feedback, and friction reduction at the point of financial decision-making.</p>
+        <p class="pcard-desc">The same behavioural systems that predict player churn — applied to financial product activation. Contextual nudges, goal-linked feedback, and friction reduction at the point of financial decision-making.</p>
         <div class="pcard-tags">
           <span class="ptag ptag-purple">Fintech</span>
           <span class="ptag">UX Systems</span>
@@ -2612,7 +2629,7 @@ footer{
       <h2>Snapshots</h2>
       <p>Screens, explorations and interfaces I've designed — curated and ongoing.</p>
     </div>
-    <a href="https://diamond-apparel-ca4.notion.site/Portfolio-36d20d328f448012af39c1beddca4704" target="_blank" class="view-all">VIEW ALL →</a>
+    <a href="https://diamond-apparel-ca4.notion.site/Portfolio-36d20d328f448012af39c1beddca4704" target="_blank" class="view-all">Full case studies →</a>
   </div>
 
   <div class="snap-track-wrap">
@@ -3204,7 +3221,7 @@ const DATA={
     period:'Jun 2026',
     embedUrl:'maya-before-after.html',
     streamlit:null,
-    desc:'A UX systems case study on transparency-first design in consumer credit. Designed a conceptual experience with contextual "why did this change?" explanations, credit visibility within transaction flows, behavioural nudges tied to life goals, and embedded financial education at the point of action.',
+    desc:'The same behavioural systems that predict player churn — applied to financial product activation. A UX systems case study on transparency-first design in consumer credit: contextual "why did this change?" explanations, credit visibility within transaction flows, behavioural nudges tied to life goals, and embedded financial education at the point of action.',
     insight:'Credit anxiety is driven less by lack of information and more by lack of context at the moment of financial decision-making. The fix isn\'t more data — it\'s better-timed explanation.',
     signals:['Contextual "why did this change?" explanations','Credit visibility embedded in transaction flows','Behavioural nudges tied to life goals (renting, loans)','Credit recovery and rebuilding pathways','Financial education embedded at point of action'],
     tools:['UX Systems Design','Behavioural Finance','Product Design','Service Design','Financial UX'],
