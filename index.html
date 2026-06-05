@@ -260,10 +260,31 @@ nav{
   gap:16px;
 }
 /* Support projects — 3-col, compact */
+.support-grid-wrap{
+  position:relative;
+}
+.support-grid-wrap::before,
+.support-grid-wrap::after{
+  content:'';
+  position:absolute;top:0;bottom:0;
+  width:60px;z-index:10;pointer-events:none;
+}
+.support-grid-wrap::before{left:0;background:linear-gradient(to right,var(--bg),transparent)}
+.support-grid-wrap::after{right:0;background:linear-gradient(to left,var(--bg),transparent)}
 .support-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
+  display:flex;
   gap:12px;
+  overflow-x:auto;
+  scroll-behavior:smooth;
+  scrollbar-width:none;
+  cursor:grab;
+  user-select:none;
+  padding-bottom:4px;
+}
+.support-grid::-webkit-scrollbar{display:none}
+.support-grid.dragging{cursor:grabbing;scroll-behavior:auto}
+.support-grid .pcard{
+  flex:0 0 340px;
 }
 .support-label{
   font-family:var(--mono);font-size:.6rem;
@@ -806,7 +827,7 @@ footer{
   /* Work grids */
   .work-grid{grid-template-columns:1fr}
   .hero-work-grid{grid-template-columns:1fr}
-  .support-grid{grid-template-columns:1fr 1fr}
+  .support-grid .pcard{flex:0 0 300px}
 
   /* About */
   .about-grid{grid-template-columns:1fr;gap:48px}
@@ -2342,7 +2363,8 @@ footer{
   </div><!-- /hero-work-grid -->
 
   <div class="support-label">More projects — gaming systems, fintech &amp; cross-domain</div>
-  <div class="support-grid">
+  <div class="support-grid-wrap">
+  <div class="support-grid" id="support-track">
 
     <!-- P2: Dead by Daylight Retention — SUPPORT -->
     <div class="pcard" onclick="openModal('retention')">
@@ -2906,6 +2928,7 @@ footer{
     </div>
 
   </div>
+  </div><!-- /support-grid-wrap -->
 </div>
 
 <div class="divider"></div>
@@ -3758,6 +3781,27 @@ function saveUrl(){
   closeUrlDlg();
   openModal(activeKey);
 }
+
+/* ── DRAG-SCROLL for horizontal tracks ── */
+(function(){
+  function makeDraggable(el){
+    if(!el) return;
+    let isDown=false, startX, scrollLeft;
+    el.addEventListener('mousedown', e=>{
+      isDown=true; el.classList.add('dragging');
+      startX=e.pageX-el.offsetLeft; scrollLeft=el.scrollLeft;
+    });
+    el.addEventListener('mouseleave',()=>{isDown=false;el.classList.remove('dragging')});
+    el.addEventListener('mouseup',()=>{isDown=false;el.classList.remove('dragging')});
+    el.addEventListener('mousemove', e=>{
+      if(!isDown) return; e.preventDefault();
+      const x=e.pageX-el.offsetLeft, walk=(x-startX)*1.2;
+      el.scrollLeft=scrollLeft-walk;
+    });
+  }
+  makeDraggable(document.getElementById('snap-track'));
+  makeDraggable(document.getElementById('support-track'));
+})();
 </script>
 </body>
 </html>
