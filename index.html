@@ -951,6 +951,120 @@ footer{
   footer{padding:20px 12px}
   .foot-left{font-size:.68rem}
 }
+
+/* ── CHARACTER ATTACHMENT ARCHITECTURE ── */
+.caa-eyebrow{font-family:var(--mono);font-size:.65rem;color:var(--purple);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.caa-eyebrow::before{content:'';width:24px;height:1px;background:var(--purple);opacity:.5}
+.caa-prose{font-size:.88rem;color:var(--muted2);line-height:1.8;max-width:820px;margin-bottom:20px}
+.caa-prose strong{color:var(--text);font-weight:600}
+.caa-prose em{font-style:italic;font-family:var(--serif);color:var(--muted2)}
+.caa-layer{border-top:1px solid var(--border);padding-top:52px;margin-top:52px}
+.caa-layer-num{font-family:var(--mono);font-size:.62rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.caa-layer-title{font-size:clamp(1.2rem,2.2vw,1.6rem);font-weight:700;letter-spacing:-.03em;margin-bottom:6px;color:var(--text)}
+.caa-layer-subtitle{font-size:.82rem;color:var(--muted2);margin-bottom:28px;max-width:700px}
+.caa-model-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border);margin-bottom:28px}
+.caa-model-card{padding:22px 20px;border-right:1px solid var(--border)}
+.caa-model-card:last-child{border-right:none}
+.caa-model-label{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+.caa-model-label.primary{color:var(--purple)}
+.caa-model-label.dcuo{color:var(--blue)}
+.caa-model-title{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:8px;letter-spacing:-.01em}
+.caa-model-body{font-size:.78rem;color:var(--muted2);line-height:1.72}
+.caa-model-body strong{color:var(--text)}
+.caa-model-body em{font-style:italic;font-family:var(--serif)}
+.caa-comparator{background:rgba(61,232,160,.03);border:1px solid rgba(61,232,160,.12);border-left:2px solid var(--green);padding:14px 18px;margin-top:20px}
+.caa-comparator-label{font-family:var(--mono);font-size:.58rem;color:var(--green);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+.caa-comparator-body{font-size:.8rem;color:var(--muted2);line-height:1.72}
+.caa-comparator-body strong{color:var(--text)}
+.caa-insight{border-left:2px solid var(--purple);padding:12px 16px;background:rgba(155,109,255,.04);margin:20px 0}
+.caa-insight-label{font-family:var(--mono);font-size:.58rem;color:var(--purple);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.caa-insight-text{font-size:.82rem;line-height:1.65;color:var(--text)}
+.caa-mech-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border);margin-bottom:20px}
+.caa-mech-card{padding:20px;border-right:1px solid var(--border)}
+.caa-mech-card:last-child{border-right:none}
+.caa-mech-num{font-family:var(--mono);font-size:.58rem;color:var(--muted);margin-bottom:8px}
+.caa-mech-title{font-size:.9rem;font-weight:600;color:var(--text);margin-bottom:8px;letter-spacing:-.01em}
+.caa-mech-body{font-size:.78rem;color:var(--muted2);line-height:1.72}
+.caa-mech-body strong{color:var(--text)}
+.caa-archetype-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);margin-bottom:20px}
+.caa-archetype{padding:22px 20px;border-right:1px solid var(--border)}
+.caa-archetype:last-child{border-right:none}
+.caa-archetype-name{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:4px}
+.caa-archetype-tag{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;display:block}
+.caa-archetype-body{font-size:.78rem;color:var(--muted2);line-height:1.72}
+.caa-archetype-body strong{color:var(--text)}
+.caa-tier-diagram{border:1px solid var(--border);padding:28px 20px;background:var(--card);margin-bottom:28px}
+.caa-tier-diag-title{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px;text-align:center}
+.caa-tier-row{display:flex;align-items:stretch;border:1px solid var(--border2);margin-bottom:2px}
+.caa-tier-label{flex:0 0 130px;padding:14px 16px;border-right:1px solid var(--border2);display:flex;flex-direction:column;justify-content:center}
+.caa-tier-name{font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.caa-tier-pct{font-family:var(--mono);font-size:.6rem;color:var(--muted)}
+.caa-tier-content{flex:1;padding:12px 16px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:start}
+.caa-tier-attr{font-size:.72rem;color:var(--muted2);line-height:1.55}
+.caa-tier-attr strong{display:block;font-size:.58rem;font-family:var(--mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px}
+.caa-tier-f2p .caa-tier-label{border-left:3px solid var(--green)}
+.caa-tier-dolphin .caa-tier-label{border-left:3px solid var(--blue)}
+.caa-tier-whale .caa-tier-label{border-left:3px solid var(--purple)}
+.caa-amp-loop{border:1px solid var(--border);padding:28px;background:var(--card);margin-bottom:28px}
+.caa-amp-loop-title{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:24px;text-align:center}
+.caa-amp-nodes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:820px;margin:0 auto}
+.caa-amp-node{padding:14px;border:1px solid var(--border2);background:var(--card2);text-align:center}
+.caa-amp-node-num{font-family:var(--mono);font-size:.58rem;color:var(--purple);margin-bottom:5px}
+.caa-amp-node-title{font-size:.75rem;font-weight:600;color:var(--text);margin-bottom:3px}
+.caa-amp-node-sub{font-size:.65rem;color:var(--muted2);line-height:1.5}
+.caa-failure-cards{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border);margin-bottom:28px}
+.caa-failure-card-inner{padding:22px 20px;border-right:1px solid var(--border)}
+.caa-failure-card-inner:last-child{border-right:none}
+.caa-failure-name{font-size:.7rem;font-weight:700;color:var(--red);font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.caa-failure-title{font-size:.9rem;font-weight:600;color:var(--text);margin-bottom:8px;letter-spacing:-.01em}
+.caa-failure-body{font-size:.78rem;color:var(--muted2);line-height:1.72}
+.caa-failure-body strong{color:var(--text)}
+.caa-failure-body em{font-style:italic;font-family:var(--serif)}
+.caa-failure-table-wrap{overflow-x:auto;margin:24px 0;border:1px solid var(--border)}
+.caa-failure-table{width:100%;border-collapse:collapse;font-size:.78rem}
+.caa-failure-table th{font-family:var(--mono);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:11px 14px;text-align:left;border-bottom:1px solid var(--border2);background:var(--card2);white-space:nowrap}
+.caa-failure-table td{padding:12px 14px;border-bottom:1px solid var(--border);color:var(--muted2);vertical-align:top;line-height:1.6}
+.caa-failure-table tr:last-child td{border-bottom:none}
+.caa-failure-table td:first-child{color:var(--text);font-weight:600;white-space:nowrap}
+.fail-tag{font-family:var(--mono);font-size:.57rem;color:var(--red);border:1px solid rgba(255,77,77,.25);padding:.1rem .4rem;white-space:nowrap}
+.partial-tag{font-family:var(--mono);font-size:.57rem;color:var(--amber);border:1px solid rgba(245,158,11,.25);padding:.1rem .4rem;white-space:nowrap}
+.caa-ethics{background:var(--card);border:1px solid var(--border);padding:28px;margin:52px 0 0}
+.caa-ethics-header{font-family:var(--mono);font-size:.6rem;color:var(--amber);letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.caa-ethics-header::before{content:'';width:14px;height:1px;background:var(--amber);opacity:.5}
+.caa-ethics-tensions{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border);margin:20px 0}
+.caa-ethics-tension{padding:18px;border-right:1px solid var(--border)}
+.caa-ethics-tension:last-child{border-right:none}
+.caa-ethics-tension-title{font-size:.8rem;font-weight:600;color:var(--text);margin-bottom:6px}
+.caa-ethics-tension-body{font-size:.75rem;color:var(--muted2);line-height:1.65}
+.caa-closing{border-top:1px solid var(--border);padding-top:52px;margin-top:52px}
+.caa-closing-quote{font-family:var(--serif);font-style:italic;font-size:clamp(1rem,1.8vw,1.3rem);color:var(--text);line-height:1.65;max-width:700px;margin-bottom:22px;border-left:2px solid var(--amber);padding-left:22px}
+.caa-fusion-map{border:1px solid var(--border);background:var(--card);margin-bottom:28px;overflow:hidden}
+.caa-fusion-header{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--card2)}
+.caa-fusion-grid{display:grid;grid-template-columns:160px repeat(3,1fr)}
+.caa-fusion-col-header{padding:11px 14px;font-size:.72rem;font-weight:600;color:var(--text);border-right:1px solid var(--border);border-bottom:1px solid var(--border2);background:rgba(155,109,255,.04)}
+.caa-fusion-col-header:last-child{border-right:none}
+.caa-fusion-row-label{padding:12px 14px;font-size:.72rem;font-weight:600;color:var(--text);border-right:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--card2);line-height:1.4}
+.caa-fusion-cell{padding:11px 14px;font-size:.72rem;color:var(--muted2);line-height:1.55;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
+.caa-fusion-cell:last-child{border-right:none}
+.caa-fusion-pill{display:inline-block;font-family:var(--mono);font-size:.55rem;padding:.1rem .35rem;letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px}
+.caa-fusion-pill.green{color:var(--green);border:1px solid rgba(61,232,160,.2);background:rgba(61,232,160,.04)}
+.caa-fusion-pill.blue{color:var(--blue);border:1px solid rgba(91,143,255,.2);background:rgba(91,143,255,.04)}
+.caa-fusion-pill.purple{color:var(--purple);border:1px solid rgba(155,109,255,.2);background:rgba(155,109,255,.04)}
+@media(max-width:960px){
+  .caa-model-grid,.caa-mech-grid,.caa-failure-cards,.caa-ethics-tensions{grid-template-columns:1fr}
+  .caa-model-card,.caa-mech-card,.caa-failure-card-inner,.caa-ethics-tension{border-right:none}
+  .caa-archetype-grid{grid-template-columns:1fr}
+  .caa-archetype{border-right:none}
+  .caa-tier-content{grid-template-columns:1fr}
+  .caa-fusion-grid{grid-template-columns:110px repeat(3,1fr)}
+  .caa-amp-nodes{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .caa-fusion-grid{grid-template-columns:1fr}
+  .caa-fusion-col-header{display:none}
+  .caa-amp-nodes{grid-template-columns:1fr}
+  .caa-tier-label{flex:0 0 100px}
+}
 </style>
 </head>
 <body>
@@ -2442,6 +2556,313 @@ footer{
   <div class="work-carousel-wrap">
   <div class="work-carousel" id="moreCarousel">
 
+    <!-- CHARACTER ATTACHMENT ARCHITECTURE -->
+    <div class="pcard" onclick="openModal('caa')">
+      <div class="pcard-preview">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="wBg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#030916"/>
+              <stop offset="55%" stop-color="#040c1c"/>
+              <stop offset="100%" stop-color="#020610"/>
+            </linearGradient>
+            <radialGradient id="wResonL" cx="38%" cy="58%" r="50%">
+              <stop offset="0%" stop-color="#2dd4bf" stop-opacity=".28"/>
+              <stop offset="50%" stop-color="#0891b2" stop-opacity=".10"/>
+              <stop offset="100%" stop-color="#0891b2" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="wFigGlow" cx="50%" cy="38%" r="55%">
+              <stop offset="0%" stop-color="#a5f3fc" stop-opacity=".55"/>
+              <stop offset="45%" stop-color="#2dd4bf" stop-opacity=".18"/>
+              <stop offset="100%" stop-color="#0891b2" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="wCrownGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#e0f2fe" stop-opacity=".9"/>
+              <stop offset="60%" stop-color="#7dd3fc" stop-opacity=".4"/>
+              <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="wGold" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#92683a" stop-opacity=".5"/>
+              <stop offset="30%" stop-color="#e2c97a" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#e2c97a" stop-opacity=".9"/>
+              <stop offset="100%" stop-color="#92683a" stop-opacity=".5"/>
+            </linearGradient>
+            <linearGradient id="wGoldV" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#e2c97a" stop-opacity=".8"/>
+              <stop offset="100%" stop-color="#92683a" stop-opacity=".3"/>
+            </linearGradient>
+            <linearGradient id="wPanelFade" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#030918" stop-opacity=".0"/>
+              <stop offset="35%" stop-color="#030918" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#030918" stop-opacity=".95"/>
+            </linearGradient>
+            <filter id="wBlur2"><feGaussianBlur stdDeviation="2"/></filter>
+            <filter id="wBlur5"><feGaussianBlur stdDeviation="5"/></filter>
+            <filter id="wBlur10"><feGaussianBlur stdDeviation="10"/></filter>
+            <filter id="wBlur18"><feGaussianBlur stdDeviation="18"/></filter>
+            <filter id="wGlowFx">
+              <feGaussianBlur stdDeviation="2.5" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <!-- ── BACKGROUND ── -->
+          <rect width="680" height="400" fill="url(#wBg)"/>
+
+          <!-- Deep ocean atmosphere -->
+          <rect x="0" y="220" width="680" height="180" fill="rgba(2,8,20,.35)"/>
+
+          <!-- Star field -->
+          <circle cx="45" cy="22" r=".7" fill="rgba(200,230,255,.5)"/>
+          <circle cx="110" cy="14" r=".5" fill="rgba(200,230,255,.4)"/>
+          <circle cx="178" cy="38" r=".8" fill="rgba(200,230,255,.55)"/>
+          <circle cx="68" cy="55" r=".5" fill="rgba(200,230,255,.3)"/>
+          <circle cx="145" cy="10" r=".6" fill="rgba(200,230,255,.45)"/>
+          <circle cx="28" cy="80" r=".4" fill="rgba(180,210,255,.35)"/>
+          <circle cx="95" cy="72" r=".6" fill="rgba(180,210,255,.3)"/>
+          <circle cx="162" cy="90" r=".5" fill="rgba(180,220,255,.25)"/>
+          <circle cx="38" cy="120" r=".4" fill="rgba(180,210,255,.2)"/>
+          <circle cx="132" cy="130" r=".5" fill="rgba(180,210,255,.2)"/>
+          <circle cx="620" cy="18" r=".7" fill="rgba(200,230,255,.4)"/>
+          <circle cx="660" cy="42" r=".5" fill="rgba(200,230,255,.35)"/>
+          <circle cx="580" cy="30" r=".6" fill="rgba(200,230,255,.3)"/>
+          <circle cx="645" cy="75" r=".4" fill="rgba(180,210,255,.25)"/>
+          <circle cx="595" cy="60" r=".5" fill="rgba(180,210,255,.3)"/>
+          <circle cx="555" cy="22" r=".6" fill="rgba(200,230,255,.35)"/>
+          <circle cx="510" cy="45" r=".5" fill="rgba(180,210,255,.25)"/>
+
+          <!-- ── RESONANCE ATMOSPHERE (left — character side) ── -->
+          <ellipse cx="240" cy="175" rx="230" ry="200" fill="url(#wResonL)" filter="url(#wBlur18)"/>
+          <!-- Secondary teal pulse rings -->
+          <circle cx="240" cy="170" r="140" fill="none" stroke="rgba(45,212,191,.05)" stroke-width="40" filter="url(#wBlur10)"/>
+          <circle cx="240" cy="170" r="100" fill="none" stroke="rgba(45,212,191,.06)" stroke-width="25" filter="url(#wBlur5)"/>
+
+          <!-- ── FIGURE GLOW ── -->
+          <ellipse cx="240" cy="155" rx="70" ry="110" fill="url(#wFigGlow)" filter="url(#wBlur18)"/>
+
+          <!-- ── CHARACTER FIGURE — Spectro / analytical resonator silhouette ── -->
+
+          <!-- Cape / flowing garment — background layer -->
+          <path d="M 212 145 C 195 185 170 230 155 290 C 148 315 152 325 165 325 C 185 325 205 305 218 280 C 228 260 232 240 238 220" fill="#051028" opacity=".92"/>
+          <path d="M 268 145 C 285 185 310 230 325 290 C 332 315 328 325 315 325 C 295 325 275 305 262 280 C 252 260 248 240 242 220" fill="#051028" opacity=".92"/>
+          <!-- Cape edge highlights — teal -->
+          <path d="M 155 290 C 148 315 152 325 165 325 C 185 325 205 305 218 280" fill="none" stroke="rgba(45,212,191,.18)" stroke-width="1.2"/>
+          <path d="M 325 290 C 332 315 328 325 315 325 C 295 325 275 305 262 280" fill="none" stroke="rgba(45,212,191,.18)" stroke-width="1.2"/>
+
+          <!-- Body torso -->
+          <path d="M 220 138 C 218 155 216 175 218 200 C 220 218 225 225 240 226 C 255 225 260 218 262 200 C 264 175 262 155 260 138 Z" fill="#061530" opacity=".95"/>
+          <!-- Body center line glow -->
+          <line x1="240" y1="140" x2="240" y2="222" stroke="rgba(125,211,252,.22)" stroke-width="1.2"/>
+          <!-- Chest resonance node -->
+          <circle cx="240" cy="175" r="5" fill="rgba(45,212,191,.12)" filter="url(#wBlur2)"/>
+          <circle cx="240" cy="175" r="2.5" fill="rgba(45,212,191,.6)" stroke="rgba(125,211,252,.8)" stroke-width=".8"/>
+
+          <!-- Shoulders / pauldrons -->
+          <ellipse cx="208" cy="148" rx="18" ry="12" fill="#061530" opacity=".95"/>
+          <ellipse cx="272" cy="148" rx="18" ry="12" fill="#061530" opacity=".95"/>
+          <!-- Pauldron teal edge -->
+          <path d="M 192 144 C 196 136 204 132 216 136 C 220 138 222 142 220 148" fill="none" stroke="rgba(45,212,191,.3)" stroke-width="1"/>
+          <path d="M 288 144 C 284 136 276 132 264 136 C 260 138 258 142 260 148" fill="none" stroke="rgba(45,212,191,.3)" stroke-width="1"/>
+
+          <!-- Arms -->
+          <path d="M 192 148 C 180 162 172 188 168 215 C 166 228 170 235 178 232 C 185 229 188 218 192 205 C 198 185 206 165 212 148" fill="#051028" opacity=".9"/>
+          <path d="M 288 148 C 300 162 308 188 312 215 C 314 228 310 235 302 232 C 295 229 292 218 288 205 C 282 185 274 165 268 148" fill="#051028" opacity=".9"/>
+          <!-- Arm inner glow line -->
+          <path d="M 175 215 C 176 228 179 233 184 231" fill="none" stroke="rgba(45,212,191,.15)" stroke-width=".8"/>
+          <path d="M 305 215 C 304 228 301 233 296 231" fill="none" stroke="rgba(45,212,191,.15)" stroke-width=".8"/>
+
+          <!-- Neck -->
+          <rect x="232" y="108" width="16" height="34" rx="4" fill="#061530" opacity=".9"/>
+
+          <!-- Head -->
+          <ellipse cx="240" cy="92" rx="26" ry="22" fill="#061530" opacity=".95"/>
+          <!-- Head highlight -->
+          <ellipse cx="235" cy="84" rx="12" ry="8" fill="rgba(125,211,252,.06)"/>
+
+          <!-- Hair — flowing upward streaks (Spectro/ethereal style) -->
+          <!-- Main hair mass -->
+          <path d="M 216 78 C 210 68 205 52 208 38 C 211 26 220 20 228 22 C 235 24 238 32 238 42" fill="#040e22" stroke="rgba(45,212,191,.15)" stroke-width=".8"/>
+          <path d="M 264 78 C 270 68 275 52 272 38 C 269 26 260 20 252 22 C 245 24 242 32 242 42" fill="#040e22" stroke="rgba(45,212,191,.15)" stroke-width=".8"/>
+          <!-- Hair teal streaks -->
+          <path d="M 222 72 C 214 58 210 42 214 28" fill="none" stroke="rgba(45,212,191,.25)" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M 258 72 C 266 58 270 42 266 28" fill="none" stroke="rgba(45,212,191,.25)" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M 236 70 C 232 52 233 36 237 22" fill="none" stroke="rgba(125,211,252,.2)" stroke-width=".8" stroke-linecap="round"/>
+          <path d="M 244 70 C 248 52 247 36 243 22" fill="none" stroke="rgba(125,211,252,.2)" stroke-width=".8" stroke-linecap="round"/>
+
+          <!-- Crown / headpiece — spectro prism -->
+          <polygon points="240,4 246,18 260,18 249,26 253,40 240,32 227,40 231,26 220,18 234,18" fill="rgba(45,212,191,.08)" stroke="rgba(45,212,191,.55)" stroke-width="1"/>
+          <circle cx="240" cy="4" r="4" fill="url(#wCrownGlow)" filter="url(#wBlur2)"/>
+          <circle cx="240" cy="4" r="2" fill="rgba(224,242,254,.9)" filter="url(#wGlowFx)"/>
+          <!-- Crown vertical rays -->
+          <line x1="240" y1="0" x2="240" y2="12" stroke="rgba(224,242,254,.6)" stroke-width=".8" filter="url(#wGlowFx)"/>
+          <line x1="225" y1="5" x2="233" y2="14" stroke="rgba(45,212,191,.35)" stroke-width=".6"/>
+          <line x1="255" y1="5" x2="247" y2="14" stroke="rgba(45,212,191,.35)" stroke-width=".6"/>
+
+          <!-- ── FLOATING RESONANCE NODES (framework layers) ── -->
+          <!-- Node 1 — top left -->
+          <circle cx="145" cy="68" r="14" fill="rgba(45,212,191,.06)" filter="url(#wBlur5)"/>
+          <circle cx="145" cy="68" r="6" fill="rgba(4,14,28,.9)" stroke="rgba(45,212,191,.45)" stroke-width="1"/>
+          <circle cx="145" cy="68" r="2.5" fill="rgba(45,212,191,.8)"/>
+          <line x1="151" y1="68" x2="192" y2="108" stroke="rgba(45,212,191,.12)" stroke-width=".8" stroke-dasharray="3 3"/>
+          <text x="122" y="58" fill="rgba(45,212,191,.55)" font-size="5.5" font-family="monospace" text-anchor="middle">LAYER 1</text>
+          <text x="122" y="68" fill="rgba(165,243,252,.7)" font-size="6" font-family="monospace" text-anchor="middle" font-weight="600">IDENTITY</text>
+
+          <!-- Node 2 — left mid -->
+          <circle cx="120" cy="148" r="14" fill="rgba(91,143,255,.06)" filter="url(#wBlur5)"/>
+          <circle cx="120" cy="148" r="6" fill="rgba(4,14,28,.9)" stroke="rgba(91,143,255,.45)" stroke-width="1"/>
+          <circle cx="120" cy="148" r="2.5" fill="rgba(91,143,255,.8)"/>
+          <line x1="126" y1="148" x2="172" y2="158" stroke="rgba(91,143,255,.12)" stroke-width=".8" stroke-dasharray="3 3"/>
+          <text x="96" y="138" fill="rgba(91,143,255,.55)" font-size="5.5" font-family="monospace" text-anchor="middle">LAYER 2</text>
+          <text x="96" y="148" fill="rgba(147,197,253,.7)" font-size="6" font-family="monospace" text-anchor="middle" font-weight="600">PARASOCIAL</text>
+
+          <!-- Node 3 — bottom left -->
+          <circle cx="140" cy="232" r="14" fill="rgba(245,158,11,.05)" filter="url(#wBlur5)"/>
+          <circle cx="140" cy="232" r="6" fill="rgba(4,14,28,.9)" stroke="rgba(245,158,11,.4)" stroke-width="1"/>
+          <circle cx="140" cy="232" r="2.5" fill="rgba(245,158,11,.75)"/>
+          <line x1="146" y1="232" x2="188" y2="218" stroke="rgba(245,158,11,.10)" stroke-width=".8" stroke-dasharray="3 3"/>
+          <text x="116" y="222" fill="rgba(245,158,11,.5)" font-size="5.5" font-family="monospace" text-anchor="middle">LAYER 3</text>
+          <text x="116" y="232" fill="rgba(253,230,138,.65)" font-size="6" font-family="monospace" text-anchor="middle" font-weight="600">SCARCITY</text>
+
+          <!-- Node 4 — top right -->
+          <circle cx="335" cy="68" r="14" fill="rgba(61,232,160,.05)" filter="url(#wBlur5)"/>
+          <circle cx="335" cy="68" r="6" fill="rgba(4,14,28,.9)" stroke="rgba(61,232,160,.4)" stroke-width="1"/>
+          <circle cx="335" cy="68" r="2.5" fill="rgba(61,232,160,.75)"/>
+          <line x1="329" y1="68" x2="288" y2="108" stroke="rgba(61,232,160,.10)" stroke-width=".8" stroke-dasharray="3 3"/>
+          <text x="358" y="58" fill="rgba(61,232,160,.5)" font-size="5.5" font-family="monospace" text-anchor="middle">LAYER 4</text>
+          <text x="358" y="68" fill="rgba(110,231,183,.65)" font-size="6" font-family="monospace" text-anchor="middle" font-weight="600">COMMUNITY</text>
+
+          <!-- Node 5 — right mid -->
+          <circle cx="360" cy="148" r="14" fill="rgba(155,109,255,.06)" filter="url(#wBlur5)"/>
+          <circle cx="360" cy="148" r="6" fill="rgba(4,14,28,.9)" stroke="rgba(155,109,255,.45)" stroke-width="1"/>
+          <circle cx="360" cy="148" r="2.5" fill="rgba(155,109,255,.8)"/>
+          <line x1="354" y1="148" x2="308" y2="158" stroke="rgba(155,109,255,.12)" stroke-width=".8" stroke-dasharray="3 3"/>
+          <text x="384" y="138" fill="rgba(155,109,255,.55)" font-size="5.5" font-family="monospace" text-anchor="middle">LAYER 5</text>
+          <text x="384" y="148" fill="rgba(196,181,253,.7)" font-size="6" font-family="monospace" text-anchor="middle" font-weight="600">RETENTION</text>
+
+          <!-- ── PANEL FADE (right side) ── -->
+          <rect x="380" y="0" width="300" height="330" fill="url(#wPanelFade)"/>
+
+          <!-- ── RIGHT PANEL — Resonance Abilities ── -->
+
+          <!-- Element badge — SPECTRO -->
+          <rect x="440" y="18" width="58" height="18" rx="2" fill="rgba(45,212,191,.1)" stroke="rgba(45,212,191,.35)" stroke-width=".8"/>
+          <text x="469" y="30" text-anchor="middle" fill="rgba(45,212,191,.85)" font-size="7.5" font-family="monospace" font-weight="700" letter-spacing="1">SPECTRO</text>
+
+          <!-- "CONVENE" banner type -->
+          <text x="510" y="30" fill="rgba(160,130,80,.6)" font-size="6.5" font-family="monospace" letter-spacing="1">· FEATURED RESONATOR</text>
+
+          <!-- Divider -->
+          <line x1="440" y1="42" x2="665" y2="42" stroke="url(#wGold)" stroke-width=".6"/>
+
+          <!-- Character title -->
+          <text x="440" y="60" fill="rgba(165,243,252,.55)" font-size="6.5" font-family="monospace" letter-spacing="1.5">CHARACTER ATTACHMENT</text>
+          <text x="440" y="76" fill="rgba(224,242,254,.92)" font-size="16" font-family="Georgia,serif" font-weight="700" font-style="italic" letter-spacing=".5">Architecture</text>
+
+          <!-- Divider -->
+          <line x1="440" y1="88" x2="665" y2="88" stroke="rgba(200,165,80,.12)" stroke-width=".6"/>
+
+          <!-- Resonance abilities list -->
+          <text x="440" y="103" fill="rgba(160,130,80,.7)" font-size="6" font-family="monospace" letter-spacing="1">RESONANCE ABILITIES</text>
+
+          <!-- Ability 1 -->
+          <circle cx="447" cy="120" r="3" fill="rgba(45,212,191,.7)" stroke="rgba(45,212,191,.3)" stroke-width=".8"/>
+          <text x="456" y="124" fill="rgba(224,242,254,.8)" font-size="8" font-family="-apple-system,sans-serif" font-weight="600">Identity Anchoring</text>
+          <text x="456" y="135" fill="rgba(120,140,160,.55)" font-size="6.5" font-family="monospace">The Witness · Resonator Bond · DCUO</text>
+
+          <!-- Ability 2 -->
+          <circle cx="447" cy="152" r="3" fill="rgba(91,143,255,.7)" stroke="rgba(91,143,255,.3)" stroke-width=".8"/>
+          <text x="456" y="156" fill="rgba(224,242,254,.8)" font-size="8" font-family="-apple-system,sans-serif" font-weight="600">Parasocial Engineering</text>
+          <text x="456" y="167" fill="rgba(120,140,160,.55)" font-size="6.5" font-family="monospace">Scheduled Intimacy · Voiceline Evolution</text>
+
+          <!-- Ability 3 -->
+          <circle cx="447" cy="184" r="3" fill="rgba(245,158,11,.7)" stroke="rgba(245,158,11,.3)" stroke-width=".8"/>
+          <text x="456" y="188" fill="rgba(224,242,254,.8)" font-size="8" font-family="-apple-system,sans-serif" font-weight="600">Scarcity &amp; Desire Architecture</text>
+          <text x="456" y="199" fill="rgba(120,140,160,.55)" font-size="6.5" font-family="monospace">Meta Puller · Attachment Puller · C0–C6</text>
+
+          <!-- Ability 4 -->
+          <circle cx="447" cy="216" r="3" fill="rgba(61,232,160,.7)" stroke="rgba(61,232,160,.3)" stroke-width=".8"/>
+          <text x="456" y="220" fill="rgba(224,242,254,.8)" font-size="8" font-family="-apple-system,sans-serif" font-weight="600">Community Amplification</text>
+          <text x="456" y="231" fill="rgba(120,140,160,.55)" font-size="6.5" font-family="monospace">Lore Gaps · Fan Art · Creator System</text>
+
+          <!-- Ability 5 -->
+          <circle cx="447" cy="248" r="3" fill="rgba(155,109,255,.7)" stroke="rgba(155,109,255,.3)" stroke-width=".8"/>
+          <text x="456" y="252" fill="rgba(224,242,254,.8)" font-size="8" font-family="-apple-system,sans-serif" font-weight="600">Retention–Monetisation Fusion</text>
+          <text x="456" y="263" fill="rgba(120,140,160,.55)" font-size="6.5" font-family="monospace">F2P · Dolphin · Whale · Anniversary</text>
+
+          <!-- Divider -->
+          <line x1="440" y1="278" x2="665" y2="278" stroke="rgba(200,165,80,.12)" stroke-width=".6"/>
+
+          <!-- Studio tags -->
+          <rect x="440" y="287" width="60" height="15" rx="1.5" fill="rgba(155,109,255,.08)" stroke="rgba(155,109,255,.25)" stroke-width=".7"/>
+          <text x="470" y="297" text-anchor="middle" fill="rgba(155,109,255,.75)" font-size="6" font-family="monospace">HOYOVERSE</text>
+          <rect x="506" y="287" width="38" height="15" rx="1.5" fill="rgba(155,109,255,.07)" stroke="rgba(155,109,255,.2)" stroke-width=".7"/>
+          <text x="525" y="297" text-anchor="middle" fill="rgba(155,109,255,.65)" font-size="6" font-family="monospace">KURO</text>
+          <rect x="550" y="287" width="24" height="15" rx="1.5" fill="rgba(155,109,255,.07)" stroke="rgba(155,109,255,.2)" stroke-width=".7"/>
+          <text x="562" y="297" text-anchor="middle" fill="rgba(155,109,255,.6)" font-size="6" font-family="monospace">FGO</text>
+
+          <!-- ── GOLD CORNER ORNAMENTS ── -->
+          <!-- Top-left bracket -->
+          <path d="M 12 8 L 12 25 L 8 25" fill="none" stroke="url(#wGoldV)" stroke-width="1.2"/>
+          <path d="M 12 8 L 32 8" fill="none" stroke="url(#wGold)" stroke-width="1.2"/>
+          <rect x="10" y="6" width="4" height="4" fill="rgba(226,201,122,.7)"/>
+          <!-- Top-right bracket -->
+          <path d="M 668 8 L 668 25 L 672 25" fill="none" stroke="url(#wGoldV)" stroke-width="1.2"/>
+          <path d="M 668 8 L 648 8" fill="none" stroke="url(#wGold)" stroke-width="1.2"/>
+          <rect x="666" y="6" width="4" height="4" fill="rgba(226,201,122,.7)"/>
+          <!-- Bottom-left bracket -->
+          <path d="M 12 332 L 12 318 L 8 318" fill="none" stroke="rgba(200,165,80,.5)" stroke-width="1.2"/>
+          <path d="M 12 332 L 32 332" fill="none" stroke="rgba(200,165,80,.4)" stroke-width="1.2"/>
+          <rect x="10" y="330" width="4" height="4" fill="rgba(160,120,60,.6)"/>
+          <!-- Bottom-right bracket -->
+          <path d="M 668 332 L 668 318 L 672 318" fill="none" stroke="rgba(200,165,80,.5)" stroke-width="1.2"/>
+          <path d="M 668 332 L 648 332" fill="none" stroke="rgba(200,165,80,.4)" stroke-width="1.2"/>
+          <rect x="666" y="330" width="4" height="4" fill="rgba(160,120,60,.6)"/>
+
+          <!-- Gold diamond ornament top-center (character area) -->
+          <polygon points="240,306 244,312 240,318 236,312" fill="rgba(45,212,191,.15)" stroke="rgba(45,212,191,.4)" stroke-width=".8"/>
+          <circle cx="240" cy="312" r="1.5" fill="rgba(45,212,191,.7)"/>
+
+          <!-- ── BOTTOM NAMEPLATE ── -->
+          <rect x="0" y="330" width="680" height="70" fill="rgba(3,7,18,.97)"/>
+          <line x1="0" y1="330" x2="680" y2="330" stroke="url(#wGold)" stroke-width="1"/>
+
+          <!-- Left: name block -->
+          <text x="22" y="352" fill="rgba(165,243,252,.5)" font-size="7" font-family="monospace" letter-spacing="2">CHARACTER ATTACHMENT</text>
+          <text x="22" y="372" fill="rgba(224,242,254,.95)" font-size="17" font-family="Georgia,serif" font-weight="700" font-style="italic" letter-spacing=".5">Architecture</text>
+          <text x="22" y="388" fill="rgba(120,140,160,.5)" font-size="6.5" font-family="monospace" letter-spacing=".8">GAME DESIGN FRAMEWORK  ·  5-LAYER ANALYSIS</text>
+
+          <!-- Stars — 5 gold stars -->
+          <g transform="translate(420,340)">
+            <text x="0"  y="14" fill="rgba(226,201,122,.95)" font-size="14" font-family="monospace">&#9733;</text>
+            <text x="16" y="14" fill="rgba(226,201,122,.95)" font-size="14" font-family="monospace">&#9733;</text>
+            <text x="32" y="14" fill="rgba(226,201,122,.95)" font-size="14" font-family="monospace">&#9733;</text>
+            <text x="48" y="14" fill="rgba(226,201,122,.95)" font-size="14" font-family="monospace">&#9733;</text>
+            <text x="64" y="14" fill="rgba(226,201,122,.95)" font-size="14" font-family="monospace">&#9733;</text>
+          </g>
+          <!-- Star glow -->
+          <ellipse cx="472" cy="347" rx="48" ry="10" fill="rgba(226,201,122,.12)" filter="url(#wBlur5)"/>
+
+          <!-- Right: element + type -->
+          <circle cx="635" cy="355" r="18" fill="rgba(45,212,191,.08)" stroke="rgba(45,212,191,.3)" stroke-width="1"/>
+          <!-- Spectro prism icon -->
+          <polygon points="635,340 641,352 629,352" fill="rgba(45,212,191,.5)" stroke="rgba(165,243,252,.7)" stroke-width=".8"/>
+          <circle cx="635" cy="341" r="2" fill="rgba(224,242,254,.9)" filter="url(#wGlowFx)"/>
+          <text x="635" y="380" text-anchor="middle" fill="rgba(45,212,191,.65)" font-size="6" font-family="monospace" letter-spacing="1">SPECTRO</text>
+        </svg>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">Character Attachment Architecture — Emotional Retention Infrastructure</h3>
+        <p class="pcard-desc">A five-layer game design framework examining how Hoyoverse, Kuro Games, and FGO engineer parasocial relationships into sustainable revenue systems. Includes failure case studies (Zani, Cyno, Dehya), spending tier ecosystem, and Pokémon as 30-year proof of concept.</p>
+        <div class="pcard-tags">
+          <span class="ptag" style="border-color:rgba(155,109,255,.3);color:var(--purple)">Game Design</span>
+          <span class="ptag">Gacha Systems</span>
+          <span class="ptag">LiveOps</span>
+          <span class="ptag">Behavioural Systems</span>
+          <span class="ptag ptag-live" style="border-color:rgba(155,109,255,.3);color:rgba(180,150,255,.7)">● Framework</span>
+        </div>
+      </div>
+    </div>
+
     <!-- P2: Dead by Daylight Retention — SUPPORT -->
     <div class="pcard" onclick="openModal('retention')">
       <div class="pcard-preview">
@@ -3329,6 +3750,8 @@ footer{
       </div>
     </div>
 
+
+
   </div><!-- /moreCarousel -->
   </div><!-- /more-carousel-wrap -->
 </div>
@@ -3826,6 +4249,7 @@ footer{
   </div>
 </section>
 
+
 <div class="divider"></div>
 
 <!-- CTA -->
@@ -4036,6 +4460,27 @@ const DATA={
     signals:['Commuter friction journey: 5-stage Before/After comparison','Perceived proximity shift across western neighbourhoods','Movement efficiency gain from direct east–west LRT routing','Cognitive load reduction through transfer elimination','Perceived vs. objective friction gap across the corridor'],
     tools:['Behavioural Systems Analysis','UX Systems Mapping','Service Design','Figma','Urban Mobility Research'],
     links:[{label:'Eglinton Crosstown Case Study',url:'https://www.linkedin.com/in/leontelemaque/overlay/Project/1909914223/treasury/?profileId=ACoAAF0mRoQB4h2gyM8q7dCnyWJlNPpmdBCXPxE'}]
+  },
+  caa:{
+    tag:'gaming',tagLabel:'Game Design · Behavioural Systems · LiveOps',
+    title:'Character Attachment Architecture — How Emotional Investment Becomes Long-Term Retention Infrastructure',
+    period:'2025–2026 · Five-Layer Framework',
+    embedUrl:'character-attachment-framework.html',
+    streamlit:null,
+    desc:'A game design framework and research analysis examining how Hoyoverse, Kuro Games, and FGO engineer parasocial relationships into sustainable revenue systems — with cross-industry validation from Pokémon, Overwatch, and DCUO. The framework maps five layers of attachment architecture: Identity Anchoring, Parasocial Engineering, Scarcity & Desire, Community Amplification, and Retention–Monetisation Fusion.',
+    insight:'These studios generate revenue not only through gameplay systems, but through ongoing relationships with fictional characters — and the revenue infrastructure exists to sustain and deepen those relationships over multi-year timeframes. Pokémon is the 30-year proof of concept. Hoyoverse, Kuro, and FGO are building the next iteration.',
+    signals:[
+      'Layer 1 — Identity Anchoring: The Witness (FGO/Hoyoverse), Resonator Bond (Kuro), Aspirational Proximity (DCUO)',
+      'Layer 2 — Parasocial Engineering: Scheduled Intimacy, Voiceline Evolution, Update Cycle as Emotional Delivery System',
+      'Layer 3 — Scarcity & Desire: Meta Puller vs Attachment Puller archetypes; constellation systems as devotion declaration',
+      'Layer 4 — Community Amplification: Lore gaps, fan art ecosystems, creator pressure systems, character defence culture',
+      'Layer 5 — Retention–Monetisation Fusion: F2P/Dolphin/Whale tier ecosystem; anniversary characters as peak loyalty moments',
+      'Failure Cases: Zani (dual pillar collapse), Cyno (translation failure), Dehya (kit–archetype incoherence)',
+      'Ethics Acknowledgment: engineered obligation, parasocial boundary blurring, vulnerable player spending',
+      'Cross-industry: Pokémon 30-year generational inheritance architecture as framework proof of concept'
+    ],
+    tools:['Game Design Framework','Behavioural Systems Analysis','LiveOps Research','Gacha Systems','Parasocial Architecture','Comparative Analysis'],
+    links:[]
   },
   marvel:{
     tag:'gaming',tagLabel:'Gaming · LiveOps · Systems Design',

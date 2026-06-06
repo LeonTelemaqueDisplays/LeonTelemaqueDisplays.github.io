@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Character Attachment Architecture — Leon Telemaque</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08060f;
+  --surface:#0f0c1a;
+  --surface2:#141020;
+  --border:#1e1a2e;
+  --border2:#2a2440;
+  --text:#e8e4f2;
+  --muted:#6b6480;
+  --muted2:#9890b0;
+  --purple:#9b6dff;
+  --blue:#5b8fff;
+  --green:#3de8a0;
+  --red:#ff4d4d;
+  --amber:#f59e0b;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;
+  --mono:"JetBrains Mono","Fira Code",monospace;
+  --serif:Georgia,"Times New Roman",serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:13px;line-height:1.5;min-height:100vh}
+
+/* ── HEADER ── */
+.hdr{background:var(--surface);border-bottom:2px solid rgba(155,109,255,.3);padding:20px 28px}
+.hdr-eyebrow{font-family:var(--mono);font-size:.6rem;color:var(--purple);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.hdr-eyebrow::before{content:"";width:20px;height:1px;background:var(--purple);opacity:.6}
+.hdr-title{font-size:1.25rem;font-weight:700;letter-spacing:-.02em;color:var(--text);margin-bottom:4px}
+.hdr-sub{font-size:.78rem;color:var(--muted2);margin-bottom:16px}
+.hdr-chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;padding:.2rem .55rem;border:1px solid}
+.chip-p{color:var(--purple);border-color:rgba(155,109,255,.3);background:rgba(155,109,255,.07)}
+.chip-g{color:var(--green);border-color:rgba(61,232,160,.25);background:rgba(61,232,160,.05)}
+
+/* ── LAYOUT ── */
+.doc{padding:0}
+
+/* ── LAYER ── */
+.layer{border-bottom:1px solid var(--border);padding:22px 28px}
+.layer-num{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.layer-title{font-size:1rem;font-weight:700;letter-spacing:-.02em;color:var(--text);margin-bottom:4px}
+.layer-sub{font-size:.75rem;color:var(--muted2);margin-bottom:14px}
+.prose{font-size:.8rem;color:var(--muted2);line-height:1.75;margin-bottom:12px}
+.prose strong{color:var(--text);font-weight:600}
+.prose em{font-style:italic;font-family:var(--serif)}
+
+/* ── MODEL GRID ── */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border);margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);margin-bottom:14px}
+.gcell{padding:14px 16px;border-right:1px solid var(--border)}
+.gcell:last-child{border-right:none}
+.glabel{font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+.glabel.p{color:var(--purple)}
+.glabel.b{color:var(--blue)}
+.gname{font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:6px}
+.gbody{font-size:.73rem;color:var(--muted2);line-height:1.7}
+.gbody strong{color:var(--text)}
+
+/* ── COMPARATOR ── */
+.cmp{border-left:2px solid var(--green);padding:10px 14px;background:rgba(61,232,160,.03);border:1px solid rgba(61,232,160,.12);border-left:2px solid var(--green);margin-bottom:14px}
+.cmp-lbl{font-family:var(--mono);font-size:.55rem;color:var(--green);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.cmp-body{font-size:.75rem;color:var(--muted2);line-height:1.7}
+.cmp-body strong{color:var(--text)}
+
+/* ── INSIGHT ── */
+.insight{border-left:2px solid var(--purple);padding:10px 14px;background:rgba(155,109,255,.04);margin-bottom:14px}
+.insight-lbl{font-family:var(--mono);font-size:.55rem;color:var(--purple);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.insight-body{font-size:.75rem;color:var(--text);line-height:1.65}
+
+/* ── TIER DIAGRAM ── */
+.tier-wrap{border:1px solid var(--border);background:var(--surface);margin-bottom:14px;overflow:hidden}
+.tier-hdr{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.tier-row{display:flex;border-bottom:1px solid var(--border)}
+.tier-row:last-child{border-bottom:none}
+.tier-lbl{flex:0 0 90px;padding:12px 14px;border-right:1px solid var(--border2);display:flex;flex-direction:column;justify-content:center}
+.tier-name{font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.tier-pct{font-family:var(--mono);font-size:.56rem;color:var(--muted)}
+.tier-content{flex:1;padding:10px 14px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tier-attr{font-size:.68rem;color:var(--muted2);line-height:1.5}
+.tier-attr strong{display:block;font-family:var(--mono);font-size:.54rem;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}
+.t-f2p .tier-lbl{border-left:3px solid var(--green)}
+.t-dol .tier-lbl{border-left:3px solid var(--blue)}
+.t-whl .tier-lbl{border-left:3px solid var(--purple)}
+
+/* ── AMP LOOP ── */
+.amp-wrap{border:1px solid var(--border);background:var(--surface);margin-bottom:14px;padding:16px}
+.amp-hdr{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;text-align:center}
+.amp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.amp-node{padding:10px;border:1px solid var(--border2);background:var(--surface2);text-align:center}
+.amp-num{font-family:var(--mono);font-size:.55rem;color:var(--purple);margin-bottom:4px}
+.amp-name{font-size:.72rem;font-weight:600;color:var(--text);margin-bottom:3px}
+.amp-sub{font-size:.62rem;color:var(--muted2);line-height:1.45}
+
+/* ── FAILURE CARDS ── */
+.fail-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border);margin-bottom:14px}
+.fail-cell{padding:14px 16px;border-right:1px solid var(--border)}
+.fail-cell:last-child{border-right:none}
+.fail-name{font-family:var(--mono);font-size:.62rem;color:var(--red);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;font-weight:700}
+.fail-title{font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:6px}
+.fail-body{font-size:.72rem;color:var(--muted2);line-height:1.65}
+.fail-body strong{color:var(--text)}
+
+/* ── FAIL TABLE ── */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);margin-bottom:14px}
+.tbl{width:100%;border-collapse:collapse;font-size:.7rem}
+.tbl th{font-family:var(--mono);font-size:.54rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:9px 12px;text-align:left;border-bottom:1px solid var(--border2);background:var(--surface2);white-space:nowrap}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted2);vertical-align:top;line-height:1.55}
+.tbl tr:last-child td{border-bottom:none}
+.tbl td:first-child{color:var(--text);font-weight:600;white-space:nowrap}
+.tag-f{font-family:var(--mono);font-size:.54rem;color:var(--red);border:1px solid rgba(255,77,77,.25);padding:.08rem .35rem}
+.tag-p{font-family:var(--mono);font-size:.54rem;color:var(--amber);border:1px solid rgba(245,158,11,.25);padding:.08rem .35rem}
+
+/* ── FUSION MAP ── */
+.fusion-wrap{border:1px solid var(--border);background:var(--surface);margin-bottom:14px;overflow:hidden}
+.fusion-hdr{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.fusion-grid{display:grid;grid-template-columns:130px repeat(3,1fr)}
+.fusion-ch{padding:9px 12px;font-size:.68rem;font-weight:600;color:var(--text);border-right:1px solid var(--border);border-bottom:1px solid var(--border2);background:rgba(155,109,255,.05)}
+.fusion-ch:last-child{border-right:none}
+.fusion-rl{padding:10px 12px;font-size:.68rem;font-weight:600;color:var(--text);border-right:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface2);line-height:1.4}
+.fusion-rl span{font-weight:400;color:var(--muted);font-size:.6rem;font-family:var(--mono);display:block;margin-top:2px}
+.fusion-cell{padding:9px 12px;font-size:.68rem;color:var(--muted2);line-height:1.5;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
+.fusion-cell:last-child{border-right:none}
+.pill{display:inline-block;font-family:var(--mono);font-size:.52rem;padding:.08rem .32rem;letter-spacing:.04em;text-transform:uppercase;margin-bottom:2px}
+.pill-g{color:var(--green);border:1px solid rgba(61,232,160,.2);background:rgba(61,232,160,.04)}
+.pill-b{color:var(--blue);border:1px solid rgba(91,143,255,.2);background:rgba(91,143,255,.04)}
+.pill-p{color:var(--purple);border:1px solid rgba(155,109,255,.2);background:rgba(155,109,255,.04)}
+.pill-r{color:var(--red);border:1px solid rgba(255,77,77,.2);background:rgba(255,77,77,.04)}
+
+/* ── ETHICS ── */
+.ethics-wrap{background:var(--surface);border:1px solid var(--border);padding:18px 20px;margin-bottom:14px}
+.ethics-hdr{font-family:var(--mono);font-size:.58rem;color:var(--amber);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.ethics-hdr::before{content:"";width:12px;height:1px;background:var(--amber);opacity:.5}
+.eth-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border);margin:12px 0}
+.eth-cell{padding:12px 14px;border-right:1px solid var(--border)}
+.eth-cell:last-child{border-right:none}
+.eth-title{font-size:.75rem;font-weight:600;color:var(--text);margin-bottom:5px}
+.eth-body{font-size:.68rem;color:var(--muted2);line-height:1.6}
+
+/* ── CLOSING ── */
+.closing{padding:22px 28px;border-bottom:1px solid var(--border)}
+.closing-quote{font-family:var(--serif);font-style:italic;font-size:.95rem;color:var(--text);line-height:1.65;border-left:2px solid var(--amber);padding-left:18px;margin-bottom:14px}
+
+/* Responsive */
+@media(max-width:640px){
+  .grid3,.fail-grid,.eth-grid{grid-template-columns:1fr}
+  .gcell,.fail-cell,.eth-cell{border-right:none}
+  .grid2{grid-template-columns:1fr}
+  .gcell:last-child{border-right:none}
+  .tier-content{grid-template-columns:1fr}
+  .amp-grid{grid-template-columns:1fr 1fr}
+  .fusion-grid{grid-template-columns:1fr}
+  .fusion-ch{display:none}
+  .fusion-rl{font-weight:700}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <p class="hdr-eyebrow">Game Design Framework &middot; Research Analysis</p>
+  <h1 class="hdr-title">Character Attachment Architecture</h1>
+  <p class="hdr-sub">How Emotional Investment Becomes Long-Term Retention Infrastructure</p>
+  <div class="hdr-chips">
+    <span class="chip chip-p">Hoyoverse &middot; Kuro Games &middot; FGO</span>
+    <span class="chip chip-g">Pok&eacute;mon &middot; Overwatch &middot; DCUO</span>
+    <span class="chip chip-p">5-Layer Framework</span>
+    <span class="chip chip-p">Failure Cases</span>
+    <span class="chip chip-p">Ethics</span>
+  </div>
+</div>
+
+<div class="doc">
+
+<!-- STUDIO CONTEXT -->
+<div class="layer">
+  <p class="layer-num">Studio Context</p>
+  <h2 class="layer-title">Understanding the Studios</h2>
+  <p class="prose"><strong>Kuro Games</strong> entered the gacha market as a challenger studio &mdash; built on <em>Punishing: Gray Raven</em> before pivoting to <em>Wuthering Waves</em> as flagship. The 2024 launch controversy is now a canonical recovery arc case study: technical failures met with structural apologies, generous compensation, and quality patches that rebuilt trust faster than most studios recover from comparable launches. By 2025, WuWa ranked <strong>#1 most played gacha on PC worldwide by playtime</strong> &mdash; sustained engagement, not peak downloads.</p>
+  <p class="prose"><strong>Hoyoverse</strong> (Genshin Impact, Honkai: Star Rail) is the market reference point &mdash; the studio that refined what <strong>FGO</strong> (Fate/Grand Order) established and scaled it globally. FGO remains the genre&rsquo;s origin architecture: the first proof that players would form emotional bonds strong enough to sustain decade-long revenue relationships. This framework treats Hoyoverse as the refinement layer and FGO as the blueprint.</p>
+  <p class="prose" style="margin-bottom:0">The central argument: these studios generate revenue not only through gameplay systems, but through <strong>ongoing relationships with fictional characters</strong> &mdash; and the revenue infrastructure exists to sustain and deepen those relationships over multi-year timeframes.</p>
+</div>
+
+<!-- LAYER 1 -->
+<div class="layer">
+  <p class="layer-num">Layer 1</p>
+  <h2 class="layer-title">Identity Anchoring</h2>
+  <p class="layer-sub">How studios embed characters into player identity before monetisation is introduced.</p>
+  <div class="grid3">
+    <div class="gcell">
+      <p class="glabel p">FGO / Hoyoverse</p>
+      <p class="gname">The Witness</p>
+      <p class="gbody">The player is not a character but a <strong>witness to characters&rsquo; lives</strong>. The Master/Traveller construct grants emotional proximity without narrative ownership &mdash; you observe, support, remember. FGO positions the Master as the person who enables other characters&rsquo; stories to resolve. Hoyoverse&rsquo;s Traveller exists to witness what each character <em>becomes</em>. Attachment forms because players feel present at character-defining moments.</p>
+    </div>
+    <div class="gcell">
+      <p class="glabel p">Kuro Games</p>
+      <p class="gname">The Resonator Bond</p>
+      <p class="gbody">The Rover is a <strong>Resonator</strong>, sharing a category of existence with <strong>Aemeth</strong> and <strong>Fleurdelys</strong>. This creates lateral attachment &mdash; player character and companions share an ontological condition. Aemeth&rsquo;s fragmented memory arc and Fleurdelys&rsquo; guarded emotional state both position the Rover as a <em>peer witness</em> rather than a superior or servant. The bond feels earned through shared condition.</p>
+    </div>
+    <div class="gcell">
+      <p class="glabel b">DCUO</p>
+      <p class="gname">Aspirational Proximity</p>
+      <p class="gbody">Players choose a <strong>mentor at character creation</strong> (Batman, Superman, Wonder Woman, Joker). That character&rsquo;s voice follows them through Level 30. The Level 30 congratulatory speech &mdash; a direct acknowledgment of what you&rsquo;ve become &mdash; is one of the most effective uses of parasocial architecture in an MMO. Personal mail from Batman to your character. Not features &mdash; identity anchors.</p>
+    </div>
+  </div>
+  <div class="cmp">
+    <p class="cmp-lbl">Cross-Industry &middot; Pok&eacute;mon + Overwatch</p>
+    <p class="cmp-body"><strong>Pok&eacute;mon</strong> operationalises identity anchoring through <em>primal projection</em> &mdash; starter choice functions as a personality test the player rarely consciously takes. The Bulbasaur/Charmander/Squirtle decision encodes something about who the player believes themselves to be, which is why starter debates remain emotionally charged decades later. <strong>Overwatch</strong> anchors identity at the intersection of role (Tank/DPS/Support) and cosmetic self-representation: the skin you choose communicates identity to teammates before a single ability is used.</p>
+  </div>
+</div>
+
+<!-- LAYER 2 -->
+<div class="layer">
+  <p class="layer-num">Layer 2</p>
+  <h2 class="layer-title">Parasocial Engineering</h2>
+  <p class="layer-sub">The scheduled, evolving, and narrative mechanisms that sustain emotional investment between spending events.</p>
+  <div class="grid3">
+    <div class="gcell">
+      <p class="glabel p">Mechanism 01</p>
+      <p class="gname">Scheduled Intimacy</p>
+      <p class="gbody">Birthday systems, seasonal calendar events, and anniversary messages are <strong>parasocial contact points</strong> engineered to maintain emotional currency between banners. FGO&rsquo;s Servant birthday messages, Hoyoverse&rsquo;s in-game birthday voicelines, and Kuro&rsquo;s character calendar events all share the same mechanic: the game creates a reason for the player to feel <em>thought of</em> by their favourite character on a specific date. The calendar becomes an emotional relationship schedule.</p>
+    </div>
+    <div class="gcell">
+      <p class="glabel p">Mechanism 02</p>
+      <p class="gname">Voiceline Evolution &amp; Direct Address</p>
+      <p class="gbody">Bond progression unlocks voicelines that reflect increasing familiarity. <strong>Fleurdelys in WuWa</strong> is deliberate: her composed professional demeanour in early interactions gives way to noticeably warmer, less guarded speech as bond increases. The player is rewarded not with power but with <em>access to the character&rsquo;s interior life</em>. DCUO&rsquo;s mentor direct address system operates at the genre level: Batman speaks specifically to <em>your character</em>, not to a player.</p>
+    </div>
+    <div class="gcell">
+      <p class="glabel p">Mechanism 03</p>
+      <p class="gname">Update Cycle as Emotional Delivery</p>
+      <p class="gbody">The gacha patch cycle is structurally identical to television season scheduling: <strong>each update is both content delivery and banner delivery</strong>. Genshin&rsquo;s Furina (Fontaine finale) represents this &mdash; a two-year narrative build ending in a character banner. Kuro&rsquo;s Aemeth and Fleurdelys banners arrive <em>after</em> narrative investment, not before. <strong>Absence is also a mechanic</strong> &mdash; characters referenced in story but not yet playable generate anticipatory attachment that precedes the spending window.</p>
+    </div>
+  </div>
+  <div class="insight">
+    <p class="insight-lbl">DCUO as Specialist Anchor</p>
+    <p class="insight-body">DCUO&rsquo;s parasocial architecture concentrates at Layers 1 and 2. As a subscription MMO without banner mechanics, it doesn&rsquo;t extend into Layers 3&ndash;5 in the same configuration. DCUO demonstrates that parasocial engineering is not exclusive to gacha economies &mdash; the tools are genre-portable even when the monetisation structure differs.</p>
+  </div>
+</div>
+
+<!-- LAYER 3 -->
+<div class="layer">
+  <p class="layer-num">Layer 3</p>
+  <h2 class="layer-title">Scarcity &amp; Desire Architecture</h2>
+  <p class="layer-sub">How studios transform emotional investment into spending decisions.</p>
+  <div class="grid2">
+    <div class="gcell">
+      <p class="glabel p">Archetype 01</p>
+      <p class="gname">The Meta Puller</p>
+      <p class="gbody">Spending decisions are primarily justified by <strong>power level</strong>. Tier lists and DPS calculations are the decision inputs. Content creator tier lists don&rsquo;t create the desire to pull &mdash; they provide social legitimacy for a desire already present. The meta verdict is a <em>rationalisation mechanism</em>, not an information source. Meta pullers are most vulnerable to kit-narrative alignment failures (see: Dehya, Cyno).</p>
+    </div>
+    <div class="gcell">
+      <p class="glabel p">Archetype 02</p>
+      <p class="gname">The Attachment Puller</p>
+      <p class="gbody">Spending decisions are justified by <strong>character relationship</strong>. The meta is irrelevant. Attachment pullers are more resistant to tier list influence and more susceptible to narrative investment mechanics. The <strong>overlap player</strong> &mdash; meta-aware but attachment-driven &mdash; is the primary revenue target: they seek both the emotional permission and the mechanical legitimacy simultaneously.</p>
+    </div>
+  </div>
+  <p class="prose"><strong>Constellation and dupe systems</strong> (C0&ndash;C6 in Genshin, equivalent systems in HSR and WuWa) function simultaneously as mechanical upgrades and <em>devotion declarations</em>. Community visibility &mdash; &ldquo;I have C6 Furina&rdquo; &mdash; operates as social display within character fan communities. This makes high-investment characters <strong>social infrastructure</strong>, not just personal utility.</p>
+  <div class="insight">
+    <p class="insight-lbl">Case Study &middot; Kit-Narrative Alignment &middot; Furina (Genshin 4.2)</p>
+    <p class="insight-body">Furina&rsquo;s story centres on performance, self-sacrifice, and maintaining a fa&ccedil;ade for 500 years. Her kit requires players to intentionally keep characters at low HP &mdash; a mechanical expression of her thematic core. The player <em>enacts her narrative condition</em> through gameplay. This convergence creates the deepest emotional resonance available in the medium &mdash; and makes Dehya&rsquo;s inverted version so instructive by contrast.</p>
+  </div>
+  <div class="cmp">
+    <p class="cmp-lbl">Cross-Industry &middot; Pok&eacute;mon</p>
+    <p class="cmp-body">Pok&eacute;mon&rsquo;s <strong>happiness mechanic</strong> is the original attachment-spending converter: investment of time and care produces measurable character change. The <strong>walking system</strong> creates physical proximity as a bonding mechanic. <strong>Version exclusives</strong> &mdash; Pok&eacute;mon only available in one version &mdash; generate trade relationships, community value asymmetry, and the persistent social question of &ldquo;which version did you get?&rdquo; These mechanics predate gacha but share the same underlying architecture.</p>
+  </div>
+</div>
+
+<!-- LAYER 4 -->
+<div class="layer">
+  <p class="layer-num">Layer 4</p>
+  <h2 class="layer-title">Community Amplification</h2>
+  <p class="layer-sub">How studios leverage player communities to extend attachment infrastructure beyond the game itself.</p>
+  <p class="prose">The amplification stack operates across four components: <strong>deliberate lore gaps</strong> invite fan theories and extended canon; <strong>fan art and cosplay ecosystems</strong> create community-maintained character presence outside game updates; <strong>shipping culture</strong> extends character relationships into player-generated fiction; and <strong>content creator pressure systems</strong> convert attachment into public performance. Hoyoverse&rsquo;s approach to lore gaps is especially studied &mdash; characters like Arlecchino and Capitano were referenced for years before their banners, generating speculation that functioned as free pre-launch marketing at scale.</p>
+  <p class="prose">Content creator pressure systems operate in three distinct layers that compound: <strong>&ldquo;should you pull&rdquo; videos</strong> provide the meta permission structure; <strong>tier list videos</strong> create social context; and <strong>pull reaction videos</strong> &mdash; the most emotionally charged format &mdash; provide vicarious parasocial experience. <strong>Character defence culture</strong> functions as free recruitment: character fans become advocates who introduce new players to the system.</p>
+
+  <div class="amp-wrap">
+    <p class="amp-hdr">Community Amplification Loop</p>
+    <div class="amp-grid">
+      <div class="amp-node">
+        <p class="amp-num">01</p>
+        <p class="amp-name">Deliberate Lore Gaps</p>
+        <p class="amp-sub">Studio withholds canon &rarr; community speculates &rarr; emotional investment precedes character arrival</p>
+      </div>
+      <div class="amp-node">
+        <p class="amp-num">02</p>
+        <p class="amp-name">Fan Art &amp; Cosplay</p>
+        <p class="amp-sub">Community creates visual presence between updates &rarr; character stays culturally alive</p>
+      </div>
+      <div class="amp-node">
+        <p class="amp-num">03</p>
+        <p class="amp-name">Shipping Culture</p>
+        <p class="amp-sub">Player-generated relationship narratives &rarr; attachment extends beyond playable content</p>
+      </div>
+      <div class="amp-node">
+        <p class="amp-num">04</p>
+        <p class="amp-name">Content Creator System</p>
+        <p class="amp-sub">Pull reactions + tier lists + permission videos &rarr; attachment becomes public performance</p>
+      </div>
+      <div class="amp-node">
+        <p class="amp-num">05</p>
+        <p class="amp-name">Character Defence Culture</p>
+        <p class="amp-sub">Fans advocate to new players &rarr; organic recruitment into the attachment system</p>
+      </div>
+      <div class="amp-node" style="border-color:rgba(155,109,255,.3);background:rgba(155,109,255,.06)">
+        <p class="amp-num" style="color:var(--green)">&rarr; 01</p>
+        <p class="amp-name">New Players Enter</p>
+        <p class="amp-sub">Recruited by community &rarr; encounter lore gaps &rarr; attachment cycle begins again</p>
+      </div>
+    </div>
+  </div>
+  <div class="cmp">
+    <p class="cmp-lbl">Cross-Industry &middot; Pok&eacute;mon + Overwatch</p>
+    <p class="cmp-body">Pok&eacute;mon&rsquo;s <strong>competitive community</strong> (VGC, Smogon) creates a parallel analytical culture giving players reason to engage with the roster as competitive units independently of story investment. <strong>Version exclusives</strong> create inter-community trade economies. <strong>Overwatch&rsquo;s</strong> team composition discourse and &ldquo;counter&rdquo; culture creates a similar analytical layer, extending character cultural presence beyond gameplay.</p>
+  </div>
+</div>
+
+<!-- FAILURE CASES -->
+<div class="layer">
+  <p class="layer-num">Failure Cases</p>
+  <h2 class="layer-title">When The Architecture Fails</h2>
+  <p class="layer-sub">Three case studies in the collapse of attachment infrastructure.</p>
+  <div class="fail-grid">
+    <div class="fail-cell">
+      <p class="fail-name">Zani &middot; WuWa</p>
+      <p class="fail-title">Dual Pillar Collapse</p>
+      <p class="fail-body"><strong>No meta justification</strong>: kit failed to establish competitive utility, removing the permission structure meta pullers required. <strong>No emotional infrastructure</strong>: the character lacked narrative depth, visual distinctiveness, and community resonance that would have sustained attachment pulling. When both pillars collapse simultaneously there is no floor on revenue underperformance. The overlap player found no entry point from either direction.</p>
+    </div>
+    <div class="fail-cell">
+      <p class="fail-name">Cyno &middot; Genshin</p>
+      <p class="fail-title">Investment Destroyed at Translation</p>
+      <p class="fail-body"><strong>Multi-year pre-attachment investment</strong> &mdash; manga appearances, &ldquo;We Will Be Reunited&rdquo; trailer, Archon-level framing &mdash; generated one of the deepest pre-banner attachment wells in Genshin history. The monetisation system converted none of it. Kit feel failed to match character archetype. Team cost was prohibitive. <strong>Narrative vindication arrived after the monetisation window closed.</strong> Pre-attachment investment does not automatically convert at the banner.</p>
+    </div>
+    <div class="fail-cell">
+      <p class="fail-name">Dehya &middot; Genshin</p>
+      <p class="fail-title">Kit&ndash;Archetype Incoherence</p>
+      <p class="fail-body">Her archetype &mdash; <strong>the selfless protector</strong> who absorbs damage to shield others &mdash; was undermined by a kit whose protection mechanic actively harmed team performance. Playing her as her narrative suggested resulted in worse outcomes than not using the mechanic at all. This is not a balance failure; it is an <em>architectural</em> failure. The layer that should reinforce emotional investment instead contradicted it.</p>
+    </div>
+  </div>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>Character</th>
+          <th>Pre-Banner Investment</th>
+          <th>Kit&ndash;Narrative Alignment</th>
+          <th>Meta Verdict</th>
+          <th>Primary Failure Mode</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Zani (WuWa)</td>
+          <td>Low &mdash; limited story exposure</td>
+          <td><span class="tag-f">ABSENT</span></td>
+          <td><span class="tag-f">WEAK</span></td>
+          <td>Dual pillar collapse</td>
+        </tr>
+        <tr>
+          <td>Cyno (Genshin)</td>
+          <td>Very High &mdash; 2+ year build</td>
+          <td><span class="tag-p">FAILED</span></td>
+          <td><span class="tag-f">WEAK</span></td>
+          <td>Translation failure at banner</td>
+        </tr>
+        <tr>
+          <td>Dehya (Genshin)</td>
+          <td>Moderate &mdash; Sumeru presence</td>
+          <td><span class="tag-f">INVERTED</span></td>
+          <td><span class="tag-f">WEAK</span></td>
+          <td>Kit contradicts archetype</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ETHICS -->
+<div class="layer">
+  <div class="ethics-wrap">
+    <p class="ethics-hdr">Ethics Acknowledgment</p>
+    <p class="prose" style="max-width:none;margin-bottom:10px">Analytical clarity about how these systems work is not an endorsement of their application without ethical consideration. Three tensions warrant acknowledgment.</p>
+    <div class="eth-grid">
+      <div class="eth-cell">
+        <p class="eth-title">Engineered Emotional Obligation</p>
+        <p class="eth-body">Scheduled intimacy and bond progression mechanics are designed to create feelings of reciprocal obligation. The counterargument &mdash; that players exercise genuine agency in choosing what to play and how much to spend &mdash; is substantive and should be taken seriously. Agency within a designed system is still agency.</p>
+      </div>
+      <div class="eth-cell">
+        <p class="eth-title">Parasocial Boundary Blurring</p>
+        <p class="eth-body">Direct address voicelines, birthday messages, and bond progression deliberately blur the line between fictional relationship and parasocial relationship. This is not an unintended side effect &mdash; it is the mechanism. Whether this constitutes exploitation depends on the degree of player awareness.</p>
+      </div>
+      <div class="eth-cell">
+        <p class="eth-title">Spending Compulsion &amp; Vulnerable Players</p>
+        <p class="eth-body">The overlap player sits at the intersection of meta awareness and attachment investment. Systems designed to maximise spending here will disproportionately affect players with compulsive patterns or financial vulnerability. Kuro Games&rsquo; spend responsibly messaging and pity transparency is a positive design acknowledgment worth noting.</p>
+      </div>
+    </div>
+    <p class="prose" style="max-width:none;margin-bottom:0">The graduated observation: understanding how attachment architecture works creates a responsibility in how it is deployed. The framework describes the system. What studios do with it &mdash; and with what safeguards &mdash; reflects values, not just mechanics.</p>
+  </div>
+</div>
+
+<!-- LAYER 5 -->
+<div class="layer">
+  <p class="layer-num">Layer 5</p>
+  <h2 class="layer-title">Retention&ndash;Monetisation Fusion</h2>
+  <p class="layer-sub">Where emotional architecture and revenue infrastructure converge into a single operating system.</p>
+
+  <div class="tier-wrap">
+    <div class="tier-hdr">Spending Tier Ecosystem</div>
+    <div class="tier-row t-f2p">
+      <div class="tier-lbl"><p class="tier-name">F2P</p><p class="tier-pct">~85&ndash;90%</p></div>
+      <div class="tier-content">
+        <div class="tier-attr"><strong>Revenue Role</strong>Community infrastructure &amp; aspiration engine. Provides the social mass that makes games feel alive.</div>
+        <div class="tier-attr"><strong>Attachment Function</strong>Fan art, discourse, lore speculation &mdash; sustains character visibility between banners at no cost to the studio.</div>
+        <div class="tier-attr"><strong>Monetisation Path</strong>Welkin Moon habit formation; seasonal Battle Pass as low-friction entry point into the spending relationship.</div>
+      </div>
+    </div>
+    <div class="tier-row t-dol">
+      <div class="tier-lbl"><p class="tier-name">Dolphin</p><p class="tier-pct">~8&ndash;12%</p></div>
+      <div class="tier-content">
+        <div class="tier-attr"><strong>Revenue Role</strong>Primary recurring revenue. Consistent banner participation across the roster&rsquo;s most resonant characters.</div>
+        <div class="tier-attr"><strong>Attachment Function</strong>Threshold-based selective spending. Meta awareness acts as filter, not driver.</div>
+        <div class="tier-attr"><strong>Monetisation Path</strong>Banner + limited constellation escalation for high-attachment characters; BP + Welkin as stable baseline.</div>
+      </div>
+    </div>
+    <div class="tier-row t-whl">
+      <div class="tier-lbl"><p class="tier-name">Whale</p><p class="tier-pct">~1&ndash;3%</p></div>
+      <div class="tier-content">
+        <div class="tier-attr"><strong>Revenue Role</strong>Devotion ceiling &mdash; attachment functionally removes the spending limit for the characters they are attached to.</div>
+        <div class="tier-attr"><strong>Attachment Function</strong>C6 / max-dupe as devotion declaration and social display. Spending is emotional and relational, not mechanical.</div>
+        <div class="tier-attr"><strong>Monetisation Path</strong>Full constellation runs; anniversary banners; limited re-run windows create urgency at the ceiling tier.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight">
+    <p class="insight-lbl">Anniversary Case Studies &middot; Peak Loyalty Architecture</p>
+    <p class="insight-body"><strong>Acheron (HSR, 2nd anniversary)</strong> &mdash; mechanically dominant + narrative culmination. <strong>Caster Artoria (FGO, 7th anniversary)</strong> &mdash; positioned as reward for multi-year commitment, celebrating the player&rsquo;s relationship with the game rather than the game&rsquo;s existence. <strong>Hiyuki (WuWa)</strong> &mdash; loyalty reward for the community that sustained the game through its launch controversy. In each case, the anniversary character is not celebrating the game &mdash; it is celebrating the player&rsquo;s relationship with it.</p>
+  </div>
+
+  <div class="fusion-wrap">
+    <div class="fusion-hdr">Retention&ndash;Monetisation Fusion Map</div>
+    <div class="fusion-grid">
+      <div class="fusion-ch" style="background:var(--surface2);border-bottom:1px solid var(--border)"></div>
+      <div class="fusion-ch">F2P Conversion</div>
+      <div class="fusion-ch">Dolphin Escalation</div>
+      <div class="fusion-ch">Whale Ceiling</div>
+      <div class="fusion-rl">Habit Formation<span>Welkin / BP</span></div>
+      <div class="fusion-cell"><span class="pill pill-g">Primary</span><br>Entry point &mdash; establishes the spending relationship before banner pressure exists</div>
+      <div class="fusion-cell"><span class="pill pill-b">Supporting</span><br>Frames banner spending as incremental rather than exceptional</div>
+      <div class="fusion-cell"><span class="pill pill-p">Minimal</span><br>Negligible relative to banner and constellation spend</div>
+      <div class="fusion-rl">Emotional Recurrence<span>Seasonal Events</span></div>
+      <div class="fusion-cell"><span class="pill pill-g">High Impact</span><br>Sustains login frequency; free wishes as goodwill &amp; Layer 2 maintenance</div>
+      <div class="fusion-cell"><span class="pill pill-b">High Impact</span><br>Event stories deepen character attachment &rarr; inform next banner decision</div>
+      <div class="fusion-cell"><span class="pill pill-p">Supporting</span><br>Emotional maintenance between major banner events</div>
+      <div class="fusion-rl" style="border-bottom:none">Peak Loyalty Moments<span>Anniversary Chars</span></div>
+      <div class="fusion-cell" style="border-bottom:none"><span class="pill pill-g">Moderate</span><br>Anniversary freebies reinforce attachment; builds community cohesion</div>
+      <div class="fusion-cell" style="border-bottom:none"><span class="pill pill-b">Primary</span><br>Anniversary characters pass the attachment threshold for the widest dolphin pool</div>
+      <div class="fusion-cell" style="border-bottom:none"><span class="pill pill-p">Peak Revenue</span><br>Full constellation run on anniversary unit = maximum devotion expression</div>
+    </div>
+  </div>
+</div>
+
+<!-- CLOSING -->
+<div class="closing">
+  <p class="layer-num">Closing Argument</p>
+  <h2 class="layer-title">The Pok&eacute;mon Proof</h2>
+  <div class="closing-quote">&ldquo;Hoyoverse, Kuro, and FGO are building toward what Pok&eacute;mon has already proven: that emotional investment in fictional characters does not depreciate over generational timescales.&rdquo;</div>
+  <p class="prose">Pok&eacute;mon&rsquo;s <strong>generational inheritance architecture</strong> is the framework&rsquo;s closing evidence. Attachment formed between a nine-year-old and their first starter in 1996 is still legible in that person&rsquo;s cultural behaviour in 2026. The franchise&rsquo;s 30-year proof is not that it maintained the same playerbase &mdash; it is that it maintained <em>emotional relevance</em> across generational transmission. Parents introduce children to Pok&eacute;mon as a cultural inheritance: a transfer of attachment that reproduces the framework across demographics and decades.</p>
+  <p class="prose" style="margin-bottom:0">The framework&rsquo;s final claim: <strong>Genshin&rsquo;s Furina, WuWa&rsquo;s Rover arc, and FGO&rsquo;s Servant relationships</strong> are not comparable to Pok&eacute;mon yet &mdash; but the architectural ambition is identical. The question for the next decade of live-service design is whether attachment infrastructure built in 2020&ndash;2030 will prove as durable at 30 years as the infrastructure built in 1996. Pok&eacute;mon is the proof of concept. These studios are building the next iteration.</p>
+</div>
+
+</div><!-- /doc -->
+</body>
+</html>
