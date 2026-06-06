@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Music as Retention Infrastructure — Leon Telemaque</title>
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0d0f14;
+      --surface:     #141720;
+      --surface-alt: #1a1e2b;
+      --border:      #252a3a;
+      --accent:      #7c6af7;
+      --accent-dim:  #4e45a0;
+      --accent-glow: rgba(124,106,247,0.15);
+      --gold:        #f0b429;
+      --gold-dim:    rgba(240,180,41,0.12);
+      --green:       #36c987;
+      --green-dim:   rgba(54,201,135,0.12);
+      --red:         #f06060;
+      --red-dim:     rgba(240,96,96,0.12);
+      --text:        #e2e4ed;
+      --muted:       #7a7f96;
+      --mono:        'JetBrains Mono', 'Fira Mono', 'Courier New', monospace;
+      --sans:        'Inter', 'Segoe UI', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    /* ─── Typography ───────────────────────────────────────────────────── */
+    h1 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+    h2 { font-size: clamp(1.25rem, 3vw, 1.75rem); font-weight: 600; letter-spacing: -0.01em; }
+    h3 { font-size: 1.1rem; font-weight: 600; }
+    p { color: #b0b5cc; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .mono { font-family: var(--mono); font-size: 0.78rem; }
+    .label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ─── Layout ───────────────────────────────────────────────────────── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* ─── Navigation ───────────────────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13,15,20,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .nav-brand {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .nav-brand span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-family: var(--mono);
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .nav-links a.active { color: var(--accent); }
+
+    /* ─── Hero ─────────────────────────────────────────────────────────── */
+    .hero {
+      padding: 96px 0 64px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(124,106,247,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(124,106,247,0.3);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .hero h1 { max-width: 760px; margin-bottom: 20px; }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 640px;
+      margin-bottom: 48px;
+      line-height: 1.65;
+    }
+
+    .thesis-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 20px 24px;
+      max-width: 780px;
+    }
+
+    .thesis-block .label { margin-bottom: 8px; }
+    .thesis-block p {
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    /* ─── Section ──────────────────────────────────────────────────────── */
+    section { padding: 80px 0; }
+    section + section { border-top: 1px solid var(--border); }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .section-num {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+    }
+
+    /* ─── Framework Overview ───────────────────────────────────────────── */
+    .framework-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .framework-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .framework-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--card-accent, var(--accent));
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .framework-card:hover {
+      border-color: var(--card-accent, var(--accent));
+      transform: translateY(-2px);
+    }
+
+    .framework-card:hover::before { opacity: 1; }
+    .framework-card.active {
+      border-color: var(--card-accent, var(--accent));
+      background: var(--surface-alt);
+    }
+    .framework-card.active::before { opacity: 1; }
+
+    .card-num {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+    }
+
+    .framework-card h3 { font-size: 0.95rem; margin-bottom: 8px; }
+    .framework-card p { font-size: 0.82rem; line-height: 1.5; }
+
+    /* Framework detail panel */
+    .framework-detail {
+      margin-top: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 32px;
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .detail-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 20px; }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 640px) {
+      .detail-grid { grid-template-columns: 1fr; }
+    }
+
+    .detail-point {
+      display: flex;
+      gap: 12px;
+      padding: 16px;
+      background: var(--surface-alt);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .detail-point-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .detail-point h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
+    .detail-point p { font-size: 0.8rem; line-height: 1.45; }
+
+    /* ─── Case Studies ─────────────────────────────────────────────────── */
+    .case-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 32px;
+      width: fit-content;
+    }
+
+    .case-tab {
+      padding: 10px 20px;
+      border-radius: 7px;
+      font-size: 0.82rem;
+      font-family: var(--mono);
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--muted);
+      background: none;
+      border: none;
+      letter-spacing: 0.03em;
+    }
+
+    .case-tab:hover { color: var(--text); }
+
+    .case-tab.active {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .case-tab.active[data-case="mhw"] { color: var(--gold); border-color: rgba(240,180,41,0.3); }
+    .case-tab.active[data-case="destiny"] { color: var(--accent); border-color: rgba(124,106,247,0.3); }
+    .case-tab.active[data-case="p5"] { color: var(--red); border-color: rgba(240,96,96,0.3); }
+
+    .case-panel { display: none; animation: fadeIn 0.25s ease; }
+    .case-panel.active { display: block; }
+
+    .case-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .case-layout { grid-template-columns: 1fr; }
+    }
+
+    .case-main {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 32px;
+    }
+
+    .case-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .case-logo {
+      width: 48px; height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .case-meta { flex: 1; }
+    .case-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; }
+    .case-subtitle { font-size: 0.8rem; color: var(--muted); font-family: var(--mono); }
+
+    .case-body h4 {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-family: var(--mono);
+      margin: 20px 0 10px;
+    }
+
+    .case-body h4:first-child { margin-top: 0; }
+    .case-body p { font-size: 0.88rem; line-height: 1.65; margin-bottom: 8px; }
+
+    .mechanism-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mechanism-list li {
+      display: flex;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: #b0b5cc;
+      padding: 10px 14px;
+      background: var(--surface-alt);
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .mechanism-list li::before {
+      content: '→';
+      color: var(--case-accent, var(--accent));
+      flex-shrink: 0;
+      font-family: var(--mono);
+    }
+
+    .case-sidebar { display: flex; flex-direction: column; gap: 16px; }
+
+    .sidebar-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .sidebar-card .label { margin-bottom: 12px; }
+
+    .retention-bar {
+      margin-bottom: 14px;
+    }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-family: var(--mono);
+      margin-bottom: 5px;
+    }
+
+    .bar-track {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 1s cubic-bezier(.4,0,.2,1);
+    }
+
+    .insight-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.77rem;
+      font-family: var(--mono);
+      margin: 4px 4px 4px 0;
+    }
+
+    /* ─── Grind Spectrum ───────────────────────────────────────────────── */
+    .spectrum-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .spectrum-title { font-size: 0.82rem; color: var(--muted); font-family: var(--mono); margin-bottom: 28px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+    .spectrum-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .spectrum-game {
+      width: 120px;
+      font-size: 0.8rem;
+      font-family: var(--mono);
+      color: var(--muted);
+      flex-shrink: 0;
+      text-align: right;
+    }
+
+    .spectrum-track {
+      flex: 1;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: visible;
+      position: relative;
+    }
+
+    .spectrum-fill {
+      height: 100%;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .spectrum-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      position: absolute;
+      right: -7px; top: 50%;
+      transform: translateY(-50%);
+      border: 2px solid var(--bg);
+    }
+
+    .spectrum-val {
+      width: 36px;
+      font-size: 0.75rem;
+      font-family: var(--mono);
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .spectrum-axis {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 16px;
+      padding-left: 136px;
+      padding-right: 52px;
+    }
+
+    .spectrum-axis span {
+      font-size: 0.68rem;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+
+    /* ─── Comparison Table ─────────────────────────────────────────────── */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+    }
+
+    .compare-table th {
+      text-align: left;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+
+    .compare-table th:first-child { border-radius: 8px 0 0 0; }
+    .compare-table th:last-child  { border-radius: 0 8px 0 0; }
+
+    .compare-table td {
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      color: #b0b5cc;
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .compare-table tr:last-child td:first-child { border-radius: 0 0 0 8px; }
+    .compare-table tr:last-child td:last-child  { border-radius: 0 0 8px 0; }
+
+    .compare-table td.game-name {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .compare-table tr:hover td { background: var(--surface); }
+
+    .score-chip {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 10px;
+      font-size: 0.73rem;
+      font-family: var(--mono);
+      font-weight: 600;
+    }
+
+    /* ─── Live Service Gap ─────────────────────────────────────────────── */
+    .gap-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 640px) {
+      .gap-grid { grid-template-columns: 1fr; }
+    }
+
+    .gap-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+    }
+
+    .gap-card.opportunity {
+      border-left: 3px solid var(--green);
+    }
+
+    .gap-card.failure {
+      border-left: 3px solid var(--red);
+    }
+
+    .gap-icon { font-size: 1.3rem; margin-bottom: 12px; }
+    .gap-card h3 { font-size: 0.9rem; margin-bottom: 8px; }
+    .gap-card p { font-size: 0.82rem; line-height: 1.55; }
+
+    .gap-examples {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .game-tag {
+      padding: 3px 10px;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 0.73rem;
+      font-family: var(--mono);
+      color: var(--muted);
+    }
+
+    /* ─── Measurement Framework ────────────────────────────────────────── */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+    }
+
+    .metric-card .label { color: var(--accent); margin-bottom: 10px; }
+    .metric-card h3 { font-size: 0.95rem; margin-bottom: 10px; }
+    .metric-card p { font-size: 0.82rem; line-height: 1.5; }
+
+    .formula-block {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-top: 14px;
+      font-family: var(--mono);
+      font-size: 0.77rem;
+      color: var(--accent);
+      line-height: 1.6;
+    }
+
+    /* ─── Key Claims ───────────────────────────────────────────────────── */
+    .claims-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .claim-stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .claim-value {
+      font-size: 2.2rem;
+      font-weight: 700;
+      font-family: var(--mono);
+      color: var(--accent);
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .claim-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* ─── Footer ────────────────────────────────────────────────────────── */
+    footer {
+      padding: 48px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .footer-left h3 {
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+    }
+
+    .footer-left p {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .footer-meta {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-align: right;
+      line-height: 1.8;
+    }
+
+    /* ─── Utilities ─────────────────────────────────────────────────────── */
+    .hidden { display: none !important; }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 32px 0;
+    }
+
+    @media (max-width: 680px) {
+      .nav-links { display: none; }
+      .case-tabs {
+        flex-direction: column;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Navigation ──────────────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand">leon.telemaque / <span>portfolio</span></div>
+    <ul class="nav-links">
+      <li><a href="#framework" class="active">Framework</a></li>
+      <li><a href="#case-studies">Case Studies</a></li>
+      <li><a href="#gap">The Gap</a></li>
+      <li><a href="#measurement">Measurement</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── Hero ────────────────────────────────────────────────────────────── -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-tag">Research Framework · Live Service Design</div>
+    <h1>Music as <em>Retention Infrastructure</em><br>in Live Service Games</h1>
+    <p class="hero-sub">
+      Why the games that hold players longest don't just design better loops —
+      they design better <em>feelings</em>. A psychological and design framework
+      built across three deep case studies.
+    </p>
+    <div class="thesis-block">
+      <div class="label">Core Thesis</div>
+      <p>
+        Music actively reduces grind fatigue and extends session investment in repetitive game systems.
+        It works through autonomic arousal modulation, narrative anchoring, and community-encoded
+        emotional memory — and it is systematically underused in modern live service design.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 1: Framework ────────────────────────────────────────────── -->
+<section id="framework">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>The Four-Layer Framework</h2>
+    </div>
+
+    <div class="framework-grid" id="frameworkGrid">
+
+      <div class="framework-card" data-layer="0" style="--card-accent: #7c6af7;" onclick="showLayer(0)">
+        <div class="card-num">LAYER 01</div>
+        <div class="card-icon">🧠</div>
+        <h3>Psychological Foundation</h3>
+        <p>How music interfaces with the autonomic nervous system, attention load, and task endurance — and why this matters for repetitive play.</p>
+      </div>
+
+      <div class="framework-card" data-layer="1" style="--card-accent: #f0b429;" onclick="showLayer(1)">
+        <div class="card-num">LAYER 02</div>
+        <div class="card-icon">🎮</div>
+        <h3>Game Design Analysis</h3>
+        <p>How MHW, Destiny 1, and Persona 5 each weaponise music differently against different grind types — and why each approach works.</p>
+      </div>
+
+      <div class="framework-card" data-layer="2" style="--card-accent: #f06060;" onclick="showLayer(2)">
+        <div class="card-num">LAYER 03</div>
+        <div class="card-icon">📉</div>
+        <h3>The Live Service Gap</h3>
+        <p>Where current live service titles leave this lever untouched — and what the opportunity cost looks like in player behaviour terms.</p>
+      </div>
+
+      <div class="framework-card" data-layer="3" style="--card-accent: #36c987;" onclick="showLayer(3)">
+        <div class="card-num">LAYER 04</div>
+        <div class="card-icon">📊</div>
+        <h3>Measurement Design</h3>
+        <p>The telemetry infrastructure and methodology that would actually quantify music's retention effect — if someone built it.</p>
+      </div>
+
+    </div>
+
+    <!-- Detail panels -->
+    <div id="layerDetail0" class="framework-detail" style="border-left: 3px solid #7c6af7;">
+      <div class="detail-title">Layer 01 — Psychological Foundation</div>
+      <div class="detail-grid">
+        <div class="detail-point">
+          <div class="detail-point-icon">🎵</div>
+          <div>
+            <h4>Arousal Modulation</h4>
+            <p>Music at 120–140 BPM activates the sympathetic nervous system — increasing alertness and masking fatigue onset. Hunt music in MHW sits precisely in this range during active combat. Players don't recognise they're being biologically sustained.</p>
+          </div>
+        </div>
+        <div class="detail-point">
+          <div class="detail-point-icon">🔄</div>
+          <div>
+            <h4>Task Completion Signal</h4>
+            <p>Music resolves harmonic tension on kill/completion events. This creates a neurochemical micro-reward loop that maps to the dopaminergic pattern of intermittent reinforcement — which is also why slot machines work.</p>
+          </div>
+        </div>
+        <div class="detail-point">
+          <div class="detail-point-icon">🧩</div>
+          <div>
+            <h4>Cognitive Load Shedding</h4>
+            <p>Repetitive systems require conscious monitoring. Music shifts some of that processing to the auditory cortex, reducing the sense of cognitive effort. Tasks feel less draining at the same objective complexity level.</p>
+          </div>
+        </div>
+        <div class="detail-point">
+          <div class="detail-point-icon">🏪</div>
+          <div>
+            <h4>Consumer Psychology Precedent</h4>
+            <p>Nintendo's eShop used slow-tempo ambient music (≈60 BPM) that measurably increased browse time by reducing decision fatigue. If a storefront music choice has measurable behavioural effects, in-game music almost certainly does too.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="layerDetail1" class="framework-detail hidden" style="border-left: 3px solid #f0b429;">
+      <div class="detail-title">Layer 02 — Game Design Analysis</div>
+      <div class="detail-grid">
+        <div class="detail-point">
+          <div class="detail-point-icon">⚔️</div>
+          <div>
+            <h4>Monster Hunter World</h4>
+            <p>Uses monster-specific escalating music as an adaptive difficulty signal. The audio tells players what phase they're in before the visual cues confirm it. Mastery of the hunt is partly mastery of the music's language — making repetition feel like fluency gain.</p>
+          </div>
+        </div>
+        <div class="detail-point">
+          <div class="detail-point-icon">🌌</div>
+          <div>
+            <h4>Destiny 1</h4>
+            <p>Uses Marty O'Donnell's score as community glue during content droughts. The music doesn't just soundtrack activity — it narratively justifies absence and return. Players who quit still identify with the score, reducing churn to permanent departure.</p>
+          </div>
+        </div>
+        <div class="detail-point">
+          <div class="detail-point-icon">🎭</div>
+          <div>
+            <h4>Persona 5</h4>
+            <p>Palaces should produce severe fatigue — they are long, turn-based, mechanically repetitive. Jazzy, stylised, upbeat tracks actively contradict the genre convention and override the expected decay. The dissonance is the mechanism.</p>
+          </div>
+        </div>
+        <div class="detail-point">
+          <div class="detail-point-icon">📐</div>
+          <div>
+            <h4>The Design Principle</h4>
+            <p>Each game uses a different mode: MHW uses <em>progression signalling</em>, Destiny uses <em>identity encoding</em>, P5 uses <em>mood contradiction</em>. These are distinct tools from the same toolbox — and most live service games use none of them deliberately.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="layerDetail2" class="framework-detail hidden" style="border-left: 3px solid #f06060;">
+      <div class="detail-title">Layer 03 — The Live Service Gap</div>
+      <div class="detail-grid">
+        <div class="detail-point">
+          <div class="detail-point-icon">🔁</div>
+          <div>
+            <h4>The Generic Loop Problem</h4>
+            <p>Most live service titles loop 2–4 combat/ambient tracks across all progression states. There is no musical language for mastery, no audio signal for seasonal identity, no designed mood arc through a session. The audio is decoration.</p>
+          </div>
+        </div>
+        <div class="detail-point">
+          <div class="detail-point-icon">💸</div>
+          <div>
+            <h4>Where Budget Goes Instead</h4>
+            <p>Live service devs invest in cosmetic seasonal content, battle pass UI, and engagement notifications. These are visible, attributable, A/B-testable. Music ROI is invisible to standard analytics — so it never competes for budget.</p>
+          </div>
+        </div>
+        <div class="detail-point">
+          <div class="detail-point-icon">📵</div>
+          <div>
+            <h4>The Mute Rate Problem</h4>
+            <p>Because live service sessions are often longer and social (Discord, streams), music is muted more frequently. Studios interpret this as low value. But muting is also a signal that the audio isn't competing for attention with communication — it's not hostile, it's just not designed to be felt.</p>
+          </div>
+        </div>
+        <div class="detail-point">
+          <div class="detail-point-icon">⚡</div>
+          <div>
+            <h4>The Actual Opportunity</h4>
+            <p>Season-specific music that decays and returns with lore. Dynamic mixing tied to progression events. Music as a community memory anchor for returning players. None of these require new technology — they require a design framework that treats audio as retention infrastructure.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="layerDetail3" class="framework-detail hidden" style="border-left: 3px solid #36c987;">
+      <div class="detail-title">Layer 04 — What Measurement Would Look Like</div>
+      <div class="detail-grid">
+        <div class="detail-point">
+          <div class="detail-point-icon">📡</div>
+          <div>
+            <h4>Audio State Telemetry</h4>
+            <p>Tag all in-game music events with IDs: track ID, loop count, phase, player volume setting. Correlate with session length, task completion rate, and mute time. This generates a per-track engagement coefficient without any player survey.</p>
+          </div>
+        </div>
+        <div class="detail-point">
+          <div class="detail-point-icon">🔬</div>
+          <div>
+            <h4>The Natural Experiment</h4>
+            <p>Every audio update (track swap, volume rebalance, new layer) is a natural experiment if logged correctly. Compare cohort session behaviour pre/post update, controlling for patch notes. Most studios have this data — they just don't log the audio state.</p>
+          </div>
+        </div>
+        <div class="detail-point">
+          <div class="detail-point-icon">🧪</div>
+          <div>
+            <h4>Viable A/B Design</h4>
+            <p>Route 5% of sessions to ambient-only (no dynamic mixing), hold all else constant. Measure: session length, return rate D1/D7/D30, task completion per session. Even 20k sessions would yield statistical power sufficient for a publishable effect size.</p>
+          </div>
+        </div>
+        <div class="detail-point">
+          <div class="detail-point-icon">📈</div>
+          <div>
+            <h4>The Confound Problem</h4>
+            <p>Engaged players mute less — so mute rate looks like an effect rather than a cause. The valid instrument is session-start mute: did the player mute before first content interaction? This controls for engagement level as a confounder.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Section 2: Case Studies ─────────────────────────────────────────── -->
+<section id="case-studies">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Case Studies</h2>
+    </div>
+
+    <!-- Grind Spectrum -->
+    <div class="spectrum-container">
+      <div class="spectrum-title">Grind Type Spectrum — How Each Case Maps</div>
+
+      <div class="spectrum-row">
+        <div class="spectrum-game">Monster Hunter</div>
+        <div class="spectrum-track">
+          <div class="spectrum-fill" style="width:80%; background: linear-gradient(90deg, #f0b429, #e09520);">
+            <div class="spectrum-dot" style="background: #f0b429;"></div>
+          </div>
+        </div>
+        <div class="spectrum-val mono">High</div>
+      </div>
+
+      <div class="spectrum-row">
+        <div class="spectrum-game">Destiny 1</div>
+        <div class="spectrum-track">
+          <div class="spectrum-fill" style="width:58%; background: linear-gradient(90deg, #7c6af7, #5a50cc);">
+            <div class="spectrum-dot" style="background: #7c6af7;"></div>
+          </div>
+        </div>
+        <div class="spectrum-val mono">Med</div>
+      </div>
+
+      <div class="spectrum-row">
+        <div class="spectrum-game">Persona 5</div>
+        <div class="spectrum-track">
+          <div class="spectrum-fill" style="width:71%; background: linear-gradient(90deg, #f06060, #cc4444);">
+            <div class="spectrum-dot" style="background: #f06060;"></div>
+          </div>
+        </div>
+        <div class="spectrum-val mono">High</div>
+      </div>
+
+      <div class="spectrum-axis">
+        <span>Low grind</span>
+        <span>Severe grind</span>
+      </div>
+    </div>
+
+    <!-- Case Study Tabs -->
+    <div class="case-tabs">
+      <button class="case-tab active" data-case="mhw" onclick="switchCase('mhw')">Monster Hunter World</button>
+      <button class="case-tab" data-case="destiny" onclick="switchCase('destiny')">Destiny 1</button>
+      <button class="case-tab" data-case="p5" onclick="switchCase('p5')">Persona 5</button>
+    </div>
+
+    <!-- MHW Panel -->
+    <div class="case-panel active" id="case-mhw">
+      <div class="case-layout">
+        <div class="case-main" style="--case-accent: #f0b429;">
+          <div class="case-header">
+            <div class="case-logo" style="background: rgba(240,180,41,0.12); border: 1px solid rgba(240,180,41,0.2);">⚔️</div>
+            <div class="case-meta">
+              <div class="case-title">Monster Hunter World</div>
+              <div class="case-subtitle">Capcom · Action RPG · 2018 · ~200–500hr avg playthrough</div>
+            </div>
+          </div>
+          <div class="case-body">
+            <h4>The Grind Problem</h4>
+            <p>MHW's loop is structurally identical across hundreds of hours: load into zone, track monster, kill monster, harvest parts, upgrade gear, repeat. By any traditional retention model, this loop should produce severe fatigue by hour 50. It doesn't — and the music is a significant part of why.</p>
+
+            <h4>The Mechanism</h4>
+            <ul class="mechanism-list" style="--case-accent: #f0b429;">
+              <li>Each monster has a unique, escalating score that moves through distinct phases: idle tracking → engagement → enragement → near-death. Players internalise this as a secondary difficulty language.</li>
+              <li>The moment a hunter learns to read the music — knowing an enrage is coming before the visual animation — marks a player's transition from novice to competent. Music teaches mastery.</li>
+              <li>At 120–140 BPM during active combat, the score maintains physiological arousal at levels that delay subjective fatigue. Players describe "being in the zone" — they're describing an audio-assisted flow state.</li>
+              <li>Post-hunt loading screens use distinct resolution themes. The hunt music's harmonic tension resolves. This maps cleanly to neurological reward completion signals, not just metaphorically but mechanistically.</li>
+            </ul>
+
+            <h4>Why This Works Against Repetition Specifically</h4>
+            <p>Most anti-fatigue mechanics fight repetition by adding variety. MHW's audio approach does the opposite: it deepens the repetition into expertise. The same hunt at 200 hours sounds different to a veteran than at hour 5 — not because the music changed, but because the player's relationship to its language has evolved. That's a fundamentally different design philosophy.</p>
+          </div>
+        </div>
+
+        <div class="case-sidebar">
+          <div class="sidebar-card">
+            <div class="label">Music Retention Levers</div>
+            <div class="retention-bar">
+              <div class="bar-label"><span>Arousal Maintenance</span><span style="color:#f0b429;">★★★★★</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:95%; background: #f0b429;"></div></div>
+            </div>
+            <div class="retention-bar">
+              <div class="bar-label"><span>Mastery Signalling</span><span style="color:#f0b429;">★★★★★</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:92%; background: #f0b429;"></div></div>
+            </div>
+            <div class="retention-bar">
+              <div class="bar-label"><span>Community Identity</span><span style="color:#f0b429;">★★★☆☆</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:55%; background: #f0b429;"></div></div>
+            </div>
+            <div class="retention-bar">
+              <div class="bar-label"><span>Mood Override</span><span style="color:#f0b429;">★★★☆☆</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:60%; background: #f0b429;"></div></div>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <div class="label">Key Design Insight</div>
+            <p style="font-size:0.82rem; line-height:1.55;">Music isn't used to distract from grind. It's used to make grind legible as expertise. That reframing is the mechanism — repeated content feels like fluency gain, not repetition.</p>
+          </div>
+
+          <div class="sidebar-card">
+            <div class="label">Tags</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+              <span class="insight-pill" style="background:rgba(240,180,41,0.1); border:1px solid rgba(240,180,41,0.25); color:#f0b429;">Adaptive Audio</span>
+              <span class="insight-pill" style="background:rgba(240,180,41,0.1); border:1px solid rgba(240,180,41,0.25); color:#f0b429;">Flow State</span>
+              <span class="insight-pill" style="background:rgba(240,180,41,0.1); border:1px solid rgba(240,180,41,0.25); color:#f0b429;">Mastery Signal</span>
+              <span class="insight-pill" style="background:rgba(240,180,41,0.1); border:1px solid rgba(240,180,41,0.25); color:#f0b429;">Phase Cues</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Destiny Panel -->
+    <div class="case-panel" id="case-destiny">
+      <div class="case-layout">
+        <div class="case-main" style="--case-accent: #7c6af7;">
+          <div class="case-header">
+            <div class="case-logo" style="background: var(--accent-glow); border: 1px solid rgba(124,106,247,0.2);">🌌</div>
+            <div class="case-meta">
+              <div class="case-title">Destiny 1</div>
+              <div class="case-subtitle">Bungie · First-Person Shooter · Live Service · 2014–2017</div>
+            </div>
+          </div>
+          <div class="case-body">
+            <h4>The Grind Problem</h4>
+            <p>Destiny 1's live service structure meant players frequently hit content walls — periods of weeks or months where new content hadn't shipped and existing content was exhausted. Traditional live service analysis predicts permanent churn during these droughts. Destiny 1's community behaviour defied that model.</p>
+
+            <h4>The Mechanism</h4>
+            <ul class="mechanism-list" style="--case-accent: #7c6af7;">
+              <li>Marty O'Donnell's score was compositionally ambitious — deliberately more complex than a shooter's audio usually demands. The music built an emotional weight that exceeded the content it was attached to.</li>
+              <li>The score anchored community memory to specific game states: the opening cosmodrome, the vault of glass, the first Crota fight. These memories were musically encoded — players couldn't recall the content without the audio.</li>
+              <li>During droughts, players returned to familiar activities partly for the audio experience itself. The music had become a social object — shared playlists, YouTube compilations, community recognition signals.</li>
+              <li>Bungie's removal of O'Donnell's score in Destiny 2 is a natural experiment: community sentiment and session behaviour shifted measurably. The counter-evidence is the evidence.</li>
+            </ul>
+
+            <h4>What Live Service Designers Miss</h4>
+            <p>Destiny 1 demonstrates that music can function as a community cohesion mechanism — not just a session experience. Players who churned during content droughts remained culturally Destiny players. When content returned, they came back. This is a different kind of retention: identity retention rather than engagement retention. Current live service design has no framework for designing this deliberately.</p>
+          </div>
+        </div>
+
+        <div class="case-sidebar">
+          <div class="sidebar-card">
+            <div class="label">Music Retention Levers</div>
+            <div class="retention-bar">
+              <div class="bar-label"><span>Arousal Maintenance</span><span style="color:#7c6af7;">★★★☆☆</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:55%; background: #7c6af7;"></div></div>
+            </div>
+            <div class="retention-bar">
+              <div class="bar-label"><span>Mastery Signalling</span><span style="color:#7c6af7;">★★☆☆☆</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:38%; background: #7c6af7;"></div></div>
+            </div>
+            <div class="retention-bar">
+              <div class="bar-label"><span>Community Identity</span><span style="color:#7c6af7;">★★★★★</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:96%; background: #7c6af7;"></div></div>
+            </div>
+            <div class="retention-bar">
+              <div class="bar-label"><span>Drought Resilience</span><span style="color:#7c6af7;">★★★★★</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:90%; background: #7c6af7;"></div></div>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <div class="label">Key Design Insight</div>
+            <p style="font-size:0.82rem; line-height:1.55;">Music can retain players <em>after</em> they stop playing. Identity retention — the state of remaining culturally attached to a game's community — is its own form of retention that translates to reactivation when content returns.</p>
+          </div>
+
+          <div class="sidebar-card">
+            <div class="label">Tags</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+              <span class="insight-pill" style="background:rgba(124,106,247,0.1); border:1px solid rgba(124,106,247,0.25); color:#7c6af7;">Identity Anchor</span>
+              <span class="insight-pill" style="background:rgba(124,106,247,0.1); border:1px solid rgba(124,106,247,0.25); color:#7c6af7;">Drought Buffer</span>
+              <span class="insight-pill" style="background:rgba(124,106,247,0.1); border:1px solid rgba(124,106,247,0.25); color:#7c6af7;">Community Memory</span>
+              <span class="insight-pill" style="background:rgba(124,106,247,0.1); border:1px solid rgba(124,106,247,0.25); color:#7c6af7;">Reactivation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Persona 5 Panel -->
+    <div class="case-panel" id="case-p5">
+      <div class="case-layout">
+        <div class="case-main" style="--case-accent: #f06060;">
+          <div class="case-header">
+            <div class="case-logo" style="background: var(--red-dim); border: 1px solid rgba(240,96,96,0.2);">🎭</div>
+            <div class="case-meta">
+              <div class="case-title">Persona 5</div>
+              <div class="case-subtitle">Atlus · JRPG · 2017 · Avg completion: 100+ hrs</div>
+            </div>
+          </div>
+          <div class="case-body">
+            <h4>The Grind Problem</h4>
+            <p>Persona 5's Palaces are the central dungeon mechanic: long, turn-based, mechanically repetitive sequences with no meaningful randomisation. Every JRPG design principle predicts that 100+ hours of this format produces severe session decay and fatigue. The game is beloved for its feel. The music is the primary reason.</p>
+
+            <h4>The Mechanism</h4>
+            <ul class="mechanism-list" style="--case-accent: #f06060;">
+              <li>The score by Shoji Meguro uses upbeat jazz-funk — a genre associated with confidence, movement, and cool. This is tonally dissonant with the genre expectation (slow, atmospheric, tense dungeon music). That dissonance is the design choice.</li>
+              <li>Players enter repetitive combat feeling stylistically empowered rather than grinding through it. The audio reframes the activity's social meaning: you're not grinding, you're performing.</li>
+              <li>Tracks like "Last Surprise" and "Wake Up, Get Up, Get Out There" are culturally legible outside the game — playlist staples, meme music, cosplay soundtracks. The music functions as cultural capital that extends identity beyond play.</li>
+              <li>The music's tempo (upbeat throughout) prevents the standard fatigue signal from being triggered. You cannot feel like you're grinding to slow, atmospheric music playing fast-paced jazz.</li>
+            </ul>
+
+            <h4>The Cognitive Dissonance Effect</h4>
+            <p>Shoji Meguro's approach works because it exploits a cognitive dissonance effect: if the music tells you you're having fun, and you're oriented toward the music, the brain reconciles the gap by reframing the activity as enjoyable. This isn't manipulation — it's design that understands how emotional context shapes experience. The activity is the same; the felt experience is profoundly different.</p>
+          </div>
+        </div>
+
+        <div class="case-sidebar">
+          <div class="sidebar-card">
+            <div class="label">Music Retention Levers</div>
+            <div class="retention-bar">
+              <div class="bar-label"><span>Arousal Maintenance</span><span style="color:#f06060;">★★★★☆</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:80%; background: #f06060;"></div></div>
+            </div>
+            <div class="retention-bar">
+              <div class="bar-label"><span>Mood Override</span><span style="color:#f06060;">★★★★★</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:97%; background: #f06060;"></div></div>
+            </div>
+            <div class="retention-bar">
+              <div class="bar-label"><span>Cultural Capital</span><span style="color:#f06060;">★★★★★</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:93%; background: #f06060;"></div></div>
+            </div>
+            <div class="retention-bar">
+              <div class="bar-label"><span>Fatigue Prevention</span><span style="color:#f06060;">★★★★★</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width:91%; background: #f06060;"></div></div>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <div class="label">Key Design Insight</div>
+            <p style="font-size:0.82rem; line-height:1.55;">Mood contradiction — playing audio that conflicts with the expected emotional register of the activity — is a distinct tool. It doesn't sustain the grind; it reframes it. "You're not grinding. You're the Phantom Thieves."</p>
+          </div>
+
+          <div class="sidebar-card">
+            <div class="label">Tags</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+              <span class="insight-pill" style="background:rgba(240,96,96,0.1); border:1px solid rgba(240,96,96,0.25); color:#f06060;">Mood Contradiction</span>
+              <span class="insight-pill" style="background:rgba(240,96,96,0.1); border:1px solid rgba(240,96,96,0.25); color:#f06060;">Identity Frame</span>
+              <span class="insight-pill" style="background:rgba(240,96,96,0.1); border:1px solid rgba(240,96,96,0.25); color:#f06060;">Genre Subversion</span>
+              <span class="insight-pill" style="background:rgba(240,96,96,0.1); border:1px solid rgba(240,96,96,0.25); color:#f06060;">Cultural Spread</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison Table -->
+    <div style="margin-top:40px;">
+      <h3 style="margin-bottom:16px; font-size:0.85rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); font-family:var(--mono);">Cross-Case Comparison</h3>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Game</th>
+            <th>Grind Type</th>
+            <th>Music Strategy</th>
+            <th>Primary Mechanism</th>
+            <th>Transferable to Live Service?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="game-name" style="color:#f0b429;">Monster Hunter World</td>
+            <td>Identical loop, hundreds of hours</td>
+            <td>Adaptive escalation per monster phase</td>
+            <td>Mastery signalling — music teaches and rewards expertise</td>
+            <td><span class="score-chip" style="background:rgba(54,201,135,0.12); color:#36c987; border:1px solid rgba(54,201,135,0.25);">High — Event tracking</span></td>
+          </tr>
+          <tr>
+            <td class="game-name" style="color:#7c6af7;">Destiny 1</td>
+            <td>Content drought / inter-season dead zones</td>
+            <td>Emotionally ambitious orchestral identity score</td>
+            <td>Community memory encoding — music outlasts the content</td>
+            <td><span class="score-chip" style="background:rgba(54,201,135,0.12); color:#36c987; border:1px solid rgba(54,201,135,0.25);">High — Season theming</span></td>
+          </tr>
+          <tr>
+            <td class="game-name" style="color:#f06060;">Persona 5</td>
+            <td>Long-form turn-based repetition</td>
+            <td>Genre-contradicting jazz-funk energy</td>
+            <td>Emotional reframing — activity feels like style, not grind</td>
+            <td><span class="score-chip" style="background:rgba(240,180,41,0.12); color:#f0b429; border:1px solid rgba(240,180,41,0.25);">Medium — Genre-specific</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Section 3: The Live Service Gap ─────────────────────────────────── -->
+<section id="gap">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>The Live Service Gap</h2>
+    </div>
+
+    <p style="max-width:680px; margin-bottom:40px; font-size:0.95rem; line-height:1.7;">
+      The games that have proven music works as a retention tool are not live service titles.
+      The games that need it most — high-repetition, long-form live service products —
+      are the ones using it least deliberately. That asymmetry is the gap.
+    </p>
+
+    <div class="gap-grid">
+      <div class="gap-card failure">
+        <div class="gap-icon">❌</div>
+        <h3>What Live Service Does Now</h3>
+        <p>Static 2–4 track combat loops with no state dependency. Music is mixed at flat volume regardless of game state. No audio signal for progression milestones, season changes, or player mastery. Audio is often described by devs as "background" — which is precisely the problem.</p>
+        <div class="gap-examples">
+          <span class="game-tag">Apex Legends</span>
+          <span class="game-tag">Warzone</span>
+          <span class="game-tag">The Division 2</span>
+          <span class="game-tag">Outriders</span>
+        </div>
+      </div>
+
+      <div class="gap-card opportunity">
+        <div class="gap-icon">✦</div>
+        <h3>What the Framework Suggests Instead</h3>
+        <p>Dynamic audio layers tied to progression state. Season-exclusive tracks that encode temporal identity ("this music means Season 4"). Music-marked milestone events with distinct harmonic resolution. A score ambitious enough to outlive the content it's attached to.</p>
+        <div class="gap-examples">
+          <span class="game-tag" style="border-color:rgba(54,201,135,0.3); color:#36c987;">Event-reactive music</span>
+          <span class="game-tag" style="border-color:rgba(54,201,135,0.3); color:#36c987;">Season identity tracks</span>
+          <span class="game-tag" style="border-color:rgba(54,201,135,0.3); color:#36c987;">Mastery audio layers</span>
+        </div>
+      </div>
+
+      <div class="gap-card failure">
+        <div class="gap-icon">📊</div>
+        <h3>Why the Budget Never Goes Here</h3>
+        <p>Music ROI is invisible to standard live service analytics. There's no "music engagement" column in your session telemetry. Cosmetic items, notifications, and UI changes are A/B-testable and attributable. Music effects are systemic and slow — incompatible with sprint-cycle decision-making and quarterly metrics.</p>
+      </div>
+
+      <div class="gap-card opportunity">
+        <div class="gap-icon">🔍</div>
+        <h3>The Counter-Evidence is Already There</h3>
+        <p>Destiny 2's community sentiment shift after O'Donnell's departure is documented. FFXIV's music is a player-cited top-5 retention reason in community surveys. Fortnite's seasonal events with music moments ("Party Royale", Travis Scott event) saw measurably different session behaviour. The data exists — it just isn't labelled as "music data."</p>
+      </div>
+    </div>
+
+    <!-- The Opportunity in Numbers -->
+    <div class="claims-row">
+      <div class="claim-stat">
+        <div class="claim-value" style="color:#f0b429;">3×</div>
+        <div class="claim-label">Distinct design modes identified across case studies (signalling, encoding, reframing)</div>
+      </div>
+      <div class="claim-stat">
+        <div class="claim-value" style="color:#7c6af7;">0</div>
+        <div class="claim-label">Major live service titles with a documented audio-to-retention design framework</div>
+      </div>
+      <div class="claim-stat">
+        <div class="claim-value" style="color:#36c987;">∞</div>
+        <div class="claim-label">Delta between the cost of a dynamic audio system and another cosmetic battle pass tier</div>
+      </div>
+      <div class="claim-stat">
+        <div class="claim-value" style="color:#f06060;">D30</div>
+        <div class="claim-label">The retention window where community identity effects (Destiny-model) would be most measurable</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Section 4: Measurement ──────────────────────────────────────────── -->
+<section id="measurement">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>What Measurement Would Look Like</h2>
+    </div>
+
+    <p style="max-width:680px; margin-bottom:40px; font-size:0.95rem; line-height:1.7;">
+      This framework is built from qualitative analysis and psychological theory —
+      there is no telemetry dataset attached to this project. But if a studio wanted to
+      validate it quantitatively, here's what the measurement infrastructure would need to look like.
+    </p>
+
+    <div class="metrics-grid">
+
+      <div class="metric-card">
+        <div class="label">Telemetry Layer</div>
+        <h3>Audio State Events</h3>
+        <p>Log all track transitions as events: <code style="font-family:var(--mono); font-size:0.78rem; color:var(--accent);">audio_track_started</code>, <code style="font-family:var(--mono); font-size:0.78rem; color:var(--accent);">audio_muted</code>, <code style="font-family:var(--mono); font-size:0.78rem; color:var(--accent);">audio_unmuted</code>. Tag with session context: time in session, activity type, player progression tier.</p>
+        <div class="formula-block">
+          track_id → session_id → time_in_session<br>
+          mute_state → activity_context → player_tier
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="label">Primary Metric</div>
+        <h3>Session Decay Curve</h3>
+        <p>Compare session length distribution between audio-on and audio-off cohorts. Control for player progression level. The prediction: audio-on sessions will have a flatter decay curve — longer tails, fewer early exits.</p>
+        <div class="formula-block">
+          session_length ~ audio_state<br>
+          + player_level + activity_type<br>
+          + prior_session_count
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="label">Confound Control</div>
+        <h3>Session-Start Mute Instrument</h3>
+        <p>Engaged players mute less, which makes mute rate look like an effect rather than a cause. The instrument is <em>session-start mute state</em> — whether a player muted before first content interaction. This is exogenous to in-session engagement level.</p>
+        <div class="formula-block">
+          IV: mute_at_session_start<br>
+          DV: session_length, D1/D7/D30<br>
+          Excludes: in-session mute changes
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="label">Natural Experiment</div>
+        <h3>Audio Update Analysis</h3>
+        <p>Every track swap, volume rebalance, or new audio layer is a natural experiment if logged. Compare cohort session behaviour pre/post update, controlling for simultaneous patch content. Most studios have this data — it's just not labelled as an audio test.</p>
+        <div class="formula-block">
+          pre_period: T-14 to T-1<br>
+          post_period: T+1 to T+14<br>
+          control: concurrent non-updated cohort
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="label">A/B Design</div>
+        <h3>Ambient vs. Dynamic Audio</h3>
+        <p>Route 5% of sessions to ambient-only audio (no adaptive mixing or phase-reactive tracks). Hold all content and UI constant. Measure session length, D1/D7/D30 return rate, task completion per session. 20,000 sessions yields publishable effect size.</p>
+        <div class="formula-block">
+          Treatment: dynamic adaptive audio<br>
+          Control: static ambient loop<br>
+          n ≥ 20,000 · MDE: ~3% session Δ
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="label">Identity Retention</div>
+        <h3>Lapsed Player Reactivation</h3>
+        <p>For the Destiny-model effect (identity retention during droughts): compare reactivation rates for lapsed players who engaged with game-adjacent content (YouTube music, community references) vs. those who fully disengaged. Music community activity is a leading indicator for return.</p>
+        <div class="formula-block">
+          lapsed_player_cohort<br>
+          → external_brand_signal_activity<br>
+          → reactivation_within_30d
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:40px; background: var(--surface); border:1px solid var(--border); border-left:3px solid var(--green); border-radius:8px; padding:24px 28px; max-width:760px;">
+      <div class="label" style="margin-bottom:10px;">A Note on This Framework</div>
+      <p style="font-size:0.9rem; line-height:1.65; color:#b0b5cc;">
+        This project is deliberately built on psychological theory and design analysis rather than telemetry
+        — because the telemetry doesn't exist yet. The measurement section above isn't a limitation disclosure;
+        it's the argument that this is a gap worth closing. The mechanism is understood.
+        The quantification is waiting for someone to build the logging layer.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Footer ───────────────────────────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <h3>Leon Telemaque</h3>
+        <p>Product Analytics · Live Service · Gaming &amp; Fintech</p>
+        <p style="margin-top:8px;"><a href="mailto:leon.telemaque@gmail.com" style="color:var(--muted); font-size:0.8rem;">leon.telemaque@gmail.com</a></p>
+      </div>
+      <div class="footer-meta">
+        <div>Research Framework · 2024</div>
+        <div>Qualitative &amp; Psychological Analysis</div>
+        <div style="margin-top:8px; color:var(--accent);">Music as Retention Infrastructure</div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Framework Layer Toggle ───────────────────────────────────────────────
+  let activeLayer = null;
+
+  function showLayer(idx) {
+    const cards = document.querySelectorAll('.framework-card');
+    const panels = [0,1,2,3].map(i => document.getElementById('layerDetail' + i));
+
+    if (activeLayer === idx) {
+      // collapse
+      cards[idx].classList.remove('active');
+      panels[idx].classList.add('hidden');
+      activeLayer = null;
+      return;
+    }
+
+    // Hide all
+    cards.forEach(c => c.classList.remove('active'));
+    panels.forEach(p => p.classList.add('hidden'));
+
+    // Show clicked
+    cards[idx].classList.add('active');
+    panels[idx].classList.remove('hidden');
+    activeLayer = idx;
+
+    // Smooth scroll to panel
+    setTimeout(() => {
+      panels[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 50);
+  }
+
+  // ── Case Study Tabs ──────────────────────────────────────────────────────
+  function switchCase(id) {
+    document.querySelectorAll('.case-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.case-panel').forEach(p => p.classList.remove('active'));
+
+    document.querySelector(`.case-tab[data-case="${id}"]`).classList.add('active');
+    document.getElementById('case-' + id).classList.add('active');
+  }
+
+  // ── Nav active on scroll ─────────────────────────────────────────────────
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // ── Animate bars on load ─────────────────────────────────────────────────
+  // Bars start at 0 width via CSS, transition to set width on page load
+  window.addEventListener('load', () => {
+    // bars animate via CSS transition — just ensure they're visible
+    document.querySelectorAll('.bar-fill').forEach(bar => {
+      const w = bar.style.width;
+      bar.style.width = '0';
+      requestAnimationFrame(() => {
+        setTimeout(() => { bar.style.width = w; }, 100);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -3003,6 +3003,332 @@ footer{
       </div>
     </div>
 
+    <!-- Music as Retention Infrastructure — MHW Iceborne -->
+    <div class="pcard" onclick="window.open('music-retention-dashboard.html','_blank')">
+      <div class="pcard-preview">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="vkSky" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%"   stop-color="#02080f"/>
+              <stop offset="55%"  stop-color="#04111e"/>
+              <stop offset="100%" stop-color="#071c2e"/>
+            </linearGradient>
+            <radialGradient id="vkMoonHalo" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"   stop-color="#bddff5" stop-opacity=".95"/>
+              <stop offset="40%"  stop-color="#7ab8e0" stop-opacity=".4"/>
+              <stop offset="100%" stop-color="#4090c0" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="vkBodyGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"   stop-color="#5cc8f0" stop-opacity=".35"/>
+              <stop offset="100%" stop-color="#5cc8f0" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="vkWingGlow" cx="50%" cy="30%" r="70%">
+              <stop offset="0%"   stop-color="#3ab0e8" stop-opacity=".18"/>
+              <stop offset="100%" stop-color="#3ab0e8" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="vkBreath" cx="0%" cy="50%" r="100%">
+              <stop offset="0%"   stop-color="#a0eeff" stop-opacity=".7"/>
+              <stop offset="60%"  stop-color="#50c8f8" stop-opacity=".25"/>
+              <stop offset="100%" stop-color="#50c8f8" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="snowFloor" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%"   stop-color="#d0e8f8"/>
+              <stop offset="100%" stop-color="#9ac0d8"/>
+            </linearGradient>
+            <filter id="vkBlur2"><feGaussianBlur stdDeviation="2"/></filter>
+            <filter id="vkBlur6"><feGaussianBlur stdDeviation="6"/></filter>
+            <filter id="vkBlur12"><feGaussianBlur stdDeviation="12"/></filter>
+            <filter id="vkGlow">
+              <feGaussianBlur stdDeviation="2.5" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <filter id="vkGlowStrong">
+              <feGaussianBlur stdDeviation="5" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <clipPath id="cardClip">
+              <rect width="680" height="400"/>
+            </clipPath>
+          </defs>
+
+          <g clip-path="url(#cardClip)">
+
+          <!-- Sky -->
+          <rect width="680" height="400" fill="url(#vkSky)"/>
+
+          <!-- Aurora ribbons — wide, haunting -->
+          <path d="M-40 60 Q 170 20 340 55 Q 510 90 720 40"  stroke="rgba(30,140,200,.13)" stroke-width="55" fill="none" filter="url(#vkBlur12)"/>
+          <path d="M-40 95 Q 160 55 340 80 Q 530 105 720 65"  stroke="rgba(60,200,230,.07)" stroke-width="40" fill="none" filter="url(#vkBlur12)"/>
+          <path d="M-40 130 Q 200 95 360 115 Q 500 135 720 100" stroke="rgba(20,100,180,.08)" stroke-width="30" fill="none" filter="url(#vkBlur12)"/>
+
+          <!-- Stars -->
+          <circle cx="30"  cy="22"  r="1"    fill="rgba(210,235,255,.8)"/>
+          <circle cx="90"  cy="14"  r=".8"   fill="rgba(210,235,255,.6)"/>
+          <circle cx="155" cy="30"  r="1.1"  fill="rgba(210,235,255,.7)"/>
+          <circle cx="230" cy="10"  r=".9"   fill="rgba(210,235,255,.6)"/>
+          <circle cx="295" cy="25"  r=".7"   fill="rgba(210,235,255,.5)"/>
+          <circle cx="500" cy="18"  r=".9"   fill="rgba(210,235,255,.7)"/>
+          <circle cx="565" cy="30"  r="1"    fill="rgba(210,235,255,.6)"/>
+          <circle cx="630" cy="12"  r=".8"   fill="rgba(210,235,255,.5)"/>
+          <circle cx="665" cy="38"  r=".7"   fill="rgba(210,235,255,.4)"/>
+          <circle cx="48"  cy="52"  r=".6"   fill="rgba(210,235,255,.4)"/>
+          <circle cx="190" cy="48"  r=".7"   fill="rgba(210,235,255,.4)"/>
+          <circle cx="440" cy="40"  r=".8"   fill="rgba(210,235,255,.5)"/>
+
+          <!-- Moon — large, centre-right, Velkhana will partly occlude it -->
+          <circle cx="400" cy="78" r="48"  fill="rgba(12,40,70,.98)"   filter="url(#vkBlur2)"/>
+          <circle cx="400" cy="78" r="46"  fill="url(#vkMoonHalo)"     filter="url(#vkBlur2)"/>
+          <circle cx="400" cy="78" r="38"  fill="#c8e4f6"/>
+          <!-- Moon craters — subtle -->
+          <circle cx="390" cy="68"  r="5"  fill="rgba(160,200,230,.35)"/>
+          <circle cx="410" cy="85"  r="3"  fill="rgba(160,200,230,.3)"/>
+          <circle cx="402" cy="60"  r="3.5"fill="rgba(160,200,230,.28)"/>
+
+          <!-- Distant mountains -->
+          <polygon points="0,320 80,170 160,220 260,130 360,195 460,118 560,175 660,130 680,140 680,320"
+                   fill="#0a1e30" opacity=".8"/>
+          <polygon points="80,170  70,200  90,200"  fill="rgba(180,215,240,.35)"/>
+          <polygon points="260,130 248,162 272,162" fill="rgba(180,215,240,.35)"/>
+          <polygon points="460,118 446,152 474,152" fill="rgba(180,215,240,.35)"/>
+          <polygon points="660,130 648,158 672,158" fill="rgba(180,215,240,.35)"/>
+
+          <!-- Foreground cliff/terrain -->
+          <polygon points="0,320 120,200 220,270 340,185 460,255 580,190 680,240 680,320"
+                   fill="#061525"/>
+          <polygon points="120,200 106,235 134,235" fill="rgba(200,228,248,.5)"/>
+          <polygon points="340,185 324,222 356,222" fill="rgba(200,228,248,.5)"/>
+          <polygon points="580,190 564,224 596,224" fill="rgba(200,228,248,.5)"/>
+
+          <!-- Snow floor -->
+          <rect x="0" y="320" width="680" height="80" fill="url(#snowFloor)"/>
+          <path d="M 0 324 Q 120 318 250 325 Q 380 332 520 322 Q 600 317 680 323"
+                stroke="rgba(255,255,255,.4)" stroke-width="1.5" fill="none"/>
+
+          <!-- ════════════════════════════════════════
+               VELKHANA — full-frame hero silhouette
+               Centre: body ~(340,200), flying/hovering
+               Wings span ~90 → 610 in X
+               ════════════════════════════════════════ -->
+
+          <!-- Aura / glow behind entire dragon -->
+          <ellipse cx="340" cy="195" rx="200" ry="140"
+                   fill="url(#vkBodyGlow)" filter="url(#vkBlur12)"/>
+          <ellipse cx="340" cy="195" rx="280" ry="100"
+                   fill="url(#vkWingGlow)" filter="url(#vkBlur12)"/>
+
+          <!-- ── LEFT WING ──
+               Main membrane: shoulder (290,180) → tip (90,95) → trailing edge back to body -->
+          <path d="
+            M 290 185
+            C 260 170, 190 140, 110 90
+            C 90  80,  75  75,  70  88
+            C 85  100, 110 120, 130 145
+            C 155 172, 195 182, 230 188
+            Z"
+            fill="#050f1e" opacity=".92"/>
+          <!-- Wing membrane vein lines — ice-pale -->
+          <path d="M 290 185 C 240 160 170 120 110 90" stroke="rgba(100,180,230,.18)" stroke-width="1.2" fill="none"/>
+          <path d="M 280 188 C 235 170 175 140 125 110" stroke="rgba(100,180,230,.12)" stroke-width=".8" fill="none"/>
+          <path d="M 268 190 C 228 178 188 160 148 135" stroke="rgba(100,180,230,.10)" stroke-width=".7" fill="none"/>
+          <!-- Left wing leading edge highlight -->
+          <path d="M 290 185 C 255 165 185 128 110 90"
+                stroke="rgba(140,210,245,.25)" stroke-width="1.5" fill="none"/>
+
+          <!-- Left secondary / elbow finger -->
+          <path d="
+            M 230 188
+            C 185 175, 145 155, 120 135
+            C 105 125, 100 118, 108 112
+            C 118 118, 130 132, 148 148
+            C 170 166, 200 178, 230 188
+            Z"
+            fill="#061320" opacity=".88"/>
+
+          <!-- ── RIGHT WING ──
+               Mirror: shoulder (390,180) → tip (590,88) → trailing back -->
+          <path d="
+            M 390 185
+            C 420 170, 490 138, 570 88
+            C 590 78,  608 74,  612 87
+            C 596 100, 572 118, 550 143
+            C 524 170, 482 181, 448 187
+            Z"
+            fill="#050f1e" opacity=".92"/>
+          <!-- Right wing veins -->
+          <path d="M 390 185 C 440 158 510 118 570 88" stroke="rgba(100,180,230,.18)" stroke-width="1.2" fill="none"/>
+          <path d="M 398 188 C 445 168 508 138 558 108" stroke="rgba(100,180,230,.12)" stroke-width=".8" fill="none"/>
+          <path d="M 408 190 C 450 176 496 157 534 133" stroke="rgba(100,180,230,.10)" stroke-width=".7" fill="none"/>
+          <!-- Right leading edge highlight -->
+          <path d="M 390 185 C 426 163 498 126 570 88"
+                stroke="rgba(140,210,245,.25)" stroke-width="1.5" fill="none"/>
+
+          <!-- Right secondary finger -->
+          <path d="
+            M 448 187
+            C 492 174, 532 153, 558 132
+            C 573 122, 578 115, 570 110
+            C 560 116, 548 130, 530 146
+            C 508 164, 476 177, 448 187
+            Z"
+            fill="#061320" opacity=".88"/>
+
+          <!-- ── BODY ── -->
+          <ellipse cx="340" cy="208" rx="38" ry="20" fill="#061828" opacity=".95"/>
+          <!-- Body scale lines -->
+          <path d="M 310 205 Q 340 198 370 205" stroke="rgba(80,150,200,.15)" stroke-width="1" fill="none"/>
+          <path d="M 315 212 Q 340 206 365 212" stroke="rgba(80,150,200,.12)" stroke-width=".8" fill="none"/>
+
+          <!-- ── NECK ── long elegant S-curve up to the right -->
+          <path d="M 330 192 C 325 175, 320 158, 325 140 C 330 122, 342 112, 352 98"
+                stroke="#061828" stroke-width="18" fill="none" stroke-linecap="round"/>
+          <!-- Neck highlight -->
+          <path d="M 330 192 C 325 175, 320 158, 325 140 C 330 122, 342 112, 352 98"
+                stroke="rgba(80,160,210,.12)" stroke-width="10" fill="none" stroke-linecap="round"/>
+
+          <!-- ── HEAD ── -->
+          <!-- Skull mass -->
+          <ellipse cx="360" cy="88" rx="20" ry="13" fill="#061828"/>
+          <!-- Snout extending forward-right -->
+          <path d="M 368 88 C 382 86 400 84 412 87 C 418 88 418 92 412 94 C 400 97 382 96 368 93 Z"
+                fill="#061828"/>
+          <!-- Lower jaw — slight open for breath -->
+          <path d="M 372 93 C 385 92 403 91 412 94 C 406 100 388 102 374 100 Z"
+                fill="#050f1e"/>
+
+          <!-- ── HEAD CROWN — Velkhana's signature ice spines ── -->
+          <!-- Central large spine -->
+          <path d="M 355 78 L 348 52 L 362 72" fill="#061828" stroke="rgba(120,200,240,.3)" stroke-width=".8"/>
+          <!-- Left crown spines -->
+          <path d="M 348 80 L 336 57 L 350 76" fill="#061828" stroke="rgba(100,180,225,.25)" stroke-width=".7"/>
+          <path d="M 342 83 L 326 65 L 340 80" fill="#061828" stroke="rgba(100,180,225,.2)"  stroke-width=".7"/>
+          <path d="M 338 87 L 320 75 L 336 86" fill="#061828" stroke="rgba(100,180,225,.18)" stroke-width=".7"/>
+          <!-- Right crown spines -->
+          <path d="M 362 78 L 370 54 L 358 74" fill="#061828" stroke="rgba(120,200,240,.25)" stroke-width=".7"/>
+          <path d="M 368 81 L 380 60 L 366 79" fill="#061828" stroke="rgba(100,180,225,.2)"  stroke-width=".7"/>
+          <!-- Crown ice-glow highlights -->
+          <path d="M 348 52 L 355 78" stroke="rgba(170,230,255,.4)" stroke-width=".8" fill="none" filter="url(#vkGlow)"/>
+          <path d="M 336 57 L 348 80" stroke="rgba(150,215,248,.3)" stroke-width=".6" fill="none" filter="url(#vkGlow)"/>
+          <path d="M 370 54 L 362 78" stroke="rgba(150,215,248,.3)" stroke-width=".6" fill="none" filter="url(#vkGlow)"/>
+
+          <!-- ── EYE — piercing ice blue ── -->
+          <circle cx="356" cy="85" r="4.5" fill="#03080f"/>
+          <circle cx="356" cy="85" r="3"   fill="#7ce8ff" filter="url(#vkGlowStrong)"/>
+          <circle cx="357" cy="84" r="1.2" fill="#ffffff" opacity=".9"/>
+
+          <!-- ── ICE BREATH — streaming from open jaw ── -->
+          <!-- Inner bright core -->
+          <path d="M 413 90 Q 480 82 560 72 Q 620 65 680 60"
+                stroke="rgba(180,245,255,.55)" stroke-width="5" fill="none"
+                stroke-linecap="round" filter="url(#vkGlow)"/>
+          <!-- Mid plume -->
+          <path d="M 413 91 Q 475 86 555 78 Q 625 72 680 68"
+                stroke="rgba(120,210,248,.35)" stroke-width="12" fill="none"
+                stroke-linecap="round" filter="url(#vkBlur2)"/>
+          <!-- Outer diffuse -->
+          <path d="M 414 90 Q 470 88 550 82 Q 620 78 680 74"
+                stroke="rgba(80,180,230,.18)" stroke-width="22" fill="none"
+                stroke-linecap="round" filter="url(#vkBlur6)"/>
+          <!-- Ice crystal particles in breath -->
+          <circle cx="445" cy="83" r="2"   fill="rgba(200,245,255,.6)" filter="url(#vkGlow)"/>
+          <circle cx="478" cy="79" r="1.5" fill="rgba(200,245,255,.5)" filter="url(#vkGlow)"/>
+          <circle cx="512" cy="74" r="2.2" fill="rgba(200,245,255,.65)" filter="url(#vkGlow)"/>
+          <circle cx="548" cy="70" r="1.8" fill="rgba(200,245,255,.55)" filter="url(#vkGlow)"/>
+          <circle cx="585" cy="67" r="1.5" fill="rgba(200,245,255,.5)"  filter="url(#vkGlow)"/>
+          <circle cx="618" cy="63" r="1.2" fill="rgba(200,245,255,.4)"  filter="url(#vkGlow)"/>
+
+          <!-- ── TAIL — long whip curling below-right ── -->
+          <path d="M 368 215 C 400 220, 440 228, 475 222 C 510 216, 535 205, 555 215 C 570 222, 575 230, 568 238"
+                stroke="#061828" stroke-width="12" fill="none" stroke-linecap="round"/>
+          <!-- Tail tip — bladed like Velkhana's -->
+          <path d="M 568 238 C 572 248, 576 255, 570 262 C 564 268, 558 262, 560 253 C 562 244, 568 238, 568 238 Z"
+                fill="#061828"/>
+          <!-- Tail ice spines -->
+          <path d="M 475 222 L 472 210" stroke="#061828" stroke-width="4" stroke-linecap="round"/>
+          <path d="M 490 220 L 488 207" stroke="#061828" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M 505 218 L 504 205" stroke="#061828" stroke-width="3" stroke-linecap="round"/>
+
+          <!-- ── HIND LEGS — crouched / tucked in flight ── -->
+          <path d="M 325 218 C 315 230, 308 242, 300 248 C 295 252, 290 250, 292 244 C 296 235, 308 226, 325 218 Z"
+                fill="#061828" opacity=".9"/>
+          <path d="M 355 222 C 348 236, 344 248, 348 254 C 350 260, 356 258, 358 252 C 360 242, 360 232, 355 222 Z"
+                fill="#061828" opacity=".9"/>
+
+          <!-- ── FRONT ARMS / WRIST CLAWS ── -->
+          <!-- Left arm visible under left wing edge -->
+          <path d="M 295 188 C 278 198, 262 210, 252 218" stroke="#061828" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M 252 218 L 242 228 M 252 218 L 248 230 M 252 218 L 258 228" stroke="#061828" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+          <!-- ── FLOATING ICE CRYSTALS — orbiting Velkhana ── -->
+          <!-- Large hex crystal — upper left -->
+          <polygon points="145,118 140,128 145,138 152,138 157,128 152,118"
+                   fill="rgba(140,220,255,.12)" stroke="rgba(160,230,255,.45)" stroke-width="1"/>
+          <!-- inner shimmer -->
+          <line x1="145" y1="118" x2="152" y2="138" stroke="rgba(200,245,255,.2)" stroke-width=".6"/>
+          <line x1="157" y1="118" x2="140" y2="138" stroke="rgba(200,245,255,.2)" stroke-width=".6"/>
+
+          <!-- Medium crystal — left mid -->
+          <polygon points="168,155 164,162 168,169 174,169 178,162 174,155"
+                   fill="rgba(120,200,240,.1)" stroke="rgba(150,220,250,.38)" stroke-width=".8"/>
+
+          <!-- Shard — below breath stream -->
+          <polygon points="490,100 487,107 490,114 494,114 497,107 494,100"
+                   fill="rgba(140,220,255,.1)" stroke="rgba(170,235,255,.4)" stroke-width=".8"/>
+
+          <!-- Tiny shards scattered -->
+          <polygon points="200,96 198,101 200,106 202,101" fill="rgba(150,225,255,.3)" stroke="rgba(180,240,255,.3)" stroke-width=".5"/>
+          <polygon points="520,105 518,109 520,113 522,109" fill="rgba(150,225,255,.25)" stroke="rgba(180,240,255,.25)" stroke-width=".5"/>
+          <polygon points="108,140 106,145 108,150 110,145" fill="rgba(150,225,255,.3)" stroke="rgba(180,240,255,.28)" stroke-width=".5"/>
+
+          <!-- ── BOTTOM INFO STRIP ── -->
+          <rect x="0" y="338" width="680" height="62" fill="rgba(3,10,20,.82)"/>
+          <rect x="0" y="338" width="680" height="1" fill="rgba(100,180,230,.2)"/>
+
+          <!-- Left: game label -->
+          <text x="22" y="356" fill="rgba(100,180,225,.45)" font-size="6.5" font-family="monospace" letter-spacing="1.5">MONSTER HUNTER WORLD  ·  ICEBORNE</text>
+          <text x="22" y="374" fill="rgba(210,235,250,.85)" font-size="11" font-family="Georgia,serif" font-style="italic">Music as Retention Infrastructure</text>
+          <text x="22" y="389" fill="rgba(100,160,205,.5)" font-size="6.5" font-family="monospace">4-layer framework  ·  3 case studies  ·  live service design</text>
+
+          <!-- Right: waveform mini — hunt phase signal -->
+          <g transform="translate(468, 346)">
+            <!-- Track phase -->
+            <rect x="0"   y="22" width="4" height="10" rx="1" fill="rgba(60,130,190,.5)"/>
+            <rect x="6"   y="19" width="4" height="13" rx="1" fill="rgba(60,130,190,.5)"/>
+            <rect x="12"  y="16" width="4" height="16" rx="1" fill="rgba(60,130,190,.5)"/>
+            <!-- Engage -->
+            <rect x="20"  y="13" width="4" height="19" rx="1" fill="rgba(80,170,225,.65)"/>
+            <rect x="26"  y="10" width="4" height="22" rx="1" fill="rgba(80,170,225,.65)"/>
+            <rect x="32"  y="12" width="4" height="20" rx="1" fill="rgba(80,170,225,.65)"/>
+            <!-- Enrage peak — ice blue glow -->
+            <rect x="40"  y="5"  width="4" height="27" rx="1" fill="rgba(140,230,255,.9)" filter="url(#vkGlow)"/>
+            <rect x="46"  y="2"  width="4" height="30" rx="1" fill="rgba(160,240,255,.95)" filter="url(#vkGlow)"/>
+            <rect x="52"  y="4"  width="4" height="28" rx="1" fill="rgba(140,230,255,.9)" filter="url(#vkGlow)"/>
+            <!-- Resolve -->
+            <rect x="60"  y="10" width="4" height="22" rx="1" fill="rgba(80,160,215,.6)"/>
+            <rect x="66"  y="15" width="4" height="17" rx="1" fill="rgba(60,140,200,.5)"/>
+            <rect x="72"  y="20" width="4" height="12" rx="1" fill="rgba(50,120,185,.45)"/>
+            <rect x="78"  y="24" width="4" height="8"  rx="1" fill="rgba(50,120,185,.4)"/>
+            <!-- Labels -->
+            <text x="6"   y="40" fill="rgba(90,150,195,.4)" font-size="5" font-family="monospace" text-anchor="middle">TRACK</text>
+            <text x="26"  y="40" fill="rgba(90,150,195,.4)" font-size="5" font-family="monospace" text-anchor="middle">ENGAGE</text>
+            <text x="48"  y="40" fill="rgba(160,235,255,.55)" font-size="5" font-family="monospace" text-anchor="middle">ENRAGE</text>
+            <text x="70"  y="40" fill="rgba(90,150,195,.4)" font-size="5" font-family="monospace" text-anchor="middle">RESOLVE</text>
+          </g>
+
+          </g>
+        </svg>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">Music as Retention Infrastructure — Live Service Design</h3>
+        <p class="pcard-desc">A psychological and game design framework for how music reduces grind fatigue and extends session investment. Built across three deep case studies: MHW Iceborne, Destiny 1, and Persona 5.</p>
+        <div class="pcard-tags">
+          <span class="ptag ptag-blue">Gaming · LiveOps</span>
+          <span class="ptag">Retention · Psychology</span>
+          <span class="ptag">Design Framework</span>
+          <span class="ptag ptag-live" style="border-color:rgba(124,200,240,.3);color:rgba(140,210,255,.7);">● Interactive</span>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /moreCarousel -->
   </div><!-- /more-carousel-wrap -->
 </div>
