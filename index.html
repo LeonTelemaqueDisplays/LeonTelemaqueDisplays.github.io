@@ -1065,6 +1065,420 @@ footer{
   .caa-amp-nodes{grid-template-columns:1fr}
   .caa-tier-label{flex:0 0 100px}
 }
+
+/* ── Economy Architecture card preview tile ── */
+.eco-preview {
+  background: #0a0a0a;
+  width: 100%;
+  aspect-ratio: 16/9;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Space Mono', monospace;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.eco-preview .ep-header {
+  position: absolute;
+  top: 10px; left: 12px;
+  font-size: 7px;
+  letter-spacing: 2px;
+  color: #444;
+  text-transform: uppercase;
+}
+
+.eco-preview .ep-title {
+  position: absolute;
+  top: 22px; left: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #e8e8e0;
+  letter-spacing: 0.5px;
+  line-height: 1.3;
+}
+
+/* Split panel */
+.eco-preview .ep-panel {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 10px 10px 12px;
+}
+
+.eco-preview .ep-left  { left: 0;   background: #060f06; border-right: 1px solid #1a2a1a; }
+.eco-preview .ep-right { right: 0;  background: #0a060f; }
+
+.eco-preview .ep-game-label {
+  font-size: 7px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.ep-left  .ep-game-label { color: #4a9edd; }
+.ep-right .ep-game-label { color: #c49cf7; }
+
+.eco-preview .ep-stat-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.eco-preview .ep-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.eco-preview .ep-stat-val {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+}
+.ep-left  .ep-stat-val { color: #4a9edd; }
+.ep-right .ep-stat-val { color: #c49cf7; }
+
+.eco-preview .ep-stat-label {
+  font-size: 6px;
+  color: #555;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.eco-preview .ep-divider {
+  position: absolute;
+  left: 50%; top: 0; bottom: 0;
+  width: 1px;
+  background: #1e1e1e;
+}
+
+.eco-preview .ep-badge {
+  position: absolute;
+  top: 10px; right: 10px;
+  background: #0d0d0d;
+  border: 1px solid #2a2a2a;
+  padding: 3px 7px;
+  font-size: 6.5px;
+  color: #666;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.eco-preview .ep-vs {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 7px;
+  color: #555;
+  z-index: 2;
+  letter-spacing: 0;
+}
+
+.eco-preview .ep-tag-row {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.eco-preview .ep-tag {
+  font-size: 6px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border: 1px solid #222;
+  color: #555;
+  background: #0a0a0a;
+}
+
+/* Part II mini viz */
+.eco-preview .ep-tft-strip {
+  position: absolute;
+  top: 42px; right: 0; left: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 10px 0;
+}
+
+.eco-preview .ep-interest-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.eco-preview .ep-ib-label {
+  font-size: 6px;
+  color: #555;
+  width: 28px;
+  text-align: right;
+}
+
+.eco-preview .ep-ib-fill {
+  height: 5px;
+  border-radius: 1px;
+  background: #c49cf7;
+  opacity: 0.7;
+}
+
+.eco-preview .ep-ib-val {
+  font-size: 6px;
+  color: #c49cf7;
+}
+
+/* ── Modal ── */
+#modal-economy {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(6px);
+  overflow-y: auto;
+  padding: 40px 20px;
+}
+
+#modal-economy.open { display: flex; justify-content: center; align-items: flex-start; }
+
+.eco-modal-inner {
+  background: #0d0d0d;
+  border: 1px solid #1e1e1e;
+  max-width: 860px;
+  width: 100%;
+  padding: 48px 52px;
+  position: relative;
+  font-family: 'Space Mono', monospace;
+}
+
+.eco-modal-close {
+  position: absolute;
+  top: 20px; right: 24px;
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 18px;
+  cursor: pointer;
+  font-family: 'Space Mono', monospace;
+  transition: color 0.2s;
+}
+.eco-modal-close:hover { color: #e8e8e0; }
+
+.eco-modal-eyebrow {
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: #444;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.eco-modal-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #e8e8e0;
+  line-height: 1.2;
+  margin-bottom: 6px;
+  font-family: 'Syne', 'Space Mono', monospace;
+}
+
+.eco-modal-subtitle {
+  font-size: 11px;
+  color: #555;
+  letter-spacing: 1px;
+  margin-bottom: 28px;
+}
+
+.eco-target-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.eco-chip {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  padding: 4px 10px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+.eco-chip-riot     { background: #d84f4f18; color: #d84f4f; border: 1px solid #d84f4f33; }
+.eco-chip-hoyo     { background: #4a9edd18; color: #7ab8f5; border: 1px solid #4a9edd33; }
+.eco-chip-kuro     { background: #c49cf718; color: #c49cf7; border: 1px solid #c49cf733; }
+.eco-chip-neutral  { background: #33333318; color: #888;    border: 1px solid #33333333; }
+
+/* Part dividers */
+.eco-part-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 36px 0 20px;
+}
+
+.eco-part-num {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #333;
+}
+
+.eco-part-title {
+  font-size: 14px;
+  font-weight: 700;
+  flex: 1;
+  letter-spacing: 0.3px;
+}
+
+.eco-part-title.p1 { color: #4a9edd; }
+.eco-part-title.p2 { color: #c49cf7; }
+
+.eco-part-game {
+  font-size: 9px;
+  color: #444;
+  letter-spacing: 1px;
+}
+
+.eco-rule { height: 1px; background: #1a1a1a; margin: 0; border: none; }
+
+/* Body copy */
+.eco-body {
+  font-size: 11.5px;
+  color: #888;
+  line-height: 1.9;
+  margin-bottom: 20px;
+  font-family: 'Space Mono', monospace;
+}
+
+.eco-body strong { color: #c8c8c0; font-weight: 700; }
+
+/* Key findings */
+.eco-findings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0 28px;
+}
+
+.eco-finding {
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  padding: 14px 16px;
+}
+
+.eco-finding-val {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.eco-finding-label {
+  font-size: 8px;
+  color: #555;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+/* Chart embeds */
+.eco-chart-block {
+  margin: 24px 0;
+}
+
+.eco-chart-label {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: #444;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.eco-chart-block img {
+  width: 100%;
+  border: 1px solid #1a1a1a;
+  display: block;
+}
+
+.eco-chart-caption {
+  font-size: 9px;
+  color: #444;
+  margin-top: 6px;
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+}
+
+/* Verdict box */
+.eco-verdict {
+  background: #080808;
+  border: 1px solid #2a2a2a;
+  border-left: 3px solid #5aad6e;
+  padding: 20px 24px;
+  margin: 28px 0;
+}
+
+.eco-verdict-label {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: #5aad6e;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.eco-verdict-body {
+  font-size: 11.5px;
+  color: #888;
+  line-height: 1.9;
+}
+
+.eco-verdict-body strong { color: #c8c8c0; }
+
+/* Stack of key metrics */
+.eco-metrics-row {
+  display: flex;
+  gap: 0;
+  margin: 20px 0;
+  border: 1px solid #1a1a1a;
+  overflow: hidden;
+}
+
+.eco-metric {
+  flex: 1;
+  padding: 14px 12px;
+  border-right: 1px solid #1a1a1a;
+  text-align: center;
+}
+
+.eco-metric:last-child { border-right: none; }
+
+.eco-metric-val {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.eco-metric-label {
+  font-size: 7px;
+  color: #555;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.val-g { color: #4a9edd; }
+.val-w { color: #c49cf7; }
+.val-d { color: #5aad6e; }
 </style>
 </head>
 <body>
@@ -1470,6 +1884,7 @@ footer{
     </div>
   </div>
 </div>
+
 
 <div class="divider"></div>
 
@@ -2537,6 +2952,87 @@ footer{
           <span class="ptag">Behavioural Systems</span>
         </div>
       </div>
+    </div>
+
+    <!-- Economy Architecture — How Live-Service Games Design Player Decisions -->
+    <div class="pcard" onclick="document.getElementById('modal-economy').classList.add('open')">
+
+      <!-- ── Visual Preview Tile ── -->
+      <div class="eco-preview">
+        <div class="ep-badge">Economic Design · Two-Part</div>
+
+        <!-- Left panel: Genshin -->
+        <div class="ep-panel ep-left">
+          <div class="ep-game-label">Genshin Impact</div>
+          <div class="ep-stat-row">
+            <div class="ep-stat">
+              <span class="ep-stat-val">93.4</span>
+              <span class="ep-stat-label">Mean pulls to C0</span>
+            </div>
+            <div class="ep-stat">
+              <span class="ep-stat-val">$149</span>
+              <span class="ep-stat-label">Avg USD cost</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ep-vs">VS</div>
+        <div class="ep-divider"></div>
+
+        <!-- Right panel: WuWa -->
+        <div class="ep-panel ep-right">
+          <div class="ep-game-label">Wuthering Waves</div>
+          <div class="ep-stat-row">
+            <div class="ep-stat">
+              <span class="ep-stat-val">51.1</span>
+              <span class="ep-stat-label">Mean pulls to C0</span>
+            </div>
+            <div class="ep-stat">
+              <span class="ep-stat-val">$82</span>
+              <span class="ep-stat-label">Avg USD cost</span>
+            </div>
+          </div>
+          <!-- TFT interest bars -->
+          <div style="margin-top:8px">
+            <div style="font-size:6px;color:#555;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px">Part II · TFT Gold Economy</div>
+            <div class="ep-interest-bar">
+              <span class="ep-ib-label">50g</span>
+              <div class="ep-ib-fill" style="width:50px"></div>
+              <span class="ep-ib-val">+5g</span>
+            </div>
+            <div class="ep-interest-bar">
+              <span class="ep-ib-label">40g</span>
+              <div class="ep-ib-fill" style="width:40px;opacity:0.55"></div>
+              <span class="ep-ib-val">+4g</span>
+            </div>
+            <div class="ep-interest-bar">
+              <span class="ep-ib-label">20g</span>
+              <div class="ep-ib-fill" style="width:20px;opacity:0.35"></div>
+              <span class="ep-ib-val">+2g</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ep-header">Economy Architecture · Gacha + TFT</div>
+        <div style="position:absolute;top:22px;left:12px;font-size:10px;font-weight:700;color:#e8e8e0;font-family:'Space Mono',monospace;line-height:1.3">How Live-Service Games<br>Design Player Decisions</div>
+      </div>
+
+      <!-- ── Card Text ── -->
+      <div class="pcard-body">
+        <h3 class="pcard-title">Economy Architecture — How Live-Service Games Design Player Decisions</h3>
+        <p class="pcard-desc">
+          A two-part economic design study. Part I: a full virtual economy audit of Wuthering Waves vs. Genshin Impact — pity mechanics, currency architecture, resource inflation, and the $67 player savings gap Kuro deliberately built in. Part II: TFT's gold economy as mechanism design — interest thresholds as savings incentives, streak bonuses as risk-adjusted EV, and LP payouts as tournament prize theory.
+        </p>
+        <div class="pcard-tags">
+          <span class="ptag">Economic Design</span>
+          <span class="ptag">Game Theory</span>
+          <span class="ptag">LiveOps</span>
+          <span class="ptag">Behavioural Systems</span>
+          <span class="ptag">Python</span>
+          <span class="ptag" style="color:#c8a0e8">● In Progress</span>
+        </div>
+      </div>
+
     </div>
 
   </div><!-- /workCarousel -->
@@ -4688,6 +5184,249 @@ function saveUrl(){
   makeDraggable(document.getElementById('snap-track'));
   makeDraggable(document.getElementById('support-track'));
 })();
+</script>
+
+<!-- ═══════════════════════════════════════
+     ECONOMY ARCHITECTURE MODAL
+     ═══════════════════════════════════════ -->
+<div id="modal-economy">
+  <div class="eco-modal-inner">
+    <button class="eco-modal-close" onclick="document.getElementById('modal-economy').classList.remove('open')">✕</button>
+
+    <div class="eco-modal-eyebrow">Mega-Project · Economic Design · 2025–2026</div>
+    <div class="eco-modal-title">Economy Architecture —<br>How Live-Service Games Design Player Decisions</div>
+    <div class="eco-modal-subtitle">100,000 Monte Carlo simulations · Mechanism design theory · 1,000+ hrs player data</div>
+
+    <div class="eco-target-row">
+      <span class="eco-chip eco-chip-hoyo">HoYoverse</span>
+      <span class="eco-chip eco-chip-kuro">Kuro Games</span>
+      <span class="eco-chip eco-chip-riot">Riot Games</span>
+      <span class="eco-chip eco-chip-neutral">Python</span>
+      <span class="eco-chip eco-chip-neutral">Game Theory</span>
+      <span class="eco-chip eco-chip-neutral">Economic Design</span>
+    </div>
+
+    <hr class="eco-rule">
+
+    <!-- ── PART I ── -->
+    <div class="eco-part-header">
+      <span class="eco-part-num">PART I</span>
+      <span class="eco-part-title p1">Virtual Economy Audit</span>
+      <span class="eco-part-game">Wuthering Waves vs. Genshin Impact</span>
+    </div>
+
+    <p class="eco-body">
+      Both games look identical on the surface: primogems and astrite, 160 per pull, 50/50 featured banners.
+      The mechanism underneath is not identical. Kuro made three deliberate divergences from HoYoverse's blueprint —
+      earlier soft pity, a higher base rate, and a guaranteed featured character on your <strong>first 5-star ever</strong>.
+      Each choice has a measurable cost to Kuro's revenue ceiling and a measurable benefit to player trust.
+      This is what that tradeoff looks like when you model it.
+    </p>
+
+    <!-- Key metrics bar -->
+    <div class="eco-metrics-row">
+      <div class="eco-metric">
+        <div class="eco-metric-val val-g">93.4</div>
+        <div class="eco-metric-label">Genshin mean<br>pulls to C0</div>
+      </div>
+      <div class="eco-metric">
+        <div class="eco-metric-val val-w">51.1</div>
+        <div class="eco-metric-label">WuWa mean<br>pulls to C0</div>
+      </div>
+      <div class="eco-metric">
+        <div class="eco-metric-val val-d">−42.3</div>
+        <div class="eco-metric-label">Pulls saved<br>per character</div>
+      </div>
+      <div class="eco-metric">
+        <div class="eco-metric-val val-d">$67</div>
+        <div class="eco-metric-label">Avg player<br>savings (USD)</div>
+      </div>
+      <div class="eco-metric">
+        <div class="eco-metric-val val-g">155</div>
+        <div class="eco-metric-label">Genshin p90<br>worst case</div>
+      </div>
+      <div class="eco-metric">
+        <div class="eco-metric-val val-w">67</div>
+        <div class="eco-metric-label">WuWa p90<br>worst case</div>
+      </div>
+    </div>
+
+    <!-- Chart 1: Pity curves -->
+    <div class="eco-chart-block">
+      <div class="eco-chart-label">Fig 1 — Pity Curve Simulation · 100,000 runs</div>
+      <img src="./pity_simulation.png" alt="Pity curve simulation: WuWa vs Genshin">
+      <div class="eco-chart-caption">
+        Monte Carlo simulation across 100,000 player sessions. WuWa's soft pity at pull 62 (vs. Genshin's 74) and hard pity at 80 (vs. 90)
+        compresses worst-case outcomes significantly — the p90 gap is 88 pulls. At $1.60/pull that's $141 in downside protection for unlucky players.
+      </div>
+    </div>
+
+    <!-- Chart 2: Currency architecture -->
+    <div class="eco-chart-block">
+      <div class="eco-chart-label">Fig 2 — Currency Architecture Flow Diagram</div>
+      <img src="./currency_architecture.png" alt="Currency architecture: WuWa vs Genshin">
+      <div class="eco-chart-caption">
+        Full source-to-sink map of both economies. WuWa generates ~3,200 astrite/month for F2P players vs. Genshin's ~2,700 primogems —
+        a 19% supply advantage. Both convert at 160:1, but WuWa empties the sink faster (51 vs. 93 pulls mean).
+        Implicit F2P hourly wage: WuWa ~$0.21/hr, Genshin ~$0.14/hr.
+      </div>
+    </div>
+
+    <!-- Chart 3: Inflation -->
+    <div class="eco-chart-block">
+      <div class="eco-chart-label">Fig 3 — Resource Inflation & Power Creep Analysis</div>
+      <img src="./inflation_power_creep.png" alt="Resource inflation and power creep: WuWa vs Genshin">
+      <div class="eco-chart-caption">
+        Roster growth vs. resource cap over time. Genshin's resin cap has been unchanged since 2020 while its roster has grown to 80+ characters —
+        a structural inflation squeeze that WuWa is currently avoiding through higher earn rates and more active character rebalancing.
+      </div>
+    </div>
+
+    <!-- Verdict -->
+    <div class="eco-verdict">
+      <div class="eco-verdict-label">Economy Design Verdict — Part I</div>
+      <div class="eco-verdict-body">
+        Kuro's economy is <strong>more welfare-optimal</strong> — players get more currency, spend fewer pulls, and face dramatically lower worst-case outcomes.
+        HoYoverse's is <strong>more revenue-optimal</strong> — higher pull counts per character means higher expected ARPU per banner.
+        The gap between them is Kuro's deliberate bet: sacrifice short-term revenue ceiling for long-term retention and player trust.
+        At 1.5 years old, WuWa hasn't yet hit the inflation wall Genshin ran into at year 3. <strong>The real test is patches 20–40.</strong>
+        If Kuro holds the earn rate while the roster grows, they'll have built something genuinely novel.
+        If they compress it — they become Genshin.
+      </div>
+    </div>
+
+    <hr class="eco-rule">
+
+    <!-- ── PART II ── -->
+    <div class="eco-part-header">
+      <span class="eco-part-num">PART II</span>
+      <span class="eco-part-title p2">TFT Gold Economy as Mechanism Design</span>
+      <span class="eco-part-game">Teamfight Tactics · Riot Games</span>
+    </div>
+
+    <p class="eco-body">
+      Teamfight Tactics has two economic systems running simultaneously —
+      one inside the game (gold, interest, streaks) and one around the game (MMR, LP, rank).
+      Both are mechanism design problems. The gold economy determines <strong>how players invest resources under uncertainty</strong>.
+      The LP system determines <strong>how the platform rewards competitive effort</strong>.
+      Most analysis treats these as game balance questions. They're economics questions.
+    </p>
+
+    <div class="eco-findings">
+      <div class="eco-finding">
+        <div class="eco-finding-val val-w">10%</div>
+        <div class="eco-finding-label">Interest rate per 10g held<br>(capped at 5g/round)</div>
+      </div>
+      <div class="eco-finding">
+        <div class="eco-finding-val val-w">+2g</div>
+        <div class="eco-finding-label">Streak bonus floor<br>(3+ win or loss streak)</div>
+      </div>
+      <div class="eco-finding">
+        <div class="eco-finding-val val-d">8-player</div>
+        <div class="eco-finding-label">Tournament structure<br>not a 2-sided PvP market</div>
+      </div>
+      <div class="eco-finding">
+        <div class="eco-finding-val" style="color:#d8624a">Smurf</div>
+        <div class="eco-finding-label">= market manipulation<br>LP boosting = counterfeiting</div>
+      </div>
+    </div>
+
+    <!-- TFT LP metrics row -->
+    <div class="eco-metrics-row">
+      <div class="eco-metric">
+        <div class="eco-metric-val val-w">50g</div>
+        <div class="eco-metric-label">Interest cap<br>threshold</div>
+      </div>
+      <div class="eco-metric">
+        <div class="eco-metric-val val-w">+5g</div>
+        <div class="eco-metric-label">Max interest<br>per round</div>
+      </div>
+      <div class="eco-metric">
+        <div class="eco-metric-val val-d">+80</div>
+        <div class="eco-metric-label">Current 1st<br>place LP</div>
+      </div>
+      <div class="eco-metric">
+        <div class="eco-metric-val val-d">+100</div>
+        <div class="eco-metric-label">Proposed 1st<br>place LP</div>
+      </div>
+      <div class="eco-metric">
+        <div class="eco-metric-val" style="color:#d8624a">−45</div>
+        <div class="eco-metric-label">Current 8th<br>place LP</div>
+      </div>
+      <div class="eco-metric">
+        <div class="eco-metric-val" style="color:#d8624a">−60</div>
+        <div class="eco-metric-label">Proposed 8th<br>place LP</div>
+      </div>
+    </div>
+
+    <p class="eco-body">
+      <strong>The gold interest system is a savings incentive mechanism.</strong>
+      Holding 50g earns 5g/round — a 10% return. This creates a tension between
+      investing (leveling, rolling) and saving (compounding interest). The optimal strategy
+      mirrors a real options problem: hold until the EV of rolling exceeds the opportunity cost of lost interest.
+      Streak bonuses function as <strong>risk-adjusted compensation</strong> — players absorbing variance
+      (accepting losses) are paid extra gold to offset the HP damage. It's an insurance premium built into the game loop.
+    </p>
+
+    <!-- Chart 4: TFT Gold Economy -->
+    <div class="eco-chart-block">
+      <div class="eco-chart-label">Fig 4 — TFT Gold Economy Model · Interest, Streak EV & LP Design</div>
+      <img src="./tft_gold_economy.png" alt="TFT gold economy: interest mechanisms, streak EV and LP distribution">
+      <div class="eco-chart-caption">
+        Five-panel mechanism design breakdown. Top left: the 50g interest threshold — every gold below 50 costs 0.1g/round in lost compounding.
+        Top right: reroll vs. level-up EV crossover at stage 4-5. Bottom left: current vs. proposed convex LP payout curve —
+        the "play for 4th" trap quantified. Bottom middle: market failure taxonomy. Bottom right: HP × Gold optimal action heatmap.
+      </div>
+    </div>
+
+    <p class="eco-body">
+      <strong>The LP system is a tournament prize pool.</strong>
+      In an 8-player lobby, placement points (1st = +80LP, 8th = −40LP) distribute a fixed pool of rank currency.
+      Unlike a 2-sided PvP game where LP is zero-sum between two players, TFT's structure means
+      top-4 is profitable and bottom-4 is taxed — incentivising <strong>consistent placement over high-variance plays</strong>.
+      The mechanism design question: does the current payout curve encourage optimal play, or does it reward
+      risk-aversion to a point that makes lobbies less competitive?
+    </p>
+
+    <div class="eco-verdict" style="border-left-color: #c49cf7">
+      <div class="eco-verdict-label" style="color:#c49cf7">Mechanism Design Recommendation — Part II</div>
+      <div class="eco-verdict-body">
+        The current LP curve over-rewards 4th place relative to the skill gap between 1st and 4th.
+        A <strong>convex payout structure</strong> — where LP deltas steepen at the extremes (1st and 8th) —
+        would better align incentives: high-variance aggressive play becomes more viable at the top,
+        reducing the rational incentive to "play for 4th." This mirrors prize pool designs in
+        competitive esports where top-heavy distributions increase effort across all competitors,
+        not just the leader. Implementation risk: increased ranked anxiety at the bottom. Mitigation:
+        soften the 7th/8th penalty in the first 10 placement games of a new rank tier.
+      </div>
+    </div>
+
+    <hr class="eco-rule" style="margin-top:32px">
+
+    <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap">
+      <a href="https://diamond-apparel-ca4.notion.site/Portfolio-36d20d328f448012af39c1beddca4704"
+         target="_blank"
+         style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:#555;text-decoration:none;text-transform:uppercase;border:1px solid #222;padding:8px 16px;transition:color 0.2s,border-color 0.2s"
+         onmouseover="this.style.color='#e8e8e0';this.style.borderColor='#444'"
+         onmouseout="this.style.color='#555';this.style.borderColor='#222'">
+        Full Portfolio →
+      </a>
+      <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:#333;padding:8px 0;text-transform:uppercase">
+        ● In Progress — Est. completion Q3 2026
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<!-- Close modal on backdrop click -->
+<script>
+document.getElementById('modal-economy').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('open');
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') document.getElementById('modal-economy').classList.remove('open');
+});
 </script>
 </body>
 </html>
