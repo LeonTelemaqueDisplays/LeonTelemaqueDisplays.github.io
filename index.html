@@ -4248,6 +4248,103 @@ footer{
 
     </div>
 
+    <!-- ARKHAM CITY — NARRATIVE PACING ANALYSIS -->
+    <div class="pcard" onclick="openModal('arkham')">
+      <div class="pcard-preview">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="acBg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#040406"/>
+              <stop offset="60%" stop-color="#070609"/>
+              <stop offset="100%" stop-color="#040405"/>
+            </linearGradient>
+            <radialGradient id="acRedTop" cx="50%" cy="0%" r="55%">
+              <stop offset="0%" stop-color="#a81818" stop-opacity=".18"/>
+              <stop offset="60%" stop-color="#a81818" stop-opacity=".05"/>
+              <stop offset="100%" stop-color="#a81818" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="acRedLeft" cx="10%" cy="80%" r="40%">
+              <stop offset="0%" stop-color="#c82020" stop-opacity=".12"/>
+              <stop offset="100%" stop-color="#c82020" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="acCityGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#b0b0b8" stop-opacity=".12"/>
+              <stop offset="100%" stop-color="#b0b0b8" stop-opacity=".03"/>
+            </linearGradient>
+            <filter id="acBlur3"><feGaussianBlur stdDeviation="3"/></filter>
+            <filter id="acBlur8"><feGaussianBlur stdDeviation="8"/></filter>
+            <filter id="acGlow">
+              <feGaussianBlur stdDeviation="3" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <!-- Background -->
+          <rect width="680" height="400" fill="url(#acBg)"/>
+          <rect width="680" height="400" fill="url(#acRedTop)"/>
+          <rect width="680" height="400" fill="url(#acRedLeft)"/>
+
+          <!-- Cityscape silhouette -->
+          <polygon points="0,400 0,248 10,248 10,220 20,220 20,236 34,236 34,168 44,168 44,192 56,192 56,144 68,144 68,172 78,172 78,120 90,120 90,152 104,152 104,188 116,188 116,116 130,116 130,88 140,88 140,112 154,112 154,156 168,156 168,128 180,128 180,192 196,192 196,72 208,72 208,100 218,100 218,140 230,140 230,80 242,80 242,108 256,108 256,176 268,176 268,64 280,64 280,100 292,100 292,152 306,152 306,96 318,96 318,120 332,120 332,168 346,168 346,108 360,108 360,80 372,80 372,128 386,128 386,60 398,60 398,92 410,92 410,140 422,140 422,84 434,84 434,116 448,116 448,160 460,160 460,100 474,100 474,140 488,140 488,192 502,192 502,128 516,128 516,156 530,156 530,112 542,112 542,72 554,72 554,108 568,108 568,152 580,152 580,92 594,92 594,130 608,130 608,168 620,168 620,120 634,120 634,148 648,148 648,192 660,192 660,232 672,232 672,256 680,256 680,400" fill="url(#acCityGrad)"/>
+
+          <!-- Fog layer over city -->
+          <rect x="0" y="280" width="680" height="120" fill="url(#acBg)" opacity=".6"/>
+
+          <!-- Vignette -->
+          <radialGradient id="acVig" cx="50%" cy="50%" r="70%">
+            <stop offset="0%" stop-color="transparent"/>
+            <stop offset="100%" stop-color="#000" stop-opacity=".7"/>
+          </radialGradient>
+          <rect width="680" height="400" fill="url(#acVig)"/>
+
+          <!-- Red glow line at top -->
+          <rect x="0" y="0" width="680" height="2" fill="#c82020" opacity=".5"/>
+
+          <!-- Bat symbol (simplified) -->
+          <g transform="translate(340,155)" filter="url(#acBlur3)" opacity=".06">
+            <path d="M0,-28 C-8,-28 -20,-18 -32,-8 C-22,-12 -14,-10 -8,-4 C-16,2 -28,6 -38,2 C-30,10 -18,14 -8,12 C-4,16 -2,20 0,24 C2,20 4,16 8,12 C18,14 30,10 38,2 C28,6 16,2 8,-4 C14,-10 22,-12 32,-8 C20,-18 8,-28 0,-28 Z" fill="#c82020"/>
+          </g>
+
+          <!-- Main title — BATMAN -->
+          <text x="340" y="168" font-family="'Oswald',Arial,sans-serif" font-weight="700" font-size="52" fill="#d0d2d8" letter-spacing="6" text-anchor="middle" opacity=".92">BATMAN</text>
+
+          <!-- Subtitle — ARKHAM CITY in red -->
+          <text x="340" y="206" font-family="'Oswald',Arial,sans-serif" font-weight="700" font-size="28" fill="#c82020" letter-spacing="10" text-anchor="middle" filter="url(#acGlow)">ARKHAM CITY</text>
+
+          <!-- Divider line -->
+          <rect x="240" y="220" width="200" height="1" fill="#c82020" opacity=".35"/>
+
+          <!-- Descriptor -->
+          <text x="340" y="240" font-family="'Oswald',Arial,sans-serif" font-weight="400" font-size="10" fill="#787a88" letter-spacing="3" text-anchor="middle" text-transform="uppercase">NARRATIVE PACING ARCHITECTURE · 2011</text>
+
+          <!-- Four layer pills -->
+          <g font-family="'Oswald',Arial,sans-serif" font-size="8" fill="#424454" letter-spacing="1.5">
+            <text x="108" y="298" text-anchor="middle">01 · THE PROBLEM</text>
+            <text x="254" y="298" text-anchor="middle">02 · THE SOLUTION</text>
+            <text x="426" y="298" text-anchor="middle">03 · THE LIVING CITY</text>
+            <text x="572" y="298" text-anchor="middle">04 · STEAL THIS</text>
+          </g>
+          <line x1="56" y1="302" x2="160" y2="302" stroke="#c82020" stroke-width=".6" opacity=".2"/>
+          <line x1="200" y1="302" x2="308" y2="302" stroke="#424454" stroke-width=".6" opacity=".3"/>
+          <line x1="364" y1="302" x2="488" y2="302" stroke="#2a6090" stroke-width=".6" opacity=".2"/>
+          <line x1="526" y1="302" x2="618" y2="302" stroke="#c82020" stroke-width=".6" opacity=".2"/>
+
+          <!-- Eyebrow -->
+          <text x="340" y="352" font-family="'Oswald',Arial,sans-serif" font-weight="400" font-size="9" fill="#505870" letter-spacing="2" text-anchor="middle">ROCKSTEADY STUDIOS · DESIGN ANALYSIS</text>
+        </svg>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">The Urgency Engine — Narrative Pacing Architecture in Batman: Arkham City</h3>
+        <p class="pcard-desc">How Arkham City solved open world storytelling — a four-layer analysis of the ticking clock, villain architecture, living gang war, and optional lore system that create emotional momentum most open world games never achieve. With proven live service applications from Destiny 1 and Where Winds Meet.</p>
+        <div class="pcard-tags">
+          <span class="ptag" style="border-color:rgba(200,32,32,.3);color:rgba(200,80,80,.85)">Narrative Design</span>
+          <span class="ptag">Open World Systems</span>
+          <span class="ptag">Game Analysis</span>
+          <span class="ptag" style="border-color:rgba(91,143,255,.3);color:var(--blue)">LiveOps Narrative</span>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /moreCarousel -->
   </div><!-- /more-carousel-wrap -->
 </div>
@@ -4988,6 +5085,24 @@ const DATA={
     insight:'Fairness is not statistical equilibrium — it is interpretable agency under constraint. A player who can say "I could have played that differently" has experienced a fair match, regardless of what the numbers say.',
     signals:['Structural layer: skill distribution, composition stability, volatility estimation','Coordination layer: stack detection, sync probability modelling, expectation bands','Perception layer: agency scoring, match readability, volatility smoothing','Stress tested against 5 adversarial scenarios including 5-stack vs solo, meta spam, and snowball comps','Soft 2-2-2 role pressure without queue locks — preserving hero identity'],
     tools:['Behavioural Systems Design','Matchmaking Architecture','LiveOps Analytics','Coordination Modelling','UX Systems Design'],
+    links:[]
+  },
+  arkham:{
+    tag:'gaming',tagLabel:'Narrative Design · Game Analysis · Open World',
+    title:'The Urgency Engine — Narrative Pacing Architecture in Batman: Arkham City',
+    period:'2026 · Four-Layer Framework',
+    embedUrl:'arkham-city-pacing.html',
+    streamlit:null,
+    desc:'A design analysis of how Batman: Arkham City solved open world storytelling — maintaining narrative urgency in a structure built to constantly pull players away from the story. The Joker poisoning clock, villain layering, a living gang war already in motion before Batman arrives, and an optional lore layer that deepens emotional payoff without demanding completion. Includes proven applications in Destiny 1 / The Taken King and Where Winds Meet.',
+    insight:'Arkham City\'s achievement isn\'t that it made a good Batman game — it\'s that it built a structural proof that open world freedom and narrative urgency are not opposites. The solution has been available since 2011. The studios that understand it are still building games people talk about a decade later.',
+    signals:[
+      'Layer 1 — The Pacing Problem: Why open world structures kill narrative momentum and why Arkham City shouldn\'t work by conventional design logic',
+      'Layer 2 — Arkham City\'s Solution: Joker ticking clock, Hugo Strange / Protocol 10 TYGER comms, Ra\'s al Ghul revelation reframe',
+      'Layer 3 — The Living City: Three-way gang war pre-existing Batman\'s arrival; faction ambient dialogue as villain characterisation; politician camps and world scale',
+      'Layer 4 — What Studios Should Steal: Seven design principles with live service and single-player applications',
+      'Proven In Practice: Destiny 1 / The Taken King (Oryx Moon presence, Taken patrol corruption); Where Winds Meet / Kaifeng'
+    ],
+    tools:['Narrative Design','Open World Systems','Environmental Storytelling','LiveOps Narrative','Game Design Analysis'],
     links:[]
   }
 };

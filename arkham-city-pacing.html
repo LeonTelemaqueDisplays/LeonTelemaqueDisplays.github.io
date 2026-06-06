@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Urgency Engine — Batman: Arkham City | Leon Telemaque</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #040406;
+  --bg-2: #080a0f;
+  --bg-card: #0d1018;
+  --bg-card-h: #121520;
+  --gold: #c8a030;
+  --gold-dim: #8a6a18;
+  --gold-faint: rgba(200,160,48,0.06);
+  --red: #a81818;
+  --red-bright: #c82020;
+  --red-faint: rgba(168,24,24,0.08);
+  --blue: #2a6090;
+  --blue-light: #4a88b8;
+  --blue-faint: rgba(42,96,144,0.08);
+  --t1: #d8dae0;
+  --t2: #787a88;
+  --t3: #424454;
+  --border: rgba(168,24,24,0.12);
+  --border-m: rgba(168,24,24,0.28);
+  --border-neutral: rgba(255,255,255,0.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;line-height:1.7;overflow-x:hidden;}
+
+/* Progress bar */
+#progress{position:fixed;top:0;left:0;height:2px;width:0%;background:var(--red-bright);z-index:200;transition:width 0.1s linear;box-shadow:0 0 8px rgba(200,32,32,0.6);}
+
+/* Nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:58px;background:rgba(4,4,6,0.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;}
+.nav-brand{font-family:'Oswald',sans-serif;font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--t3);}
+.nav-brand span{color:var(--red-bright);}
+.nav-links{display:flex;list-style:none;}
+.nav-links a{display:block;height:58px;line-height:58px;padding:0 1.1rem;font-family:'Oswald',sans-serif;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t3);text-decoration:none;border-bottom:2px solid transparent;transition:color 0.2s,border-color 0.2s;}
+.nav-links a:hover{color:var(--t2);}
+.nav-links a.active{color:var(--red-bright);border-bottom-color:var(--red-bright);}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:7rem 4rem 5.5rem;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;pointer-events:none;}
+.hero-bg::before{content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(168,24,24,0.12) 0%,transparent 60%),
+    radial-gradient(ellipse at 80% 50%,rgba(168,24,24,0.06) 0%,transparent 45%),
+    radial-gradient(ellipse at 0% 100%,rgba(168,24,24,0.1) 0%,transparent 50%),
+    linear-gradient(180deg,rgba(0,0,0,0.6) 0%,rgba(4,4,6,0.2) 40%,rgba(4,4,6,0.85) 80%,var(--bg) 100%);
+}
+.hero-city{position:absolute;bottom:0;left:0;right:0;height:220px;opacity:0.07;background:linear-gradient(to top,rgba(180,180,180,0.9) 0%,transparent 100%);clip-path:polygon(0% 100%,0% 62%,1.5% 62%,1.5% 52%,3% 52%,3% 58%,5% 58%,5% 42%,6.5% 42%,6.5% 50%,8% 50%,8% 36%,10% 36%,10% 44%,11.5% 44%,11.5% 30%,13% 30%,13% 38%,15% 38%,15% 24%,17% 24%,17% 33%,19% 33%,19% 47%,21% 47%,21% 29%,23% 29%,23% 36%,24.5% 36%,24.5% 20%,26% 20%,26% 30%,28% 30%,28% 52%,30% 52%,30% 38%,32% 38%,32% 22%,34% 22%,34% 35%,35.5% 35%,35.5% 18%,37% 18%,37% 28%,39% 28%,39% 42%,41% 42%,41% 32%,43% 32%,43% 50%,45% 50%,45% 28%,47% 28%,47% 40%,49% 40%,49% 55%,51% 55%,51% 38%,53% 38%,53% 48%,55% 48%,55% 35%,57% 35%,57% 45%,59% 45%,59% 30%,61% 30%,61% 42%,63% 42%,63% 24%,65% 24%,65% 36%,67% 36%,67% 50%,69% 50%,69% 40%,71% 40%,71% 27%,73% 27%,73% 34%,75% 34%,75% 46%,77% 46%,77% 32%,79% 32%,79% 44%,81% 44%,81% 56%,83% 56%,83% 43%,85% 43%,85% 52%,87% 52%,87% 40%,89% 40%,89% 58%,91% 58%,91% 52%,93% 52%,93% 63%,95% 63%,95% 57%,97% 57%,97% 66%,100% 66%,100% 100%);
+}
+/* Vignette overlay */
+.hero-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,transparent 40%,rgba(0,0,0,0.75) 100%);pointer-events:none;}
+.hero-noise{position:absolute;inset:0;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;}
+
+.hero-eyebrow{font-family:'Oswald',sans-serif;font-size:0.68rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--t3);margin-bottom:1.5rem;position:relative;}
+.hero-eyebrow span{color:var(--red-bright);}
+.hero-title{font-family:'Oswald',sans-serif;font-size:clamp(2.8rem,6.5vw,6rem);font-weight:700;line-height:0.95;letter-spacing:-0.02em;text-transform:uppercase;max-width:940px;margin-bottom:2rem;position:relative;}
+.hero-title em{font-style:normal;color:var(--red-bright);display:block;text-shadow:0 0 60px rgba(168,24,24,0.4);}
+.hero-thesis{max-width:660px;font-size:1rem;color:var(--t2);line-height:1.78;margin-bottom:3rem;border-left:2px solid var(--red);padding-left:1.5rem;position:relative;}
+.hero-meta{display:flex;gap:2rem;align-items:center;flex-wrap:wrap;position:relative;}
+.badge{font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--t3);padding:0.35rem 0.9rem;border:1px solid rgba(255,255,255,0.06);border-radius:2px;}
+.hero-scroll{display:flex;align-items:center;gap:0.7rem;color:var(--t3);font-family:'Oswald',sans-serif;font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;margin-left:auto;transition:color 0.2s;}
+.hero-scroll:hover{color:var(--red-bright);}
+.hero-scroll-line{width:36px;height:1px;background:currentColor;transition:width 0.25s;}
+.hero-scroll:hover .hero-scroll-line{width:56px;}
+
+/* Sections */
+.section{padding:6.5rem 4rem;border-top:1px solid rgba(255,255,255,0.03);opacity:0;transform:translateY(28px);transition:opacity 0.65s ease,transform 0.65s ease;}
+.section.vis{opacity:1;transform:translateY(0);}
+.section-inner{max-width:1080px;margin:0 auto;}
+.section-header{display:grid;grid-template-columns:80px 1fr;gap:2.5rem;margin-bottom:4rem;align-items:start;}
+.section-num{font-family:'Oswald',sans-serif;font-size:4.5rem;font-weight:700;line-height:1;letter-spacing:-0.04em;user-select:none;opacity:0.1;}
+.section-eyebrow{font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:0.6rem;}
+.section-title{font-family:'Oswald',sans-serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:600;line-height:1.1;letter-spacing:-0.01em;text-transform:uppercase;margin-bottom:0.85rem;}
+.section-sub{font-size:0.95rem;color:var(--t2);max-width:580px;line-height:1.7;}
+
+/* Layer 1 — Red/blood */
+#l1{background:linear-gradient(180deg,transparent,rgba(168,24,24,0.05));}
+#l1 .section-num{color:var(--red-bright);}
+#l1 .section-eyebrow{color:var(--red-bright);}
+/* Layer 2 — Desaturated gold (Batman utility belt) */
+#l2 .section-num{color:var(--gold);}
+#l2 .section-eyebrow{color:var(--gold);}
+/* Layer 3 — Cold blue (Strange's surveillance) */
+#l3{background:linear-gradient(180deg,transparent,rgba(42,96,144,0.06));}
+#l3 .section-num{color:var(--blue);}
+#l3 .section-eyebrow{color:var(--blue-light);}
+/* Layer 4 — Red returns */
+#l4{background:linear-gradient(180deg,transparent,rgba(168,24,24,0.04));}
+#l4 .section-num{color:var(--red-bright);}
+#l4 .section-eyebrow{color:var(--red-bright);}
+
+/* Expandables */
+.expandables{margin-top:2.5rem;}
+.exp{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;margin-bottom:0.875rem;overflow:hidden;transition:border-color 0.25s;}
+.exp:hover{border-color:rgba(168,24,24,0.25);}
+.exp-head{padding:1.4rem 1.75rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none;gap:1rem;}
+.exp-title{font-family:'Oswald',sans-serif;font-size:1rem;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;color:var(--t1);}
+.exp-icon{width:22px;height:22px;border:1px solid rgba(168,24,24,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--red-bright);font-size:1.1rem;font-weight:300;transition:transform 0.3s,background 0.2s;}
+.exp.open .exp-icon{transform:rotate(45deg);background:var(--red-faint);}
+.exp-body{max-height:0;overflow:hidden;transition:max-height 0.42s ease;}
+.exp.open .exp-body{max-height:500px;}
+.exp-body-inner{padding:1.4rem 1.75rem;border-top:1px solid rgba(255,255,255,0.04);font-size:0.9rem;color:var(--t2);line-height:1.78;}
+.exp-body-inner p+p{margin-top:0.9rem;}
+strong.hl{color:var(--t1);font-weight:600;}
+
+/* Mechanism cards */
+.mech-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:2.5rem;}
+.mech-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:1.75rem;position:relative;overflow:hidden;transition:all 0.3s;}
+.mech-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;transition:opacity 0.3s;opacity:0.5;}
+.mech-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,0.5);}
+.mech-card:hover::after{opacity:1;}
+.mech-gold{border-top:2px solid rgba(200,160,48,0.35);}
+.mech-gold::after{background:var(--gold);}
+.mech-red{border-top:2px solid rgba(168,24,24,0.45);}
+.mech-red::after{background:var(--red-bright);}
+.mech-blue{border-top:2px solid rgba(42,96,144,0.35);}
+.mech-blue::after{background:var(--blue-light);}
+.mech-tag{font-family:'Oswald',sans-serif;font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;padding:0.22rem 0.6rem;border-radius:2px;display:inline-block;margin-bottom:1rem;}
+.tag-gold{color:var(--gold);border:1px solid rgba(240,192,64,0.3);background:var(--gold-faint);}
+.tag-red{color:var(--red);border:1px solid rgba(201,64,32,0.3);background:var(--red-faint);}
+.tag-blue{color:var(--blue-light);border:1px solid rgba(58,122,181,0.3);background:var(--blue-faint);}
+.mech-title{font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--t1);margin-bottom:0.75rem;}
+.mech-body{font-size:0.875rem;color:var(--t2);line-height:1.72;}
+
+/* Tension timeline */
+.tension-wrap{margin-top:3rem;background:var(--bg-card);border:1px solid var(--border);border-radius:3px;padding:2.25rem;}
+.tension-label{font-family:'Oswald',sans-serif;font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--t3);margin-bottom:2rem;}
+.timeline{position:relative;padding-bottom:2rem;}
+.tl-acts{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-bottom:1.5rem;}
+.tl-act{font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t3);border-left:1px solid rgba(255,255,255,0.06);padding-left:0.75rem;padding-bottom:0.5rem;}
+.tl-act:first-child{border-left:none;padding-left:0;}
+.tl-tracks{display:flex;flex-direction:column;gap:0.875rem;}
+.tl-track{display:grid;grid-template-columns:140px 1fr;gap:1rem;align-items:center;}
+.tl-track-name{font-family:'Oswald',sans-serif;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--t2);text-align:right;}
+.tl-bar-outer{height:8px;background:rgba(255,255,255,0.04);border-radius:4px;position:relative;overflow:hidden;}
+.tl-bar-fill{height:100%;border-radius:4px;position:absolute;top:0;}
+.bar-full{left:0;right:0;background:linear-gradient(90deg,transparent 0%,var(--gold) 8%,var(--gold) 92%,transparent 100%);}
+.bar-mid{left:25%;right:10%;background:linear-gradient(90deg,transparent 0%,var(--red) 8%,var(--red) 90%,transparent 100%);}
+.bar-late{left:55%;right:5%;background:linear-gradient(90deg,transparent 0%,var(--blue) 12%,var(--blue) 88%,transparent 100%);}
+.bar-env{left:0;right:0;background:repeating-linear-gradient(90deg,rgba(90,154,213,0.4) 0px,rgba(90,154,213,0.4) 8px,transparent 8px,transparent 16px);}
+.tl-note{font-size:0.78rem;color:var(--t3);margin-top:1.5rem;font-style:italic;}
+
+/* Gang war section */
+.gang-war{margin-top:3rem;}
+.gang-war-intro{font-size:0.9rem;color:var(--t2);line-height:1.78;margin-bottom:2rem;max-width:760px;}
+.faction-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:1.5rem;}
+.faction-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:1.75rem;position:relative;overflow:hidden;}
+.faction-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.faction-joker::before{background:linear-gradient(90deg,#3a7a3a,#6ab56a);}
+.faction-twoface::before{background:linear-gradient(90deg,#8a1515 50%,#b8a040 50%);}
+.faction-penguin::before{background:linear-gradient(90deg,#2a4a6a,#4a7aaa);}
+.faction-name{font-family:'Oswald',sans-serif;font-size:1rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--t1);margin-bottom:0.3rem;}
+.faction-role{font-family:'Oswald',sans-serif;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--t3);margin-bottom:1.1rem;}
+.faction-pitch{font-size:0.78rem;color:var(--t2);line-height:1.65;margin-bottom:1rem;padding:0.75rem;background:rgba(255,255,255,0.03);border-radius:2px;font-style:italic;border-left:2px solid rgba(255,255,255,0.08);}
+.faction-pitch::before{content:'"';font-size:1.2rem;color:var(--t3);line-height:0;vertical-align:-0.3em;margin-right:0.2rem;}
+.faction-pitch::after{content:'"';font-size:1.2rem;color:var(--t3);line-height:0;vertical-align:-0.3em;margin-left:0.2rem;}
+.faction-reveals{font-size:0.8rem;color:var(--t2);line-height:1.65;}
+.faction-reveals strong{color:var(--t1);font-weight:600;display:block;font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.3rem;}
+
+/* Opening scene block */
+.scene-block{background:rgba(168,24,24,0.06);border:1px solid rgba(168,24,24,0.18);border-radius:3px;padding:2rem;margin-top:1.5rem;display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:start;}
+.scene-num{font-family:'Oswald',sans-serif;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--red-bright);white-space:nowrap;padding-top:0.15rem;}
+.scene-label{font-family:'Oswald',sans-serif;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--red-bright);margin-bottom:0.5rem;}
+.scene-title{font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--t1);margin-bottom:0.75rem;}
+.scene-body{font-size:0.875rem;color:var(--t2);line-height:1.75;}
+.scene-body p+p{margin-top:0.75rem;}
+
+/* Lore layer */
+.lore-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:2.5rem;}
+.lore-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:1.75rem;transition:all 0.3s;}
+.lore-card:hover{border-color:rgba(42,96,144,0.3);transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,0.4);}
+.lore-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;margin-bottom:1.1rem;background:var(--blue-faint);border:1px solid rgba(42,96,144,0.2);}
+.lore-title{font-family:'Oswald',sans-serif;font-size:0.95rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--t1);margin-bottom:0.65rem;}
+.lore-body{font-size:0.875rem;color:var(--t2);line-height:1.7;}
+
+/* Highlight box */
+.hi-box{background:rgba(168,24,24,0.06);border:1px solid rgba(168,24,24,0.2);border-left:3px solid var(--red);border-radius:0 3px 3px 0;padding:1.75rem 2rem;margin-top:2.5rem;}
+.hi-label{font-family:'Oswald',sans-serif;font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--red-bright);margin-bottom:0.65rem;}
+.hi-box p{font-size:1rem;color:var(--t1);line-height:1.72;}
+
+/* Steal grid */
+.steal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-top:2.5rem;}
+.steal-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:1.75rem 1.75rem 1.75rem 2rem;position:relative;overflow:hidden;transition:all 0.3s;border-left:3px solid rgba(168,24,24,0.15);}
+.steal-card:hover{background:var(--bg-card-h);border-color:rgba(168,24,24,0.2);border-left-color:var(--red-bright);transform:translateX(3px);box-shadow:-4px 0 20px rgba(168,24,24,0.1);}
+.steal-num{position:absolute;top:-0.5rem;right:1rem;font-family:'Oswald',sans-serif;font-size:4rem;font-weight:700;color:rgba(168,24,24,0.07);line-height:1;user-select:none;}
+.steal-tag{display:inline-block;font-family:'Oswald',sans-serif;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--red-bright);border:1px solid rgba(168,24,24,0.3);padding:0.18rem 0.55rem;border-radius:2px;margin-bottom:0.9rem;}
+.steal-title{font-family:'Oswald',sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--t1);margin-bottom:0.65rem;}
+.steal-body{font-size:0.875rem;color:var(--t2);line-height:1.72;}
+
+/* Precedent block */
+.precedent-wrap{margin-top:3rem;margin-bottom:3.5rem;}
+.precedent-label{font-family:'Oswald',sans-serif;font-size:0.62rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--t3);margin-bottom:1.25rem;}
+.precedent-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;}
+.precedent-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:2rem;position:relative;overflow:hidden;}
+.precedent-card::before{content:'';position:absolute;inset:0;opacity:0.03;background:linear-gradient(135deg,var(--red) 0%,transparent 60%);}
+.precedent-game{font-family:'Oswald',sans-serif;font-size:1.05rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--t1);margin-bottom:0.2rem;}
+.precedent-sub{font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--red-bright);margin-bottom:1.25rem;}
+.precedent-principles{display:flex;flex-direction:column;gap:0.875rem;}
+.pp{display:grid;grid-template-columns:auto 1fr;gap:0.875rem;align-items:start;}
+.pp-tag{font-family:'Oswald',sans-serif;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--t3);white-space:nowrap;padding:0.18rem 0.5rem;border:1px solid rgba(255,255,255,0.06);border-radius:2px;margin-top:0.1rem;}
+.pp-body{font-size:0.82rem;color:var(--t2);line-height:1.65;}
+.pp-body strong{color:var(--t1);font-weight:600;}
+
+/* Closing statement */
+.closing{margin-top:4rem;padding:3rem;background:var(--bg-card);border:1px solid rgba(168,24,24,0.2);border-top:2px solid var(--red);border-radius:0 0 3px 3px;text-align:center;}
+.closing-line{width:40px;height:2px;background:var(--red-bright);margin:0 auto 2rem;box-shadow:0 0 12px rgba(200,32,32,0.5);}
+.closing p{font-family:'Oswald',sans-serif;font-size:clamp(1.1rem,2.2vw,1.5rem);font-weight:400;line-height:1.5;color:var(--t2);max-width:680px;margin:0 auto;}
+.closing p em{font-style:normal;color:var(--red-bright);}
+
+/* Divider */
+.divider{width:48px;height:2px;background:rgba(168,24,24,0.35);margin:2.5rem 0;}
+.divider-red{background:rgba(168,24,24,0.5);}
+.divider-blue{background:rgba(42,96,144,0.4);}
+
+/* Footer */
+footer{padding:3.5rem 4rem;border-top:1px solid rgba(255,255,255,0.04);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;}
+.footer-name{font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--t3);}
+.footer-name span{color:var(--gold);}
+.footer-note{font-size:0.75rem;color:var(--t3);}
+
+/* Utilities */
+.prose{font-size:0.95rem;color:var(--t2);line-height:1.78;}
+.prose+.prose{margin-top:1rem;}
+.t-gold{color:var(--gold);}
+.t-red{color:var(--red-bright);}
+.t-blue{color:var(--blue-light);}
+.mt-2{margin-top:2rem;}
+
+/* Responsive */
+@media(max-width:900px){
+  .mech-grid,.steal-grid,.lore-grid,.faction-row,.precedent-grid{grid-template-columns:1fr 1fr;}
+  nav{padding:0 1.25rem;}
+}
+@media(max-width:680px){
+  .hero{padding:6rem 1.5rem 4rem;}
+  .section{padding:5rem 1.5rem;}
+  .section-header{grid-template-columns:1fr;gap:0.5rem;}
+  .section-num{font-size:2.5rem;}
+  .mech-grid,.steal-grid,.lore-grid,.faction-row,.precedent-grid{grid-template-columns:1fr;}
+  .tl-track{grid-template-columns:100px 1fr;}
+  .tl-track-name{font-size:0.62rem;}
+  .nav-brand{display:none;}
+  footer{padding:2.5rem 1.5rem;}
+  .scene-block{grid-template-columns:1fr;gap:0.75rem;}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+  <div class="nav-brand"><span>Leon Telemaque</span> &nbsp;/&nbsp; Portfolio</div>
+  <ul class="nav-links">
+    <li><a href="#l1">The Problem</a></li>
+    <li><a href="#l2">The Solution</a></li>
+    <li><a href="#l3">Lore Layer</a></li>
+    <li><a href="#l4">Steal This</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="hero-noise"></div>
+    <div class="hero-city"></div>
+    <div class="hero-vignette"></div>
+  </div>
+
+  <div class="hero-eyebrow">Narrative Design Analysis &nbsp;·&nbsp; <span>Batman: Arkham City</span> &nbsp;·&nbsp; 2011</div>
+
+  <h1 class="hero-title">
+    The Urgency Engine:
+    <em>How Arkham City Solved Open World Storytelling</em>
+  </h1>
+
+  <p class="hero-thesis">
+    Arkham City solves the hardest problem in open world game design — maintaining narrative urgency in a structure built to constantly pull players away from the story. The ticking clock mechanic, villain architecture, and optional lore system work together to create emotional momentum that most open world games never achieve. Studios building live service and single player games can steal directly from this blueprint.
+  </p>
+
+  <div class="hero-meta">
+    <span class="badge">Rocksteady Studios</span>
+    <span class="badge">Open World Design</span>
+    <span class="badge">Narrative Architecture</span>
+    <span class="badge">Released 2011</span>
+    <a href="#l1" class="hero-scroll">
+      <span class="hero-scroll-line"></span>
+      Begin Analysis
+    </a>
+  </div>
+</section>
+
+<!-- LAYER 1: THE PACING PROBLEM -->
+<section class="section" id="l1">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div>
+        <div class="section-eyebrow">Layer One</div>
+        <h2 class="section-title">The Pacing Problem</h2>
+        <p class="section-sub">Why open world structures kill narrative momentum — and why Arkham City shouldn't work by conventional design logic.</p>
+      </div>
+    </div>
+
+    <p class="prose">Open world game design contains a structural paradox. The genre's defining virtue — freedom, scale, the invitation to explore — is also the mechanism that kills narrative urgency. The moment a designer gives players a world to roam, they've handed them a hundred reasons to not care about the story right now.</p>
+    <p class="prose mt-2">Most games resolve this badly. They either lock content behind story gates (restricting the freedom they sold), or they release the world fully and accept that narrative becomes ambient noise — there when players want it, easily ignored. Arkham City was entering this exact trap in 2011. And then it didn't.</p>
+
+    <div class="divider divider-red"></div>
+
+    <div class="expandables">
+      <div class="exp">
+        <div class="exp-head" onclick="toggleExp(this)">
+          <span class="exp-title">The Player Agency Paradox</span>
+          <span class="exp-icon">+</span>
+        </div>
+        <div class="exp-body">
+          <div class="exp-body-inner">
+            <p>Narrative urgency requires the player to feel <strong class="hl">they must act now</strong>. Open world design requires them to feel <strong class="hl">they can act whenever</strong>. These are not just in tension — they are structurally opposed. Every side quest icon, every collectible marker, every "discover this area" prompt is a designer whispering: the story can wait. Take your time.</p>
+            <p>Most studios treat this as an acceptable trade-off. They write an urgent main story and populate a world full of distractions, then accept that players will dilute their own experience. Arkham City was not willing to accept that trade-off.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp">
+        <div class="exp-head" onclick="toggleExp(this)">
+          <span class="exp-title">The Gravity Well Failure</span>
+          <span class="exp-icon">+</span>
+        </div>
+        <div class="exp-body">
+          <div class="exp-body-inner">
+            <p>The standard open world model creates what might be called narrative gravity wells — story nodes with strong emotional pull when you're near them, but zero pull when you're 200 metres away gliding between rooftops. The moment a player stops interacting with the story, the story stops mattering.</p>
+            <p>This is why so many open world games feel hollow despite enormous budgets and talented writers. The story is <strong class="hl">present</strong> but never <strong class="hl">urgent</strong>. Players remember the world but not what they were doing in it. The emotional investment never builds because it keeps being interrupted and reset.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp">
+        <div class="exp-head" onclick="toggleExp(this)">
+          <span class="exp-title">The Structural Diagnosis</span>
+          <span class="exp-icon">+</span>
+        </div>
+        <div class="exp-body">
+          <div class="exp-body-inner">
+            <p>The problem isn't player discipline — it's design architecture. Players don't choose to stop caring about a story. They stop caring because <strong class="hl">nothing in the game structure continues to ask them to care</strong> once they step off the critical path. Most open world games have no answer for this. The story sits dormant until the player returns to it.</p>
+            <p>Arkham City's solution wasn't to redesign the open world or restrict player freedom. It was to redesign the relationship between story and player psychology — so that urgency travels with the player wherever they go in the city, regardless of what they're doing.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp">
+        <div class="exp-head" onclick="toggleExp(this)">
+          <span class="exp-title">Why Arkham City Shouldn't Work</span>
+          <span class="exp-icon">+</span>
+        </div>
+        <div class="exp-body">
+          <div class="exp-body-inner">
+            <p>By the logic above, Arkham City should be a pacing failure. It has a large open city to explore. It has hundreds of Riddler trophies, side missions, character encounters, and optional challenges. Hugo Strange's Protocol 10 announcement should create zero urgency once the player discovers they can swing around solving Catwoman puzzles for three hours without anything happening.</p>
+            <p>But this isn't what players experience. Arkham City maintains a feeling of <strong class="hl">genuine dread</strong> — a sense that events are unfolding, that time matters, that the city is dangerous and escalating — even while players are doing something completely optional. Understanding why is the entire design lesson.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hi-box">
+      <div class="hi-label">The Core Insight</div>
+      <p>Narrative urgency doesn't require mechanical restriction. It requires emotional residency — the story needs to live in the player's head, not just in the quest marker. Arkham City builds urgency at the psychological level, which is why it survives players ignoring the critical path for hours at a time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LAYER 2: ARKHAM CITY'S SOLUTION -->
+<section class="section" id="l2">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div>
+        <div class="section-eyebrow">Layer Two</div>
+        <h2 class="section-title">Arkham City's Solution</h2>
+        <p class="section-sub">Three interlocking mechanisms that maintain urgency without forcing the player's hand.</p>
+      </div>
+    </div>
+
+    <p class="prose">The solution is not a single clever trick. It's an architecture — three narrative mechanisms operating on different timelines, each reinforcing the others, creating a compounding sense of urgency that never fully releases even when the player is doing something optional.</p>
+
+    <div class="mech-grid">
+      <div class="mech-card mech-gold">
+        <span class="mech-tag tag-gold">Mechanism 01</span>
+        <div class="mech-title">The Joker Poisoning</div>
+        <div class="mech-body">Batman has hours to live. The clock is real, the stakes are personal, and the dread is constant — but there is no game mechanic enforcing it. Players feel the urgency because they believe it. Rocksteady trusted the story to do the work without a literal timer on screen.</div>
+      </div>
+      <div class="mech-card mech-red">
+        <span class="mech-tag tag-red">Mechanism 02</span>
+        <div class="mech-title">Hugo Strange & Protocol 10</div>
+        <div class="mech-body">A macro threat building in parallel to the Joker crisis — but Rocksteady doesn't just tell you it's building. As Batman glides across the city and progresses through the campaign, TYGER guards can be overheard relaying radio communications from Strange: movement orders, security escalations, cryptic references to Protocol 10's timeline. None of it is flagged. None of it is required. Players who engage with the world can piece together what Protocol 10 actually is <em>before Batman officially discovers it</em> — arriving at the story's reveal already carrying dread they built themselves. The player gets ahead of the protagonist. That gap is where the tension lives.</div>
+      </div>
+      <div class="mech-card mech-blue">
+        <span class="mech-tag tag-blue">Mechanism 03</span>
+        <div class="mech-title">Ra's al Ghul Revelation</div>
+        <div class="mech-body">The late-game reveal that Protocol 10 is only the surface of a deeper conspiracy recontextualises everything. Stakes that felt contained are suddenly global. Players who thought they understood the threat discover they were only seeing the first layer. The urgency resets and amplifies at the moment it would naturally start to decay.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <p class="prose">The Joker poisoning is often cited as the standout mechanic, but the design insight runs deeper than a single device. The three mechanisms each target a different dimension of player psychology — <span class="t-gold">personal stakes</span>, <span class="t-red">systemic threat</span>, and <span class="t-blue">narrative revelation</span> — and they are timed so that when one begins to weaken, the next amplifies. Players never have a chance to feel safe.</p>
+
+    <div class="tension-wrap">
+      <div class="tension-label">Urgency Architecture — How Tension Is Maintained Across the Arc</div>
+      <div class="timeline">
+        <div class="tl-acts">
+          <div class="tl-act">Act I<br>City Entry</div>
+          <div class="tl-act">Act II<br>Escalation</div>
+          <div class="tl-act">Act III<br>Crisis Peak</div>
+          <div class="tl-act">Finale<br>Resolution</div>
+        </div>
+        <div class="tl-tracks">
+          <div class="tl-track">
+            <div class="tl-track-name">Joker Clock</div>
+            <div class="tl-bar-outer"><div class="tl-bar-fill bar-full"></div></div>
+          </div>
+          <div class="tl-track">
+            <div class="tl-track-name">Protocol 10</div>
+            <div class="tl-bar-outer"><div class="tl-bar-fill bar-mid"></div></div>
+          </div>
+          <div class="tl-track">
+            <div class="tl-track-name">Ra's al Ghul</div>
+            <div class="tl-bar-outer"><div class="tl-bar-fill bar-late"></div></div>
+          </div>
+          <div class="tl-track">
+            <div class="tl-track-name">Env. Storytelling</div>
+            <div class="tl-bar-outer"><div class="tl-bar-fill bar-env"></div></div>
+          </div>
+        </div>
+        <p class="tl-note">Each urgency layer activates as the previous one risks becoming familiar. The ambient layer isn't passive atmosphere — overheard TYGER comms let players decode Protocol 10 ahead of Batman, creating dramatic irony that makes the story's official reveal land as confirmation rather than surprise. Players who listened arrive at the twist already afraid.</p>
+      </div>
+    </div>
+
+    <div class="hi-box mt-2">
+      <div class="hi-label">The Key Design Principle</div>
+      <p>Arkham City never restricts player movement to create urgency. Batman can glide to any corner of the city at any moment. The urgency is psychological architecture — it lives in the player's understanding of what is at stake, not in what the game permits them to do. Freedom and urgency coexist because they operate on different layers of experience.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LAYER 3: THE OPTIONAL LORE LAYER -->
+<section class="section" id="l3">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div>
+        <div class="section-eyebrow">Layer Three</div>
+        <h2 class="section-title">The Living City &amp; Lore Layer</h2>
+        <p class="section-sub">Arkham City doesn't wait for Batman to arrive. The gang war, the faction recruitment, the political economy of the prison — all of it is already in motion. Players enter a world with its own inertia.</p>
+      </div>
+    </div>
+
+    <p class="prose">Most open world games are sets. Elaborate, detailed, beautifully dressed sets — but sets nonetheless. They wait. The NPCs stand at their marks. The world is in stasis until the player activates it. Arkham City is different in a way that's easy to feel and hard to articulate: <em class="t-blue">it was already happening before you got there.</em></p>
+    <p class="prose mt-2">When Batman drops into the city for the first time, a three-way gang war between Joker, Two-Face, and Penguin is actively underway. Territories have been drawn. Recruitment is live. Foot soldiers are debating which boss offers the best deal. And scattered between those gang territories, in makeshift camps and fortified corners of the city, are the people who never belonged there at all — politicians who opposed the Arkham City program, now imprisoned inside it. Their presence isn't announced by any quest. It's there in the world, communicating the full scale of what this place is and who it has consumed.</p>
+
+    <!-- THE GANG WAR -->
+    <div class="gang-war">
+      <p class="gang-war-intro">The three major factions have distinct power structures, territorial logic, and — critically — distinct employer value propositions that their goons articulate through ambient dialogue. Gliding over the city, players overhear active recruitment conversations. Each faction makes a different case for itself. This is villain characterization through world logic, not cutscene exposition.</p>
+
+      <div class="faction-row">
+        <div class="faction-card faction-joker">
+          <div class="faction-name">Joker's Gang</div>
+          <div class="faction-role">Steel Mill &amp; Industrial Zone</div>
+          <div class="faction-pitch">Working for Joker means you might die laughing. Or just die. But you'll never be bored.</div>
+          <div class="faction-reveals"><strong>What this reveals</strong>Joker's gang runs on charisma, fear, and spectacle. The ambient dialogue captures a loyalty built from adrenaline — his men know they're in a dangerous situation and choose it anyway. By the time you face Joker as a story target, you understand through his followers that his power is psychological, not hierarchical. He's not in charge because he's the strongest. He's in charge because being near him feels like the only place worth being.</div>
+        </div>
+
+        <div class="faction-card faction-twoface">
+          <div class="faction-name">Two-Face's Gang</div>
+          <div class="faction-role">Courthouse &amp; Ace Chemicals</div>
+          <div class="faction-pitch">Two-Face has a plan. Structure. Territory. Join us — tonight we make an example of Catwoman in front of the whole city.</div>
+          <div class="faction-reveals"><strong>What this reveals</strong>Two-Face recruits through the promise of order and public spectacle. His goons talk about him like a general — methodical, territorial, building something. The Catwoman execution isn't cruelty for its own sake: it's a demonstration of power designed to consolidate loyalty. Working for Two-Face is presented as a career decision. This reframes him as a different kind of threat than Joker — not chaos, but cold, utilitarian control.</div>
+        </div>
+
+        <div class="faction-card faction-penguin">
+          <div class="faction-name">Penguin's Gang</div>
+          <div class="faction-role">Museum &amp; Iceberg Lounge</div>
+          <div class="faction-pitch">Penguin's got the weapons, the fortress, and the gear. If you want to come out of this city alive, you work for someone who's properly equipped.</div>
+          <div class="faction-reveals"><strong>What this reveals</strong>Penguin's pitch is purely operational. His men aren't loyal out of fear or admiration — they're there because he has the best resources. The Iceberg Lounge functions as a headquarters and armory. Ambient dialogue around his territory skews pragmatic and mercenary, which tells you something important: Penguin's power is logistical. He can be beaten by cutting off his supply lines. The world is telling you his weakness before you ever confront him.</div>
+        </div>
+      </div>
+
+      <!-- THE TWO-FACE OPENING -->
+      <div class="scene-block">
+        <div class="scene-num">Case Study</div>
+        <div>
+          <div class="scene-label">The First Mission</div>
+          <div class="scene-title">A Culmination, Not an Introduction</div>
+          <div class="scene-body">
+            <p>The Catwoman trial isn't something Two-Face arranged because Batman showed up. It's the latest development in a gang war that had been running its own course long before Batman descended into Arkham City. Two-Face has been consolidating territory, fighting for position against Joker and Penguin, building his criminal operation — and somewhere in that ongoing conflict, Catwoman ended up in his hands. The courthouse execution is a moment the gang war itself produced.</p>
+            <p>This framing is crucial. Batman doesn't arrive and <em>cause</em> the first mission. He arrives and <em>finds</em> it — already in progress, already carrying its own momentum, already meaningful to the political landscape of the city regardless of whether he intervenes. <strong class="hl">He is not the needle on the compass.</strong> The city has its own north.</p>
+            <p>That's what the opening is really establishing: not just that Arkham City is dangerous, but that it has its own center of gravity that doesn't shift when Batman enters the frame. The gang war was happening. It will keep happening. Batman is a new variable in an equation the city was already solving — and the game never lets you forget that.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider divider-blue"></div>
+
+    <!-- LORE SYSTEMS -->
+    <p class="prose">Underneath the living gang war sits a second, entirely optional narrative system — collectible lore that doesn't pad the world but deepens what you already care about. Interview tapes, Riddler challenges, and environmental text all speak directly to the game's emotional core. Players who engage arrive at the climax feeling something more intense than players who don't. Not more informed — more <em>moved</em>.</p>
+
+    <div class="lore-grid">
+      <div class="lore-card">
+        <div class="lore-icon">🎙</div>
+        <div class="lore-title">Interview Tapes</div>
+        <div class="lore-body">Hugo Strange's recorded sessions with inmates reveal the psychology of each villain — trauma, obsession, the logic of madness. The Joker's tape sequence is a masterclass in unreliable narration that makes the ending devastating rather than merely sad. They don't explain the plot. They recharge the emotional stakes that the gang war introduces at ground level.</div>
+      </div>
+      <div class="lore-card">
+        <div class="lore-icon">❓</div>
+        <div class="lore-title">Riddler's Secrets</div>
+        <div class="lore-body">Riddler challenges unlock biographical data on every major character — Arkham history, motivations, what Strange knows about them. His framing adds a satirical layer: a villain who mistakes data collection for understanding. Players get an ironic meta-commentary on the game's own lore system, delivered through the villain least equipped to appreciate what the data means.</div>
+      </div>
+      <div class="lore-card">
+        <div class="lore-icon">🗺</div>
+        <div class="lore-title">Territory as Text</div>
+        <div class="lore-body">Gang boundaries are drawn in graffiti. Buildings carry their prior histories. Prisoner hierarchies are legible in how different factions occupy different zones. But the detail that most forcefully communicates Arkham City's scale and moral horror is quieter: politicians who opposed the program are hiding in makeshift camps inside the walls, crammed into the same space as the criminals they once governed. Players who explore find these settlements tucked between gang territories — frightened, powerless people surviving alongside the worst of Gotham. No quest marker. No dialogue prompt. Just the human cost of what Hugo Strange and Sharp built, legible in the geography if you look.</div>
+      </div>
+    </div>
+
+    <div class="expandables mt-2">
+      <div class="exp">
+        <div class="exp-head" onclick="toggleExp(this)">
+          <span class="exp-title">The World In Motion — What Most Open Worlds Get Wrong</span>
+          <span class="exp-icon">+</span>
+        </div>
+        <div class="exp-body">
+          <div class="exp-body-inner">
+            <p>Most open world games are built around the player as the world's compass. Quests don't begin until accepted. Villains don't act until provoked. The city is a stage, and the stage is dark until the player walks on it. This is practical — it's how you manage complexity and playtest a game — but it produces a specific feeling players can sense even when they can't name it: the world exists <em>for</em> them rather than <em>alongside</em> them.</p>
+            <p>Arkham City is built differently. The gang war between Joker, Two-Face, and Penguin has a history, a momentum, and a logic that <strong class="hl">predates the player and does not require them to continue</strong>. Territories were drawn before Batman arrived. Recruitment was underway before Batman arrived. The Catwoman situation at the courthouse was a product of Two-Face's ongoing campaign before Batman arrived. The player enters this world mid-consequence, not at the beginning of a plan that was waiting for them to show up.</p>
+            <p>The payoff is profound and consistent. Gliding over the city between missions, hearing goons debate whether Penguin's gear is worth tolerating his cruelty, or argue about whether Joker's going to pull through — none of that is happening for the player's benefit. It's the city doing what it does. The player just happened to be close enough to hear it.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp">
+        <div class="exp-head" onclick="toggleExp(this)">
+          <span class="exp-title">Ambient Dialogue as Character Design</span>
+          <span class="exp-icon">+</span>
+        </div>
+        <div class="exp-body">
+          <div class="exp-body-inner">
+            <p>Each gang's recruitment conversations do double duty. Overtly, they build atmosphere and make the world feel lived-in. Covertly, they're delivering villain characterization from an angle that cutscenes can't replicate — the perspective of ordinary people trying to navigate these personalities as employment decisions.</p>
+            <p>Hearing a Penguin goon weigh up "at least he's not going to kill you for no reason, he's a businessman" tells you more about Penguin's management style than any amount of expository dialogue. Hearing a Two-Face recruit describe tonight's execution as "showing us what the boss can do" reframes cruelty as corporate onboarding. <strong class="hl">The villains are characterized by their followers before the story characterizes them directly.</strong> Players arrive at each story confrontation with a pre-built, ground-level understanding of who they're dealing with — which makes the confrontations land harder.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp">
+        <div class="exp-head" onclick="toggleExp(this)">
+          <span class="exp-title">The Two-Tier Narrative: Lore That Earns Its Place</span>
+          <span class="exp-icon">+</span>
+        </div>
+        <div class="exp-body">
+          <div class="exp-body-inner">
+            <p>The interview tapes and Riddler secrets aren't lateral world expansion — they're designed to speak directly to the emotional core of the main story. Players who skip all optional content still receive a complete narrative. Players who engage arrive at the same ending with a fundamentally different emotional understanding of what they just witnessed.</p>
+            <p>This asymmetry — optional upside, no downside penalty — solves one of the genre's chronic friction points: completionist guilt. The Riddler trophies feel genuinely optional because the game never positioned them as part of the emotional covenant with the player. The story doesn't require them. It simply rewards anyone who was curious enough to look.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hi-box">
+      <div class="hi-label">The Living City Principle</div>
+      <p>Design a world that was already happening before the player arrived. Give your factions ongoing agendas that the player enters mid-execution rather than initiates. Use ambient NPC dialogue to characterize your major threats from the ground up — the most revealing perspective on power is always from the people navigating it as a daily reality, not from the people wielding it in cutscenes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LAYER 4: WHAT STUDIOS SHOULD STEAL -->
+<section class="section" id="l4">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div>
+        <div class="section-eyebrow">Layer Four</div>
+        <h2 class="section-title">What Studios Should Steal</h2>
+        <p class="section-sub">Direct applications for live service narrative design and single player pacing. What Arkham City figured out in 2011 that open world games are still getting wrong today.</p>
+      </div>
+    </div>
+
+    <p class="prose">The lessons from Arkham City aren't historical curiosities. They're directly applicable to the narrative challenges studios are wrestling with right now — seasonal live service storytelling, open world single-player games, and games that need to maintain player emotional investment over months rather than hours. The blueprint is there. And it's already been proven at scale.</p>
+
+    <div class="precedent-wrap">
+      <div class="precedent-label">Already Proven — Studios That Got This Right</div>
+      <div class="precedent-grid">
+
+        <div class="precedent-card">
+          <div class="precedent-game">Destiny 1</div>
+          <div class="precedent-sub">The Taken King — Bungie, 2015</div>
+          <div class="precedent-principles">
+            <div class="pp">
+              <span class="pp-tag">Invisible Clock</span>
+              <div class="pp-body">The Taken corruption didn't wait for players to accept a quest. Landing on patrol zones, Guardians found familiar areas already invaded — environments visibly changing, enemies already entrenched. <strong>Ambient dread with no mechanical timer.</strong> The threat was progressing whether you were watching or not.</div>
+            </div>
+            <div class="pp">
+              <span class="pp-tag">Villain Layering</span>
+              <div class="pp-body">The Taken were the immediate environmental threat — everywhere, ongoing, impossible to ignore. Oryx himself was the macro threat operating on a cosmic timeline, only encountered in the King's Fall raid. <strong>Two simultaneous timelines of danger, each feeding the other's weight.</strong> Arkham City's Strange/Joker structure scaled to live service.</div>
+            </div>
+            <div class="pp">
+              <span class="pp-tag">Player Ahead of Story</span>
+              <div class="pp-body">Before The Taken King launched, Oryx was already present in the game — referenced by name in Moon missions, invoked as the god the Hive serve across multiple strikes and story beats. More importantly, the Moon itself communicated something through world design alone: <strong>the Hive didn't invade recently. They took the Moon centuries before players re-emerged.</strong> The Hellmouth is ancient. The corruption is embedded. Players who paid attention to what the game showed them — not external lore, but the scale and age of what they were fighting through — arrived at The Taken King already carrying the weight of who Oryx was. The story's formal introduction confirmed what the world had been building for a year.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="precedent-card">
+          <div class="precedent-game">Where Winds Meet</div>
+          <div class="precedent-sub">Everstone Studio / NetEase, 2024</div>
+          <div class="precedent-principles">
+            <div class="pp">
+              <span class="pp-tag">World In Motion</span>
+              <div class="pp-body">The city of Kaifeng is likely the most impressive city in any live service game — not for its size alone, but for its <strong>density and conviction</strong>. Merchants haggle. Crowds fill the streets with purpose. The city operates on its own rhythms whether the player is present or not. Kaifeng doesn't feel like a hub zone between missions — it feels like a place that has been alive for centuries and will continue to be after the player logs off. <strong>The world in motion principle at its most literal and most achieved.</strong></div>
+            </div>
+            <div class="pp">
+              <span class="pp-tag">Faction Ecology</span>
+              <div class="pp-body">Competing powers with distinct territorial logic, value systems, and ambient presence. Players who move through the world absorb the political landscape through observation rather than exposition. <strong>The world characterizes its factions through how they occupy space and how ordinary people talk about them</strong> — the same mechanism Arkham City used with Joker, Two-Face, and Penguin, applied to a living open world at MMO scale.</div>
+            </div>
+            <div class="pp">
+              <span class="pp-tag">Urgency Without Gates</span>
+              <div class="pp-body">Player freedom and narrative stakes coexist without mechanical restriction. The world's conflicts feel urgent not because content is locked behind progression, but because the <strong>emotional architecture of the world makes players feel the stakes</strong> wherever they are in it. The Arkham principle — urgency lives in the player's head, not in what the UI permits — proven in a live service context.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="steal-grid">
+      <div class="steal-card">
+        <div class="steal-num">01</div>
+        <div class="steal-tag">Live Service</div>
+        <div class="steal-title">The Invisible Clock</div>
+        <div class="steal-body">Introduce a narrative threat with a personal timeline that doesn't manifest as a game mechanic. A season's story doesn't need a countdown timer — it needs a promise that something will change, a reason for the player to feel the current moment matters. The urgency lives in what the story has established, not in what the UI displays.</div>
+      </div>
+
+      <div class="steal-card">
+        <div class="steal-num">02</div>
+        <div class="steal-tag">Single Player &amp; Live Service</div>
+        <div class="steal-title">Villain Layering</div>
+        <div class="steal-body">Stack macro and micro threats on deliberately misaligned timelines. One threat is immediate and personal; one is systemic and building; one is revealed late, recontextualising both. When the micro-threat resolves, the macro-threat remains. Players never receive a clean "you're done" signal. The world continues to feel dangerous and consequential.</div>
+      </div>
+
+      <div class="steal-card">
+        <div class="steal-num">03</div>
+        <div class="steal-tag">Both</div>
+        <div class="steal-title">Voluntary Depth</div>
+        <div class="steal-body">Design optional content that pays emotional dividends on what players already care about — not lateral world expansion. Tie the optional layer to the emotional core of the primary narrative. A player who completes the optional content should arrive at the climax feeling something more intense than a player who didn't — not more informed, more <em>moved</em>.</div>
+      </div>
+
+      <div class="steal-card">
+        <div class="steal-num">04</div>
+        <div class="steal-tag">Single Player</div>
+        <div class="steal-title">The Revelation Reframe</div>
+        <div class="steal-body">Place a late-game revelation that recontextualises earlier events at precisely the moment urgency would naturally begin to decay. Players who were starting to feel the threat was understood discover they were only seeing the first layer. The emotional reset amplifies investment rather than extending runtime — there's a difference, and players feel it.</div>
+      </div>
+
+      <div class="steal-card">
+        <div class="steal-num">05</div>
+        <div class="steal-tag">Live Service</div>
+        <div class="steal-title">Seasonal Narrative Urgency</div>
+        <div class="steal-body">Apply the ticking clock model to seasonal arcs. Each season's narrative should carry a personal threat that builds toward resolution, a systemic threat that persists across seasons, and an ongoing revelation layer that rewards players who have been present since the beginning. Retention through emotional investment is more durable than retention through FOMO.</div>
+      </div>
+
+      <div class="steal-card">
+        <div class="steal-num">06</div>
+        <div class="steal-tag">Both</div>
+        <div class="steal-title">Urgency Without Restriction</div>
+        <div class="steal-body">Never use mechanical restriction as a substitute for narrative investment. Locking content, gating areas, or forcing mission order are design failures masquerading as pacing. Arkham City's Batman can go anywhere at any time. The story doesn't need to stop him — it needs to make him not want to stop. That's a writer's problem, not a systems designer's problem.</div>
+      </div>
+
+      <div class="steal-card">
+        <div class="steal-num">07</div>
+        <div class="steal-tag">Both</div>
+        <div class="steal-title">The World In Motion</div>
+        <div class="steal-body">Don't make the player the compass. Build factions with genuine histories, ongoing conflicts, and agendas that were already producing consequences before the player arrived. The opening mission should be a window into something mid-development — a culmination of off-screen events, not the start of a plan that was waiting. Players should feel they entered a world, not activated one.</div>
+      </div>
+    </div>
+
+    <div class="closing">
+      <div class="closing-line"></div>
+      <p>Arkham City's achievement isn't that it made a good Batman game. It's that it built a <em>structural proof</em> that open world freedom and narrative urgency are not opposites — they're a design problem with a known solution. The solution is available. It's been available since 2011. The studios that understand it are building games people talk about for a decade. The ones that don't are building games people finish and forget.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-name"><span>Leon Telemaque</span> &nbsp;·&nbsp; Game Design Analysis</div>
+  <div class="footer-note">Portfolio · Narrative Design &amp; Player Experience</div>
+</footer>
+
+<script>
+// Progress bar
+const prog = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.width = (total > 0 ? (scrolled / total) * 100 : 0) + '%';
+});
+
+// Nav scroll spy
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-40% 0px -55% 0px' });
+sections.forEach(s => obs.observe(s));
+
+// Section fade-in on scroll
+const fadeObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('vis');
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.section').forEach(s => fadeObs.observe(s));
+
+// Expandables
+function toggleExp(header) {
+  const exp = header.closest('.exp');
+  const isOpen = exp.classList.contains('open');
+  // Close all in same container
+  exp.closest('.expandables').querySelectorAll('.exp.open').forEach(o => {
+    if (o !== exp) o.classList.remove('open');
+  });
+  exp.classList.toggle('open', !isOpen);
+}
+</script>
+</body>
+</html>
