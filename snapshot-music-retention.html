@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Music as Retention Infrastructure</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 540px; height: 380px; overflow: hidden; background: #060e0e; }
+</style>
+</head>
+<body>
+<svg width="540" height="380" viewBox="0 0 540 380" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cyanBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#040e0e"/>
+      <stop offset="100%" stop-color="#060c0c"/>
+    </linearGradient>
+    <linearGradient id="mhwBar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00bcd4"/>
+      <stop offset="100%" stop-color="#0097a7"/>
+    </linearGradient>
+    <linearGradient id="d1Bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00e5ff"/>
+      <stop offset="100%" stop-color="#00bcd4"/>
+    </linearGradient>
+    <linearGradient id="p5Bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#80deea"/>
+      <stop offset="100%" stop-color="#4dd0e1"/>
+    </linearGradient>
+    <filter id="cyanGlow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="540" height="380" fill="url(#cyanBg)"/>
+
+  <!-- Waveform background (decorative frequency bands) -->
+  <!-- Sine wave approximated with polyline -->
+  <polyline
+    points="0,190 20,175 40,155 60,148 80,155 100,175 120,190 140,175 160,155 180,148 200,155 220,175 240,190 260,175 280,155 300,148 320,155 340,175 360,190 380,175 400,155 420,148 440,155 460,175 480,190 500,175 520,155 540,148"
+    fill="none" stroke="#00bcd4" stroke-width=".7" opacity=".06"/>
+  <polyline
+    points="0,200 15,185 30,168 50,162 70,168 90,185 110,200 130,185 150,168 170,162 190,168 210,185 230,200 250,185 270,168 290,162 310,168 330,185 350,200 370,185 390,168 410,162 430,168 450,185 470,200 490,185 510,168 530,162 540,162"
+    fill="none" stroke="#00e5ff" stroke-width=".5" opacity=".05"/>
+
+  <!-- Vertical frequency bars (background decoration) -->
+  <rect x="22" y="60" width="4" height="60" fill="#00bcd4" opacity=".04"/>
+  <rect x="30" y="80" width="4" height="40" fill="#00bcd4" opacity=".03"/>
+  <rect x="38" y="55" width="4" height="70" fill="#00bcd4" opacity=".04"/>
+  <rect x="46" y="70" width="4" height="55" fill="#00bcd4" opacity=".03"/>
+  <rect x="490" y="60" width="4" height="60" fill="#00bcd4" opacity=".04"/>
+  <rect x="498" y="75" width="4" height="45" fill="#00bcd4" opacity=".03"/>
+  <rect x="506" y="52" width="4" height="72" fill="#00bcd4" opacity=".04"/>
+  <rect x="514" y="68" width="4" height="56" fill="#00bcd4" opacity=".03"/>
+
+  <!-- Top bar -->
+  <rect width="540" height="28" fill="#020808"/>
+  <rect width="540" height="1" y="28" fill="#00bcd4" opacity=".4"/>
+  <rect width="4" height="28" fill="#00e5ff"/>
+  <text x="12" y="18" fill="#00e5ff" font-size="8.5" font-family="'Courier New',monospace" letter-spacing="1.5">MUSIC AS RETENTION INFRASTRUCTURE · 3 CASE STUDIES · LIVE SERVICE DESIGN</text>
+
+  <!-- Column headers -->
+  <rect x="12" y="36" width="296" height="14" fill="#040c0c" rx="1"/>
+  <text x="20" y="46" fill="#00bcd4" font-size="7" font-family="'Courier New',monospace" letter-spacing="1">DESIGN LAYER</text>
+
+  <!-- Game headers -->
+  <rect x="316" y="36" width="68" height="14" fill="#04100c" stroke="#00bcd4" stroke-width=".5" rx="1"/>
+  <text x="350" y="46" text-anchor="middle" fill="#00bcd4" font-size="7" font-family="'Courier New',monospace">MHW</text>
+
+  <rect x="390" y="36" width="68" height="14" fill="#04100c" stroke="#00e5ff" stroke-width=".5" rx="1"/>
+  <text x="424" y="46" text-anchor="middle" fill="#00e5ff" font-size="7" font-family="'Courier New',monospace">DESTINY 1</text>
+
+  <rect x="464" y="36" width="64" height="14" fill="#04100c" stroke="#80deea" stroke-width=".5" rx="1"/>
+  <text x="496" y="46" text-anchor="middle" fill="#80deea" font-size="7" font-family="'Courier New',monospace">PERSONA 5</text>
+
+  <!-- === ROW 1: Psychological Foundation === -->
+  <rect x="12" y="58" width="516" height="68" fill="#040e0e" stroke="#0a2020" stroke-width=".7" rx="2"/>
+  <rect x="12" y="58" width="5" height="68" fill="#00bcd4" rx="1"/>
+  <!-- Icon -->
+  <circle cx="33" cy="92" r="12" fill="#020c0c" stroke="#00bcd4" stroke-width=".8"/>
+  <text x="33" y="96" text-anchor="middle" fill="#00bcd4" font-size="10">♪</text>
+  <!-- Layer info -->
+  <text x="52" y="74" fill="#00e5ff" font-size="8.5" font-family="'Courier New',monospace" font-weight="700">PSYCHOLOGICAL FOUNDATION</text>
+  <text x="52" y="87" fill="#00889a" font-size="7" font-family="'Courier New',monospace">Emotional state priming via adaptive audio. Music signals safe vs.</text>
+  <text x="52" y="98" fill="#00889a" font-size="7" font-family="'Courier New',monospace">danger states, reward moments. Conditions player anticipation.</text>
+  <text x="52" y="112" fill="#006070" font-size="6.5" font-family="'Courier New',monospace">MECHANISM: Pavlovian conditioning · emotional memory encoding</text>
+
+  <!-- Intensity bars -->
+  <!-- MHW: 88% -->
+  <rect x="316" y="72" width="68" height="10" fill="#020c0c" rx="2"/>
+  <rect x="316" y="72" width="60" height="10" fill="url(#mhwBar)" rx="2" opacity=".9"/>
+  <text x="350" y="91" text-anchor="middle" fill="#00bcd4" font-size="6.5" font-family="'Courier New',monospace">88%</text>
+
+  <!-- Destiny 1: 95% -->
+  <rect x="390" y="72" width="68" height="10" fill="#020c0c" rx="2"/>
+  <rect x="390" y="72" width="65" height="10" fill="url(#d1Bar)" rx="2" opacity=".9"/>
+  <text x="424" y="91" text-anchor="middle" fill="#00e5ff" font-size="6.5" font-family="'Courier New',monospace">95%</text>
+
+  <!-- Persona 5: 92% -->
+  <rect x="464" y="72" width="64" height="10" fill="#020c0c" rx="2"/>
+  <rect x="464" y="72" width="59" height="10" fill="url(#p5Bar)" rx="2" opacity=".9"/>
+  <text x="496" y="91" text-anchor="middle" fill="#80deea" font-size="6.5" font-family="'Courier New',monospace">92%</text>
+
+  <!-- === ROW 2: Game Design Integration === -->
+  <rect x="12" y="132" width="516" height="68" fill="#040e0e" stroke="#0a2020" stroke-width=".7" rx="2"/>
+  <rect x="12" y="132" width="5" height="68" fill="#00a0b0" rx="1"/>
+  <circle cx="33" cy="166" r="12" fill="#020c0c" stroke="#00a0b0" stroke-width=".8"/>
+  <text x="33" y="170" text-anchor="middle" fill="#00a0b0" font-size="10">⚙</text>
+  <text x="52" y="148" fill="#00d0e0" font-size="8.5" font-family="'Courier New',monospace" font-weight="700">GAME DESIGN INTEGRATION</text>
+  <text x="52" y="161" fill="#007a8a" font-size="7" font-family="'Courier New',monospace">Music dynamically responds to gameplay state. Boss phase shifts,</text>
+  <text x="52" y="172" fill="#007a8a" font-size="7" font-family="'Courier New',monospace">area transitions, and loot triggers have signature audio events.</text>
+  <text x="52" y="186" fill="#005060" font-size="6.5" font-family="'Courier New',monospace">MECHANISM: State-driven layered audio · systemic event hooks</text>
+
+  <!-- MHW: 76% -->
+  <rect x="316" y="146" width="68" height="10" fill="#020c0c" rx="2"/>
+  <rect x="316" y="146" width="52" height="10" fill="url(#mhwBar)" rx="2" opacity=".8"/>
+  <text x="350" y="165" text-anchor="middle" fill="#00bcd4" font-size="6.5" font-family="'Courier New',monospace">76%</text>
+
+  <!-- Destiny 1: 90% -->
+  <rect x="390" y="146" width="68" height="10" fill="#020c0c" rx="2"/>
+  <rect x="390" y="146" width="61" height="10" fill="url(#d1Bar)" rx="2" opacity=".85"/>
+  <text x="424" y="165" text-anchor="middle" fill="#00e5ff" font-size="6.5" font-family="'Courier New',monospace">90%</text>
+
+  <!-- Persona 5: 84% -->
+  <rect x="464" y="146" width="64" height="10" fill="#020c0c" rx="2"/>
+  <rect x="464" y="146" width="54" height="10" fill="url(#p5Bar)" rx="2" opacity=".85"/>
+  <text x="496" y="165" text-anchor="middle" fill="#80deea" font-size="6.5" font-family="'Courier New',monospace">84%</text>
+
+  <!-- === ROW 3: Live Service Gap === -->
+  <rect x="12" y="206" width="516" height="68" fill="#040e0e" stroke="#0a2020" stroke-width=".7" rx="2"/>
+  <rect x="12" y="206" width="5" height="68" fill="#007a8a" rx="1"/>
+  <circle cx="33" cy="240" r="12" fill="#020c0c" stroke="#007a8a" stroke-width=".8"/>
+  <text x="33" y="244" text-anchor="middle" fill="#007a8a" font-size="9">▲</text>
+  <text x="52" y="222" fill="#00b0c0" font-size="8.5" font-family="'Courier New',monospace" font-weight="700">LIVE SERVICE GAP ANALYSIS</text>
+  <text x="52" y="235" fill="#006070" font-size="7" font-family="'Courier New',monospace">Most live service games treat music as static content drop. Missed</text>
+  <text x="52" y="246" fill="#006070" font-size="7" font-family="'Courier New',monospace">opportunity: seasonal audio identity, community anthem moments.</text>
+  <text x="52" y="260" fill="#004050" font-size="6.5" font-family="'Courier New',monospace">GAP: Dynamic music rarely shipped past Year 1 content releases</text>
+
+  <!-- MHW: 55% -->
+  <rect x="316" y="220" width="68" height="10" fill="#020c0c" rx="2"/>
+  <rect x="316" y="220" width="37" height="10" fill="url(#mhwBar)" rx="2" opacity=".7"/>
+  <text x="350" y="239" text-anchor="middle" fill="#00bcd4" font-size="6.5" font-family="'Courier New',monospace">55%</text>
+
+  <!-- Destiny 1: 68% -->
+  <rect x="390" y="220" width="68" height="10" fill="#020c0c" rx="2"/>
+  <rect x="390" y="220" width="46" height="10" fill="url(#d1Bar)" rx="2" opacity=".75"/>
+  <text x="424" y="239" text-anchor="middle" fill="#00e5ff" font-size="6.5" font-family="'Courier New',monospace">68%</text>
+
+  <!-- Persona 5: 40% -->
+  <rect x="464" y="220" width="64" height="10" fill="#020c0c" rx="2"/>
+  <rect x="464" y="220" width="26" height="10" fill="url(#p5Bar)" rx="2" opacity=".7"/>
+  <text x="496" y="239" text-anchor="middle" fill="#80deea" font-size="6.5" font-family="'Courier New',monospace">40%</text>
+
+  <!-- === ROW 4: Measurement Design === -->
+  <rect x="12" y="280" width="516" height="68" fill="#040e0e" stroke="#0a2020" stroke-width=".7" rx="2"/>
+  <rect x="12" y="280" width="5" height="68" fill="#004a5a" rx="1"/>
+  <circle cx="33" cy="314" r="12" fill="#020c0c" stroke="#004a5a" stroke-width=".8"/>
+  <text x="33" y="318" text-anchor="middle" fill="#004a5a" font-size="9">◎</text>
+  <text x="52" y="296" fill="#0090a0" font-size="8.5" font-family="'Courier New',monospace" font-weight="700">MEASUREMENT DESIGN</text>
+  <text x="52" y="309" fill="#005060" font-size="7" font-family="'Courier New',monospace">Session length delta when signature music plays. Heatmap correlations</text>
+  <text x="52" y="320" fill="#005060" font-size="7" font-family="'Courier New',monospace">between audio events and next-session return rate.</text>
+  <text x="52" y="334" fill="#003540" font-size="6.5" font-family="'Courier New',monospace">METRIC: Music-session D7 return lift · audio-spend correlation index</text>
+
+  <!-- MHW: 48% -->
+  <rect x="316" y="294" width="68" height="10" fill="#020c0c" rx="2"/>
+  <rect x="316" y="294" width="33" height="10" fill="url(#mhwBar)" rx="2" opacity=".6"/>
+  <text x="350" y="313" text-anchor="middle" fill="#00bcd4" font-size="6.5" font-family="'Courier New',monospace">48%</text>
+
+  <!-- Destiny 1: 62% -->
+  <rect x="390" y="294" width="68" height="10" fill="#020c0c" rx="2"/>
+  <rect x="390" y="294" width="42" height="10" fill="url(#d1Bar)" rx="2" opacity=".65"/>
+  <text x="424" y="313" text-anchor="middle" fill="#00e5ff" font-size="6.5" font-family="'Courier New',monospace">62%</text>
+
+  <!-- Persona 5: 35% -->
+  <rect x="464" y="294" width="64" height="10" fill="#020c0c" rx="2"/>
+  <rect x="464" y="294" width="22" height="10" fill="url(#p5Bar)" rx="2" opacity=".6"/>
+  <text x="496" y="313" text-anchor="middle" fill="#80deea" font-size="6.5" font-family="'Courier New',monospace">35%</text>
+
+  <!-- Frequency waveform decoration at bottom -->
+  <polyline
+    points="12,356 30,348 45,338 60,352 75,342 90,358 105,345 120,336 135,350 150,342 165,358 180,345 195,338 210,352 225,343 240,356 255,347 270,338 285,352 300,344 315,356 330,347 345,340 360,354 375,344 390,357 405,348 420,340 435,352 450,344 465,358 480,347 495,340 510,354 525,346 540,356"
+    fill="none" stroke="#00bcd4" stroke-width=".8" opacity=".15"/>
+
+</svg>
+</body>
+</html>

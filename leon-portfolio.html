@@ -1922,6 +1922,196 @@ footer{
       </div>
     </div>
 
+
+    <!-- ELDEN RING — Difficulty Architecture -->
+    <div class="pcard" onclick="window.open('elden-ring-difficulty-analysis.html','_blank')">
+      <div class="pcard-preview">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <radialGradient id="erBg" cx="50%" cy="45%" r="65%">
+              <stop offset="0%"   stop-color="#0d0c1f"/>
+              <stop offset="55%"  stop-color="#060610"/>
+              <stop offset="100%" stop-color="#020205"/>
+            </radialGradient>
+            <radialGradient id="erGlow" cx="50%" cy="43%" r="42%">
+              <stop offset="0%"   stop-color="#c9a227" stop-opacity=".38"/>
+              <stop offset="45%"  stop-color="#c9a227" stop-opacity=".09"/>
+              <stop offset="100%" stop-color="#c9a227" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="erGlow2" cx="50%" cy="43%" r="22%">
+              <stop offset="0%"   stop-color="#e8c547" stop-opacity=".18"/>
+              <stop offset="100%" stop-color="#e8c547" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="erMist" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"   stop-color="#020208" stop-opacity="0"/>
+              <stop offset="62%"  stop-color="#020208" stop-opacity=".35"/>
+              <stop offset="100%" stop-color="#010106" stop-opacity=".92"/>
+            </linearGradient>
+            <linearGradient id="erTopFade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"   stop-color="#010108" stop-opacity=".55"/>
+              <stop offset="100%" stop-color="#010108" stop-opacity="0"/>
+            </linearGradient>
+            <radialGradient id="erVig" cx="50%" cy="50%" r="70%">
+              <stop offset="45%"  stop-color="black" stop-opacity="0"/>
+              <stop offset="100%" stop-color="black" stop-opacity=".72"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Base -->
+          <rect width="680" height="400" fill="url(#erBg)"/>
+          <rect width="680" height="400" fill="url(#erGlow)"/>
+          <rect width="680" height="400" fill="url(#erGlow2)"/>
+
+          <!-- Ambient star field — warm golden tint -->
+          <circle cx="68"  cy="28"  r=".7" fill="#c9a227" opacity=".22"/>
+          <circle cx="185" cy="48"  r=".5" fill="#c9a227" opacity=".16"/>
+          <circle cx="290" cy="18"  r=".8" fill="#c9a227" opacity=".2"/>
+          <circle cx="470" cy="24"  r=".9" fill="#c9a227" opacity=".28"/>
+          <circle cx="580" cy="55"  r=".6" fill="#c9a227" opacity=".18"/>
+          <circle cx="95"  cy="75"  r=".4" fill="#c9a227" opacity=".12"/>
+          <circle cx="540" cy="85"  r=".6" fill="#c9a227" opacity=".14"/>
+          <circle cx="640" cy="38"  r=".5" fill="white"   opacity=".12"/>
+          <circle cx="140" cy="42"  r=".4" fill="white"   opacity=".1"/>
+          <circle cx="410" cy="62"  r=".5" fill="white"   opacity=".1"/>
+          <circle cx="50"  cy="150" r=".4" fill="#c9a227" opacity=".08"/>
+          <circle cx="620" cy="130" r=".5" fill="#c9a227" opacity=".1"/>
+
+          <!-- ═══ THE ELDEN RING SIGIL ═══ -->
+          <!-- center: cx=340, cy=165 -->
+
+          <!-- Outermost halo rings — very faint -->
+          <circle cx="340" cy="165" r="148" fill="none" stroke="#c9a227" stroke-width=".3" opacity=".12"/>
+          <circle cx="340" cy="165" r="128" fill="none" stroke="#c9a227" stroke-width=".3" opacity=".15"/>
+
+          <!-- Outer broken ring — 4 arcs, alternating bright/dim to simulate shatter -->
+          <path d="M 340 57 A 108 108 0 0 1 448 165"  fill="none" stroke="#c9a227" stroke-width="1.6" opacity=".55"/>
+          <path d="M 448 165 A 108 108 0 0 1 340 273" fill="none" stroke="#c9a227" stroke-width=".7" opacity=".22"/>
+          <path d="M 340 273 A 108 108 0 0 1 232 165" fill="none" stroke="#c9a227" stroke-width="1.4" opacity=".48"/>
+          <path d="M 232 165 A 108 108 0 0 1 340 57"  fill="none" stroke="#c9a227" stroke-width=".7" opacity=".22"/>
+
+          <!-- Secondary ring -->
+          <circle cx="340" cy="165" r="78" fill="none" stroke="#c9a227" stroke-width="1" opacity=".38"/>
+          <circle cx="340" cy="165" r="78" fill="none" stroke="#c9a227" stroke-width="2.5" opacity=".18" stroke-dasharray="48,22,62,18"/>
+
+          <!-- Inner ring — crisp, glowing -->
+          <circle cx="340" cy="165" r="50" fill="rgba(201,162,39,0.06)"/>
+          <circle cx="340" cy="165" r="50" fill="none" stroke="#c9a227" stroke-width="1.8" opacity=".65"/>
+
+          <!-- Core bright ring -->
+          <circle cx="340" cy="165" r="28" fill="rgba(201,162,39,0.14)"/>
+          <circle cx="340" cy="165" r="28" fill="none" stroke="#c9a227" stroke-width="2.2" opacity=".85"/>
+          <circle cx="340" cy="165" r="20" fill="rgba(232,197,71,0.12)"/>
+
+          <!-- Great Rune cross lines — 8-spoke pattern through the rings -->
+          <!-- Cardinal spokes (to ring edge) -->
+          <line x1="340" y1="115" x2="340"  y2="57"  stroke="#c9a227" stroke-width="1"   opacity=".42"/>
+          <line x1="340" y1="215" x2="340"  y2="273" stroke="#c9a227" stroke-width="1"   opacity=".42"/>
+          <line x1="290" y1="165" x2="232"  y2="165" stroke="#c9a227" stroke-width="1"   opacity=".42"/>
+          <line x1="390" y1="165" x2="448"  y2="165" stroke="#c9a227" stroke-width="1"   opacity=".42"/>
+          <!-- Diagonal spokes -->
+          <line x1="305" y1="130" x2="264"  y2="89"  stroke="#c9a227" stroke-width=".7"  opacity=".28"/>
+          <line x1="375" y1="200" x2="416"  y2="241" stroke="#c9a227" stroke-width=".7"  opacity=".28"/>
+          <line x1="375" y1="130" x2="416"  y2="89"  stroke="#c9a227" stroke-width=".7"  opacity=".28"/>
+          <line x1="305" y1="200" x2="264"  y2="241" stroke="#c9a227" stroke-width=".7"  opacity=".28"/>
+
+          <!-- Erdtree branch growing upward from top of inner ring -->
+          <line x1="340" y1="115" x2="340"  y2="32"  stroke="#c9a227" stroke-width="1.4" opacity=".32"/>
+          <line x1="340" y1="82"  x2="316"  y2="58"  stroke="#c9a227" stroke-width=".9"  opacity=".24"/>
+          <line x1="340" y1="68"  x2="360"  y2="48"  stroke="#c9a227" stroke-width=".9"  opacity=".24"/>
+          <line x1="340" y1="56"  x2="328"  y2="42"  stroke="#c9a227" stroke-width=".6"  opacity=".16"/>
+          <line x1="340" y1="50"  x2="354"  y2="36"  stroke="#c9a227" stroke-width=".6"  opacity=".16"/>
+          <line x1="340" y1="44"  x2="332"  y2="32"  stroke="#c9a227" stroke-width=".4"  opacity=".12"/>
+
+          <!-- Centrepoint -->
+          <circle cx="340" cy="165" r="6"  fill="#c9a227" opacity=".95"/>
+          <circle cx="340" cy="165" r="3.5" fill="#f0d060"/>
+          <circle cx="340" cy="165" r="1.5" fill="white" opacity=".9"/>
+
+          <!-- Very faint light rays -->
+          <line x1="340" y1="165" x2="160" y2="72"  stroke="#c9a227" stroke-width=".35" opacity=".06"/>
+          <line x1="340" y1="165" x2="520" y2="72"  stroke="#c9a227" stroke-width=".35" opacity=".06"/>
+          <line x1="340" y1="165" x2="100" y2="165" stroke="#c9a227" stroke-width=".35" opacity=".05"/>
+          <line x1="340" y1="165" x2="580" y2="165" stroke="#c9a227" stroke-width=".35" opacity=".05"/>
+          <line x1="340" y1="165" x2="155" y2="310" stroke="#c9a227" stroke-width=".3"  opacity=".05"/>
+          <line x1="340" y1="165" x2="525" y2="310" stroke="#c9a227" stroke-width=".3"  opacity=".05"/>
+
+          <!-- ═══ LONE FIGURE ═══ -->
+          <!-- Small silhouette at base, center — dwarfed by the sigil above -->
+
+          <!-- Ground mist glow -->
+          <ellipse cx="340" cy="378" rx="38" ry="7" fill="rgba(201,162,39,.05)"/>
+          <ellipse cx="340" cy="376" rx="18" ry="4" fill="rgba(201,162,39,.04)"/>
+
+          <!-- Shadow on ground -->
+          <ellipse cx="340" cy="379" rx="14" ry="3" fill="rgba(0,0,0,.4)"/>
+
+          <!-- Legs -->
+          <path d="M 334 344 L 331 378 L 337 378 L 340 356 L 343 378 L 349 378 L 346 344 Z"
+                fill="rgba(6,6,16,.97)"/>
+          <!-- Cape/cloak flowing left -->
+          <path d="M 330 300 Q 320 328 315 358 Q 311 374 318 378 L 330 376 Q 328 358 333 336 Z"
+                fill="rgba(5,5,14,.9)"/>
+          <!-- Body torso -->
+          <path d="M 330 298 L 328 344 L 352 344 L 350 298 Z" fill="rgba(6,6,16,.97)"/>
+          <!-- Shoulders / pauldrons -->
+          <path d="M 325 298 Q 318 294 316 304 L 316 320 Q 319 326 328 322 L 330 298 Z"
+                fill="rgba(7,7,18,.95)"/>
+          <path d="M 355 298 Q 362 294 364 304 L 364 320 Q 361 326 352 322 L 350 298 Z"
+                fill="rgba(7,7,18,.95)"/>
+          <!-- Arms hanging, slightly out -->
+          <path d="M 316 320 L 312 350 L 320 352 L 328 322 Z" fill="rgba(6,6,16,.95)"/>
+          <path d="M 364 320 L 368 350 L 360 352 L 352 322 Z" fill="rgba(6,6,16,.95)"/>
+          <!-- Head — tilted up toward the ring -->
+          <ellipse cx="340" cy="285" rx="11" ry="13"
+                   fill="rgba(6,6,16,.97)" transform="rotate(-8,340,285)"/>
+          <!-- Helm top -->
+          <path d="M 329 282 Q 329 268 340 265 Q 351 268 351 280 L 351 285
+                   Q 346 278 340 277 Q 334 278 329 285 Z"
+                fill="rgba(8,8,20,.97)"/>
+
+          <!-- ═══ TYPOGRAPHY ═══ -->
+
+          <!-- "ELDEN RING" — ghosted at top, cover-art reference -->
+          <text x="340" y="23"
+                text-anchor="middle"
+                fill="rgba(201,162,39,.55)"
+                font-size="19" font-family="Georgia,'Times New Roman',serif"
+                font-weight="700" letter-spacing="7">ELDEN RING</text>
+          <text x="340" y="36"
+                text-anchor="middle"
+                fill="rgba(201,162,39,.18)"
+                font-size="6.5" font-family="monospace" letter-spacing="4">FROMSOFT · GAME OF THE YEAR</text>
+
+          <!-- Bottom bar -->
+          <rect x="0" y="352" width="680" height="48" fill="rgba(1,1,7,.88)"/>
+          <text x="340" y="372"
+                text-anchor="middle"
+                fill="rgba(242,242,242,.9)"
+                font-size="14" font-family="-apple-system,sans-serif"
+                font-weight="700" letter-spacing="-.25">Difficulty as Architecture</text>
+          <text x="340" y="390"
+                text-anchor="middle"
+                fill="rgba(201,162,39,.62)"
+                font-size="7.5" font-family="monospace" letter-spacing="1.8">ELDEN RING  ·  THREE-LAYER FRAMEWORK  ·  GAME DESIGN ANALYSIS</text>
+
+          <!-- Overlays -->
+          <rect width="680" height="400" fill="url(#erMist)"/>
+          <rect x="0" y="0" width="680" height="56" fill="url(#erTopFade)"/>
+          <rect width="680" height="400" fill="url(#erVig)"/>
+        </svg>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">Difficulty as Architecture — Elden Ring's Dual Design Contract</h3>
+        <p class="pcard-desc">Elden Ring doesn't have a difficulty curve — it has a difficulty ecosystem. A three-layer framework analyzing how geographic challenges and mechanical skill walls coexist in the same game without contradiction, and what open world studios should steal from this design.</p>
+        <div class="pcard-tags">
+          <span class="ptag" style="border-color:rgba(201,162,39,.3);color:rgba(201,162,39,.85)">Game Design</span>
+          <span class="ptag">Difficulty Systems</span>
+          <span class="ptag">Open World</span>
+          <span class="ptag">FromSoftware</span>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /work-carousel -->
   </div><!-- /work-carousel-wrap -->
 </div>

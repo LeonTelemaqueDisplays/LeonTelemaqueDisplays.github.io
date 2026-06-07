@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Economy Architecture · Pity Curve</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 540px; height: 380px; overflow: hidden; background: #0d1117; }
+</style>
+</head>
+<body>
+<svg width="540" height="380" viewBox="0 0 540 380" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#060a10"/>
+      <stop offset="100%" stop-color="#0d1117"/>
+    </linearGradient>
+    <linearGradient id="genshinFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4a9eff" stop-opacity=".35"/>
+      <stop offset="100%" stop-color="#4a9eff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="wuwaFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#00e8c8" stop-opacity=".3"/>
+      <stop offset="100%" stop-color="#00e8c8" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow2">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="540" height="380" fill="url(#bg2)"/>
+
+  <!-- Grid lines -->
+  <line x1="60" y1="170" x2="490" y2="170" stroke="#0e1a28" stroke-width="1"/>
+  <line x1="60" y1="200" x2="490" y2="200" stroke="#0e1a28" stroke-width="1"/>
+  <line x1="60" y1="230" x2="490" y2="230" stroke="#0e1a28" stroke-width="1"/>
+  <line x1="60" y1="260" x2="490" y2="260" stroke="#0e1a28" stroke-width="1"/>
+  <line x1="60" y1="290" x2="490" y2="290" stroke="#0e1a28" stroke-width="1"/>
+
+  <!-- Vertical grid -->
+  <line x1="130" y1="80" x2="130" y2="315" stroke="#0e1a28" stroke-width="1"/>
+  <line x1="200" y1="80" x2="200" y2="315" stroke="#0e1a28" stroke-width="1"/>
+  <line x1="270" y1="80" x2="270" y2="315" stroke="#0e1a28" stroke-width="1"/>
+  <line x1="340" y1="80" x2="340" y2="315" stroke="#0e1a28" stroke-width="1"/>
+  <line x1="410" y1="80" x2="410" y2="315" stroke="#0e1a28" stroke-width="1"/>
+
+  <!-- Top bar -->
+  <rect width="540" height="28" fill="#060c14"/>
+  <rect width="540" height="1" y="28" fill="#4a9eff" opacity=".3"/>
+  <rect width="4" height="28" fill="#4a9eff"/>
+  <text x="12" y="18" fill="#4a9eff" font-size="8.5" font-family="'Courier New',monospace" letter-spacing="1.5">ECONOMY ARCHITECTURE · PITY CURVE SIMULATION · 100K RUNS</text>
+
+  <!-- Axes -->
+  <line x1="60" y1="80" x2="60" y2="315" stroke="#1e2a38" stroke-width="1.5"/>
+  <line x1="60" y1="315" x2="490" y2="315" stroke="#1e2a38" stroke-width="1.5"/>
+
+  <!-- X-axis labels -->
+  <text x="60" y="330" text-anchor="middle" fill="#333" font-size="6.5" font-family="'Courier New',monospace">0</text>
+  <text x="130" y="330" text-anchor="middle" fill="#333" font-size="6.5" font-family="'Courier New',monospace">20</text>
+  <text x="200" y="330" text-anchor="middle" fill="#333" font-size="6.5" font-family="'Courier New',monospace">40</text>
+  <text x="270" y="330" text-anchor="middle" fill="#333" font-size="6.5" font-family="'Courier New',monospace">60</text>
+  <text x="340" y="330" text-anchor="middle" fill="#333" font-size="6.5" font-family="'Courier New',monospace">80</text>
+  <text x="410" y="330" text-anchor="middle" fill="#333" font-size="6.5" font-family="'Courier New',monospace">100</text>
+  <text x="490" y="330" text-anchor="middle" fill="#333" font-size="6.5" font-family="'Courier New',monospace">120</text>
+  <text x="270" y="345" text-anchor="middle" fill="#2a3a4a" font-size="6" font-family="'Courier New',monospace">PULLS TO 5★</text>
+
+  <!-- Y axis labels -->
+  <text x="55" y="315" text-anchor="end" fill="#333" font-size="6" font-family="'Courier New',monospace">0%</text>
+  <text x="55" y="260" text-anchor="end" fill="#333" font-size="6" font-family="'Courier New',monospace">15%</text>
+  <text x="55" y="200" text-anchor="end" fill="#333" font-size="6" font-family="'Courier New',monospace">30%</text>
+  <text x="55" y="140" text-anchor="end" fill="#333" font-size="6" font-family="'Courier New',monospace">45%</text>
+
+  <!--
+    Coordinate mapping:
+    X: pull count 0-120 → SVG x: 60-490  (range 430, 430/120 = 3.583 per pull)
+    Y: probability 0-50% → SVG y: 315-80 (range 235, 235/50 = 4.7 per %)
+    So y = 315 - (prob * 4.7)
+
+    Genshin: soft pity at 74, hard pity 90. Peak ~90. Wide distribution.
+    Approx shape: low flat 0-73, steep rise 74-90, guaranteed at 90
+    WuWa: pity at 80 but much lower average pulls (51.1). Peaks early.
+
+    I'll approximate as smoothed curves with polyline points.
+  -->
+
+  <!-- Genshin Impact fill area -->
+  <polygon
+    points="60,315 87,314 113,313 130,311 148,308 165,303 183,295 200,282 218,263 235,240 252,212 270,180 287,148 305,122 322,104 340,96 357,100 374,118 392,145 409,175 427,205 444,228 462,248 479,263 490,270 490,315"
+    fill="url(#genshinFill)"/>
+
+  <!-- Genshin Impact curve line -->
+  <polyline
+    points="60,315 87,314 113,313 130,311 148,308 165,303 183,295 200,282 218,263 235,240 252,212 270,180 287,148 305,122 322,104 340,96 357,100 374,118 392,145 409,175 427,205 444,228 462,248 479,263 490,270"
+    fill="none" stroke="#4a9eff" stroke-width="2.5" stroke-linejoin="round" filter="url(#glow2)"/>
+
+  <!-- WuWa fill area -->
+  <polygon
+    points="60,315 87,312 113,305 130,293 148,272 165,245 183,213 200,180 218,155 235,138 252,130 270,133 287,148 305,165 322,183 340,202 357,218 374,232 392,245 409,256 427,265 444,272 462,278 479,282 490,284 490,315"
+    fill="url(#wuwaFill)"/>
+
+  <!-- WuWa curve line -->
+  <polyline
+    points="60,315 87,312 113,305 130,293 148,272 165,245 183,213 200,180 218,155 235,138 252,130 270,133 287,148 305,165 322,183 340,202 357,218 374,232 392,245 409,256 427,265 444,272 462,278 479,282 490,284"
+    fill="none" stroke="#00e8c8" stroke-width="2.5" stroke-linejoin="round" filter="url(#glow2)"/>
+
+  <!-- Peak markers -->
+  <!-- Genshin peak at ~pull 84 → x = 60 + 84*3.583 = 361, y=96 approx -->
+  <circle cx="340" cy="96" r="4" fill="#4a9eff" filter="url(#glow2)"/>
+  <circle cx="340" cy="96" r="8" fill="none" stroke="#4a9eff" stroke-width="1" opacity=".4"/>
+  <rect x="344" y="80" width="88" height="14" fill="#06101e" stroke="#4a9eff" stroke-width=".6" rx="1"/>
+  <text x="388" y="90.5" text-anchor="middle" fill="#4a9eff" font-size="7" font-family="'Courier New',monospace">PEAK: ~84 PULLS</text>
+
+  <!-- WuWa peak at ~pull 53 → x = 60 + 53*3.583 = 250 -->
+  <circle cx="252" cy="130" r="4" fill="#00e8c8" filter="url(#glow2)"/>
+  <circle cx="252" cy="130" r="8" fill="none" stroke="#00e8c8" stroke-width="1" opacity=".4"/>
+  <rect x="180" y="115" width="66" height="14" fill="#060e14" stroke="#00e8c8" stroke-width=".6" rx="1"/>
+  <text x="213" y="125.5" text-anchor="middle" fill="#00e8c8" font-size="7" font-family="'Courier New',monospace">PEAK: ~52 PULLS</text>
+
+  <!-- Mean lines -->
+  <!-- Genshin mean 93.4 pulls → x = 60 + 93.4*3.583 = 394.5 -->
+  <line x1="394" y1="80" x2="394" y2="315" stroke="#4a9eff" stroke-width="1" stroke-dasharray="4 3" opacity=".5"/>
+  <text x="396" y="92" fill="#4a9eff" font-size="6" font-family="'Courier New',monospace">μ=93.4</text>
+
+  <!-- WuWa mean 51.1 pulls → x = 60 + 51.1*3.583 = 243 -->
+  <line x1="243" y1="80" x2="243" y2="315" stroke="#00e8c8" stroke-width="1" stroke-dasharray="4 3" opacity=".5"/>
+  <text x="218" y="145" fill="#00e8c8" font-size="6" font-family="'Courier New',monospace">μ=51.1</text>
+
+  <!-- Savings callout arrow -->
+  <line x1="243" y1="260" x2="394" y2="260" stroke="#ffd700" stroke-width="1.5" opacity=".7"/>
+  <line x1="243" y1="256" x2="243" y2="264" stroke="#ffd700" stroke-width="1.5" opacity=".7"/>
+  <line x1="394" y1="256" x2="394" y2="264" stroke="#ffd700" stroke-width="1.5" opacity=".7"/>
+  <rect x="296" y="250" width="55" height="14" fill="#0a0c00" stroke="#ffd700" stroke-width=".6" rx="1"/>
+  <text x="323" y="260.5" text-anchor="middle" fill="#ffd700" font-size="7.5" font-family="'Courier New',monospace">Δ42 PULLS</text>
+
+  <!-- Legend & Stats panel -->
+  <rect x="12" y="38" width="215" height="35" fill="#060c14" stroke="#1a2535" stroke-width=".7" rx="2"/>
+
+  <!-- Genshin legend -->
+  <rect x="20" y="46" width="16" height="2.5" fill="#4a9eff" rx="1"/>
+  <text x="42" y="52" fill="#4a9eff" font-size="7.5" font-family="'Courier New',monospace">GENSHIN IMPACT</text>
+  <text x="148" y="52" fill="#4a9eff" font-size="7.5" font-family="'Courier New',monospace" opacity=".7">μ=93.4</text>
+
+  <!-- WuWa legend -->
+  <rect x="20" y="60" width="16" height="2.5" fill="#00e8c8" rx="1"/>
+  <text x="42" y="66" fill="#00e8c8" font-size="7.5" font-family="'Courier New',monospace">WUTHERING WAVES</text>
+  <text x="148" y="66" fill="#00e8c8" font-size="7.5" font-family="'Courier New',monospace" opacity=".7">μ=51.1</text>
+
+  <!-- Stats pills -->
+  <rect x="236" y="38" width="135" height="35" fill="#0a0a00" stroke="#2a2500" stroke-width=".7" rx="2"/>
+  <text x="244" y="52" fill="#555" font-size="6.5" font-family="'Courier New',monospace">AVG PLAYER SAVINGS</text>
+  <text x="244" y="66" fill="#ffd700" font-size="16" font-weight="700" font-family="'Courier New',monospace">$67.00</text>
+
+  <rect x="380" y="38" width="148" height="35" fill="#06100a" stroke="#1a2a1a" stroke-width=".7" rx="2"/>
+  <text x="388" y="52" fill="#555" font-size="6.5" font-family="'Courier New',monospace">SIMULATION RUNS</text>
+  <text x="388" y="66" fill="#00e8c8" font-size="16" font-weight="700" font-family="'Courier New',monospace">100,000</text>
+
+</svg>
+</body>
+</html>

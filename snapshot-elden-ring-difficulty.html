@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Difficulty Ecosystem · Elden Ring</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 540px; height: 380px; overflow: hidden; background: #07060a; }
+</style>
+</head>
+<body>
+<svg width="540" height="380" viewBox="0 0 540 380" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="voidBg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#0f0a00"/>
+      <stop offset="100%" stop-color="#030200"/>
+    </radialGradient>
+    <radialGradient id="goldGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#c8922a" stop-opacity=".25"/>
+      <stop offset="100%" stop-color="#c8922a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="goldFilter">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <linearGradient id="geoPath" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c8922a"/>
+      <stop offset="100%" stop-color="#8b5a0a"/>
+    </linearGradient>
+    <linearGradient id="mechPath" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d4822a"/>
+      <stop offset="100%" stop-color="#6b3a0a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="540" height="380" fill="url(#voidBg)"/>
+  <rect width="540" height="380" fill="url(#goldGlow)"/>
+
+  <!-- Fine rune grid overlay -->
+  <pattern id="runeGrid" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+    <line x1="0" y1="0" x2="30" y2="0" stroke="#1a1200" stroke-width=".5" opacity=".6"/>
+    <line x1="0" y1="0" x2="0" y2="30" stroke="#1a1200" stroke-width=".5" opacity=".6"/>
+  </pattern>
+  <rect width="540" height="380" fill="url(#runeGrid)"/>
+
+  <!-- Top bar -->
+  <rect width="540" height="28" fill="#050400"/>
+  <rect width="540" height="1" y="28" fill="#c8922a" opacity=".5"/>
+  <rect width="4" height="28" fill="#c8922a"/>
+  <text x="12" y="18" fill="#c8922a" font-size="8.5" font-family="'Courier New',monospace" letter-spacing="1.5">DIFFICULTY ECOSYSTEM · ELDEN RING · DUAL CONTRACT ARCHITECTURE</text>
+
+  <!-- CENTER NODE: TARNISHED -->
+  <!-- Outer ring glow -->
+  <circle cx="270" cy="185" r="56" fill="none" stroke="#c8922a" stroke-width=".5" opacity=".2" filter="url(#softGlow)"/>
+  <circle cx="270" cy="185" r="48" fill="none" stroke="#c8922a" stroke-width=".8" opacity=".3"/>
+  <circle cx="270" cy="185" r="38" fill="#0a0700" stroke="#c8922a" stroke-width="1.5" filter="url(#goldFilter)"/>
+  <circle cx="270" cy="185" r="30" fill="#0f0a00" stroke="#8b5a0a" stroke-width=".8"/>
+  <text x="270" y="180" text-anchor="middle" fill="#c8922a" font-size="9" font-family="'Courier New',monospace" font-weight="700" letter-spacing="1">TARNISHED</text>
+  <text x="270" y="194" text-anchor="middle" fill="#8b5a0a" font-size="6.5" font-family="'Courier New',monospace">BEGINS JOURNEY</text>
+
+  <!-- === LEFT PATH: GEOGRAPHIC CONTRACT === -->
+  <!-- Path line from center to left -->
+  <line x1="232" y1="175" x2="100" y2="130" stroke="#c8922a" stroke-width="1.5" opacity=".6" stroke-dasharray="6 3"/>
+
+  <!-- CONTRACT label left -->
+  <rect x="18" y="38" width="180" height="18" fill="#0f0800" stroke="#c8922a" stroke-width=".7" rx="1"/>
+  <text x="108" y="51" text-anchor="middle" fill="#c8922a" font-size="8" font-family="'Courier New',monospace" letter-spacing="2">GEOGRAPHIC CONTRACT</text>
+
+  <!-- Step boxes left path -->
+  <!-- MARGIT box -->
+  <rect x="18" y="68" width="148" height="46" fill="#0c0800" stroke="#c8922a" stroke-width="1" rx="2"/>
+  <rect x="18" y="68" width="148" height="16" fill="#c8922a" opacity=".12" rx="2"/>
+  <text x="92" y="81" text-anchor="middle" fill="#c8922a" font-size="9" font-family="'Courier New',monospace" font-weight="700">MARGIT</text>
+  <text x="92" y="94" text-anchor="middle" fill="#8b5a0a" font-size="7" font-family="'Courier New',monospace">GATEKEEPER BOSS</text>
+  <text x="92" y="107" text-anchor="middle" fill="#666" font-size="6.5" font-family="'Courier New',monospace">Blocks castle access</text>
+
+  <!-- Arrow down -->
+  <line x1="92" y1="115" x2="92" y2="130" stroke="#c8922a" stroke-width="1" opacity=".5"/>
+  <text x="92" y="140" text-anchor="middle" fill="#c8922a" font-size="10" opacity=".5">↓</text>
+
+  <!-- EXPLORE box -->
+  <rect x="18" y="145" width="148" height="46" fill="#0c0800" stroke="#8b5a0a" stroke-width=".8" rx="2"/>
+  <rect x="18" y="145" width="148" height="16" fill="#8b5a0a" opacity=".12" rx="2"/>
+  <text x="92" y="158" text-anchor="middle" fill="#a87020" font-size="9" font-family="'Courier New',monospace" font-weight="700">EXPLORE</text>
+  <text x="92" y="171" text-anchor="middle" fill="#7a4a0a" font-size="7" font-family="'Courier New',monospace">OPEN WORLD RESPONSE</text>
+  <text x="92" y="184" text-anchor="middle" fill="#555" font-size="6.5" font-family="'Courier New',monospace">Find alternate routes + gear</text>
+
+  <!-- Arrow down -->
+  <line x1="92" y1="192" x2="92" y2="207" stroke="#c8922a" stroke-width="1" opacity=".5"/>
+  <text x="92" y="217" text-anchor="middle" fill="#c8922a" font-size="10" opacity=".5">↓</text>
+
+  <!-- RETURN STRONGER box -->
+  <rect x="18" y="222" width="148" height="46" fill="#0a0600" stroke="#c8922a" stroke-width="1" rx="2"/>
+  <rect x="18" y="222" width="148" height="16" fill="#c8922a" opacity=".08" rx="2"/>
+  <text x="92" y="235" text-anchor="middle" fill="#c8922a" font-size="9" font-family="'Courier New',monospace" font-weight="700">RETURN STRONGER</text>
+  <text x="92" y="248" text-anchor="middle" fill="#8b5a0a" font-size="7" font-family="'Courier New',monospace">MASTERY PROGRESSION</text>
+  <text x="92" y="261" text-anchor="middle" fill="#555" font-size="6.5" font-family="'Courier New',monospace">Overcome → feel growth</text>
+
+  <!-- Contract badge left -->
+  <rect x="18" y="280" width="148" height="28" fill="#060400" stroke="#c8922a" stroke-width=".6" rx="1"/>
+  <text x="92" y="292" text-anchor="middle" fill="#8b5a0a" font-size="6.5" font-family="'Courier New',monospace">OUTCOME</text>
+  <text x="92" y="304" text-anchor="middle" fill="#c8922a" font-size="7.5" font-family="'Courier New',monospace">AGENCY + SPATIAL MASTERY</text>
+
+  <!-- === RIGHT PATH: MECHANICAL CONTRACT === -->
+  <!-- Path line from center to right -->
+  <line x1="308" y1="175" x2="440" y2="130" stroke="#d4822a" stroke-width="1.5" opacity=".6" stroke-dasharray="6 3"/>
+
+  <!-- CONTRACT label right -->
+  <rect x="342" y="38" width="180" height="18" fill="#0f0600" stroke="#d4822a" stroke-width=".7" rx="1"/>
+  <text x="432" y="51" text-anchor="middle" fill="#d4822a" font-size="8" font-family="'Courier New',monospace" letter-spacing="2">MECHANICAL CONTRACT</text>
+
+  <!-- MALENIA box -->
+  <rect x="374" y="68" width="148" height="46" fill="#0c0600" stroke="#d4822a" stroke-width="1" rx="2"/>
+  <rect x="374" y="68" width="148" height="16" fill="#d4822a" opacity=".12" rx="2"/>
+  <text x="448" y="81" text-anchor="middle" fill="#d4822a" font-size="9" font-family="'Courier New',monospace" font-weight="700">MALENIA</text>
+  <text x="448" y="94" text-anchor="middle" fill="#9b5a1a" font-size="7" font-family="'Courier New',monospace">OPTIONAL ENDGAME BOSS</text>
+  <text x="448" y="107" text-anchor="middle" fill="#666" font-size="6.5" font-family="'Courier New',monospace">Lifesteal heals on every hit</text>
+
+  <!-- Arrow down -->
+  <line x1="448" y1="115" x2="448" y2="130" stroke="#d4822a" stroke-width="1" opacity=".5"/>
+  <text x="448" y="140" text-anchor="middle" fill="#d4822a" font-size="10" opacity=".5">↓</text>
+
+  <!-- ABSOLUTE WALL box -->
+  <rect x="374" y="145" width="148" height="46" fill="#0c0600" stroke="#9b5a1a" stroke-width=".8" rx="2"/>
+  <rect x="374" y="145" width="148" height="16" fill="#9b5a1a" opacity=".12" rx="2"/>
+  <text x="448" y="158" text-anchor="middle" fill="#cc7020" font-size="9" font-family="'Courier New',monospace" font-weight="700">ABSOLUTE WALL</text>
+  <text x="448" y="171" text-anchor="middle" fill="#7a4a0a" font-size="7" font-family="'Courier New',monospace">PRECISION GATE</text>
+  <text x="448" y="184" text-anchor="middle" fill="#555" font-size="6.5" font-family="'Courier New',monospace">Demands perfect mechanics</text>
+
+  <!-- Arrow down -->
+  <line x1="448" y1="192" x2="448" y2="207" stroke="#d4822a" stroke-width="1" opacity=".5"/>
+  <text x="448" y="217" text-anchor="middle" fill="#d4822a" font-size="10" opacity=".5">↓</text>
+
+  <!-- NO BYPASS box -->
+  <rect x="374" y="222" width="148" height="46" fill="#0a0600" stroke="#d4822a" stroke-width="1" rx="2"/>
+  <rect x="374" y="222" width="148" height="16" fill="#d4822a" opacity=".08" rx="2"/>
+  <text x="448" y="235" text-anchor="middle" fill="#d4822a" font-size="9" font-family="'Courier New',monospace" font-weight="700">NO BYPASS</text>
+  <text x="448" y="248" text-anchor="middle" fill="#9b5a1a" font-size="7" font-family="'Courier New',monospace">SKILL IS THE ONLY KEY</text>
+  <text x="448" y="261" text-anchor="middle" fill="#555" font-size="6.5" font-family="'Courier New',monospace">No level-up workaround</text>
+
+  <!-- Contract badge right -->
+  <rect x="374" y="280" width="148" height="28" fill="#060400" stroke="#d4822a" stroke-width=".6" rx="1"/>
+  <text x="448" y="292" text-anchor="middle" fill="#9b5a1a" font-size="6.5" font-family="'Courier New',monospace">OUTCOME</text>
+  <text x="448" y="304" text-anchor="middle" fill="#d4822a" font-size="7.5" font-family="'Courier New',monospace">PURE EXECUTION MASTERY</text>
+
+  <!-- Bottom insight bar -->
+  <rect x="12" y="320" width="516" height="50" fill="#060400" stroke="#1a1000" stroke-width=".7" rx="2"/>
+  <line x1="270" y1="320" x2="270" y2="370" stroke="#1a1000" stroke-width=".7"/>
+  <text x="141" y="338" text-anchor="middle" fill="#555" font-size="6.5" font-family="'Courier New',monospace">GEOGRAPHIC CONTRACT THESIS</text>
+  <text x="141" y="356" text-anchor="middle" fill="#c8922a" font-size="7" font-family="'Courier New',monospace">Difficulty = navigable space. Player</text>
+  <text x="141" y="366" text-anchor="middle" fill="#8b5a0a" font-size="7" font-family="'Courier New',monospace">always has agency to return.</text>
+  <text x="399" y="338" text-anchor="middle" fill="#555" font-size="6.5" font-family="'Courier New',monospace">MECHANICAL CONTRACT THESIS</text>
+  <text x="399" y="356" text-anchor="middle" fill="#d4822a" font-size="7" font-family="'Courier New',monospace">Difficulty = execution ceiling. No</text>
+  <text x="399" y="366" text-anchor="middle" fill="#9b5a1a" font-size="7" font-family="'Courier New',monospace">workaround — only mastery wins.</text>
+
+</svg>
+</body>
+</html>
