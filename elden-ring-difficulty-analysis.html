@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Difficulty as Architecture — Elden Ring Design Analysis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --void: #030305;
+      --deep: #07070f;
+      --dark: #0c0c18;
+      --surface: #111120;
+      --surface-2: #161628;
+      --gold: #c9a227;
+      --gold-light: #e8c547;
+      --gold-dim: #7a6015;
+      --gold-glow: rgba(201,162,39,0.12);
+      --amber: #d4891a;
+      --parchment: #e2d5b8;
+      --parchment-dim: #9a8c72;
+      --parchment-muted: #5a5040;
+      --blue-dark: #0a0a1f;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--void);
+      color: var(--parchment);
+      font-family: 'EB Garamond', serif;
+      font-size: 18px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* Grain texture overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--void); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.1rem 2.5rem;
+      background: linear-gradient(to bottom, rgba(3,3,5,0.96) 0%, transparent 100%);
+      backdrop-filter: blur(6px);
+    }
+    .nav-mark { display: flex; align-items: center; gap: 0.75rem; }
+    .nav-mark-text {
+      font-family: 'Cinzel', serif; font-size: 0.6rem;
+      letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold-dim);
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-family: 'Cinzel', serif; font-size: 0.6rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--parchment-muted); text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+      text-align: center; padding: 7rem 2rem 5rem;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 55% 45% at 50% 55%, rgba(201,162,39,0.07) 0%, transparent 65%),
+        linear-gradient(180deg, var(--void) 0%, #060610 55%, var(--blue-dark) 100%);
+    }
+    .hero-glow {
+      position: absolute; width: 700px; height: 700px;
+      top: 50%; left: 50%; transform: translate(-50%,-50%);
+      background: radial-gradient(circle, rgba(201,162,39,0.05) 0%, transparent 68%);
+      animation: breathe 7s ease-in-out infinite; pointer-events: none;
+    }
+    @keyframes breathe {
+      0%,100% { opacity: 0.5; transform: translate(-50%,-50%) scale(1); }
+      50% { opacity: 1; transform: translate(-50%,-50%) scale(1.06); }
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 860px; }
+    .eyebrow {
+      font-family: 'Cinzel', serif; font-size: 0.6rem;
+      letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--gold); opacity: 0.75; margin-bottom: 2.5rem; display: block;
+    }
+    .hero-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+      font-weight: 700; line-height: 1.12; color: var(--parchment);
+      text-shadow: 0 0 80px rgba(201,162,39,0.18);
+      margin-bottom: 1rem;
+    }
+    .hero-title em { font-style: normal; color: var(--gold); }
+    .hero-sub {
+      font-family: 'Cinzel', serif; font-size: 0.75rem;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--parchment-muted); margin-bottom: 3.5rem;
+    }
+    .hero-thesis {
+      max-width: 660px; margin: 0 auto 4rem;
+      font-size: 1.12rem; font-style: italic;
+      color: var(--parchment-dim); line-height: 1.85;
+      border-left: 1px solid var(--gold-dim);
+      padding-left: 1.75rem; text-align: left;
+    }
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+      animation: sink 3s ease-in-out infinite; opacity: 0.35;
+    }
+    @keyframes sink {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
+    .scroll-hint span {
+      font-family: 'Cinzel', serif; font-size: 0.5rem;
+      letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold-dim);
+    }
+    .scroll-hint-line { width: 1px; height: 44px; background: linear-gradient(to bottom, var(--gold-dim), transparent); }
+
+    /* ── DIVIDER ── */
+    .rune-divider {
+      display: flex; align-items: center; gap: 1.5rem;
+      max-width: 900px; margin: 0 auto; padding: 0 2rem;
+    }
+    .rune-divider::before, .rune-divider::after {
+      content: ''; flex: 1; height: 1px;
+    }
+    .rune-divider::before { background: linear-gradient(to right, transparent, var(--gold-dim)); }
+    .rune-divider::after  { background: linear-gradient(to left,  transparent, var(--gold-dim)); }
+    .rune-divider span {
+      font-family: 'Cinzel', serif; font-size: 0.55rem;
+      letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-dim);
+      white-space: nowrap;
+    }
+
+    /* ── LAYER NAV ── */
+    .layer-nav {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: rgba(201,162,39,0.12);
+      border: 1px solid rgba(201,162,39,0.12);
+      max-width: 900px; margin: 3.5rem auto 7rem;
+    }
+    .layer-nav a {
+      background: var(--deep); padding: 1.75rem 1.5rem;
+      text-align: center; text-decoration: none;
+      display: flex; flex-direction: column; gap: 0.5rem;
+      transition: background 0.3s;
+    }
+    .layer-nav a:hover { background: var(--surface); }
+    .layer-num {
+      font-family: 'Cinzel', serif; font-size: 0.5rem;
+      letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-dim);
+    }
+    .layer-nav-title {
+      font-family: 'Cinzel', serif; font-size: 0.82rem;
+      color: var(--parchment); font-weight: 600;
+    }
+    .layer-nav-desc { font-size: 0.82rem; color: var(--parchment-muted); }
+
+    /* ── SECTION SHELL ── */
+    .layer-section { padding: 6rem 2rem; position: relative; }
+    .layer-section::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, var(--gold-dim) 30%, var(--gold-dim) 70%, transparent);
+      opacity: 0.3;
+    }
+    .layer-inner { max-width: 980px; margin: 0 auto; }
+    .layer-header { display: flex; align-items: flex-start; gap: 2rem; margin-bottom: 3rem; }
+    .layer-num-bg {
+      font-family: 'Cinzel', serif; font-size: 7rem; font-weight: 900;
+      color: var(--gold-dim); line-height: 1; opacity: 0.18; flex-shrink: 0;
+      user-select: none;
+    }
+    .layer-head-text { padding-top: 0.75rem; }
+    .section-label {
+      font-family: 'Cinzel', serif; font-size: 0.55rem;
+      letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--gold); display: block; margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.65rem, 3vw, 2.5rem);
+      font-weight: 700; color: var(--parchment); line-height: 1.2;
+    }
+    .section-title em { font-style: normal; color: var(--gold); }
+    .accent-line {
+      width: 56px; height: 2px;
+      background: linear-gradient(to right, var(--gold), transparent);
+      margin-top: 1.25rem;
+    }
+
+    p { margin-bottom: 1.5rem; color: var(--parchment-dim); }
+    p:last-child { margin-bottom: 0; }
+    strong { color: var(--parchment); font-weight: 600; }
+
+    /* ── INSIGHT BOX ── */
+    .insight {
+      background: linear-gradient(135deg, rgba(201,162,39,0.05), rgba(201,162,39,0.01));
+      border: 1px solid rgba(201,162,39,0.18);
+      border-left: 3px solid var(--gold);
+      padding: 1.75rem 2rem; margin: 2.5rem 0;
+      position: relative;
+    }
+    .insight::before {
+      content: attr(data-label);
+      position: absolute; top: -0.65rem; left: 1.5rem;
+      background: var(--void); padding: 0 0.5rem;
+      font-family: 'Cinzel', serif; font-size: 0.5rem;
+      letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold);
+    }
+    .insight p { margin-bottom: 0; font-style: italic; font-size: 1.05rem; }
+
+    /* ── COMPARISON ── */
+    .compare-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: var(--surface);
+      border: 1px solid var(--surface); margin: 3rem 0;
+    }
+    .compare-col { background: var(--deep); padding: 2rem; }
+    .compare-col.hi { background: linear-gradient(135deg, rgba(201,162,39,0.04), var(--deep)); }
+    .compare-col-title {
+      font-family: 'Cinzel', serif; font-size: 0.65rem;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.5rem;
+      padding-bottom: 1rem; border-bottom: 1px solid var(--surface);
+    }
+    .compare-item {
+      display: flex; align-items: flex-start;
+      gap: 0.75rem; margin-bottom: 1rem;
+      font-size: 0.92rem; color: var(--parchment-dim); line-height: 1.6;
+    }
+    .compare-item::before { content: '—'; color: var(--gold-dim); flex-shrink: 0; }
+
+    /* ── BOSS CARDS ── */
+    .boss-grid {
+      display: grid; grid-template-columns: repeat(2,1fr);
+      gap: 1px; background: rgba(201,162,39,0.08);
+      border: 1px solid rgba(201,162,39,0.08); margin: 3rem 0;
+    }
+    .boss-card { background: var(--deep); padding: 2rem; position: relative; overflow: hidden; }
+    .boss-card::after {
+      content: ''; position: absolute; top: 0; right: 0;
+      width: 80px; height: 80px;
+      background: radial-gradient(circle at top right, rgba(201,162,39,0.06), transparent);
+    }
+    .boss-contract {
+      font-family: 'Cinzel', serif; font-size: 0.5rem;
+      letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 0.5rem;
+    }
+    .geo  { color: #4a9eff; }
+    .mech { color: var(--gold); }
+    .boss-name {
+      font-family: 'Cinzel', serif; font-size: 1.15rem;
+      font-weight: 700; color: var(--parchment); margin-bottom: 0.75rem;
+    }
+    .boss-body { font-size: 0.9rem; color: var(--parchment-dim); line-height: 1.65; margin-bottom: 1rem; }
+    .boss-verdict {
+      font-size: 0.8rem; font-style: italic; color: var(--parchment-muted);
+      border-top: 1px solid var(--surface); padding-top: 0.75rem;
+    }
+
+    /* ── DIAGRAM ── */
+    .diagram-wrap {
+      background: var(--deep); border: 1px solid var(--surface);
+      padding: 3rem 2rem; margin: 3rem 0; text-align: center;
+    }
+    .diagram-title {
+      font-family: 'Cinzel', serif; font-size: 0.6rem;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold-dim); margin-bottom: 2rem;
+    }
+
+    /* ── PULL QUOTE ── */
+    .pull {
+      font-size: 1.25rem; font-style: italic;
+      color: var(--parchment-dim); line-height: 1.65;
+      border-top: 1px solid var(--gold-dim);
+      border-bottom: 1px solid var(--gold-dim);
+      padding: 1.75rem 2rem; margin: 3rem 0; text-align: center;
+    }
+    .pull em { font-style: normal; color: var(--gold); }
+
+    /* ── PARALLEL CARD ── */
+    .parallel-card {
+      background: linear-gradient(135deg, rgba(201,162,39,0.04), var(--deep));
+      border: 1px solid rgba(201,162,39,0.14);
+      padding: 2.5rem; margin: 2.5rem 0;
+    }
+    .parallel-game {
+      font-family: 'Cinzel', serif; font-size: 0.55rem;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold-dim); margin-bottom: 0.6rem;
+    }
+    .parallel-title {
+      font-family: 'Cinzel', serif; font-size: 1.05rem;
+      color: var(--parchment); margin-bottom: 1.25rem; font-weight: 600;
+    }
+
+    /* ── STEAL LIST ── */
+    .steal-grid {
+      display: grid; grid-template-columns: repeat(2,1fr);
+      gap: 1px; background: var(--surface);
+      border: 1px solid var(--surface); margin: 3rem 0;
+    }
+    .steal-item { background: var(--deep); padding: 2rem; }
+    .steal-num {
+      font-family: 'Cinzel', serif; font-size: 2.5rem;
+      font-weight: 900; color: var(--gold-dim); opacity: 0.25;
+      line-height: 1; margin-bottom: 0.75rem;
+    }
+    .steal-title {
+      font-family: 'Cinzel', serif; font-size: 0.82rem;
+      color: var(--gold); font-weight: 600; margin-bottom: 0.75rem;
+    }
+    .steal-desc { font-size: 0.9rem; color: var(--parchment-dim); line-height: 1.65; }
+
+    /* ── VERDICT ── */
+    .verdict {
+      background: linear-gradient(to bottom, var(--void), var(--blue-dark), var(--void));
+      padding: 9rem 2rem; text-align: center; position: relative; overflow: hidden;
+    }
+    .verdict-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(201,162,39,0.06), transparent);
+      pointer-events: none;
+    }
+    .verdict-inner { position: relative; z-index: 2; max-width: 800px; margin: 0 auto; }
+    .verdict-quote {
+      font-size: clamp(1.05rem, 2vw, 1.4rem); font-style: italic;
+      color: var(--parchment-dim); line-height: 1.75; margin-bottom: 2rem;
+    }
+    .verdict-quote strong { color: var(--gold); font-style: normal; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--void); border-top: 1px solid var(--surface);
+      padding: 5rem 2rem 3rem; text-align: center;
+    }
+    .footer-inner { max-width: 680px; margin: 0 auto; }
+    .footer-name {
+      font-family: 'Cinzel', serif; font-size: 0.65rem;
+      letter-spacing: 0.3em; text-transform: uppercase; color: var(--parchment-dim);
+      margin-bottom: 0.5rem;
+    }
+    .footer-tagline { font-size: 0.88rem; color: var(--parchment-muted); margin-bottom: 2.5rem; }
+    .footer-links { display: flex; justify-content: center; gap: 2.5rem; list-style: none; margin-bottom: 3.5rem; }
+    .footer-links a {
+      font-family: 'Cinzel', serif; font-size: 0.58rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--parchment-muted); text-decoration: none; transition: color 0.3s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .trilogy-label {
+      font-family: 'Cinzel', serif; font-size: 0.5rem;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--parchment-muted); margin-bottom: 1rem;
+    }
+    .trilogy {
+      display: flex; justify-content: center; flex-wrap: wrap;
+      gap: 0.4rem 1.5rem; margin-bottom: 3rem;
+    }
+    .trilogy span {
+      font-size: 0.8rem; color: var(--parchment-muted); padding: 0.2rem 0;
+    }
+    .trilogy span.active { color: var(--gold); }
+    .copyright { font-size: 0.72rem; color: var(--parchment-muted); opacity: 0.4; }
+
+    /* ── SCROLL REVEAL ── */
+    .fade { opacity: 0; transform: translateY(28px); transition: opacity 0.85s ease, transform 0.85s ease; }
+    .fade.in { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width: 700px) {
+      .layer-nav { grid-template-columns: 1fr; }
+      .compare-grid { grid-template-columns: 1fr; }
+      .boss-grid { grid-template-columns: 1fr; }
+      .steal-grid { grid-template-columns: 1fr; }
+      .layer-header { flex-direction: column; gap: 0.25rem; }
+      .layer-num-bg { font-size: 3.5rem; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-mark">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <circle cx="14" cy="14" r="12" stroke="#c9a227" stroke-width="0.5" opacity="0.35"/>
+      <circle cx="14" cy="14" r="7"  stroke="#c9a227" stroke-width="0.5" opacity="0.55"/>
+      <line x1="14" y1="2"  x2="14" y2="8"  stroke="#c9a227" stroke-width="0.8" opacity="0.6"/>
+      <line x1="14" y1="20" x2="14" y2="26" stroke="#c9a227" stroke-width="0.8" opacity="0.6"/>
+      <line x1="2"  y1="14" x2="8"  y2="14" stroke="#c9a227" stroke-width="0.8" opacity="0.6"/>
+      <line x1="20" y1="14" x2="26" y2="14" stroke="#c9a227" stroke-width="0.8" opacity="0.6"/>
+      <circle cx="14" cy="14" r="2.5" fill="#c9a227" opacity="0.75"/>
+    </svg>
+    <span class="nav-mark-text">Difficulty as Architecture</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#layer-1">The Linear Wall</a></li>
+    <li><a href="#layer-2">The Ecosystem</a></li>
+    <li><a href="#layer-3">The Implication</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-content">
+    <span class="eyebrow">Difficulty Architecture · Game Design Analysis · Leon Telemaque</span>
+
+    <!-- Erdtree sigil -->
+    <svg width="110" height="130" viewBox="0 0 110 130" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto 2.5rem;">
+      <circle cx="55" cy="75" r="48" stroke="#c9a227" stroke-width="0.4" opacity="0.2"/>
+      <circle cx="55" cy="75" r="32" stroke="#c9a227" stroke-width="0.5" opacity="0.4"/>
+      <circle cx="55" cy="75" r="16" stroke="#c9a227" stroke-width="1"   opacity="0.65"/>
+      <circle cx="55" cy="75" r="4"  fill="#c9a227" opacity="0.8"/>
+      <circle cx="55" cy="75" r="9"  fill="rgba(201,162,39,0.08)"/>
+      <!-- Tree trunk -->
+      <line x1="55" y1="59" x2="55" y2="4"   stroke="#c9a227" stroke-width="1.5" opacity="0.55"/>
+      <!-- Main branches -->
+      <line x1="55" y1="30" x2="38" y2="18"  stroke="#c9a227" stroke-width="1"   opacity="0.45"/>
+      <line x1="55" y1="22" x2="70" y2="12"  stroke="#c9a227" stroke-width="1"   opacity="0.45"/>
+      <!-- Sub-branches -->
+      <line x1="55" y1="15" x2="48" y2="7"   stroke="#c9a227" stroke-width="0.6" opacity="0.3"/>
+      <line x1="55" y1="12" x2="62" y2="5"   stroke="#c9a227" stroke-width="0.6" opacity="0.3"/>
+      <line x1="46" y1="22" x2="38" y2="13"  stroke="#c9a227" stroke-width="0.5" opacity="0.25"/>
+      <line x1="64" y1="16" x2="73" y2="9"   stroke="#c9a227" stroke-width="0.5" opacity="0.25"/>
+      <!-- Radial spokes -->
+      <line x1="55" y1="43" x2="55" y2="59"  stroke="#c9a227" stroke-width="0.6" opacity="0.3"/>
+      <line x1="7"  y1="75" x2="23" y2="75"  stroke="#c9a227" stroke-width="0.6" opacity="0.3"/>
+      <line x1="87" y1="75" x2="103" y2="75" stroke="#c9a227" stroke-width="0.6" opacity="0.3"/>
+      <line x1="55" y1="107" x2="55" y2="123" stroke="#c9a227" stroke-width="0.6" opacity="0.3"/>
+      <line x1="21" y1="41" x2="32" y2="52"  stroke="#c9a227" stroke-width="0.4" opacity="0.2"/>
+      <line x1="89" y1="41" x2="78" y2="52"  stroke="#c9a227" stroke-width="0.4" opacity="0.2"/>
+      <line x1="21" y1="109" x2="32" y2="98" stroke="#c9a227" stroke-width="0.4" opacity="0.2"/>
+      <line x1="89" y1="109" x2="78" y2="98" stroke="#c9a227" stroke-width="0.4" opacity="0.2"/>
+    </svg>
+
+    <h1 class="hero-title">Difficulty as <em>Architecture</em></h1>
+    <p class="hero-sub">Elden Ring · A Three-Layer Framework for Difficulty Design</p>
+
+    <blockquote class="hero-thesis">
+      Elden Ring doesn't have a difficulty curve — it has a difficulty ecosystem. Geographic challenges that reward exploration and patient progression sit alongside pure mechanical skill walls that cannot be bypassed or outleveled. The player chooses which type of difficulty they engage with and when. But the game ensures that true mastery moments remain uncompromising regardless.
+    </blockquote>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Descend</span>
+    <div class="scroll-hint-line"></div>
+  </div>
+</section>
+
+<!-- ── FRAMEWORK NAV ── -->
+<div style="padding:5rem 2rem 0;">
+  <div class="rune-divider"><span>The Framework</span></div>
+  <div class="layer-nav">
+    <a href="#layer-1">
+      <span class="layer-num">Layer I</span>
+      <span class="layer-nav-title">The Linear Wall</span>
+      <span class="layer-nav-desc">How traditional Souls games build fixed difficulty — Pontiff Sulyvahn as the primary example</span>
+    </a>
+    <a href="#layer-2">
+      <span class="layer-num">Layer II</span>
+      <span class="layer-nav-title">The Ecosystem</span>
+      <span class="layer-nav-desc">Elden Ring's two simultaneous difficulty contracts — geographic and mechanical</span>
+    </a>
+    <a href="#layer-3">
+      <span class="layer-num">Layer III</span>
+      <span class="layer-nav-title">The Implication</span>
+      <span class="layer-nav-desc">What studios building open world and live-service games should steal from this design</span>
+    </a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     LAYER I — THE LINEAR WALL
+════════════════════════════════════════ -->
+<section id="layer-1" class="layer-section">
+  <div class="layer-inner">
+
+    <div class="layer-header">
+      <div class="layer-num-bg">I</div>
+      <div class="layer-head-text">
+        <span class="section-label">Layer One</span>
+        <h2 class="section-title">The Linear <em>Difficulty Wall</em></h2>
+        <div class="accent-line"></div>
+      </div>
+    </div>
+
+    <p>Traditional Souls games — Dark Souls 3, Bloodborne, Sekiro — are built around a single, non-negotiable philosophy: <strong>the wall is the design.</strong> Progress is fixed. The path is linear. The next obstacle cannot be avoided, approached from an angle, or outleveled. You either develop the skill to overcome it, or you stop.</p>
+
+    <p>This is a complete and coherent design philosophy. It's not a failure of flexibility — it's a deliberate statement. Failure in a linear system sends an unambiguous signal: <em>adapt or quit.</em> There is no geographic alternative. No overlevel strategy. No different path to gather strength and return. The wall exists, and it waits.</p>
+
+    <div class="insight" data-label="Primary Case Study">
+      <p><strong>Pontiff Sulyvahn</strong> in Dark Souls 3 is the definitive example. He sits at the threshold between Irithyll of the Boreal Valley and Anor Londo — halfway through the critical path. The entire game's difficulty architecture converges on that moment. Players who cannot pass Pontiff cannot continue. There is no other way. His arena is a corridor with nowhere to hide. He is a wall, and FromSoft built the entire structure of the game around that wall being unavoidable.</p>
+    </div>
+
+    <p>The guidance systems in linear Souls games reflect the same philosophy. <strong>Firelink Shrine</strong> in Dark Souls 3 and <strong>the Hunter's Dream</strong> in Bloodborne function as passive waypoints — places to level, upgrade, and commune with the world. Neither tells you where to go. Neither offers a geographic alternative. They are rest stops between walls, not branching opportunities.</p>
+
+    <div class="compare-grid fade">
+      <div class="compare-col">
+        <div class="compare-col-title">What the linear model does well</div>
+        <div class="compare-item">Creates unambiguous skill gates — progress is earned, not navigated around</div>
+        <div class="compare-item">Focuses design effort on a single critical path — every obstacle can be precisely tuned</div>
+        <div class="compare-item">Makes overcoming a boss feel absolute — there is no other way it could have happened</div>
+        <div class="compare-item">Builds cultural reputation through shared experience — everyone faced the same wall in the same order</div>
+      </div>
+      <div class="compare-col hi">
+        <div class="compare-col-title">What the linear model cannot do</div>
+        <div class="compare-item">Give players genuine agency over their difficulty experience without external tools</div>
+        <div class="compare-item">Distinguish between players blocked by mechanical skill versus those who need more context</div>
+        <div class="compare-item">Sustain engagement for players who hit a wall and cannot currently overcome it</div>
+        <div class="compare-item">Support multiple simultaneous difficulty philosophies in a single product</div>
+      </div>
+    </div>
+
+    <p>This is not a critique of the linear model. It is a documentation of its design contract. FromSoft knew exactly what they were building — and for Dark Souls, Bloodborne, and Sekiro, that contract was exactly right. The wall is the point.</p>
+
+    <p>The question Elden Ring asks is: <em>what if you didn't have to pick just one contract?</em></p>
+
+    <!-- Linear path diagram -->
+    <div class="diagram-wrap fade">
+      <div class="diagram-title">Linear Difficulty Architecture — Dark Souls 3 Critical Path</div>
+      <svg viewBox="0 0 780 140" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;">
+        <!-- Track -->
+        <line x1="40" y1="70" x2="740" y2="70" stroke="#1e1e32" stroke-width="2"/>
+
+        <!-- Arrows -->
+        <polygon points="148,66 154,70 148,74" fill="#2a2a45"/>
+        <polygon points="278,66 284,70 278,74" fill="#2a2a45"/>
+        <polygon points="408,66 414,70 408,74" fill="#c9a227" opacity="0.5"/>
+        <polygon points="548,66 554,70 548,74" fill="#2a2a45"/>
+        <polygon points="658,66 664,70 658,74" fill="#2a2a45"/>
+
+        <!-- START -->
+        <circle cx="40"  cy="70" r="8"  fill="#0d0d18" stroke="#3a3a60" stroke-width="1.5"/>
+        <text x="40"  y="92"  text-anchor="middle" fill="#4a4a70" font-size="8.5" font-family="Cinzel,serif">START</text>
+
+        <!-- Abyss Watchers -->
+        <circle cx="155" cy="70" r="9"  fill="#0d0d18" stroke="#4a4a70" stroke-width="1.5"/>
+        <text x="155" y="92"  text-anchor="middle" fill="#5a5a80" font-size="8" font-family="Cinzel,serif">ABYSS</text>
+        <text x="155" y="102" text-anchor="middle" fill="#5a5a80" font-size="8" font-family="Cinzel,serif">WATCHERS</text>
+
+        <!-- Yhorm -->
+        <circle cx="285" cy="70" r="9"  fill="#0d0d18" stroke="#4a4a70" stroke-width="1.5"/>
+        <text x="285" y="92"  text-anchor="middle" fill="#5a5a80" font-size="8" font-family="Cinzel,serif">YHORM</text>
+
+        <!-- PONTIFF — the wall -->
+        <circle cx="415" cy="70" r="18" fill="rgba(201,162,39,0.07)" stroke="#c9a227" stroke-width="2"/>
+        <circle cx="415" cy="70" r="11" fill="#080810" stroke="#c9a227" stroke-width="1"/>
+        <text x="415" y="94"  text-anchor="middle" fill="#c9a227" font-size="8" font-family="Cinzel,serif">PONTIFF</text>
+        <text x="415" y="104" text-anchor="middle" fill="#c9a227" font-size="8" font-family="Cinzel,serif">SULYVAHN</text>
+        <text x="415" y="45"  text-anchor="middle" fill="#c9a227" font-size="7.5" font-family="Cinzel,serif" letter-spacing="1">THE WALL</text>
+        <line x1="415" y1="51" x2="415" y2="52" stroke="#c9a227" stroke-width="1" opacity="0.5"/>
+
+        <!-- Aldrich -->
+        <circle cx="555" cy="70" r="9"  fill="#0d0d18" stroke="#4a4a70" stroke-width="1.5"/>
+        <text x="555" y="92"  text-anchor="middle" fill="#5a5a80" font-size="8" font-family="Cinzel,serif">ALDRICH</text>
+
+        <!-- Twin Princes -->
+        <circle cx="665" cy="70" r="9"  fill="#0d0d18" stroke="#4a4a70" stroke-width="1.5"/>
+        <text x="665" y="92"  text-anchor="middle" fill="#5a5a80" font-size="8" font-family="Cinzel,serif">TWIN</text>
+        <text x="665" y="102" text-anchor="middle" fill="#5a5a80" font-size="8" font-family="Cinzel,serif">PRINCES</text>
+
+        <!-- Soul of Cinder -->
+        <circle cx="740" cy="70" r="9"  fill="rgba(201,162,39,0.04)" stroke="#7a6015" stroke-width="1.5"/>
+        <text x="740" y="92"  text-anchor="middle" fill="#6a5010" font-size="8" font-family="Cinzel,serif">SOUL OF</text>
+        <text x="740" y="102" text-anchor="middle" fill="#6a5010" font-size="8" font-family="Cinzel,serif">CINDER</text>
+
+        <text x="390" y="130" text-anchor="middle" fill="#2a2a40" font-size="7.5" font-family="Cinzel,serif" letter-spacing="3">ONE PATH · ONE CONTRACT · NO ALTERNATIVE</text>
+      </svg>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     LAYER II — THE ECOSYSTEM
+════════════════════════════════════════ -->
+<section id="layer-2" class="layer-section" style="margin-top:2rem;">
+  <div class="layer-inner">
+
+    <div class="layer-header">
+      <div class="layer-num-bg">II</div>
+      <div class="layer-head-text">
+        <span class="section-label">Layer Two</span>
+        <h2 class="section-title">Elden Ring's Difficulty <em>Ecosystem</em></h2>
+        <div class="accent-line"></div>
+      </div>
+    </div>
+
+    <p>Elden Ring makes a radical structural decision for a Souls game: the critical path is optional. <strong>Melina gives you a destination, never a route.</strong> The Lands Between is not a corridor — it is a territory, and you move through it with genuine geographic agency.</p>
+
+    <p>This creates something that doesn't exist in any prior FromSoft title: <strong>two simultaneous difficulty contracts operating in the same game, at the same time.</strong> The player selects which contract they are entering at any given moment. The game never announces which they've chosen. It simply responds to what they've done.</p>
+
+    <div class="insight" data-label="Contract One — Geographic Difficulty">
+      <p><strong>Margit. Stormveil. Early Liurnia.</strong> These are gates, but they are negotiable. The player can explore Limgrave, find Torrent, level their character, discover smithing stones, locate better weapons, encounter NPCs who gesture vaguely eastward. A player blocked by Margit can become a player who returns to Margit three levels later with a +3 weapon and wins. This is geographic difficulty: the wall has a workaround, and the workaround is the open world itself.</p>
+    </div>
+
+    <div class="insight" data-label="Contract Two — Mechanical Difficulty">
+      <p><strong>Malenia, Blade of Miquella. Promised Consort Radahn.</strong> These are not negotiable. They are self-selected — located in zones that demand deliberate, sustained effort to reach. And once there, no amount of overleveling, no alternate path, no geographic workaround removes their core mechanical demand. You must learn them. You must adapt. The wall is absolute — and the player chose to stand in front of it.</p>
+    </div>
+
+    <div class="pull">
+      The open world is not a difficulty reducer. It is a <em>difficulty sorter.</em><br>
+      It routes players to the challenge they are currently equipped — emotionally and mechanically — to face.
+    </div>
+
+    <p>This is the ecosystem. Not a difficulty curve but a difficulty <em>territory</em> — where geographic challenges and mechanical skill walls coexist, each fully realized, each internally consistent, each serving a different player motivation at different moments of the same playthrough.</p>
+
+    <!-- Boss cards -->
+    <div class="boss-grid fade">
+      <div class="boss-card">
+        <div class="boss-contract geo">Geographic Contract</div>
+        <div class="boss-name">Margit, the Fell Omen</div>
+        <div class="boss-body">The first major gate of the Lands Between. Mechanically demanding for early-game players — but the world beyond him is not the only world. Limgrave, Caelid's periphery, the Weeping Peninsula, Stormhill — all accessible. A blocked player has geography available to them.</div>
+        <div class="boss-verdict">Overleveling works. Exploration works. The wall is real but not absolute.</div>
+      </div>
+      <div class="boss-card">
+        <div class="boss-contract geo">Geographic Contract</div>
+        <div class="boss-name">Godrick the Grafted</div>
+        <div class="boss-body">Stormveil's lord. Mechanically challenging, but one where gear, summons, and level investment meaningfully narrow the gap. Players who explored thoroughly before approaching feel his difficulty compress in real time — not because the fight changed, but because they prepared.</div>
+        <div class="boss-verdict">Preparation transfers. Investment has leverage here.</div>
+      </div>
+      <div class="boss-card">
+        <div class="boss-contract mech">Mechanical Contract</div>
+        <div class="boss-name">Malenia, Blade of Miquella</div>
+        <div class="boss-body">The defining mechanical wall of the entire game. Optional. Self-selected. Located in Haligtree — a location requiring deliberate effort to reach. Lifesteal on every hit. Scarlet Rot phase. A moveset that punishes passive play absolutely. She is not designed to be overcome through preparation. She is designed to be mastered.</div>
+        <div class="boss-verdict">No overlevel removes her. No summon trivializes her. The demand is mechanical and uncompromising.</div>
+      </div>
+      <div class="boss-card">
+        <div class="boss-contract mech">Mechanical Contract</div>
+        <div class="boss-name">Promised Consort Radahn</div>
+        <div class="boss-body">The Shadow of the Erdtree final boss. The culminating mechanical challenge of Elden Ring's expanded design. Players who reach him have already demonstrated significant investment. And yet he demands more — precise understanding of spacing, timing, and his attack telegraphs that preparation alone cannot provide.</div>
+        <div class="boss-verdict">The endgame of the mechanical contract. Mastery or nothing.</div>
+      </div>
+    </div>
+
+    <!-- Ecosystem diagram -->
+    <div class="diagram-wrap fade">
+      <div class="diagram-title">The Elden Ring Ecosystem — Dual Contract Architecture</div>
+      <svg viewBox="0 0 800 290" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;">
+
+        <!-- Start -->
+        <circle cx="65" cy="145" r="13" fill="#0d0d18" stroke="#3a3a60" stroke-width="1.5"/>
+        <text x="65" y="167" text-anchor="middle" fill="#5a5a80" font-size="8" font-family="Cinzel,serif">TARNISHED</text>
+
+        <!-- Branch lines -->
+        <line x1="78"  y1="138" x2="185" y2="88"  stroke="#2a2a45" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="78"  y1="152" x2="185" y2="202" stroke="#2a2a45" stroke-width="1" stroke-dasharray="4,3"/>
+
+        <!-- GEOGRAPHIC TRACK (upper) -->
+        <text x="250" y="56" text-anchor="middle" fill="#3a6fa0" font-size="7.5" font-family="Cinzel,serif" letter-spacing="1" opacity="0.8">GEOGRAPHIC CONTRACT</text>
+
+        <circle cx="200" cy="80" r="10" fill="#0d0d18" stroke="#2a5a88" stroke-width="1.5"/>
+        <text x="200" y="100" text-anchor="middle" fill="#4a80b0" font-size="8" font-family="Cinzel,serif">MARGIT</text>
+
+        <!-- Explore bypass arc -->
+        <path d="M 214 70 Q 255 38 296 70" stroke="#1e3a58" stroke-width="1" stroke-dasharray="3,3" fill="none"/>
+        <text x="255" y="36" text-anchor="middle" fill="#2a4a68" font-size="7" font-family="Cinzel,serif">EXPLORE · RETURN STRONGER</text>
+
+        <line x1="210" y1="80" x2="295" y2="80" stroke="#2a5a88" stroke-width="1"/>
+        <polygon points="291,76 297,80 291,84" fill="#2a5a88"/>
+
+        <circle cx="308" cy="80" r="10" fill="#0d0d18" stroke="#2a5a88" stroke-width="1.5"/>
+        <text x="308" y="100" text-anchor="middle" fill="#4a80b0" font-size="8" font-family="Cinzel,serif">GODRICK</text>
+
+        <line x1="318" y1="80" x2="415" y2="80" stroke="#2a5a88" stroke-width="1"/>
+        <polygon points="411,76 417,80 411,84" fill="#2a5a88"/>
+
+        <circle cx="428" cy="80" r="10" fill="#0d0d18" stroke="#2a5a88" stroke-width="1.5"/>
+        <text x="428" y="100" text-anchor="middle" fill="#4a80b0" font-size="8" font-family="Cinzel,serif">RENNALA</text>
+
+        <line x1="438" y1="80" x2="540" y2="80" stroke="#2a5a88" stroke-width="1"/>
+
+        <text x="560" y="80" text-anchor="middle" fill="#3a5a78" font-size="7.5" font-family="Cinzel,serif">MORGOTT</text>
+        <text x="560" y="90" text-anchor="middle" fill="#3a5a78" font-size="7.5" font-family="Cinzel,serif">+ MORE</text>
+
+        <!-- MECHANICAL TRACK (lower) -->
+        <text x="250" y="232" text-anchor="middle" fill="#8a7010" font-size="7.5" font-family="Cinzel,serif" letter-spacing="1" opacity="0.9">MECHANICAL CONTRACT</text>
+
+        <circle cx="200" cy="210" r="10" fill="#0d0d18" stroke="#5a4010" stroke-width="1.5"/>
+        <text x="200" y="228" text-anchor="middle" fill="#6a5010" font-size="8" font-family="Cinzel,serif">CAELID</text>
+        <text x="200" y="238" text-anchor="middle" fill="#6a5010" font-size="8" font-family="Cinzel,serif">APPROACH</text>
+
+        <line x1="210" y1="210" x2="350" y2="210" stroke="#7a6015" stroke-width="1"/>
+
+        <circle cx="365" cy="210" r="10" fill="#0d0d18" stroke="#7a6015" stroke-width="1.5"/>
+        <text x="365" y="228" text-anchor="middle" fill="#8a7018" font-size="8" font-family="Cinzel,serif">HALIGTREE</text>
+
+        <line x1="375" y1="210" x2="515" y2="210" stroke="#c9a227" stroke-width="1.5" opacity="0.5"/>
+        <polygon points="511,206 517,210 511,214" fill="#c9a227" opacity="0.5"/>
+
+        <!-- Malenia node -->
+        <circle cx="540" cy="210" r="22" fill="rgba(201,162,39,0.07)" stroke="#c9a227" stroke-width="2"/>
+        <circle cx="540" cy="210" r="14" fill="#060610" stroke="#c9a227" stroke-width="1"/>
+        <circle cx="540" cy="210" r="4"  fill="#c9a227" opacity="0.6"/>
+        <text x="540" y="240" text-anchor="middle" fill="#c9a227" font-size="8" font-family="Cinzel,serif">MALENIA</text>
+        <text x="540" y="182" text-anchor="middle" fill="#c9a227" font-size="7.5" font-family="Cinzel,serif">ABSOLUTE WALL</text>
+        <line x1="540" y1="186" x2="540" y2="188" stroke="#c9a227" stroke-width="1" opacity="0.4"/>
+        <text x="540" y="254" text-anchor="middle" fill="#5a4010" font-size="7" font-family="Cinzel,serif">NO OVERLEVEL BYPASS</text>
+
+        <!-- Center label -->
+        <text x="395" y="150" text-anchor="middle" fill="#2e2e45" font-size="8" font-family="Cinzel,serif" letter-spacing="1">MELINA GIVES DESTINATION — NEVER ROUTE</text>
+        <text x="395" y="275" text-anchor="middle" fill="#222235" font-size="7.5" font-family="Cinzel,serif" letter-spacing="2">PLAYER AGENCY DETERMINES WHICH CONTRACT THEY ENTER</text>
+
+      </svg>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     LAYER III — THE IMPLICATION
+════════════════════════════════════════ -->
+<section id="layer-3" class="layer-section" style="margin-top:2rem;">
+  <div class="layer-inner">
+
+    <div class="layer-header">
+      <div class="layer-num-bg">III</div>
+      <div class="layer-head-text">
+        <span class="section-label">Layer Three</span>
+        <h2 class="section-title">The Design <em>Implication</em></h2>
+        <div class="accent-line"></div>
+      </div>
+    </div>
+
+    <p>Most games pick one difficulty philosophy and apply it universally. The linear model or the open model — but not both simultaneously. This is a reasonable instinct. Difficulty inconsistency is a design risk. If a player doesn't understand which contract they've entered, the design feels arbitrary. Progress feels random. The feedback loop breaks.</p>
+
+    <p><strong>Elden Ring proved this instinct wrong.</strong> You can run multiple difficulty contracts simultaneously without the experience feeling inconsistent — but only if player agency is the mechanism that determines which contract they're in. The design doesn't need to announce which type of difficulty the player is facing. The player's own behavior — where they chose to go, what they chose to pursue — makes that determination legible.</p>
+
+    <div class="insight" data-label="Why This Works">
+      <p>Elden Ring never presents its two contracts as contradictory. Geographic challenges and mechanical skill walls both feel like the same game because they share the same visual language, the same world, the same underlying physics and combat system. The contracts differ in their negotiability — not in their aesthetic coherence. The player intuitively feels the difference between "I could come back stronger" and "I need to be better." They feel it without the game explaining it.</p>
+    </div>
+
+    <h3 style="font-family:'Cinzel',serif;font-size:1.05rem;color:var(--parchment);margin:3rem 0 1.5rem;font-weight:600;">The Closest Parallel</h3>
+
+    <div class="parallel-card fade">
+      <div class="parallel-game">Design Parallel · Ghost of Tsushima</div>
+      <div class="parallel-title">A Dual Difficulty Philosophy in a Different Form</div>
+      <p>Ghost of Tsushima implements something structurally similar through explicit design rather than implicit geography. Its Lethal difficulty mode targets players who want precise, high-stakes samurai combat — one or two strikes in either direction. Its lower difficulties support the narrative experience without demanding mechanical mastery. Both modes exist in the same world, the same story, the same enemy encounters.</p>
+      <p>Where Ghost makes the contract explicit (difficulty selection at the menu), Elden Ring makes it implicit (geographic investment and zone choice). Both approaches work. The insight is the same: <strong>you can serve multiple player motivations simultaneously if the difficulty system is coherent and player agency mediates the experience.</strong></p>
+    </div>
+
+    <h3 style="font-family:'Cinzel',serif;font-size:1.05rem;color:var(--parchment);margin:3rem 0 1.5rem;font-weight:600;">What Studios Should Steal</h3>
+
+    <div class="steal-grid fade">
+      <div class="steal-item">
+        <div class="steal-num">01</div>
+        <div class="steal-title">Separate the Contracts</div>
+        <div class="steal-desc">Don't apply one difficulty philosophy to your entire game. Identify which challenges should be geographic — explorable, levelable, circumnavigable — and which should be mechanical — uncompromising, mastery-gated. Design them differently. Tune them differently. Never confuse them for each other.</div>
+      </div>
+      <div class="steal-item">
+        <div class="steal-num">02</div>
+        <div class="steal-title">Let Agency Be the Sorter</div>
+        <div class="steal-desc">The open world doesn't need to announce which contract each challenge belongs to. Player behavior — where they went, what they pursued, how much they explored — will naturally route them toward the challenge appropriate to their current capability. Trust the player to read the signal.</div>
+      </div>
+      <div class="steal-item">
+        <div class="steal-num">03</div>
+        <div class="steal-title">Protect the Mechanical Walls</div>
+        <div class="steal-desc">For live-service games and open world titles: if you have challenges designed for mastery, protect them from being trivialized by systems outside their contract. Power creep, seasonal spikes, and gear treadmills that undermine skill-wall content destroy the mechanical contract entirely. Malenia must remain Malenia.</div>
+      </div>
+      <div class="steal-item">
+        <div class="steal-num">04</div>
+        <div class="steal-title">Maintain Aesthetic Coherence</div>
+        <div class="steal-desc">Both contracts must feel like the same game. Tonal inconsistency between bypassed content and uncompromising skill walls makes the ecosystem feel arbitrary. In Elden Ring, Margit and Malenia share the same visual language, the same world, the same combat vocabulary — even though one is negotiable and one is not.</div>
+      </div>
+    </div>
+
+    <div class="pull">
+      The studios building the next generation of open world experiences don't need a difficulty slider.<br>
+      They need to understand <em>which challenges should be walls and which should be geography.</em>
+    </div>
+
+    <p>For live-service environments specifically, this framework maps directly to challenge system design, seasonal content, endgame difficulty tiers, and player segmentation. The question isn't "how hard should our game be?" The question is: <strong>which challenges are we asking players to overcome, and which are we asking them to master?</strong> They require different design decisions. They require different tuning. And they should never be confused for one another.</p>
+
+  </div>
+</section>
+
+<!-- ── VERDICT ── -->
+<section class="verdict">
+  <div class="verdict-glow"></div>
+  <div class="verdict-inner">
+
+    <span class="section-label" style="margin-bottom:2rem;">The Verdict</span>
+
+    <svg width="56" height="56" viewBox="0 0 56 56" fill="none" style="display:block;margin:0 auto 2.5rem;opacity:0.55;">
+      <circle cx="28" cy="28" r="25" stroke="#c9a227" stroke-width="0.5"/>
+      <circle cx="28" cy="28" r="15" stroke="#c9a227" stroke-width="0.5"/>
+      <circle cx="28" cy="28" r="3"  fill="#c9a227"/>
+      <line x1="28" y1="3"  x2="28" y2="13" stroke="#c9a227" stroke-width="0.8"/>
+      <line x1="28" y1="43" x2="28" y2="53" stroke="#c9a227" stroke-width="0.8"/>
+      <line x1="3"  y1="28" x2="13" y2="28" stroke="#c9a227" stroke-width="0.8"/>
+      <line x1="43" y1="28" x2="53" y2="28" stroke="#c9a227" stroke-width="0.8"/>
+    </svg>
+
+    <blockquote class="verdict-quote">
+      Elden Ring's greatest design achievement isn't its world-building or its boss design in isolation. It's that <strong>it made two incompatible difficulty philosophies coexist without tension</strong> — by making the player the mechanism that resolves them. The open world doesn't make the game easier. It makes the player's relationship to difficulty legible to themselves.
+    </blockquote>
+
+    <blockquote class="verdict-quote" style="font-size:1rem;opacity:0.8;margin-top:2rem;">
+      The lone Tarnished beneath the Erdtree isn't small because the world is large. They're small because <strong>mastery requires confronting something much larger than yourself</strong> — and Elden Ring is the first game to let you choose the scale of that confrontation.
+    </blockquote>
+
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-name">Leon Telemaque</div>
+    <p class="footer-tagline">Product Analytics · Game Design Systems · Behavioural Modelling</p>
+
+    <ul class="footer-links">
+      <li><a href="https://linkedin.com/in/leontelemaque" target="_blank">LinkedIn</a></li>
+      <li><a href="mailto:leon.telemaque@gmail.com">Email</a></li>
+      <li><a href="#">Portfolio</a></li>
+      <li><a href="#">GitHub</a></li>
+    </ul>
+
+    <div class="trilogy-label">Single Player &amp; Game Design Trilogy</div>
+    <div class="trilogy">
+      <span>Arkham City · Narrative Pacing</span>
+      <span>Music Retention Infrastructure</span>
+      <span class="active">Elden Ring · Difficulty Architecture</span>
+    </div>
+
+    <p class="copyright">© 2026 Leon Telemaque · Portfolio · Game design analysis</p>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const fades = document.querySelectorAll('.fade');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  fades.forEach(el => io.observe(el));
+
+  // Nav highlight
+  const sections = document.querySelectorAll('[id^="layer-"]');
+  const links    = document.querySelectorAll('.nav-links a');
+  const nio = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.style.color = l.getAttribute('href') === '#' + e.target.id ? 'var(--gold)' : '');
+      }
+    });
+  }, { threshold: 0.35 });
+  sections.forEach(s => nio.observe(s));
+</script>
+
+</body>
+</html>
