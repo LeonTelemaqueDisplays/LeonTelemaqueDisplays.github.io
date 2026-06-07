@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Power Fantasy Contract — DC Universe Online</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  --void:    #020508;
+  --deep:    #060d14;
+  --surface: #0a1520;
+  --surface2:#0f1e2e;
+  --surface3:#142030;
+  --border:  #1a2d40;
+  --border2: #253d55;
+  --electric:#00aaff;
+  --electric2:#40c8ff;
+  --electric3:#80ddff;
+  --elec-glow:rgba(0,170,255,0.12);
+  --elec-glow2:rgba(0,170,255,0.06);
+  --gold:    #ffd200;
+  --gold2:   #ffaa00;
+  --gold-dim:#a07800;
+  --green:   #00ff99;
+  --green-dim:#00aa66;
+  --red:     #ff3344;
+  --red-dim: #aa1122;
+  --text:    #d0e8ff;
+  --text2:   #8aaabb;
+  --muted:   #4a6070;
+  --mono:    'JetBrains Mono', monospace;
+  --sans:    'Inter', -apple-system, sans-serif;
+  --display: 'Rajdhani', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--void);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.8;
+  overflow-x: hidden;
+}
+
+/* scanline overlay */
+body::before {
+  content:'';
+  position:fixed;inset:0;
+  pointer-events:none;z-index:9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(0,0,0,0.04) 2px,
+    rgba(0,0,0,0.04) 4px
+  );
+}
+
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-track { background:var(--void); }
+::-webkit-scrollbar-thumb { background:var(--electric); opacity:.4; }
+
+/* ── NAV ── */
+nav {
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0.9rem 2.5rem;
+  background:linear-gradient(to bottom,rgba(2,5,8,0.97) 0%,transparent 100%);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid rgba(0,170,255,0.1);
+}
+.nav-mark {
+  font-family:var(--mono);font-size:0.6rem;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--electric);opacity:0.7;
+  display:flex;align-items:center;gap:0.7rem;
+}
+.nav-mark::before {
+  content:'';width:6px;height:6px;
+  background:var(--electric);border-radius:50%;
+  box-shadow:0 0 8px var(--electric);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:0.4;transform:scale(0.8)}
+}
+.nav-links {
+  display:flex;gap:2rem;list-style:none;
+}
+.nav-links a {
+  font-family:var(--mono);font-size:0.58rem;
+  letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;
+  transition:color 0.2s;
+}
+.nav-links a:hover { color:var(--electric); }
+.nav-back {
+  font-family:var(--mono);font-size:0.58rem;
+  letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;
+  transition:color 0.2s;
+  display:flex;align-items:center;gap:0.4rem;
+}
+.nav-back:hover { color:var(--electric); }
+
+/* ── HERO ── */
+.hero {
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  text-align:center;padding:8rem 2rem 5rem;
+}
+.hero-bg {
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 60%, rgba(0,170,255,0.07) 0%, transparent 65%),
+    linear-gradient(180deg, var(--void) 0%, #030810 60%, #050d1a 100%);
+}
+.hero-grid {
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,170,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,170,255,0.04) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+}
+.hero-glow {
+  position:absolute;width:800px;height:800px;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  background:radial-gradient(circle, rgba(0,170,255,0.06) 0%, transparent 65%);
+  animation:breathe 6s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes breathe {
+  0%,100%{opacity:0.6;transform:translate(-50%,-50%) scale(1)}
+  50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}
+}
+.hero-content { position:relative;z-index:2;max-width:900px; }
+.hero-eyebrow {
+  font-family:var(--mono);font-size:0.6rem;
+  letter-spacing:0.35em;text-transform:uppercase;
+  color:var(--electric);opacity:0.8;
+  margin-bottom:2rem;display:block;
+}
+.hero-title {
+  font-family:var(--display);
+  font-size:clamp(2.8rem,6vw,5rem);
+  font-weight:700;line-height:1.05;
+  color:var(--text);
+  text-shadow:0 0 60px rgba(0,170,255,0.2);
+  margin-bottom:0.5rem;
+  letter-spacing:-0.01em;
+}
+.hero-title em {
+  font-style:normal;
+  color:var(--electric);
+  text-shadow:0 0 30px rgba(0,170,255,0.5);
+}
+.hero-sub {
+  font-family:var(--display);
+  font-size:clamp(1rem,2vw,1.4rem);
+  font-weight:500;
+  color:var(--text2);letter-spacing:0.04em;
+  margin-bottom:3rem;
+}
+.hero-thesis {
+  max-width:680px;margin:0 auto 3.5rem;
+  font-size:1.05rem;font-style:italic;
+  color:var(--text2);line-height:1.9;
+  border-left:2px solid var(--electric);
+  padding-left:1.75rem;text-align:left;
+  position:relative;
+}
+.hero-thesis::before {
+  content:'';
+  position:absolute;left:-2px;top:0;bottom:0;
+  width:2px;
+  background:linear-gradient(to bottom,transparent,var(--electric),transparent);
+}
+.hero-meta {
+  display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;
+  margin-bottom:1rem;
+}
+.hero-chip {
+  font-family:var(--mono);font-size:0.58rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  padding:0.3rem 0.9rem;
+  border:1px solid var(--border2);
+  color:var(--text2);
+  background:var(--surface);
+}
+.hero-chip.electric { border-color:rgba(0,170,255,0.4);color:var(--electric);background:rgba(0,170,255,0.05); }
+.hero-chip.gold { border-color:rgba(255,210,0,0.4);color:var(--gold);background:rgba(255,210,0,0.05); }
+
+.scroll-hint {
+  position:absolute;bottom:2.5rem;left:50%;
+  transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:0.5rem;
+  animation:sink 3s ease-in-out infinite;opacity:0.3;
+}
+@keyframes sink {
+  0%,100%{transform:translateX(-50%) translateY(0)}
+  50%{transform:translateX(-50%) translateY(8px)}
+}
+.scroll-hint span {
+  font-family:var(--mono);font-size:0.5rem;
+  letter-spacing:0.3em;text-transform:uppercase;color:var(--electric);
+}
+
+/* ── CR VITALS BAR ── */
+.vitals-bar {
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:1.5rem 2.5rem;
+  display:flex;gap:0;
+  overflow-x:auto;
+}
+.vital {
+  flex:1;min-width:160px;
+  padding:0 2rem;
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;gap:0.3rem;
+}
+.vital:first-child{padding-left:0}
+.vital:last-child{border-right:none}
+.vital-label {
+  font-family:var(--mono);font-size:0.55rem;
+  letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--muted);
+}
+.vital-value {
+  font-family:var(--display);font-size:1.6rem;font-weight:700;
+  color:var(--electric);
+  text-shadow:0 0 20px rgba(0,170,255,0.3);
+}
+.vital-value.gold{color:var(--gold);text-shadow:0 0 20px rgba(255,210,0,0.3)}
+.vital-value.green{color:var(--green);text-shadow:0 0 20px rgba(0,255,153,0.3)}
+.vital-value.red{color:var(--red);text-shadow:0 0 20px rgba(255,51,68,0.3)}
+.vital-sub {
+  font-family:var(--mono);font-size:0.56rem;
+  color:var(--muted);letter-spacing:0.05em;
+}
+
+/* ── MAIN LAYOUT ── */
+.container {
+  max-width:900px;margin:0 auto;
+  padding:0 2rem;
+}
+.container-wide {
+  max-width:1100px;margin:0 auto;
+  padding:0 2rem;
+}
+
+/* ── INTRO / CONCLUSION SECTIONS ── */
+.prose-section {
+  padding:6rem 0;
+  border-bottom:1px solid var(--border);
+}
+.section-eyebrow {
+  font-family:var(--mono);font-size:0.58rem;
+  letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--electric);opacity:0.7;
+  margin-bottom:1.5rem;
+  display:flex;align-items:center;gap:1rem;
+}
+.section-eyebrow::before {
+  content:'';width:24px;height:1px;background:var(--electric);opacity:0.5;
+}
+.section-title {
+  font-family:var(--display);
+  font-size:clamp(1.8rem,3.5vw,2.8rem);
+  font-weight:700;letter-spacing:-0.01em;
+  color:var(--text);margin-bottom:0.5rem;
+  line-height:1.1;
+}
+.section-title em {
+  font-style:normal;color:var(--electric);
+}
+.section-subtitle {
+  font-family:var(--display);font-size:1rem;
+  color:var(--text2);letter-spacing:0.05em;
+  margin-bottom:3rem;
+}
+.prose {
+  font-size:1rem;color:var(--text2);
+  line-height:1.9;margin-bottom:1.5rem;
+}
+.prose strong { color:var(--text);font-weight:600; }
+.prose em { font-style:italic;color:var(--text); }
+
+/* ── CONTENT SECTIONS ── */
+.content-section {
+  padding:5rem 0;
+  border-bottom:1px solid var(--border);
+  position:relative;
+}
+.content-section::before {
+  content:'';
+  position:absolute;left:0;top:0;
+  width:3px;height:100%;
+  background:linear-gradient(to bottom,transparent,var(--electric),transparent);
+  opacity:0.3;
+}
+.act-label {
+  font-family:var(--mono);font-size:0.58rem;
+  letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:0.5rem;
+  display:flex;align-items:center;gap:0.8rem;
+}
+.act-label .act-num {
+  font-size:0.55rem;padding:0.15rem 0.5rem;
+  background:var(--surface);
+  border:1px solid var(--border2);
+  color:var(--electric);
+}
+.content-title {
+  font-family:var(--display);
+  font-size:clamp(1.5rem,3vw,2.2rem);
+  font-weight:700;color:var(--text);
+  line-height:1.1;margin-bottom:0.4rem;
+  letter-spacing:-0.01em;
+}
+.content-title em { font-style:normal;color:var(--electric); }
+.content-subtitle {
+  font-family:var(--mono);font-size:0.65rem;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:2.5rem;
+  padding-bottom:1.5rem;
+  border-bottom:1px solid var(--border);
+}
+
+/* two-col layout */
+.two-col {
+  display:grid;
+  grid-template-columns:1fr 380px;
+  gap:3rem;
+  align-items:start;
+}
+.two-col.flip { grid-template-columns:380px 1fr; }
+@media(max-width:800px){
+  .two-col,.two-col.flip{grid-template-columns:1fr}
+}
+
+/* ── PRINCIPLE BOX ── */
+.principle {
+  margin-top:2.5rem;
+  padding:1.5rem 1.75rem;
+  background:rgba(0,170,255,0.04);
+  border:1px solid rgba(0,170,255,0.2);
+  border-left:3px solid var(--electric);
+  position:relative;
+}
+.principle::before {
+  content:'UNIVERSAL PRINCIPLE';
+  position:absolute;top:-0.6rem;left:1rem;
+  font-family:var(--mono);font-size:0.5rem;
+  letter-spacing:0.2em;
+  background:var(--void);
+  padding:0 0.5rem;
+  color:var(--electric);
+}
+.principle p {
+  font-size:0.9rem;color:var(--text);
+  line-height:1.75;font-style:italic;
+}
+.principle p strong { font-style:normal;color:var(--electric); }
+
+/* ── VISUAL PANELS ── */
+.vis-panel {
+  background:var(--surface);
+  border:1px solid var(--border);
+  overflow:hidden;
+}
+.vis-panel-head {
+  padding:0.75rem 1rem;
+  border-bottom:1px solid var(--border);
+  background:var(--surface2);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.vis-panel-head span {
+  font-family:var(--mono);font-size:0.56rem;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--electric);opacity:0.8;
+}
+.vis-panel-head .dots {
+  display:flex;gap:4px;
+}
+.vis-panel-head .dots div {
+  width:6px;height:6px;border-radius:50%;
+}
+.vis-panel-body { padding:1.25rem; }
+
+/* CR Meter */
+.cr-meter { margin-bottom:1rem; }
+.cr-meter-label {
+  display:flex;justify-content:space-between;
+  font-family:var(--mono);font-size:0.58rem;
+  color:var(--muted);letter-spacing:0.08em;
+  margin-bottom:0.4rem;
+}
+.cr-meter-label span:last-child { color:var(--electric); }
+.cr-bar {
+  height:10px;background:var(--deep);
+  border:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.cr-bar-fill {
+  height:100%;
+  background:linear-gradient(90deg,var(--electric),var(--electric2));
+  position:relative;
+}
+.cr-bar-fill::after {
+  content:'';position:absolute;right:0;top:0;bottom:0;
+  width:2px;background:white;
+  box-shadow:0 0 8px var(--electric);
+}
+.cr-bar-fill.gold-fill {
+  background:linear-gradient(90deg,var(--gold2),var(--gold));
+}
+.cr-bar-fill.red-fill {
+  background:linear-gradient(90deg,var(--red-dim),var(--red));
+}
+.cr-bar-fill.green-fill {
+  background:linear-gradient(90deg,var(--green-dim),var(--green));
+}
+
+/* stat row */
+.stat-row {
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0.5rem 0;
+  border-bottom:1px solid var(--border);
+  font-family:var(--mono);font-size:0.6rem;
+}
+.stat-row:last-child{border-bottom:none}
+.stat-row .label { color:var(--muted);letter-spacing:0.08em;text-transform:uppercase; }
+.stat-row .val { color:var(--text);font-weight:500; }
+.stat-row .val.elec { color:var(--electric); }
+.stat-row .val.gold { color:var(--gold); }
+.stat-row .val.red { color:var(--red); }
+.stat-row .val.green { color:var(--green); }
+
+/* phase diagram */
+.phase-row {
+  display:grid;grid-template-columns:1fr 32px 1fr;
+  gap:0.5rem;align-items:center;
+  margin-bottom:0.6rem;
+}
+.phase-box {
+  padding:0.6rem 0.8rem;
+  border:1px solid var(--border);
+  font-family:var(--mono);font-size:0.56rem;
+  line-height:1.5;
+}
+.phase-box.blue { border-color:rgba(0,170,255,0.4);background:rgba(0,170,255,0.05);color:var(--electric); }
+.phase-box.gold { border-color:rgba(255,210,0,0.3);background:rgba(255,210,0,0.04);color:var(--gold); }
+.phase-box.red  { border-color:rgba(255,51,68,0.3);background:rgba(255,51,68,0.04);color:var(--red); }
+.phase-box.green{ border-color:rgba(0,255,153,0.3);background:rgba(0,255,153,0.04);color:var(--green); }
+.phase-arrow {
+  text-align:center;color:var(--muted);
+  font-size:1rem;
+}
+
+/* timeline */
+.timeline-item {
+  display:flex;gap:1rem;
+  padding:0.75rem 0;
+  border-bottom:1px solid var(--border);
+  align-items:flex-start;
+}
+.timeline-item:last-child{border-bottom:none}
+.timeline-dot {
+  width:8px;height:8px;border-radius:50%;
+  margin-top:0.3rem;flex-shrink:0;
+}
+.timeline-dot.blue{background:var(--electric);box-shadow:0 0 6px var(--electric)}
+.timeline-dot.gold{background:var(--gold);box-shadow:0 0 6px var(--gold)}
+.timeline-dot.red{background:var(--red);box-shadow:0 0 6px var(--red)}
+.timeline-dot.green{background:var(--green);box-shadow:0 0 6px var(--green)}
+.timeline-dot.muted{background:var(--muted)}
+.timeline-content { flex:1; }
+.timeline-year {
+  font-family:var(--mono);font-size:0.55rem;
+  letter-spacing:0.1em;color:var(--muted);
+  margin-bottom:0.15rem;
+}
+.timeline-event {
+  font-family:var(--mono);font-size:0.62rem;
+  color:var(--text);letter-spacing:0.05em;
+}
+.timeline-desc {
+  font-size:0.72rem;color:var(--muted);
+  margin-top:0.15rem;line-height:1.4;
+}
+
+/* wave bar */
+.wave-bar {
+  display:flex;align-items:flex-end;gap:3px;
+  height:60px;margin-bottom:0.5rem;
+}
+.wave-bar .bar {
+  flex:1;background:var(--electric);
+  opacity:0.7;
+  transition:height 0.3s;
+}
+
+/* Three principles footer */
+.principles-grid {
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);
+  margin-top:3rem;
+}
+@media(max-width:700px){.principles-grid{grid-template-columns:1fr}}
+.principle-card {
+  background:var(--surface);
+  padding:2rem 1.75rem;
+}
+.principle-card-num {
+  font-family:var(--mono);font-size:0.55rem;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--electric);opacity:0.6;
+  margin-bottom:0.75rem;
+}
+.principle-card-title {
+  font-family:var(--display);font-size:1.15rem;font-weight:700;
+  color:var(--text);margin-bottom:0.75rem;
+  line-height:1.2;
+}
+.principle-card p {
+  font-size:0.82rem;color:var(--text2);line-height:1.75;
+}
+
+/* ── FOOTER ── */
+footer {
+  padding:3rem 2.5rem;
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:1rem;
+}
+footer .foot-left {
+  font-family:var(--mono);font-size:0.58rem;
+  letter-spacing:0.12em;color:var(--muted);
+}
+footer .foot-right a {
+  font-family:var(--mono);font-size:0.58rem;
+  letter-spacing:0.12em;color:var(--electric);
+  text-decoration:none;opacity:0.7;
+}
+footer .foot-right a:hover{opacity:1}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-mark">DC UNIVERSE ONLINE · POWER PROGRESSION ANALYSIS</div>
+  <ul class="nav-links">
+    <li><a href="#intro">Intro</a></li>
+    <li><a href="#section-1">Contract</a></li>
+    <li><a href="#act-1">Act I</a></li>
+    <li><a href="#act-2">Act II</a></li>
+    <li><a href="#act-3">Act III</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+  <a class="nav-back" href="index.html">← Portfolio</a>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <span class="hero-eyebrow">Systems Design Postmortem · Leon Telemaque</span>
+    <h1 class="hero-title">The Power Fantasy<br><em>Contract</em></h1>
+    <p class="hero-sub">DC Universe Online · Power Progression · 2011–2026</p>
+    <blockquote class="hero-thesis">
+      Put in the work. Feel the payoff. Become something the world responds to.<br>
+      That's the contract. And a live service that breaks it with its most invested players isn't fixing a problem — it's creating one it may never recover from.
+    </blockquote>
+    <div class="hero-meta">
+      <span class="hero-chip electric">Systems Design Critique</span>
+      <span class="hero-chip electric">Live Service Architecture</span>
+      <span class="hero-chip gold">15-Year Postmortem</span>
+      <span class="hero-chip">3 Decisions · 3 Acts</span>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <svg width="12" height="16" viewBox="0 0 12 16" fill="none"><path d="M6 1v14M1 10l5 5 5-5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+  </div>
+</section>
+
+<!-- ── VITALS ── -->
+<div class="vitals-bar">
+  <div class="vital">
+    <span class="vital-label">Game Launch</span>
+    <span class="vital-value">2011</span>
+    <span class="vital-sub">January · PS3 + PC</span>
+  </div>
+  <div class="vital">
+    <span class="vital-label">Lifespan</span>
+    <span class="vital-value">15 <span style="font-size:1rem;font-weight:400">YRS</span></span>
+    <span class="vital-sub">Still operational · 2026</span>
+  </div>
+  <div class="vital">
+    <span class="vital-label">Contract Breaks</span>
+    <span class="vital-value red">3</span>
+    <span class="vital-sub">PvP nerf · Global nerf · Instance nerf</span>
+  </div>
+  <div class="vital">
+    <span class="vital-label">Right Solution</span>
+    <span class="vital-value gold">Arrived Late</span>
+    <span class="vital-sub">Instanced scaling · post-peak</span>
+  </div>
+  <div class="vital">
+    <span class="vital-label">Industry Lesson</span>
+    <span class="vital-value green">Unlearned</span>
+    <span class="vital-sub">Pattern persists in 2026</span>
+  </div>
+</div>
+
+<!-- ── INTRODUCTION ── -->
+<section class="prose-section" id="intro">
+  <div class="container">
+    <span class="section-eyebrow">Introduction</span>
+    <h2 class="section-title">The <em>Contract</em></h2>
+    <p class="section-subtitle">Every game that asks you to invest in a character is making a deal.</p>
+
+    <p class="prose">Not in writing. Not in the terms of service nobody reads. In the design itself — in the systems, the grind, the gear tiers, the progression ladder. The deal is implicit but it's real, and every player who has ever seriously invested in an MMO character understands it intuitively even if they've never articulated it:</p>
+
+    <p class="prose" style="padding:1.5rem 2rem;border-left:2px solid var(--electric);background:rgba(0,170,255,0.04);margin:2rem 0;font-style:italic;color:var(--text);font-size:1.1rem;line-height:1.85">Put in the work. Feel the payoff. Become something the world responds to.</p>
+
+    <p class="prose">That's the power fantasy. And the power fantasy isn't a feature. It isn't a side effect of well-designed progression systems. It isn't a luxury the development team can adjust or relocate or remove when it becomes inconvenient.</p>
+
+    <p class="prose"><strong>It's the contract.</strong></p>
+
+    <p class="prose">The grind is tolerated — sometimes even loved in retrospect — because of what waits at the end of it. Not a number on a stat screen. Not a trophy in a menu nobody looks at. Something felt. Something social. Something that exists in the world of the game in a way that other players can witness and that the environment responds to. The moment where the hours logged and the content cleared and the systems mastered translate into something undeniable.</p>
+
+    <p class="prose">Remove that moment and you haven't balanced the game. You haven't protected new players or preserved progression integrity or solved carry culture. You've broken the deal. And a live service that breaks the deal with its most invested players isn't fixing a problem. It's creating one it may never recover from.</p>
+
+    <p class="prose">DC Universe Online launched in January 2011. Before Destiny. Before Fortnite. Before the live service model had a name or a vocabulary or an established set of practices the industry had agreed on. DCUO was one of the first games to fully reckon with what the power fantasy contract required at scale — what it meant to run a game where character investment needed to feel real and consequential over months and years rather than hours.</p>
+
+    <p class="prose">It was also one of the first games to demonstrate, in real time and over a fifteen-year lifespan, what happens when a live service team systematically dismantles the systems keeping that contract alive.</p>
+
+    <p class="prose">Not through malice. Not through incompetence — the architecture DCUO built at its peak was genuinely innovative, solutions to problems the industry wouldn't develop frameworks for until years later. What happened was something more instructive and more persistent than either of those explanations: a recurring organisational failure to understand that the power fantasy isn't the side effect of the systems being removed.</p>
+
+    <p class="prose" style="color:var(--text);font-size:1.05rem"><strong>It's the reason those systems existed.</strong></p>
+
+    <p class="prose">Across three separate decisions — the PvP stat quarantine, the global stat nerf, the instance nerf — Daybreak broke the contract with the players who had invested most completely. Each decision made in response to legitimate complaints. Each one solving loudly for what the metrics could see while quietly destroying what they couldn't. Each one moving the game further from the promise it had made and closer to something that kept the servers running while emptying the room.</p>
+
+    <p class="prose">And then — after the damage was done — Daybreak built the instanced scaling system. The right answer. The elegant, non-subtractive solution that addressed every concern the three acts had been trying to address without touching the power fantasy at all. It works. It's running in the game right now. It arrived into a room that used to be full.</p>
+
+    <p class="prose">This piece is a postmortem of a game that's still alive — which makes it a different kind of story than most. It's also a case study in a failure mode that didn't die with DCUO's golden era. The same pattern — visible complaint, wrong level of intervention, subtraction of the thing that was doing the real retention work — runs through Destiny's build complexity gutting, World of Warcraft's talent tree removals, Halo's repeated dismantling of its own social infrastructure.</p>
+
+    <p class="prose">The industry has had fifteen years of live service history to learn from DCUO's mistakes. <strong>The pattern persists anyway.</strong> That's not a historical curiosity. That's an active problem sitting inside every live service game being built right now.</p>
+
+    <p class="prose" style="color:var(--text);font-size:1.05rem"><strong>The power fantasy is the product. The contract is real. And this is the story of what happens when you break it.</strong></p>
+  </div>
+</section>
+
+<!-- ── SECTION 1: CONTRACT KEPT ── -->
+<section class="content-section" id="section-1">
+  <div class="container-wide">
+    <div style="padding:0 0 2.5rem 2rem">
+      <div class="act-label"><span class="act-num">SECTION 01</span> The Foundation</div>
+      <h2 class="content-title">What The Contract Looks Like<br>When It's <em>Kept</em></h2>
+      <p class="content-subtitle">DCUO at peak · The 99 CR grind · The open world as stage · Three levels of power fantasy delivered simultaneously</p>
+    </div>
+    <div class="two-col" style="padding:0 2rem">
+      <div>
+        <p class="prose">DC Universe Online at its peak is the clearest illustration in live service history of the power fantasy fully delivered. The game built a progression ladder that felt like it was going somewhere — and then, critically, made sure that somewhere was real and visible when you arrived.</p>
+
+        <p class="prose">The 99 Combat Rating grind was the contract's price. It was long. It was repetitive in the way all grinds are repetitive. Players complained about it — sometimes bitterly — in forum threads that Daybreak was watching. But the grind existed in a relationship with something: the open world, the tier structure, the league ecosystem that formed around players who had completed the journey. The grind was the price of admission to a status that was legible to everyone in the game's living, populated world.</p>
+
+        <p class="prose">The siege. Fifteen kills. Veterans in lower-tier zones where newer players were running content — not harassing anyone, just existing as proof that the ceiling was real and reachable. A police station entrance turned into a performance stage. A faction geography that gave territory meaning. These weren't bugs in the system. They were the system working exactly as intended.</p>
+
+        <p class="prose"><strong>The power fantasy operates on three levels simultaneously: mechanical, social, and territorial.</strong> Mechanical — you are numerically superior. Social — other players can see that you are. Territorial — the world itself registers your presence differently. DCUO at its peak was delivering all three. Most live service games deliver one if they're lucky.</p>
+
+        <div class="principle">
+          <p><strong>Universal Principle:</strong> The power fantasy is not a single-axis feature. When it lands, it lands on all three planes at once — mechanical, social, territorial. Strip any one of the three and you don't have a diminished power fantasy. You have something categorically different that no longer fulfils the original contract.</p>
+        </div>
+      </div>
+
+      <!-- Visual: CR progression + three-level breakdown -->
+      <div>
+        <div class="vis-panel">
+          <div class="vis-panel-head">
+            <span>CR PROGRESSION · PEAK ERA</span>
+            <div class="dots">
+              <div style="background:#00aaff"></div>
+              <div style="background:#ffd200"></div>
+              <div style="background:#00ff99"></div>
+            </div>
+          </div>
+          <div class="vis-panel-body">
+            <div class="cr-meter">
+              <div class="cr-meter-label"><span>COMBAT RATING</span><span>CR 99 / 99</span></div>
+              <div class="cr-bar"><div class="cr-bar-fill" style="width:100%"></div></div>
+            </div>
+            <div class="cr-meter">
+              <div class="cr-meter-label"><span>SKILL POINTS</span><span>412 / ~500</span></div>
+              <div class="cr-bar"><div class="cr-bar-fill" style="width:82%"></div></div>
+            </div>
+            <div class="cr-meter">
+              <div class="cr-meter-label"><span>LEAGUE STANDING</span><span>ELITE TIER</span></div>
+              <div class="cr-bar"><div class="cr-bar-fill gold-fill" style="width:94%"></div></div>
+            </div>
+            <div style="height:1px;background:var(--border);margin:1rem 0"></div>
+            <p style="font-family:var(--mono);font-size:0.55rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">POWER FANTASY DELIVERY</p>
+            <div class="stat-row">
+              <span class="label">Mechanical</span>
+              <span class="val elec">DELIVERED ██████</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Social</span>
+              <span class="val gold">DELIVERED ██████</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Territorial</span>
+              <span class="val green">DELIVERED ██████</span>
+            </div>
+            <div style="height:1px;background:var(--border);margin:0.75rem 0"></div>
+            <div class="stat-row">
+              <span class="label">Contract Status</span>
+              <span class="val green">✓ INTACT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 2: ARCHITECTURE ── -->
+<section class="content-section" id="section-2">
+  <div class="container-wide">
+    <div style="padding:0 0 2.5rem 2rem">
+      <div class="act-label"><span class="act-num">SECTION 02</span> The Architecture</div>
+      <h2 class="content-title">The System That <em>Protected</em><br>The Contract</h2>
+      <p class="content-subtitle">The phase system · Consent architecture · Non-aggression pacts · Environmental intelligence</p>
+    </div>
+    <div class="two-col flip" style="padding:0 2rem">
+      <!-- Visual: Phase system diagram -->
+      <div>
+        <div class="vis-panel">
+          <div class="vis-panel-head">
+            <span>PHASE ARCHITECTURE · CONSENT MODEL</span>
+            <div class="dots">
+              <div style="background:#00aaff"></div>
+              <div style="background:#333"></div>
+              <div style="background:#333"></div>
+            </div>
+          </div>
+          <div class="vis-panel-body">
+            <p style="font-family:var(--mono);font-size:0.55rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">WORLD STATE SEPARATION</p>
+            <div class="phase-row">
+              <div class="phase-box blue">PHASE A<br>PvP ENABLED<br><span style="font-size:0.5rem;opacity:.7">Veteran power active<br>Player consent given</span></div>
+              <div class="phase-arrow">↔</div>
+              <div class="phase-box gold">PHASE B<br>PvP DISABLED<br><span style="font-size:0.5rem;opacity:.7">Power differential<br>contextually contained</span></div>
+            </div>
+            <div style="height:1px;background:var(--border);margin:0.75rem 0"></div>
+            <p style="font-family:var(--mono);font-size:0.55rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">PLAYER SIGNALS</p>
+            <div class="stat-row">
+              <span class="label">Opt-in PvP</span>
+              <span class="val elec">PHASE A → full power active</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Opt-out PvP</span>
+              <span class="val gold">PHASE B → safe environment</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Non-aggression pacts</span>
+              <span class="val green">Emergent · community-built</span>
+            </div>
+            <div style="height:1px;background:var(--border);margin:0.75rem 0"></div>
+            <div class="stat-row">
+              <span class="label">Power fantasy intact</span>
+              <span class="val green">✓ IN BOTH PHASES</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">New player protected</span>
+              <span class="val green">✓ BY CONSENT</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Contract Status</span>
+              <span class="val green">✓ INTACT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p class="prose">The fundamental tension of every live service game with vertical progression is this: the power that makes the game worth playing for veterans is the same power that makes the game feel hostile to newer players. Every MMO team eventually confronts this. Most reach for the obvious answer: reduce the power. Flatten the ceiling. Close the gap.</p>
+
+        <p class="prose">DCUO's phase system was a different answer — and a better one. Instead of removing the power differential, it built an environmental architecture around it. Two distinct phase states. Player-controlled consent. If you opted into PvP you opted into the full expression of the power gap. If you didn't, the differential was contextually contained without being eliminated.</p>
+
+        <p class="prose">The non-aggression pacts that the community developed on top of this architecture were not a product the development team designed. They were evidence of a sophisticated community finding equilibrium inside a system that gave them room to. Veterans protecting developing players. Hierarchies of reputation forming across server populations. <strong>Social infrastructure that the phase system made possible by not resolving the tension it was built around — just containing it intelligently.</strong></p>
+
+        <p class="prose">This is the answer to power differential in live service: not subtraction, but environmental intelligence. Build the constraint into the context, not into the player. DCUO had already figured this out before the industry had a name for the problem.</p>
+
+        <div class="principle">
+          <p><strong>Universal Principle:</strong> The answer to power differential in live service isn't subtraction — it's <strong>environmental intelligence</strong>. Build the constraint into the context, not into the player. The question isn't "how do we reduce the power gap?" It's "how do we give players tools to navigate the power gap without eliminating the gap that makes navigation meaningful?"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACT 1 ── -->
+<section class="content-section" id="act-1">
+  <div class="container-wide">
+    <div style="padding:0 0 2.5rem 2rem">
+      <div class="act-label"><span class="act-num" style="border-color:rgba(255,51,68,.4);color:var(--red)">ACT I</span> <span style="color:var(--red);opacity:.7">First Breach</span></div>
+      <h2 class="content-title">Breaking The Contract<br>In The <em style="color:var(--red)">Open World</em></h2>
+      <p class="content-subtitle">The PvP stat quarantine · Domestication of power · Context is inseparable from fantasy</p>
+    </div>
+    <div class="two-col" style="padding:0 2rem">
+      <div>
+        <p class="prose">The PvP stat quarantine felt like a reasonable solution. Veterans were dominating developing players in open-world PvP in ways that generated complaints — loud ones, the kind that show up in forum threads and support tickets and the metrics every live service team watches. The response was targeted: separate the stats. In PvP contexts, the power differential would be suppressed. Veterans would still have their gear, their progression, their numbers. Just not in the mode where it was creating friction.</p>
+
+        <p class="prose">What this missed — and what Daybreak's metrics couldn't show — was that the open world wasn't just a mode. It was the stage. The place where the power fantasy's social and territorial layers were expressed. A veteran player existing in a lower-tier zone didn't need to be actively engaging in PvP for their presence to be meaningful. The presence itself was the signal. The power readouts. The way the environment responded. The way other players responded.</p>
+
+        <p class="prose"><strong>Move the payoff from the living world into a designated mode and you have not kept the payoff. You have made a copy of it that exists only in controlled conditions.</strong> That's not the same thing. A power fantasy that only exists in a dedicated PvP bracket is a simulation of a power fantasy. The contract says the world responds to what you've become. A quarantined mode says: what you've become is valid in this room and nowhere else.</p>
+
+        <p class="prose">The investment that led to CR 99 was made inside the open world. The social infrastructure — the league system, the faction geography, the reputation that accumulated across server populations — lived in the open world. Moving the expression of veteran power into a designated space didn't just reduce that expression. It severed it from the context that gave it meaning.</p>
+
+        <div class="principle">
+          <p><strong>Universal Principle:</strong> <strong>Context is inseparable from fantasy.</strong> A power fantasy relocated from the living world into a designated mode is not the same power fantasy operating in a different location. It is a categorically different experience — regardless of whether the numbers are identical. Before any intervention that moves player power between contexts, ask: does this preserve the meaning of the payoff, or just the number?</p>
+        </div>
+      </div>
+
+      <!-- Visual: stat quarantine effect -->
+      <div>
+        <div class="vis-panel">
+          <div class="vis-panel-head">
+            <span>STAT QUARANTINE · IMPACT MODEL</span>
+            <div class="dots">
+              <div style="background:#ff3344"></div>
+              <div style="background:#333"></div>
+              <div style="background:#333"></div>
+            </div>
+          </div>
+          <div class="vis-panel-body">
+            <p style="font-family:var(--mono);font-size:0.55rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">BEFORE: Open World Expression</p>
+            <div class="cr-meter">
+              <div class="cr-meter-label"><span>Mechanical Power</span><span style="color:var(--green)">FULL</span></div>
+              <div class="cr-bar"><div class="cr-bar-fill green-fill" style="width:100%"></div></div>
+            </div>
+            <div class="cr-meter">
+              <div class="cr-meter-label"><span>Social Visibility</span><span style="color:var(--green)">FULL</span></div>
+              <div class="cr-bar"><div class="cr-bar-fill green-fill" style="width:100%"></div></div>
+            </div>
+            <div class="cr-meter">
+              <div class="cr-meter-label"><span>Territorial Presence</span><span style="color:var(--green)">FULL</span></div>
+              <div class="cr-bar"><div class="cr-bar-fill green-fill" style="width:100%"></div></div>
+            </div>
+            <div style="height:1px;background:var(--border);margin:1rem 0"></div>
+            <p style="font-family:var(--mono);font-size:0.55rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">AFTER: Stat Quarantine Applied</p>
+            <div class="cr-meter">
+              <div class="cr-meter-label"><span>Mechanical Power</span><span style="color:var(--gold)">SUPPRESSED</span></div>
+              <div class="cr-bar"><div class="cr-bar-fill gold-fill" style="width:38%"></div></div>
+            </div>
+            <div class="cr-meter">
+              <div class="cr-meter-label"><span>Social Visibility</span><span style="color:var(--red)">LOST</span></div>
+              <div class="cr-bar"><div class="cr-bar-fill red-fill" style="width:20%"></div></div>
+            </div>
+            <div class="cr-meter">
+              <div class="cr-meter-label"><span>Territorial Presence</span><span style="color:var(--red)">LOST</span></div>
+              <div class="cr-bar"><div class="cr-bar-fill red-fill" style="width:15%"></div></div>
+            </div>
+            <div style="height:1px;background:var(--border);margin:0.75rem 0"></div>
+            <div class="stat-row">
+              <span class="label">Metric Moved</span>
+              <span class="val green">✓ PvP Complaints ↓</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Contract Status</span>
+              <span class="val red">⚠ FIRST BREACH</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACT 2 ── -->
+<section class="content-section" id="act-2">
+  <div class="container-wide">
+    <div style="padding:0 0 2.5rem 2rem">
+      <div class="act-label"><span class="act-num" style="border-color:rgba(255,51,68,.4);color:var(--red)">ACT II</span> <span style="color:var(--red);opacity:.7">The Simplification Trap</span></div>
+      <h2 class="content-title">Breaking The Contract<br>In <em style="color:var(--red)">Progression</em></h2>
+      <p class="content-subtitle">The global stat nerf · Carry culture concerns · Solving at the wrong level</p>
+    </div>
+    <div class="two-col flip" style="padding:0 2rem">
+      <!-- Visual: global nerf model -->
+      <div>
+        <div class="vis-panel">
+          <div class="vis-panel-head">
+            <span>GLOBAL NERF · INTERVENTION MODEL</span>
+            <div class="dots">
+              <div style="background:#ff3344"></div>
+              <div style="background:#333"></div>
+              <div style="background:#333"></div>
+            </div>
+          </div>
+          <div class="vis-panel-body">
+            <p style="font-family:var(--mono);font-size:0.55rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">PROBLEM: Where It Lived</p>
+            <div class="phase-row" style="grid-template-columns:1fr">
+              <div class="phase-box red" style="margin-bottom:0.4rem">CARRY CULTURE · INSTANCED CONTENT<br><span style="font-size:0.5rem;opacity:.7">Veterans trivialising group instances for geared players<br>Bypassing progression for newcomers</span></div>
+            </div>
+            <div style="height:1px;background:var(--border);margin:0.75rem 0"></div>
+            <p style="font-family:var(--mono);font-size:0.55rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">INTERVENTION: Where It Reached</p>
+            <div class="stat-row">
+              <span class="label">Instanced content</span>
+              <span class="val green">✓ Problem lived here</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Open world</span>
+              <span class="val red">✗ Problem did not live here</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">League ecosystem</span>
+              <span class="val red">✗ Unrelated to problem</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Veteran presence signals</span>
+              <span class="val red">✗ Unrelated to problem</span>
+            </div>
+            <div style="height:1px;background:var(--border);margin:0.75rem 0"></div>
+            <p style="font-family:var(--mono);font-size:0.55rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">CORRECT INTERVENTION (TARGETED)</p>
+            <div class="phase-box green" style="margin-bottom:0.5rem;font-size:0.56rem;line-height:1.6">Instanced scaling · Address carry culture at the instance level<br>Leave open world and power expression intact</div>
+            <div class="stat-row">
+              <span class="label">Actual intervention used</span>
+              <span class="val red">GLOBAL STAT NERF</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Contract Status</span>
+              <span class="val red">⚠ SECOND BREACH</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p class="prose">The carry culture concern was real. Veterans in group instances were trivialising content for players who hadn't consented to have their progression bypassed. Newer players were being carried through content at a pace that prevented them from developing the mechanical understanding the game was designed to build. The complaints were measurable. The problem was genuine.</p>
+
+        <p class="prose">But the problem lived in the instance. The solution reached everywhere. A global stat nerf touched the open world where carry culture wasn't the issue. It touched the league ecosystem where veteran power was doing aspirational signalling work. It touched the progression ceiling that was pulling developing players toward investment. <strong>It solved for the complaint in the place where the metrics could see it while destroying something in every other space the metrics weren't watching.</strong></p>
+
+        <p class="prose">This is the Simplification Trap. The version of the problem that shows up in the dashboard is always simpler than the actual problem. Veterans are too powerful — true in the specific context of group instance carry culture. The fix: reduce veteran power — true as a solution to the dashboard problem, catastrophically wrong as a solution to the actual system.</p>
+
+        <p class="prose">The open world autonomy argument is the clearest illustration. The power differential in the open world was not creating carry culture. It was creating something else entirely: the aspiration signal. The kid who was in a lower-tier zone watching a veteran exist at a level they hadn't yet reached wasn't being harmed by that differential. They were being shown that the ceiling was real and reachable. That's the pipeline the global nerf quietly closed — not through malice, but through a failure to see what the power differential was doing in every context where it wasn't causing the problem being solved.</p>
+
+        <div class="principle">
+          <p><strong>Universal Principle:</strong> <strong>Solve at the right level.</strong> The problem lived in the instance. The solution touched everything. Every live service team that has ever reached for a global nerf to solve a contextual problem has made this mistake. The correct intervention is always the most targeted one — the one that addresses the problem in the space where it exists without reaching into spaces where it doesn't.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACT 3 ── -->
+<section class="content-section" id="act-3">
+  <div class="container-wide">
+    <div style="padding:0 0 2.5rem 2rem">
+      <div class="act-label"><span class="act-num" style="border-color:rgba(255,51,68,.4);color:var(--red)">ACT III</span> <span style="color:var(--red);opacity:.7">Final Erasure · Self-Indictment</span></div>
+      <h2 class="content-title">The Final Erasure<br>&amp; The <em style="color:var(--gold)">Right Answer Too Late</em></h2>
+      <p class="content-subtitle">The instance nerf · Removal of history · The scaling system that proves capability existed · A right answer is not absolution</p>
+    </div>
+    <div class="two-col" style="padding:0 2rem">
+      <div>
+        <p class="prose">The instance nerf removed the last space where veteran power had full expression. In instanced content — the raids, the alerts, the operations that veterans had built their identity around completing — power was now normalised. The history those raids represented, the difficulty that had once been the price of the ceiling, was gone. A veteran returning to content they had cleared at CR 99 when CR 99 was the ceiling would no longer feel the distance they had travelled. The world no longer remembered what they had done.</p>
+
+        <p class="prose"><strong>This is the removal of history.</strong> A live service game where veteran players cannot feel the distance between where they started and where they are has lost one of its most powerful retention mechanisms — not a feature, not a mode, but the existential weight of time invested made legible by the world continuing to reflect it back.</p>
+
+        <p class="prose">And then Daybreak built the instanced scaling system. The right answer. The elegant, non-subtractive architecture that allows instanced content to scale appropriately for every group composition without touching global player power. Veterans remain fully expressed in the open world. Newer players experience instanced content at an appropriate challenge level. Carry culture is addressed. Progression integrity is preserved. The power fantasy is untouched.</p>
+
+        <p class="prose">It works. It runs in the game today. It is the correct solution to every problem the three acts had been trying to solve — and it required no subtraction from the player to achieve any of it.</p>
+
+        <p class="prose"><strong>The timeline is the indictment.</strong> The instanced scaling system arrived after the PvP stat quarantine. After the global nerf. After the instance nerf. After three separate acts of subtraction, each driven by complaints the instanced scaling system would have made irrelevant without touching the power fantasy at all. The capability existed. The right answer existed. It arrived into a room that used to be full.</p>
+
+        <div class="principle">
+          <p><strong>Universal Principle:</strong> <strong>A right answer delivered too late is a category of failure, not a category of success.</strong> The instanced scaling system works. But correctness without timing isn't absolution — it's evidence that the capability existed while the damage was being done. Every studio that eventually builds the right solution to a problem they spent years solving incorrectly needs to reckon honestly with that gap.</p>
+        </div>
+      </div>
+
+      <!-- Visual: timeline of three acts -->
+      <div>
+        <div class="vis-panel">
+          <div class="vis-panel-head">
+            <span>DECISION TIMELINE · 15 YEARS</span>
+            <div class="dots">
+              <div style="background:#ff3344"></div>
+              <div style="background:#ff3344"></div>
+              <div style="background:#00ff99"></div>
+            </div>
+          </div>
+          <div class="vis-panel-body">
+            <div class="timeline-item">
+              <div class="timeline-dot blue"></div>
+              <div class="timeline-content">
+                <div class="timeline-year">2011</div>
+                <div class="timeline-event">DCUO LAUNCH</div>
+                <div class="timeline-desc">Phase system · Open world power fantasy · Contract intact · Room full</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot red"></div>
+              <div class="timeline-content">
+                <div class="timeline-year">ACT I</div>
+                <div class="timeline-event" style="color:var(--red)">PvP STAT QUARANTINE</div>
+                <div class="timeline-desc">Open world power suppressed in PvP. Social + territorial expression severed from context.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot red"></div>
+              <div class="timeline-content">
+                <div class="timeline-year">ACT II</div>
+                <div class="timeline-event" style="color:var(--red)">GLOBAL STAT NERF</div>
+                <div class="timeline-desc">Carry culture concern → global reduction. Open world aspiration signal removed. Pipeline closes.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot red"></div>
+              <div class="timeline-content">
+                <div class="timeline-year">ACT III</div>
+                <div class="timeline-event" style="color:var(--red)">INSTANCE NERF</div>
+                <div class="timeline-desc">Veteran history removed. World no longer reflects investment. Contract fully broken.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot green"></div>
+              <div class="timeline-content">
+                <div class="timeline-year">POST-PEAK</div>
+                <div class="timeline-event" style="color:var(--green)">INSTANCED SCALING SYSTEM</div>
+                <div class="timeline-desc">The correct answer. Non-subtractive. Elegant. Would have solved all three acts without touching player power.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot muted"></div>
+              <div class="timeline-content">
+                <div class="timeline-year">2026</div>
+                <div class="timeline-event">DCUO STILL RUNNING</div>
+                <div class="timeline-desc">Servers up. Metrics acceptable. The community that made the servers worth running: gone.</div>
+              </div>
+            </div>
+            <div style="height:1px;background:var(--border);margin:0.75rem 0"></div>
+            <div class="stat-row">
+              <span class="label">Right answer arrived</span>
+              <span class="val red">AFTER all three breaches</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Capability existed</span>
+              <span class="val red">DURING all three breaches</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 6: COMMUNITY ── -->
+<section class="content-section" id="section-6">
+  <div class="container-wide">
+    <div style="padding:0 0 2.5rem 2rem">
+      <div class="act-label"><span class="act-num">SECTION 06</span> The Human Cost</div>
+      <h2 class="content-title">The Community That Left<br>&amp; <em>What Went With It</em></h2>
+      <p class="content-subtitle">Three waves of departure · League ecosystem decay · The pipeline that closed · What's still there and what isn't</p>
+    </div>
+    <div class="two-col flip" style="padding:0 2rem">
+      <!-- Visual: community health / wave departure -->
+      <div>
+        <div class="vis-panel">
+          <div class="vis-panel-head">
+            <span>COMMUNITY HEALTH · DEPARTURE WAVES</span>
+            <div class="dots">
+              <div style="background:#ff3344"></div>
+              <div style="background:#ff3344"></div>
+              <div style="background:#ff3344"></div>
+            </div>
+          </div>
+          <div class="vis-panel-body">
+            <p style="font-family:var(--mono);font-size:0.55rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">RETENTION CURVE · 3 BREACH EVENTS</p>
+            <!-- Simplified retention curve SVG -->
+            <svg viewBox="0 0 280 90" xmlns="http://www.w3.org/2000/svg" style="width:100%;margin-bottom:0.75rem">
+              <!-- Grid -->
+              <line x1="20" y1="10" x2="20" y2="80" stroke="#1a2d40" stroke-width=".7"/>
+              <line x1="20" y1="80" x2="275" y2="80" stroke="#1a2d40" stroke-width=".7"/>
+              <!-- Area fill -->
+              <polygon points="20,20 65,22 90,35 130,50 155,62 195,70 230,74 275,76 275,80 20,80"
+                fill="rgba(0,170,255,0.06)"/>
+              <!-- Retention line -->
+              <polyline points="20,20 65,22 90,35 130,50 155,62 195,70 230,74 275,76"
+                fill="none" stroke="#00aaff" stroke-width="1.8" stroke-linejoin="round"/>
+              <!-- Breach markers -->
+              <line x1="90" y1="10" x2="90" y2="80" stroke="#ff3344" stroke-width="1" stroke-dasharray="3 2" opacity=".6"/>
+              <text x="91" y="18" fill="#ff3344" font-size="5" font-family="monospace">ACT I</text>
+              <line x1="155" y1="10" x2="155" y2="80" stroke="#ff3344" stroke-width="1" stroke-dasharray="3 2" opacity=".6"/>
+              <text x="156" y="18" fill="#ff3344" font-size="5" font-family="monospace">ACT II</text>
+              <line x1="230" y1="10" x2="230" y2="80" stroke="#ff3344" stroke-width="1" stroke-dasharray="3 2" opacity=".5"/>
+              <text x="231" y="18" fill="#ff3344" font-size="5" font-family="monospace">ACT III</text>
+              <!-- Dots at breach points -->
+              <circle cx="90" cy="35" r="3" fill="#ff3344"/>
+              <circle cx="155" cy="62" r="3" fill="#ff3344"/>
+              <circle cx="230" cy="74" r="3" fill="#ff3344"/>
+              <!-- Y labels -->
+              <text x="15" y="23" text-anchor="end" fill="#4a6070" font-size="5" font-family="monospace">100%</text>
+              <text x="15" y="51" text-anchor="end" fill="#4a6070" font-size="5" font-family="monospace">50%</text>
+              <text x="15" y="79" text-anchor="end" fill="#4a6070" font-size="5" font-family="monospace">0%</text>
+            </svg>
+            <div class="stat-row">
+              <span class="label">Wave 1 · Post Act I</span>
+              <span class="val red">PvP-invested veterans exit</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Wave 2 · Post Act II</span>
+              <span class="val red">End-game league core departs</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Wave 3 · Post Act III</span>
+              <span class="val red">Remaining invested community gone</span>
+            </div>
+            <div style="height:1px;background:var(--border);margin:0.75rem 0"></div>
+            <div class="stat-row">
+              <span class="label">Pipeline closed</span>
+              <span class="val red">No new elite-tier recruitment</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">League activity</span>
+              <span class="val red">Structural decay confirmed</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Community shows in data</span>
+              <span class="val gold">Months later · causation buried</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p class="prose">The players who left after each contract breach did not leave all at once. They left in waves — and in each wave they took something the metrics weren't measuring. The PvP-invested veterans who left after Act I didn't just reduce the server population. They removed the social infrastructure that gave open-world PvP its meaning. The end-game league cores that departed after Act II didn't just reduce daily active user counts. They closed the pipeline that was bringing developing players into the competitive community and giving them something real to work toward.</p>
+
+        <p class="prose">The kid who was in elementary school running lower-tier content and watching a top hero league veteran exist at CR 99 — that kid was logging in every day because the systems had created something real to aspire toward. A visible ceiling. A reachable community. A structure that said: if you put in the work, this is where you arrive. After the pipeline closed, that kid was still there for a while. Then they weren't. And by the time the churn data registered the signal, the causation was buried under months of other variables.</p>
+
+        <p class="prose"><strong>Community is not a metric. The most valuable thing a live service community produces — social infrastructure, institutional knowledge, the pipeline that develops the next generation of invested players — is invisible in every standard dashboard until it's gone.</strong> And by the time it shows up in the data, it is gone, and the players aren't coming back, and no patch addresses the cause because the cause stopped being visible the moment the first wave of departures absorbed it.</p>
+
+        <p class="prose">Log into DCUO today. The world is there. Metropolis. Gotham. The faction anchors. The zones that used to mean something. The IP is intact. The servers are up. By the only metric most publishers use to evaluate live service health, it is a success story. What those metrics don't capture is the distance between what the game is and what it was. The community that built its reputation is gone. The game outlived its promise.</p>
+
+        <div class="principle">
+          <p><strong>Universal Principle:</strong> <strong>Measure the invisible.</strong> Community health, league activity, veteran engagement, the mentorship patterns that develop the next generation of invested players — none of this shows up in standard dashboards until it's gone. Build ways to see what the metrics aren't showing before those systems disappear, not after.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONCLUSION ── -->
+<section class="prose-section" id="conclusion">
+  <div class="container">
+    <span class="section-eyebrow">Conclusion</span>
+    <h2 class="section-title">What The Industry<br>Still Owes Its <em>Players</em></h2>
+    <p class="section-subtitle">Three decisions. Fifteen years. One game. Three principles for 2026.</p>
+
+    <p class="prose">The arc of DC Universe Online's relationship with its most invested players isn't a story about a studio that didn't care or a development team that didn't understand what they had. The phase system they built in the game's early years was genuinely innovative — consent architecture that most MMOs of that era never managed. The instanced scaling system they eventually built is genuinely elegant — a non-subtractive solution that honours the power fantasy while protecting progression integrity simultaneously. The capability was always there.</p>
+
+    <p class="prose">What wasn't there — consistently, across three separate decisions made at different points across years of live service operation — was the organisational patience to deploy that capability before reaching for the simpler answer. The one that moved the metric. The one that addressed the complaint visibly and immediately in a patch note. The one that solved for what the dashboard could see while destroying what it couldn't.</p>
+
+    <p class="prose"><strong>That's the real lesson of DCUO.</strong> Not that Daybreak failed — they built something that has run for fifteen years, which is an achievement most live service games never approach. But that survival and integrity are not the same thing. That a game can keep its servers running while breaking faith with the community that made those servers worth running. And that the decisions responsible for that breach weren't made by people who didn't care about their players. They were made by people under pressure, solving visible problems with available tools, unable to see in real time what the quieter systems were worth.</p>
+
+    <p class="prose">That's the condition every live service team is operating in right now.</p>
+
+    <!-- Three principles -->
+    <div class="principles-grid">
+      <div class="principle-card">
+        <div class="principle-card-num">Principle 01</div>
+        <h3 class="principle-card-title">The Power Fantasy Is Load-Bearing</h3>
+        <p>In any game where players invest time in a character, the payoff of that investment isn't a feature that can be adjusted or relocated. It's the structural reason players are there. Before any decision that touches player power, ask honestly: are we adjusting a feature, or breaking a promise? Those are different things with different consequences.</p>
+      </div>
+      <div class="principle-card" style="border-left:1px solid var(--border);border-right:1px solid var(--border)">
+        <div class="principle-card-num">Principle 02</div>
+        <h3 class="principle-card-title">Solve At The Right Level</h3>
+        <p>The correct intervention is always the most targeted one — the one that addresses the problem in the space where it lives without collateral damage to the spaces where it doesn't. Building that intervention requires more time and more organisational will than reaching for the global lever. It is always worth it. The alternative is always more expensive.</p>
+      </div>
+      <div class="principle-card">
+        <div class="principle-card-num">Principle 03</div>
+        <h3 class="principle-card-title">Measure The Invisible</h3>
+        <p>Build ways to see what the dashboards aren't showing. Instrument community health — not just player count. Track league activity, veteran engagement, the mentorship patterns that develop the next generation of invested players. Make the invisible legible before it disappears, not after. By the time it shows in churn data, it's already too late.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:4rem;padding:2.5rem;background:rgba(0,170,255,0.04);border:1px solid rgba(0,170,255,0.15);border-left:3px solid var(--electric)">
+      <p class="prose" style="font-size:1.1rem;color:var(--text);line-height:1.9;margin-bottom:1.25rem">DC Universe Online is still running. Log in today and the world is there — Metropolis, Gotham, the faction anchors, the zones that used to mean something. The IP is intact. The servers are up. By the only metric most publishers use to evaluate a live service game's health, DCUO is a success story.</p>
+      <p class="prose" style="font-size:1.05rem;color:var(--text2);line-height:1.9;margin-bottom:1.25rem">What those metrics don't capture is the distance between what the game is and what it was. The community that built its reputation is gone. The pipeline that developed them is closed. <strong style="color:var(--text)">The game outlived its promise.</strong></p>
+      <p class="prose" style="font-size:1.1rem;color:var(--text);line-height:1.9;margin:0;font-style:italic">The power fantasy is the product. The contract is real. The ones that remember that — that build every system, every patch note, every balance decision around protecting that moment — are the ones that don't just survive. They're the ones players never want to leave.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="foot-left">
+    LEON TELEMAQUE · GAME ANALYTICS · SYSTEMS DESIGN<br>
+    <span style="opacity:.5">DC Universe Online Postmortem · 2026</span>
+  </div>
+  <div class="foot-right">
+    <a href="index.html">← Back to Portfolio</a>
+  </div>
+</footer>
+
+</body>
+</html>
