@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infamous 2 — Karmic World Reactivity System</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --good:         #00c8ff;
+    --good-dark:    #0077aa;
+    --good-dim:     rgba(0,200,255,0.12);
+    --good-border:  rgba(0,200,255,0.32);
+    --good-glow:    rgba(0,200,255,0.4);
+    --evil:         #ff4400;
+    --evil-dark:    #aa1100;
+    --evil-dim:     rgba(255,68,0,0.12);
+    --evil-border:  rgba(255,68,0,0.32);
+    --evil-glow:    rgba(255,68,0,0.4);
+    --neutral:      #888899;
+    --neutral-dim:  rgba(136,136,153,0.12);
+    --bg:           #08080e;
+    --surface:      #0f0f18;
+    --surface2:     #141420;
+    --text:         #ddddf0;
+    --text-dim:     #55556a;
+    --text-mid:     #9999b0;
+    --border:       #1e1e2e;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 28px;
+    height: 48px;
+    background: rgba(8,8,14,0.95);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(8px);
+  }
+  .nav-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem; letter-spacing: 0.1em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-title .good { color: var(--good); }
+  .nav-title .evil { color: var(--evil); }
+  .nav-links { display: flex; gap: 0; }
+  .nav-link {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-dim); text-decoration: none;
+    padding: 0 16px; height: 48px;
+    display: flex; align-items: center;
+    border-left: 1px solid var(--border);
+    transition: color 0.2s, background 0.2s;
+  }
+  .nav-link:hover { color: var(--text); background: var(--surface); }
+  .nav-link.active { color: var(--good); }
+  .nav-back {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-dim); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--text); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 80px 24px 60px;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 30% 50%, rgba(0,200,255,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 70% 50%, rgba(255,68,0,0.05) 0%, transparent 60%),
+      linear-gradient(180deg, var(--bg) 0%, #080810 100%);
+  }
+  .hero-split-line {
+    position: absolute; top: 0; bottom: 0; left: 50%; width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--border) 20%, var(--border) 80%, transparent);
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 860px; }
+  .hero-eyebrow {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 24px; display: block;
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    letter-spacing: 0.04em; line-height: 0.95;
+    margin-bottom: 16px;
+  }
+  .hero-title .good { color: var(--good); }
+  .hero-title .evil { color: var(--evil); }
+  .hero-sub {
+    font-size: 1.05rem; color: var(--text-mid);
+    font-weight: 300; font-style: italic;
+    max-width: 600px; margin: 0 auto 32px;
+    line-height: 1.65;
+  }
+  .hero-chips {
+    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  .chip {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+  .chip.good { border-color: var(--good-border); color: var(--good); background: var(--good-dim); }
+  .chip.evil { border-color: var(--evil-border); color: var(--evil); background: var(--evil-dim); }
+  .hero-scroll {
+    position: absolute; bottom: 28px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--text-dim);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    animation: sink 3s ease-in-out infinite;
+  }
+  @keyframes sink {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* ── SECTION WRAPPER ── */
+  .page-section {
+    max-width: 1000px; margin: 0 auto;
+    padding: 72px 24px;
+    border-top: 1px solid var(--border);
+  }
+  .section-header {
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-eyebrow {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 10px;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    letter-spacing: 0.06em; line-height: 1.0;
+  }
+  .section-title .good { color: var(--good); }
+  .section-title .evil { color: var(--evil); }
+  .section-desc {
+    font-size: 0.9rem; color: var(--text-mid);
+    font-weight: 300; font-style: italic;
+    margin-top: 8px; line-height: 1.55;
+    max-width: 600px;
+  }
+
+  /* ── INTERACTIVE SECTION ── */
+  .toggle-container {
+    display: flex; align-items: center; justify-content: center;
+    gap: 20px; padding: 0 0 32px;
+  }
+  .toggle-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem; letter-spacing: 0.1em;
+    transition: color 0.4s; cursor: pointer;
+  }
+  .toggle-label.good { color: var(--good); }
+  .toggle-label.evil { color: var(--evil); }
+  .toggle-label.inactive { color: var(--text-dim); }
+  .toggle-track {
+    width: 64px; height: 32px; border-radius: 16px;
+    background: var(--surface); border: 1px solid #333;
+    position: relative; cursor: pointer;
+    transition: border-color 0.4s;
+  }
+  .toggle-track.good-active { border-color: var(--good); box-shadow: 0 0 12px var(--good-glow); }
+  .toggle-track.evil-active { border-color: var(--evil); box-shadow: 0 0 12px var(--evil-glow); }
+  .toggle-thumb {
+    width: 24px; height: 24px; border-radius: 50%;
+    position: absolute; top: 3px;
+    transition: left 0.4s cubic-bezier(0.34,1.56,0.64,1), background 0.4s;
+  }
+  .toggle-thumb.good { left: 4px; background: var(--good); box-shadow: 0 0 8px var(--good); }
+  .toggle-thumb.evil { left: 36px; background: var(--evil); box-shadow: 0 0 8px var(--evil); }
+
+  .interactive-main {
+    display: grid;
+    grid-template-columns: 1fr 220px 1fr;
+    gap: 0; align-items: start;
+    position: relative;
+  }
+  .centre-line {
+    position: absolute; top: 0; bottom: 0; left: 50%; width: 1px;
+    background: linear-gradient(to bottom, transparent, #333 20%, #333 80%, transparent);
+    pointer-events: none;
+  }
+
+  /* Side panels */
+  .side-panel { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+  .side-panel.good-side { align-items: flex-end; text-align: right; }
+  .side-panel.evil-side { align-items: flex-start; text-align: left; }
+
+  .faction-card {
+    width: 100%; max-width: 300px;
+    background: var(--surface); border-radius: 4px;
+    padding: 14px 16px;
+    transition: all 0.5s ease;
+    position: relative; overflow: hidden;
+  }
+  .faction-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    transition: background 0.5s;
+  }
+  .good-side .faction-card::before { background: var(--good); }
+  .evil-side .faction-card::before { background: var(--evil); }
+  .faction-card.dimmed { opacity: 0.22; transform: scale(0.97); }
+  .faction-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem; letter-spacing: 0.12em; margin-bottom: 6px;
+  }
+  .good-side .faction-name { color: var(--good); }
+  .evil-side .faction-name { color: var(--evil); }
+  .faction-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; font-weight: 300; }
+  .faction-desc strong { color: var(--text); font-weight: 600; }
+  .faction-meter { margin-top: 10px; height: 3px; background: #222; border-radius: 2px; overflow: hidden; }
+  .faction-meter-fill { height: 100%; border-radius: 2px; transition: width 0.8s ease, background 0.5s; }
+  .good-side .faction-meter-fill { background: var(--good); }
+  .evil-side .faction-meter-fill { background: var(--evil); }
+  .meter-label {
+    font-family: 'Share Tech Mono', monospace; font-size: 0.6rem;
+    color: var(--text-dim); margin-top: 4px; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .encounter-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .good-side .encounter-tags { justify-content: flex-end; }
+  .tag {
+    font-family: 'Share Tech Mono', monospace; font-size: 0.55rem;
+    letter-spacing: 0.08em; padding: 2px 6px; border-radius: 2px;
+    text-transform: uppercase; transition: opacity 0.5s;
+  }
+  .good-tag { background: rgba(0,200,255,0.1); color: var(--good); border: 1px solid rgba(0,200,255,0.3); }
+  .evil-tag { background: rgba(255,68,0,0.1); color: var(--evil); border: 1px solid rgba(255,68,0,0.3); }
+
+  /* Cole centre */
+  .cole-centre {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 16px; padding: 10px 0; position: relative;
+  }
+  .cole-figure { width: 180px; height: 280px; position: relative; display: flex; align-items: center; justify-content: center; }
+  .cole-svg { width: 100%; height: 100%; transition: filter 0.6s ease; }
+  @keyframes flicker { 0%,100%{opacity:1}50%{opacity:0.6}75%{opacity:0.9} }
+  @keyframes pulse-good {
+    0%,100%{filter:drop-shadow(0 0 16px rgba(0,200,255,0.8)) drop-shadow(0 0 40px rgba(0,200,255,0.4))}
+    50%{filter:drop-shadow(0 0 24px rgba(0,200,255,1)) drop-shadow(0 0 60px rgba(0,200,255,0.6))}
+  }
+  @keyframes pulse-evil {
+    0%,100%{filter:drop-shadow(0 0 16px rgba(255,68,0,0.8)) drop-shadow(0 0 40px rgba(255,68,0,0.4))}
+    50%{filter:drop-shadow(0 0 24px rgba(255,68,0,1)) drop-shadow(0 0 60px rgba(255,68,0,0.6))}
+  }
+  .cole-svg.good-glow { animation: pulse-good 2s ease-in-out infinite; }
+  .cole-svg.evil-glow { animation: pulse-evil 2s ease-in-out infinite; }
+
+  .dual-meters { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+  .meter-row { display: flex; flex-direction: column; gap: 4px; }
+  .meter-row-label {
+    font-family: 'Share Tech Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); text-align: center;
+  }
+  .meter-bar { height: 6px; background: #1a1a2a; border-radius: 3px; overflow: hidden; position: relative; }
+  .meter-bar-fill { height: 100%; border-radius: 3px; transition: width 0.8s ease, background 0.5s; position: absolute; }
+  .meter-bar-fill.from-left { left: 0; }
+
+  .power-state {
+    text-align: center; padding: 10px 14px;
+    background: var(--surface); border-radius: 4px; width: 100%;
+    border: 1px solid #222; transition: border-color 0.5s, box-shadow 0.5s;
+  }
+  .power-state.good-active { border-color: var(--good); box-shadow: 0 0 20px var(--good-glow); }
+  .power-state.evil-active { border-color: var(--evil); box-shadow: 0 0 20px var(--evil-glow); }
+  .power-title { font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 0.15em; color: var(--text-dim); margin-bottom: 4px; }
+  .power-desc { font-size: 0.75rem; line-height: 1.5; transition: color 0.5s; }
+  .power-desc.good { color: var(--good); }
+  .power-desc.evil { color: var(--evil); }
+
+  .stage-indicator { display: flex; gap: 6px; justify-content: center; }
+  .stage-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #222; border: 1px solid #444;
+    transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
+  }
+  .stage-dot.active-good { background: var(--good); border-color: var(--good); box-shadow: 0 0 6px var(--good); }
+  .stage-dot.active-evil { background: var(--evil); border-color: var(--evil); box-shadow: 0 0 6px var(--evil); }
+  .stage-label { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.1em; text-align: center; transition: color 0.5s; }
+
+  .bottom-note {
+    text-align: center; padding: 24px 20px 0;
+    font-family: 'Share Tech Mono', monospace; font-size: 0.65rem;
+    color: var(--text-dim); letter-spacing: 0.1em;
+    max-width: 600px; margin: 0 auto; line-height: 1.8;
+  }
+
+  /* ── ARCHITECTURE SECTION ── */
+  .arch-section { margin-bottom: 48px; }
+  .arch-label {
+    font-family: 'Share Tech Mono', monospace; font-size: 0.6rem;
+    letter-spacing: 0.2em; color: var(--text-dim); text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .arch-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* Karma scale */
+  .karma-scale { position: relative; padding: 32px 0; }
+  .scale-track { position: relative; height: 4px; background: var(--border); border-radius: 2px; margin: 0 40px; }
+  .scale-fill-good { position: absolute; left: 50%; top: 0; height: 100%; background: linear-gradient(to right, rgba(0,200,255,0.3), var(--good)); border-radius: 0 2px 2px 0; width: 50%; }
+  .scale-fill-evil { position: absolute; right: 50%; top: 0; height: 100%; background: linear-gradient(to left, rgba(255,68,0,0.3), var(--evil)); border-radius: 2px 0 0 2px; width: 50%; }
+  .scale-center { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 10px; height: 10px; background: var(--neutral); border-radius: 50%; border: 2px solid var(--bg); }
+  .scale-nodes { display: flex; justify-content: space-between; margin: 0 40px; }
+  .scale-node { display: flex; flex-direction: column; align-items: center; flex: 1; }
+  .scale-node-dot { width: 8px; height: 8px; border-radius: 50%; border: 1px solid; margin-top: -6px; background: var(--bg); }
+  .scale-node-dot.good { border-color: var(--good); }
+  .scale-node-dot.evil { border-color: var(--evil); }
+  .scale-node-dot.neutral { border-color: var(--neutral); background: var(--neutral); }
+  .scale-node-label { font-family: 'Bebas Neue', sans-serif; font-size: 0.75rem; letter-spacing: 0.1em; margin-top: 8px; text-align: center; }
+  .scale-node-label.good { color: var(--good); }
+  .scale-node-label.evil { color: var(--evil); }
+  .scale-node-label.neutral { color: var(--neutral); }
+  .scale-node-pts { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; color: var(--text-dim); margin-top: 2px; }
+
+  /* Sources grid */
+  .sources-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .source-col { background: var(--surface); border-radius: 4px; overflow: hidden; }
+  .source-col-header { padding: 10px 14px; font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; letter-spacing: 0.12em; border-bottom: 1px solid var(--border); }
+  .source-col-header.good { color: var(--good); background: var(--good-dim); }
+  .source-col-header.evil { color: var(--evil); background: var(--evil-dim); }
+  .source-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-bottom: 1px solid var(--border); font-size: 0.78rem; }
+  .source-row:last-child { border-bottom: none; }
+  .source-row-name { color: var(--text-mid); font-weight: 300; }
+  .source-row-pts { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; }
+  .source-row-pts.good { color: var(--good); }
+  .source-row-pts.evil { color: var(--evil); }
+
+  /* Faction thresholds */
+  .faction-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+  .faction-block { background: var(--surface); border-radius: 4px; overflow: hidden; border: 1px solid var(--border); }
+  .faction-block-header { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .faction-block-name { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.12em; color: var(--text); }
+  .faction-block-speed { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; color: var(--text-dim); margin-top: 2px; letter-spacing: 0.1em; }
+  .faction-stages { padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+  .faction-stage-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .faction-stage-name { font-family: 'Bebas Neue', sans-serif; font-size: 0.75rem; letter-spacing: 0.1em; }
+  .faction-stage-range { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; color: var(--text-dim); }
+  .stage-bar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
+  .stage-bar-fill { height: 100%; border-radius: 2px; }
+  .faction-stage-desc { font-size: 0.7rem; color: var(--text-dim); line-height: 1.4; font-weight: 300; }
+
+  /* Power states */
+  .power-grid { display: grid; grid-template-columns: 1fr 80px 1fr; background: var(--surface); border-radius: 4px; overflow: hidden; border: 1px solid var(--border); }
+  .power-side { padding: 20px; }
+  .power-side.good { border-right: 1px solid var(--border); }
+  .power-side-label { font-family: 'Bebas Neue', sans-serif; font-size: 0.75rem; letter-spacing: 0.15em; margin-bottom: 10px; }
+  .power-side-label.good { color: var(--good); }
+  .power-side-label.evil { color: var(--evil); }
+  .power-attr { display: flex; gap: 8px; margin-bottom: 6px; align-items: flex-start; }
+  .power-attr-key { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: var(--text-dim); letter-spacing: 0.08em; min-width: 60px; padding-top: 1px; }
+  .power-attr-val { font-size: 0.75rem; color: var(--text-mid); line-height: 1.4; }
+  .power-centre { display: flex; align-items: center; justify-content: center; padding: 20px 0; border-right: 1px solid var(--border); }
+  .power-vs { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--text-dim); letter-spacing: 0.1em; writing-mode: vertical-rl; }
+
+  /* Fortress note */
+  .fortress-note { background: var(--surface); border-left: 2px solid var(--evil); padding: 14px 16px; border-radius: 0 4px 4px 0; margin-top: 16px; }
+  .fortress-note-title { font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 0.12em; color: var(--evil); margin-bottom: 4px; }
+  .fortress-note-body { font-size: 0.75rem; color: var(--text-dim); line-height: 1.5; font-weight: 300; }
+  .fortress-note-body strong { color: var(--text-mid); font-weight: 600; }
+
+  /* Broadcast */
+  .broadcast-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .broadcast-col { background: var(--surface); border-radius: 4px; overflow: hidden; border: 1px solid var(--border); }
+  .broadcast-header { padding: 10px 14px; border-bottom: 1px solid var(--border); font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; letter-spacing: 0.12em; }
+  .broadcast-header.good { color: var(--good); }
+  .broadcast-header.evil { color: var(--evil); }
+  .broadcast-item { padding: 10px 14px; border-bottom: 1px solid var(--border); display: flex; gap: 10px; }
+  .broadcast-item:last-child { border-bottom: none; }
+  .broadcast-stage { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: var(--text-dim); min-width: 42px; padding-top: 1px; }
+  .broadcast-text { font-size: 0.75rem; color: var(--text-mid); line-height: 1.4; font-weight: 300; }
+
+  /* Principles */
+  .principles { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+  .principle { background: var(--surface); border-radius: 4px; padding: 14px 16px; border: 1px solid var(--border); }
+  .principle-num { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: var(--text-dim); letter-spacing: 0.1em; margin-bottom: 6px; }
+  .principle-text { font-size: 0.78rem; color: var(--text-mid); line-height: 1.5; font-weight: 300; }
+  .principle-text strong { color: var(--text); font-weight: 600; }
+
+  /* ── FOOTER ── */
+  footer {
+    max-width: 1000px; margin: 0 auto;
+    padding: 24px 24px 48px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+  }
+  .footer-credit { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: var(--text-dim); letter-spacing: 0.1em; }
+  .footer-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .footer-tag { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; padding: 3px 8px; border: 1px solid var(--border); border-radius: 2px; color: var(--text-dim); letter-spacing: 0.08em; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    .interactive-main { grid-template-columns: 1fr; }
+    .side-panel { align-items: flex-start; text-align: left; }
+    .good-side .encounter-tags { justify-content: flex-start; }
+    .centre-line { display: none; }
+    .sources-grid, .broadcast-grid, .principles { grid-template-columns: 1fr; }
+    .faction-grid { grid-template-columns: 1fr; }
+    .power-grid { grid-template-columns: 1fr; }
+    .power-centre { display: none; }
+    .power-side.good { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-title">
+    <span class="good">KARMIC</span> WORLD <span class="evil">REACTIVITY</span>
+  </div>
+  <div class="nav-links">
+    <a class="nav-link active" href="#interactive">Interactive</a>
+    <a class="nav-link" href="#architecture">Architecture</a>
+  </div>
+  <a class="nav-back" href="index.html">← Portfolio</a>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-split-line"></div>
+  <div class="hero-content">
+    <span class="hero-eyebrow">System Design Redesign · Infamous 2 · Sucker Punch Productions · Leon Telemaque · 2026</span>
+    <h1 class="hero-title">
+      INFAMOUS 2<br>
+      <span class="good">KARMIC</span> WORLD <span class="evil">REACTIVITY</span>
+    </h1>
+    <p class="hero-sub">
+      Infamous 2 has a karma system with a spine but no nervous system. Player actions feed a meter, the story responds, but the world in between — its factions, its civilians, its streets — stays deaf to who Cole has become. This redesign builds the nervous system.
+    </p>
+    <div class="hero-chips">
+      <span class="chip good">Dual Meter Architecture</span>
+      <span class="chip">3-Faction Reactivity</span>
+      <span class="chip evil">Power State System</span>
+      <span class="chip">Systems Design</span>
+      <span class="chip">Behavioural Systems</span>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <svg width="10" height="14" viewBox="0 0 10 14" fill="none"><path d="M5 1v12M1 9l4 4 4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+  </div>
+</section>
+
+<!-- ── INTERACTIVE SECTION ── -->
+<section class="page-section" id="interactive">
+  <div class="section-header">
+    <div class="section-eyebrow">Section 01 — Live Demo</div>
+    <div class="section-title"><span class="good">COLE</span> IN THE WORLD</div>
+    <p class="section-desc">Toggle between alignments to see how the same man becomes something the city cannot ignore. The world doesn't respond to intentions — it responds to pattern.</p>
+  </div>
+
+  <div class="toggle-container">
+    <span class="toggle-label good" id="good-label" onclick="setAlignment('good')">HERO</span>
+    <div class="toggle-track good-active" id="toggle-track" onclick="toggleAlignment()">
+      <div class="toggle-thumb good" id="toggle-thumb"></div>
+    </div>
+    <span class="toggle-label evil inactive" id="evil-label" onclick="setAlignment('evil')">INFAMOUS</span>
+  </div>
+
+  <div class="interactive-main">
+    <div class="centre-line"></div>
+
+    <!-- GOOD SIDE -->
+    <div class="side-panel good-side" id="good-panel">
+      <div class="faction-card" id="good-militia">
+        <div class="faction-name">MILITIA — DOUBT</div>
+        <div class="faction-desc"><strong>Fractured presence.</strong> Fear turns to uncertainty. Deserters appear in cleared districts. Patrols thin. Bertrand's loyalists hold — but the institution is cracking.</div>
+        <div class="encounter-tags">
+          <span class="tag good-tag">deserters visible</span>
+          <span class="tag good-tag">reduced patrols</span>
+          <span class="tag good-tag">non-aggressive units</span>
+        </div>
+        <div class="faction-meter"><div class="faction-meter-fill" id="gm-militia" style="width:80%"></div></div>
+        <div class="meter-label">faction alignment · stage 3</div>
+      </div>
+      <div class="faction-card" id="good-rebels">
+        <div class="faction-name">REBELS — ALLIED</div>
+        <div class="faction-desc"><strong>Full alliance unlocked.</strong> Questline resolved. Rebels patrol your turf, respond to distress calls, coordinate operations alongside Cole. The cause lives.</div>
+        <div class="encounter-tags">
+          <span class="tag good-tag">joint operations</span>
+          <span class="tag good-tag">district defense</span>
+          <span class="tag good-tag">tier 3 missions</span>
+        </div>
+        <div class="faction-meter"><div class="faction-meter-fill" id="gm-rebels" style="width:90%"></div></div>
+        <div class="meter-label">faction alignment · stage 3</div>
+      </div>
+      <div class="faction-card" id="good-civilians">
+        <div class="faction-name">CIVILIANS — INSPIRED</div>
+        <div class="faction-desc"><strong>The city rallies.</strong> Rare civilians take up arms alongside Cole. His AOE heals those caught in the radius. Districts feel alive — vendors, movement, people who believe.</div>
+        <div class="encounter-tags">
+          <span class="tag good-tag">armed civilians</span>
+          <span class="tag good-tag">healing aoe</span>
+          <span class="tag good-tag">intel tips</span>
+        </div>
+        <div class="faction-meter"><div class="faction-meter-fill" id="gm-civilians-good" style="width:85%"></div></div>
+        <div class="meter-label">faction alignment · stage 3</div>
+      </div>
+    </div>
+
+    <!-- COLE CENTRE -->
+    <div class="cole-centre">
+      <div class="stage-label" id="stage-label" style="color:var(--good)">GUARDIAN</div>
+      <div class="stage-indicator">
+        <div class="stage-dot active-good" id="dot1"></div>
+        <div class="stage-dot active-good" id="dot2"></div>
+        <div class="stage-dot active-good" id="dot3"></div>
+      </div>
+      <div class="cole-figure">
+        <svg class="cole-svg good-glow" id="cole-svg" viewBox="0 0 180 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g id="cole-body">
+            <ellipse cx="90" cy="38" rx="18" ry="20" fill="#1a1a2a"/>
+            <rect x="84" y="55" width="12" height="10" fill="#1a1a2a"/>
+            <path d="M62 65 L118 65 L122 145 L58 145 Z" fill="#1a1a2a"/>
+            <path d="M62 68 L38 120 L32 118 L55 65 Z" fill="#1a1a2a"/>
+            <path d="M118 68 L148 105 L144 110 L115 72 Z" fill="#1a1a2a"/>
+            <path d="M68 145 L60 220 L72 220 L82 145 Z" fill="#1a1a2a"/>
+            <path d="M112 145 L120 220 L108 220 L98 145 Z" fill="#1a1a2a"/>
+            <path d="M78 65 L82 105 L90 110 L98 105 L102 65" stroke="#2a2a3a" stroke-width="1" fill="none"/>
+          </g>
+          <g id="good-lightning" opacity="1">
+            <path d="M148 105 L162 95 L155 88 L172 80" stroke="#00c8ff" stroke-width="1.5" fill="none" opacity="0.8" style="animation:flicker 1.5s infinite"/>
+            <path d="M148 105 L165 115 L158 125" stroke="#00c8ff" stroke-width="1" fill="none" opacity="0.6" style="animation:flicker 2s infinite 0.3s"/>
+            <path d="M32 118 L18 108 L22 98" stroke="#00c8ff" stroke-width="1" fill="none" opacity="0.5" style="animation:flicker 1.8s infinite 0.6s"/>
+            <circle cx="148" cy="105" r="6" stroke="#00c8ff" stroke-width="1" fill="none" opacity="0.4" style="animation:flicker 2s infinite"/>
+            <circle cx="148" cy="105" r="12" stroke="#00c8ff" stroke-width="0.5" fill="none" opacity="0.2" style="animation:flicker 2.5s infinite 0.5s"/>
+          </g>
+          <g id="evil-lightning" opacity="0">
+            <path d="M148 105 L165 90 L155 85 L175 70 L168 65 L182 52" stroke="#ff4400" stroke-width="2" fill="none" opacity="0.9" style="animation:flicker 0.8s infinite"/>
+            <path d="M148 105 L170 120 L160 130 L178 140" stroke="#ff6600" stroke-width="1.5" fill="none" opacity="0.7" style="animation:flicker 1s infinite 0.2s"/>
+            <path d="M32 118 L12 105 L18 92 L5 80" stroke="#ff4400" stroke-width="1.5" fill="none" opacity="0.7" style="animation:flicker 0.9s infinite 0.4s"/>
+            <path d="M90 38 L85 15 L92 10 L88 0" stroke="#ff4400" stroke-width="1" fill="none" opacity="0.5" style="animation:flicker 1.2s infinite"/>
+            <circle cx="148" cy="105" r="4" fill="#ff4400" opacity="0.6" style="animation:flicker 0.7s infinite"/>
+            <line x1="155" y1="98" x2="162" y2="92" stroke="#ff6600" stroke-width="1" opacity="0.8" style="animation:flicker 0.5s infinite 0.1s"/>
+            <line x1="142" y1="112" x2="148" y2="119" stroke="#ff6600" stroke-width="1" opacity="0.8" style="animation:flicker 0.6s infinite 0.3s"/>
+          </g>
+          <g id="cole-tint">
+            <ellipse cx="90" cy="38" rx="18" ry="20" fill="#00c8ff" opacity="0.08" id="tint-head"/>
+            <path d="M62 65 L118 65 L122 145 L58 145 Z" fill="#00c8ff" opacity="0.06" id="tint-torso"/>
+          </g>
+        </svg>
+      </div>
+      <div class="dual-meters">
+        <div class="meter-row">
+          <div class="meter-row-label">Personal Karma</div>
+          <div class="meter-bar"><div class="meter-bar-fill from-left" id="personal-meter" style="width:85%;background:var(--good)"></div></div>
+        </div>
+        <div class="meter-row">
+          <div class="meter-row-label">Faction Alignment</div>
+          <div class="meter-bar"><div class="meter-bar-fill from-left" id="faction-meter" style="width:72%;background:var(--good)"></div></div>
+        </div>
+      </div>
+      <div class="power-state good-active" id="power-state">
+        <div class="power-title">POWER STATE</div>
+        <div class="power-desc good" id="power-desc">Controlled surge. AOE arcs precisely — heals civilians in radius. Debris pushed aside. Cole has mastered what he is.</div>
+      </div>
+    </div>
+
+    <!-- EVIL SIDE -->
+    <div class="side-panel evil-side" id="evil-panel">
+      <div class="faction-card dimmed" id="evil-militia">
+        <div class="faction-name">MILITIA — FEARED</div>
+        <div class="faction-desc"><strong>Maximum presence.</strong> Cole confirmed everything they feared. Patrols surge citywide. Special units hunt Cole. Bertrand's propaganda machine runs at full force.</div>
+        <div class="encounter-tags">
+          <span class="tag evil-tag">shoot on sight</span>
+          <span class="tag evil-tag">expanded checkpoints</span>
+          <span class="tag evil-tag">elite hunters</span>
+        </div>
+        <div class="faction-meter"><div class="faction-meter-fill" id="em-militia" style="width:20%"></div></div>
+        <div class="meter-label">faction alignment · stage 1</div>
+      </div>
+      <div class="faction-card dimmed" id="evil-rebels">
+        <div class="faction-name">REBELS — HOSTILE</div>
+        <div class="faction-desc"><strong>Alliance broken.</strong> The survivor leads the splinter faction. Rogue squads patrol seeking vengeance. The fortress mission cannot be undone. Some debts don't clear.</div>
+        <div class="encounter-tags">
+          <span class="tag evil-tag">active hunters</span>
+          <span class="tag evil-tag">vengeance squads</span>
+          <span class="tag evil-tag">questline locked</span>
+        </div>
+        <div class="faction-meter"><div class="faction-meter-fill" id="em-rebels" style="width:15%"></div></div>
+        <div class="meter-label">faction alignment · stage 1</div>
+      </div>
+      <div class="faction-card dimmed" id="evil-civilians">
+        <div class="faction-name">CIVILIANS — TERRORISED</div>
+        <div class="faction-desc"><strong>Streets clear on approach.</strong> Cowering, begging, fleeing. The desperate few take up arms against Cole — hopeless but refusing. Volatile AOE kills indiscriminately.</div>
+        <div class="encounter-tags">
+          <span class="tag evil-tag">mass flee</span>
+          <span class="tag evil-tag">lethal aoe</span>
+          <span class="tag evil-tag">desperate resistance</span>
+        </div>
+        <div class="faction-meter"><div class="faction-meter-fill" id="em-civilians" style="width:10%"></div></div>
+        <div class="meter-label">faction alignment · stage 1</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="bottom-note" id="bottom-note">
+    GOOD COLE — World reads a pattern of mercy. Electricity controlled. Factions follow personal karma with natural delay.<br>
+    Toggle to see how the same man becomes something the city cannot ignore.
+  </p>
+</section>
+
+<!-- ── ARCHITECTURE SECTION ── -->
+<section class="page-section" id="architecture">
+  <div class="section-header">
+    <div class="section-eyebrow">Section 02 — System Architecture</div>
+    <div class="section-title"><span class="evil">SYSTEM</span> ARCHITECTURE</div>
+    <p class="section-desc">The world doesn't respond to Cole's intentions. It responds to his pattern. Every system — factions, civilians, districts, powers — reflects not just what he did but who he became.</p>
+  </div>
+
+  <!-- 01 Karma Scale -->
+  <div class="arch-section">
+    <div class="arch-label">01 — Personal Karma Scale</div>
+    <div class="karma-scale">
+      <div class="scale-track">
+        <div class="scale-fill-evil"></div>
+        <div class="scale-fill-good"></div>
+        <div class="scale-center"></div>
+      </div>
+      <div class="scale-nodes">
+        <div class="scale-node"><div class="scale-node-dot evil"></div><div class="scale-node-label evil">INFAMOUS</div><div class="scale-node-pts">−3500</div></div>
+        <div class="scale-node"><div class="scale-node-dot evil"></div><div class="scale-node-label evil">NOTORIOUS</div><div class="scale-node-pts">−1500</div></div>
+        <div class="scale-node"><div class="scale-node-dot evil"></div><div class="scale-node-label evil">OUTLAW</div><div class="scale-node-pts">−500</div></div>
+        <div class="scale-node"><div class="scale-node-dot neutral"></div><div class="scale-node-label neutral">NEUTRAL</div><div class="scale-node-pts">0</div></div>
+        <div class="scale-node"><div class="scale-node-dot good"></div><div class="scale-node-label good">BEACON</div><div class="scale-node-pts">+500</div></div>
+        <div class="scale-node"><div class="scale-node-dot good"></div><div class="scale-node-label good">GUARDIAN</div><div class="scale-node-pts">+1500</div></div>
+        <div class="scale-node"><div class="scale-node-dot good"></div><div class="scale-node-label good">CHAMPION</div><div class="scale-node-pts">+3500</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 Karma Sources -->
+  <div class="arch-section">
+    <div class="arch-label">02 — Karma Sources</div>
+    <div class="sources-grid">
+      <div class="source-col">
+        <div class="source-col-header good">Good Actions</div>
+        <div class="source-row"><span class="source-row-name">Healing civilians</span><span class="source-row-pts good">+10–25</span></div>
+        <div class="source-row"><span class="source-row-name">Preventing muggings</span><span class="source-row-pts good">+10–25</span></div>
+        <div class="source-row"><span class="source-row-name">Subduing Militia (non-lethal)</span><span class="source-row-pts good">+10–25</span></div>
+        <div class="source-row"><span class="source-row-name">Protecting civilians in crossfire</span><span class="source-row-pts good">+10–25</span></div>
+        <div class="source-row"><span class="source-row-name">Defeating Bertrand's beast packs</span><span class="source-row-pts good">+10–25</span></div>
+        <div class="source-row"><span class="source-row-name">Tier 1 encounter missions</span><span class="source-row-pts good">+75</span></div>
+        <div class="source-row"><span class="source-row-name">Tier 2 encounter missions</span><span class="source-row-pts good">+100</span></div>
+        <div class="source-row"><span class="source-row-name">Tier 3 encounter missions</span><span class="source-row-pts good">+150</span></div>
+        <div class="source-row"><span class="source-row-name">Standard story missions</span><span class="source-row-pts good">+300</span></div>
+        <div class="source-row"><span class="source-row-name">Turning point missions (pool of 4)</span><span class="source-row-pts good">+500</span></div>
+      </div>
+      <div class="source-col">
+        <div class="source-col-header evil">Evil Actions</div>
+        <div class="source-row"><span class="source-row-name">Draining / killing civilians</span><span class="source-row-pts evil">+10–25</span></div>
+        <div class="source-row"><span class="source-row-name">Destroying cars and property</span><span class="source-row-pts evil">+10–25</span></div>
+        <div class="source-row"><span class="source-row-name">Killing Militia (lethal)</span><span class="source-row-pts evil">+10–25</span></div>
+        <div class="source-row"><span class="source-row-name">Killing Rebels</span><span class="source-row-pts evil">+10–25</span></div>
+        <div class="source-row" style="opacity:0.3"><span class="source-row-name">—</span><span class="source-row-pts evil"></span></div>
+        <div class="source-row"><span class="source-row-name">Tier 1 encounter missions</span><span class="source-row-pts evil">+75</span></div>
+        <div class="source-row"><span class="source-row-name">Tier 2 encounter missions</span><span class="source-row-pts evil">+100</span></div>
+        <div class="source-row"><span class="source-row-name">Tier 3 encounter missions</span><span class="source-row-pts evil">+150</span></div>
+        <div class="source-row"><span class="source-row-name">Standard story missions</span><span class="source-row-pts evil">+300</span></div>
+        <div class="source-row"><span class="source-row-name">Turning point missions (pool of 4)</span><span class="source-row-pts evil">+500</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 Faction Thresholds -->
+  <div class="arch-section">
+    <div class="arch-label">03 — Faction Alignment Thresholds (0–100 scale)</div>
+    <div class="faction-grid">
+      <div class="faction-block">
+        <div class="faction-block-header">
+          <div class="faction-block-name">CIVILIANS</div>
+          <div class="faction-block-speed">Multiplier 0.8× · Fastest response</div>
+        </div>
+        <div class="faction-stages">
+          <div class="faction-stage"><div class="faction-stage-header"><span class="faction-stage-name" style="color:var(--good)">GOOD · GRATEFUL</span><span class="faction-stage-range">0–33</span></div><div class="stage-bar"><div class="stage-bar-fill" style="width:33%;background:var(--good)"></div></div><div class="faction-stage-desc">Nods, acknowledgement, small gestures. Streets feel warm.</div></div>
+          <div class="faction-stage"><div class="faction-stage-header"><span class="faction-stage-name" style="color:var(--good)">GOOD · INSPIRED</span><span class="faction-stage-range">34–66</span></div><div class="stage-bar"><div class="stage-bar-fill" style="width:66%;background:var(--good)"></div></div><div class="faction-stage-desc">Civilians rally in conflict zones. Intel tips. Vendors return to cleared districts.</div></div>
+          <div class="faction-stage"><div class="faction-stage-header"><span class="faction-stage-name" style="color:var(--good)">GOOD · HEROIC</span><span class="faction-stage-range">67–100</span></div><div class="stage-bar"><div class="stage-bar-fill" style="width:100%;background:var(--good)"></div></div><div class="faction-stage-desc">Armed civilians fight alongside Cole. Healing AOE buffs their health in Cole's radius.</div></div>
+          <div class="faction-stage"><div class="faction-stage-header"><span class="faction-stage-name" style="color:var(--evil)">EVIL · FEARFUL</span><span class="faction-stage-range">0–33</span></div><div class="stage-bar"><div class="stage-bar-fill" style="width:33%;background:var(--evil)"></div></div><div class="faction-stage-desc">Uneasy, moving away from Cole. Hushed reactions.</div></div>
+          <div class="faction-stage"><div class="faction-stage-header"><span class="faction-stage-name" style="color:var(--evil)">EVIL · FLEEING</span><span class="faction-stage-range">34–66</span></div><div class="stage-bar"><div class="stage-bar-fill" style="width:66%;background:var(--evil)"></div></div><div class="faction-stage-desc">Civilians flee on sight. Streets thin around Cole.</div></div>
+          <div class="faction-stage"><div class="faction-stage-header"><span class="faction-stage-name" style="color:var(--evil)">EVIL · TERRORISED</span><span class="faction-stage-range">67–100</span></div><div class="stage-bar"><div class="stage-bar-fill" style="width:100%;background:var(--evil)"></div></div><div class="faction-stage-desc">Cowering, begging. Desperate few take arms against Cole — hopeless but refusing.</div></div>
+        </div>
+      </div>
+      <div class="faction-block">
+        <div class="faction-block-header">
+          <div class="faction-block-name">MILITIA</div>
+          <div class="faction-block-speed">Multiplier 0.5× · Moderate response</div>
+        </div>
+        <div class="faction-stages">
+          <div class="faction-stage"><div class="faction-stage-header"><span class="faction-stage-name" style="color:var(--good)">GOOD · QUESTIONED</span><span class="faction-stage-range">0–33</span></div><div class="stage-bar"><div class="stage-bar-fill" style="width:33%;background:var(--good)"></div></div><div class="faction-stage-desc">Occasional non-aggressive units. Slight patrol reduction begins.</div></div>
+          <div class="faction-stage"><div class="faction-stage-header"><span class="faction-stage-name" style="color:var(--good)">GOOD · DOUBTED</span><span class="faction-stage-range">34–66</span></div><div class="stage-bar"><div class="stage-bar-fill" style="width:66%;background:var(--good)"></div></div><div class="faction-stage-desc">Visible deserters in world. Patrols avoiding Cole's known areas.</div></div>
+          <div class="faction-stage"><div class="faction-stage-header"><span class="faction-stage-name" style="color:var(--good)">GOOD · FRACTURED</span><span class="faction-stage-range">67–100</span></div><div class="stage-bar"><div class="stage-bar-fill" style="width:100%;background:var(--good)"></div></div><div class="faction-stage-desc">Only Bertrand loyalists remain aggressive. Former Militia helping civilians.</div></div>
+          <div class="faction-stage"><div class="faction-stage-header"><span class="faction-stage-name" style="color:var(--evil)">EVIL · ALERT</span><span class="faction-stage-range">0–33</span></div><div class="stage-bar"><div class="stage-bar-fill" style="width:33%;background:var(--evil)"></div></div><div class="faction-stage-desc">Increased patrol density. Faster aggression trigger.</div></div>
+          <div class="faction-stage"><div class="faction-stage-header"><span class="faction-stage-name" style="color:var(--evil)">EVIL · MOBILISED</span><span class="faction-stage-range">34–66</span></div><div class="stage-bar"><div class="stage-bar-fill" style="width:66%;background:var(--evil)"></div></div><div class="faction-stage-desc">Checkpoints expand. Radio propaganda intensifies. Heavy units deployed.</div></div>
+          <div class="faction-stage"><div class="faction-stage-header"><span class="faction-stage-name" style="color:var(--evil)">EVIL · FEARED</span><span class="faction-stage-range">67–100</span></div><div class="stage-bar"><div class="stage-bar-fill" style="width:100%;background:var(--evil)"></div></div><div class="faction-stage-desc">Shoot on sight citywide. Bertrand deploys elite hunter units targeting Cole.</div></div>
+        </div>
+      </div>
+      <div class="faction-block">
+        <div class="faction-block-header">
+          <div class="faction-block-name">REBELS</div>
+          <div class="faction-block-speed">Multiplier 0.3× · Slowest response</div>
+        </div>
+        <div class="faction-stages">
+          <div class="faction-stage"><div class="faction-stage-header"><span class="faction-stage-name" style="color:var(--good)">GOOD · WATCHING</span><span class="faction-stage-range">0–33</span></div><div class="stage-bar"><div class="stage-bar-fill" style="width:33%;background:var(--good)"></div></div><div class="faction-stage-desc">Cautious acknowledgement. Rebel broadcasts note Cole's actions publicly.</div></div>
+          <div class="faction-stage"><div class="faction-stage-header"><span class="faction-stage-name" style="color:var(--good)">GOOD · ALLIED</span><span class="faction-stage-range">34–66</span></div><div class="stage-bar"><div class="stage-bar-fill" style="width:66%;background:var(--good)"></div></div><div class="faction-stage-desc">Open endorsement. Rebels patrol cleared districts. Joint encounter missions unlock.</div></div>
+          <div class="faction-stage"><div class="faction-stage-header"><span class="faction-stage-name" style="color:var(--good)">GOOD · LIBERATED</span><span class="faction-stage-range">67–100</span></div><div class="stage-bar"><div class="stage-bar-fill" style="width:100%;background:var(--good)"></div></div><div class="faction-stage-desc">Full declaration. Tier 3 missions active. Rebels name Cole the symbol of liberation.</div></div>
+          <div class="faction-stage"><div class="faction-stage-header"><span class="faction-stage-name" style="color:var(--evil)">EVIL · WARY</span><span class="faction-stage-range">0–33</span></div><div class="stage-bar"><div class="stage-bar-fill" style="width:33%;background:var(--evil)"></div></div><div class="faction-stage-desc">Alliance uneasy. Rebels tolerating Cole as long as Militia bears the cost.</div></div>
+          <div class="faction-stage"><div class="faction-stage-header"><span class="faction-stage-name" style="color:var(--evil)">EVIL · WITHDRAWN</span><span class="faction-stage-range">34–66</span></div><div class="stage-bar"><div class="stage-bar-fill" style="width:66%;background:var(--evil)"></div></div><div class="faction-stage-desc">Rebels pulling back from Cole. Fortress mission tipping point approaching.</div></div>
+          <div class="faction-stage"><div class="faction-stage-header"><span class="faction-stage-name" style="color:var(--evil)">EVIL · HOSTILE</span><span class="faction-stage-range">FORTRESS</span></div><div class="stage-bar"><div class="stage-bar-fill" style="width:100%;background:var(--evil)"></div></div><div class="faction-stage-desc">Meter → 0 on fortress Ionic Storm. Survivor leads splinter faction. Rogue squads hunt Cole permanently.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="fortress-note">
+      <div class="fortress-note-title">⚡ Fortress Mission — Permanent Consequence</div>
+      <div class="fortress-note-body">Taking the <strong>Ionic Storm path</strong> resets the Rebel faction meter to 0 instantly. The survivor becomes a permanent enemy. Switched players can rebuild to Stage 3 only through the <strong>Rebel Redemption Questline</strong> — freeing Rebel prisoners non-lethally. The survivor watches the final mission. He does not speak. Stage 3 unlocks. He does not forgive.</div>
+    </div>
+  </div>
+
+  <!-- 04 Power States -->
+  <div class="arch-section">
+    <div class="arch-label">04 — Power State by Alignment</div>
+    <div class="power-grid">
+      <div class="power-side good">
+        <div class="power-side-label good">Champion — Controlled Surge</div>
+        <div class="power-attr"><span class="power-attr-key">AOE</span><span class="power-attr-val">Extended but precise. Electricity arcs between enemies only.</span></div>
+        <div class="power-attr"><span class="power-attr-key">Civilians</span><span class="power-attr-val">Caught in radius are healed. Health boost scales with proximity.</span></div>
+        <div class="power-attr"><span class="power-attr-key">Debris</span><span class="power-attr-val">Pushed aside. Environment preserved.</span></div>
+        <div class="power-attr"><span class="power-attr-key">Visual</span><span class="power-attr-val">Clean bright arcs. Lightning feels intentional and directed.</span></div>
+        <div class="power-attr"><span class="power-attr-key">Feel</span><span class="power-attr-val">Cole has mastered what he is.</span></div>
+      </div>
+      <div class="power-centre"><div class="power-vs">VS</div></div>
+      <div class="power-side evil">
+        <div class="power-side-label evil">Infamous — Volatile Surge</div>
+        <div class="power-attr"><span class="power-attr-key">AOE</span><span class="power-attr-val">Extended and indiscriminate. Chains between enemies, civilians, debris.</span></div>
+        <div class="power-attr"><span class="power-attr-key">Civilians</span><span class="power-attr-val">Caught in radius die. Collateral is unintended — not malice, negligence.</span></div>
+        <div class="power-attr"><span class="power-attr-key">Debris</span><span class="power-attr-val">Destroyed. Environment visibly damaged around Cole.</span></div>
+        <div class="power-attr"><span class="power-attr-key">Visual</span><span class="power-attr-val">Chaotic dark crackling. Lightning feels hungry and uncontrolled.</span></div>
+        <div class="power-attr"><span class="power-attr-key">Feel</span><span class="power-attr-val">Cole stopped caring what he breaks.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 Broadcast System -->
+  <div class="arch-section">
+    <div class="arch-label">05 — Faction Broadcast System</div>
+    <div class="broadcast-grid">
+      <div class="broadcast-col">
+        <div class="broadcast-header good">Rebel Broadcasts — Good Alignment</div>
+        <div class="broadcast-item"><span class="broadcast-stage">Stage 1</span><span class="broadcast-text">Cautious acknowledgement. Rebels note Cole's recent actions publicly. Reserved — but watching.</span></div>
+        <div class="broadcast-item"><span class="broadcast-stage">Stage 2</span><span class="broadcast-text">Open endorsement. Rebels call Cole an ally to the city. Civilians rallying around his presence.</span></div>
+        <div class="broadcast-item"><span class="broadcast-stage">Stage 3</span><span class="broadcast-text">Full declaration. Rebels name Cole the symbol of liberation. New Marais called to stand with him.</span></div>
+      </div>
+      <div class="broadcast-col">
+        <div class="broadcast-header evil">Militia Broadcasts — Evil Alignment</div>
+        <div class="broadcast-item"><span class="broadcast-stage">Stage 1</span><span class="broadcast-text">Bertrand escalating propaganda. Citizens warned about Cole's presence in their districts.</span></div>
+        <div class="broadcast-item"><span class="broadcast-stage">Stage 2</span><span class="broadcast-text">Martial law declaration. Militia expansion citywide justified by Cole's actions.</span></div>
+        <div class="broadcast-item"><span class="broadcast-stage">Stage 3</span><span class="broadcast-text">Bertrand declares Cole the ultimate threat. All units mobilised. The city is at war with one man.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 Design Principles -->
+  <div class="arch-section">
+    <div class="arch-label">06 — Design Principles</div>
+    <div class="principles">
+      <div class="principle"><div class="principle-num">01</div><div class="principle-text"><strong>The world reads pattern, not intent.</strong> Cole can't fake redemption or corruption with a single act. The world responds to consistent behaviour over time — not the moment, but the arc.</div></div>
+      <div class="principle"><div class="principle-num">02</div><div class="principle-text"><strong>Same power, different character.</strong> Evil Cole isn't stronger — he's equally powerful but uncontained. Good Cole's mastery makes him more efficient. The destruction is a consequence, not a feature.</div></div>
+      <div class="principle"><div class="principle-num">03</div><div class="principle-text"><strong>Consequences that don't dissolve.</strong> The fortress mission zeroes the Rebel meter permanently. Redemption is possible — but it has to be earned through the specific act that mirrors what was broken.</div></div>
+      <div class="principle"><div class="principle-num">04</div><div class="principle-text"><strong>Faction meters trail personal karma.</strong> Each faction transitions at its own speed. The world is always slightly behind Cole — which makes the shift feel earned rather than instant.</div></div>
+      <div class="principle"><div class="principle-num">05</div><div class="principle-text"><strong>Civilians communicate through presence, not broadcast.</strong> Factions have a voice. Civilians have a body. Their fear or inspiration is felt in the world — not announced.</div></div>
+      <div class="principle"><div class="principle-num">06</div><div class="principle-text"><strong>The grind is the arc.</strong> Point values are tuned so players feel Cole's transformation alongside him — not farming karma, but living it. Turning points are earned through difficulty, not repetition.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-credit">LEON TELEMAQUE · SYSTEM DESIGN · 2026 · leontelemaquedisplays.github.io</div>
+  <div class="footer-tags">
+    <span class="footer-tag">Systems Design</span>
+    <span class="footer-tag">Live Service</span>
+    <span class="footer-tag">Behavioural Systems</span>
+    <span class="footer-tag">Infamous 2</span>
+    <span class="footer-tag">Sucker Punch</span>
+  </div>
+</footer>
+
+<script>
+  let currentAlignment = 'good';
+  function setAlignment(align) { if (currentAlignment === align) return; currentAlignment = align; updateUI(); }
+  function toggleAlignment() { currentAlignment = currentAlignment === 'good' ? 'evil' : 'good'; updateUI(); }
+  function updateUI() {
+    const isGood = currentAlignment === 'good';
+    document.getElementById('toggle-track').className = 'toggle-track ' + (isGood ? 'good-active' : 'evil-active');
+    document.getElementById('toggle-thumb').className = 'toggle-thumb ' + (isGood ? 'good' : 'evil');
+    document.getElementById('good-label').className = 'toggle-label good ' + (isGood ? '' : 'inactive');
+    document.getElementById('evil-label').className = 'toggle-label evil ' + (!isGood ? '' : 'inactive');
+    const coleSvg = document.getElementById('cole-svg');
+    coleSvg.className = 'cole-svg ' + (isGood ? 'good-glow' : 'evil-glow');
+    document.getElementById('good-lightning').style.opacity = isGood ? '1' : '0';
+    document.getElementById('evil-lightning').style.opacity = isGood ? '0' : '1';
+    const tintColor = isGood ? '#00c8ff' : '#ff4400';
+    document.getElementById('tint-head').setAttribute('fill', tintColor);
+    document.getElementById('tint-torso').setAttribute('fill', tintColor);
+    const stageLabel = document.getElementById('stage-label');
+    stageLabel.textContent = isGood ? 'GUARDIAN' : 'INFAMOUS';
+    stageLabel.style.color = isGood ? 'var(--good)' : 'var(--evil)';
+    const dotClass = isGood ? 'active-good' : 'active-evil';
+    ['dot1','dot2','dot3'].forEach(id => { document.getElementById(id).className = 'stage-dot ' + dotClass; });
+    const personalMeter = document.getElementById('personal-meter');
+    const factionMeter = document.getElementById('faction-meter');
+    personalMeter.style.width = isGood ? '85%' : '90%';
+    personalMeter.style.background = isGood ? 'var(--good)' : 'var(--evil)';
+    factionMeter.style.width = isGood ? '72%' : '78%';
+    factionMeter.style.background = isGood ? 'var(--good)' : 'var(--evil)';
+    const powerState = document.getElementById('power-state');
+    const powerDesc = document.getElementById('power-desc');
+    powerState.className = 'power-state ' + (isGood ? 'good-active' : 'evil-active');
+    powerDesc.className = 'power-desc ' + (isGood ? 'good' : 'evil');
+    powerDesc.textContent = isGood
+      ? 'Controlled surge. AOE arcs precisely — heals civilians in radius. Debris pushed aside. Cole has mastered what he is.'
+      : 'Volatile surge. Electricity spreads indiscriminately. Civilians caught in radius die. Debris destroyed. Cole stopped caring what he breaks.';
+    ['good-militia','good-rebels','good-civilians'].forEach(id => { document.getElementById(id).className = 'faction-card' + (isGood ? '' : ' dimmed'); });
+    ['evil-militia','evil-rebels','evil-civilians'].forEach(id => { document.getElementById(id).className = 'faction-card' + (!isGood ? '' : ' dimmed'); });
+    document.getElementById('bottom-note').innerHTML = isGood
+      ? 'GOOD COLE — World reads a pattern of mercy. Electricity controlled. Factions follow personal karma with natural delay.<br>Toggle to see how the same man becomes something the city cannot ignore.'
+      : 'INFAMOUS COLE — World confirms what it feared. Volatile electricity. Factions fracture or mobilise against him.<br>The fortress cannot be undone. Some consequences are permanent.';
+  }
+</script>
+</body>
+</html>
