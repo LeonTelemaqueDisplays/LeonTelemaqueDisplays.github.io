@@ -2431,7 +2431,7 @@ footer{
       </div>
       <p class="hero-availability">
         <span class="avail-dot"></span>
-        Available for internship and junior roles — game design, LiveOps, or product analytics. Toronto-based, open to remote.
+        Available for internship and junior roles — game design and LiveOps. Toronto-based, open to remote.
       </p>
     </div>
 
@@ -3024,7 +3024,7 @@ footer{
           <span class="ptag" style="color:#785A28;border-color:#1E2D3D">Champion Design</span>
           <span class="ptag" style="color:#785A28;border-color:#1E2D3D">Game Systems</span>
           <span class="ptag" style="color:#785A28;border-color:#1E2D3D">League of Legends</span>
-          <span class="ptag" style="color:#C89B3C;border-color:#785A28">● In Progress</span>
+          <span class="ptag" style="color:#C89B3C;border-color:#785A28">● Complete</span>
         </div>
       </div>
     </div>
@@ -4106,6 +4106,261 @@ footer{
       </div>
     </div>
 
+
+
+    <!-- THE WRONG BLUEPRINT — Street Fighter III: Third Strike -->
+    <div class="pcard" onclick="document.getElementById('modal-sf3').classList.add('open')" style="cursor:pointer">
+      <div class="pcard-preview">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <radialGradient id="sfParryGlow" cx="50%" cy="55%" r="45%">
+              <stop offset="0%" stop-color="#2060CC" stop-opacity=".5"/>
+              <stop offset="100%" stop-color="#0A0A12" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="sfDangerGlow" cx="20%" cy="50%" r="35%">
+              <stop offset="0%" stop-color="#CC2020" stop-opacity=".35"/>
+              <stop offset="100%" stop-color="#0A0A12" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="sfFlashCenter" cx="50%" cy="52%" r="30%">
+              <stop offset="0%" stop-color="#FFFFFF" stop-opacity=".18"/>
+              <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="sfGround" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1A1A2A"/>
+              <stop offset="100%" stop-color="#0A0A12"/>
+            </linearGradient>
+            <linearGradient id="sfHealthFull" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#20CC40"/>
+              <stop offset="100%" stop-color="#10AA28"/>
+            </linearGradient>
+            <filter id="sfGlow8"><feGaussianBlur stdDeviation="8"/></filter>
+            <filter id="sfGlow3"><feGaussianBlur stdDeviation="3"/></filter>
+          </defs>
+
+          <!-- Base -->
+          <rect width="680" height="400" fill="#08080F"/>
+          <rect width="680" height="400" fill="url(#sfGround)"/>
+          <rect width="680" height="400" fill="url(#sfParryGlow)"/>
+          <rect width="680" height="400" fill="url(#sfDangerGlow)"/>
+          <rect width="680" height="400" fill="url(#sfFlashCenter)"/>
+
+          <!-- Floor -->
+          <rect x="0" y="295" width="680" height="1" fill="#2A2A4A" opacity=".6"/>
+          <rect x="0" y="296" width="680" height="60" fill="#0A0A18" opacity=".5"/>
+
+          <!-- Grid -->
+          <line x1="0" y1="100" x2="680" y2="100" stroke="#1A1A30" stroke-width=".5" opacity=".4"/>
+          <line x1="0" y1="200" x2="680" y2="200" stroke="#1A1A30" stroke-width=".5" opacity=".4"/>
+          <line x1="170" y1="0" x2="170" y2="400" stroke="#1A1A30" stroke-width=".5" opacity=".3"/>
+          <line x1="340" y1="0" x2="340" y2="400" stroke="#1A1A30" stroke-width=".5" opacity=".3"/>
+          <line x1="510" y1="0" x2="510" y2="400" stroke="#1A1A30" stroke-width=".5" opacity=".3"/>
+
+          <!-- P1 health bar — one pixel remaining -->
+          <rect x="28" y="22" width="260" height="14" rx="2" fill="#0A0A18" stroke="#303060" stroke-width="1"/>
+          <rect x="30" y="24" width="255" height="10" rx="1" fill="#1A0808" opacity=".8"/>
+          <rect x="30" y="24" width="3" height="10" rx="1" fill="#CC2020"/>
+          <circle cx="33" cy="29" r="8" fill="#CC2020" opacity=".3" filter="url(#sfGlow3)"/>
+          <text x="32" y="18" fill="#CC4444" font-family="monospace" font-size="8" letter-spacing="1" font-weight="700">CHUN-LI</text>
+          <text x="32" y="46" fill="#882222" font-family="monospace" font-size="6" letter-spacing=".5" opacity=".7">1 PIXEL REMAINING</text>
+
+          <!-- P2 health bar — full -->
+          <rect x="392" y="22" width="260" height="14" rx="2" fill="#0A0A18" stroke="#303060" stroke-width="1"/>
+          <rect x="394" y="24" width="255" height="10" rx="1" fill="#20CC40"/>
+          <text x="648" y="18" text-anchor="end" fill="#4488CC" font-family="monospace" font-size="8" letter-spacing="1" font-weight="700">KEN</text>
+          <text x="648" y="46" text-anchor="end" fill="#224488" font-family="monospace" font-size="6" letter-spacing=".5" opacity=".7">DAIGO UMEHARA</text>
+
+          <!-- Timer -->
+          <rect x="316" y="16" width="48" height="28" rx="3" fill="#0A0A20" stroke="#2A2A50" stroke-width="1"/>
+          <text x="340" y="35" text-anchor="middle" fill="#8888CC" font-family="monospace" font-size="16" font-weight="700">07</text>
+          <text x="340" y="14" text-anchor="middle" fill="#606080" font-family="monospace" font-size="7" letter-spacing="2">ROUND 3</text>
+
+          <!-- Chun-Li silhouette (left) -->
+          <g transform="translate(160,180)" opacity=".9">
+            <circle cx="0" cy="10" r="50" fill="#CC2020" opacity=".06" filter="url(#sfGlow8)"/>
+            <ellipse cx="0" cy="20" rx="22" ry="28" fill="#CC2020" opacity=".7"/>
+            <circle cx="0" cy="-10" r="16" fill="#CC2020" opacity=".75"/>
+            <circle cx="-12" cy="-18" r="7" fill="#AA1818" opacity=".8"/>
+            <circle cx="12" cy="-18" r="7" fill="#AA1818" opacity=".8"/>
+            <line x1="0" y1="40" x2="60" y2="10" stroke="#CC2020" stroke-width="14" stroke-linecap="round" opacity=".75"/>
+            <line x1="0" y1="40" x2="-20" y2="90" stroke="#CC2020" stroke-width="12" stroke-linecap="round" opacity=".7"/>
+            <line x1="-10" y1="15" x2="-50" y2="-10" stroke="#CC2020" stroke-width="10" stroke-linecap="round" opacity=".7"/>
+            <line x1="10" y1="15" x2="45" y2="5" stroke="#CC2020" stroke-width="10" stroke-linecap="round" opacity=".7"/>
+            <circle cx="60" cy="5" r="30" fill="#FF4444" opacity=".12" filter="url(#sfGlow8)"/>
+          </g>
+
+          <!-- Daigo/Ken silhouette (right) -->
+          <g transform="translate(490,185)" opacity=".92">
+            <circle cx="0" cy="10" r="65" fill="#4488FF" opacity=".08" filter="url(#sfGlow8)"/>
+            <circle cx="0" cy="10" r="40" fill="#6699FF" opacity=".1" filter="url(#sfGlow3)"/>
+            <ellipse cx="0" cy="20" rx="22" ry="28" fill="#2255CC" opacity=".8"/>
+            <circle cx="0" cy="-10" r="16" fill="#2255CC" opacity=".85"/>
+            <rect x="-16" y="-14" width="32" height="5" rx="2" fill="#CC2222" opacity=".9"/>
+            <line x1="-8" y1="10" x2="-55" y2="-5" stroke="#2255CC" stroke-width="11" stroke-linecap="round" opacity=".85"/>
+            <circle cx="-55" cy="-5" r="12" fill="#88AAFF" opacity=".3" filter="url(#sfGlow3)"/>
+            <circle cx="-55" cy="-5" r="6" fill="#AACCFF" opacity=".25"/>
+            <line x1="8" y1="12" x2="35" y2="30" stroke="#2255CC" stroke-width="10" stroke-linecap="round" opacity=".8"/>
+            <line x1="-5" y1="42" x2="-25" y2="95" stroke="#2255CC" stroke-width="13" stroke-linecap="round" opacity=".8"/>
+            <line x1="5" y1="42" x2="20" y2="95" stroke="#2255CC" stroke-width="13" stroke-linecap="round" opacity=".8"/>
+          </g>
+
+          <!-- Parry flash impact -->
+          <ellipse cx="330" cy="200" rx="80" ry="60" fill="#FFFFFF" opacity=".06" filter="url(#sfGlow8)"/>
+          <ellipse cx="330" cy="200" rx="40" ry="30" fill="#88AAFF" opacity=".12" filter="url(#sfGlow3)"/>
+          <line x1="310" y1="185" x2="280" y2="165" stroke="#AACCFF" stroke-width="2" opacity=".6"/>
+          <line x1="325" y1="180" x2="308" y2="152" stroke="#FFFFFF" stroke-width="1.5" opacity=".5"/>
+          <line x1="340" y1="188" x2="368" y2="170" stroke="#AACCFF" stroke-width="2" opacity=".55"/>
+          <line x1="330" y1="210" x2="315" y2="238" stroke="#88AAFF" stroke-width="1.5" opacity=".45"/>
+          <circle cx="275" cy="162" r="3" fill="#FFFFFF" opacity=".5"/>
+          <circle cx="372" cy="168" r="3" fill="#FFFFFF" opacity=".5"/>
+
+          <!-- Parry counter -->
+          <rect x="256" y="218" width="128" height="22" rx="3" fill="#0A0A20" opacity=".75"/>
+          <text x="320" y="233" text-anchor="middle" fill="#4488FF" font-family="monospace" font-size="9" letter-spacing="2" font-weight="700">PARRY ×15</text>
+          <rect x="256" y="243" width="128" height="18" rx="2" fill="#0A0A1A" opacity=".6"/>
+          <text x="320" y="255" text-anchor="middle" fill="#446688" font-family="monospace" font-size="7" letter-spacing="1">2 FRAME WINDOW · 1/30s</text>
+
+          <!-- Bottom title panel -->
+          <rect x="0" y="310" width="680" height="90" fill="#06060E" opacity=".88"/>
+          <rect x="0" y="310" width="680" height="1" fill="#1A1A40" opacity=".8"/>
+          <text x="28" y="338" fill="#2A2A50" font-family="monospace" font-size="32" font-weight="700" letter-spacing="2" opacity=".4">EVO 2004</text>
+          <text x="28" y="358" fill="#8888AA" font-family="Georgia, serif" font-size="11" font-weight="700" letter-spacing=".5">The Wrong Blueprint</text>
+          <text x="28" y="374" fill="#4A4A6A" font-family="Georgia, serif" font-size="8.5" font-style="italic">How Street Fighter III built a 25-year legacy by failing commercially</text>
+          <text x="28" y="390" fill="#303050" font-family="monospace" font-size="7" letter-spacing="1.5">GAME DESIGN ANALYSIS · CULTURAL DURABILITY · CAPCOM · 1999–2026</text>
+        </svg>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">The Wrong Blueprint — Street Fighter III: Third Strike</h3>
+        <p class="pcard-desc">Capcom made every commercially wrong decision — a hostile parry system, an unrecognisable roster, a jazz-hip-hop soundtrack, art direction that rewarded patience over instant appeal. Third Strike underperformed at launch and built a 25-year community. This is why.</p>
+        <div class="pcard-tags">
+          <span class="ptag">Game Design Analysis</span>
+          <span class="ptag">Cultural Durability</span>
+          <span class="ptag ptag-blue">Fighting Games</span>
+          <span class="ptag">Capcom · 1999</span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Monster Hunter World/Wilds Card -->
+    <div class="pcard" onclick="document.getElementById('modal-mhw').classList.add('open')" style="cursor:pointer">
+      <div class="pcard-preview" style="background:#060A06">
+        <svg viewBox="0 0 390 410" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="mhwBg" cx="55%" cy="40%" r="70%">
+              <stop offset="0%" stop-color="#1A1208"/>
+              <stop offset="100%" stop-color="#030503"/>
+            </radialGradient>
+            <radialGradient id="mhwEnrage" cx="60%" cy="38%" r="45%">
+              <stop offset="0%" stop-color="#CC4400" stop-opacity=".22"/>
+              <stop offset="100%" stop-color="#CC4400" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="mhwCharge" cx="35%" cy="80%" r="30%">
+              <stop offset="0%" stop-color="#FFB800" stop-opacity=".16"/>
+              <stop offset="100%" stop-color="#FFB800" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect width="390" height="410" fill="url(#mhwBg)"/>
+          <ellipse cx="230" cy="155" rx="160" ry="115" fill="url(#mhwEnrage)"/>
+          <ellipse cx="120" cy="295" rx="80" ry="35" fill="url(#mhwCharge)"/>
+          <!-- Ground -->
+          <rect x="0" y="308" width="390" height="102" fill="#080D08"/>
+          <line x1="0" y1="308" x2="390" y2="308" stroke="#1E2A18" stroke-width="1"/>
+          <!-- Background trees -->
+          <rect x="18" y="148" width="7" height="162" fill="#090D09" opacity=".6"/>
+          <polygon points="21,95 9,155 33,155" fill="#090D09" opacity=".5"/>
+          <rect x="52" y="168" width="6" height="142" fill="#090D09" opacity=".4"/>
+          <polygon points="55,122 44,172 66,172" fill="#090D09" opacity=".4"/>
+          <rect x="348" y="178" width="7" height="132" fill="#090D09" opacity=".35"/>
+          <rect x="364" y="162" width="6" height="148" fill="#090D09" opacity=".3"/>
+          <!-- Monster body -->
+          <ellipse cx="248" cy="162" rx="78" ry="42" fill="#2E1808"/>
+          <ellipse cx="240" cy="170" rx="52" ry="28" fill="#241408"/>
+          <!-- Monster neck -->
+          <path d="M 194 148 Q 185 122 188 100 Q 190 80 200 70" stroke="#2E1808" stroke-width="26" fill="none" stroke-linecap="round"/>
+          <path d="M 194 148 Q 186 124 190 102 Q 192 82 200 70" stroke="#1E1008" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <!-- Monster head -->
+          <path d="M 188 68 Q 196 50 220 47 Q 234 45 242 56 Q 246 65 234 72 Q 218 78 200 74 Q 190 71 188 68Z" fill="#3A1A08"/>
+          <path d="M 196 71 Q 212 80 228 76 Q 238 72 242 57 Q 248 68 238 78 Q 220 86 205 80Z" fill="#8B1A00" opacity=".65"/>
+          <!-- Horns -->
+          <path d="M 212 46 L 215 22 L 220 46" fill="#5A3A0A"/>
+          <path d="M 220 47 L 226 26 L 230 47" fill="#4A2A08"/>
+          <!-- Eye glow — enraged -->
+          <circle cx="212" cy="57" r="3.5" fill="#FF4400" opacity=".95"/>
+          <circle cx="212" cy="57" r="6" fill="#FF4400" opacity=".2"/>
+          <circle cx="212" cy="57" r="10" fill="#FF4400" opacity=".07"/>
+          <!-- Left wing -->
+          <path d="M 205 148 Q 145 102 92 122 Q 75 130 82 142 Q 118 128 165 158Z" fill="#22110A" opacity=".85"/>
+          <path d="M 205 150 Q 148 112 95 128" stroke="#2E1808" stroke-width="1.2" fill="none" opacity=".7"/>
+          <path d="M 208 155 Q 150 120 100 134" stroke="#2A1408" stroke-width="1" fill="none" opacity=".5"/>
+          <path d="M 210 160 Q 155 130 108 140" stroke="#221008" stroke-width=".8" fill="none" opacity=".4"/>
+          <!-- Right wing -->
+          <path d="M 292 148 Q 348 102 362 120 Q 372 130 360 140 Q 340 126 305 158Z" fill="#22110A" opacity=".85"/>
+          <path d="M 292 150 Q 345 112 358 128" stroke="#2E1808" stroke-width="1.2" fill="none" opacity=".7"/>
+          <!-- Tail -->
+          <path d="M 318 168 Q 350 178 368 200 Q 378 215 360 218 Q 348 208 332 192 Q 315 175 308 168Z" fill="#2E1808"/>
+          <path d="M 360 218 L 378 232 L 364 222Z" fill="#4A3A10"/>
+          <!-- Legs -->
+          <path d="M 220 198 Q 212 238 208 255 Q 206 266 214 268 Q 220 265 222 254 Q 226 237 232 200Z" fill="#281608"/>
+          <path d="M 270 198 Q 278 238 282 255 Q 284 266 276 268 Q 270 265 268 254 Q 264 237 260 200Z" fill="#281608"/>
+          <!-- Claws -->
+          <path d="M 214 268 L 204 278 L 210 275 L 202 286" stroke="#5A4A20" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M 219 268 L 216 282" stroke="#5A4A20" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M 276 268 L 286 278 L 280 275 L 288 286" stroke="#5A4A20" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Wound indicator (part break) -->
+          <circle cx="222" cy="150" r="9" fill="none" stroke="#FFB800" stroke-width="1.5" stroke-dasharray="3,2" opacity=".8"/>
+          <line x1="218" y1="146" x2="226" y2="154" stroke="#FFB800" stroke-width="1.5" opacity=".9"/>
+          <line x1="226" y1="146" x2="218" y2="154" stroke="#FFB800" stroke-width="1.5" opacity=".9"/>
+          <!-- Enrage steam -->
+          <circle cx="206" cy="58" r="6" fill="#2A1008" opacity=".7"/>
+          <circle cx="198" cy="48" r="5" fill="#221008" opacity=".5"/>
+          <line x1="212" y1="51" x2="218" y2="34" stroke="#FF4400" stroke-width=".8" opacity=".5"/>
+          <line x1="208" y1="53" x2="200" y2="36" stroke="#FF6600" stroke-width=".8" opacity=".4"/>
+          <!-- Hunter silhouette -->
+          <rect x="102" y="268" width="24" height="34" rx="2" fill="#163A16"/>
+          <path d="M 100 270 Q 90 278 92 288 Q 96 284 102 280Z" fill="#0E2A0E"/>
+          <ellipse cx="114" cy="260" rx="9" ry="8" fill="#163A16"/>
+          <rect x="108" y="258" width="12" height="2" rx="1" fill="#88AA00" opacity=".6"/>
+          <!-- Great Sword drawn back, charged -->
+          <path d="M 80 235 L 75 215 L 80 210 L 95 220 L 98 242Z" fill="#8A7A50"/>
+          <line x1="76" y1="212" x2="80" y2="235" stroke="#C8B870" stroke-width="1.2" opacity=".8"/>
+          <path d="M 78 220 L 82 218 L 84 225 L 80 228Z" fill="#FFD060" opacity=".5"/>
+          <rect x="104" y="300" width="9" height="24" rx="2" fill="#102A10"/>
+          <rect x="115" y="300" width="9" height="24" rx="2" fill="#102A10"/>
+          <!-- Impact particles between hunter and monster -->
+          <circle cx="172" cy="195" r="2.5" fill="#FF8800" opacity=".7"/>
+          <circle cx="180" cy="205" r="1.8" fill="#FF6600" opacity=".55"/>
+          <circle cx="164" cy="202" r="1.5" fill="#FFB800" opacity=".65"/>
+          <circle cx="175" cy="188" r="1.2" fill="#FFCC00" opacity=".5"/>
+          <line x1="170" y1="193" x2="177" y2="186" stroke="#FF8800" stroke-width="1" opacity=".5"/>
+          <line x1="168" y1="198" x2="160" y2="192" stroke="#FFB800" stroke-width=".8" opacity=".4"/>
+          <!-- Hunter HUD -->
+          <text x="22" y="24" fill="#4A8A30" font-family="monospace" font-size="6" letter-spacing="1">HP</text>
+          <rect x="34" y="16" width="88" height="5" rx="2" fill="#0A1208" opacity=".9"/>
+          <rect x="34" y="16" width="78" height="5" rx="2" fill="#20AA40" opacity=".8"/>
+          <text x="22" y="36" fill="#6A7A20" font-family="monospace" font-size="6" letter-spacing="1">ST</text>
+          <rect x="34" y="28" width="88" height="5" rx="2" fill="#0A1208" opacity=".9"/>
+          <rect x="34" y="28" width="52" height="5" rx="2" fill="#88AA00" opacity=".7"/>
+          <!-- Monster HUD -->
+          <text x="240" y="18" fill="#AA4400" font-family="monospace" font-size="5.5" letter-spacing=".4">✦ ENRAGED</text>
+          <rect x="240" y="22" width="128" height="5" rx="2" fill="#1A0808" opacity=".9"/>
+          <rect x="240" y="22" width="38" height="5" rx="2" fill="#CC2200" opacity=".8"/>
+          <!-- Text overlay -->
+          <text x="22" y="348" fill="#C89B3C" font-family="Georgia, serif" font-size="13" font-weight="700" letter-spacing=".3">Reading the Monster</text>
+          <text x="22" y="365" fill="#5A5A3A" font-family="Georgia, serif" font-size="8.5" font-style="italic">Combat Architecture in World &amp; Wilds</text>
+          <text x="22" y="381" fill="#2E2E1E" font-family="monospace" font-size="6.5" letter-spacing="1.3">GAME DESIGN · BEHAVIORAL SYSTEMS · CAPCOM · 2018–2025</text>
+        </svg>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">Reading the Monster — Monster Hunter World &amp; Wilds</h3>
+        <p class="pcard-desc">Monster Hunter is a behavioral curriculum disguised as a fight. The monster teaches through consequence — every tell, phase shift, and part break a designed signal. The hunt is a two-way negotiation: Fatalis, Alatreon, AT-Velkhana, and Savage Omega each represent a different version of that design philosophy.</p>
+        <div class="pcard-tags">
+          <span class="ptag">Game Design Analysis</span>
+          <span class="ptag">Behavioral Systems</span>
+          <span class="ptag ptag-green">Monster Hunter</span>
+          <span class="ptag">Capcom · 2018–2025</span>
+        </div>
+      </div>
+    </div>
 
   </div><!-- /workCarousel -->
   </div><!-- /work-carousel-wrap -->
@@ -7373,6 +7628,24 @@ const DATA={
     ],
     tools:['Narrative Design','Open World Systems','Environmental Storytelling','LiveOps Narrative','Game Design Analysis'],
     links:[]
+  },
+  sf3:{
+    tag:'gaming',tagLabel:'Game Design Analysis · Cultural Durability · Fighting Games',
+    title:'The Wrong Blueprint — How Street Fighter III: Third Strike Built a 25-Year Legacy by Failing Commercially',
+    period:'2026 · Capcom · Three-Part Design Analysis',
+    embedUrl:null,
+    streamlit:null,
+    desc:'EVO 2004. Grand finals. Daigo Umehara has one pixel of health. Chun-Li activates her super — fifteen hits of guaranteed damage. A parry in Third Strike requires tapping forward at the exact frame an attack connects. The window is two frames — 1/30th of a second. Daigo parried all fifteen. The crowd reacted before the last hit landed. That moment didn\'t happen because Capcom planned it. It happened because Third Strike was specific enough to produce mastery, and mastery specific enough to be legible as something extraordinary. This is an analysis of every commercially wrong decision Capcom made — and why those decisions built a 25-year community instead of a hit.',
+    insight:'Third Strike failed to optimise for the broadest possible audience and built a 25-year community instead. Every creative collaborator — Naganuma, Infinite, Yasuda — came in with genuine conviction rather than calculated appeal, and Capcom gave each of them enough room to express it. The live service question worth asking isn\'t "how do we retain the most players this month" — it\'s "how do we build systems specific enough that the players who stay long enough can create moments we couldn\'t have planned."',
+    signals:[
+      'Part I — The Wrong Decisions: The parry system (hostile to casuals, created expertise density legible to spectators); the roster (Q, Makoto, Dudley — unrecognisable characters that built tribal identity); the Naganuma soundtrack (jazz-funk-hip-hop that sounded like nothing in the genre); Infinite\'s vocal performance (genuine fan, minimal brief, 25-year cultural reference); Yasuda\'s art direction (rewarded patience over instant appeal, still the SF benchmark in 2026)',
+      'Part II — Why the Wrong Decisions Were Right: Expertise legibility (EVO 2004 crowd felt the moment without needing frame data); identity investment (Q mains are still Q mains in 2026); specificity ages better than trend-chasing (Naganuma\'s tracks became more culturally resonant as lo-fi/jazz-funk entered mainstream vocabulary); visual authority compounds (SF6 designs still measured against Third Strike)',
+      'Part III — What This Means for Live Service: Breadth tools (battle pass, seasonal events, login bonuses) retain players by giving them things to do; depth creates players who generate their own reasons to return; EVO Moment 37 is still being clipped in 2026 — no live service event from 2004 is; the organic marketing value of one unrepeatable moment of genuine expertise has outlasted every seasonal drop from that era combined',
+      'On the collaborators: Hideki Naganuma (composer — jazz-funk-hip-hop identity, most-referenced fighting game OST); Infinite (Toronto-born rapper — existing fan, minimal Capcom direction, real passion audible in the performance); Akira Yasuda (character designer — roster still the aesthetic benchmark 25 years later)',
+      'No simulated data — this analysis didn\'t need it'
+    ],
+    tools:['Game Design Analysis','Cultural Durability','Fighting Game Systems','Community Architecture','Live Service Theory','Creative Conviction'],
+    links:[]
   }
 };
 
@@ -7891,7 +8164,7 @@ document.addEventListener('keydown', function(e) {
       <button class="lol-close" onclick="document.getElementById('modal-rework').classList.remove('open')">✕</button>
 
       <!-- ── Header ── -->
-      <div class="lol-eyebrow">Mega-Project · Game Design &amp; Behavioural Systems · 2026 · Draft / In Progress</div>
+      <div class="lol-eyebrow">Mega-Project · Game Design &amp; Behavioural Systems · 2026</div>
       <div class="lol-title">The Counterplay Gate —<br><em>Power, Identity &amp; Trust in League Reworks</em></div>
       <div class="lol-subtitle">6 champions · 3 axes · 2 taxonomies compared · 6-year longest arc</div>
 
@@ -8698,6 +8971,1381 @@ document.getElementById('modal-rework').addEventListener('click', function(e) {
     </div><!-- /cs-panel-inner -->
   </div><!-- /cs-panel -->
 </div><!-- /modal-mfvp -->
+
+<!-- ══════════════════════════════════════════════════════════
+     MODAL — THE WRONG BLUEPRINT (Street Fighter III: Third Strike)
+══════════════════════════════════════════════════════════ -->
+<style>
+/* Palette: #06060E base · #4488FF parry blue · #CC2020 danger red · #C89B3C gold · #1A1A3A border */
+#modal-sf3 {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(2,2,10,0.96);
+  backdrop-filter: blur(8px);
+  overflow-y: auto;
+  padding: 40px 16px 60px;
+}
+#modal-sf3.open { display: flex; justify-content: center; align-items: flex-start; }
+
+.sf3-panel {
+  background: #06060E;
+  max-width: 900px;
+  width: 100%;
+  position: relative;
+  border: 1px solid #1A1A3A;
+  box-shadow:
+    -4px 0 40px rgba(68,136,255,.08),
+     4px 0 40px rgba(204,32,32,.06),
+     0 0 0 1px #0A0A1E,
+    inset 0 0 120px rgba(68,136,255,.02);
+}
+/* Corner brackets — blue top-left, red bottom-right */
+.sf3-panel::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px;
+  width: 20px; height: 20px;
+  border: 2px solid #4488FF;
+  border-right: none; border-bottom: none;
+  z-index: 2;
+}
+.sf3-panel::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; right: -1px;
+  width: 20px; height: 20px;
+  border: 2px solid #CC2020;
+  border-left: none; border-top: none;
+  z-index: 2;
+}
+.sf3-panel-inner {
+  position: relative;
+  padding: 0 0 52px;
+}
+.sf3-close {
+  position: absolute;
+  top: 16px; right: 20px;
+  background: none; border: none;
+  color: #2A2A4A;
+  font-size: 18px; cursor: pointer;
+  font-family: 'Space Mono', monospace;
+  transition: color .2s;
+  z-index: 10;
+}
+.sf3-close:hover { color: #8888AA; }
+
+/* Header SVG wrapper */
+.sf3-header { margin-bottom: 0; overflow: hidden; position: relative; }
+
+/* Content area */
+.sf3-content { padding: 36px 48px 0; }
+
+/* Eyebrow */
+.sf3-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: .6rem;
+  color: #2A2A50;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.sf3-eyebrow::before {
+  content: '▶ ';
+  color: #4488FF;
+  opacity: .6;
+}
+
+/* Title */
+.sf3-title {
+  font-family: Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #A0A8CC;
+  letter-spacing: -.01em;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+.sf3-title em { color: #C89B3C; font-style: italic; }
+
+.sf3-subtitle {
+  font-family: 'Space Mono', monospace;
+  font-size: .7rem;
+  color: #303060;
+  letter-spacing: .06em;
+  margin-bottom: 24px;
+}
+
+/* Chips */
+.sf3-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 28px; }
+.sf3-chip {
+  font-family: 'Space Mono', monospace;
+  font-size: .6rem;
+  padding: 4px 10px;
+  border: 1px solid #1A1A3A;
+  color: #3A3A5A;
+  letter-spacing: .08em;
+  border-radius: 2px;
+}
+.sf3-chip-blue { border-color: rgba(68,136,255,.3); color: #4466AA; }
+.sf3-chip-red  { border-color: rgba(204,32,32,.3);  color: #AA3333; }
+.sf3-chip-gold { border-color: rgba(200,155,60,.3); color: #8A6A28; }
+
+/* Stat strip */
+.sf3-stats {
+  display: flex;
+  gap: 0;
+  border: 1px solid #1A1A3A;
+  margin-bottom: 32px;
+  overflow: hidden;
+}
+.sf3-stat {
+  flex: 1;
+  padding: 14px 12px;
+  border-right: 1px solid #1A1A3A;
+  text-align: center;
+}
+.sf3-stat:last-child { border-right: none; }
+.sf3-stat-val {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #4A4A6A;
+  margin-bottom: 4px;
+}
+.sf3-stat-val.blue  { color: #4488FF; }
+.sf3-stat-val.red   { color: #CC2020; }
+.sf3-stat-val.gold  { color: #C89B3C; }
+.sf3-stat-label {
+  font-family: 'Space Mono', monospace;
+  font-size: .52rem;
+  color: #252540;
+  letter-spacing: .05em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+/* Section dividers */
+.sf3-rule {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 36px 0 24px;
+}
+.sf3-rule-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #1A1A3A);
+}
+.sf3-rule-line.rev {
+  background: linear-gradient(90deg, #1A1A3A, transparent);
+}
+.sf3-rule-label {
+  font-family: 'Space Mono', monospace;
+  font-size: .6rem;
+  color: #C89B3C;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sf3-rule-diamond {
+  width: 6px; height: 6px;
+  background: #C89B3C;
+  transform: rotate(45deg);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Decision cards — the four wrong decisions */
+.sf3-decisions { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #1A1A3A; border: 1px solid #1A1A3A; margin-bottom: 28px; }
+.sf3-decision { background: #06060E; padding: 20px 22px; }
+.sf3-decision-num {
+  font-family: 'Space Mono', monospace;
+  font-size: .55rem;
+  color: #CC2020;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.sf3-decision-name {
+  font-family: Georgia, serif;
+  font-size: .95rem;
+  font-weight: 700;
+  color: #7070A0;
+  margin-bottom: 8px;
+}
+.sf3-decision-body {
+  font-family: Georgia, serif;
+  font-size: .82rem;
+  color: #2E2E50;
+  line-height: 1.75;
+}
+.sf3-decision-body em { color: #5A5A88; font-style: italic; }
+.sf3-decision-verdict {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: #08081A;
+  border-left: 2px solid #4488FF;
+  font-family: 'Space Mono', monospace;
+  font-size: .62rem;
+  color: #3A3A6A;
+  line-height: 1.6;
+  letter-spacing: .02em;
+}
+
+/* Body text */
+.sf3-body {
+  font-family: Georgia, serif;
+  font-size: .9rem;
+  color: #2E2E50;
+  line-height: 1.85;
+  margin-bottom: 18px;
+}
+.sf3-body em { color: #5A5A88; }
+.sf3-body strong { color: #5050A0; font-weight: 600; }
+
+/* Pull quote */
+.sf3-pullquote {
+  border-left: 2px solid #C89B3C;
+  padding: 14px 20px;
+  margin: 28px 0;
+  background: #08080E;
+}
+.sf3-pullquote p {
+  font-family: Georgia, serif;
+  font-size: 1rem;
+  color: #5A5A88;
+  line-height: 1.7;
+  font-style: italic;
+  margin: 0;
+}
+.sf3-pullquote cite {
+  display: block;
+  margin-top: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: .58rem;
+  color: #3A2A18;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+/* Why it worked — synthesis blocks */
+.sf3-why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #1A1A3A; border: 1px solid #1A1A3A; margin-bottom: 28px; }
+.sf3-why { background: #06060E; padding: 18px 20px; }
+.sf3-why-head {
+  font-family: 'Space Mono', monospace;
+  font-size: .62rem;
+  color: #4488FF;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.sf3-why-body {
+  font-family: Georgia, serif;
+  font-size: .82rem;
+  color: #2A2A48;
+  line-height: 1.75;
+}
+.sf3-why-body em { color: #5050A0; }
+
+/* Live service contrast table */
+.sf3-contrast {
+  border: 1px solid #1A1A3A;
+  margin-bottom: 28px;
+  overflow: hidden;
+}
+.sf3-contrast-head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.sf3-contrast-col-head {
+  padding: 10px 16px;
+  font-family: 'Space Mono', monospace;
+  font-size: .6rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #1A1A3A;
+}
+.sf3-contrast-col-head.breadth { background: #0A060A; color: #AA3333; border-right: 1px solid #1A1A3A; }
+.sf3-contrast-col-head.depth   { background: #06060E; color: #4488FF; }
+.sf3-contrast-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid #0E0E1E;
+}
+.sf3-contrast-cell {
+  padding: 10px 16px;
+  font-family: Georgia, serif;
+  font-size: .8rem;
+  color: #2A2A48;
+  line-height: 1.6;
+}
+.sf3-contrast-cell.breadth-cell { background: #08040A; border-right: 1px solid #1A1A3A; color: #3A2A3A; }
+.sf3-contrast-cell.depth-cell   { background: #04060E; }
+
+/* Collaborator cards */
+.sf3-collabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: #1A1A3A; border: 1px solid #1A1A3A; }
+.sf3-collab { background: #06060E; padding: 18px 18px; }
+.sf3-collab-role {
+  font-family: 'Space Mono', monospace;
+  font-size: .55rem;
+  color: #C89B3C;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.sf3-collab-name {
+  font-family: Georgia, serif;
+  font-size: .95rem;
+  font-weight: 700;
+  color: #6060A0;
+  margin-bottom: 8px;
+}
+.sf3-collab-body {
+  font-family: Georgia, serif;
+  font-size: .78rem;
+  color: #28284A;
+  line-height: 1.7;
+}
+.sf3-collab-body em { color: #4A4A80; }
+
+/* Closing line */
+.sf3-closing {
+  text-align: center;
+  padding: 32px 0 0;
+  border-top: 1px solid #0E0E1E;
+  margin-top: 36px;
+}
+.sf3-closing p {
+  font-family: Georgia, serif;
+  font-size: .88rem;
+  color: #282848;
+  line-height: 1.8;
+  font-style: italic;
+}
+.sf3-closing strong { color: #4A4A88; font-style: normal; }
+</style>
+
+<div id="modal-sf3">
+  <div class="sf3-panel">
+    <div class="sf3-panel-inner">
+      <button class="sf3-close" onclick="document.getElementById('modal-sf3').classList.remove('open')">✕</button>
+
+      <!-- ── PANORAMIC HEADER ── -->
+      <div class="sf3-header">
+        <svg viewBox="0 0 900 240" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style="display:block;width:100%">
+          <defs>
+            <radialGradient id="h3ParryGlow" cx="52%" cy="60%" r="40%">
+              <stop offset="0%" stop-color="#2255CC" stop-opacity=".55"/>
+              <stop offset="100%" stop-color="#04040C" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="h3DangerGlow" cx="18%" cy="55%" r="35%">
+              <stop offset="0%" stop-color="#AA1818" stop-opacity=".4"/>
+              <stop offset="100%" stop-color="#04040C" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="h3CrowdGlow" cx="50%" cy="90%" r="50%">
+              <stop offset="0%" stop-color="#C89B3C" stop-opacity=".06"/>
+              <stop offset="100%" stop-color="#04040C" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="h3Bottom" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="60%" stop-color="#04040C" stop-opacity="0"/>
+              <stop offset="100%" stop-color="#06060E" stop-opacity="1"/>
+            </linearGradient>
+            <linearGradient id="h3HealthL" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#CC2020"/>
+              <stop offset="100%" stop-color="#AA1010"/>
+            </linearGradient>
+            <linearGradient id="h3HealthR" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#20CC40"/>
+              <stop offset="100%" stop-color="#10AA28"/>
+            </linearGradient>
+            <filter id="h3Glow12"><feGaussianBlur stdDeviation="12"/></filter>
+            <filter id="h3Glow5"><feGaussianBlur stdDeviation="5"/></filter>
+            <filter id="h3Glow2"><feGaussianBlur stdDeviation="2"/></filter>
+          </defs>
+
+          <!-- Base -->
+          <rect width="900" height="240" fill="#04040C"/>
+          <rect width="900" height="240" fill="url(#h3ParryGlow)"/>
+          <rect width="900" height="240" fill="url(#h3DangerGlow)"/>
+          <rect width="900" height="240" fill="url(#h3CrowdGlow)"/>
+
+          <!-- Scan-line texture -->
+          <rect width="900" height="240" fill="none" stroke="#0A0A1A" stroke-width=".4" opacity=".3"
+                style="background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(10,10,26,.3) 2px,rgba(10,10,26,.3) 3px)"/>
+
+          <!-- Arena background silhouette — crowd in darkness -->
+          <ellipse cx="450" cy="260" rx="500" ry="120" fill="#0A0A1E" opacity=".6"/>
+          <!-- Crowd silhouettes -->
+          <rect x="0"   y="160" width="900" height="80" fill="#060614" opacity=".7"/>
+          <!-- Individual crowd heads -->
+          <ellipse cx="60"  cy="168" rx="12" ry="8" fill="#08081A"/>
+          <ellipse cx="120" cy="172" rx="10" ry="7" fill="#08081A"/>
+          <ellipse cx="180" cy="166" rx="13" ry="8" fill="#06060E"/>
+          <ellipse cx="240" cy="170" rx="11" ry="7" fill="#08081A"/>
+          <ellipse cx="300" cy="165" rx="12" ry="8" fill="#06060E"/>
+          <ellipse cx="360" cy="169" rx="10" ry="7" fill="#08081A"/>
+          <ellipse cx="720" cy="167" rx="12" ry="8" fill="#08081A"/>
+          <ellipse cx="780" cy="171" rx="11" ry="7" fill="#06060E"/>
+          <ellipse cx="840" cy="165" rx="13" ry="8" fill="#08081A"/>
+
+          <!-- Floor line -->
+          <rect x="0" y="158" width="900" height="1" fill="#1A1A3A" opacity=".5"/>
+
+          <!-- ── CHUN-LI (left) ── -->
+          <g transform="translate(185,95)" opacity=".9">
+            <circle cx="0" cy="15" r="55" fill="#CC2020" opacity=".07" filter="url(#h3Glow12)"/>
+            <ellipse cx="0" cy="22" rx="20" ry="25" fill="#AA1818" opacity=".75"/>
+            <circle cx="0" cy="-5" r="14" fill="#AA1818" opacity=".8"/>
+            <circle cx="-10" cy="-14" r="6" fill="#881010" opacity=".85"/>
+            <circle cx="10" cy="-14" r="6" fill="#881010" opacity=".85"/>
+            <line x1="0" y1="38" x2="55" y2="10" stroke="#CC2020" stroke-width="12" stroke-linecap="round" opacity=".75"/>
+            <line x1="0" y1="38" x2="-18" y2="82" stroke="#AA1818" stroke-width="10" stroke-linecap="round" opacity=".7"/>
+            <line x1="-8" y1="14" x2="-45" y2="-8" stroke="#AA1818" stroke-width="9" stroke-linecap="round" opacity=".7"/>
+            <line x1="8" y1="14" x2="42" y2="4" stroke="#AA1818" stroke-width="9" stroke-linecap="round" opacity=".7"/>
+            <!-- Kikosho energy -->
+            <circle cx="55" cy="5" r="25" fill="#FF3333" opacity=".1" filter="url(#h3Glow5)"/>
+          </g>
+
+          <!-- ── DAIGO / KEN (right) ── -->
+          <g transform="translate(680,93)" opacity=".92">
+            <circle cx="0" cy="15" r="70" fill="#4488FF" opacity=".08" filter="url(#h3Glow12)"/>
+            <circle cx="0" cy="15" r="42" fill="#2266CC" opacity=".09" filter="url(#h3Glow5)"/>
+            <ellipse cx="0" cy="22" rx="20" ry="25" fill="#1A44AA" opacity=".82"/>
+            <circle cx="0" cy="-4" r="14" fill="#1A44AA" opacity=".88"/>
+            <rect x="-14" y="-9" width="28" height="4" rx="2" fill="#CC2020" opacity=".9"/>
+            <line x1="-8" y1="10" x2="-55" y2="-4" stroke="#2255CC" stroke-width="10" stroke-linecap="round" opacity=".85"/>
+            <circle cx="-55" cy="-4" r="10" fill="#88AAFF" opacity=".35" filter="url(#h3Glow2)"/>
+            <circle cx="-55" cy="-4" r="5" fill="#BBCCFF" opacity=".28"/>
+            <line x1="8" y1="12" x2="32" y2="28" stroke="#1A44AA" stroke-width="9" stroke-linecap="round" opacity=".8"/>
+            <line x1="-5" y1="40" x2="-22" y2="88" stroke="#1A44AA" stroke-width="11" stroke-linecap="round" opacity=".8"/>
+            <line x1="5" y1="40" x2="18" y2="88" stroke="#1A44AA" stroke-width="11" stroke-linecap="round" opacity=".8"/>
+          </g>
+
+          <!-- ── IMPACT FLASH (center) ── -->
+          <ellipse cx="435" cy="120" rx="70" ry="50" fill="#FFFFFF" opacity=".05" filter="url(#h3Glow12)"/>
+          <ellipse cx="435" cy="120" rx="35" ry="25" fill="#88AAFF" opacity=".1" filter="url(#h3Glow5)"/>
+          <line x1="415" y1="108" x2="388" y2="90"  stroke="#AACCFF" stroke-width="1.5" opacity=".55"/>
+          <line x1="428" y1="104" x2="412" y2="80"  stroke="#FFFFFF"  stroke-width="1"   opacity=".45"/>
+          <line x1="445" y1="110" x2="470" y2="94"  stroke="#AACCFF" stroke-width="1.5" opacity=".5"/>
+          <line x1="435" y1="132" x2="422" y2="154" stroke="#88AAFF" stroke-width="1"   opacity=".4"/>
+          <circle cx="385" cy="88"  r="2.5" fill="#FFFFFF" opacity=".5"/>
+          <circle cx="474" cy="92"  r="2.5" fill="#FFFFFF" opacity=".48"/>
+          <circle cx="410" cy="78"  r="1.5" fill="#AACCFF" opacity=".4"/>
+
+          <!-- ── HUD ── -->
+          <!-- P1 bar -->
+          <rect x="24" y="16" width="220" height="12" rx="1.5" fill="#08081A" stroke="#1A1A3A" stroke-width=".8"/>
+          <rect x="26" y="18" width="215" height="8" rx="1" fill="#1A0606" opacity=".9"/>
+          <rect x="26" y="18" width="3"   height="8" rx="1" fill="url(#h3HealthL)"/>
+          <text x="26" y="13" fill="#881111" font-family="monospace" font-size="7" letter-spacing=".8" font-weight="700">CHUN-LI</text>
+          <text x="26" y="38" fill="#441010" font-family="monospace" font-size="5.5" letter-spacing=".5">1 PIXEL REMAINING</text>
+
+          <!-- P2 bar -->
+          <rect x="656" y="16" width="220" height="12" rx="1.5" fill="#08081A" stroke="#1A1A3A" stroke-width=".8"/>
+          <rect x="658" y="18" width="215" height="8" rx="1" fill="url(#h3HealthR)"/>
+          <text x="876" y="13" text-anchor="end" fill="#226622" font-family="monospace" font-size="7" letter-spacing=".8" font-weight="700">KEN — DAIGO</text>
+          <text x="876" y="38" text-anchor="end" fill="#113311" font-family="monospace" font-size="5.5" letter-spacing=".5">FULL HEALTH</text>
+
+          <!-- Timer + Round -->
+          <rect x="416" y="12" width="68" height="28" rx="2" fill="#06060E" stroke="#1A1A3A" stroke-width=".8"/>
+          <text x="450" y="12" text-anchor="middle" fill="#2A2A50" font-family="monospace" font-size="6" letter-spacing="2">ROUND 3</text>
+          <text x="450" y="32" text-anchor="middle" fill="#5555AA" font-family="monospace" font-size="18" font-weight="700">07</text>
+
+          <!-- Parry counter overlay -->
+          <rect x="372" y="134" width="156" height="20" rx="2" fill="#04040C" opacity=".85"/>
+          <text x="450" y="147" text-anchor="middle" fill="#4488FF" font-family="monospace" font-size="8.5" letter-spacing="2" font-weight="700">PARRY × 15</text>
+          <rect x="372" y="155" width="156" height="14" rx="1.5" fill="#030308" opacity=".8"/>
+          <text x="450" y="165" text-anchor="middle" fill="#2A3A5A" font-family="monospace" font-size="6" letter-spacing="1">2 FRAMES · 1/30th SECOND</text>
+
+          <!-- EVO text watermark -->
+          <text x="450" y="145" text-anchor="middle" fill="#1A1A3A" font-family="monospace" font-size="80" font-weight="700" opacity=".12">EVO</text>
+
+          <!-- Bottom fade to content -->
+          <rect x="0" y="0" width="900" height="240" fill="url(#h3Bottom)"/>
+
+          <!-- Bottom accent line -->
+          <rect x="0" y="239" width="900" height="1">
+            <animate attributeName="opacity" values="0.2;0.6;0.2" dur="3s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="0" y="239" width="450" height="1" fill="#CC2020" opacity=".4"/>
+          <rect x="450" y="239" width="450" height="1" fill="#4488FF" opacity=".4"/>
+        </svg>
+      </div>
+
+      <!-- ── CONTENT ── -->
+      <div class="sf3-content">
+        <div class="sf3-eyebrow">Game Design Analysis · Cultural Durability · Capcom · 1999–2026</div>
+        <div class="sf3-title">The Wrong Blueprint —<br><em>How Street Fighter III: Third Strike Built a 25-Year Legacy by Failing Commercially</em></div>
+        <div class="sf3-subtitle">Capcom · 1999 · Three-Part Analysis · No simulated data — this one didn't need it</div>
+
+        <div class="sf3-chips">
+          <span class="sf3-chip sf3-chip-gold">Capcom</span>
+          <span class="sf3-chip">Street Fighter III</span>
+          <span class="sf3-chip sf3-chip-blue">EVO 2004</span>
+          <span class="sf3-chip">Game Design Analysis</span>
+          <span class="sf3-chip sf3-chip-red">Cultural Durability</span>
+          <span class="sf3-chip">Community Architecture</span>
+          <span class="sf3-chip">Live Service Theory</span>
+        </div>
+
+        <div class="sf3-stats">
+          <div class="sf3-stat">
+            <div class="sf3-stat-val red">4</div>
+            <div class="sf3-stat-label">Wrong<br>Decisions</div>
+          </div>
+          <div class="sf3-stat">
+            <div class="sf3-stat-val red">1px</div>
+            <div class="sf3-stat-label">Health<br>Remaining</div>
+          </div>
+          <div class="sf3-stat">
+            <div class="sf3-stat-val blue">×15</div>
+            <div class="sf3-stat-label">Parries<br>Executed</div>
+          </div>
+          <div class="sf3-stat">
+            <div class="sf3-stat-val blue">2</div>
+            <div class="sf3-stat-label">Frame<br>Window</div>
+          </div>
+          <div class="sf3-stat">
+            <div class="sf3-stat-val gold">25</div>
+            <div class="sf3-stat-label">Years<br>of Legacy</div>
+          </div>
+        </div>
+
+        <!-- Opening hook -->
+        <p class="sf3-body">EVO 2004. Grand finals. Justin Wong vs. Daigo Umehara. Justin activates Chun-Li's super — fifteen hits of guaranteed damage, enough to end the match. Daigo has one pixel of health left. What happens next is either impossible or it isn't, depending on whether you understand what a parry costs.</p>
+        <p class="sf3-body">A parry in Third Strike requires you to tap forward at the exact frame an attack connects. The window is two frames — 1/30th of a second. Miss it and you take full damage. Miss it once across fifteen consecutive hits and you lose. <em>Daigo parried all fifteen. Then he won the round.</em></p>
+
+        <div class="sf3-pullquote">
+          <p>The crowd reaction started before the last hit landed. That's the detail that matters. The people in that room didn't need to see the finish — they already knew what they'd witnessed. It took specific knowledge to feel that moment fully. And that specificity is why that clip is still being watched in 2026.</p>
+          <cite>EVO Moment #37 — the most watched fighting game clip in history</cite>
+        </div>
+
+        <p class="sf3-body">Third Strike didn't plan EVO Moment 37. It just built the only game where it could happen.</p>
+
+        <!-- PART I -->
+        <div class="sf3-rule">
+          <div class="sf3-rule-line"></div>
+          <div class="sf3-rule-label"><span class="sf3-rule-diamond"></span>Part I — The Wrong Decisions</div>
+          <div class="sf3-rule-line rev"></div>
+        </div>
+
+        <p class="sf3-body">Capcom released Street Fighter III: Third Strike in 1999. By most commercial metrics it underperformed. By every measure of cultural durability — community longevity, tournament presence, design influence, soundtrack recognition, visual legacy — it became the most enduring entry in the franchise. These are the decisions that should have made that impossible.</p>
+
+        <div class="sf3-decisions">
+          <div class="sf3-decision">
+            <div class="sf3-decision-num">Wrong Decision 01</div>
+            <div class="sf3-decision-name">The Parry System</div>
+            <div class="sf3-decision-body">
+              Street Fighter II built an audience on a simple contract: block to defend, attack to deal damage, read your opponent to win. Third Strike broke the contract. Blocking was replaced — not supplemented, <em>replaced</em> — by a parry mechanic requiring frame-precise timing on every incoming hit. Miss once and you eat full damage with no defensive recovery.
+              <br><br>
+              This was hostile to casual players by design. The skill floor for meaningful defense was so high that newcomers couldn't compete against anyone who'd invested real time in the system. Third Strike didn't meet you halfway. It demanded you come to it.
+            </div>
+            <div class="sf3-decision-verdict">What it built: expertise density — and mastery so legible that watching high-level play felt like watching a different sport entirely.</div>
+          </div>
+          <div class="sf3-decision">
+            <div class="sf3-decision-num">Wrong Decision 02</div>
+            <div class="sf3-decision-name">The Roster</div>
+            <div class="sf3-decision-body">
+              Street Fighter II gave the world Ryu and Ken — simple enough to become archetypes. Third Strike sidelined them. The featured roster led with characters nobody had ever seen: Makoto, a judoka teenager from a rural dojo who hits harder than anyone twice her size. Dudley, an English heavyweight boxer in immaculate evening wear. Q, a trenchcoated figure of completely unknown origin whose face is a steel mask.
+              <br><br>
+              Nobody mains Q casually. Choosing Q is a statement. That kind of investment doesn't produce customers. <em>It produces evangelists.</em>
+            </div>
+            <div class="sf3-decision-verdict">What it built: tribal identity — players who don't just play the game but represent it, carry it, introduce it with the energy of someone sharing something they genuinely love.</div>
+          </div>
+          <div class="sf3-decision">
+            <div class="sf3-decision-num">Wrong Decision 03</div>
+            <div class="sf3-decision-name">The Soundtrack</div>
+            <div class="sf3-decision-body">
+              In 1999, fighting game soundtracks followed a formula: driving electronic compositions, tempo-matched to combat pace, functional rather than memorable. Capcom handed Third Strike's soundtrack to Hideki Naganuma and told him to make something different. What Naganuma delivered was a jazz-funk-hip-hop hybrid that had no precedent in the genre. Then they put a Canadian rapper on the front door.
+              <br><br>
+              Infinite — born in Toronto, an existing fan before he auditioned — voiced the intro and character select. Capcom's creative direction was minimal: keywords, functional calls. <em>Everything inside it was his.</em>
+            </div>
+            <div class="sf3-decision-verdict">What it built: a sonic identity that aged backward — tracks that became more culturally resonant as lo-fi hip-hop and jazz-funk entered mainstream vocabulary in the 2010s.</div>
+          </div>
+          <div class="sf3-decision">
+            <div class="sf3-decision-num">Wrong Decision 04</div>
+            <div class="sf3-decision-name">The Art Direction</div>
+            <div class="sf3-decision-body">
+              Akira Yasuda's character designs pushed further from the Street Fighter II blueprint than any previous entry. More stylized. More specific. Less broadly legible on first contact. The personality encoded in idle animations — Dudley adjusting his cufflinks between rounds, Makoto cracking her knuckles with barely-contained aggression, Q standing completely still in a way that communicates menace without a single moving part.
+              <br><br>
+              Gill, the final boss, looks like nothing in the franchise before or since. A final boss designed to be <em>aesthetically interesting</em> rather than immediately threatening.
+            </div>
+            <div class="sf3-decision-verdict">What it built: visual authority that compounds. SF6 character designs get compared to Third Strike designs in 2026. Not SF4. Not SF5. A 25-year-old entry is still the aesthetic benchmark.</div>
+          </div>
+        </div>
+
+        <!-- PART II -->
+        <div class="sf3-rule">
+          <div class="sf3-rule-line"></div>
+          <div class="sf3-rule-label"><span class="sf3-rule-diamond"></span>Part II — Why the Wrong Decisions Were Right</div>
+          <div class="sf3-rule-line rev"></div>
+        </div>
+
+        <p class="sf3-body">Every wrong decision in Third Strike shared a common structure: <strong>it optimised for a specific player rather than the broadest possible audience.</strong> And the specific player, once found, became something more valuable than a customer.</p>
+
+        <div class="sf3-why-grid">
+          <div class="sf3-why">
+            <div class="sf3-why-head">Expertise Legibility</div>
+            <div class="sf3-why-body">High-skill-ceiling mechanics don't just produce skilled players — they produce a <em>visible hierarchy of mastery</em> that spectators can feel even without understanding the system technically. The crowd at EVO 2004 didn't need a tutorial on frame data to recognise that something impossible had just happened. That legibility is what makes high-level Third Strike footage shareable across two decades.</div>
+          </div>
+          <div class="sf3-why">
+            <div class="sf3-why-head">Identity Investment</div>
+            <div class="sf3-why-body">When a player commits to Q — a character who gives them almost nothing upfront, who rewards only the players willing to stay long enough to find what's buried — they're not making a consumer choice. <em>They're making an identity choice.</em> That identity doesn't expire when the next game releases. Third Strike mains are still Third Strike mains in 2026.</div>
+          </div>
+          <div class="sf3-why">
+            <div class="sf3-why-head">Specificity Ages Better</div>
+            <div class="sf3-why-body">Naganuma and Infinite made music specific to a feeling rather than calibrated to a market. The tracks that sounded unusual in 1999 became reference points as lo-fi hip-hop and jazz-funk entered mainstream aesthetic vocabulary in the 2010s. <em>Safe music chases trends. Specific music occasionally becomes one.</em></div>
+          </div>
+          <div class="sf3-why">
+            <div class="sf3-why-head">Authority Compounds</div>
+            <div class="sf3-why-body">Every year Third Strike's designs remain the community benchmark is another year of compounding authority. Yasuda's work didn't just produce memorable characters — it produced characters that made subsequent work in the franchise look like it was trying to live up to something. <em>Not imitation. Standard-setting.</em></div>
+          </div>
+        </div>
+
+        <div class="sf3-pullquote">
+          <p>Third Strike failed to optimise for the broadest possible audience and built a 25-year community instead.</p>
+          <cite>The synthesis — Part II</cite>
+        </div>
+
+        <!-- PART III -->
+        <div class="sf3-rule">
+          <div class="sf3-rule-line"></div>
+          <div class="sf3-rule-label"><span class="sf3-rule-diamond"></span>Part III — What This Means for Live Service</div>
+          <div class="sf3-rule-line rev"></div>
+        </div>
+
+        <p class="sf3-body">Most live service games optimise for the metrics that justify continued investment: DAU, D7 retention, MAU, revenue per user. Those metrics reward breadth — keeping the most players engaged the longest. The seasonal content calendar, the battle pass, the limited-time event, the login bonus — all of these are breadth tools.</p>
+        <p class="sf3-body">Third Strike had none of these. No seasonal content. No battle pass. No limited-time events. No live team making weekly balance adjustments. A fighting game shipped in 1999 that somehow built a more durable community than most live service titles that ran for a decade with full operational support.</p>
+
+        <div class="sf3-contrast">
+          <div class="sf3-contrast-head">
+            <div class="sf3-contrast-col-head breadth">Breadth Tools (Live Service)</div>
+            <div class="sf3-contrast-col-head depth">Depth Design (Third Strike)</div>
+          </div>
+          <div class="sf3-contrast-row">
+            <div class="sf3-contrast-cell breadth-cell">Retain players by giving them things to do</div>
+            <div class="sf3-contrast-cell depth-cell">Create players who generate their own reasons to return</div>
+          </div>
+          <div class="sf3-contrast-row">
+            <div class="sf3-contrast-cell breadth-cell">Seasonal events expire — content consumed and discarded</div>
+            <div class="sf3-contrast-cell depth-cell">Mastery compounds — the longer you stay, the more you have</div>
+          </div>
+          <div class="sf3-contrast-row">
+            <div class="sf3-contrast-cell breadth-cell">Retention measured in DAU / D7 / monthly actives</div>
+            <div class="sf3-contrast-cell depth-cell">Community measured in years — players who bring others</div>
+          </div>
+          <div class="sf3-contrast-row">
+            <div class="sf3-contrast-cell breadth-cell">No live service event from 2004 is still being clipped</div>
+            <div class="sf3-contrast-cell depth-cell">EVO Moment 37 is still being watched and shared in 2026</div>
+          </div>
+        </div>
+
+        <p class="sf3-body">EVO Moment 37 is still being clipped, discussed, and shown to new players in 2026. The organic marketing value of one unrepeatable moment of genuine expertise — witnessed by people who understood exactly what they were seeing, shared because the feeling was impossible to keep to yourself — has outlasted every seasonal drop from that era combined.</p>
+
+        <div class="sf3-pullquote">
+          <p>The live service question worth asking isn't "how do we retain the most players this month." It's "how do we build systems specific enough that the players who stay long enough can create moments we couldn't have planned." Third Strike answered that question by accident in 1999. The best live service teams are trying to answer it on purpose in 2026.</p>
+          <cite>Part III — the payoff</cite>
+        </div>
+
+        <!-- ON THE COLLABORATORS -->
+        <div class="sf3-rule">
+          <div class="sf3-rule-line"></div>
+          <div class="sf3-rule-label"><span class="sf3-rule-diamond"></span>On the Collaborators</div>
+          <div class="sf3-rule-line rev"></div>
+        </div>
+
+        <div class="sf3-collabs">
+          <div class="sf3-collab">
+            <div class="sf3-collab-role">Composer</div>
+            <div class="sf3-collab-name">Hideki Naganuma</div>
+            <div class="sf3-collab-body">Jazz-funk-hip-hop production gave the game its sonic identity. Naganuma's soundtrack remains one of the most-referenced fighting game OSTs in community discussions, 25 years after release. <em>Encore! (Jazzy NYC '99) sounds more current now than it did at launch.</em></div>
+          </div>
+          <div class="sf3-collab">
+            <div class="sf3-collab-role">Voice · Intro &amp; Character Select</div>
+            <div class="sf3-collab-name">Infinite</div>
+            <div class="sf3-collab-body">Toronto-born rapper. Came into the Capcom audition as an existing fan of the franchise. Capcom's creative direction was structural — keywords and functional calls. The performance was his. <em>He continues to discuss the longevity of the tracks in interviews — the passion behind it was real, not performed.</em></div>
+          </div>
+          <div class="sf3-collab">
+            <div class="sf3-collab-role">Character Designer</div>
+            <div class="sf3-collab-name">Akira Yasuda</div>
+            <div class="sf3-collab-body">Third Strike's roster remains the aesthetic benchmark against which Street Fighter character design is measured in community discussions — 25 years after release. <em>SF6 character designs get compared to Third Strike. Not SF4. Not SF5. The standard compounds.</em></div>
+          </div>
+        </div>
+
+        <!-- Closing -->
+        <div class="sf3-closing">
+          <p>Capcom didn't plan EVO Moment 37.<br><strong>They just built the only game where it could happen.</strong></p>
+        </div>
+
+      </div><!-- /sf3-content -->
+    </div><!-- /sf3-panel-inner -->
+  </div><!-- /sf3-panel -->
+</div><!-- /modal-sf3 -->
+
+
+<!-- ═════════════════════════════════════════════════════════════════════════
+     MONSTER HUNTER WORLD / WILDS MODAL
+     Palette: #060A06 base · #C89B3C bone gold · #4A8A30 forest green
+              #CC4400 enrage · #88AA00 stamina · #1A2A18 border
+     ═════════════════════════════════════════════════════════════════════════ -->
+<style>
+#modal-mhw {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(3,5,3,0.96);
+  backdrop-filter: blur(8px);
+  overflow-y: auto;
+  padding: 40px 16px 60px;
+}
+#modal-mhw.open { display: flex; justify-content: center; align-items: flex-start; }
+
+.mhw-panel {
+  background: #060A06;
+  max-width: 900px;
+  width: 100%;
+  position: relative;
+  border: 1px solid #1A2A18;
+  box-shadow:
+    -4px 0 40px rgba(74,138,48,.07),
+     4px 0 40px rgba(204,68,0,.06),
+     0 0 0 1px #0A140A,
+    inset 0 0 120px rgba(74,138,48,.02);
+}
+.mhw-panel::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px;
+  width: 20px; height: 20px;
+  border: 2px solid #4A8A30;
+  border-right: none; border-bottom: none;
+  z-index: 2;
+}
+.mhw-panel::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; right: -1px;
+  width: 20px; height: 20px;
+  border: 2px solid #C89B3C;
+  border-left: none; border-top: none;
+  z-index: 2;
+}
+.mhw-panel-inner { position: relative; padding: 0 0 52px; }
+.mhw-close {
+  position: absolute;
+  top: 16px; right: 20px;
+  background: none; border: none;
+  color: #1E2E1E;
+  font-size: 18px; cursor: pointer;
+  font-family: 'Space Mono', monospace;
+  transition: color .2s;
+  z-index: 10;
+}
+.mhw-close:hover { color: #4A6A4A; }
+.mhw-header { margin-bottom: 0; overflow: hidden; position: relative; }
+.mhw-content { padding: 36px 48px 0; }
+
+/* Eyebrow */
+.mhw-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: .6rem;
+  color: #1E2E1E;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.mhw-eyebrow::before { content: '▶ '; color: #4A8A30; opacity: .7; }
+
+/* Title */
+.mhw-title {
+  font-family: Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #8AA890;
+  letter-spacing: -.01em;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+.mhw-title em { color: #C89B3C; font-style: italic; }
+.mhw-subtitle {
+  font-family: 'Space Mono', monospace;
+  font-size: .7rem;
+  color: #1E3020;
+  letter-spacing: .06em;
+  margin-bottom: 24px;
+}
+
+/* Chips */
+.mhw-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 28px; }
+.mhw-chip {
+  font-family: 'Space Mono', monospace;
+  font-size: .6rem;
+  padding: 4px 10px;
+  border: 1px solid #1A2A18;
+  color: #2A3A2A;
+  letter-spacing: .08em;
+  border-radius: 2px;
+}
+.mhw-chip-green { border-color: rgba(74,138,48,.35); color: #3A6A28; }
+.mhw-chip-amber { border-color: rgba(200,155,60,.3); color: #7A6020; }
+.mhw-chip-red   { border-color: rgba(204,68,0,.3);   color: #8A3010; }
+
+/* Stat strip */
+.mhw-stats { display: flex; gap: 0; border: 1px solid #1A2A18; margin-bottom: 32px; overflow: hidden; }
+.mhw-stat { flex: 1; padding: 14px 12px; border-right: 1px solid #1A2A18; text-align: center; }
+.mhw-stat:last-child { border-right: none; }
+.mhw-stat-val {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2E4A2E;
+  margin-bottom: 4px;
+}
+.mhw-stat-val.green  { color: #4A8A30; }
+.mhw-stat-val.amber  { color: #C89B3C; }
+.mhw-stat-val.red    { color: #CC4400; }
+.mhw-stat-label {
+  font-family: 'Space Mono', monospace;
+  font-size: .52rem;
+  color: #1A2A1A;
+  letter-spacing: .05em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+/* Section rules */
+.mhw-rule { display: flex; align-items: center; gap: 12px; margin: 36px 0 24px; }
+.mhw-rule-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #1A2A18); }
+.mhw-rule-line.rev { background: linear-gradient(90deg, #1A2A18, transparent); }
+.mhw-rule-label {
+  font-family: 'Space Mono', monospace;
+  font-size: .6rem;
+  color: #C89B3C;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  display: flex; align-items: center; gap: 8px;
+}
+.mhw-rule-diamond { width: 6px; height: 6px; background: #4A8A30; transform: rotate(45deg); display: inline-block; flex-shrink: 0; }
+
+/* Signal grid (Part I) */
+.mhw-signals { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #1A2A18; border: 1px solid #1A2A18; margin-bottom: 28px; }
+.mhw-signal { background: #060A06; padding: 20px 22px; }
+.mhw-signal-num {
+  font-family: 'Space Mono', monospace;
+  font-size: .55rem;
+  color: #CC4400;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.mhw-signal-name {
+  font-family: Georgia, serif;
+  font-size: .95rem;
+  font-weight: 700;
+  color: #4A6A48;
+  margin-bottom: 8px;
+}
+.mhw-signal-body {
+  font-family: Georgia, serif;
+  font-size: .82rem;
+  color: #1E2E1E;
+  line-height: 1.75;
+}
+.mhw-signal-body em { color: #3A5A38; font-style: italic; }
+.mhw-signal-verdict {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: #080E08;
+  border-left: 2px solid #4A8A30;
+  font-family: 'Space Mono', monospace;
+  font-size: .62rem;
+  color: #203A20;
+  line-height: 1.6;
+  letter-spacing: .02em;
+}
+
+/* Body text */
+.mhw-body {
+  font-family: Georgia, serif;
+  font-size: .9rem;
+  color: #1E2E1E;
+  line-height: 1.85;
+  margin-bottom: 18px;
+}
+.mhw-body em { color: #3A5A38; }
+.mhw-body strong { color: #3A5A30; font-weight: 600; }
+
+/* Pull quote */
+.mhw-pullquote {
+  border-left: 2px solid #C89B3C;
+  padding: 14px 20px;
+  margin: 28px 0;
+  background: #08100A;
+}
+.mhw-pullquote p {
+  font-family: Georgia, serif;
+  font-size: 1rem;
+  color: #3A5A38;
+  line-height: 1.7;
+  font-style: italic;
+  margin: 0;
+}
+.mhw-pullquote cite {
+  display: block;
+  margin-top: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: .58rem;
+  color: #1E2A18;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+/* Weapon grid (Part II) */
+.mhw-weapons { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #1A2A18; border: 1px solid #1A2A18; margin-bottom: 28px; }
+.mhw-weapon { background: #060A06; padding: 18px 20px; }
+.mhw-weapon-head {
+  font-family: 'Space Mono', monospace;
+  font-size: .62rem;
+  color: #4A8A30;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.mhw-weapon-body {
+  font-family: Georgia, serif;
+  font-size: .82rem;
+  color: #1A2A1A;
+  line-height: 1.75;
+}
+.mhw-weapon-body em { color: #3A6A30; }
+
+/* Design delta table (Part III) */
+.mhw-contrast { border: 1px solid #1A2A18; margin-bottom: 28px; overflow: hidden; }
+.mhw-contrast-head { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.mhw-contrast-col-head {
+  padding: 10px 16px;
+  font-family: 'Space Mono', monospace;
+  font-size: .6rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #1A2A18;
+}
+.mhw-contrast-col-head.world  { background: #080A08; color: #4A8A30; border-right: 1px solid #1A2A18; }
+.mhw-contrast-col-head.wilds  { background: #060A06; color: #C89B3C; }
+.mhw-contrast-row { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid #0E160E; }
+.mhw-contrast-cell {
+  padding: 10px 16px;
+  font-family: Georgia, serif;
+  font-size: .8rem;
+  line-height: 1.6;
+}
+.mhw-contrast-cell.world-cell { background: #070A07; border-right: 1px solid #1A2A18; color: #283828; }
+.mhw-contrast-cell.wilds-cell { background: #060906; color: #2E3820; }
+
+/* Closing */
+.mhw-closing {
+  text-align: center;
+  padding: 32px 0 0;
+  border-top: 1px solid #0E160E;
+  margin-top: 36px;
+}
+.mhw-closing p {
+  font-family: Georgia, serif;
+  font-size: .88rem;
+  color: #1E2E1E;
+  line-height: 1.8;
+  font-style: italic;
+}
+.mhw-closing strong { color: #3A5A30; font-style: normal; }
+</style>
+
+<div id="modal-mhw">
+  <div class="mhw-panel">
+    <div class="mhw-panel-inner">
+      <button class="mhw-close" onclick="document.getElementById('modal-mhw').classList.remove('open')">✕</button>
+
+      <!-- ── PANORAMIC HEADER ── -->
+      <div class="mhw-header">
+        <svg viewBox="0 0 900 240" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style="display:block;width:100%">
+          <defs>
+            <radialGradient id="mhwHdrBg" cx="50%" cy="50%" r="80%">
+              <stop offset="0%" stop-color="#0F1A0C"/>
+              <stop offset="100%" stop-color="#030603"/>
+            </radialGradient>
+            <radialGradient id="mhwHdrEnrage" cx="62%" cy="45%" r="38%">
+              <stop offset="0%" stop-color="#CC4400" stop-opacity=".22"/>
+              <stop offset="100%" stop-color="#CC4400" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="mhwHdrCharge" cx="28%" cy="75%" r="22%">
+              <stop offset="0%" stop-color="#FFB800" stop-opacity=".15"/>
+              <stop offset="100%" stop-color="#FFB800" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <!-- BG -->
+          <rect width="900" height="240" fill="url(#mhwHdrBg)"/>
+          <ellipse cx="560" cy="105" rx="340" ry="185" fill="url(#mhwHdrEnrage)"/>
+          <ellipse cx="240" cy="195" rx="180" ry="70" fill="url(#mhwHdrCharge)"/>
+          <!-- Ground -->
+          <rect x="0" y="188" width="900" height="52" fill="#070C07"/>
+          <line x1="0" y1="188" x2="900" y2="188" stroke="#1A2A18" stroke-width="1"/>
+          <!-- Background forest layers -->
+          <rect x="0" y="90" width="900" height="100" fill="#0A100A" opacity=".35"/>
+          <!-- Tree silhouettes - left cluster -->
+          <rect x="30" y="80" width="10" height="110" fill="#080D08" opacity=".7"/>
+          <polygon points="35,38 22,88 48,88" fill="#080D08" opacity=".65"/>
+          <rect x="68" y="100" width="8" height="90" fill="#080D08" opacity=".5"/>
+          <polygon points="72,60 60,105 84,105" fill="#080D08" opacity=".5"/>
+          <rect x="100" y="110" width="7" height="80" fill="#080D08" opacity=".4"/>
+          <!-- Tree silhouettes - right cluster -->
+          <rect x="820" y="85" width="10" height="105" fill="#080D08" opacity=".55"/>
+          <polygon points="825,42 812,90 838,90" fill="#080D08" opacity=".5"/>
+          <rect x="858" y="100" width="8" height="90" fill="#080D08" opacity=".4"/>
+          <!-- Center trees (far) -->
+          <rect x="430" y="100" width="6" height="88" fill="#0A0E0A" opacity=".25"/>
+          <rect x="468" y="112" width="5" height="76" fill="#0A0E0A" opacity=".2"/>
+
+          <!-- MONSTER (right side, large) — Rathalos wyvern -->
+          <!-- Body -->
+          <ellipse cx="620" cy="118" rx="130" ry="58" fill="#2A1606"/>
+          <ellipse cx="608" cy="128" rx="88" ry="40" fill="#1E1004"/>
+          <!-- Neck -->
+          <path d="M 528 108 Q 510 80 515 55 Q 518 35 530 22" stroke="#2A1606" stroke-width="40" fill="none" stroke-linecap="round"/>
+          <path d="M 528 108 Q 512 82 518 58 Q 522 38 530 22" stroke="#180C04" stroke-width="22" fill="none" stroke-linecap="round"/>
+          <!-- Head -->
+          <path d="M 518 20 Q 528 4 555 2 Q 572 0 580 14 Q 585 26 570 34 Q 548 40 530 34 Q 520 28 518 20Z" fill="#341A06"/>
+          <!-- Jaw (open, enraged) -->
+          <path d="M 528 28 Q 548 38 565 34 Q 578 30 580 14 Q 588 28 574 40 Q 555 50 538 42Z" fill="#6A1400" opacity=".7"/>
+          <!-- Fire breath wisps from mouth -->
+          <path d="M 575 30 Q 610 20 640 28 Q 660 34 655 44" stroke="#CC4400" stroke-width="3" fill="none" opacity=".4" stroke-linecap="round"/>
+          <path d="M 578 35 Q 615 28 645 38" stroke="#FF6600" stroke-width="2" fill="none" opacity=".28"/>
+          <path d="M 572 38 Q 605 32 635 45 Q 648 52 642 60" stroke="#FF8800" stroke-width="1.5" fill="none" opacity=".2"/>
+          <!-- Horns -->
+          <path d="M 540 2 L 544 -16 L 550 2" fill="#4A2A08"/>
+          <path d="M 550 1 L 557 -18 L 562 1" fill="#3A1E06"/>
+          <!-- Eye — enraged red glow -->
+          <circle cx="545" cy="16" r="5" fill="#FF4400" opacity=".95"/>
+          <circle cx="545" cy="16" r="9" fill="#FF3000" opacity=".2"/>
+          <circle cx="545" cy="16" r="14" fill="#FF3000" opacity=".08"/>
+          <!-- Wings spread wide -->
+          <path d="M 540 112 Q 445 58 362 82 Q 338 90 345 106 Q 398 88 468 122Z" fill="#1E1008" opacity=".88"/>
+          <path d="M 540 115 Q 450 68 368 88" stroke="#2A1408" stroke-width="1.5" fill="none" opacity=".65"/>
+          <path d="M 542 120 Q 455 75 375 93" stroke="#241008" stroke-width="1.2" fill="none" opacity=".5"/>
+          <path d="M 544 125 Q 460 82 382 98" stroke="#200E04" stroke-width="1" fill="none" opacity=".4"/>
+          <!-- Right wing -->
+          <path d="M 700 112 Q 780 62 818 82 Q 832 92 820 106 Q 792 88 752 122Z" fill="#1E1008" opacity=".88"/>
+          <path d="M 700 115 Q 778 68 812 88" stroke="#2A1408" stroke-width="1.5" fill="none" opacity=".65"/>
+          <!-- Tail -->
+          <path d="M 742 128 Q 790 140 820 165 Q 835 182 818 188 Q 800 175 778 158 Q 752 138 738 130Z" fill="#2A1606"/>
+          <path d="M 818 188 L 842 202 L 824 192Z" fill="#3A2A08"/>
+          <!-- Legs -->
+          <path d="M 586 170 Q 575 202 570 220 Q 568 228 576 230 Q 582 228 584 218 Q 588 200 596 172Z" fill="#221206"/>
+          <path d="M 648 170 Q 658 202 662 220 Q 664 228 656 230 Q 650 228 648 218 Q 644 200 640 172Z" fill="#221206"/>
+          <!-- Wound indicator — wing shoulder part break -->
+          <circle cx="576" cy="112" r="12" fill="none" stroke="#FFB800" stroke-width="2" stroke-dasharray="4,3" opacity=".85"/>
+          <line x1="570" y1="106" x2="582" y2="118" stroke="#FFB800" stroke-width="2" opacity=".9"/>
+          <line x1="582" y1="106" x2="570" y2="118" stroke="#FFB800" stroke-width="2" opacity=".9"/>
+          <!-- Part break sparks -->
+          <circle cx="568" cy="105" r="1.5" fill="#FFD800" opacity=".8"/>
+          <circle cx="584" cy="120" r="1" fill="#FFB800" opacity=".6"/>
+          <circle cx="580" cy="102" r="1.2" fill="#FFCC00" opacity=".7"/>
+          <!-- Enrage steam/aura -->
+          <circle cx="555" cy="6" r="8" fill="#251008" opacity=".7"/>
+          <circle cx="542" cy="-2" r="7" fill="#201008" opacity=".5"/>
+          <circle cx="562" cy="-8" r="5" fill="#2A1208" opacity=".4"/>
+          <line x1="545" y1="8" x2="552" y2="-12" stroke="#FF4400" stroke-width="1" opacity=".5"/>
+          <line x1="538" y1="12" x2="528" y2="-8" stroke="#FF6600" stroke-width="1" opacity=".4"/>
+
+          <!-- HUNTER (left side, Great Sword — charging) -->
+          <!-- Torso/armor -->
+          <rect x="220" y="148" width="38" height="48" rx="3" fill="#163A16"/>
+          <!-- Pauldrons -->
+          <path d="M 218 152 Q 204 162 208 178 Q 214 170 220 162Z" fill="#0E2A0E"/>
+          <path d="M 258 152 Q 272 162 268 178 Q 262 170 256 162Z" fill="#0E2A0E"/>
+          <!-- Head/helmet -->
+          <ellipse cx="239" cy="138" rx="13" ry="12" fill="#163A16"/>
+          <!-- Visor -->
+          <rect x="232" y="136" width="16" height="3" rx="1" fill="#88AA00" opacity=".65"/>
+          <!-- Armor chest emblem -->
+          <path d="M 234 162 L 239 155 L 244 162 L 239 168Z" fill="#88AA00" opacity=".35"/>
+          <!-- GREAT SWORD — fully charged, raised high -->
+          <!-- Handle -->
+          <rect x="208" y="120" width="6" height="28" rx="1" fill="#6A5A30" transform="rotate(-18 211 134)"/>
+          <!-- Guard -->
+          <rect x="196" y="126" width="14" height="5" rx="1" fill="#8A7A40" transform="rotate(-18 203 128)"/>
+          <!-- Blade — massive, wide, charged glow -->
+          <path d="M 188 100 L 180 65 L 188 55 L 210 72 L 218 105Z" fill="#9A8A58"/>
+          <!-- Blade fuller (center groove) -->
+          <line x1="187" y1="62" x2="196" y2="98" stroke="#B8A868" stroke-width="2" opacity=".6"/>
+          <!-- Blade edge highlight -->
+          <line x1="181" y1="65" x2="188" y2="100" stroke="#D4C888" stroke-width="1.5" opacity=".8"/>
+          <!-- Charge energy glow on blade -->
+          <path d="M 184 75 L 190 70 L 194 80 L 188 85Z" fill="#FFD060" opacity=".55"/>
+          <path d="M 186 88 L 192 84 L 195 92 L 189 96Z" fill="#FFB800" opacity=".4"/>
+          <!-- Charge aura around blade -->
+          <ellipse cx="196" cy="82" rx="18" ry="24" fill="#FFB800" opacity=".06" transform="rotate(-18 196 82)"/>
+          <!-- Legs -->
+          <rect x="222" y="194" width="14" height="30" rx="2" fill="#102A10"/>
+          <rect x="242" y="194" width="14" height="30" rx="2" fill="#102A10"/>
+          <!-- Boots -->
+          <rect x="220" y="220" width="17" height="7" rx="1" fill="#1A3A1A"/>
+          <rect x="240" y="220" width="17" height="7" rx="1" fill="#1A3A1A"/>
+
+          <!-- IMPACT ZONE — particles between hunter and monster -->
+          <circle cx="370" cy="145" r="3" fill="#FF8800" opacity=".7"/>
+          <circle cx="382" cy="158" r="2" fill="#FF6600" opacity=".55"/>
+          <circle cx="360" cy="155" r="2" fill="#FFB800" opacity=".65"/>
+          <circle cx="374" cy="136" r="1.5" fill="#FFCC00" opacity=".5"/>
+          <circle cx="388" cy="148" r="1.5" fill="#FF8800" opacity=".45"/>
+          <line x1="368" y1="143" x2="376" y2="136" stroke="#FF8800" stroke-width="1.2" opacity=".5"/>
+          <line x1="372" y1="152" x2="385" y2="146" stroke="#FF6600" stroke-width="1" opacity=".45"/>
+          <line x1="364" y1="150" x2="354" y2="142" stroke="#FFB800" stroke-width="1" opacity=".4"/>
+
+          <!-- HUD: Hunter (top left) -->
+          <text x="28" y="24" fill="#4A8A30" font-family="monospace" font-size="7" letter-spacing=".8">HP</text>
+          <rect x="44" y="15" width="140" height="7" rx="2" fill="#0A1208" opacity=".9"/>
+          <rect x="44" y="15" width="125" height="7" rx="2" fill="#20AA40" opacity=".8"/>
+          <text x="28" y="40" fill="#607820" font-family="monospace" font-size="7" letter-spacing=".8">ST</text>
+          <rect x="44" y="31" width="140" height="7" rx="2" fill="#0A1208" opacity=".9"/>
+          <rect x="44" y="31" width="82" height="7" rx="2" fill="#88AA00" opacity=".7"/>
+          <!-- Charge indicator -->
+          <text x="28" y="55" fill="#CC8800" font-family="monospace" font-size="6" letter-spacing=".5">CHARGE ████░</text>
+
+          <!-- HUD: Monster (top right) -->
+          <text x="548" y="20" fill="#AA4400" font-family="monospace" font-size="6.5" letter-spacing=".4">RATHALOS · ✦ ENRAGED</text>
+          <rect x="548" y="26" width="325" height="7" rx="2" fill="#1A0808" opacity=".9"/>
+          <rect x="548" y="26" width="98" height="7" rx="2" fill="#CC2200" opacity=".8"/>
+          <text x="548" y="46" fill="#662200" font-family="monospace" font-size="6" letter-spacing=".3">☠ WING: BROKEN · TAIL: INTACT</text>
+
+          <!-- Environmental detail: mist layers -->
+          <rect x="0" y="165" width="900" height="25" fill="#0A140A" opacity=".15"/>
+
+          <!-- Watermark label -->
+          <text x="450" y="228" fill="#0E180E" font-family="monospace" font-size="8" text-anchor="middle" letter-spacing="2">MONSTER HUNTER WORLD / WILDS · COMBAT ARCHITECTURE ANALYSIS</text>
+        </svg>
+      </div>
+
+      <!-- ── CONTENT ── -->
+      <div class="mhw-content">
+
+        <div class="mhw-eyebrow">Game Design Analysis · Behavioral Architecture · Capcom · 2004–2025</div>
+        <div class="mhw-title">The Hunting Dance —<br><em>Combat Interaction Design in Monster Hunter World &amp; Wilds</em></div>
+        <div class="mhw-subtitle">How Capcom built a behavioral curriculum disguised as a fight</div>
+
+        <div class="mhw-chips">
+          <span class="mhw-chip mhw-chip-red">Fatalis</span>
+          <span class="mhw-chip mhw-chip-amber">Alatreon</span>
+          <span class="mhw-chip">AT-Velkhana</span>
+          <span class="mhw-chip mhw-chip-green">Savage Omega</span>
+          <span class="mhw-chip">Behavioral Systems</span>
+          <span class="mhw-chip">Phase Design</span>
+          <span class="mhw-chip mhw-chip-green">World · Iceborne</span>
+          <span class="mhw-chip mhw-chip-amber">Wilds</span>
+        </div>
+
+        <!-- Stat strip -->
+        <div class="mhw-stats">
+          <div class="mhw-stat">
+            <div class="mhw-stat-val red">20+</div>
+            <div class="mhw-stat-label">Years Fatalis<br>has been hunting<br>hunters · 2004–2025</div>
+          </div>
+          <div class="mhw-stat">
+            <div class="mhw-stat-val green">0</div>
+            <div class="mhw-stat-label">Tutorial screens<br>in the core<br>hunt loop</div>
+          </div>
+          <div class="mhw-stat">
+            <div class="mhw-stat-val amber">3</div>
+            <div class="mhw-stat-label">Behavioral demands —<br>prepare · read<br>· coordinate</div>
+          </div>
+          <div class="mhw-stat">
+            <div class="mhw-stat-val green">4</div>
+            <div class="mhw-stat-label">Monsters — each<br>a different<br>design case study</div>
+          </div>
+          <div class="mhw-stat">
+            <div class="mhw-stat-val amber">1</div>
+            <div class="mhw-stat-label">Curriculum —<br>consequence is the<br>only teacher</div>
+          </div>
+        </div>
+
+        <!-- Opening — Fatalis as stakes-setter -->
+        <p class="mhw-body">Start with Fatalis.</p>
+
+        <p class="mhw-body">Capcom brought the original Monster Hunter final boss back in Iceborne's 2020 endgame update. Hunters who had spent hundreds of hours learning the game — who had read every tell, optimized every build, internalized every phase transition — found their confidence completely dismantled. Fatalis didn't introduce new mechanics. It applied maximum pressure to <em>everything you already knew.</em></p>
+
+        <p class="mhw-body">That is the design. Fatalis is not a boss. It is a <strong>final exam.</strong></p>
+
+        <p class="mhw-body">Every fight before Fatalis is a lesson. Every tell you learned to read, every part you learned to break, every phase transition you learned to respect — Fatalis demands all of it simultaneously, under maximum pressure. It is the culmination of a behavioral curriculum that the game never once explicitly teaches.</p>
+
+        <div class="mhw-pullquote">
+          <p>Monster Hunter never teaches. It conditions. The tutorial is never text — it is the first time you get hit, and the second time you don't.</p>
+          <cite>— The core design contract</cite>
+        </div>
+
+        <!-- PART I -->
+        <div class="mhw-rule">
+          <div class="mhw-rule-line rev"></div>
+          <div class="mhw-rule-label"><span class="mhw-rule-diamond"></span> PART I · THE MONSTER AS TEACHER</div>
+          <div class="mhw-rule-line"></div>
+        </div>
+
+        <p class="mhw-body">The tutorial is not in the menus. It is in the monster.</p>
+
+        <p class="mhw-body">Every attack has a windup animation — a specific pose or motion that precedes the strike. These are not incidental; they are <strong>designed affordances.</strong> Capcom builds these tells as behavioral conditioning: stand in the wrong place and you get hit; read the tell and you dodge or counter. The feedback is immediate, clear, and consequence-driven. No text required.</p>
+
+        <p class="mhw-body">Phase transitions escalate the teaching. When a monster enrages — red eyes, steam venting, aura effects — its moveset priorities shift. Speed increases. New attacks unlock. The visual signals are not flavor; they are the lesson. Part breaks close the loop: sever a tail, its range shortens. Break a wing, aerial patterns change. Every break is the game handing the hunter information they <em>earned</em> by hitting the right spots.</p>
+
+        <p class="mhw-body">None of this is explained. The hunter is never told that Rathalos enrages more frequently at low HP, or that breaking its wing reduces mobility, or that the limping retreat signals the final phase. They observe it. They get it wrong. They get hit. They adjust. <em>The monster is the teacher and consequence is the only lesson it gives.</em></p>
+
+        <!-- PART II -->
+        <div class="mhw-rule">
+          <div class="mhw-rule-line rev"></div>
+          <div class="mhw-rule-label"><span class="mhw-rule-diamond"></span> PART II · THE DANCE — A TWO-WAY NEGOTIATION</div>
+          <div class="mhw-rule-line"></div>
+        </div>
+
+        <p class="mhw-body">The hunt is not one-directional.</p>
+
+        <p class="mhw-body">When you stagger a monster, it recovers differently — adjusting its next attack based on its current state. When you break a part, its options narrow. When you push it near death, it retreats and heals if you let it. <strong>The monster is reading you as much as you are reading it.</strong> This is the design that separates Monster Hunter from most action games: the fight is a live two-way behavioral negotiation, not a pattern to memorize.</p>
+
+        <p class="mhw-body">The longer a hunt goes, the more information is exchanged. Early in the fight, you are reading a stranger. By the time the monster limps, you have learned it — its preferred routes, the specific lag before it recovers from a stagger, the stance it assumes before a charge. The fight evolves with every decision both sides make.</p>
+
+        <p class="mhw-body">The most sophisticated version of this is psychological. Monster Hunter's hardest encounters don't just test what you can execute — they test what you can hold in your head while you execute it. The awareness of what you need to do, the cost of doing it, and the window closing in real time creates a pressure that is itself a behavioral design decision. The monster conditions not just your actions but your attention — and the anxiety of knowing what the fight demands of you is part of the fight.</p>
+
+        <div class="mhw-pullquote">
+          <p>The hunt is a conversation. The monster speaks through behavior. The hunter answers through positioning, timing, and damage routing. The fight evolves with every exchange — and the best fights make you feel the weight of every decision before you make it.</p>
+          <cite>— The dance as behavioral feedback loop</cite>
+        </div>
+
+        <!-- PART III — Case Studies -->
+        <div class="mhw-rule">
+          <div class="mhw-rule-line rev"></div>
+          <div class="mhw-rule-label"><span class="mhw-rule-diamond"></span> PART III · FOUR MONSTERS · FOUR DESIGN PROBLEMS</div>
+          <div class="mhw-rule-line"></div>
+        </div>
+
+        <p class="mhw-body">Fatalis is the exam. The following four monsters are the curriculum — each one conditioning a different behavioral demand, each one a distinct design answer to the question of how to make a hunter better at the hunt.</p>
+
+        <div class="mhw-signals" style="grid-template-columns:1fr">
+          <div class="mhw-signal">
+            <div class="mhw-signal-num">Case Study 01 · Fatalis · The Final Exam</div>
+            <div class="mhw-signal-name">The Psychological Trap — Designed Pressure as a Mechanic</div>
+            <div class="mhw-signal-body">Fatalis's most sophisticated design decision is not a move or a phase. It is a psychological trap built into the fight's core loop.<br><br>
+              Breaking Fatalis's head is not optional. Without it, Phase 3's white fire becomes near-unsurvivable — the damage reduction from head breaks is the difference between a winnable fight and a wipe. Every experienced hunter knows this. And that knowledge sits in the back of your mind for the entire hunt.<br><br>
+              The problem: the head is directly in front of Fatalis's face. Getting there and staying there long enough to accumulate head break damage means positioning yourself in the most dangerous zone of the most dangerous monster in the game. Fatalis's fire cone, its bite, its stomp — all of it is concentrated at close range in front of the head. The thing you need most is exactly where the danger is highest.<br><br>
+              This creates a behavioral pressure loop that operates whether you are in active combat or not. Between attacks, repositioning, healing — the awareness that you need head breaks is a constant weight. It pulls you toward the danger zone even when your instincts say stay back. It makes you rush decisions, commit to windows that aren't quite open, push into positions you haven't fully read. Fatalis doesn't just test your mechanics. It tests your ability to execute under sustained psychological pressure — and it designed that pressure deliberately by tying survival to the most dangerous position in the arena.<br><br>
+              Phase 1's wide fire cone and Phase 2's sweeping beam compound this: the beam punishes the instinct to retreat, which means staying close is both more dangerous and more necessary than every prior fight conditioned you to believe.
+              <div class="mhw-signal-verdict">The head break is a behavioral trap wearing a survival mechanic's clothes. Capcom didn't just make Fatalis hard. They made you feel the pressure of what you need to do long before you do it — and designed the fight so that pressure itself is what causes most of the mistakes.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mhw-signals">
+          <div class="mhw-signal">
+            <div class="mhw-signal-num">Case Study 02 · Alatreon · The Loadout Test</div>
+            <div class="mhw-signal-name">The Horn Contest — A Monster That Fights Back for Its Weak Point</div>
+            <div class="mhw-signal-body">Alatreon uses its horn to cycle elemental attacks — fire to ice and back — and its combat behavior is built around defending it. Breaking the horn suppresses Alatreon's elemental power faster and removes a significant portion of its abilities. Hunters learn this quickly and set it as their targeting priority. Alatreon responds by making that priority as difficult to execute as possible: repositioning to keep the horn out of reach, angling attacks to punish hunters who commit to chasing it, and in extreme cases zoning the player out entirely — pushing them far enough back that any approach to the horn becomes an approach into a full attack sequence.<br><br>
+              The Escaton Judgement sits underneath all of this as the structural pressure. Alatreon cycles elements mid-fight and demands hunters deal a threshold of matching elemental damage within each window. Fail the threshold and Escaton Judgement fires — a one-shot party wipe that no armor resists and no shield blocks. Dragon element does not count toward the threshold, closing the obvious workaround. Meet it, and Escaton fires at survivable damage and Alatreon topples — a burst window earned by sustaining elemental compliance through everything the fight threw at you.<br><br>
+              The combined design creates two simultaneous behavioral demands that pull in the same direction but operate on different timescales. The horn break is immediate and contested — you are fighting Alatreon directly for access to it on every exchange. The Escaton threshold is long-arc — a clock running in the background that turns every moment you are not dealing elemental damage into accumulated risk. Alatreon's defensive behavior around the horn makes meeting that threshold harder precisely when you are trying hardest to meet it.
+              <div class="mhw-signal-verdict">Like Fatalis's head break, the horn is the thing you need most and the thing the monster most actively denies. The difference: Fatalis puts its head in the danger zone and lets the environment do the work. Alatreon moves. It fights you for it. The contest over the horn is not a consequence of its design — it is the design.</div>
+            </div>
+          </div>
+          <div class="mhw-signal">
+            <div class="mhw-signal-num">Case Study 03 · AT-Velkhana · The Dance</div>
+            <div class="mhw-signal-name">Spatial Conditioning Through Choreography</div>
+            <div class="mhw-signal-body">Arch-Tempered Velkhana is the purest expression of the dance because she designs her own arena mid-fight. Her ice pillars aren't environmental decoration — they are attack infrastructure. She creates them to anchor specific sequences: a pillar placed to her left means a subsequent cross-ice-beam attack; a cluster of pillars signals a zone she is about to turn into impassable frozen terrain. Reading the pillars is reading Velkhana one move ahead.<br><br>
+              Her close-range frost aura punishes hunters who commit to staying in melee contact — the reflex to "stay on the monster and keep hitting" gets penalised at regular intervals. Her tail swipe has a deceptive reach that consistently catches hunters who read the windup but misjudge the hitbox. The AT version adds a tracking ice breath beam that requires dodging through rather than away from — the same counter-intuitive lesson Fatalis's sweeping beam teaches, applied through an entirely different move.<br><br>
+              What separates Velkhana from every other case study here is that none of her mechanics involve an ultimatum or enforced role. There is no Escaton Judgement, no Enmity line, no wipe clone. The difficulty is purely in the density and precision of her choreography — she is hard to read at the level of detail the fight demands, and the only way through is sustained attention over repeated hunts.
+              <div class="mhw-signal-verdict">AT-Velkhana is the fight that rewards hunters who have internalized the language the rest of the game taught. No shortcut. No compliance mechanic. Just a monster whose choreography is detailed enough that learning it is the entire challenge — and the entire reward.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mhw-signals" style="grid-template-columns:1fr">
+          <div class="mhw-signal">
+            <div class="mhw-signal-num">Case Study 04 · Savage Omega (Wilds) · The Raid Boss</div>
+            <div class="mhw-signal-name">Team Behavioral Architecture — Enforced Through Hitzone Design</div>
+            <div class="mhw-signal-body">Savage Omega is the most explicit expression of team behavioral architecture in the series — because it doesn't suggest roles. It <em>enforces</em> them through the monster's anatomy.<br><br>
+              The front legs carry higher hitzone values for blunt and projectile damage — Hammers, Hunting Horns, Bows, and Bowguns belong there. The back legs are significantly more susceptible to slashing — Longswords, Dual Blades, Greatswords, and Switch Axes target the hind legs to build toward a topple that exposes the antenna on Omega's back, a universal burst window where all weapons converge. The head is reserved for the tank. Hitting it repeatedly triggers <em>Enmity</em>: Savage Omega locks a red target line onto that hunter and directs its full aggression at them. Lance, Gunlance, and shield-configured Heavy Bowgun users park in front of the face to anchor Omega's positioning — keeping the legs consistently accessible — while head breaks reward the team with protective shield bubbles dropped on the ground.<br><br>
+              A second burst window opens after Omega fires its face laser: a temporary weak point appears on its face, and a Focus Strike there drops a free shield without permanently locking aggro onto the attacker. The team needs to read the fight to hit these windows — the roles only execute correctly when hunters are tracking Omega's behavior in real time.<br><br>
+              The wipe mechanic closes the design loop. Mid-fight, Omega spawns a Nercyla clone. Fail to kill it in time and the whole party wipes. This is a classic interrupt mechanic — a priority target that pulls DPS attention from the main boss and punishes teams that don't coordinate the response.
+              <div class="mhw-signal-verdict">The behavioral architecture of the fight is the social architecture of the team. The monster doesn't tell four hunters to play different roles — its hitzone values, Enmity system, and phase-gated burst windows make every other approach less effective. What keeps it Monster Hunter: the roles only land when hunters are reading the monster. The design and the reading are inseparable.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PART IV -->
+        <div class="mhw-rule">
+          <div class="mhw-rule-line rev"></div>
+          <div class="mhw-rule-label"><span class="mhw-rule-diamond"></span> PART IV · WORLD → WILDS · THE SAME DANCE, DEEPER</div>
+          <div class="mhw-rule-line"></div>
+        </div>
+
+        <p class="mhw-body">Wilds did not change Monster Hunter's design philosophy. It deepened the reward for executing it correctly.</p>
+
+        <p class="mhw-body">World established the dance: slow, deliberate combat built around reading the monster and committing at the right moment. The fight was a behavioral negotiation, and patience and timing were the core skills. Wilds preserved that foundation entirely — then raised the ceiling on what precise monster reading could achieve through three specific additions to the combat system.</p>
+
+        <div class="mhw-contrast">
+          <div class="mhw-contrast-head">
+            <div class="mhw-contrast-col-head world">World / Iceborne — The Foundation</div>
+            <div class="mhw-contrast-col-head wilds">Wilds — The Refinement</div>
+          </div>
+          <div class="mhw-contrast-row">
+            <div class="mhw-contrast-cell world-cell"><strong style="color:#3A6A28">Reading the tell</strong> — identify the monster's windup, position correctly, commit to the attack window. Precise reading leads to damage; misreading leads to punishment. The foundation of the dance.</div>
+            <div class="mhw-contrast-cell wilds-cell"><strong style="color:#6A5A20">Offset attacks</strong> — time a weapon attack to clash with a specific monster move and you cancel the attack and stagger it. Reading the tell perfectly is no longer just about surviving it — it is now a mechanism for reversing it entirely.</div>
+          </div>
+          <div class="mhw-contrast-row">
+            <div class="mhw-contrast-cell world-cell"><strong style="color:#3A6A28">Guarding</strong> — blocking reduced damage. Defense and offense were largely separate decisions. A well-positioned guard was the correct response to attacks that couldn't be dodged.</div>
+            <div class="mhw-contrast-cell wilds-cell"><strong style="color:#6A5A20">Guard clashes</strong> — a precisely timed guard staggers the monster and opens a counter-attack window. Defense and offense collapse into a single timed read. The hunter who understands the attack timing converts a block into an opportunity.</div>
+          </div>
+          <div class="mhw-contrast-row">
+            <div class="mhw-contrast-cell world-cell"><strong style="color:#3A6A28">Evasion</strong> — dodging removed the hunter from danger. Panic rolling was survivable if you had enough distance. Evasion was primarily defensive.</div>
+            <div class="mhw-contrast-cell wilds-cell"><strong style="color:#6A5A20">Better evade mechanics</strong> — precisely timed dodges carry significantly higher reward. Reading the monster well enough to evade at the exact right moment creates real advantages. Thoughtful evasion is rewarded. Panic rolling is penalised.</div>
+          </div>
+        </div>
+
+        <p class="mhw-body">All three changes share a single design logic: <em>raise the reward for reading the monster precisely.</em> World made reading the monster the correct way to play. Wilds made it the only way to access the highest tier of combat. Offset attacks, guard clashes, and precise evasion all require the same skill — identifying what the monster is about to do in the moment it commits — and they all return something more than survival in exchange.</p>
+
+        <p class="mhw-body">Savage Omega is the culmination of this direction applied to team play. The hitzone system, the Enmity mechanic, the burst windows after a leg topple or face laser — all require four hunters to read the same monster together, in real time, and execute against what they see. The dance World built becomes, in Wilds, a coordinated performance.</p>
+
+        <!-- Closing -->
+        <div class="mhw-closing">
+          <p>Monster Hunter&#39;s retention is not complicated.<br><strong>When the game makes you a better reader, the loop never expires.</strong><br>The monster always has more to say — and Capcom keeps writing harder ones.</p>
+        </div>
+
+      </div><!-- /mhw-content -->
+    </div><!-- /mhw-panel-inner -->
+  </div><!-- /mhw-panel -->
+</div><!-- /modal-mhw -->
+
+
+<script>
+document.getElementById('modal-mhw').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('open');
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') document.getElementById('modal-mhw').classList.remove('open');
+});
+</script>
+
+
+
+<script>
+document.getElementById('modal-sf3').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('open');
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') document.getElementById('modal-sf3').classList.remove('open');
+});
+</script>
 
 <script>
 document.getElementById('modal-mfvp').addEventListener('click', function(e) {
