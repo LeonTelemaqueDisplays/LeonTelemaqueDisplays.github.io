@@ -3019,12 +3019,12 @@ footer{
         <h3 class="pcard-title" style="color:#C89B3C">The Counterplay Gate — Power, Identity &amp; Trust in League Reworks
           <span style="font-family:var(--mono);font-size:.6rem;color:#785A28;border:1px solid #1E2D3D;padding:.1rem .4rem;margin-left:6px;vertical-align:middle;background:#050E18">DRAFT</span>
         </h3>
-        <p class="pcard-desc" style="color:#5C4D2E">A reception framework for LoL champion reworks across three axes — Power, Identity, and Counterplay — tested against six cases spanning clean wins, a six-year resolution arc (Akali), and one failure Riot deliberately chose not to fix (Yuumi).</p>
+        <p class="pcard-desc" style="color:#5C4D2E">When a champion rework lands badly, players rarely agree on why. This framework separates reception into three independent axes — Power, Identity, and Counterplay — then tests them against six VGUs. Yuumi and Akali share the same failure mode (an untargetability gate) but reached opposite conclusions: Riot closed Akali's after six years, and deliberately left Yuumi's open. Same diagnosis. Opposite outcome. Because one is a game design problem and the other is a LiveOps segment tradeoff wearing a game design costume.</p>
         <div class="pcard-tags">
           <span class="ptag" style="color:#785A28;border-color:#1E2D3D">Champion Design</span>
           <span class="ptag" style="color:#785A28;border-color:#1E2D3D">Game Systems</span>
           <span class="ptag" style="color:#785A28;border-color:#1E2D3D">League of Legends</span>
-          <span class="ptag" style="color:#C89B3C;border-color:#785A28">● Complete</span>
+          <span class="ptag" style="color:#785A28;border-color:#1E2D3D">Riot Games · 2019–2026</span>
         </div>
       </div>
     </div>
@@ -8351,7 +8351,7 @@ document.addEventListener('keydown', function(e) {
             <tr><td>V4 / Legacy</td><td>Riot's own designer admitted this is the third or fourth attempt and that players were right to call them out. Current kit criticised for lacking uniqueness vs. other mages. An entire subreddit culture built on dark humour about how unfixable his situation feels</td><td>Riot devs + playerbase</td><td class="axis-col">Identity (repeatedly reset, never stabilised)</td><td>Riot dev admission + years of community meme culture</td></tr>
           </tbody>
         </table>
-        <div class="rw-case-note"><strong>Why it matters:</strong> Ryze shows what happens when a champion never had a stable identity contract — there's nothing for a rework to renegotiate, so each attempt is a fresh guess, and player trust erodes with each iteration regardless of the actual changes.</div>
+        <div class="rw-case-note"><strong>Why it matters:</strong> Ryze shows what happens when a champion never had a stable identity contract — there's nothing for a rework to renegotiate, so each attempt is a fresh guess, and player trust erodes with each iteration regardless of the actual changes.<br><br><strong>What should have been different:</strong> the failure starts before the kit is written. Every other champion in this set can be described in one sentence without referencing a mechanic: Aatrox is "a warrior who refuses to die alone," Udyr is "an unstoppable force of nature," Akali is "a ruthless precision assassin." Riot never established that sentence for Ryze — or at least never held to one consistently. Without a north-star fantasy, each rework answers a different question about what Ryze is <em>for</em>. The result isn't a series of failed attempts to fix him — it's a series of unrelated champions who all happen to be named Ryze. The principle: nail the fantasy in one sentence before writing a single ability. Ryze is the proof that skipping that step doesn't defer the conversation — it just forces you to have it again, repeatedly, with less trust remaining each time.</div>
       </div>
 
       <!-- Case 6: Akali -->
@@ -8436,8 +8436,8 @@ document.addEventListener('keydown', function(e) {
         <div class="lol-principle">
           <span class="lol-principle-num">05</span>
           <div>
-            <div class="lol-principle-title">Intentional underperformance requires an explicit contract.</div>
-            <div class="lol-principle-body">Deliberately keeping a champion weak is a valid design choice. Doing it <em>without saying so</em> is a trust violation. The Yuumi failure wasn't the decision — it was that the community spent years lobbying for a fix Riot had already decided not to make. Transparency converts a controversial choice into a negotiated one. Players can accept "we know she's weak and here's why" far better than they can accept ambiguity that looks like indifference.</div>
+            <div class="lol-principle-title">A segment tradeoff requires a segment explanation.</div>
+            <div class="lol-principle-body">Keeping a mechanic that frustrates opponents because it serves a different player segment is a valid product decision. Doing it while fielding years of balance feedback — as though the problem is fixable and just hasn't been fixed yet — is a trust failure. Yuumi's counterplay gate persisted not because Riot couldn't remove it. They explicitly chose not to, because her design serves new-to-MOBA players who need a low-stakes support entry point, and that segment matters more to them than competitive opponents. That's a legitimate LiveOps tradeoff. The mistake wasn't making it — it was not saying so. Players can accept "we know this frustrates you and here's the segment reason why" far better than ambiguity that reads as indifference. An undisclosed tradeoff turns every public conversation into a mismatch: Riot is answering a product question while players think they're asking a design one.</div>
           </div>
         </div>
       </div>
@@ -8457,6 +8457,26 @@ document.addEventListener('keydown', function(e) {
         Ryze rework history and retrospectives — invenglobal.com, zleague.gg, leagueoflegends.fandom.com<br>
         Akali rework history and 2024 shroud change — riftherald.com, comicbook.com, sportskeeda.com<br>
         Riot's VGU/CGU/ASU/Mid-Scope taxonomy — leagueoflegends.fandom.com, wiki.leagueoflegends.com
+      </div>
+
+      <!-- Closing -->
+      <div class="lol-rule" style="margin-top:36px">
+        <div class="lol-rule-line"></div>
+        <div class="lol-rule-label"><span class="lol-rule-diamond"></span>Closing</div>
+        <div class="lol-rule-line rev"></div>
+      </div>
+
+      <p class="lol-body">The framework's central finding isn't really about game design.</p>
+
+      <p class="lol-body">Counterplay is a gate — not an equal axis — because it determines where frustration routes when a player loses. When counterplay exists, frustration has an exit: <em>I'll learn that next time.</em> When it doesn't, frustration routes directly at the champion's existence. That's not a balance problem. It's a trust problem. And trust problems are product problems dressed as design problems.</p>
+
+      <p class="lol-body">Yuumi, Akali, and Ryze aren't design failures in the same way — they're product failures in different modes. Yuumi is an undisclosed segment tradeoff. Akali is balance debt that compounded past the point of quick recovery. Ryze is a champion launched without a stable product vision, reworked repeatedly without one, and now permanently priced into community discourse as unfixable.</p>
+
+      <div class="lol-verdict" style="margin-top:28px">
+        <div class="lol-verdict-label">The argument</div>
+        <div class="lol-verdict-body">
+          The framework is useful not because it grades reworks — it's useful because it tells you which type of problem you actually have. <strong>Power problems get solved by patches. Identity problems get solved by reworks. Counterplay problems require both design changes and trust recovery. Segment tradeoffs require transparency, not design fixes at all.</strong> Conflating them — which is what most public discourse does, and what Riot's own communication often does — is what makes rework conversations circular. Players think they're reporting a bug. Riot is making a product call. The framework names that gap.
+        </div>
       </div>
 
     </div><!-- /lol-panel-inner -->
