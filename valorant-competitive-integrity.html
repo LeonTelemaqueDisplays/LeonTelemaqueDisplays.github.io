@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Split Problem — Competitive Integrity & Smurfing in Valorant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --void:       #0F1923;
+      --deep:       #131D28;
+      --surface:    #1B2A37;
+      --surface-2:  #213040;
+      --red:        #FF4655;
+      --red-dim:    #6B1C24;
+      --red-glow:   rgba(255,70,85,0.10);
+      --teal:       #70D4CC;
+      --teal-dim:   #245850;
+      --teal-glow:  rgba(112,212,204,0.08);
+      --text:       #ECE8E1;
+      --text-dim:   #8A9BAB;
+      --text-muted: #3D5068;
+      --mono:       'Space Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--void);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 17px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 9999; opacity: 0.018;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--void); }
+    ::-webkit-scrollbar-thumb { background: var(--red-dim); }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(to bottom, rgba(15,25,35,0.97) 0%, transparent 100%);
+      backdrop-filter: blur(8px);
+    }
+    .nav-back {
+      font-family: var(--mono); font-size: 0.58rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none;
+      transition: color 0.25s;
+    }
+    .nav-back:hover { color: var(--red); }
+    .nav-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.75rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted);
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-family: var(--mono); font-size: 0.55rem;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none; transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--teal); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+      text-align: center; padding: 8rem 2rem 5rem;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 55%, rgba(255,70,85,0.06) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 35% at 20% 40%, rgba(112,212,204,0.04) 0%, transparent 60%),
+        linear-gradient(180deg, #0A1420 0%, var(--void) 50%, #0A1218 100%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,70,85,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,70,85,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 75%);
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 880px; }
+
+    .eyebrow {
+      font-family: var(--mono); font-size: 0.58rem;
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--red); opacity: 0.75; margin-bottom: 2rem; display: block;
+    }
+    .hero-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 700; line-height: 1.0; color: var(--text);
+      letter-spacing: 0.02em; margin-bottom: 0.4rem;
+    }
+    .hero-title .accent { color: var(--red); }
+    .hero-sub {
+      font-family: 'Rajdhani', sans-serif; font-size: clamp(1rem, 2.2vw, 1.4rem);
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 3.5rem; font-weight: 500;
+    }
+    .hero-thesis {
+      max-width: 680px; margin: 0 auto 4rem;
+      font-size: 1.05rem; color: var(--text-dim); line-height: 1.85;
+      border-left: 2px solid var(--red-dim); padding-left: 1.5rem; text-align: left;
+    }
+
+    /* ── STAT STRIP ── */
+    .stat-strip {
+      display: flex; justify-content: center; gap: 0;
+      background: var(--deep); border: 1px solid var(--surface-2);
+      max-width: 760px; margin: 0 auto;
+    }
+    .stat-cell {
+      flex: 1; padding: 1.25rem 1.5rem; text-align: center;
+      border-right: 1px solid var(--surface-2);
+      position: relative;
+    }
+    .stat-cell:last-child { border-right: none; }
+    .stat-val {
+      font-family: 'Rajdhani', sans-serif; font-size: 2rem;
+      font-weight: 700; color: var(--text); line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+    .stat-val.red { color: var(--red); }
+    .stat-val.teal { color: var(--teal); }
+    .stat-label {
+      font-family: var(--mono); font-size: 0.5rem;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      animation: sink 3s ease-in-out infinite; opacity: 0.3;
+    }
+    @keyframes sink {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
+    .scroll-hint span {
+      font-family: var(--mono); font-size: 0.5rem;
+      letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-muted);
+    }
+    .scroll-hint-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--red-dim), transparent); }
+
+    /* ── LAYER NAV ── */
+    .layer-nav {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: 1px; background: var(--surface);
+      border: 1px solid var(--surface); max-width: 980px; margin: 4rem auto 7rem;
+    }
+    .layer-nav a {
+      background: var(--deep); padding: 1.75rem 1.25rem;
+      text-align: center; text-decoration: none;
+      display: flex; flex-direction: column; gap: 0.4rem;
+      transition: background 0.25s;
+    }
+    .layer-nav a:hover { background: var(--surface-2); }
+    .layer-nav-num {
+      font-family: var(--mono); font-size: 0.5rem;
+      letter-spacing: 0.28em; text-transform: uppercase; color: var(--red);
+    }
+    .layer-nav-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.88rem;
+      color: var(--text); font-weight: 600; letter-spacing: 0.04em;
+    }
+    .layer-nav-desc { font-family: var(--mono); font-size: 0.55rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex; align-items: center; gap: 1.5rem;
+      max-width: 980px; margin: 0 auto; padding: 0 2rem;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px;
+    }
+    .divider::before { background: linear-gradient(to right, transparent, var(--red-dim)); }
+    .divider::after  { background: linear-gradient(to left,  transparent, var(--red-dim)); }
+    .divider span {
+      font-family: var(--mono); font-size: 0.52rem;
+      letter-spacing: 0.28em; text-transform: uppercase; color: var(--red-dim);
+      white-space: nowrap;
+    }
+
+    /* ── SECTION SHELL ── */
+    .layer-section { padding: 6rem 2rem; position: relative; }
+    .layer-section::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, var(--red-dim) 30%, var(--red-dim) 70%, transparent);
+      opacity: 0.25;
+    }
+    .layer-inner { max-width: 980px; margin: 0 auto; }
+    .layer-header { display: flex; align-items: flex-start; gap: 2rem; margin-bottom: 3rem; }
+    .layer-num-bg {
+      font-family: 'Rajdhani', sans-serif; font-size: 7rem; font-weight: 700;
+      color: var(--red); line-height: 1; opacity: 0.12; flex-shrink: 0;
+      user-select: none;
+    }
+    .layer-head-text { padding-top: 0.5rem; }
+    .section-label {
+      font-family: var(--mono); font-size: 0.52rem;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--red); display: block; margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700; color: var(--text); line-height: 1.15;
+      letter-spacing: 0.02em;
+    }
+    .section-title em { font-style: normal; color: var(--red); }
+    .accent-line {
+      width: 48px; height: 2px;
+      background: linear-gradient(to right, var(--red), transparent);
+      margin-top: 1rem;
+    }
+
+    p { margin-bottom: 1.5rem; color: var(--text-dim); }
+    p:last-child { margin-bottom: 0; }
+    strong { color: var(--text); font-weight: 600; }
+
+    /* ── SPLIT EFFECT GRID ── */
+    .effect-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: var(--surface);
+      border: 1px solid var(--surface); margin: 3rem 0;
+    }
+    .effect-col { background: var(--deep); padding: 2.25rem; }
+    .effect-col.veteran { background: linear-gradient(135deg, rgba(112,212,204,0.04), var(--deep)); }
+    .effect-col.new-player { background: linear-gradient(135deg, rgba(255,70,85,0.04), var(--deep)); }
+    .effect-tag {
+      font-family: var(--mono); font-size: 0.52rem;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      padding-bottom: 1rem; border-bottom: 1px solid var(--surface);
+      margin-bottom: 1.5rem;
+    }
+    .effect-tag.teal { color: var(--teal); }
+    .effect-tag.red  { color: var(--red); }
+    .effect-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 1.15rem;
+      font-weight: 700; color: var(--text); margin-bottom: 1rem;
+    }
+    .effect-body { font-size: 0.92rem; color: var(--text-dim); line-height: 1.7; margin-bottom: 1rem; }
+    .effect-items { list-style: none; }
+    .effect-items li {
+      font-size: 0.9rem; color: var(--text-dim);
+      padding: 0.35rem 0; padding-left: 1.25rem; position: relative; line-height: 1.5;
+    }
+    .effect-items li::before { content: '—'; position: absolute; left: 0; color: var(--text-muted); }
+    .effect-verdict {
+      font-family: var(--mono); font-size: 0.72rem; font-style: italic;
+      color: var(--text-muted); border-top: 1px solid var(--surface);
+      padding-top: 1rem; margin-top: 1.25rem; line-height: 1.6;
+    }
+
+    /* ── EVIDENCE NOTE ── */
+    .evidence-note {
+      background: linear-gradient(135deg, rgba(112,212,204,0.04), rgba(112,212,204,0.01));
+      border: 1px solid rgba(112,212,204,0.15);
+      border-left: 3px solid var(--teal);
+      padding: 1.75rem 2rem; margin: 2.5rem 0; position: relative;
+    }
+    .evidence-note::before {
+      content: 'EVIDENCE NOTE';
+      position: absolute; top: -0.65rem; left: 1.5rem;
+      background: var(--void); padding: 0 0.5rem;
+      font-family: var(--mono); font-size: 0.48rem;
+      letter-spacing: 0.22em; color: var(--teal);
+    }
+    .evidence-note p { font-size: 0.92rem; margin-bottom: 1rem; }
+    .evidence-note p:last-child { margin-bottom: 0; }
+
+    /* ── INSIGHT BOX ── */
+    .insight {
+      background: linear-gradient(135deg, rgba(255,70,85,0.05), rgba(255,70,85,0.01));
+      border: 1px solid rgba(255,70,85,0.15);
+      border-left: 3px solid var(--red);
+      padding: 1.75rem 2rem; margin: 2.5rem 0; position: relative;
+    }
+    .insight::before {
+      content: attr(data-label);
+      position: absolute; top: -0.65rem; left: 1.5rem;
+      background: var(--void); padding: 0 0.5rem;
+      font-family: var(--mono); font-size: 0.48rem;
+      letter-spacing: 0.22em; color: var(--red);
+    }
+    .insight p { margin-bottom: 0; font-style: italic; font-size: 1.02rem; }
+
+    /* ── SYSTEM BREAKDOWN ── */
+    .system-grid { margin: 3rem 0; }
+    .system-item {
+      background: var(--deep); border: 1px solid var(--surface);
+      border-left: 3px solid var(--surface-2);
+      padding: 1.75rem 2rem; margin-bottom: 1px;
+      display: grid; grid-template-columns: 220px 1fr;
+      gap: 2rem; align-items: start;
+    }
+    .system-item.failing { border-left-color: var(--red-dim); }
+    .system-name {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.95rem;
+      font-weight: 700; color: var(--text); letter-spacing: 0.04em;
+    }
+    .system-sub {
+      font-family: var(--mono); font-size: 0.55rem;
+      letter-spacing: 0.12em; color: var(--text-muted); margin-top: 0.3rem;
+    }
+    .system-body { font-size: 0.92rem; color: var(--text-dim); line-height: 1.7; }
+    .system-gap {
+      font-family: var(--mono); font-size: 0.7rem; font-style: italic;
+      color: var(--red); margin-top: 0.75rem; padding-top: 0.75rem;
+      border-top: 1px solid var(--surface);
+    }
+
+    /* ── TRACK CARDS ── */
+    .track-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: var(--surface);
+      border: 1px solid var(--surface); margin: 3rem 0;
+    }
+    .track-col { background: var(--deep); padding: 2.25rem; }
+    .track-tag {
+      font-family: var(--mono); font-size: 0.52rem;
+      letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 0.5rem;
+    }
+    .track-tag.a { color: var(--teal); }
+    .track-tag.b { color: var(--red); }
+    .track-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 1.2rem;
+      font-weight: 700; color: var(--text); margin-bottom: 0.4rem; letter-spacing: 0.02em;
+    }
+    .track-def {
+      font-family: var(--mono); font-size: 0.72rem; color: var(--text-muted);
+      line-height: 1.5; margin-bottom: 1.5rem; padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--surface);
+    }
+    .track-section-label {
+      font-family: var(--mono); font-size: 0.5rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted);
+      margin-bottom: 0.6rem; margin-top: 1.25rem;
+    }
+    .track-items { list-style: none; margin-bottom: 1rem; }
+    .track-items li {
+      font-size: 0.9rem; color: var(--text-dim);
+      padding: 0.4rem 0; padding-left: 1.25rem;
+      position: relative; line-height: 1.55; border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .track-items li:last-child { border-bottom: none; }
+    .track-items li::before { content: '→'; position: absolute; left: 0; color: var(--text-muted); font-size: 0.8rem; }
+
+    /* ── PULL QUOTE ── */
+    .pull {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+      font-weight: 500; color: var(--text-dim); line-height: 1.65;
+      border-top: 1px solid var(--red-dim);
+      border-bottom: 1px solid var(--red-dim);
+      padding: 1.75rem 2rem; margin: 3rem 0; text-align: center;
+    }
+    .pull em { font-style: normal; color: var(--red); }
+    .pull strong { color: var(--text); }
+
+    /* ── STEAL GRID ── */
+    .steal-grid {
+      display: grid; grid-template-columns: repeat(2,1fr);
+      gap: 1px; background: var(--surface);
+      border: 1px solid var(--surface); margin: 3rem 0;
+    }
+    .steal-item { background: var(--deep); padding: 2rem; }
+    .steal-num {
+      font-family: 'Rajdhani', sans-serif; font-size: 3rem;
+      font-weight: 700; color: var(--red); opacity: 0.18;
+      line-height: 1; margin-bottom: 0.75rem;
+    }
+    .steal-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.9rem;
+      letter-spacing: 0.06em; color: var(--teal); font-weight: 600; margin-bottom: 0.75rem;
+    }
+    .steal-desc { font-size: 0.9rem; color: var(--text-dim); line-height: 1.65; }
+
+    /* ── KEY REFRAME ── */
+    .reframe {
+      background: var(--deep); border: 1px solid var(--surface-2);
+      padding: 2.5rem 3rem; margin: 3rem 0; position: relative;
+      overflow: hidden;
+    }
+    .reframe::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(to right, var(--red), var(--teal));
+    }
+    .reframe-label {
+      font-family: var(--mono); font-size: 0.5rem;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 1rem;
+    }
+    .reframe p { font-size: 1rem; color: var(--text-dim); margin-bottom: 1rem; }
+    .reframe p:last-child { margin-bottom: 0; }
+    .reframe strong { color: var(--text); }
+
+    /* ── VERDICT ── */
+    .verdict {
+      background: linear-gradient(to bottom, var(--void), #091420, var(--void));
+      padding: 9rem 2rem; text-align: center; position: relative; overflow: hidden;
+    }
+    .verdict-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 55% 40% at 50% 50%, rgba(255,70,85,0.05), transparent);
+      pointer-events: none;
+    }
+    .verdict-inner { position: relative; z-index: 2; max-width: 820px; margin: 0 auto; }
+    .verdict-label {
+      font-family: var(--mono); font-size: 0.55rem;
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--red); opacity: 0.7; margin-bottom: 2rem; display: block;
+    }
+    .verdict-quote {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(1.2rem, 2.5vw, 1.7rem);
+      font-weight: 500; color: var(--text-dim); line-height: 1.65; margin-bottom: 2rem;
+    }
+    .verdict-quote strong { color: var(--text); font-weight: 700; }
+    .verdict-quote em { font-style: normal; color: var(--red); }
+    .verdict-line {
+      font-family: 'Rajdhani', sans-serif; font-size: 1.1rem;
+      font-weight: 700; color: var(--red); letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--void); border-top: 1px solid var(--surface);
+      padding: 5rem 2rem 3rem; text-align: center;
+    }
+    .footer-inner { max-width: 680px; margin: 0 auto; }
+    .footer-name {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.7rem;
+      letter-spacing: 0.28em; text-transform: uppercase; color: var(--text-dim);
+      margin-bottom: 0.4rem;
+    }
+    .footer-tagline { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2.5rem; }
+    .footer-links { display: flex; justify-content: center; gap: 2.5rem; list-style: none; margin-bottom: 3.5rem; }
+    .footer-links a {
+      font-family: var(--mono); font-size: 0.56rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none; transition: color 0.25s;
+    }
+    .footer-links a:hover { color: var(--red); }
+    .copyright { font-family: var(--mono); font-size: 0.66rem; color: var(--text-muted); opacity: 0.35; }
+
+    /* ── SCROLL REVEAL ── */
+    .fade { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .fade.in { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width: 760px) {
+      .layer-nav { grid-template-columns: repeat(2,1fr); }
+      .effect-grid { grid-template-columns: 1fr; }
+      .track-grid { grid-template-columns: 1fr; }
+      .steal-grid { grid-template-columns: 1fr; }
+      .system-item { grid-template-columns: 1fr; }
+      .stat-strip { flex-wrap: wrap; }
+      .stat-cell { flex: 0 0 50%; }
+      nav { padding: 0.9rem 1.25rem; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-back">← Leon Telemaque</a>
+    <span class="nav-title">The Split Problem</span>
+    <ul class="nav-links">
+      <li><a href="#layer-1">The Two Effects</a></li>
+      <li><a href="#layer-2">Conflation</a></li>
+      <li><a href="#layer-3">Framework</a></li>
+      <li><a href="#layer-4">Design Implications</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content fade">
+      <span class="eyebrow">Competitive Integrity · Live Service Design · Riot Games · Valorant · 2025</span>
+      <h1 class="hero-title">The <span class="accent">Split</span> Problem</h1>
+      <div class="hero-sub">Competitive Integrity &amp; Smurfing in Valorant</div>
+      <p class="hero-thesis">
+        Smurfing is not a single retention problem — it is two opposing retention effects that current ranked systems fail to separate. Smurf accounts are disproportionately tied to high-investment, long-tenure players — smurfing itself is often an expression of deep engagement, not a precursor to churn. But smurfs concentrated in low-rank lobbies actively damage new player onboarding, producing worse early retention for the exact cohort a live service game needs most to sustain its future player base. The design failure isn't that studios haven't noticed this tension — it's that smurf detection and mitigation systems treat "reduce smurfing" as one undifferentiated objective, when it actually requires two distinct design treatments serving two different player populations.
+      </p>
+      <div class="stat-strip">
+        <div class="stat-cell">
+          <div class="stat-val">2</div>
+          <div class="stat-label">Retention<br>effects</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-val red">1</div>
+          <div class="stat-label">Blunt<br>system</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-val teal">3</div>
+          <div class="stat-label">Player<br>populations</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-val">4</div>
+          <div class="stat-label">Design<br>layers</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-val teal">1</div>
+          <div class="stat-label">Framework<br>proposed</div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-hint-line"></div>
+    </div>
+  </section>
+
+  <!-- ── LAYER NAV ── -->
+  <div class="layer-nav fade">
+    <a href="#layer-1">
+      <div class="layer-nav-num">Layer 01</div>
+      <div class="layer-nav-title">The Two Effects</div>
+      <div class="layer-nav-desc">Veteran re-engagement vs. new player harm</div>
+    </a>
+    <a href="#layer-2">
+      <div class="layer-nav-num">Layer 02</div>
+      <div class="layer-nav-title">Why Systems Conflate</div>
+      <div class="layer-nav-desc">How one ladder treats two different problems</div>
+    </a>
+    <a href="#layer-3">
+      <div class="layer-nav-num">Layer 03</div>
+      <div class="layer-nav-title">A Differentiated System</div>
+      <div class="layer-nav-desc">Two tracks, two design treatments</div>
+    </a>
+    <a href="#layer-4">
+      <div class="layer-nav-num">Layer 04</div>
+      <div class="layer-nav-title">What Studios Should Steal</div>
+      <div class="layer-nav-desc">Design implications for any ranked live service game</div>
+    </a>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       LAYER 1 — THE TWO EFFECTS
+       ══════════════════════════════════════════════════════ -->
+  <section id="layer-1" class="layer-section">
+    <div class="layer-inner">
+      <div class="layer-header fade">
+        <div class="layer-num-bg">01</div>
+        <div class="layer-head-text">
+          <span class="section-label">Layer 01</span>
+          <h2 class="section-title">The Two Effects</h2>
+          <div class="accent-line"></div>
+        </div>
+      </div>
+
+      <p class="fade">Smurfing is typically framed as a single problem: experienced players in lobbies where they don't belong, making the game worse for everyone else. That framing is half right. It correctly identifies one harm. It misses the population producing it — and why that population matters to the game's health in a completely different direction.</p>
+
+      <p class="fade">The reason smurf mitigation is hard is not that studios don't care about it, or that detection is technically unsolved. It's that the same behavior produces two effects that point in opposite directions on the retention curve, and current systems have no mechanism for treating them separately.</p>
+
+      <div class="effect-grid fade">
+        <div class="effect-col veteran">
+          <div class="effect-tag teal">Effect A · Veteran Re-engagement</div>
+          <div class="effect-title">Smurfing as a deep engagement signal</div>
+          <div class="effect-body">The player who creates a smurf account is, almost without exception, someone who plays the game enough to find their main account limiting. That is not the profile of a disengaged player.</div>
+          <ul class="effect-items">
+            <li>Play with lower-ranked friends without dragging them into Platinum lobbies or tanking their MMR</li>
+            <li>Decompress from high-stakes ranked play at a tempo that feels controllable</li>
+            <li>Practice agents, compositions, or mechanics without risking rank before they're comfortable</li>
+            <li>Demonstrate mastery from a fresh account — a different kind of mastery expression than grinding the peak of a main</li>
+            <li>Fresh calibration after a long break, without carrying the history of an old account</li>
+          </ul>
+          <div class="effect-verdict">Every one of these motivations describes a player who understands the game deeply, cares about their performance, and has enough investment in the experience to create a second account rather than find a different game.</div>
+        </div>
+        <div class="effect-col new-player">
+          <div class="effect-tag red">Effect B · New Player Onboarding Harm</div>
+          <div class="effect-title">The smurf-in-new-player-lobby problem</div>
+          <div class="effect-body">The player being harmed is not interchangeable with the player causing harm. The smurf is investing. The new player is <em>evaluating</em>.</div>
+          <ul class="effect-items">
+            <li>A new player's first 10–20 ranked matches are the window in which they decide whether the game is for them</li>
+            <li>A smurf in that lobby doesn't just win matches — they create an experience that feels impossible to respond to</li>
+            <li>The new player can't distinguish "I'm still learning" from "this game is fundamentally unfair"</li>
+            <li>The mental model that forms during those first sessions is the mental model they carry forward — or exit with</li>
+            <li>Early-rank lobbies with high smurf density build a reputation that deters new players before they even try ranked</li>
+          </ul>
+          <div class="effect-verdict">This is the specific mechanism by which smurfing damages new player retention: not through raw statistical disadvantage, but through narrative. The story a new player tells themselves about why they're losing determines whether they invest more or disengage.</div>
+        </div>
+      </div>
+
+      <div class="evidence-note fade">
+        <p><strong>The veteran spend claim — handled carefully.</strong> The argument that smurf accounts correlate with higher spend or engagement is the most important half of this framework — and the one requiring the most evidentiary care. Direct per-account cosmetic spend data for smurf vs. single-account players is not publicly available. What this framework claims is narrower and better supported.</p>
+        <p>A player maintaining multiple Valorant accounts accrues cosmetic spend opportunity across those accounts. Valorant's economy — Valorant Points, Radianite, battle passes, rotating weapon bundles — attaches to individual accounts. A player running two accounts is a player Riot has the opportunity to sell cosmetics to across two separate storefronts. Whether they do is not confirmed; that the opportunity exists structurally is.</p>
+        <p>More importantly: the behavioral profile of a smurf — high-hour player who finds one account insufficient for their various play contexts — aligns with the profiles that live service games generally associate with high-LTV players. Riot's own publicly stated concern has focused on losing veteran players to inactivity and game fatigue, not on smurfing as a primary churn signal. The community data broadly supports that multi-account players are engaged players. This framework treats the veteran-as-high-engagement claim as a supported hypothesis rather than an asserted fact, and the design implications hold either way: the veteran population is not a population to antagonize.</p>
+      </div>
+
+      <p class="fade">The two effects are both real. They operate on completely different player populations. A system designed to minimize smurfing as a single undifferentiated phenomenon cannot optimize for both simultaneously — and in practice, it optimizes for neither. That is the design failure this framework is built to address.</p>
+
+      <div class="pull fade">
+        <em>The two effects are not in tension with each other as game design problems.</em> They are in tension only because the current system treats them as one problem.
+      </div>
+
+      <p class="fade"><strong>Industry precedent supports the split.</strong> Counter-Strike's Silver and Gold Nova ranks carried a persistent reputation for smurf concentration throughout CS:GO's lifespan. New players at those ranks faced skill levels orders of magnitude above their own with regularity. The resulting reputation — "you can't tell if you're bad or just getting smurfed" — became a documented deterrent to new player investment in ranked, and remained unresolved until CS2's revised account structure attempted to address it. Riot has publicly acknowledged a parallel dynamic in Valorant. The phone verification requirement introduced to Valorant in 2021 was motivated in part by raising the cost of smurf account creation specifically to protect lower-rank lobbies. That Riot invested in mitigation confirms the harm is real and measurable.</p>
+    </div>
+  </section>
+
+  <div class="divider fade"><span>Layer 02</span></div>
+
+  <!-- ══════════════════════════════════════════════════════
+       LAYER 2 — WHY SYSTEMS CONFLATE
+       ══════════════════════════════════════════════════════ -->
+  <section id="layer-2" class="layer-section">
+    <div class="layer-inner">
+      <div class="layer-header fade">
+        <div class="layer-num-bg">02</div>
+        <div class="layer-head-text">
+          <span class="section-label">Layer 02</span>
+          <h2 class="section-title">Why Current Systems <em>Conflate</em> Them</h2>
+          <div class="accent-line"></div>
+        </div>
+      </div>
+
+      <p class="fade">Every ranked game with a smurf problem has built some version of the same solution: detect the smurf, move them up faster, and raise the cost of creating a new account. Valorant's implementation is among the more sophisticated in live service shooters. It still doesn't separate the two effects, because it wasn't designed to — the infrastructure was built around a continuous ladder, and the problem was defined as "smurfs climbing too slowly," not "two different player populations requiring two different systems."</p>
+
+      <div class="system-grid fade">
+        <div class="system-item failing">
+          <div>
+            <div class="system-name">MMR / Rank Ladder</div>
+            <div class="system-sub">Iron → Radiant · continuous</div>
+          </div>
+          <div class="system-body">
+            The fundamental structure places every new account at the bottom of a continuous ladder. A veteran player on a new account must climb through every rank below their actual skill level. During that climb — typically 5–20 matches — they are in lobbies with players whose actual rank belongs there.
+            <div class="system-gap">Design gap: the ladder assumes every account starting at the bottom is a genuinely new player. It has no native concept of "experienced player, new account."</div>
+          </div>
+        </div>
+        <div class="system-item failing">
+          <div>
+            <div class="system-name">Smurf Detection + Acceleration</div>
+            <div class="system-sub">Behavioral signals → fast-track</div>
+          </div>
+          <div class="system-body">
+            When behavioral signals trigger — abnormally high KDA, headshot rates inconsistent with rank, rapid win streaks — the system accelerates the account's climb. This is the right instinct. The target is wrong. Acceleration minimizes the number of mismatched matches. It doesn't eliminate them. A detected smurf still plays mismatched matches against new players before the system responds — and the response is single-track: same ladder, faster.
+            <div class="system-gap">Design gap: acceleration assumes one exit point (correct rank on the main ladder) when the detection signal might justify a completely different routing decision.</div>
+          </div>
+        </div>
+        <div class="system-item failing">
+          <div>
+            <div class="system-name">Phone Verification</div>
+            <div class="system-sub">Friction-based deterrence</div>
+          </div>
+          <div class="system-body">
+            One phone number per account raises the cost of creating a smurf. The mechanism is sound for casual or impulsive multi-accounting. It doesn't change what happens when a motivated veteran pays the cost. Most veteran smurfs — the players this framework is most interested in — will use a second phone number, a family member's number, or accept the friction as part of the process.
+            <div class="system-gap">Design gap: friction deters low-commitment multi-accounting but doesn't address the veteran population for whom smurfing is deliberate and high-motivation.</div>
+          </div>
+        </div>
+        <div class="system-item failing">
+          <div>
+            <div class="system-name">Account Linking / Riot ID</div>
+            <div class="system-sub">Cross-game history inference</div>
+          </div>
+          <div class="system-body">
+            Linking a Valorant account to an existing Riot ecosystem account (League of Legends, TFT) allows the system to infer higher skill and place the new account more accurately. This is the closest current mechanism to what the framework proposes — but it applies only within Riot's ecosystem, relies on voluntary linking, and still routes to the same ladder. It reduces the problem for players with League history; it doesn't solve it.
+            <div class="system-gap">Design gap: routing informs starting rank on the same ladder; it doesn't create a separate protected pool for accounts without linkable history.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="insight fade" data-label="The Shared Assumption">
+        <p>All four mechanisms share a single underlying assumption: every new account represents a player trying to reach their appropriate rank on a continuous ladder, and the system's job is to help that process happen correctly and efficiently. This assumption is correct for a fraction of new accounts. For the rest — veteran players on fresh accounts — it defines a problem that can only be partially solved from within the ladder's own logic. The infrastructure for a different solution already exists at the detection layer. What's missing is a different response once detection fires.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider fade"><span>Layer 03</span></div>
+
+  <!-- ══════════════════════════════════════════════════════
+       LAYER 3 — A DIFFERENTIATED SYSTEM
+       ══════════════════════════════════════════════════════ -->
+  <section id="layer-3" class="layer-section">
+    <div class="layer-inner">
+      <div class="layer-header fade">
+        <div class="layer-num-bg">03</div>
+        <div class="layer-head-text">
+          <span class="section-label">Layer 03</span>
+          <h2 class="section-title">A <em>Differentiated</em> System</h2>
+          <div class="accent-line"></div>
+        </div>
+      </div>
+
+      <p class="fade">The detection infrastructure already exists. Valorant can identify, with reasonable confidence, whether a new account belongs to a first-time player or an experienced one — through behavioral signals, account linking, phone verification status, and hardware profile. The design gap is not at the detection layer. It's at the response layer: one exit (accelerate on the same ladder) instead of two distinct routes.</p>
+
+      <p class="fade">The framework proposes separating the response into two tracks — not two ladders, not two separate games, but two routing decisions that use the same detection infrastructure to send different accounts in different directions at the moment of identification.</p>
+
+      <div class="track-grid fade">
+        <div class="track-col">
+          <div class="track-tag a">Track A · Protected Onboarding</div>
+          <div class="track-title">The New Player Window</div>
+          <div class="track-def">Any account without confirmable prior competitive history — no linked accounts with ranked history, no veteran behavioral signals — in their first 40–60 competitive matches.</div>
+
+          <div class="track-section-label">Goal</div>
+          <p style="font-size:.9rem;color:var(--text-dim);margin-bottom:1rem">Ensure this population's early ranked experience reflects their actual skill level against similar players, and only against similar players. The onboarding window is not just low rank — it is the period during which a player forms their mental model of the game. It deserves dedicated infrastructure.</p>
+
+          <div class="track-section-label">Matchmaking-side</div>
+          <ul class="track-items">
+            <li><strong>Separate new-player queue:</strong> accounts in the protected window match against other accounts in that window only — not "low rank" generally, specifically "new account without veteran signals."</li>
+            <li><strong>Immediate queue exit on detection:</strong> when smurf signals emerge (KDA threshold, win rate, headshot accuracy inconsistent with rank), the account exits the protected pool immediately and enters the standard ladder at a calibrated starting point. Not "accelerate in the same pool" — exit the pool entirely.</li>
+            <li><strong>Result:</strong> in the protected window, smurfs cannot linger. The moment they demonstrate veteran-level play, they're out. New players never face a confirmed smurf twice.</li>
+          </ul>
+
+          <div class="track-section-label">Account-side</div>
+          <ul class="track-items">
+            <li><strong>Linked account gate:</strong> any account with linked Riot ecosystem history is never placed in the protected pool. It enters the standard ladder at an inferred starting point regardless of whether it would otherwise qualify by account age.</li>
+            <li><strong>Hardware and behavioral profile:</strong> if the system can identify an account as belonging to a known veteran via existing fingerprinting (without requiring explicit linking), route accordingly. The bar for inferred veteran status should be calibrated conservatively — false positives (routing a genuine new player to standard ranked) are preferable to false negatives (routing a veteran to the protected new-player pool).</li>
+          </ul>
+        </div>
+        <div class="track-col">
+          <div class="track-tag b">Track B · Veteran Multi-Account</div>
+          <div class="track-title">The Known Veteran Account</div>
+          <div class="track-def">Any account with linked veteran history, confirmable prior competitive skill, or that triggers smurf detection signals within the first calibration window.</div>
+
+          <div class="track-section-label">Goal</div>
+          <p style="font-size:.9rem;color:var(--text-dim);margin-bottom:1rem">Route this player to their appropriate MMR as efficiently as possible, acknowledge multi-account behavior as a legitimate expression of deep engagement, and stop treating the calibration process as adversarial. The veteran who gets to their correct rank in 5 matches is a better outcome than the veteran who grinds 30 low-rank matches and damages new player lobbies along the way.</p>
+
+          <div class="track-section-label">Matchmaking-side</div>
+          <ul class="track-items">
+            <li><strong>Fast-placement calibration:</strong> accounts with confirmed veteran history receive a hard skill inference and placement within 5 matches. The climb does not start at the bottom — it starts at the inferred rank.</li>
+            <li><strong>Unranked alt mode:</strong> an explicit parallel mode for veteran players who want to play at lower-skill contexts — play with friends, practice new agents, decompress — without competitive MMR consequences. Separate from existing unranked (which still affects MMR implicitly). This mode addresses the "play with friends" and "de-stress" motivations without routing veteran players through the new-player ranked pool at all.</li>
+          </ul>
+
+          <div class="track-section-label">Account-side</div>
+          <ul class="track-items">
+            <li><strong>Cosmetic portability across linked accounts:</strong> allow specific cosmetics (weapon skins, player cards, gun buddies) to display across explicitly linked accounts. Reduces the economic friction of honest multi-accounting and removes one incentive for maintaining unlinkable accounts specifically to avoid detection.</li>
+            <li><strong>Transparent multi-account profile:</strong> show linked account rank on profile, visible to the player and optionally to teammates. Acknowledge the relationship without penalizing it. A player with a Radiant main and a Gold alt is a different profile than a single-account Gold player, and the system can treat them differently without stigmatizing either.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="reframe fade">
+        <div class="reframe-label">The critical reframe</div>
+        <p>The detection system already flags these accounts. The current response is: <strong>detected → accelerate on the same queue.</strong> The proposed response is: <strong>detected → route to a different queue.</strong></p>
+        <p>One change, at the response layer. No new detection infrastructure required. The same signal that currently triggers acceleration instead triggers routing. The protected pool stays clean because exit is immediate and automatic. The veteran player gets to appropriate rank faster and with less collateral harm. Both populations are better served.</p>
+        <p>The design cost is maintaining a separate pool with enough population to produce fair matches. This is a real operational constraint. At Valorant's scale — active player counts that sustain dozens of ranked queues simultaneously — it is a solvable one, particularly if the protected pool is geographically broader than standard matchmaking during its early life.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider fade"><span>Layer 04</span></div>
+
+  <!-- ══════════════════════════════════════════════════════
+       LAYER 4 — WHAT STUDIOS SHOULD STEAL
+       ══════════════════════════════════════════════════════ -->
+  <section id="layer-4" class="layer-section">
+    <div class="layer-inner">
+      <div class="layer-header fade">
+        <div class="layer-num-bg">04</div>
+        <div class="layer-head-text">
+          <span class="section-label">Layer 04</span>
+          <h2 class="section-title">What Studios <em>Should Steal</em></h2>
+          <div class="accent-line"></div>
+        </div>
+      </div>
+
+      <p class="fade">The framework above is built around Valorant's specific architecture, but the underlying design logic applies to any live service competitive game with ranked progression and a multi-account problem. The following five principles translate across games regardless of genre, platform, or scale.</p>
+
+      <div class="steal-grid fade">
+        <div class="steal-item">
+          <div class="steal-num">01</div>
+          <div class="steal-title">Segment before you mitigate</div>
+          <div class="steal-desc">Any smurf mitigation policy that doesn't begin by identifying which player population is affected will optimize for the wrong thing. The smurf is not the problem population — they're the source of a problem for a different population. Design around the affected player, not the behavior. The first question in any smurf system design should be: "Who is being harmed, and at what point in their player lifecycle?" The answer to that question determines everything else.</div>
+        </div>
+        <div class="steal-item">
+          <div class="steal-num">02</div>
+          <div class="steal-title">Protect the onboarding window as a distinct system</div>
+          <div class="steal-desc">The first 40–60 competitive matches are not just "low rank." They are the window during which a player forms their mental model of the game, decides whether it's for them, and builds the habits that carry them forward or cause them to exit. That window deserves its own matchmaking logic, its own population management, and its own health metrics — not just modified weights on the main ladder. Treat it as a product feature, not a ranked edge case.</div>
+        </div>
+        <div class="steal-item">
+          <div class="steal-num">03</div>
+          <div class="steal-title">Fast-track as a product feature, not a penalty response</div>
+          <div class="steal-desc">Veteran multi-account behavior should be accommodated, not reluctantly tolerated. A veteran who can be identified and placed at their correct rank in 5 matches is a better product experience than a veteran who grinds through 30 low-rank matches feeling bored and creating harm along the way. Make fast-track an explicit feature of the account linking system, marketed openly: "Already experienced? Link your account and get placed faster." This removes the adversarial framing and makes the system collaborative rather than punitive.</div>
+        </div>
+        <div class="steal-item">
+          <div class="steal-num">04</div>
+          <div class="steal-title">Give veterans an alternative to smurfing for low-stakes play</div>
+          <div class="steal-desc">The "play with friends" and "de-stress" motivations don't need ranked. An explicit unranked alt mode — genuinely consequence-free for MMR, labeled as such, designed for skill-expression variety rather than progression — addresses the core motivations behind the majority of smurfing without routing veteran players through the new-player ranked pool at all. The game already has unranked modes; the gap is making them explicitly designed for the veteran-multi-account use case rather than as a feeder to competitive.</div>
+        </div>
+        <div class="steal-item">
+          <div class="steal-num">05</div>
+          <div class="steal-title">Monitor the protected pool as a product health metric</div>
+          <div class="steal-desc">Smurf-to-new-player ratio in the protected onboarding pool is a product health metric, not just a ranked integrity signal. When that ratio rises, it means detection and routing are failing, and the onboarding experience is degrading. Track it the same way you'd track D7 retention or first-session completion rates. Build dashboards around it. Alert on it. The health of the new player experience is a downstream revenue question — it determines the size of the player base available to monetize at every future cohort.</div>
+        </div>
+        <div class="steal-item">
+          <div class="steal-num">06</div>
+          <div class="steal-title">Make multi-account transparency a feature, not a forced disclosure</div>
+          <div class="steal-desc">Cosmetic portability and transparent linked profiles don't surveil players — they reduce the adversarial dynamic between the detection system and veteran players. If a veteran's skins appear on their alt account, they have one less reason to hide the relationship. If their linked rank is visible in their profile, their team has context. Neither requires punishment. Both create a healthier information environment around multi-account behavior, and both make the system feel like it's working with engaged players rather than trying to catch them.</div>
+        </div>
+      </div>
+
+      <div class="pull fade">
+        The framework's utility is not in predicting exactly what Riot will build. It's in making the design space legible. <strong>Once you see the two effects separately, treating them identically looks obviously wrong.</strong> The question becomes: <em>which exit door did we forget to build?</em>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── VERDICT ── -->
+  <section class="verdict">
+    <div class="verdict-glow"></div>
+    <div class="verdict-inner fade">
+      <span class="verdict-label">Closing Argument</span>
+      <div class="verdict-quote">
+        Smurfing isn't going away. The design question was never "how do we prevent it" — veterans will always find ways to play on multiple accounts, and many of those veterans are among a game's most engaged players. <strong>The right question is: how do we prevent it from affecting the people who can't defend against it?</strong>
+      </div>
+      <div class="verdict-quote">
+        That's a routing problem, not a punishment problem. The infrastructure to answer it — detection, account linking, behavioral profiling — already exists in Valorant's architecture. What's missing is a second exit door at the detection stage: one path for veterans who belong in ranked, one mode for veterans who just want to play.
+      </div>
+      <div class="verdict-quote">
+        <em>Separate the effects.</em> <strong>Separate the responses.</strong>
+      </div>
+      <div class="verdict-line">Two populations. Two design treatments. One healthier game.</div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-name">Leon Telemaque</div>
+      <div class="footer-tagline">Game Design Analysis · Behavioural Systems · Live Service</div>
+      <ul class="footer-links">
+        <li><a href="index.html">← Portfolio</a></li>
+        <li><a href="elden-ring-difficulty-analysis.html">Elden Ring</a></li>
+        <li><a href="https://www.linkedin.com/in/leontelemaque/" target="_blank">LinkedIn</a></li>
+      </ul>
+      <div class="copyright">© 2025 Leon Telemaque</div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const fades = document.querySelectorAll('.fade');
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    fades.forEach(el => io.observe(el));
+
+    // Trigger hero immediately
+    document.querySelectorAll('.hero .fade, .layer-nav.fade').forEach(el => {
+      setTimeout(() => el.classList.add('in'), 200);
+    });
+  </script>
+</body>
+</html>
