@@ -2436,162 +2436,146 @@ footer{
     </div>
 
     <div class="hero-right">
-      <!-- Card 1: Destiny 2 Raid Architecture -->
-      <div class="hcard" onclick="openModal('raids')">
+      <!-- Card 1: Mournful Flower & Vengeful Plight — Combat Prototype -->
+      <div class="hcard" onclick="document.getElementById('modal-mfvp').classList.add('open')">
         <div class="hcard-img">
           <svg viewBox="0 0 280 373" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <radialGradient id="raidCore" cx="50%" cy="45%" r="45%">
-                <stop offset="0%" stop-color="#c9a84c" stop-opacity=".55"/>
-                <stop offset="45%" stop-color="#4a6faa" stop-opacity=".2"/>
-                <stop offset="100%" stop-color="#020408" stop-opacity="0"/>
+              <radialGradient id="hmfInkL" cx="30%" cy="50%" r="60%">
+                <stop offset="0%" stop-color="#0F1528" stop-opacity=".85"/>
+                <stop offset="100%" stop-color="#0A0805" stop-opacity="0"/>
               </radialGradient>
-              <radialGradient id="sealGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#c9a84c" stop-opacity=".6"/>
-                <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
+              <radialGradient id="hvpInkR" cx="70%" cy="50%" r="60%">
+                <stop offset="0%" stop-color="#1A0608" stop-opacity=".85"/>
+                <stop offset="100%" stop-color="#0A0805" stop-opacity="0"/>
               </radialGradient>
-              <filter id="rglow4"><feGaussianBlur stdDeviation="4"/></filter>
-              <filter id="rglow7"><feGaussianBlur stdDeviation="7"/></filter>
-              <filter id="rglow2"><feGaussianBlur stdDeviation="2"/></filter>
+              <radialGradient id="hmoonGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#3A5A90" stop-opacity=".15"/>
+                <stop offset="100%" stop-color="#3A5A90" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="hemberGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#881111" stop-opacity=".2"/>
+                <stop offset="100%" stop-color="#881111" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="hsumiDiv" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#C89B3C" stop-opacity="0"/>
+                <stop offset="10%" stop-color="#C89B3C" stop-opacity=".45"/>
+                <stop offset="90%" stop-color="#C89B3C" stop-opacity=".45"/>
+                <stop offset="100%" stop-color="#C89B3C" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="hbladeSheen" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#6A90C0" stop-opacity="0"/>
+                <stop offset="40%" stop-color="#A0C0E8" stop-opacity=".8"/>
+                <stop offset="100%" stop-color="#6A90C0" stop-opacity="0"/>
+              </linearGradient>
+              <filter id="hinkBlur"><feGaussianBlur stdDeviation="18"/></filter>
+              <filter id="hmoonBlur"><feGaussianBlur stdDeviation="3"/></filter>
             </defs>
 
-            <!-- Deep space background -->
-            <rect width="280" height="373" fill="#020408"/>
+            <!-- Background -->
+            <rect width="280" height="373" fill="#0A0805"/>
 
-            <!-- Star field -->
-            <circle cx="22" cy="18" r=".8" fill="white" opacity=".5"/>
-            <circle cx="68" cy="32" r=".6" fill="white" opacity=".4"/>
-            <circle cx="130" cy="12" r="1" fill="white" opacity=".55"/>
-            <circle cx="210" cy="28" r=".7" fill="white" opacity=".4"/>
-            <circle cx="258" cy="15" r=".9" fill="white" opacity=".45"/>
-            <circle cx="45" cy="80" r=".6" fill="white" opacity=".3"/>
-            <circle cx="240" cy="65" r=".7" fill="white" opacity=".35"/>
-            <circle cx="18" cy="140" r=".5" fill="white" opacity=".25"/>
-            <circle cx="265" cy="110" r=".8" fill="white" opacity=".3"/>
-            <circle cx="12" cy="220" r=".6" fill="white" opacity=".2"/>
-            <circle cx="270" cy="200" r=".5" fill="white" opacity=".2"/>
-            <circle cx="100" cy="50" r=".5" fill="#c4b5fd" opacity=".5"/>
-            <circle cx="195" cy="42" r=".7" fill="#93c5fd" opacity=".45"/>
-            <circle cx="55" cy="155" r=".6" fill="white" opacity=".25"/>
-            <circle cx="252" cy="160" r=".5" fill="white" opacity=".2"/>
-            <circle cx="140" cy="22" r=".8" fill="#fde68a" opacity=".4"/>
+            <!-- Ink wash pools -->
+            <ellipse cx="70" cy="186" rx="130" ry="180" fill="url(#hmfInkL)"/>
+            <ellipse cx="210" cy="186" rx="130" ry="180" fill="url(#hvpInkR)"/>
 
-            <!-- Nebula glow behind seal -->
-            <ellipse cx="140" cy="158" rx="110" ry="100" fill="url(#raidCore)" filter="url(#rglow7)"/>
+            <!-- Enso circle -->
+            <circle cx="140" cy="178" r="92" fill="none" stroke="#C89B3C" stroke-width=".8" opacity=".05" stroke-dasharray="530 95" stroke-dashoffset="140"/>
+            <circle cx="140" cy="178" r="72" fill="none" stroke="#785A28" stroke-width=".35" opacity=".055"/>
 
-            <!-- Top label -->
-            <text x="14" y="22" fill="rgba(201,168,76,.65)" font-size="7.5" font-family="monospace" font-weight="bold" letter-spacing="1.5">DESTINY 2</text>
-            <line x1="80" y1="17" x2="266" y2="17" stroke="rgba(201,168,76,.15)" stroke-width=".8"/>
-            <text x="14" y="33" fill="rgba(120,140,180,.45)" font-size="6" font-family="monospace" letter-spacing=".5">RAID ONBOARDING ARCHITECTURE</text>
+            <!-- MF side glow & water ripples -->
+            <ellipse cx="70" cy="170" rx="75" ry="75" fill="url(#hmoonGlow)" filter="url(#hinkBlur)"/>
+            <ellipse cx="70" cy="196" rx="52" ry="13" fill="none" stroke="#1A3060" stroke-width=".5" opacity=".3"/>
+            <ellipse cx="70" cy="196" rx="38" ry="9" fill="none" stroke="#2A4080" stroke-width=".4" opacity=".35"/>
+            <ellipse cx="70" cy="196" rx="24" ry="5" fill="none" stroke="#3A5090" stroke-width=".5" opacity=".35"/>
 
-            <!-- Outer orbit ring -->
-            <circle cx="140" cy="158" r="98" fill="none" stroke="rgba(201,168,76,.1)" stroke-width="1"/>
-            <!-- tick marks on outer ring -->
-            <line x1="140" y1="60" x2="140" y2="68" stroke="rgba(201,168,76,.3)" stroke-width="1"/>
-            <line x1="140" y1="248" x2="140" y2="256" stroke="rgba(201,168,76,.3)" stroke-width="1"/>
-            <line x1="42" y1="158" x2="50" y2="158" stroke="rgba(201,168,76,.3)" stroke-width="1"/>
-            <line x1="230" y1="158" x2="238" y2="158" stroke="rgba(201,168,76,.3)" stroke-width="1"/>
+            <!-- Falling petals (MF) -->
+            <ellipse cx="36" cy="100" rx="4" ry="2" fill="#A0B8D8" opacity=".17" transform="rotate(-30,36,100)"/>
+            <ellipse cx="90" cy="124" rx="3.5" ry="1.8" fill="#A0B8D8" opacity=".13" transform="rotate(-15,90,124)"/>
+            <ellipse cx="28" cy="224" rx="3" ry="1.5" fill="#A0B8D8" opacity=".1" transform="rotate(-10,28,224)"/>
 
-            <!-- Middle ring -->
-            <circle cx="140" cy="158" r="72" fill="none" stroke="rgba(201,168,76,.18)" stroke-width="1.5" stroke-dasharray="8 4"/>
+            <!-- KATANA (MF side) — vertical, centered at x=70 -->
+            <rect x="68.5" y="60" width="3" height="182" rx="1.5" fill="#7090B8" opacity=".58"/>
+            <rect x="69.5" y="60" width="1.5" height="182" fill="url(#hbladeSheen)" opacity=".65"/>
+            <polygon points="68.5,60 72,60 70,52" fill="#8AAAD0" opacity=".65"/>
+            <rect x="65" y="242" width="10" height="5" rx="1" fill="#3A4A6A" opacity=".75"/>
+            <ellipse cx="70" cy="247" rx="14" ry="4" fill="none" stroke="#4A6A90" stroke-width=".8" opacity=".55"/>
+            <ellipse cx="70" cy="247" rx="14" ry="4" fill="#1A2A40" opacity=".55"/>
+            <rect x="66" y="251" width="8" height="44" rx="1" fill="#1A2030" opacity=".82"/>
+            <line x1="66" y1="257" x2="74" y2="257" stroke="#2A3A58" stroke-width=".8" opacity=".55"/>
+            <line x1="66" y1="265" x2="74" y2="265" stroke="#2A3A58" stroke-width=".8" opacity=".5"/>
+            <line x1="66" y1="273" x2="74" y2="273" stroke="#2A3A58" stroke-width=".8" opacity=".55"/>
+            <line x1="66" y1="281" x2="74" y2="281" stroke="#2A3A58" stroke-width=".8" opacity=".5"/>
+            <rect x="66" y="295" width="8" height="4" rx="2" fill="#2A3A58" opacity=".65"/>
+            <ellipse cx="70" cy="132" rx="1.5" ry="9" fill="#C0D8F0" opacity=".22" filter="url(#hmoonBlur)"/>
 
-            <!-- Inner ring -->
-            <circle cx="140" cy="158" r="48" fill="none" stroke="rgba(201,168,76,.25)" stroke-width="1.2"/>
+            <!-- VP side glow -->
+            <ellipse cx="210" cy="178" rx="92" ry="105" fill="url(#hemberGlow)" filter="url(#hinkBlur)"/>
 
-            <!-- Seal glow -->
-            <circle cx="140" cy="158" r="32" fill="rgba(201,168,76,.08)" filter="url(#rglow4)"/>
+            <!-- Brushstroke slashes (VP) -->
+            <path d="M 162 68 C 164 72, 185 100, 204 132 C 223 164, 244 202, 256 228 C 261 238, 259 244, 254 241 C 249 238, 243 226, 224 194 C 205 162, 182 128, 164 96 C 153 78, 157 64, 162 68 Z" fill="#7A0E0E" opacity=".42"/>
+            <path d="M 256 62 C 254 67, 235 94, 215 124 C 195 154, 170 194, 156 222 C 151 232, 153 238, 158 235 C 163 232, 170 220, 190 190 C 210 160, 237 120, 254 92 C 264 74, 259 57, 256 62 Z" fill="#881111" opacity=".35"/>
 
-            <!-- Raid seal — Destiny-style geometric emblem -->
-            <!-- Outer hex border -->
-            <polygon points="140,126 166,141 166,175 140,190 114,175 114,141" fill="rgba(8,12,24,.9)" stroke="rgba(201,168,76,.6)" stroke-width="1.5"/>
-            <!-- Inner decoration lines -->
-            <line x1="140" y1="126" x2="140" y2="190" stroke="rgba(201,168,76,.15)" stroke-width=".8"/>
-            <line x1="114" y1="141" x2="166" y2="175" stroke="rgba(201,168,76,.15)" stroke-width=".8"/>
-            <line x1="166" y1="141" x2="114" y2="175" stroke="rgba(201,168,76,.15)" stroke-width=".8"/>
-            <!-- Center symbol — stylised ghost/traveller -->
-            <circle cx="140" cy="158" r="14" fill="none" stroke="rgba(201,168,76,.5)" stroke-width="1.2"/>
-            <circle cx="140" cy="158" r="7" fill="rgba(201,168,76,.2)" stroke="rgba(201,168,76,.7)" stroke-width="1"/>
-            <circle cx="140" cy="158" r="3" fill="rgba(201,168,76,.8)"/>
-            <!-- Corner nodes on hex -->
-            <circle cx="140" cy="126" r="2.5" fill="rgba(201,168,76,.7)"/>
-            <circle cx="166" cy="141" r="2.5" fill="rgba(201,168,76,.7)"/>
-            <circle cx="166" cy="175" r="2.5" fill="rgba(201,168,76,.7)"/>
-            <circle cx="140" cy="190" r="2.5" fill="rgba(201,168,76,.7)"/>
-            <circle cx="114" cy="175" r="2.5" fill="rgba(201,168,76,.7)"/>
-            <circle cx="114" cy="141" r="2.5" fill="rgba(201,168,76,.7)"/>
+            <!-- Ink splatter (VP) -->
+            <circle cx="204" cy="172" r="3" fill="#6A0808" opacity=".5"/>
+            <circle cx="212" cy="165" r="1.8" fill="#7A1111" opacity=".45"/>
+            <circle cx="197" cy="179" r="2" fill="#6A0808" opacity=".4"/>
+            <circle cx="220" cy="182" r="1.2" fill="#881111" opacity=".45"/>
 
-            <!-- Orbiting node — Sherpa -->
-            <circle cx="212" cy="120" r="6" fill="rgba(201,168,76,.15)" stroke="rgba(201,168,76,.6)" stroke-width="1" filter="url(#rglow2)"/>
-            <circle cx="212" cy="120" r="3" fill="rgba(201,168,76,.8)"/>
-            <text x="222" y="117" fill="rgba(201,168,76,.55)" font-size="6" font-family="monospace">SHERPA</text>
-
-            <!-- Orbiting node — Guided player -->
-            <circle cx="75" cy="210" r="5" fill="rgba(120,160,255,.12)" stroke="rgba(120,160,255,.5)" stroke-width="1" filter="url(#rglow2)"/>
-            <circle cx="75" cy="210" r="2.5" fill="rgba(120,160,255,.7)"/>
-            <text x="84" y="207" fill="rgba(120,160,255,.5)" font-size="6" font-family="monospace">GUIDED</text>
-
-            <!-- Connector line between nodes -->
-            <line x1="212" y1="120" x2="166" y2="141" stroke="rgba(201,168,76,.2)" stroke-width=".8" stroke-dasharray="3 3"/>
-            <line x1="75" y1="210" x2="114" y2="175" stroke="rgba(120,160,255,.2)" stroke-width=".8" stroke-dasharray="3 3"/>
-
-            <!-- Two silhouettes below seal — veteran + new guardian -->
-            <!-- Veteran (left) — taller, armoured -->
-            <g transform="translate(92, 218)">
-              <ellipse cx="0" cy="34" rx="10" ry="18" fill="#0a1020" opacity=".9"/>
-              <circle cx="0" cy="12" r="10" fill="#0a1020" opacity=".9"/>
-              <!-- helmet crest -->
-              <rect x="-4" y="2" width="8" height="4" fill="#0f1828" rx="1"/>
-              <!-- shoulder pads -->
-              <ellipse cx="-12" cy="24" rx="6" ry="4" fill="#0d1525" opacity=".9"/>
-              <ellipse cx="12" cy="24" rx="6" ry="4" fill="#0d1525" opacity=".9"/>
-              <!-- gold accent on chest -->
-              <ellipse cx="0" cy="30" rx="4" ry="6" fill="rgba(201,168,76,.2)"/>
-              <!-- arms -->
-              <line x1="-10" y1="28" x2="-20" y2="46" stroke="#0a1020" stroke-width="6" stroke-linecap="round"/>
-              <line x1="10" y1="28" x2="18" y2="44" stroke="#0a1020" stroke-width="6" stroke-linecap="round"/>
-              <!-- legs -->
-              <line x1="-5" y1="52" x2="-8" y2="72" stroke="#0a1020" stroke-width="7" stroke-linecap="round"/>
-              <line x1="5" y1="52" x2="8" y2="72" stroke="#0a1020" stroke-width="7" stroke-linecap="round"/>
-              <!-- glow -->
-              <ellipse cx="0" cy="30" rx="14" ry="20" fill="rgba(201,168,76,.06)" filter="url(#rglow4)"/>
+            <!-- Dual blades (VP) — crossed, at x≈205 -->
+            <g transform="translate(198,181) rotate(-30)">
+              <rect x="-2" y="-84" width="4" height="140" rx="1" fill="#B05060" opacity=".68"/>
+              <rect x="-1" y="-84" width="1.5" height="140" rx=".5" fill="#E07080" opacity=".48"/>
+              <rect x=".5" y="-64" width=".7" height="105" fill="#903040" opacity=".38"/>
+              <rect x="-6" y="56" width="12" height="5" rx="1" fill="#3A1010" opacity=".88"/>
+              <rect x="-5" y="61" width="10" height="30" rx="1" fill="#280808" opacity=".88"/>
+              <ellipse cx="0" cy="-76" rx="1.8" ry="3.5" fill="#881111" opacity=".48" filter="url(#hmoonBlur)"/>
+            </g>
+            <g transform="translate(224,177) rotate(30)">
+              <rect x="-2" y="-84" width="4" height="140" rx="1" fill="#B05060" opacity=".62"/>
+              <rect x="-1" y="-84" width="1.5" height="140" rx=".5" fill="#E07080" opacity=".42"/>
+              <rect x=".5" y="-64" width=".7" height="105" fill="#903040" opacity=".33"/>
+              <rect x="-6" y="56" width="12" height="5" rx="1" fill="#3A1010" opacity=".88"/>
+              <rect x="-5" y="61" width="10" height="30" rx="1" fill="#280808" opacity=".88"/>
+              <ellipse cx="0" cy="-76" rx="1.8" ry="3.5" fill="#881111" opacity=".42" filter="url(#hmoonBlur)"/>
             </g>
 
-            <!-- New guardian (right) — slightly smaller, less armour -->
-            <g transform="translate(190, 226)">
-              <ellipse cx="0" cy="30" rx="9" ry="16" fill="#080e1c" opacity=".85"/>
-              <circle cx="0" cy="11" r="9" fill="#080e1c" opacity=".85"/>
-              <!-- blue accent -->
-              <ellipse cx="0" cy="26" rx="3" ry="5" fill="rgba(100,150,255,.18)"/>
-              <!-- arms -->
-              <line x1="-9" y1="25" x2="-17" y2="40" stroke="#080e1c" stroke-width="6" stroke-linecap="round"/>
-              <line x1="9" y1="25" x2="15" y2="40" stroke="#080e1c" stroke-width="6" stroke-linecap="round"/>
-              <!-- legs -->
-              <line x1="-4" y1="46" x2="-7" y2="64" stroke="#080e1c" stroke-width="6" stroke-linecap="round"/>
-              <line x1="4" y1="46" x2="7" y2="64" stroke="#080e1c" stroke-width="6" stroke-linecap="round"/>
-              <ellipse cx="0" cy="26" rx="12" ry="18" fill="rgba(100,150,255,.05)" filter="url(#rglow4)"/>
-            </g>
+            <!-- Centre vertical divider -->
+            <path d="M 139 0 C 140 30, 138 90, 140 186 C 142 282, 139 345, 141 373" fill="none" stroke="url(#hsumiDiv)" stroke-width="1.2"/>
 
-            <!-- Sherpa guidance beam between figures -->
-            <line x1="104" y1="262" x2="188" y2="266" stroke="rgba(201,168,76,.2)" stroke-width="1" stroke-dasharray="4 3"/>
+            <!-- Mon seal -->
+            <circle cx="140" cy="178" r="16" fill="#0A0805" stroke="#C89B3C" stroke-width=".7" opacity=".8"/>
+            <circle cx="140" cy="178" r="11" fill="none" stroke="#785A28" stroke-width=".35" opacity=".5"/>
+            <line x1="140" y1="166" x2="140" y2="173" stroke="#C89B3C" stroke-width=".7" opacity=".5"/>
+            <line x1="140" y1="183" x2="140" y2="190" stroke="#C89B3C" stroke-width=".7" opacity=".5"/>
+            <line x1="128" y1="178" x2="135" y2="178" stroke="#C89B3C" stroke-width=".7" opacity=".5"/>
+            <line x1="145" y1="178" x2="152" y2="178" stroke="#C89B3C" stroke-width=".7" opacity=".5"/>
+            <rect x="137.5" y="175.5" width="5" height="5" fill="#C89B3C" opacity=".28" transform="rotate(45,140,178)"/>
 
-            <!-- Bottom stats panel -->
-            <rect x="0" y="320" width="280" height="53" fill="rgba(4,8,20,.95)"/>
-            <line x1="0" y1="320" x2="280" y2="320" stroke="rgba(201,168,76,.2)" stroke-width="1"/>
+            <!-- Stance labels -->
+            <text x="70" y="30" text-anchor="middle" fill="#2A4080" font-size="6.5" font-family="Georgia, serif" letter-spacing="2.5" opacity=".65">MOURNFUL FLOWER</text>
+            <line x1="14" y1="34" x2="126" y2="34" stroke="#1A2850" stroke-width=".35" opacity=".35"/>
+            <text x="70" y="44" text-anchor="middle" fill="#1A2850" font-size="5.5" font-family="Georgia, serif" letter-spacing="1.5" font-style="italic" opacity=".45">Stillness before the cut</text>
 
-            <!-- Stat row -->
-            <text x="14" y="336" fill="rgba(201,168,76,.45)" font-size="6" font-family="monospace" letter-spacing=".8">ABANDONMENT REDUCTION</text>
-            <text x="266" y="336" text-anchor="end" fill="rgba(201,168,76,.8)" font-size="10" font-family="monospace" font-weight="bold">−27pt</text>
+            <text x="210" y="30" text-anchor="middle" fill="#771111" font-size="6.5" font-family="Georgia, serif" letter-spacing="2.5" opacity=".65">VENGEFUL PLIGHT</text>
+            <line x1="154" y1="34" x2="266" y2="34" stroke="#4A0808" stroke-width=".35" opacity=".35"/>
+            <text x="210" y="44" text-anchor="middle" fill="#4A0808" font-size="5.5" font-family="Georgia, serif" letter-spacing="1.5" font-style="italic" opacity=".45">No pause. No retreat.</text>
 
-            <text x="14" y="352" fill="rgba(120,140,180,.4)" font-size="6" font-family="monospace" letter-spacing=".8">MODELLED COHORT · 500 SESSIONS</text>
-            <text x="266" y="352" text-anchor="end" fill="rgba(120,160,255,.65)" font-size="9" font-family="monospace">56→29%</text>
+            <!-- Edge pillars -->
+            <rect x="3" y="0" width="1.2" height="373" fill="#1A1008" opacity=".38"/>
+            <rect x="275.8" y="0" width="1.2" height="373" fill="#1A1008" opacity=".38"/>
 
-            <text x="14" y="366" fill="rgba(80,100,150,.35)" font-size="6" font-family="monospace">5-LAYER LEARNING MODEL · DUAL-QUEUE SYSTEM</text>
+            <!-- Bottom strip -->
+            <rect x="0" y="342" width="280" height="31" fill="rgba(6,4,2,.88)"/>
+            <line x1="0" y1="342" x2="280" y2="342" stroke="#1E1208" stroke-width=".5" opacity=".7"/>
+            <text x="14" y="355" fill="#2A1A0A" font-size="5.5" font-family="monospace" letter-spacing="1">READ → ADVANTAGE → CONVERT → RESET</text>
+            <text x="140" y="368" text-anchor="middle" fill="#5A3A10" font-size="5.5" font-family="Georgia, serif" font-style="italic">Stance-Based Duel Combat · Unreal Engine 5</text>
           </svg>
         </div>
-        <div class="hcard-bar" style="background:linear-gradient(90deg,#c9a84c,#4a6faa)"></div>
+        <div class="hcard-bar" style="background:linear-gradient(90deg,#1A2850,#C89B3C,#7A0E0E)"></div>
         <div class="hcard-info">
-          <div class="hcard-name">Destiny 2 · Raid Architecture</div>
-          <div class="hcard-role">Endgame Onboarding System</div>
+          <div class="hcard-name">Mournful Flower &amp; Vengeful Plight</div>
+          <div class="hcard-role">Combat Systems Prototype · UE5</div>
         </div>
       </div>
 
@@ -2795,6 +2779,224 @@ footer{
   <div class="work-carousel-wrap">
   <div class="work-carousel" id="workCarousel">
 
+
+
+    <!-- MOURNFUL FLOWER & VENGEFUL PLIGHT — Combat Systems Prototype -->
+    <div class="pcard" onclick="document.getElementById('modal-mfvp').classList.add('open')" style="border-color:#1E1208;opacity:.9;cursor:pointer">
+      <div class="pcard-preview" style="background:#0A0805;overflow:hidden;position:relative">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <radialGradient id="mfInkL" cx="25%" cy="50%" r="60%">
+              <stop offset="0%" stop-color="#0F1528" stop-opacity=".9"/>
+              <stop offset="100%" stop-color="#0A0805" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="vpInkR" cx="75%" cy="50%" r="60%">
+              <stop offset="0%" stop-color="#1A0608" stop-opacity=".9"/>
+              <stop offset="100%" stop-color="#0A0805" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#3A5A90" stop-opacity=".12"/>
+              <stop offset="100%" stop-color="#3A5A90" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="emberGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#881111" stop-opacity=".16"/>
+              <stop offset="100%" stop-color="#881111" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="sumiDivide" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#C89B3C" stop-opacity="0"/>
+              <stop offset="15%" stop-color="#C89B3C" stop-opacity=".5"/>
+              <stop offset="85%" stop-color="#C89B3C" stop-opacity=".5"/>
+              <stop offset="100%" stop-color="#C89B3C" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="bladeSheen" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#6A90C0" stop-opacity="0"/>
+              <stop offset="40%" stop-color="#A0C0E8" stop-opacity=".8"/>
+              <stop offset="100%" stop-color="#6A90C0" stop-opacity="0"/>
+            </linearGradient>
+            <filter id="inkBlur"><feGaussianBlur stdDeviation="22"/></filter>
+            <filter id="softS"><feGaussianBlur stdDeviation="5"/></filter>
+            <filter id="moonBlur"><feGaussianBlur stdDeviation="3"/></filter>
+          </defs>
+
+          <!-- ── SUMI INK BASE ── -->
+          <rect width="680" height="400" fill="#0A0805"/>
+          <!-- Ink wash pools -->
+          <ellipse cx="170" cy="200" rx="220" ry="200" fill="url(#mfInkL)"/>
+          <ellipse cx="510" cy="200" rx="220" ry="200" fill="url(#vpInkR)"/>
+
+          <!-- ── LARGE ENSO — the warrior's circle, spanning the full card ── -->
+          <!-- The enso is open at top-right (traditional form) -->
+          <circle cx="340" cy="200" r="165" fill="none" stroke="#C89B3C" stroke-width="1" opacity=".055"
+            stroke-dasharray="900 180" stroke-dashoffset="260"/>
+          <circle cx="340" cy="200" r="165" fill="none" stroke="#C89B3C" stroke-width=".4" opacity=".08"
+            stroke-dasharray="1000 80" stroke-dashoffset="200"/>
+          <!-- Inner enso ring — moon-thin -->
+          <circle cx="340" cy="200" r="130" fill="none" stroke="#785A28" stroke-width=".4" opacity=".07"/>
+
+          <!-- ── MOURNFUL FLOWER SIDE ── -->
+          <!-- Moon glow — cold, precise -->
+          <ellipse cx="160" cy="185" rx="110" ry="110" fill="url(#moonGlow)" filter="url(#inkBlur)"/>
+
+          <!-- Water rings — parry timing visualised as ripples -->
+          <ellipse cx="160" cy="195" rx="88" ry="20" fill="none" stroke="#1A3060" stroke-width=".6" opacity=".35"/>
+          <ellipse cx="160" cy="195" rx="64" ry="14" fill="none" stroke="#2A4080" stroke-width=".5" opacity=".4"/>
+          <ellipse cx="160" cy="195" rx="40" ry="9" fill="none" stroke="#3A5090" stroke-width=".6" opacity=".4"/>
+          <ellipse cx="160" cy="195" rx="20" ry="4" fill="none" stroke="#4A60A0" stroke-width=".7" opacity=".5"/>
+
+          <!-- Falling petals — sakura -->
+          <ellipse cx="95"  cy="110" rx="5" ry="2.5" fill="#A0B8D8" opacity=".2" transform="rotate(-30,95,110)"/>
+          <ellipse cx="128" cy="140" rx="4" ry="2"   fill="#A0B8D8" opacity=".18" transform="rotate(-15,128,140)"/>
+          <ellipse cx="200" cy="95"  rx="4.5" ry="2" fill="#A0B8D8" opacity=".15" transform="rotate(-45,200,95)"/>
+          <ellipse cx="76"  cy="250" rx="3.5" ry="1.8" fill="#A0B8D8" opacity=".12" transform="rotate(-10,76,250)"/>
+          <ellipse cx="220" cy="300" rx="4" ry="2"   fill="#A0B8D8" opacity=".1"  transform="rotate(-55,220,300)"/>
+
+          <!-- Mist at base of MF side -->
+          <ellipse cx="150" cy="340" rx="150" ry="50" fill="#0F1528" opacity=".5" filter="url(#softS)"/>
+
+          <!-- KATANA — vertical, still, a line of silver in darkness -->
+          <!-- Blade — long, slender, slightly reflective -->
+          <rect x="158.5" y="52" width="3" height="218" rx="1.5" fill="#7090B8" opacity=".6"/>
+          <rect x="159.5" y="52" width="1.5" height="218" fill="url(#bladeSheen)" opacity=".7"/>
+          <!-- Kissaki (blade tip) -->
+          <polygon points="158.5,52 162,52 160,44" fill="#8AAAD0" opacity=".7"/>
+          <!-- Habaki (blade collar) -->
+          <rect x="155" y="270" width="10" height="6" rx="1" fill="#3A4A6A" opacity=".8"/>
+          <!-- Tsuba (guard) — simple round form -->
+          <ellipse cx="160" cy="276" rx="16" ry="5" fill="none" stroke="#4A6A90" stroke-width="1" opacity=".6"/>
+          <ellipse cx="160" cy="276" rx="16" ry="5" fill="#1A2A40" opacity=".6"/>
+          <!-- Tsuka (handle) wrapped -->
+          <rect x="156" y="281" width="8" height="52" rx="1" fill="#1A2030" opacity=".85"/>
+          <!-- Tsuka ito (handle wrap) marks -->
+          <line x1="156" y1="288" x2="164" y2="288" stroke="#2A3A58" stroke-width="1" opacity=".6"/>
+          <line x1="156" y1="297" x2="164" y2="297" stroke="#2A3A58" stroke-width="1" opacity=".5"/>
+          <line x1="156" y1="306" x2="164" y2="306" stroke="#2A3A58" stroke-width="1" opacity=".6"/>
+          <line x1="156" y1="315" x2="164" y2="315" stroke="#2A3A58" stroke-width="1" opacity=".5"/>
+          <line x1="156" y1="324" x2="164" y2="324" stroke="#2A3A58" stroke-width="1" opacity=".6"/>
+          <!-- Kashira (pommel) -->
+          <rect x="156" y="333" width="8" height="5" rx="2" fill="#2A3A58" opacity=".7"/>
+          <!-- Moon on the blade — reflection point -->
+          <ellipse cx="160" cy="140" rx="2" ry="12" fill="#C0D8F0" opacity=".25" filter="url(#moonBlur)"/>
+
+          <!-- ── VENGEFUL PLIGHT SIDE ── -->
+          <!-- Ember glow — hot, aggressive -->
+          <ellipse cx="520" cy="200" rx="130" ry="130" fill="url(#emberGlow)" filter="url(#inkBlur)"/>
+
+          <!-- Brushstroke slashes — sumi-e style (filled paths, tapered) -->
+          <!-- Primary slash: diagonal, thick center, tapered ends -->
+          <path d="M 415 75 C 418 80, 445 115, 475 155 C 505 195, 545 245, 568 278 C 575 290, 572 298, 565 294 C 558 290, 550 278, 520 238 C 490 198, 458 152, 430 112 C 412 88, 410 78, 415 75 Z" fill="#7A0E0E" opacity=".45"/>
+          <!-- Counter slash -->
+          <path d="M 615 68 C 612 74, 588 102, 562 140 C 536 178, 498 228, 476 265 C 469 278, 472 286, 479 282 C 486 278, 494 266, 520 228 C 546 190, 582 140, 608 102 C 624 80, 618 62, 615 68 Z" fill="#881111" opacity=".38"/>
+          <!-- Secondary slash marks — smaller, more chaotic -->
+          <path d="M 430 290 C 432 292, 448 268, 462 248 C 466 253, 452 274, 436 296 Z" fill="#6A0808" opacity=".5"/>
+          <path d="M 580 160 C 582 158, 598 140, 608 128 C 610 132, 596 146, 582 164 Z" fill="#6A0808" opacity=".45"/>
+
+          <!-- Ink splatter — impact marks -->
+          <circle cx="498" cy="195" r="3.5" fill="#6A0808" opacity=".55"/>
+          <circle cx="508" cy="188" r="2"   fill="#7A1111" opacity=".5"/>
+          <circle cx="486" cy="204" r="2.5" fill="#6A0808" opacity=".45"/>
+          <circle cx="515" cy="200" r="1.5" fill="#881111" opacity=".5"/>
+          <circle cx="494" cy="181" r="1"   fill="#6A0808" opacity=".4"/>
+          <circle cx="524" cy="215" r="1.5" fill="#6A0808" opacity=".35"/>
+          <circle cx="478" cy="210" r="1"   fill="#881111" opacity=".4"/>
+          <circle cx="540" cy="172" r="1"   fill="#6A0808" opacity=".35"/>
+          <!-- Larger splatter -->
+          <circle cx="556" cy="230" r="4"   fill="#5A0808" opacity=".3"/>
+          <circle cx="460" cy="155" r="3"   fill="#6A0808" opacity=".3"/>
+
+          <!-- Dual blades — crossed, aggressive, more dramatic angle -->
+          <!-- Left blade (-30 deg) -->
+          <g transform="translate(500,200) rotate(-30)">
+            <rect x="-2" y="-105" width="4.5" height="170" rx="1" fill="#B05060" opacity=".7"/>
+            <!-- Blade edge sheen -->
+            <rect x="-1" y="-105" width="1.5" height="170" rx=".5" fill="#E07080" opacity=".5"/>
+            <!-- Blood groove (hi) -->
+            <rect x=".5" y="-80" width=".8" height="130" fill="#903040" opacity=".4"/>
+            <!-- Guard -->
+            <rect x="-7" y="65" width="14" height="6" rx="1" fill="#3A1010" opacity=".9"/>
+            <rect x="-6" y="71" width="12" height="36" rx="1" fill="#280808" opacity=".9"/>
+            <!-- Blood on blade tip -->
+            <ellipse cx="0" cy="-95" rx="2" ry="4" fill="#881111" opacity=".5" filter="url(#moonBlur)"/>
+          </g>
+          <!-- Right blade (+30 deg) -->
+          <g transform="translate(535,196) rotate(30)">
+            <rect x="-2" y="-105" width="4.5" height="170" rx="1" fill="#B05060" opacity=".65"/>
+            <rect x="-1" y="-105" width="1.5" height="170" rx=".5" fill="#E07080" opacity=".45"/>
+            <rect x=".5" y="-80" width=".8" height="130" fill="#903040" opacity=".35"/>
+            <rect x="-7" y="65" width="14" height="6" rx="1" fill="#3A1010" opacity=".9"/>
+            <rect x="-6" y="71" width="12" height="36" rx="1" fill="#280808" opacity=".9"/>
+            <ellipse cx="0" cy="-95" rx="2" ry="4" fill="#881111" opacity=".45" filter="url(#moonBlur)"/>
+          </g>
+
+          <!-- Ember embers rising -->
+          <circle cx="470" cy="310" r="1.5" fill="#AA2020" opacity=".4"/>
+          <circle cx="482" cy="298" r="1"   fill="#CC3030" opacity=".35"/>
+          <circle cx="565" cy="302" r="1.5" fill="#AA2020" opacity=".35"/>
+          <circle cx="580" cy="285" r="1"   fill="#BB2828" opacity=".3"/>
+
+          <!-- ── CENTRE DIVIDER — The cut ── -->
+          <!-- Vertical brushstroke-style divider (slightly irregular) -->
+          <path d="M 339 0 C 340 40, 338 100, 340 200 C 342 300, 339 360, 341 400" fill="none" stroke="url(#sumiDivide)" stroke-width="1.5"/>
+          <!-- Centre mon (family seal / warrior's crest) -->
+          <circle cx="340" cy="200" r="18" fill="#0A0805" stroke="#C89B3C" stroke-width=".8" opacity=".8"/>
+          <circle cx="340" cy="200" r="13" fill="none" stroke="#785A28" stroke-width=".4" opacity=".5"/>
+          <!-- Interior cross — four-direction symbol -->
+          <line x1="340" y1="186" x2="340" y2="194" stroke="#C89B3C" stroke-width=".8" opacity=".5"/>
+          <line x1="340" y1="206" x2="340" y2="214" stroke="#C89B3C" stroke-width=".8" opacity=".5"/>
+          <line x1="326" y1="200" x2="334" y2="200" stroke="#C89B3C" stroke-width=".8" opacity=".5"/>
+          <line x1="346" y1="200" x2="354" y2="200" stroke="#C89B3C" stroke-width=".8" opacity=".5"/>
+          <!-- Corner diamonds of mon -->
+          <rect x="337.5" y="197.5" width="5" height="5" fill="#C89B3C" opacity=".3" transform="rotate(45,340,200)"/>
+
+          <!-- ── STANCE LABELS — calligraphic, sepia ── -->
+          <!-- MF label — vertical orientation hint -->
+          <text x="160" y="32" text-anchor="middle" fill="#2A4080" font-size="7.5" font-family="Georgia, serif" letter-spacing="4" opacity=".7">MOURNFUL FLOWER</text>
+          <line x1="80" y1="37" x2="240" y2="37" stroke="#1A2850" stroke-width=".4" opacity=".4"/>
+          <text x="160" y="48" text-anchor="middle" fill="#1A2850" font-size="6" font-family="Georgia, serif" letter-spacing="2" font-style="italic" opacity=".5">Stillness before the cut</text>
+
+          <!-- VP label -->
+          <text x="512" y="32" text-anchor="middle" fill="#771111" font-size="7.5" font-family="Georgia, serif" letter-spacing="4" opacity=".7">VENGEFUL PLIGHT</text>
+          <line x1="400" y1="37" x2="624" y2="37" stroke="#4A0808" stroke-width=".4" opacity=".4"/>
+          <text x="512" y="48" text-anchor="middle" fill="#4A0808" font-size="6" font-family="Georgia, serif" letter-spacing="2" font-style="italic" opacity=".5">No pause. No retreat.</text>
+
+          <!-- ── BOTTOM STRIP ── -->
+          <rect x="0" y="368" width="680" height="32" fill="rgba(6,4,2,.88)"/>
+          <line x1="20" y1="368" x2="660" y2="368" stroke="#1E1208" stroke-width=".5" opacity=".7"/>
+
+          <!-- Read → Convert loop — subtle, sepia -->
+          <text x="28" y="382" fill="#2A1A0A" font-size="6.5" font-family="monospace" letter-spacing="1.5">READ</text>
+          <text x="62"  y="382" fill="#1A1008" font-size="6" font-family="monospace">→</text>
+          <text x="72"  y="382" fill="#2A1A0A" font-size="6.5" font-family="monospace" letter-spacing="1.5">ADVANTAGE</text>
+          <text x="142" y="382" fill="#1A1008" font-size="6" font-family="monospace">→</text>
+          <text x="152" y="382" fill="#2A1A0A" font-size="6.5" font-family="monospace" letter-spacing="1.5">CONVERT</text>
+          <text x="212" y="382" fill="#1A1008" font-size="6" font-family="monospace">→</text>
+          <text x="222" y="382" fill="#2A1A0A" font-size="6.5" font-family="monospace" letter-spacing="1.5">RESET</text>
+
+          <!-- Centre separator mark -->
+          <text x="340" y="388" text-anchor="middle" fill="#3A2A10" font-size="8" font-family="Georgia">◆</text>
+
+          <!-- Right label -->
+          <text x="652" y="381" text-anchor="end" fill="#5A3A10" font-size="6.5" font-family="Georgia, serif" letter-spacing="1" font-style="italic">Stance-Based Duel Combat</text>
+          <text x="652" y="393" text-anchor="end" fill="#2A1808" font-size="6" font-family="monospace">Unreal Engine 5 · In Development</text>
+
+          <!-- Decorative vertical strokes on far edges — like torii pillars -->
+          <rect x="4" y="0" width="1.5" height="368" fill="#1A1008" opacity=".4"/>
+          <rect x="674.5" y="0" width="1.5" height="368" fill="#1A1008" opacity=".4"/>
+        </svg>
+      </div>
+      <div class="pcard-body" style="background:#0A0805;border-top:1px solid #1E1208">
+        <h3 class="pcard-title" style="color:#C89B3C">Mournful Flower &amp; Vengeful Plight
+          <span style="font-family:var(--mono);font-size:.6rem;color:#5A3A10;border:1px solid #1E1208;padding:.1rem .4rem;margin-left:6px;vertical-align:middle;background:#07050A">IN DEVELOPMENT</span>
+        </h3>
+        <p class="pcard-desc" style="color:#5A4830">A stance-based duel combat prototype built around two opposing philosophies — <em style="color:#8A7050">Mournful Flower</em> rewards precise parries and tempo control through katana discipline, while <em style="color:#8A7050">Vengeful Plight</em> converts perfect dodges into relentless offensive chains. Advantage is earned through defense and spent through aggression.</p>
+        <div class="pcard-tags">
+          <span class="ptag" style="color:#3A2A18;border-color:#1E1208">Combat Systems Design</span>
+          <span class="ptag" style="color:#3A2A18;border-color:#1E1208">Unreal Engine 5</span>
+          <span class="ptag" style="color:#3A2A18;border-color:#1E1208">Stance Design</span>
+          <span class="ptag" style="color:#3A2A18;border-color:#1E1208">Posture Economy</span>
+          <span class="ptag" style="color:#C89B3C;border-color:#5A3A10">● In Development</span>
+        </div>
+      </div>
+    </div>
 
 
     <!-- THE COUNTERPLAY GATE — Champion Rework Reception -->
@@ -3025,224 +3227,6 @@ footer{
           <span class="ptag">Game Systems</span>
           <span class="ptag">League of Legends</span>
           <span class="ptag">Riot Games · 2019–2026</span>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- MOURNFUL FLOWER & VENGEFUL PLIGHT — Combat Systems Prototype -->
-    <div class="pcard" onclick="document.getElementById('modal-mfvp').classList.add('open')" style="border-color:#1E1208;opacity:.9;cursor:pointer">
-      <div class="pcard-preview" style="background:#0A0805;overflow:hidden;position:relative">
-        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-          <defs>
-            <radialGradient id="mfInkL" cx="25%" cy="50%" r="60%">
-              <stop offset="0%" stop-color="#0F1528" stop-opacity=".9"/>
-              <stop offset="100%" stop-color="#0A0805" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="vpInkR" cx="75%" cy="50%" r="60%">
-              <stop offset="0%" stop-color="#1A0608" stop-opacity=".9"/>
-              <stop offset="100%" stop-color="#0A0805" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#3A5A90" stop-opacity=".12"/>
-              <stop offset="100%" stop-color="#3A5A90" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="emberGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#881111" stop-opacity=".16"/>
-              <stop offset="100%" stop-color="#881111" stop-opacity="0"/>
-            </radialGradient>
-            <linearGradient id="sumiDivide" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#C89B3C" stop-opacity="0"/>
-              <stop offset="15%" stop-color="#C89B3C" stop-opacity=".5"/>
-              <stop offset="85%" stop-color="#C89B3C" stop-opacity=".5"/>
-              <stop offset="100%" stop-color="#C89B3C" stop-opacity="0"/>
-            </linearGradient>
-            <linearGradient id="bladeSheen" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stop-color="#6A90C0" stop-opacity="0"/>
-              <stop offset="40%" stop-color="#A0C0E8" stop-opacity=".8"/>
-              <stop offset="100%" stop-color="#6A90C0" stop-opacity="0"/>
-            </linearGradient>
-            <filter id="inkBlur"><feGaussianBlur stdDeviation="22"/></filter>
-            <filter id="softS"><feGaussianBlur stdDeviation="5"/></filter>
-            <filter id="moonBlur"><feGaussianBlur stdDeviation="3"/></filter>
-          </defs>
-
-          <!-- ── SUMI INK BASE ── -->
-          <rect width="680" height="400" fill="#0A0805"/>
-          <!-- Ink wash pools -->
-          <ellipse cx="170" cy="200" rx="220" ry="200" fill="url(#mfInkL)"/>
-          <ellipse cx="510" cy="200" rx="220" ry="200" fill="url(#vpInkR)"/>
-
-          <!-- ── LARGE ENSO — the warrior's circle, spanning the full card ── -->
-          <!-- The enso is open at top-right (traditional form) -->
-          <circle cx="340" cy="200" r="165" fill="none" stroke="#C89B3C" stroke-width="1" opacity=".055"
-            stroke-dasharray="900 180" stroke-dashoffset="260"/>
-          <circle cx="340" cy="200" r="165" fill="none" stroke="#C89B3C" stroke-width=".4" opacity=".08"
-            stroke-dasharray="1000 80" stroke-dashoffset="200"/>
-          <!-- Inner enso ring — moon-thin -->
-          <circle cx="340" cy="200" r="130" fill="none" stroke="#785A28" stroke-width=".4" opacity=".07"/>
-
-          <!-- ── MOURNFUL FLOWER SIDE ── -->
-          <!-- Moon glow — cold, precise -->
-          <ellipse cx="160" cy="185" rx="110" ry="110" fill="url(#moonGlow)" filter="url(#inkBlur)"/>
-
-          <!-- Water rings — parry timing visualised as ripples -->
-          <ellipse cx="160" cy="195" rx="88" ry="20" fill="none" stroke="#1A3060" stroke-width=".6" opacity=".35"/>
-          <ellipse cx="160" cy="195" rx="64" ry="14" fill="none" stroke="#2A4080" stroke-width=".5" opacity=".4"/>
-          <ellipse cx="160" cy="195" rx="40" ry="9" fill="none" stroke="#3A5090" stroke-width=".6" opacity=".4"/>
-          <ellipse cx="160" cy="195" rx="20" ry="4" fill="none" stroke="#4A60A0" stroke-width=".7" opacity=".5"/>
-
-          <!-- Falling petals — sakura -->
-          <ellipse cx="95"  cy="110" rx="5" ry="2.5" fill="#A0B8D8" opacity=".2" transform="rotate(-30,95,110)"/>
-          <ellipse cx="128" cy="140" rx="4" ry="2"   fill="#A0B8D8" opacity=".18" transform="rotate(-15,128,140)"/>
-          <ellipse cx="200" cy="95"  rx="4.5" ry="2" fill="#A0B8D8" opacity=".15" transform="rotate(-45,200,95)"/>
-          <ellipse cx="76"  cy="250" rx="3.5" ry="1.8" fill="#A0B8D8" opacity=".12" transform="rotate(-10,76,250)"/>
-          <ellipse cx="220" cy="300" rx="4" ry="2"   fill="#A0B8D8" opacity=".1"  transform="rotate(-55,220,300)"/>
-
-          <!-- Mist at base of MF side -->
-          <ellipse cx="150" cy="340" rx="150" ry="50" fill="#0F1528" opacity=".5" filter="url(#softS)"/>
-
-          <!-- KATANA — vertical, still, a line of silver in darkness -->
-          <!-- Blade — long, slender, slightly reflective -->
-          <rect x="158.5" y="52" width="3" height="218" rx="1.5" fill="#7090B8" opacity=".6"/>
-          <rect x="159.5" y="52" width="1.5" height="218" fill="url(#bladeSheen)" opacity=".7"/>
-          <!-- Kissaki (blade tip) -->
-          <polygon points="158.5,52 162,52 160,44" fill="#8AAAD0" opacity=".7"/>
-          <!-- Habaki (blade collar) -->
-          <rect x="155" y="270" width="10" height="6" rx="1" fill="#3A4A6A" opacity=".8"/>
-          <!-- Tsuba (guard) — simple round form -->
-          <ellipse cx="160" cy="276" rx="16" ry="5" fill="none" stroke="#4A6A90" stroke-width="1" opacity=".6"/>
-          <ellipse cx="160" cy="276" rx="16" ry="5" fill="#1A2A40" opacity=".6"/>
-          <!-- Tsuka (handle) wrapped -->
-          <rect x="156" y="281" width="8" height="52" rx="1" fill="#1A2030" opacity=".85"/>
-          <!-- Tsuka ito (handle wrap) marks -->
-          <line x1="156" y1="288" x2="164" y2="288" stroke="#2A3A58" stroke-width="1" opacity=".6"/>
-          <line x1="156" y1="297" x2="164" y2="297" stroke="#2A3A58" stroke-width="1" opacity=".5"/>
-          <line x1="156" y1="306" x2="164" y2="306" stroke="#2A3A58" stroke-width="1" opacity=".6"/>
-          <line x1="156" y1="315" x2="164" y2="315" stroke="#2A3A58" stroke-width="1" opacity=".5"/>
-          <line x1="156" y1="324" x2="164" y2="324" stroke="#2A3A58" stroke-width="1" opacity=".6"/>
-          <!-- Kashira (pommel) -->
-          <rect x="156" y="333" width="8" height="5" rx="2" fill="#2A3A58" opacity=".7"/>
-          <!-- Moon on the blade — reflection point -->
-          <ellipse cx="160" cy="140" rx="2" ry="12" fill="#C0D8F0" opacity=".25" filter="url(#moonBlur)"/>
-
-          <!-- ── VENGEFUL PLIGHT SIDE ── -->
-          <!-- Ember glow — hot, aggressive -->
-          <ellipse cx="520" cy="200" rx="130" ry="130" fill="url(#emberGlow)" filter="url(#inkBlur)"/>
-
-          <!-- Brushstroke slashes — sumi-e style (filled paths, tapered) -->
-          <!-- Primary slash: diagonal, thick center, tapered ends -->
-          <path d="M 415 75 C 418 80, 445 115, 475 155 C 505 195, 545 245, 568 278 C 575 290, 572 298, 565 294 C 558 290, 550 278, 520 238 C 490 198, 458 152, 430 112 C 412 88, 410 78, 415 75 Z" fill="#7A0E0E" opacity=".45"/>
-          <!-- Counter slash -->
-          <path d="M 615 68 C 612 74, 588 102, 562 140 C 536 178, 498 228, 476 265 C 469 278, 472 286, 479 282 C 486 278, 494 266, 520 228 C 546 190, 582 140, 608 102 C 624 80, 618 62, 615 68 Z" fill="#881111" opacity=".38"/>
-          <!-- Secondary slash marks — smaller, more chaotic -->
-          <path d="M 430 290 C 432 292, 448 268, 462 248 C 466 253, 452 274, 436 296 Z" fill="#6A0808" opacity=".5"/>
-          <path d="M 580 160 C 582 158, 598 140, 608 128 C 610 132, 596 146, 582 164 Z" fill="#6A0808" opacity=".45"/>
-
-          <!-- Ink splatter — impact marks -->
-          <circle cx="498" cy="195" r="3.5" fill="#6A0808" opacity=".55"/>
-          <circle cx="508" cy="188" r="2"   fill="#7A1111" opacity=".5"/>
-          <circle cx="486" cy="204" r="2.5" fill="#6A0808" opacity=".45"/>
-          <circle cx="515" cy="200" r="1.5" fill="#881111" opacity=".5"/>
-          <circle cx="494" cy="181" r="1"   fill="#6A0808" opacity=".4"/>
-          <circle cx="524" cy="215" r="1.5" fill="#6A0808" opacity=".35"/>
-          <circle cx="478" cy="210" r="1"   fill="#881111" opacity=".4"/>
-          <circle cx="540" cy="172" r="1"   fill="#6A0808" opacity=".35"/>
-          <!-- Larger splatter -->
-          <circle cx="556" cy="230" r="4"   fill="#5A0808" opacity=".3"/>
-          <circle cx="460" cy="155" r="3"   fill="#6A0808" opacity=".3"/>
-
-          <!-- Dual blades — crossed, aggressive, more dramatic angle -->
-          <!-- Left blade (-30 deg) -->
-          <g transform="translate(500,200) rotate(-30)">
-            <rect x="-2" y="-105" width="4.5" height="170" rx="1" fill="#B05060" opacity=".7"/>
-            <!-- Blade edge sheen -->
-            <rect x="-1" y="-105" width="1.5" height="170" rx=".5" fill="#E07080" opacity=".5"/>
-            <!-- Blood groove (hi) -->
-            <rect x=".5" y="-80" width=".8" height="130" fill="#903040" opacity=".4"/>
-            <!-- Guard -->
-            <rect x="-7" y="65" width="14" height="6" rx="1" fill="#3A1010" opacity=".9"/>
-            <rect x="-6" y="71" width="12" height="36" rx="1" fill="#280808" opacity=".9"/>
-            <!-- Blood on blade tip -->
-            <ellipse cx="0" cy="-95" rx="2" ry="4" fill="#881111" opacity=".5" filter="url(#moonBlur)"/>
-          </g>
-          <!-- Right blade (+30 deg) -->
-          <g transform="translate(535,196) rotate(30)">
-            <rect x="-2" y="-105" width="4.5" height="170" rx="1" fill="#B05060" opacity=".65"/>
-            <rect x="-1" y="-105" width="1.5" height="170" rx=".5" fill="#E07080" opacity=".45"/>
-            <rect x=".5" y="-80" width=".8" height="130" fill="#903040" opacity=".35"/>
-            <rect x="-7" y="65" width="14" height="6" rx="1" fill="#3A1010" opacity=".9"/>
-            <rect x="-6" y="71" width="12" height="36" rx="1" fill="#280808" opacity=".9"/>
-            <ellipse cx="0" cy="-95" rx="2" ry="4" fill="#881111" opacity=".45" filter="url(#moonBlur)"/>
-          </g>
-
-          <!-- Ember embers rising -->
-          <circle cx="470" cy="310" r="1.5" fill="#AA2020" opacity=".4"/>
-          <circle cx="482" cy="298" r="1"   fill="#CC3030" opacity=".35"/>
-          <circle cx="565" cy="302" r="1.5" fill="#AA2020" opacity=".35"/>
-          <circle cx="580" cy="285" r="1"   fill="#BB2828" opacity=".3"/>
-
-          <!-- ── CENTRE DIVIDER — The cut ── -->
-          <!-- Vertical brushstroke-style divider (slightly irregular) -->
-          <path d="M 339 0 C 340 40, 338 100, 340 200 C 342 300, 339 360, 341 400" fill="none" stroke="url(#sumiDivide)" stroke-width="1.5"/>
-          <!-- Centre mon (family seal / warrior's crest) -->
-          <circle cx="340" cy="200" r="18" fill="#0A0805" stroke="#C89B3C" stroke-width=".8" opacity=".8"/>
-          <circle cx="340" cy="200" r="13" fill="none" stroke="#785A28" stroke-width=".4" opacity=".5"/>
-          <!-- Interior cross — four-direction symbol -->
-          <line x1="340" y1="186" x2="340" y2="194" stroke="#C89B3C" stroke-width=".8" opacity=".5"/>
-          <line x1="340" y1="206" x2="340" y2="214" stroke="#C89B3C" stroke-width=".8" opacity=".5"/>
-          <line x1="326" y1="200" x2="334" y2="200" stroke="#C89B3C" stroke-width=".8" opacity=".5"/>
-          <line x1="346" y1="200" x2="354" y2="200" stroke="#C89B3C" stroke-width=".8" opacity=".5"/>
-          <!-- Corner diamonds of mon -->
-          <rect x="337.5" y="197.5" width="5" height="5" fill="#C89B3C" opacity=".3" transform="rotate(45,340,200)"/>
-
-          <!-- ── STANCE LABELS — calligraphic, sepia ── -->
-          <!-- MF label — vertical orientation hint -->
-          <text x="160" y="32" text-anchor="middle" fill="#2A4080" font-size="7.5" font-family="Georgia, serif" letter-spacing="4" opacity=".7">MOURNFUL FLOWER</text>
-          <line x1="80" y1="37" x2="240" y2="37" stroke="#1A2850" stroke-width=".4" opacity=".4"/>
-          <text x="160" y="48" text-anchor="middle" fill="#1A2850" font-size="6" font-family="Georgia, serif" letter-spacing="2" font-style="italic" opacity=".5">Stillness before the cut</text>
-
-          <!-- VP label -->
-          <text x="512" y="32" text-anchor="middle" fill="#771111" font-size="7.5" font-family="Georgia, serif" letter-spacing="4" opacity=".7">VENGEFUL PLIGHT</text>
-          <line x1="400" y1="37" x2="624" y2="37" stroke="#4A0808" stroke-width=".4" opacity=".4"/>
-          <text x="512" y="48" text-anchor="middle" fill="#4A0808" font-size="6" font-family="Georgia, serif" letter-spacing="2" font-style="italic" opacity=".5">No pause. No retreat.</text>
-
-          <!-- ── BOTTOM STRIP ── -->
-          <rect x="0" y="368" width="680" height="32" fill="rgba(6,4,2,.88)"/>
-          <line x1="20" y1="368" x2="660" y2="368" stroke="#1E1208" stroke-width=".5" opacity=".7"/>
-
-          <!-- Read → Convert loop — subtle, sepia -->
-          <text x="28" y="382" fill="#2A1A0A" font-size="6.5" font-family="monospace" letter-spacing="1.5">READ</text>
-          <text x="62"  y="382" fill="#1A1008" font-size="6" font-family="monospace">→</text>
-          <text x="72"  y="382" fill="#2A1A0A" font-size="6.5" font-family="monospace" letter-spacing="1.5">ADVANTAGE</text>
-          <text x="142" y="382" fill="#1A1008" font-size="6" font-family="monospace">→</text>
-          <text x="152" y="382" fill="#2A1A0A" font-size="6.5" font-family="monospace" letter-spacing="1.5">CONVERT</text>
-          <text x="212" y="382" fill="#1A1008" font-size="6" font-family="monospace">→</text>
-          <text x="222" y="382" fill="#2A1A0A" font-size="6.5" font-family="monospace" letter-spacing="1.5">RESET</text>
-
-          <!-- Centre separator mark -->
-          <text x="340" y="388" text-anchor="middle" fill="#3A2A10" font-size="8" font-family="Georgia">◆</text>
-
-          <!-- Right label -->
-          <text x="652" y="381" text-anchor="end" fill="#5A3A10" font-size="6.5" font-family="Georgia, serif" letter-spacing="1" font-style="italic">Stance-Based Duel Combat</text>
-          <text x="652" y="393" text-anchor="end" fill="#2A1808" font-size="6" font-family="monospace">Unreal Engine 5 · In Development</text>
-
-          <!-- Decorative vertical strokes on far edges — like torii pillars -->
-          <rect x="4" y="0" width="1.5" height="368" fill="#1A1008" opacity=".4"/>
-          <rect x="674.5" y="0" width="1.5" height="368" fill="#1A1008" opacity=".4"/>
-        </svg>
-      </div>
-      <div class="pcard-body" style="background:#0A0805;border-top:1px solid #1E1208">
-        <h3 class="pcard-title" style="color:#C89B3C">Mournful Flower &amp; Vengeful Plight
-          <span style="font-family:var(--mono);font-size:.6rem;color:#5A3A10;border:1px solid #1E1208;padding:.1rem .4rem;margin-left:6px;vertical-align:middle;background:#07050A">IN DEVELOPMENT</span>
-        </h3>
-        <p class="pcard-desc" style="color:#5A4830">A stance-based duel combat prototype built around two opposing philosophies — <em style="color:#8A7050">Mournful Flower</em> rewards precise parries and tempo control through katana discipline, while <em style="color:#8A7050">Vengeful Plight</em> converts perfect dodges into relentless offensive chains. Advantage is earned through defense and spent through aggression.</p>
-        <div class="pcard-tags">
-          <span class="ptag" style="color:#3A2A18;border-color:#1E1208">Combat Systems Design</span>
-          <span class="ptag" style="color:#3A2A18;border-color:#1E1208">Unreal Engine 5</span>
-          <span class="ptag" style="color:#3A2A18;border-color:#1E1208">Stance Design</span>
-          <span class="ptag" style="color:#3A2A18;border-color:#1E1208">Posture Economy</span>
-          <span class="ptag" style="color:#C89B3C;border-color:#5A3A10">● In Development</span>
         </div>
       </div>
     </div>
