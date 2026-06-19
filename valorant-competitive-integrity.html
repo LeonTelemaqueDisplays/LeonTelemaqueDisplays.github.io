@@ -164,7 +164,7 @@
 
     /* ── LAYER NAV ── */
     .layer-nav {
-      display: grid; grid-template-columns: repeat(4,1fr);
+      display: grid; grid-template-columns: repeat(5,1fr);
       gap: 1px; background: var(--surface);
       border: 1px solid var(--surface); max-width: 980px; margin: 4rem auto 7rem;
     }
@@ -467,6 +467,138 @@
     .footer-links a:hover { color: var(--red); }
     .copyright { font-family: var(--mono); font-size: 0.66rem; color: var(--text-muted); opacity: 0.35; }
 
+    /* ── RETENTION CHART ── */
+    .retention-chart {
+      background: var(--deep); border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 4px; overflow: hidden; margin: 2.5rem 0;
+    }
+    .chart-header {
+      padding: 1.25rem 1.5rem 0.75rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .chart-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.9rem;
+      font-weight: 600; color: var(--text); margin-bottom: 0.3rem; letter-spacing: 0.03em;
+    }
+    .chart-disclaimer {
+      font-family: var(--mono); font-size: 0.54rem;
+      letter-spacing: 0.1em; color: var(--text-muted); text-transform: uppercase;
+    }
+    .chart-legend {
+      display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+      padding: 0.75rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-family: var(--mono); font-size: 0.58rem;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim);
+    }
+    .legend-line { width: 22px; height: 2.5px; border-radius: 2px; flex-shrink: 0; }
+    .legend-line.teal { background: #70D4CC; }
+    .legend-line.red  { background: #FF4655; }
+    .legend-item.gap  { color: var(--text-muted); margin-left: auto; font-size: 0.52rem; }
+
+    /* ── ROUTING DIAGRAM ── */
+    .routing-diagram {
+      background: var(--surface); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 4px; overflow: hidden; margin: 2.5rem 0;
+    }
+    .rd-controls {
+      display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      background: rgba(255,255,255,0.015);
+    }
+    .rd-label-ctrl {
+      font-family: var(--mono); font-size: 0.58rem;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--text-muted); flex-shrink: 0;
+    }
+    .rd-btn {
+      font-family: var(--mono); font-size: 0.58rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      background: transparent; border: 1px solid var(--text-muted);
+      color: var(--text-dim); padding: 0.38rem 0.9rem;
+      border-radius: 3px; cursor: pointer; transition: all 0.2s;
+    }
+    .rd-btn:hover { border-color: var(--text-dim); color: var(--text); }
+    .rd-btn#rdBtnNew.rd-active { border-color: #70D4CC; color: #70D4CC; background: rgba(112,212,204,0.08); }
+    .rd-btn#rdBtnVet.rd-active { border-color: #FF4655; color: #FF4655; background: rgba(255,70,85,0.08); }
+    .rd-reset { margin-left: auto; }
+    .rd-caption {
+      font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.1em;
+      color: var(--text-muted); padding: 0.6rem 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.04); text-align: center;
+    }
+    .path-new, .path-vet, .path-shared { transition: opacity 0.35s ease; }
+    #rdRoot.active-new .path-vet { opacity: 0.1; }
+    #rdRoot.active-vet .path-new { opacity: 0.1; }
+
+    /* ── METRICS SECTION ── */
+    .metrics-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2.5rem;
+    }
+    .metrics-col { display: flex; flex-direction: column; gap: 1.2rem; }
+    .metrics-col-header {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.76rem;
+      font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 0.6rem 1rem; border-radius: 3px;
+    }
+    .metrics-col-header.a { background: rgba(36,88,80,0.3); color: #70D4CC; border-left: 3px solid #70D4CC; }
+    .metrics-col-header.b { background: rgba(107,28,36,0.3); color: #FF4655; border-left: 3px solid #FF4655; }
+    .metric-item {
+      background: var(--surface); border-radius: 3px;
+      border: 1px solid rgba(255,255,255,0.04); padding: 1.1rem 1.25rem;
+    }
+    .metric-name {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.88rem;
+      font-weight: 600; color: var(--text); margin-bottom: 0.55rem; letter-spacing: 0.02em;
+    }
+    .metric-body { font-size: 0.8rem; color: var(--text-dim); line-height: 1.72; }
+    .metrics-note {
+      background: linear-gradient(135deg, rgba(255,255,255,0.025), transparent);
+      border: 1px solid rgba(255,255,255,0.06); border-top: 2px solid var(--text-muted);
+      padding: 1.75rem 2rem; border-radius: 3px;
+    }
+    .metrics-note-label {
+      font-family: var(--mono); font-size: 0.56rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 0.75rem;
+    }
+    .metrics-note p { font-size: 0.9rem; color: var(--text-dim); line-height: 1.75; }
+
+    /* ── SOURCE CARDS ── */
+    .sources-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem;
+    }
+    .source-card {
+      background: var(--surface); border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 3px; padding: 1.25rem;
+    }
+    .source-card-header {
+      font-family: var(--mono); font-size: 0.56rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 1rem;
+      padding-bottom: 0.6rem; border-bottom: 1px solid rgba(255,70,85,0.1);
+    }
+    .source-item {
+      margin-bottom: 0.9rem; padding-bottom: 0.9rem;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .source-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .source-name {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.82rem;
+      font-weight: 600; color: var(--text-dim); margin-bottom: 0.3rem; line-height: 1.35;
+    }
+    .source-detail {
+      font-family: var(--mono); font-size: 0.6rem;
+      color: var(--text-muted); line-height: 1.7;
+    }
+    .source-url {
+      font-family: var(--mono); font-size: 0.56rem; color: var(--red-dim);
+      margin-top: 0.35rem; display: block; opacity: 0.8;
+    }
+
     /* ── SCROLL REVEAL ── */
     .fade { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s ease; }
     .fade.in { opacity: 1; transform: none; }
@@ -482,6 +614,8 @@
       .stat-cell { flex: 0 0 50%; }
       nav { padding: 0.9rem 1.25rem; }
       .nav-links { display: none; }
+      .metrics-grid { grid-template-columns: 1fr; }
+      .sources-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -524,11 +658,11 @@
         </div>
         <div class="stat-cell">
           <div class="stat-val">4</div>
-          <div class="stat-label">Design<br>layers</div>
+          <div class="stat-label">Analysis<br>layers</div>
         </div>
         <div class="stat-cell">
-          <div class="stat-val teal">1</div>
-          <div class="stat-label">Framework<br>proposed</div>
+          <div class="stat-val teal">8</div>
+          <div class="stat-label">Success<br>metrics</div>
         </div>
       </div>
     </div>
@@ -559,6 +693,11 @@
       <div class="layer-nav-num">Layer 04</div>
       <div class="layer-nav-title">What Studios Should Steal</div>
       <div class="layer-nav-desc">Design implications for any ranked live service game</div>
+    </a>
+    <a href="#metrics">
+      <div class="layer-nav-num" style="color:var(--teal)">Metrics</div>
+      <div class="layer-nav-title">What Success Looks Like</div>
+      <div class="layer-nav-desc">8 product metrics to validate the framework</div>
     </a>
   </div>
 
@@ -620,6 +759,96 @@
       <div class="pull fade">
         <em>The two effects are not in tension with each other as game design problems.</em> They are in tension only because the current system treats them as one problem.
       </div>
+
+      <div class="insight fade" data-label="The Business Dimension">
+        <p>The design failure has a revenue dimension that makes the urgency concrete. New player cohorts carry the highest future-LTV potential in any live service game — their spending arc hasn't started yet. A veteran player maintaining a smurf account is already a committed player; the commercial relationship exists whether they're on their main or an alt. A new player who churns in their first 30 matches because the experience felt unwinnable never begins that relationship at all. The asymmetry is stark: the veteran's engagement is already captured. The new player's engagement is exactly what a live service game needs to acquire to sustain future revenue cohorts. <strong>Protecting the new player onboarding window isn't an ethical design choice with a business cost — it's a business choice with an ethical benefit. The failure to separate the two effects isn't just a design mistake. It's a revenue leak with a structural cause and a structural fix.</strong></p>
+      </div>
+
+      <!-- RETENTION CURVE CHART -->
+      <div class="retention-chart fade">
+        <div class="chart-header">
+          <div class="chart-title">D30 Retention Rate — New Player Cohorts by Matchmaking Condition</div>
+          <div class="chart-disclaimer">Illustrative model · values consistent with live service research benchmarks · not Riot internal data</div>
+        </div>
+        <svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;padding:0 8px">
+
+          <!-- Grid lines (y-axis) -->
+          <line x1="70" y1="25"  x2="680" y2="25"  stroke="#1B2A37" stroke-width="1"/>
+          <line x1="70" y1="69"  x2="680" y2="69"  stroke="#1B2A37" stroke-width="1"/>
+          <line x1="70" y1="113" x2="680" y2="113" stroke="#1B2A37" stroke-width="1"/>
+          <line x1="70" y1="157" x2="680" y2="157" stroke="#1B2A37" stroke-width="1"/>
+          <line x1="70" y1="201" x2="680" y2="201" stroke="#1B2A37" stroke-width="1"/>
+
+          <!-- Y-axis labels -->
+          <text x="62" y="25"  fill="#3D5068" font-family="Space Mono,monospace" font-size="9" text-anchor="end" dominant-baseline="middle">100%</text>
+          <text x="62" y="69"  fill="#3D5068" font-family="Space Mono,monospace" font-size="9" text-anchor="end" dominant-baseline="middle">80%</text>
+          <text x="62" y="113" fill="#3D5068" font-family="Space Mono,monospace" font-size="9" text-anchor="end" dominant-baseline="middle">60%</text>
+          <text x="62" y="157" fill="#3D5068" font-family="Space Mono,monospace" font-size="9" text-anchor="end" dominant-baseline="middle">40%</text>
+          <text x="62" y="201" fill="#3D5068" font-family="Space Mono,monospace" font-size="9" text-anchor="end" dominant-baseline="middle">20%</text>
+          <text x="14" y="133" fill="#3D5068" font-family="Space Mono,monospace" font-size="8" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90 14 133)">% retained</text>
+
+          <!-- X-axis baseline -->
+          <line x1="70" y1="235" x2="680" y2="235" stroke="#3D5068" stroke-width="1"/>
+
+          <!-- X-axis ticks + labels (D0, D7, D14, D21, D30) -->
+          <line x1="70"  y1="235" x2="70"  y2="241" stroke="#3D5068" stroke-width="1"/>
+          <line x1="212" y1="235" x2="212" y2="241" stroke="#3D5068" stroke-width="1"/>
+          <line x1="355" y1="235" x2="355" y2="241" stroke="#3D5068" stroke-width="1"/>
+          <line x1="497" y1="235" x2="497" y2="241" stroke="#3D5068" stroke-width="1"/>
+          <line x1="680" y1="235" x2="680" y2="241" stroke="#3D5068" stroke-width="1"/>
+          <text x="70"  y="253" fill="#3D5068" font-family="Space Mono,monospace" font-size="9" text-anchor="middle">D0</text>
+          <text x="212" y="253" fill="#3D5068" font-family="Space Mono,monospace" font-size="9" text-anchor="middle">D7</text>
+          <text x="355" y="253" fill="#3D5068" font-family="Space Mono,monospace" font-size="9" text-anchor="middle">D14</text>
+          <text x="497" y="253" fill="#3D5068" font-family="Space Mono,monospace" font-size="9" text-anchor="middle">D21</text>
+          <text x="680" y="253" fill="#3D5068" font-family="Space Mono,monospace" font-size="9" text-anchor="middle">D30</text>
+          <text x="375" y="271" fill="#3D5068" font-family="Space Mono,monospace" font-size="8" text-anchor="middle">days since first competitive match</text>
+
+          <!-- GAP FILL AREA -->
+          <!-- Follows teal curve forward, red curve backward, closes the shape -->
+          <path d="M 70,25 C 77,60 83,85 90,109 C 103,124 116,130 131,135 C 163,141 188,150 212,157 C 265,165 315,171 355,175 C 410,179 453,183 497,186 C 570,188 630,190 680,192 L 680,214 C 630,212 570,211 497,210 C 453,207 410,205 355,201 C 315,197 265,191 212,183 C 188,177 163,168 131,161 C 116,156 103,148 90,131 C 83,105 77,72 70,25 Z" fill="#70D4CC" fill-opacity="0.065" stroke="none"/>
+
+          <!-- RED CURVE — smurf-exposed / current system -->
+          <path d="M 70,25 C 77,72 83,105 90,131 C 103,148 116,156 131,161 C 163,168 188,177 212,183 C 265,191 315,197 355,201 C 410,205 453,207 497,210 C 570,211 630,212 680,214" fill="none" stroke="#FF4655" stroke-width="2.2" stroke-linecap="round" stroke-opacity="0.85"/>
+
+          <!-- TEAL CURVE — protected onboarding pool (draw on top) -->
+          <path d="M 70,25 C 77,60 83,85 90,109 C 103,124 116,130 131,135 C 163,141 188,150 212,157 C 265,165 315,171 355,175 C 410,179 453,183 497,186 C 570,188 630,190 680,192" fill="none" stroke="#70D4CC" stroke-width="2.2" stroke-linecap="round"/>
+
+          <!-- D7 CALLOUT -->
+          <line x1="212" y1="157" x2="212" y2="183" stroke="#3D5068" stroke-width="1" stroke-dasharray="3,2"/>
+          <circle cx="212" cy="157" r="3.5" fill="#70D4CC"/>
+          <circle cx="212" cy="183" r="3.5" fill="#FF4655"/>
+          <text x="222" y="153" fill="#70D4CC" font-family="Space Mono,monospace" font-size="8.5" dominant-baseline="middle">40%</text>
+          <text x="222" y="187" fill="#FF4655" font-family="Space Mono,monospace" font-size="8.5" dominant-baseline="middle">28%</text>
+          <text x="196" y="171" fill="#8A9BAB" font-family="Space Mono,monospace" font-size="7.5" text-anchor="end" dominant-baseline="middle">12pp</text>
+
+          <!-- D30 CALLOUT + BRACKET -->
+          <circle cx="680" cy="192" r="3.5" fill="#70D4CC"/>
+          <circle cx="680" cy="214" r="3.5" fill="#FF4655"/>
+          <line x1="686" y1="192" x2="694" y2="192" stroke="#70D4CC" stroke-width="1.5"/>
+          <line x1="686" y1="214" x2="694" y2="214" stroke="#FF4655" stroke-width="1.5"/>
+          <line x1="694" y1="192" x2="694" y2="214" stroke="#8A9BAB" stroke-width="1"/>
+          <text x="698" y="197" fill="#8A9BAB" font-family="Space Mono,monospace" font-size="8" dominant-baseline="middle">10pp</text>
+          <text x="698" y="209" fill="#8A9BAB" font-family="Space Mono,monospace" font-size="7.5" dominant-baseline="middle">gap</text>
+
+          <!-- ILLUSTRATIVE WATERMARK -->
+          <text x="375" y="128" fill="#1B2A37" font-family="Rajdhani,sans-serif" font-size="30" font-weight="700" text-anchor="middle" dominant-baseline="middle" letter-spacing="5">ILLUSTRATIVE</text>
+        </svg>
+        <div class="chart-legend">
+          <div class="legend-item">
+            <div class="legend-line teal"></div>
+            <span style="color:#70D4CC">Protected Onboarding Pool</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-line red"></div>
+            <span style="color:#FF4655">Smurf-Exposed / Current System</span>
+          </div>
+          <div class="legend-item gap">shaded area = retention gap · D30 target: +8–12pp</div>
+        </div>
+      </div>
+
+      <p class="fade"><strong>A note on the third population.</strong> The stat strip above reads "3 player populations." The third is the established mid-rank player — the Gold, Platinum, or Diamond player who has been in the game long enough to know what a smurf feels like, and who also gets stomped by them regularly. They are harmed. They are not the framework's primary focus, and that choice is deliberate.</p>
+
+      <p class="fade">The established player has tools the new player doesn't. They can identify a smurf in the lobby, adjust their expectations, report the account, and move to the next match without internalising the loss as a signal that the game isn't for them. Their churn risk from smurf exposure is real but lower, because they've already passed the evaluation threshold — they've decided the game is worth playing. The new player hasn't made that decision yet. The first 40–60 matches are precisely where that decision gets made. That asymmetry in vulnerability is why the framework's onboarding track targets new accounts specifically, not low-rank lobbies generally. Protecting "low rank" catches established players too — which dilutes the pool and reduces its integrity. Protecting "new accounts without confirmable prior history" is a tighter, more defensible target.</p>
 
       <p class="fade"><strong>Industry precedent supports the split.</strong> Counter-Strike's Silver and Gold Nova ranks carried a persistent reputation for smurf concentration throughout CS:GO's lifespan. New players at those ranks faced skill levels orders of magnitude above their own with regularity. The resulting reputation — "you can't tell if you're bad or just getting smurfed" — became a documented deterrent to new player investment in ranked, and remained unresolved until CS2's revised account structure attempted to address it. Riot has publicly acknowledged a parallel dynamic in Valorant. The phone verification requirement introduced to Valorant in 2021 was motivated in part by raising the cost of smurf account creation specifically to protect lower-rank lobbies. That Riot invested in mitigation confirms the harm is real and measurable.</p>
     </div>
@@ -712,6 +941,86 @@
 
       <p class="fade">The framework proposes separating the response into two tracks — not two ladders, not two separate games, but two routing decisions that use the same detection infrastructure to send different accounts in different directions at the moment of identification.</p>
 
+      <!-- INTERACTIVE ROUTING DIAGRAM -->
+      <div class="routing-diagram fade" id="rdRoot">
+        <div class="rd-controls">
+          <span class="rd-label-ctrl">Trace account route:</span>
+          <button class="rd-btn" id="rdBtnNew" onclick="rdSelect('new')">New Account</button>
+          <button class="rd-btn" id="rdBtnVet" onclick="rdSelect('vet')">Veteran Account</button>
+          <button class="rd-btn rd-reset" onclick="rdSelect(null)">Reset</button>
+        </div>
+        <svg viewBox="0 0 760 430" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;padding:1.5rem 1rem">
+          <defs>
+            <marker id="mBase" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3Z" fill="#3D5068"/></marker>
+            <marker id="mNew"  markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3Z" fill="#70D4CC"/></marker>
+            <marker id="mVet"  markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3Z" fill="#FF4655"/></marker>
+          </defs>
+
+          <!-- ENTRY NODE (shared) -->
+          <rect class="path-shared" x="270" y="18" width="220" height="46" rx="3" fill="#213040" stroke="#3D5068" stroke-width="1"/>
+          <text class="path-shared" x="380" y="41" fill="#ECE8E1" font-family="Rajdhani,sans-serif" font-size="13" font-weight="600" text-anchor="middle" dominant-baseline="middle">New Account Created</text>
+
+          <!-- Entry → Detection arrow -->
+          <line class="path-shared" x1="380" y1="64" x2="380" y2="96" stroke="#3D5068" stroke-width="1.5" marker-end="url(#mBase)"/>
+
+          <!-- DETECTION NODE (shared) -->
+          <rect class="path-shared" x="250" y="98" width="260" height="52" rx="3" fill="#213040" stroke="#3D5068" stroke-width="1"/>
+          <text class="path-shared" x="380" y="117" fill="#ECE8E1" font-family="Rajdhani,sans-serif" font-size="13" font-weight="600" text-anchor="middle" dominant-baseline="middle">Detection Layer</text>
+          <text class="path-shared" x="380" y="135" fill="#3D5068" font-family="Space Mono,monospace" font-size="7.5" text-anchor="middle" dominant-baseline="middle">behavioral signals · account linking · hardware profile</text>
+
+          <!-- NEW ACCOUNT BRANCH (teal) -->
+          <path class="path-new" d="M310,150 C295,178 215,182 200,205" stroke="#70D4CC" stroke-width="1.5" fill="none" marker-end="url(#mNew)"/>
+          <text class="path-new" x="228" y="174" fill="#70D4CC" font-family="Space Mono,monospace" font-size="7.5" text-anchor="middle">no prior history</text>
+
+          <rect class="path-new" x="72" y="208" width="256" height="58" rx="3" fill="rgba(36,88,80,0.4)" stroke="#70D4CC" stroke-width="1.5"/>
+          <text class="path-new" x="200" y="226" fill="#70D4CC" font-family="Rajdhani,sans-serif" font-size="11" font-weight="700" text-anchor="middle" dominant-baseline="middle" letter-spacing="1.2">TRACK A</text>
+          <text class="path-new" x="200" y="244" fill="#ECE8E1" font-family="Rajdhani,sans-serif" font-size="13" font-weight="600" text-anchor="middle" dominant-baseline="middle">Protected Onboarding Pool</text>
+          <text class="path-new" x="200" y="259" fill="#8A9BAB" font-family="Space Mono,monospace" font-size="7.5" text-anchor="middle" dominant-baseline="middle">first 40–60 competitive matches</text>
+
+          <!-- Track A → outcomes -->
+          <path class="path-new" d="M162,266 L118,325" stroke="#70D4CC" stroke-width="1.5" fill="none" marker-end="url(#mNew)"/>
+          <path class="path-new" d="M238,266 L282,325" stroke="#70D4CC" stroke-width="1.5" fill="none" marker-end="url(#mNew)"/>
+          <text class="path-new" x="112" y="302" fill="#70D4CC" font-family="Space Mono,monospace" font-size="7.5" text-anchor="middle">clean</text>
+          <text class="path-new" x="290" y="302" fill="#70D4CC" font-family="Space Mono,monospace" font-size="7.5" text-anchor="middle">detected</text>
+
+          <rect class="path-new" x="28" y="328" width="175" height="54" rx="3" fill="rgba(36,88,80,0.22)" stroke="#245850" stroke-width="1"/>
+          <text class="path-new" x="115" y="349" fill="#ECE8E1" font-family="Rajdhani,sans-serif" font-size="12" font-weight="600" text-anchor="middle" dominant-baseline="middle">Remains in Pool</text>
+          <text class="path-new" x="115" y="365" fill="#8A9BAB" font-family="Space Mono,monospace" font-size="7" text-anchor="middle">protected experience</text>
+          <text class="path-new" x="115" y="377" fill="#8A9BAB" font-family="Space Mono,monospace" font-size="7" text-anchor="middle">continues to match ceiling</text>
+
+          <rect class="path-new" x="210" y="328" width="180" height="54" rx="3" fill="rgba(36,88,80,0.22)" stroke="#245850" stroke-width="1"/>
+          <text class="path-new" x="300" y="349" fill="#ECE8E1" font-family="Rajdhani,sans-serif" font-size="12" font-weight="600" text-anchor="middle" dominant-baseline="middle">Exits to Standard Ranked</text>
+          <text class="path-new" x="300" y="365" fill="#8A9BAB" font-family="Space Mono,monospace" font-size="7" text-anchor="middle">calibrated entry point</text>
+          <text class="path-new" x="300" y="377" fill="#8A9BAB" font-family="Space Mono,monospace" font-size="7" text-anchor="middle">pool remains clean</text>
+
+          <!-- VETERAN BRANCH (red) -->
+          <path class="path-vet" d="M450,150 C465,178 545,182 560,205" stroke="#FF4655" stroke-width="1.5" fill="none" marker-end="url(#mVet)"/>
+          <text class="path-vet" x="532" y="174" fill="#FF4655" font-family="Space Mono,monospace" font-size="7.5" text-anchor="middle">veteran signals</text>
+
+          <rect class="path-vet" x="432" y="208" width="256" height="58" rx="3" fill="rgba(107,28,36,0.4)" stroke="#FF4655" stroke-width="1.5"/>
+          <text class="path-vet" x="560" y="226" fill="#FF4655" font-family="Rajdhani,sans-serif" font-size="11" font-weight="700" text-anchor="middle" dominant-baseline="middle" letter-spacing="1.2">TRACK B</text>
+          <text class="path-vet" x="560" y="244" fill="#ECE8E1" font-family="Rajdhani,sans-serif" font-size="13" font-weight="600" text-anchor="middle" dominant-baseline="middle">Fast Placement Calibration</text>
+          <text class="path-vet" x="560" y="259" fill="#8A9BAB" font-family="Space Mono,monospace" font-size="7.5" text-anchor="middle" dominant-baseline="middle">5-match calibration · inferred rank start</text>
+
+          <!-- Track B → outcomes -->
+          <path class="path-vet" d="M522,266 L488,325" stroke="#FF4655" stroke-width="1.5" fill="none" marker-end="url(#mVet)"/>
+          <path class="path-vet" d="M598,266 L632,325" stroke="#FF4655" stroke-width="1.5" fill="none" marker-end="url(#mVet)"/>
+          <text class="path-vet" x="480" y="302" fill="#FF4655" font-family="Space Mono,monospace" font-size="7.5" text-anchor="middle">ranked</text>
+          <text class="path-vet" x="640" y="302" fill="#FF4655" font-family="Space Mono,monospace" font-size="7.5" text-anchor="middle">alt mode</text>
+
+          <rect class="path-vet" x="400" y="328" width="175" height="54" rx="3" fill="rgba(107,28,36,0.22)" stroke="#6B1C24" stroke-width="1"/>
+          <text class="path-vet" x="487" y="349" fill="#ECE8E1" font-family="Rajdhani,sans-serif" font-size="12" font-weight="600" text-anchor="middle" dominant-baseline="middle">Standard Ranked</text>
+          <text class="path-vet" x="487" y="365" fill="#8A9BAB" font-family="Space Mono,monospace" font-size="7" text-anchor="middle">placed at inferred rank</text>
+          <text class="path-vet" x="487" y="377" fill="#8A9BAB" font-family="Space Mono,monospace" font-size="7" text-anchor="middle">no low-rank grinding</text>
+
+          <rect class="path-vet" x="580" y="328" width="152" height="54" rx="3" fill="rgba(107,28,36,0.22)" stroke="#6B1C24" stroke-width="1"/>
+          <text class="path-vet" x="656" y="349" fill="#ECE8E1" font-family="Rajdhani,sans-serif" font-size="12" font-weight="600" text-anchor="middle" dominant-baseline="middle">Unranked Alt Mode</text>
+          <text class="path-vet" x="656" y="365" fill="#8A9BAB" font-family="Space Mono,monospace" font-size="7" text-anchor="middle">low-stakes context</text>
+          <text class="path-vet" x="656" y="377" fill="#8A9BAB" font-family="Space Mono,monospace" font-size="7" text-anchor="middle">no MMR consequences</text>
+        </svg>
+        <div class="rd-caption">Select a route to trace it. Both tracks use the same detection infrastructure — only the response differs.</div>
+      </div>
+
       <div class="track-grid fade">
         <div class="track-col">
           <div class="track-tag a">Track A · Protected Onboarding</div>
@@ -760,7 +1069,7 @@
         <div class="reframe-label">The critical reframe</div>
         <p>The detection system already flags these accounts. The current response is: <strong>detected → accelerate on the same queue.</strong> The proposed response is: <strong>detected → route to a different queue.</strong></p>
         <p>One change, at the response layer. No new detection infrastructure required. The same signal that currently triggers acceleration instead triggers routing. The protected pool stays clean because exit is immediate and automatic. The veteran player gets to appropriate rank faster and with less collateral harm. Both populations are better served.</p>
-        <p>The design cost is maintaining a separate pool with enough population to produce fair matches. This is a real operational constraint. At Valorant's scale — active player counts that sustain dozens of ranked queues simultaneously — it is a solvable one, particularly if the protected pool is geographically broader than standard matchmaking during its early life.</p>
+        <p>The design cost is real and worth naming explicitly: maintaining a separate protected pool requires enough population within the pool to produce fair, low-wait-time matches. Three scenarios stress this constraint. <strong>At server launch</strong> (new region, new game), the total player base is small and split matchmaking risks long queues for everyone. The mitigation: the protected pool should default to geographically broader matching than standard ranked — trading match quality slightly for queue speed during the population-building phase. <strong>At off-peak hours</strong> in mature regions, the new-account queue thins. The mitigation: a dynamic fallback threshold — if fewer than N unmatched accounts are in the protected pool, temporarily blend protected accounts into a wider low-rank pool with smurf-signal filtering applied, rather than forcing queue times past a tolerable ceiling. <strong>At scale in a healthy game</strong>, the constraint largely resolves itself: Valorant's active player count sustains dozens of concurrent ranked queues globally. A protected new-player pool, which by definition contains only accounts in their first 40–60 competitive matches, is a naturally replenishing population — new accounts are created continuously. The pool doesn't need to be large; it needs to be large enough to fill a 10-player lobby within the platform's queue tolerance. That's a lower bar than it sounds at Valorant's player counts.</p>
       </div>
     </div>
   </section>
@@ -781,7 +1090,7 @@
         </div>
       </div>
 
-      <p class="fade">The framework above is built around Valorant's specific architecture, but the underlying design logic applies to any live service competitive game with ranked progression and a multi-account problem. The following five principles translate across games regardless of genre, platform, or scale.</p>
+      <p class="fade">The framework above is built around Valorant's specific architecture, but the underlying design logic applies to any live service competitive game with ranked progression and a multi-account problem. The following six principles translate across games regardless of genre, platform, or scale.</p>
 
       <div class="steal-grid fade">
         <div class="steal-item">
@@ -818,6 +1127,130 @@
 
       <div class="pull fade">
         The framework's utility is not in predicting exactly what Riot will build. It's in making the design space legible. <strong>Once you see the two effects separately, treating them identically looks obviously wrong.</strong> The question becomes: <em>which exit door did we forget to build?</em>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       METRICS — WHAT SUCCESS LOOKS LIKE
+       ══════════════════════════════════════════════════════ -->
+  <section id="metrics" class="layer-section" style="padding:4rem 2rem 3rem;background:linear-gradient(to bottom,var(--void),#0A1420)">
+    <div class="layer-inner">
+      <div class="divider fade" style="max-width:100%;padding:0;margin-bottom:2.5rem">
+        <span>What Success Looks Like</span>
+      </div>
+
+      <p class="fade" style="margin-bottom:2rem">A framework without measurable success criteria is a preference, not a proposal. These are the specific metrics that would tell you whether the differentiated system is working — and what to watch if it isn't.</p>
+
+      <div class="metrics-grid fade">
+        <!-- Track A -->
+        <div class="metrics-col">
+          <div class="metrics-col-header a">Track A · Protected Pool Health</div>
+
+          <div class="metric-item">
+            <div class="metric-name">D30 Retention — Protected Pool vs. Standard Ranked</div>
+            <div class="metric-body">Retention rate at day 30 for accounts in the protected onboarding pool, compared against the historical baseline for accounts placed directly in standard Iron/Bronze. This is the north star metric — the clearest signal that the pool is delivering a meaningfully better early experience. A lift of 8–12 percentage points at D30 is the target. Below 5 points suggests the pool's integrity is being compromised by false negatives in smurf detection; the gap isn't closing because veteran accounts are still reaching new-player lobbies.</div>
+          </div>
+
+          <div class="metric-item">
+            <div class="metric-name">Smurf-Detection Trigger Rate Within Protected Window</div>
+            <div class="metric-body">Percentage of protected-pool accounts that trigger smurf-detection signals after entering the pool — i.e., after the routing layer has already classified them as new accounts. Target: &lt;3%. Veterans should be caught at entry via linking and hardware profiling, not mid-session by behavioral signals. A rising in-pool trigger rate is a false-negative alarm at the routing layer: the gate is letting veteran accounts through, and the behavioral system is doing corrective work it was never supposed to do.</div>
+          </div>
+
+          <div class="metric-item">
+            <div class="metric-name">Win Rate Variance Within Protected Pool</div>
+            <div class="metric-body">Standard deviation of per-match win rates within the protected pool vs. standard Iron/Bronze. A healthy pool should show lower variance — matches should be more even because the skill distribution is tighter. Elevated variance is the earliest warning signal that veteran accounts are inside the pool skewing outcomes without yet triggering detection. It's a leading indicator, not a lagging one: it fires before D30 retention degrades.</div>
+          </div>
+
+          <div class="metric-item">
+            <div class="metric-name">Average Matches Before First Smurf Exit</div>
+            <div class="metric-body">For accounts that do enter the protected pool and later trigger detection, how many matches elapsed before exit? This measures detection response speed. A smurf that exits after 2 matches causes meaningfully less harm than one that exits after 15. Target: median exit match &lt;4, 90th percentile &lt;12. Accounts that exit late represent the residual harm case: the routing gate passed them and the behavioral detector took too long to catch the error.</div>
+          </div>
+        </div>
+
+        <!-- Track B -->
+        <div class="metrics-col">
+          <div class="metrics-col-header b">Track B · Veteran Routing Accuracy</div>
+
+          <div class="metric-item">
+            <div class="metric-name">Placement Accuracy — Fast Track vs. Full Calibration</div>
+            <div class="metric-body">How close is the 5-match fast-placement rank to the account's stabilized rank after 50 matches? Measures whether the inference model is accurate enough to justify bypassing the full calibration process. Target: 80%+ of fast-placed accounts should stabilize within one rank tier of their initial placement. High drift means the system is skipping calibration without actually placing accurately — the net effect is semi-calibrated veterans in non-new-player-pool lobbies, which creates a different quality problem than the one being solved.</div>
+          </div>
+
+          <div class="metric-item">
+            <div class="metric-name">Voluntary Account Linking Rate</div>
+            <div class="metric-body">Percentage of new accounts that voluntarily link to existing Riot ecosystem accounts with ranked history. This is a system adoption and trust signal. Veterans who link engage with the two-track system as designed: faster placement, cosmetic portability, no adversarial detection. Stagnant or falling link rates suggest the incentive structure isn't compelling enough — or that players don't trust the system with their main account's visibility. Rising link rates reduce the behavioral detection burden proportionally and improve placement accuracy for the accounts that most need it.</div>
+          </div>
+
+          <div class="metric-item">
+            <div class="metric-name">Unranked Alt Mode Adoption Rate</div>
+            <div class="metric-body">Percentage of accounts flagged as veteran that opt into unranked alt mode rather than Track B fast-placement calibration. Measures whether the framework has addressed the motivational root causes of smurfing: veterans who choose alt mode are veterans whose motivation was "low-stakes play" or "play with friends" — not rank achievement on an alt. High adoption validates that the mode is doing structural work, not just providing a visible option that most players ignore. Low adoption suggests either the mode isn't differentiated enough from existing unranked, or the player population's actual motivation is rank-based rather than context-based.</div>
+          </div>
+
+          <div class="metric-item">
+            <div class="metric-name">D7 Retention — Fast-Placed Accounts vs. Standard Calibration</div>
+            <div class="metric-body">Retention at day 7 for Track B veterans vs. veteran-signal accounts that went through standard calibration (the current experience). A fast-placement system that places veterans accurately and quickly should produce higher D7 retention for that cohort — they spent less time in mismatched lobbies and reached competitive peers faster. If fast-placed veterans retain at the same or lower rate, the 5-match window isn't producing accurate enough placements, and the experience isn't meaningfully different from the current accelerated-climb approach.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="metrics-note fade">
+        <div class="metrics-note-label">The Organizational Argument</div>
+        <p>None of these metrics require new measurement infrastructure — D30 retention, completion rates, placement accuracy, and win rate variance are standard live service measurements. What's new is the <strong>framing</strong>: the protected pool is a product feature with its own health dashboard, not a ranked edge case with modified matchmaking weights. Treating these as first-class product signals — alerting on them, tying them to sprint priorities, reviewing them in the same cadence as top-of-funnel retention — is the organizational change that makes the framework real rather than theoretical.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SOURCES ── -->
+  <section class="layer-section" style="padding:4rem 2rem 3rem">
+    <div class="layer-inner">
+      <div class="divider fade" style="max-width:100%;padding:0;margin-bottom:2.5rem">
+        <span>Sources &amp; References</span>
+      </div>
+      <div class="sources-grid fade">
+        <div class="source-card">
+          <div class="source-card-header">Riot Games · Public Statements</div>
+          <div class="source-item">
+            <div class="source-name">Addressing Smurfing in VALORANT</div>
+            <div class="source-detail">Riot Developer Blog, 2022. Confirmed active smurf detection targeting accelerated rank placement for accounts exhibiting veteran-level performance signals.</div>
+            <span class="source-url">valorant.com/en-us/news/dev/dev-addressing-smurfing</span>
+          </div>
+          <div class="source-item">
+            <div class="source-name">Brightmoon (EP) — Account Ban Complexity</div>
+            <div class="source-detail">Public statements on why outright bans are operationally complex, citing difficulty distinguishing new accounts from legitimate returning players without linked history. Valorant developer Q&amp;As, 2021–2023.</div>
+          </div>
+          <div class="source-item">
+            <div class="source-name">Phone Verification Requirement</div>
+            <div class="source-detail">Announced June 2021. Explicitly framed as friction-based deterrence for multi-account creation — the earliest public acknowledgment of the cost-raising approach.</div>
+            <span class="source-url">support.riotgames.com</span>
+          </div>
+        </div>
+
+        <div class="source-card">
+          <div class="source-card-header">CS:GO / CS2 · Industry Precedent</div>
+          <div class="source-item">
+            <div class="source-name">CS2 Revised Account Structure (2023)</div>
+            <div class="source-detail">CS2's launch introduced revised trust factor and Prime matchmaking systems to separate verified accounts from unverified new accounts in ranked — the clearest industry precedent for a structurally differentiated matchmaking approach.</div>
+            <span class="source-url">counter-strike.net/cs2</span>
+          </div>
+          <div class="source-item">
+            <div class="source-name">CS:GO Silver/Gold Nova Smurf Prevalence</div>
+            <div class="source-detail">Documented across r/GlobalOffensive, HLTV, Dexerto, and Valve's trust factor communications, 2017–2023. The resulting reputation — "you can't tell if you're bad or just being smurfed" — became a documented deterrent to new player ranked investment.</div>
+          </div>
+        </div>
+
+        <div class="source-card">
+          <div class="source-card-header">Player Retention · Research Basis</div>
+          <div class="source-item">
+            <div class="source-name">Riot — State of Competitive Dev Post (2023)</div>
+            <div class="source-detail">Acknowledged that early-rank experience quality is a measurable factor in ranked mode adoption. Smurfing named as a specific concern for new player first impressions in competitive.</div>
+            <span class="source-url">valorant.com/en-us/news</span>
+          </div>
+          <div class="source-item">
+            <div class="source-name">Live Service Early Retention Research</div>
+            <div class="source-detail">Player lifecycle data broadly supports D7–D30 retention as most sensitive to perceived fairness of early sessions, with competitive games showing higher early churn sensitivity than casual titles. GDC LiveOps design talks, 2019–2023. Basis for the illustrative retention curve in Layer 01.</div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -866,6 +1299,18 @@
     document.querySelectorAll('.hero .fade, .layer-nav.fade').forEach(el => {
       setTimeout(() => el.classList.add('in'), 200);
     });
+
+    // Routing diagram interactivity
+    function rdSelect(path) {
+      const root = document.getElementById('rdRoot');
+      const btnNew = document.getElementById('rdBtnNew');
+      const btnVet = document.getElementById('rdBtnVet');
+      root.classList.remove('active-new', 'active-vet');
+      btnNew.classList.remove('rd-active');
+      btnVet.classList.remove('rd-active');
+      if (path === 'new') { root.classList.add('active-new'); btnNew.classList.add('rd-active'); }
+      else if (path === 'vet') { root.classList.add('active-vet'); btnVet.classList.add('rd-active'); }
+    }
   </script>
 </body>
 </html>
