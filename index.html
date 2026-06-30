@@ -8992,6 +8992,65 @@ document.getElementById('modal-rework').addEventListener('click', function(e) {
         </tbody>
       </table>
 
+      <!-- Graph: Risk vs Speed scatter -->
+      <svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;margin:28px 0 4px">
+        <!-- Background -->
+        <rect width="640" height="300" fill="rgba(7,5,10,.45)" rx="2"/>
+        <!-- Zone shading -->
+        <rect x="90" y="28" width="220" height="136" fill="#881111" opacity=".03" rx="1"/>
+        <rect x="310" y="164" width="270" height="100" fill="#3A5A90" opacity=".04" rx="1"/>
+        <!-- Grid lines -->
+        <line x1="90" y1="164" x2="580" y2="164" stroke="#1E1208" stroke-width=".5" stroke-dasharray="3 4" opacity=".4"/>
+        <line x1="310" y1="28" x2="310" y2="264" stroke="#1E1208" stroke-width=".5" stroke-dasharray="3 4" opacity=".4"/>
+        <!-- Axes -->
+        <line x1="90" y1="264" x2="580" y2="264" stroke="#3A2A18" stroke-width="1" opacity=".6"/>
+        <line x1="90" y1="264" x2="90" y2="28" stroke="#3A2A18" stroke-width="1" opacity=".6"/>
+        <!-- Axis arrowheads -->
+        <polygon points="580,261 580,267 586,264" fill="#3A2A18" opacity=".5"/>
+        <polygon points="87,28 93,28 90,22" fill="#3A2A18" opacity=".5"/>
+        <!-- Axis labels -->
+        <text x="335" y="286" text-anchor="middle" fill="#5A3A10" font-size="7" font-family="'Space Mono',monospace" letter-spacing="2">EXECUTION SPEED →</text>
+        <text x="18" y="148" text-anchor="middle" fill="#5A3A10" font-size="7" font-family="'Space Mono',monospace" letter-spacing="2" transform="rotate(-90,18,148)">↑ RISK</text>
+        <!-- X tick labels -->
+        <line x1="140" y1="260" x2="140" y2="268" stroke="#3A2A18" stroke-width=".8" opacity=".4"/>
+        <text x="140" y="278" text-anchor="middle" fill="#3A2A18" font-size="6.5" font-family="monospace">SLOW</text>
+        <line x1="390" y1="260" x2="390" y2="268" stroke="#3A2A18" stroke-width=".8" opacity=".4"/>
+        <text x="390" y="278" text-anchor="middle" fill="#3A2A18" font-size="6.5" font-family="monospace">FAST</text>
+        <line x1="540" y1="260" x2="540" y2="268" stroke="#3A2A18" stroke-width=".8" opacity=".4"/>
+        <text x="540" y="278" text-anchor="middle" fill="#3A2A18" font-size="6.5" font-family="monospace">INSTANT</text>
+        <!-- Y tick labels -->
+        <line x1="84" y1="64" x2="96" y2="64" stroke="#3A2A18" stroke-width=".8" opacity=".4"/>
+        <text x="80" y="68" text-anchor="end" fill="#3A2A18" font-size="6.5" font-family="monospace">HIGH</text>
+        <line x1="84" y1="164" x2="96" y2="164" stroke="#3A2A18" stroke-width=".8" opacity=".4"/>
+        <text x="80" y="168" text-anchor="end" fill="#3A2A18" font-size="6.5" font-family="monospace">MED</text>
+        <line x1="84" y1="250" x2="96" y2="250" stroke="#3A2A18" stroke-width=".8" opacity=".4"/>
+        <text x="80" y="254" text-anchor="end" fill="#3A2A18" font-size="6.5" font-family="monospace">LOW</text>
+        <!-- Commitment curve -->
+        <path d="M 140 64 Q 340 164 540 250" fill="none" stroke="#C89B3C" stroke-width=".6" stroke-dasharray="4 3" opacity=".22"/>
+        <text x="308" y="152" fill="#5A3A10" font-size="6" font-family="monospace" font-style="italic" opacity=".45" transform="rotate(-26,308,152)">commitment curve</text>
+        <!-- ── DIRECT SWAP ── -->
+        <circle cx="140" cy="64" r="10" fill="#0D0A06" stroke="#C89B3C" stroke-width="1.4"/>
+        <circle cx="140" cy="64" r="4"  fill="#C89B3C" opacity=".75"/>
+        <line x1="150" y1="64" x2="178" y2="64" stroke="#C89B3C" stroke-width=".6" opacity=".4"/>
+        <text x="180" y="58" fill="#C89B3C" font-size="8.5" font-family="'Space Mono',monospace" font-weight="700">DIRECT SWAP</text>
+        <text x="180" y="70" fill="#5A3A10" font-size="6.5" font-family="monospace">Slow · 1–2 sec · Full vulnerable</text>
+        <text x="180" y="80" fill="#3A2A18" font-size="6" font-family="monospace" font-style="italic">Requires reading a safe gap</text>
+        <!-- ── COMBO EXTENDER ── -->
+        <circle cx="390" cy="164" r="10" fill="#0D0A06" stroke="#C89B3C" stroke-width="1.4"/>
+        <circle cx="390" cy="164" r="4"  fill="#C89B3C" opacity=".75"/>
+        <line x1="390" y1="154" x2="390" y2="130" stroke="#C89B3C" stroke-width=".6" opacity=".4"/>
+        <text x="390" y="123" text-anchor="middle" fill="#C89B3C" font-size="8.5" font-family="'Space Mono',monospace" font-weight="700">COMBO EXTENDER</text>
+        <text x="390" y="134" text-anchor="middle" fill="#5A3A10" font-size="6.5" font-family="monospace">Fast · Committed to animation</text>
+        <!-- ── POST-PERFECT ACTION ── -->
+        <circle cx="540" cy="250" r="10" fill="#0D0A06" stroke="#C89B3C" stroke-width="1.4"/>
+        <circle cx="540" cy="250" r="4"  fill="#C89B3C" opacity=".75"/>
+        <line x1="530" y1="242" x2="510" y2="218" stroke="#C89B3C" stroke-width=".6" opacity=".4"/>
+        <text x="505" y="212" text-anchor="end" fill="#C89B3C" font-size="8.5" font-family="'Space Mono',monospace" font-weight="700">POST-PERFECT ACTION</text>
+        <text x="505" y="223" text-anchor="end" fill="#5A3A10" font-size="6.5" font-family="monospace">Instant · 3s window · Boss-gated</text>
+        <!-- Chart title -->
+        <text x="335" y="18" text-anchor="middle" fill="#5A3A10" font-size="7" font-family="'Space Mono',monospace" letter-spacing="2" opacity=".7">STANCE SWITCHING — RISK vs. EXECUTION SPEED</text>
+      </svg>
+
       <!-- ── PART IV: THE COMBAT LOOP ── -->
       <div class="cs-rule" style="margin-top:36px">
         <div class="cs-rule-line neutral"></div>
@@ -9026,6 +9085,89 @@ document.getElementById('modal-rework').addEventListener('click', function(e) {
           </div>
         </div>
       </div>
+
+      <!-- Graph: Combat Loop Flowchart -->
+      <svg viewBox="0 0 680 436" xmlns="http://www.w3.org/2000/svg" style="width:100%;margin:24px 0 4px">
+        <defs>
+          <marker id="clf-ag" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,.5 L0,5.5 L6,3 z" fill="#C89B3C" opacity=".75"/></marker>
+          <marker id="clf-ab" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,.5 L0,5.5 L6,3 z" fill="#4A7AB0" opacity=".75"/></marker>
+          <marker id="clf-ar" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,.5 L0,5.5 L6,3 z" fill="#881111" opacity=".75"/></marker>
+          <marker id="clf-as" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,.5 L0,5.5 L6,3 z" fill="#5A3A10" opacity=".6"/></marker>
+        </defs>
+        <!-- Background -->
+        <rect width="680" height="436" fill="rgba(7,5,10,.45)" rx="2"/>
+        <!-- Column tints -->
+        <rect x="0"   y="0" width="270" height="436" fill="#0A0D14" opacity=".25" rx="2"/>
+        <rect x="410" y="0" width="270" height="436" fill="#140A0A" opacity=".25" rx="2"/>
+        <!-- Column labels -->
+        <text x="135" y="16" text-anchor="middle" fill="#2A4080" font-size="6.5" font-family="'Space Mono',monospace" letter-spacing="2" opacity=".45">MOURNFUL FLOWER</text>
+        <text x="545" y="16" text-anchor="middle" fill="#771111" font-size="6.5" font-family="'Space Mono',monospace" letter-spacing="2" opacity=".45">VENGEFUL PLIGHT</text>
+
+        <!-- ── LOOP-BACK ARROW (left side) ── -->
+        <path d="M 282 396 L 42 396 L 42 44 L 282 44" fill="none" stroke="#3A2A18" stroke-width=".8" stroke-dasharray="4 3" marker-end="url(#clf-as)" opacity=".38"/>
+        <text x="28" y="224" text-anchor="middle" fill="#3A2A18" font-size="6" font-family="monospace" letter-spacing="1.5" opacity=".35" transform="rotate(-90,28,224)">LOOP CONTINUES</text>
+
+        <!-- ── READ ── center=(340,44) -->
+        <rect x="285" y="24" width="110" height="40" rx="3" fill="#0D0A06" stroke="#C89B3C" stroke-width="1.2"/>
+        <text x="340" y="39" text-anchor="middle" fill="#C89B3C" font-size="9.5" font-family="'Space Mono',monospace" letter-spacing="2.5" font-weight="700">READ</text>
+        <text x="340" y="55" text-anchor="middle" fill="#6A5A30" font-size="6.5" font-family="monospace">Identify incoming attack</text>
+
+        <!-- READ → MF PARRY / VP DODGE -->
+        <line x1="312" y1="64" x2="195" y2="132" stroke="#4A7AB0" stroke-width="1" marker-end="url(#clf-ab)" opacity=".6"/>
+        <line x1="368" y1="64" x2="485" y2="132" stroke="#881111" stroke-width="1" marker-end="url(#clf-ar)" opacity=".6"/>
+
+        <!-- ── MF PARRY ── center=(148,158) -->
+        <rect x="62"  y="136" width="172" height="44" rx="3" fill="#080C16" stroke="#3A5A90" stroke-width="1.2"/>
+        <text x="148" y="152" text-anchor="middle" fill="#5A7AB0" font-size="8.5" font-family="'Space Mono',monospace" letter-spacing="1.5" font-weight="700">MF PARRY</text>
+        <text x="148" y="164" text-anchor="middle" fill="#2A3858" font-size="6.5" font-family="monospace">Precise timing · 6–10 frames</text>
+        <text x="148" y="174" text-anchor="middle" fill="#2A3858" font-size="6.5" font-family="monospace">Miss = damage + window lost</text>
+
+        <!-- ── VP DODGE ── center=(532,158) -->
+        <rect x="446" y="136" width="172" height="44" rx="3" fill="#140808" stroke="#881111" stroke-width="1.2"/>
+        <text x="532" y="152" text-anchor="middle" fill="#AA3030" font-size="8.5" font-family="'Space Mono',monospace" letter-spacing="1.5" font-weight="700">VP DODGE</text>
+        <text x="532" y="164" text-anchor="middle" fill="#4A1818" font-size="6.5" font-family="monospace">Perfect dodge · i-frames</text>
+        <text x="532" y="174" text-anchor="middle" fill="#4A1818" font-size="6.5" font-family="monospace">Miss = chain resets to Tier 1</text>
+
+        <!-- MF/VP → ADVANTAGE -->
+        <line x1="210" y1="180" x2="295" y2="228" stroke="#4A7AB0" stroke-width="1" marker-end="url(#clf-ab)" opacity=".55"/>
+        <line x1="470" y1="180" x2="385" y2="228" stroke="#881111" stroke-width="1" marker-end="url(#clf-ar)" opacity=".55"/>
+
+        <!-- ── ADVANTAGE ── center=(340,250) -->
+        <rect x="260" y="232" width="160" height="44" rx="3" fill="#0D0A06" stroke="#C89B3C" stroke-width="1.2"/>
+        <text x="340" y="248" text-anchor="middle" fill="#C89B3C" font-size="9" font-family="'Space Mono',monospace" letter-spacing="2" font-weight="700">ADVANTAGE</text>
+        <text x="340" y="260" text-anchor="middle" fill="#6A5A30" font-size="6.5" font-family="monospace">Posture damage · Punish window</text>
+        <text x="340" y="270" text-anchor="middle" fill="#6A5A30" font-size="6.5" font-family="monospace">30–45 frames open</text>
+
+        <!-- ADVANTAGE → CONVERT -->
+        <line x1="340" y1="276" x2="340" y2="302" stroke="#C89B3C" stroke-width="1" marker-end="url(#clf-ag)" opacity=".65"/>
+
+        <!-- ── CONVERT ── center=(340,322) -->
+        <rect x="256" y="306" width="168" height="50" rx="3" fill="#0D0A06" stroke="#C89B3C" stroke-width="1.2"/>
+        <text x="340" y="322" text-anchor="middle" fill="#C89B3C" font-size="9" font-family="'Space Mono',monospace" letter-spacing="2" font-weight="700">CONVERT</text>
+        <line x1="340" y1="328" x2="340" y2="350" stroke="#1E1208" stroke-width=".6" opacity=".5"/>
+        <text x="296" y="336" text-anchor="middle" fill="#4A7AB0" font-size="6.5" font-family="monospace">MF: Heavy</text>
+        <text x="296" y="347" text-anchor="middle" fill="#4A7AB0" font-size="6.5" font-family="monospace">Strike</text>
+        <text x="385" y="336" text-anchor="middle" fill="#AA3030" font-size="6.5" font-family="monospace">VP: Combo</text>
+        <text x="385" y="347" text-anchor="middle" fill="#AA3030" font-size="6.5" font-family="monospace">+ Tier chain</text>
+
+        <!-- CONVERT → RESET -->
+        <line x1="340" y1="356" x2="340" y2="382" stroke="#C89B3C" stroke-width="1" marker-end="url(#clf-ag)" opacity=".65"/>
+
+        <!-- ── RESET ── center=(340,400) -->
+        <rect x="282" y="386" width="116" height="32" rx="3" fill="#0D0A06" stroke="#3A2A18" stroke-width="1"/>
+        <text x="340" y="399" text-anchor="middle" fill="#785A28" font-size="9" font-family="'Space Mono',monospace" letter-spacing="2" font-weight="700">RESET</text>
+        <text x="340" y="412" text-anchor="middle" fill="#3A2A18" font-size="6.5" font-family="monospace">Neutral · posture check</text>
+
+        <!-- ── POSTURE BREAK BRANCH ── -->
+        <line x1="398" y1="402" x2="456" y2="402" stroke="#881111" stroke-width=".8" stroke-dasharray="3 2" marker-end="url(#clf-ar)" opacity=".5"/>
+        <text x="427" y="395" text-anchor="middle" fill="#5A1111" font-size="6" font-family="monospace" opacity=".55">posture = 0</text>
+        <rect x="456" y="386" width="180" height="32" rx="3" fill="#140808" stroke="#881111" stroke-width=".8" opacity=".75"/>
+        <text x="546" y="399" text-anchor="middle" fill="#AA3030" font-size="8" font-family="'Space Mono',monospace" letter-spacing="1" font-weight="700">SUSPENSION STATE</text>
+        <text x="546" y="412" text-anchor="middle" fill="#4A1818" font-size="6.5" font-family="monospace">Heavy punish · posture → 100%</text>
+
+        <!-- Ornament -->
+        <rect x="337" y="420" width="6" height="6" fill="#C89B3C" opacity=".18" transform="rotate(45,340,423)"/>
+      </svg>
 
       <!-- ── PULL QUOTE ── -->
       <div class="cs-pullquote" style="margin-top:32px">
