@@ -1896,6 +1896,43 @@ footer{
   line-height: 1.85;
 }
 
+/* ── DESIGN LOG ── */
+.dl-grid { display: flex; flex-direction: column; gap: 18px; margin-top: 8px; }
+.dl-entry {
+  border: 1px solid #1E1208;
+  border-left: 3px solid #C89B3C;
+  background: rgba(10,8,5,.55);
+  padding: 18px 20px;
+}
+.dl-entry-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+.dl-entry-num { font-family: 'Space Mono', monospace; font-size: 8px; color: #5A3A10; letter-spacing: 2px; }
+.dl-entry-title { font-family: 'Space Mono', monospace; font-size: 11px; color: #C89B3C; font-weight: 700; }
+.dl-entry-meta { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+.dl-meta-tag {
+  font-family: 'Space Mono', monospace; font-size: 7.5px;
+  padding: 2px 7px; border: 1px solid; letter-spacing: 1px; text-transform: uppercase;
+}
+.dl-meta-tag.committed { color: #4A8A5A; border-color: #1A3A20; background: rgba(15,30,15,.5); }
+.dl-meta-tag.tentative { color: #C89B3C; border-color: #3A2A10; background: rgba(25,15,5,.5); }
+.dl-meta-tag.date, .dl-meta-tag.type { color: #3A2A18; border-color: #1E1208; }
+.dl-section-label {
+  font-family: 'Space Mono', monospace; font-size: 7.5px;
+  color: #5A3A10; letter-spacing: 2px; text-transform: uppercase;
+  margin: 12px 0 5px;
+}
+.dl-section-label:first-of-type { margin-top: 0; }
+.dl-body { font-size: 12px; color: #7A6A58; line-height: 1.75; margin: 0; }
+.dl-body em { color: #A08050; font-style: italic; }
+.dl-body strong { color: #C89B3C; font-style: normal; }
+.dl-risk {
+  margin-top: 14px; padding: 10px 14px;
+  border-left: 2px solid #3A2A10; background: rgba(12,8,4,.5);
+}
+.dl-risk-label {
+  font-family: 'Space Mono', monospace; font-size: 7.5px;
+  color: #5A3A10; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px;
+}
+
 /* ══════════════════════════════════════════════════════════════════
    LEAGUE OF LEGENDS CLIENT THEME — Rework modal
    Palette: #010A13 bg · #C89B3C gold · #F0E6D3 parchment · #0BC4E3 hextech
@@ -9036,6 +9073,147 @@ document.getElementById('modal-rework').addEventListener('click', function(e) {
           </div>
           <div class="cs-pillar-body">Combat must be readable for both the player and spectators. The two-stance system creates legible visual language: the slow katana vs. the aggressive dual-wield tells an observer everything about the current player philosophy.</div>
         </div>
+      </div>
+
+      <!-- ── PART VI: DESIGN LOG ── -->
+      <div class="cs-rule" style="margin-top:36px">
+        <div class="cs-rule-line neutral"></div>
+        <div class="cs-rule-label"><span class="cs-rule-diamond gold"></span>Part VI — Design Log</div>
+        <div class="cs-rule-line rev neutral"></div>
+      </div>
+
+      <p class="cs-overview" style="margin-bottom:24px">
+        A running log of decisions made, numbers hypothesised, and tensions left open. Documented before the build exists — so there's something to test against, not just something to read.
+      </p>
+
+      <div class="dl-grid">
+
+        <!-- Entry 001 -->
+        <div class="dl-entry">
+          <div class="dl-entry-header">
+            <span class="dl-entry-num">Entry #001</span>
+            <span class="dl-entry-title">No Player-Side Defensive Resource</span>
+          </div>
+          <div class="dl-entry-meta">
+            <span class="dl-meta-tag date">2026-06-30</span>
+            <span class="dl-meta-tag committed">Committed</span>
+            <span class="dl-meta-tag type">Decision</span>
+          </div>
+          <div class="dl-section-label">Options Considered</div>
+          <p class="dl-body">A player posture meter that fills when you take chip damage, get hit out of a parry, or dodge into an attack. Standard approach — Sekiro puts posture on both sides, Nioh gates both offense and defense through Ki. I cut it.</p>
+          <div class="dl-section-label">Decision</div>
+          <p class="dl-body">The design ideology of MF&VP is built around flow, tempo, and the balance between aggression and control. A player-side resource bar pulls attention in the wrong direction. The moment a player is watching a bar, they are no longer reading the fight. What I want in the player's head: <em>which stance am I in, what's the enemy doing, is this a parry or a dodge window, can I switch here?</em> That's already a rich cognitive load — adding <em>how full is my bar</em> competes with all of it. Parries and dodges stand alone as pure timing and reading skills. A missed parry is punished by damage and lost positioning, not a resource going critical. <strong>Furi</strong> validates this directly — no stamina, no cooldown on defensive attempts, all defense is pure skill. At high levels it produces exactly the flow state this system is targeting.</p>
+          <div class="dl-risk">
+            <div class="dl-risk-label">Open Edge</div>
+            <p class="dl-body">Without a resource ceiling, the only cost of a failed parry attempt is damage taken. To test: does that punishment alone create enough deterrence, or do players feel like they can spam attempts until one lands? If spamming becomes dominant, the fix is a more severe miss punishment — not a resource bar.</p>
+          </div>
+        </div>
+
+        <!-- Entry 002 -->
+        <div class="dl-entry">
+          <div class="dl-entry-header">
+            <span class="dl-entry-num">Entry #002</span>
+            <span class="dl-entry-title">Direct Swap Speed and Vulnerability Window</span>
+          </div>
+          <div class="dl-entry-meta">
+            <span class="dl-meta-tag date">2026-06-30</span>
+            <span class="dl-meta-tag committed">Committed</span>
+            <span class="dl-meta-tag type">Decision</span>
+          </div>
+          <div class="dl-section-label">Options Considered</div>
+          <p class="dl-body">Instant swap: removes all commitment, makes Direct Swap a panic button. Medium speed: blurs the distinction from Combo Extender — if Direct Swap is fast enough to execute under pressure, there's no reason to use Combo Extender for switching.</p>
+          <div class="dl-section-label">Decision</div>
+          <p class="dl-body">Direct Swap is a <strong>1–2 second full-vulnerability animation</strong>. The player cannot attack, parry, or dodge during it. The reference is sharpening your weapon mid-hunt in Monster Hunter, or drinking an Estus Flask in front of a boss in Dark Souls — a powerful tool that requires reading the enemy's pattern to find a safe gap. Direct Swap <em>breaks the flow of the duel by design</em>. It is not a fluid transition — it is a conscious decision to step outside the rhythm of the fight and accept the cost. The player who swaps at the wrong moment gets punished. The player who baits an attack, lets it miss, and swaps during recovery demonstrates genuine fight-reading.</p>
+          <div class="dl-risk">
+            <div class="dl-risk-label">Open Edge</div>
+            <p class="dl-body">If the window feels too punishing, players may stop using Direct Swap entirely and default to the other two modes. Enemy design must provide enough readable gaps that skilled players can identify safe moments — the vulnerability window's value is only felt if using it skillfully is possible.</p>
+          </div>
+        </div>
+
+        <!-- Entry 003 -->
+        <div class="dl-entry">
+          <div class="dl-entry-header">
+            <span class="dl-entry-num">Entry #003</span>
+            <span class="dl-entry-title">Parry Window, Punish Window, and the Patience Read</span>
+          </div>
+          <div class="dl-entry-meta">
+            <span class="dl-meta-tag date">2026-06-30</span>
+            <span class="dl-meta-tag tentative">Tentative — hypothesis values</span>
+            <span class="dl-meta-tag type">Numbers</span>
+          </div>
+          <div class="dl-section-label">Parry Window Hypothesis</div>
+          <p class="dl-body">Target: <strong>6–10 frames at 60fps (~0.1–0.17 seconds)</strong>. Reference: Sekiro's deflect window. Missing by 1–2 frames throws the parry — the player takes damage and loses the punish window. Below 6 frames the timing becomes inconsistent across display latencies. Above 10 frames it starts to feel lenient rather than precise, undermining Mournful Flower's identity.</p>
+          <div class="dl-section-label">Punish Window Hypothesis</div>
+          <p class="dl-body">Target: <strong>30–45 frames (~0.5–0.75 seconds)</strong>. The instinct is that every successful parry opens a counter-attack window — that's correct as a base rule. The complication: the boss uses rapid-fire chains (reference: Sword Saint Isshin Phase 3, Raiden in MGR:R) where the next attack arrives before the punish window is safely spent. <em>The patience read</em> — knowing which hit in a chain actually earns a punish versus which one you should absorb and wait through — is the primary skill expression of the MF stance. Not just landing the parry, but correctly reading whether to spend the window.</p>
+          <div class="dl-risk">
+            <div class="dl-risk-label">Open Edge</div>
+            <p class="dl-body">If the parry window is too tight relative to attack speed, the fight stops feeling like a duel and starts feeling like a reaction test. Enemy telegraphs must be generous enough that the parry window's tightness is the variable — not whether the player can see the attack coming at all.</p>
+          </div>
+        </div>
+
+        <!-- Entry 004 -->
+        <div class="dl-entry">
+          <div class="dl-entry-header">
+            <span class="dl-entry-num">Entry #004</span>
+            <span class="dl-entry-title">Post-Perfect Action: The "No Risk" Clarification</span>
+          </div>
+          <div class="dl-entry-meta">
+            <span class="dl-meta-tag date">2026-06-30</span>
+            <span class="dl-meta-tag committed">Committed</span>
+            <span class="dl-meta-tag type">Decision + Correction</span>
+          </div>
+          <div class="dl-section-label">The Problem</div>
+          <p class="dl-body">The switch table originally described Post-Perfect Action as "instant" with "no risk." If that were literally true — a free instant switch always available after any successful defensive action — the player's current stance becomes irrelevant. Land a parry in MF, instantly switch to VP for a better punish. The system collapses from two philosophies into one optimal rotation.</p>
+          <div class="dl-section-label">Decision</div>
+          <p class="dl-body">Post-Perfect Action is a <strong>timed opportunity, not a permanent option</strong>. After a successful parry or dodge, a <strong>3-second window</strong> opens during which the player can trigger the instant switch. The constraint is not mechanical — no bar, no cooldown. The constraint is the boss. An aggressive boss with rapid-fire chains closes that 3-second window with the next attack. Using Post-Perfect Action freely is a privilege you earn by reading the enemy's attack cadence. The question after every successful defensive action is now: <em>do I punish in my current stance right now, or do I take the window and switch?</em> Reading which situation you're in is the skill.</p>
+          <div class="dl-risk">
+            <div class="dl-risk-label">Open Edge</div>
+            <p class="dl-body">The 3-second value needs tuning against the boss's specific attack cadence. Too short and the mechanic becomes invisible — players never recognise the opportunity. Too long and a slow boss lets players always access the optimal punish stance, collapsing the commitment cost.</p>
+          </div>
+        </div>
+
+        <!-- Entry 005 -->
+        <div class="dl-entry">
+          <div class="dl-entry-header">
+            <span class="dl-entry-num">Entry #005</span>
+            <span class="dl-entry-title">VP Momentum: Escalating Dodge Chain Tiers</span>
+          </div>
+          <div class="dl-entry-meta">
+            <span class="dl-meta-tag date">2026-06-30</span>
+            <span class="dl-meta-tag committed">Committed — values TBD</span>
+            <span class="dl-meta-tag type">Decision</span>
+          </div>
+          <div class="dl-section-label">Options Considered</div>
+          <p class="dl-body">Combo scaling by hit count (generic, not tied to VP's identity). Finisher access gated by consecutive hits (meaningful but opaque to new players). Escalating dodge chain tiers (ties reward directly to the perfect dodge — VP's defining mechanic). Chose the third.</p>
+          <div class="dl-section-label">Decision</div>
+          <p class="dl-body">Consecutive perfect dodges unlock escalating damage tiers. <strong>Tier 1</strong>: first dodge, baseline chain. <strong>Tier 2</strong>: second consecutive dodge, amplified damage and an additional hit. <strong>Tier 3</strong>: third or beyond, peak output and access to VP's signature finisher. Breaking the chain resets to Tier 1 — no punishment, only lost opportunity. Players who stop aren't wrong; they're leaving the best version of VP on the table. No UI communicates the tier — blade trail intensity and audio density shift at each level. The system is legible through feel, not a bar. Stance switching during VP momentum resets the chain: the decision to switch is now weighed against the tier being given up.</p>
+          <div class="dl-risk">
+            <div class="dl-risk-label">Open Edge</div>
+            <p class="dl-body">Momentum window between dodges to maintain chain continuity: hypothesis 2–3 seconds. Tier 3 damage target: ~30–40% above Tier 1 — enough to matter, not enough to feel broken when lost. The Tier 3 finisher needs a clear player-character cue signalling availability without a UI prompt.</p>
+          </div>
+        </div>
+
+        <!-- Entry 006 -->
+        <div class="dl-entry">
+          <div class="dl-entry-header">
+            <span class="dl-entry-num">Entry #006</span>
+            <span class="dl-entry-title">Enemy Design: The Independence Principle and Posture Break</span>
+          </div>
+          <div class="dl-entry-meta">
+            <span class="dl-meta-tag date">2026-06-30</span>
+            <span class="dl-meta-tag committed">Committed — values TBD</span>
+            <span class="dl-meta-tag type">Decision</span>
+          </div>
+          <div class="dl-section-label">The Independence Principle</div>
+          <p class="dl-body">The boss does not react to the player's current stance. It runs its own attack sequences independent of whether the player is in MF or VP. An adaptive enemy was considered and rejected: if the boss creates openings <em>because</em> the player is in a specific stance, the player didn't read the fight — the fight read them. The design intent is that the player watches the boss's pattern, identifies whether the incoming hit calls for a parry or a dodge, and selects the appropriate tool. That's a genuine read. Reactivity shortcuts it and adds a third cognitive track — <em>how is the boss responding to my stance</em> — on top of an already demanding system.</p>
+          <div class="dl-section-label">Posture Break System</div>
+          <p class="dl-body">Enemies carry a posture bar depleted by successful MF parries and VP combos. Posture does not regenerate mid-exchange. When posture hits zero, the enemy enters a <strong>suspension state</strong> — a full-vulnerability window open to heavy punishment. This is a <em>threshold break</em>, not gradual weakening: the enemy transitions from active to suspended in a single moment. After the window closes, posture resets to 100% and the cycle restarts. The natural intersection: a posture break while at VP Tier 3 is the highest possible damage window the system offers — rewarding sustained aggression and precise reads simultaneously. Hypothesis: <strong>4–6 successful MF parries to break posture, 3–4 second suspension window</strong>.</p>
+          <div class="dl-risk">
+            <div class="dl-risk-label">Open Edge</div>
+            <p class="dl-body">The posture reset creates a repeating loop — satisfying only if the boss's attack patterns evolve between cycles. Without variation, the fight becomes mechanical: learn the pattern, repeat, win. Phase-based escalation is likely required. The suspension state also needs an unambiguous visual signal — the player must immediately read "window is open and finite" without a UI prompt.</p>
+          </div>
+        </div>
+
       </div>
 
       <!-- Footer -->
