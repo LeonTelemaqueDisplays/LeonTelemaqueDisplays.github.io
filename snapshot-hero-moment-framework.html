@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Designed to Clutch — The Hero Moment Framework</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 540px; height: 380px; overflow: hidden; background: #050609; }
+</style>
+</head>
+<body>
+<svg width="540" height="380" viewBox="0 0 540 380" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hmBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a0b12"/>
+      <stop offset="100%" stop-color="#050609"/>
+    </linearGradient>
+    <linearGradient id="row1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e6c24e"/><stop offset="100%" stop-color="#c9a230"/></linearGradient>
+    <linearGradient id="row2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#9c8dff"/><stop offset="100%" stop-color="#7d6bff"/></linearGradient>
+    <linearGradient id="row3" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e6c24e"/><stop offset="100%" stop-color="#c9a230"/></linearGradient>
+    <linearGradient id="row4" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#9c8dff"/><stop offset="100%" stop-color="#7d6bff"/></linearGradient>
+    <radialGradient id="hmGlow" cx="50%" cy="0%" r="65%">
+      <stop offset="0%" stop-color="#c9a230" stop-opacity=".1"/>
+      <stop offset="100%" stop-color="#c9a230" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="hmDots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r=".6" fill="#181a24" opacity=".7"/>
+    </pattern>
+  </defs>
+
+  <rect width="540" height="380" fill="url(#hmBg)"/>
+  <rect width="540" height="380" fill="url(#hmDots)"/>
+  <rect width="540" height="380" fill="url(#hmGlow)"/>
+
+  <!-- Top bar -->
+  <rect width="540" height="28" fill="#08090e"/>
+  <rect width="540" height="1" y="28" fill="#e6c24e" opacity=".4"/>
+  <rect width="4" height="28" fill="#e6c24e"/>
+  <text x="12" y="18" fill="#e6c24e" font-size="8.5" font-family="'Courier New',monospace" letter-spacing="1.5">DESIGNED TO CLUTCH · HERO MOMENT FRAMEWORK</text>
+  <text x="528" y="18" text-anchor="end" fill="#7d6bff" font-size="7" font-family="'Courier New',monospace">RAID ARCHITECTURE</text>
+
+  <!-- === RAID ROWS === -->
+  <!-- Row 1: Vault of Glass -->
+  <rect x="12" y="42" width="516" height="56" fill="#0d0f17" stroke="#c9a230" stroke-width=".8" rx="2"/>
+  <rect x="12" y="42" width="6" height="56" fill="url(#row1)" rx="1"/>
+  <circle cx="40" cy="70" r="16" fill="#050609" stroke="#c9a230" stroke-width="1"/>
+  <text x="40" y="75" text-anchor="middle" fill="#e6c24e" font-size="13">◈</text>
+  <text x="66" y="61" fill="#e6c24e" font-size="9.5" font-family="'Courier New',monospace" font-weight="700" letter-spacing=".5">VAULT OF GLASS — THE RELIC WIELDER</text>
+  <text x="66" y="77" fill="#a89058" font-size="7.5" font-family="'Courier New',monospace">Only mechanic that breaks the Templar's shield — hidden ceiling: blocking its teleport</text>
+  <text x="462" y="61" fill="#e6c24e" font-size="8" font-family="'Courier New',monospace" opacity=".7">RAID 01</text>
+  <text x="462" y="77" fill="#a89058" font-size="7.5" font-family="'Courier New',monospace">CONDITION: ●●●</text>
+
+  <!-- Row 2: Crota's End -->
+  <rect x="12" y="106" width="516" height="56" fill="#0d0f17" stroke="#7d6bff" stroke-width=".8" rx="2"/>
+  <rect x="12" y="106" width="6" height="56" fill="url(#row2)" rx="1"/>
+  <circle cx="40" cy="134" r="16" fill="#050609" stroke="#7d6bff" stroke-width="1"/>
+  <text x="40" y="139" text-anchor="middle" fill="#9c8dff" font-size="13">⬡</text>
+  <text x="66" y="125" fill="#9c8dff" font-size="9.5" font-family="'Courier New',monospace" font-weight="700" letter-spacing=".5">CROTA'S END — THE SWORD BEARER</text>
+  <text x="66" y="141" fill="#7a76a0" font-size="7.5" font-family="'Courier New',monospace">Sole damage source in the encounter — hidden combo depth most players never find</text>
+  <text x="462" y="125" fill="#9c8dff" font-size="8" font-family="'Courier New',monospace" opacity=".7">RAID 02</text>
+  <text x="462" y="141" fill="#7a76a0" font-size="7.5" font-family="'Courier New',monospace">CONDITION: ●●●</text>
+
+  <!-- Row 3: King's Fall -->
+  <rect x="12" y="170" width="516" height="56" fill="#0d0f17" stroke="#c9a230" stroke-width=".8" rx="2"/>
+  <rect x="12" y="170" width="6" height="56" fill="url(#row3)" rx="1"/>
+  <circle cx="40" cy="198" r="16" fill="#050609" stroke="#c9a230" stroke-width="1"/>
+  <text x="40" y="203" text-anchor="middle" fill="#e6c24e" font-size="13">◆</text>
+  <text x="66" y="189" fill="#e6c24e" font-size="9.5" font-family="'Courier New',monospace" font-weight="700" letter-spacing=".5">KING'S FALL — THE IMMORTALITY RUNNER</text>
+  <text x="66" y="205" fill="#a89058" font-size="7.5" font-family="'Courier New',monospace">Chalice run is the only source of the bubble that keeps the fireteam alive</text>
+  <text x="462" y="189" fill="#e6c24e" font-size="8" font-family="'Courier New',monospace" opacity=".7">RAID 03</text>
+  <text x="462" y="205" fill="#a89058" font-size="7.5" font-family="'Courier New',monospace">CONDITION: ●●●</text>
+
+  <!-- Row 4: Wrath of the Machine -->
+  <rect x="12" y="234" width="516" height="56" fill="#0d0f17" stroke="#7d6bff" stroke-width=".8" rx="2"/>
+  <rect x="12" y="234" width="6" height="56" fill="url(#row4)" rx="1"/>
+  <circle cx="40" cy="262" r="16" fill="#050609" stroke="#7d6bff" stroke-width="1"/>
+  <text x="40" y="267" text-anchor="middle" fill="#9c8dff" font-size="13">⬢</text>
+  <text x="66" y="253" fill="#9c8dff" font-size="9.5" font-family="'Courier New',monospace" font-weight="700" letter-spacing=".5">WRATH OF THE MACHINE — THE EMPOWERED TRIO</text>
+  <text x="66" y="269" fill="#7a76a0" font-size="7.5" font-family="'Courier New',monospace">Three players control how much of the Aksis damage phase the team gets</text>
+  <text x="462" y="253" fill="#9c8dff" font-size="8" font-family="'Courier New',monospace" opacity=".7">RAID 04</text>
+  <text x="462" y="269" fill="#7a76a0" font-size="7.5" font-family="'Courier New',monospace">CONDITION: ●●●</text>
+
+  <!-- Bottom stats bar -->
+  <rect x="12" y="298" width="516" height="52" fill="#08090e" stroke="#181a24" stroke-width=".7" rx="2"/>
+  <line x1="142" y1="298" x2="142" y2="350" stroke="#181a24" stroke-width=".7"/>
+  <line x1="272" y1="298" x2="272" y2="350" stroke="#181a24" stroke-width=".7"/>
+  <line x1="402" y1="298" x2="402" y2="350" stroke="#181a24" stroke-width=".7"/>
+
+  <text x="77" y="315" text-anchor="middle" fill="#44465a" font-size="6.5" font-family="'Courier New',monospace">RAIDS ANALYSED</text>
+  <text x="77" y="336" text-anchor="middle" fill="#e6c24e" font-size="18" font-weight="700" font-family="'Courier New',monospace">4</text>
+
+  <text x="207" y="315" text-anchor="middle" fill="#44465a" font-size="6.5" font-family="'Courier New',monospace">CONDITIONS</text>
+  <text x="207" y="336" text-anchor="middle" fill="#9c8dff" font-size="18" font-weight="700" font-family="'Courier New',monospace">3</text>
+
+  <text x="337" y="315" text-anchor="middle" fill="#44465a" font-size="6.5" font-family="'Courier New',monospace">FRAMEWORK STEPS</text>
+  <text x="337" y="336" text-anchor="middle" fill="#e6c24e" font-size="18" font-weight="700" font-family="'Courier New',monospace">5</text>
+
+  <text x="461" y="315" text-anchor="middle" fill="#44465a" font-size="6.5" font-family="'Courier New',monospace">STUDIO</text>
+  <text x="461" y="336" text-anchor="middle" fill="#9c8dff" font-size="13" font-weight="700" font-family="'Courier New',monospace">BUNGIE</text>
+
+  <!-- Footer strip -->
+  <text x="12" y="370" fill="#2e3040" font-size="6.5" font-family="'Courier New',monospace">GUARDIANS MAKE THEIR OWN FATE</text>
+  <text x="528" y="370" text-anchor="end" fill="#2e3040" font-size="6.5" font-family="'Courier New',monospace">RETENTION SYSTEMS · LEON TELEMAQUE</text>
+</svg>
+</body>
+</html>

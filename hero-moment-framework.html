@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Designed to Clutch: The Hero Moment Framework | Leon Telemaque</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050609;
+  --bg-2: #090b11;
+  --bg-card: #0d0f17;
+  --bg-card-h: #12141e;
+  --gold: #c9a230;
+  --gold-bright: #e6c24e;
+  --gold-faint: rgba(201,162,48,0.07);
+  --arc: #7d6bff;
+  --arc-bright: #9c8dff;
+  --arc-faint: rgba(125,107,255,0.08);
+  --red: #a81c1c;
+  --red-bright: #d02828;
+  --red-faint: rgba(168,28,28,0.08);
+  --t1: #dcdee4;
+  --t2: #7d8090;
+  --t3: #44475a;
+  --border-neutral: rgba(255,255,255,0.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;line-height:1.7;overflow-x:hidden;}
+
+#progress{position:fixed;top:0;left:0;height:2px;width:0%;background:var(--gold-bright);z-index:200;transition:width 0.1s linear;box-shadow:0 0 8px rgba(230,194,78,0.5);}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:58px;background:rgba(5,6,9,0.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;}
+.nav-brand{font-family:'Oswald',sans-serif;font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--t3);}
+.nav-brand span{color:var(--gold-bright);}
+.nav-links{display:flex;list-style:none;}
+.nav-links a{display:block;height:58px;line-height:58px;padding:0 1.1rem;font-family:'Oswald',sans-serif;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t3);text-decoration:none;border-bottom:2px solid transparent;transition:color 0.2s,border-color 0.2s;}
+.nav-links a:hover{color:var(--t2);}
+.nav-links a.active{color:var(--gold-bright);border-bottom-color:var(--gold-bright);}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:7rem 4rem 5.5rem;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;pointer-events:none;}
+.hero-bg::before{content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(201,162,48,0.10) 0%,transparent 60%),
+    radial-gradient(ellipse at 82% 42%,rgba(125,107,255,0.08) 0%,transparent 45%),
+    radial-gradient(ellipse at 0% 100%,rgba(201,162,48,0.08) 0%,transparent 50%),
+    linear-gradient(180deg,rgba(0,0,0,0.6) 0%,rgba(5,6,9,0.2) 40%,rgba(5,6,9,0.88) 80%,var(--bg) 100%);
+}
+.hero-noise{position:absolute;inset:0;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;}
+.hero-stars{position:absolute;inset:0;opacity:.5;}
+.hero-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,transparent 40%,rgba(0,0,0,0.75) 100%);pointer-events:none;}
+
+.hero-eyebrow{font-family:'Oswald',sans-serif;font-size:0.68rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--t3);margin-bottom:1.5rem;position:relative;}
+.hero-eyebrow span{color:var(--gold-bright);}
+.hero-title{font-family:'Oswald',sans-serif;font-size:clamp(2.6rem,6vw,5.6rem);font-weight:700;line-height:0.98;letter-spacing:-0.02em;text-transform:uppercase;max-width:960px;margin-bottom:2rem;position:relative;}
+.hero-title em{font-style:normal;color:var(--gold-bright);display:block;text-shadow:0 0 60px rgba(230,194,78,0.35);}
+.hero-thesis{max-width:660px;font-size:1rem;color:var(--t2);line-height:1.78;margin-bottom:3rem;border-left:2px solid var(--gold);padding-left:1.5rem;position:relative;}
+.hero-thesis strong{color:var(--t1);font-weight:600;}
+.hero-meta{display:flex;gap:2rem;align-items:center;flex-wrap:wrap;position:relative;}
+.badge{font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--t3);padding:0.35rem 0.9rem;border:1px solid rgba(255,255,255,0.06);border-radius:2px;}
+.hero-scroll{display:flex;align-items:center;gap:0.7rem;color:var(--t3);font-family:'Oswald',sans-serif;font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;margin-left:auto;transition:color 0.2s;}
+.hero-scroll:hover{color:var(--gold-bright);}
+.hero-scroll-line{width:36px;height:1px;background:currentColor;transition:width 0.25s;}
+.hero-scroll:hover .hero-scroll-line{width:56px;}
+
+.section{padding:6.5rem 4rem;border-top:1px solid rgba(255,255,255,0.03);opacity:0;transform:translateY(28px);transition:opacity 0.65s ease,transform 0.65s ease;}
+.section.vis{opacity:1;transform:translateY(0);}
+.section-inner{max-width:1080px;margin:0 auto;}
+.section-header{display:grid;grid-template-columns:80px 1fr;gap:2.5rem;margin-bottom:4rem;align-items:start;}
+.section-num{font-family:'Oswald',sans-serif;font-size:4.5rem;font-weight:700;line-height:1;letter-spacing:-0.04em;user-select:none;opacity:0.1;}
+.section-eyebrow{font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:0.6rem;}
+.section-title{font-family:'Oswald',sans-serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:600;line-height:1.1;letter-spacing:-0.01em;text-transform:uppercase;margin-bottom:0.85rem;}
+.section-sub{font-size:0.95rem;color:var(--t2);max-width:600px;line-height:1.7;}
+
+#opening .section-eyebrow{color:var(--gold-bright);}
+#l1{background:linear-gradient(180deg,transparent,rgba(201,162,48,0.045));}
+#l1 .section-num{color:var(--gold-bright);}
+#l1 .section-eyebrow{color:var(--gold-bright);}
+#l2{background:linear-gradient(180deg,transparent,rgba(125,107,255,0.05));}
+#l2 .section-num{color:var(--arc-bright);}
+#l2 .section-eyebrow{color:var(--arc-bright);}
+#l3{background:linear-gradient(180deg,transparent,rgba(201,162,48,0.045));}
+#l3 .section-num{color:var(--gold-bright);}
+#l3 .section-eyebrow{color:var(--gold-bright);}
+#l4{background:linear-gradient(180deg,transparent,rgba(125,107,255,0.05));}
+#l4 .section-num{color:var(--arc-bright);}
+#l4 .section-eyebrow{color:var(--arc-bright);}
+
+.prose{font-size:0.95rem;color:var(--t2);line-height:1.78;}
+.prose+.prose{margin-top:1rem;}
+.prose strong{color:var(--t1);font-weight:600;}
+.prose em{font-style:italic;color:var(--t1);}
+.t-gold{color:var(--gold-bright);}
+.t-arc{color:var(--arc-bright);}
+.t-red{color:var(--red-bright);}
+.mt-2{margin-top:2rem;}
+.mt-3{margin-top:3rem;}
+
+.divider{width:48px;height:2px;background:rgba(255,255,255,0.1);margin:2.5rem 0;}
+.divider-gold{background:rgba(201,162,48,0.45);}
+.divider-arc{background:rgba(125,107,255,0.4);}
+
+/* Condition cards (used for the 3-condition framework, and reused per raid + super) */
+.cond-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:2rem;}
+.cond-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:1.6rem 1.75rem;position:relative;overflow:hidden;transition:all 0.3s;border-top:2px solid transparent;}
+.cond-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0.5;}
+.cond-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,0.5);}
+.cond-card:hover::after{opacity:1;}
+.cond-1{border-top-color:rgba(201,162,48,0.4);}
+.cond-1::after{background:var(--gold);}
+.cond-2{border-top-color:rgba(125,107,255,0.4);}
+.cond-2::after{background:var(--arc);}
+.cond-3{border-top-color:rgba(168,28,28,0.4);}
+.cond-3::after{background:var(--red-bright);}
+.cond-tag{font-family:'Oswald',sans-serif;font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;padding:0.22rem 0.6rem;border-radius:2px;display:inline-block;margin-bottom:1rem;}
+.tag-1{color:var(--gold-bright);border:1px solid rgba(230,194,78,0.3);background:var(--gold-faint);}
+.tag-2{color:var(--arc-bright);border:1px solid rgba(156,141,255,0.3);background:var(--arc-faint);}
+.tag-3{color:var(--red-bright);border:1px solid rgba(208,40,40,0.3);background:var(--red-faint);}
+.cond-title{font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--t1);margin-bottom:0.75rem;}
+.cond-body{font-size:0.86rem;color:var(--t2);line-height:1.72;}
+
+/* Compact condition strip — reused inside each raid breakdown */
+.cond-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.75rem;}
+.cond-cell{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:1.15rem 1.3rem;border-top:2px solid transparent;}
+.cond-cell.c1{border-top-color:rgba(201,162,48,0.5);}
+.cond-cell.c2{border-top-color:rgba(125,107,255,0.45);}
+.cond-cell.c3{border-top-color:rgba(168,28,28,0.5);}
+.cond-cell-tag{font-family:'Oswald',sans-serif;font-size:0.58rem;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:0.55rem;font-weight:600;}
+.cond-cell.c1 .cond-cell-tag{color:var(--gold-bright);}
+.cond-cell.c2 .cond-cell-tag{color:var(--arc-bright);}
+.cond-cell.c3 .cond-cell-tag{color:var(--red-bright);}
+.cond-cell-body{font-size:0.78rem;color:var(--t2);line-height:1.65;}
+.cond-cell-body strong{color:var(--t1);}
+
+/* Role overview strip */
+.role-strip{display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:2rem;}
+.role-chip{font-family:'Oswald',sans-serif;font-size:0.68rem;letter-spacing:0.05em;color:var(--t2);border:1px solid rgba(255,255,255,0.07);border-radius:2px;padding:0.5rem 0.9rem;background:var(--bg-card);}
+.role-chip b{color:var(--t1);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;font-size:0.62rem;}
+.role-chip span{color:var(--gold-bright);margin:0 0.35rem;}
+
+/* Raid deep-dive blocks */
+.raid-block{position:relative;margin-top:3.5rem;padding-top:2.5rem;border-top:1px solid rgba(255,255,255,0.06);}
+.raid-block:first-of-type{margin-top:3rem;}
+.raid-head{display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;margin-bottom:0.4rem;}
+.raid-num{font-family:'Oswald',sans-serif;font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--t3);}
+.raid-title{font-family:'Oswald',sans-serif;font-size:1.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.01em;color:var(--t1);}
+.raid-title span{color:var(--arc-bright);}
+.raid-role{font-family:'Oswald',sans-serif;font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:1.5rem;}
+
+/* Raid screenshots */
+.raid-photo{margin:0 0 1.75rem;border-radius:4px;overflow:hidden;border:1px solid rgba(201,162,48,0.18);box-shadow:0 14px 40px rgba(0,0,0,0.5);background:var(--bg-card);}
+.raid-photo img{width:100%;display:block;max-height:420px;object-fit:cover;object-position:center;}
+.raid-photo-cap{padding:0.65rem 1rem;border-top:1px solid rgba(255,255,255,0.06);font-family:'Oswald',sans-serif;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t3);}
+.raid-photo-cap span{color:var(--gold-bright);}
+
+/* Insight / highlight box */
+.hi-box{background:rgba(201,162,48,0.05);border:1px solid rgba(201,162,48,0.18);border-left:3px solid var(--gold);border-radius:0 3px 3px 0;padding:1.75rem 2rem;margin-top:2.5rem;}
+.hi-label{font-family:'Oswald',sans-serif;font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:0.65rem;}
+.hi-box p{font-size:1rem;color:var(--t1);line-height:1.72;}
+.hi-box.arc{background:rgba(125,107,255,0.05);border-color:rgba(125,107,255,0.2);border-left-color:var(--arc);}
+.hi-box.arc .hi-label{color:var(--arc-bright);}
+
+/* Framework steps */
+.steal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-top:2.5rem;}
+.steal-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:1.75rem 1.75rem 1.75rem 2rem;position:relative;overflow:hidden;transition:all 0.3s;border-left:3px solid rgba(201,162,48,0.15);}
+.steal-card:hover{background:var(--bg-card-h);border-color:rgba(201,162,48,0.2);border-left-color:var(--gold-bright);transform:translateX(3px);box-shadow:-4px 0 20px rgba(201,162,48,0.1);}
+.steal-num{position:absolute;top:-0.5rem;right:1rem;font-family:'Oswald',sans-serif;font-size:4rem;font-weight:700;color:rgba(201,162,48,0.07);line-height:1;user-select:none;}
+.steal-tag{display:inline-block;font-family:'Oswald',sans-serif;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-bright);border:1px solid rgba(201,162,48,0.3);padding:0.18rem 0.55rem;border-radius:2px;margin-bottom:0.9rem;}
+.steal-title{font-family:'Oswald',sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--t1);margin-bottom:0.65rem;}
+.steal-body{font-size:0.875rem;color:var(--t2);line-height:1.72;}
+
+/* Closing statement */
+.closing{margin-top:4rem;padding:3rem;background:var(--bg-card);border:1px solid rgba(201,162,48,0.2);border-top:2px solid var(--gold);border-radius:0 0 3px 3px;text-align:center;}
+.closing-line{width:40px;height:2px;background:var(--gold-bright);margin:0 auto 2rem;box-shadow:0 0 12px rgba(230,194,78,0.5);}
+.closing p{font-family:'Oswald',sans-serif;font-size:clamp(1.1rem,2.2vw,1.5rem);font-weight:400;line-height:1.5;color:var(--t2);max-width:700px;margin:0 auto;}
+.closing p em{font-style:normal;color:var(--gold-bright);}
+
+footer{padding:3.5rem 4rem;border-top:1px solid rgba(255,255,255,0.04);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;}
+.footer-name{font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--t3);}
+.footer-name span{color:var(--gold-bright);}
+.footer-note{font-size:0.75rem;color:var(--t3);}
+
+@media(max-width:900px){
+  .steal-grid,.cond-grid{grid-template-columns:1fr 1fr;}
+  .cond-strip{grid-template-columns:1fr;}
+  nav{padding:0 1.25rem;}
+}
+@media(max-width:680px){
+  .hero{padding:6rem 1.5rem 4rem;}
+  .section{padding:5rem 1.5rem;}
+  .section-header{grid-template-columns:1fr;gap:0.5rem;}
+  .section-num{font-size:2.5rem;}
+  .steal-grid,.cond-grid{grid-template-columns:1fr;}
+  .nav-brand{display:none;}
+  footer{padding:2.5rem 1.5rem;}
+  .raid-title{font-size:1.25rem;}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+  <div class="nav-brand"><span>Leon Telemaque</span> &nbsp;/&nbsp; Portfolio</div>
+  <ul class="nav-links">
+    <li><a href="#l1">The Conditions</a></li>
+    <li><a href="#l2">Raid Architecture</a></li>
+    <li><a href="#l3">The Super</a></li>
+    <li><a href="#l4">The Framework</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="hero-noise"></div>
+    <div class="hero-vignette"></div>
+  </div>
+
+  <div class="hero-eyebrow">Game Design Framework &nbsp;·&nbsp; <span>Destiny 1 Raid Architecture</span> &nbsp;·&nbsp; Retention Systems</div>
+
+  <h1 class="hero-title">
+    Designed to Clutch:
+    <em>The Hero Moment Framework</em>
+  </h1>
+
+  <p class="hero-thesis">
+    <strong>Hero moments are not accidents — they are a designable retention loop.</strong> Destiny proved it. Four raids, one recurring architecture, and a mechanic — the super — that makes the case on its own. This is the framework for replicating it.
+  </p>
+
+  <div class="hero-meta">
+    <span class="badge">Bungie · Destiny 1</span>
+    <span class="badge">Vault of Glass · Crota's End · King's Fall · Wrath of the Machine</span>
+    <span class="badge">3-Condition Framework</span>
+    <span class="badge">5-Step Replication Model</span>
+    <a href="#opening" class="hero-scroll">
+      <span class="hero-scroll-line"></span>
+      Begin the Framework
+    </a>
+  </div>
+</section>
+
+<!-- OPENING: WHAT IS A HERO -->
+<section class="section" id="opening">
+  <div class="section-inner">
+    <div class="section-header">
+      <div></div>
+      <div>
+        <div class="section-eyebrow">The Opening Question</div>
+        <h2 class="section-title">What Is A Hero?</h2>
+        <p class="section-sub">Someone powerful. Someone who takes charge when it matters. Games have always sold that promise — most of them just leave it to chance.</p>
+      </div>
+    </div>
+
+    <p class="prose">Games have always sold the power fantasy — the promise that inside this world you are capable of something extraordinary. But most multiplayer games leave that promise to chance. The hero moment <em>might</em> happen. It might not. The design doesn't engineer it, it just hopes the conditions emerge.</p>
+    <p class="prose mt-2">Destiny didn't hope. Bungie built the conditions directly into the raid architecture — repeatedly, deliberately, across four different encounters — until the hero moment stopped being a lucky accident and became a mechanic you could count on showing up.</p>
+
+    <div class="hi-box">
+      <div class="hi-label">The Thesis</div>
+      <p>Hero moments are not accidents — they are a designable retention loop. Destiny proved it. This is the framework for replicating it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LAYER 1: THREE CONDITIONS -->
+<section class="section" id="l1">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div>
+        <div class="section-eyebrow">Layer One</div>
+        <h2 class="section-title">The Three Conditions</h2>
+        <p class="section-sub">Strip a hero moment down to its mechanical parts and three conditions hold every time. Miss one and it isn't a hero moment — it's just a mechanic.</p>
+      </div>
+    </div>
+
+    <div class="cond-grid">
+      <div class="cond-card cond-1">
+        <span class="cond-tag tag-1">Condition One</span>
+        <div class="cond-title">Systemic by Design</div>
+        <div class="cond-body">The moment is systemic by design, not random. The mechanic exists specifically to create the opportunity. It doesn't happen by chance — it was built to happen.</div>
+      </div>
+      <div class="cond-card cond-2">
+        <span class="cond-tag tag-2">Condition Two</span>
+        <div class="cond-title">Cannot Be Stumbled Into</div>
+        <div class="cond-body">Executing the moment requires earned knowledge, practiced skill, or deliberate mastery. The player had to become capable of it. It cannot be stumbled into.</div>
+      </div>
+      <div class="cond-card cond-3">
+        <span class="cond-tag tag-3">Condition Three</span>
+        <div class="cond-title">Genuinely Consequential</div>
+        <div class="cond-body">The stakes were real, and the player's intervention was heavily influential to the outcome of the scenario. Failure has weight. Success is felt by the whole team.</div>
+      </div>
+    </div>
+
+    <p class="prose mt-3">These three conditions are the test. Any mechanic that passes all three produces a hero moment. Any mechanic that fails even one collapses into something else — a random event, a trivial task, or a cool ability nobody remembers using. Destiny 1's raids are the clearest proof that exists, because Bungie ran this test four separate times and passed it four separate times.</p>
+  </div>
+</section>
+
+<!-- LAYER 2: RAID ARCHITECTURE -->
+<section class="section" id="l2">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div>
+        <div class="section-eyebrow">Layer Two</div>
+        <h2 class="section-title">Destiny Raid Architecture</h2>
+        <p class="section-sub">Destiny 1 raids were designed to have one player perform the main hero moment mechanic at any given phase. These aren't just roles — they're rotating spotlights.</p>
+      </div>
+    </div>
+
+    <p class="prose">Vault of Glass established a relic wielder. Crota's End focused on the sword bearer. King's Fall built around the immortality runner. Wrath of the Machine empowered three players to slam the boss and extend the damage phase. Bungie engineered a system where every raid concentrates responsibility into one player or group at the moment that determines whether the encounter succeeds or fails.</p>
+
+    <div class="role-strip">
+      <div class="role-chip"><b>Vault of Glass</b><span>→</span>The Relic Wielder</div>
+      <div class="role-chip"><b>Crota's End</b><span>→</span>The Sword Bearer</div>
+      <div class="role-chip"><b>King's Fall</b><span>→</span>The Immortality Runner</div>
+      <div class="role-chip"><b>Wrath of the Machine</b><span>→</span>The Empowered Trio</div>
+    </div>
+
+    <!-- VAULT OF GLASS -->
+    <div class="raid-block">
+      <div class="raid-num">Raid 01 · The Templar</div>
+      <div class="raid-head"><h3 class="raid-title">Vault of Glass — <span>The Relic Wielder</span></h3></div>
+      <p class="raid-role">Six Guardians. One relic. One shield to break.</p>
+      <div class="raid-photo">
+        <img src="./hm-vault-of-glass.png" alt="A Guardian using the Relic's shield to block the Templar's teleport in Vault of Glass, extending the damage phase">
+        <div class="raid-photo-cap">The relic wielder blocking the Templar's teleport with the Aegis, extending the damage phase — <span>Vault of Glass</span></div>
+      </div>
+      <p class="prose">Six Guardians drop into the Templar's Well. The boss spawns fully shielded — no one can touch it. One player picks up the Relic. From that moment the entire encounter is on them.</p>
+      <p class="prose mt-2">The relic wielder has one job no one else can do. They are the only mechanic that can break the Templar's shield. Without them opening that damage window, the team cannot progress. On top of that, they're responsible for shielding teammates from the Templar's constant bombardment — failing to do so is most likely death for the fireteam. Should the relic wielder be inexperienced, they can completely throw off the encounter.</p>
+      <p class="prose mt-2">There's a second layer most players never learn: mid-damage-phase, the Templar tries to teleport away into the Oracle realm to reset the fight. A relic wielder who reads the tell and throws up the Aegis's shield at the right instant can block that teleport outright — trapping the Templar in the open and extending the damage window well past what an untrained wielder gets. It's the same shape as the sword combos in Crota's End: a mechanic everyone can use at a basic level, with a ceiling almost nobody reaches.</p>
+      <p class="prose mt-2">Five players are pouring everything they have into the boss. One player is carrying the outcome.</p>
+
+      <div class="cond-strip">
+        <div class="cond-cell c1">
+          <div class="cond-cell-tag">Systemic by Design</div>
+          <div class="cond-cell-body">The Relic is the only mechanic that can break the Templar's shield. Bungie built the encounter around a single designated role. The opportunity doesn't emerge randomly — it was designed to exist in one place, held by one player.</div>
+        </div>
+        <div class="cond-cell c2">
+          <div class="cond-cell-tag">Earned Knowledge &amp; Skill</div>
+          <div class="cond-cell-body">An inexperienced relic wielder can completely throw off the encounter. Knowing when to charge the super, when to break the shield, when to prioritize cleansing teammates over offensive pressure — that knowledge is earned through failure and repetition. Reading the teleport tell and blocking it with the Aegis is the mechanic's hidden ceiling — most wielders never find it.</div>
+        </div>
+        <div class="cond-cell c3">
+          <div class="cond-cell-tag">Consequential Stakes</div>
+          <div class="cond-cell-body">The team cannot damage the Templar without the shield break. Teammates die without the cleanse. The relic wielder isn't supporting the encounter — <strong>they are the encounter.</strong> The stakes are real, and their intervention is the difference between a clear and a wipe.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider divider-arc"></div>
+
+    <!-- CROTA'S END -->
+    <div class="raid-block">
+      <div class="raid-num">Raid 02 · Crota, Son of Oryx</div>
+      <div class="raid-head"><h3 class="raid-title">Crota's End — <span>The Sword Bearer</span></h3></div>
+      <p class="raid-role">Five players drain the shield. One player closes the distance.</p>
+      <div class="raid-photo">
+        <img src="./hm-crotas-end.jpg" alt="Crota downed and being struck by the sword bearer in Crota's End">
+        <div class="raid-photo-cap">Crota downed, taking the sword bearer's finishing hits — <span>Crota's End</span></div>
+      </div>
+      <p class="prose">Five players can drain Crota's shield and bring him to his knees — but they cannot actually damage him. That falls entirely on the sword bearer. When Crota kneels, the sword bearer calls the signal and closes the distance. They are the sole damage dealer in the encounter. The entire fireteam's effort — the shield drain, the positioning, the communication — exists only to create the window the sword bearer steps into.</p>
+      <p class="prose mt-2">What most players miss is the depth of skill expression the sword mechanic carries. The sword has combos the majority of players never discover, and when executed alongside the sword super, the damage ceiling rises significantly above what a basic bearer delivers. A sword bearer who has mastered the mechanic doesn't just clear the encounter — they accelerate it.</p>
+      <p class="prose mt-2">A bad sword bearer tells the opposite story. Poor timing risks death at Crota's hand. Extended runs stretch further than they need to. At worst, a mistimed approach causes a full wipe. The gap between an inexperienced bearer and a practiced one is the gap between a clean run and a failed one.</p>
+
+      <div class="cond-strip">
+        <div class="cond-cell c1">
+          <div class="cond-cell-tag">Systemic by Design</div>
+          <div class="cond-cell-body">Only the sword bearer can damage Crota. The encounter was built around that single mechanic and that single role.</div>
+        </div>
+        <div class="cond-cell c2">
+          <div class="cond-cell-tag">Earned Knowledge &amp; Skill</div>
+          <div class="cond-cell-body">The sword has hidden depth most players never reach. Mastering the combos and timing the super correctly requires practice and deliberate study of the mechanic.</div>
+        </div>
+        <div class="cond-cell c3">
+          <div class="cond-cell-tag">Consequential Stakes</div>
+          <div class="cond-cell-body">The team cannot finish the encounter without the sword bearer executing. Their intervention isn't influential — <strong>it's the only path to completion.</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider divider-gold"></div>
+
+    <!-- KING'S FALL -->
+    <div class="raid-block">
+      <div class="raid-num">Raid 03 · Oryx, the Taken King</div>
+      <div class="raid-head"><h3 class="raid-title">King's Fall — <span>The Immortality Runner</span></h3></div>
+      <p class="raid-role">Four players hold the door open. One player runs.</p>
+      <div class="raid-photo">
+        <img src="./hm-kings-fall.jpg" alt="The immortality runner platforming across the King's Fall arena under the Torn Between Dimensions debuff">
+        <div class="raid-photo-cap">The runner mid-platform, Torn Between Dimensions active — <span>King's Fall</span></div>
+      </div>
+      <p class="prose">Four players step on plates simultaneously to open the path. One player runs. The immortality runner platforms across the arena to reach the Chalice — the only source of the bubble that keeps the fireteam alive during Oryx's onslaught. Without the bubble, the team has no answer to his wipe mechanic. The runner isn't supporting the encounter. <strong>They're the reason the team survives it.</strong></p>
+      <p class="prose mt-2">Like the relic wielder and the sword bearer, the runner is a chosen role. The responsibility concentrates into one player at the moment that determines whether the fireteam lives or dies. Should the runner fail to reach the Chalice, or fail to coordinate the team into the immortality bubble in time, both outcomes end the same way — a wipe.</p>
+
+      <div class="cond-strip">
+        <div class="cond-cell c1">
+          <div class="cond-cell-tag">Systemic by Design</div>
+          <div class="cond-cell-body">The Chalice and the plate mechanic exist specifically to create this moment. Bungie built a gauntlet that only one player runs while five others hold the door open.</div>
+        </div>
+        <div class="cond-cell c2">
+          <div class="cond-cell-tag">Earned Knowledge &amp; Skill</div>
+          <div class="cond-cell-body">The platforming sequence requires knowledge of the route and the timing. A runner who hesitates or miscommunicates the bubble position costs the team the encounter.</div>
+        </div>
+        <div class="cond-cell c3">
+          <div class="cond-cell-tag">Consequential Stakes</div>
+          <div class="cond-cell-body">The immortality bubble is the only protection against Oryx's wipe mechanic. The runner's success or failure is the difference between survival and a full reset.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider divider-arc"></div>
+
+    <!-- WRATH OF THE MACHINE -->
+    <div class="raid-block">
+      <div class="raid-num">Raid 04 · Aksis, Archon Prime</div>
+      <div class="raid-head"><h3 class="raid-title">Wrath of the Machine — <span>The Empowered Trio</span></h3></div>
+      <p class="raid-role">Bungie's greatest example of raid collaboration — and it still found a hero moment inside it.</p>
+      <div class="raid-photo">
+        <img src="./hm-wrath-of-the-machine.jpeg" alt="Aksis stunned with the Empowered buff active, waiting to be slammed">
+        <div class="raid-photo-cap">Aksis stunned, Empowered active — one slam from an extended damage phase — <span>Wrath of the Machine</span></div>
+      </div>
+      <p class="prose">Aksis Phase 2 gives the fireteam five pillars and five chances to survive his wipe mechanic. Miss all five and the encounter is over. Each damage window is short — Aksis teleports back to his pedestal and begins charging the attack that ends the run. This is where the empowerment mechanic takes over.</p>
+      <p class="prose mt-2">Three players turn blue — lit up like a jolly rancher — and are handed the most consequential role in the encounter. As Aksis teleports around the arena after each slam, these three players must coordinate instantly, assigning locations between themselves to cover all positions. The logic is simple. The execution is not. Think four corners — every base must be covered or Aksis wakes up, the damage phase ends prematurely, and the team loses a pillar. Lose enough pillars without finishing the fight and the wipe is inevitable.</p>
+      <p class="prose mt-2">The empowered players aren't just extending the damage phase. <strong>They're the reason the damage phase exists at all in its fullest form.</strong></p>
+
+      <div class="cond-strip">
+        <div class="cond-cell c1">
+          <div class="cond-cell-tag">Systemic by Design</div>
+          <div class="cond-cell-body">The empowerment mechanic was built specifically to create this moment. Three players are chosen by the encounter itself and handed the role that determines how much damage the team gets to deal.</div>
+        </div>
+        <div class="cond-cell c2">
+          <div class="cond-cell-tag">Earned Knowledge &amp; Skill</div>
+          <div class="cond-cell-body">Coordination between three players under pressure requires practice and trust. Knowing instinctively which position to cover without hesitation is earned through repetition and communication built over multiple attempts.</div>
+        </div>
+        <div class="cond-cell c3">
+          <div class="cond-cell-tag">Consequential Stakes</div>
+          <div class="cond-cell-body">A failed coordination costs a pillar. Lose enough pillars and the encounter ends. The empowered players aren't influencing the outcome — <strong>they're controlling it.</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hi-box mt-3">
+      <div class="hi-label">The Pattern</div>
+      <p>You've read through four very different raid mechanics — but have you caught what they all encapsulate? Every single one places a player in full control of the encounter's outcome. Should they fail, the consequences are near game ending. And yet in that same moment of pressure and responsibility, they are the most powerful person in the room. That is not a coincidence. That is Bungie engineering the hero moment — power and consequence delivered simultaneously through deliberate mechanical design. That is the framework. And it is replicable.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LAYER 3: THE SUPER MECHANIC -->
+<section class="section" id="l3">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div>
+        <div class="section-eyebrow">Layer Three</div>
+        <h2 class="section-title">The Super Mechanic</h2>
+        <p class="section-sub">Destiny's supers are not balanced. They are not meant to be — and that's the entire point.</p>
+      </div>
+    </div>
+
+    <p class="prose">They are deliberately overpowered — designed to clear rooms of adds in seconds, supercharged further with the right build, and terrifying in PvP to the point where enemies run at the sight of one activating. That is not a design oversight. That is the entire point.</p>
+    <p class="prose mt-2">The super is Destiny's purest expression of the hero moment framework. The moment it activates, you become the center of attention. In PvE you take the lead — adds fall, the encounter shifts, your fireteam follows your momentum. In PvP the dynamic flips entirely — the enemy team scatters or gets erased. Either way, every other player in the encounter is reacting to you.</p>
+
+    <div class="cond-strip mt-2">
+      <div class="cond-cell c1">
+        <div class="cond-cell-tag">Systemic by Design</div>
+        <div class="cond-cell-body">The super is a built mechanic with a dedicated resource bar. Bungie designed it specifically to create this moment on a recurring basis throughout every activity.</div>
+      </div>
+      <div class="cond-cell c2">
+        <div class="cond-cell-tag">Earned Knowledge &amp; Skill</div>
+        <div class="cond-cell-body">Knowing when to pop a super, how to position for maximum impact, which super fits which encounter — that knowledge separates a Guardian who wastes the mechanic from one who turns the tide with it.</div>
+      </div>
+      <div class="cond-cell c3">
+        <div class="cond-cell-tag">Consequential Stakes</div>
+        <div class="cond-cell-body">In PvE, a well-timed super can save a fireteam from a wipe. In PvP, it can swing a round. The intervention matters, every time it's spent.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LAYER 4: THE REPLICABLE FRAMEWORK -->
+<section class="section" id="l4">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div>
+        <div class="section-eyebrow">Layer Four</div>
+        <h2 class="section-title">The Replicable Framework</h2>
+        <p class="section-sub">What a studio actually does to engineer hero moments deliberately — instead of hoping they emerge.</p>
+      </div>
+    </div>
+
+    <p class="prose">Studios looking to build games with RPG and MMO elements should understand one thing before anything else — balance is an umbrella, and if you hold it wrong it blocks out the power fantasy entirely.</p>
+    <p class="prose mt-2">The instinct to balance everything equally is understandable. But it produces games where no moment feels extraordinary, because every moment is designed to feel fair. Hero moments are not fair. They are deliberately weighted toward the player. That is the point.</p>
+    <p class="prose mt-2">Destiny is the proof. Despite its core identity living in PvE, and despite its supers being blatantly overpowered by design, the power fantasy did not collapse into chaos in PvP. Bungie balanced <em>around</em> the power fantasy rather than against it. The result was a game where players genuinely felt in control of their own fate. That is not an accident. That is a design philosophy. And it is the reason Destiny carries the slogan it does — <span class="t-gold">Guardians make their own fate.</span></p>
+
+    <div class="divider divider-gold"></div>
+
+    <p class="prose"><strong>So what does a studio actually do to engineer hero moments deliberately?</strong></p>
+
+    <div class="steal-grid">
+      <div class="steal-card">
+        <div class="steal-num">01</div>
+        <div class="steal-tag">Principle</div>
+        <div class="steal-title">Concentrate Responsibility</div>
+        <div class="steal-body">Design mechanics where the weight of the encounter falls on a specific player or group rather than distributing evenly across the team. The spotlight can hold one player or three — but it has to be a spotlight. Ambient responsibility produces no hero moments.</div>
+      </div>
+
+      <div class="steal-card">
+        <div class="steal-num">02</div>
+        <div class="steal-tag">Principle</div>
+        <div class="steal-title">Attach Real Consequences</div>
+        <div class="steal-body">The mechanic only becomes a hero moment if failure has weight. If nothing bad happens when the role is mishandled, the moment has no stakes and no memory. Wipes, lost pillars, missed damage windows — consequence is what transforms a cool mechanic into a moment a player remembers a decade later.</div>
+      </div>
+
+      <div class="steal-card">
+        <div class="steal-num">03</div>
+        <div class="steal-tag">Principle</div>
+        <div class="steal-title">Make Power Legible</div>
+        <div class="steal-body">Other players need to feel or see the hero moment happening. The sword bearer closing in on Crota, the relic super breaking the Templar's shield, three players glowing blue across the Aksis arena — the power reads clearly to everyone in the encounter. Design the moment so it's visible and felt by the whole room, not just the person executing it.</div>
+      </div>
+
+      <div class="steal-card">
+        <div class="steal-num">04</div>
+        <div class="steal-tag">Principle</div>
+        <div class="steal-title">Build in Skill Expression Depth</div>
+        <div class="steal-body">The mechanic should have a surface level anyone can execute and a deeper level that rewards mastery. Most players never found the sword combos in Crota's End. The ones who did felt the difference. That hidden depth is what keeps the hero moment from feeling like a scripted cutscene.</div>
+      </div>
+
+      <div class="steal-card">
+        <div class="steal-num">05</div>
+        <div class="steal-tag">Principle</div>
+        <div class="steal-title">Balance Around the Fantasy, Not Against It</div>
+        <div class="steal-body">Do not nerf the moment into fairness. Design the rest of the encounter to accommodate the power spike rather than suppress it. Destiny's supers are overpowered by design, and the game is better for it. Guardians make their own fate — and your players should too.</div>
+      </div>
+    </div>
+
+    <div class="closing">
+      <div class="closing-line"></div>
+      <p>Ask any Destiny veteran about their most memorable raid moment and they won't describe a loot drop or a seasonal event. They'll describe the run where they were the sword bearer. The night they solo'd the scorch cannons on Aksis. The moment they broke the Templar's shield with half the team down and somehow held it together.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING: RETENTION & NOSTALGIA -->
+<section class="section" id="closing-section">
+  <div class="section-inner">
+    <div class="section-header">
+      <div></div>
+      <div>
+        <div class="section-eyebrow t-gold">Closing Argument</div>
+        <h2 class="section-title">Retention Built From Nostalgia</h2>
+        <p class="section-sub">The residue a well-designed hero moment leaves behind — and why it's the reason players come back.</p>
+      </div>
+    </div>
+
+    <p class="prose">Players become nostalgic about moments where they felt like they clutched. Where their intervention changed the outcome. Where, for one concentrated moment, they were the reason the team survived.</p>
+    <p class="prose mt-2">That nostalgia is not accidental. It is the residue of a hero moment designed well enough to leave a mark.</p>
+    <p class="prose mt-2">Studios that understand this build games players return to. Not because the content is endless or the battle pass refreshes every three months — but because somewhere in the game there is a moment waiting for the player to become the protagonist of. A moment they will be talking about years later.</p>
+
+    <div class="hi-box arc mt-3">
+      <div class="hi-label">Final Word</div>
+      <p><em>Hero moments are not accidents. They are not luck. They are a system. And now you have the framework to build them.</em></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-name"><span>Leon Telemaque</span> &nbsp;·&nbsp; Game Design Framework</div>
+  <div class="footer-note">Portfolio · Retention Systems &amp; Player Experience</div>
+</footer>
+
+<script>
+const prog = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.width = (total > 0 ? (scrolled / total) * 100 : 0) + '%';
+});
+
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-40% 0px -55% 0px' });
+sections.forEach(s => obs.observe(s));
+
+const fadeObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('vis');
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.section').forEach(s => fadeObs.observe(s));
+</script>
+
+</body>
+</html>
