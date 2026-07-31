@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lifecycle Churn System — LiveOps Telemetry</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface-2: #161616;
+    --border: #222222;
+    --border-active: #333333;
+    --gold: #c9a84c;
+    --gold-dim: #7a6430;
+    --red: #c0392b;
+    --red-dim: #5a1a14;
+    --green: #27ae60;
+    --green-dim: #144d2b;
+    --amber: #e67e22;
+    --amber-dim: #5c3310;
+    --blue: #2980b9;
+    --blue-dim: #143d5c;
+    --text: #e8e8e8;
+    --text-dim: #666666;
+    --text-mid: #999999;
+    --mono: 'Courier New', Courier, monospace;
+    --sans: 'Inter', system-ui, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    padding: 24px;
+  }
+  /* HEADER */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-left .eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .header-left h1 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .header-left .subtitle {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .status-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--green);
+    text-transform: uppercase;
+  }
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  /* GRID */
+  .grid-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 1px;
+  }
+  .grid-main {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 1px;
+  }
+  .grid-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+  }
+  /* PANELS */
+  .panel {
+    background: var(--surface);
+    padding: 20px;
+  }
+  .panel-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  /* STAT CARDS */
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .stat-delta {
+    font-family: var(--mono);
+    font-size: 10px;
+    margin-top: 6px;
+  }
+  .delta-up { color: var(--red); }
+  .delta-down { color: var(--green); }
+  /* PLAYER LIST */
+  .player-list { display: flex; flex-direction: column; gap: 2px; }
+  .player-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 80px 70px;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--surface-2);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  .player-row:hover {
+    border-color: var(--border-active);
+    background: #1a1a1a;
+  }
+  .player-row.active {
+    border-color: var(--gold);
+    background: #1a1510;
+  }
+  .player-row.critical { border-left: 2px solid var(--red); }
+  .player-row.watch { border-left: 2px solid var(--amber); }
+  .player-row.safe { border-left: 2px solid var(--green); }
+  .player-row.offline { border-left: 2px solid var(--text-dim); }
+  .player-row.at-risk { border-left: 2px solid var(--red); }
+  .player-id { color: var(--text-dim); font-size: 10px; }
+  .player-status {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .status-safe { color: var(--green); }
+  .status-watch { color: var(--amber); }
+  .status-critical { color: var(--red); }
+  .status-offline { color: var(--text-dim); }
+  .status-at-risk { color: var(--red); }
+  .player-matches { color: var(--text-mid); font-size: 10px; }
+  /* DETAIL PANEL */
+  .detail-panel { min-height: 300px; }
+  .alert-banner {
+    background: var(--red-dim);
+    border: 1px solid var(--red);
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .alert-banner.hidden { display: none; }
+  .alert-text {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--red);
+    text-transform: uppercase;
+    animation: blink 1.5s infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .detail-stat {
+    background: var(--surface-2);
+    padding: 12px;
+    border: 1px solid var(--border);
+  }
+  .detail-stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 2px;
+  }
+  .detail-stat-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  /* BARS */
+  .bar-row {
+    margin-bottom: 10px;
+  }
+  .bar-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-mid);
+  }
+  .bar-track {
+    height: 4px;
+    background: var(--surface-2);
+    border-radius: 0;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    transition: width 0.6s ease;
+  }
+  .bar-gold { background: var(--gold); }
+  .bar-red { background: var(--red); }
+  .bar-green { background: var(--green); }
+  .bar-amber { background: var(--amber); }
+  .bar-blue { background: var(--blue); }
+  /* RETENTION CHART */
+  .chart-container { position: relative; height: 160px; margin-top: 8px; }
+  canvas { width: 100% !important; }
+  /* SIGNAL DISTRIBUTION */
+  .donut-container {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .donut-wrap { position: relative; width: 120px; height: 120px; flex-shrink: 0; }
+  .donut-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .donut-pct {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--red);
+    line-height: 1;
+  }
+  .donut-sub {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .legend { flex: 1; }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-mid);
+  }
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .legend-pct { color: var(--text); margin-left: auto; }
+  /* INTERVENTION TIMER */
+  .intervention-box {
+    background: var(--surface-2);
+    border: 1px solid var(--gold-dim);
+    padding: 14px;
+    margin-top: 12px;
+  }
+  .intervention-box.urgent {
+    border-color: var(--red);
+    background: var(--red-dim);
+  }
+  .intervention-box.hidden { display: none; }
+  .intervention-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .intervention-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .intervention-box.urgent .intervention-value { color: var(--red); }
+  .intervention-desc {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+  /* SEGMENT CHURN */
+  .segment-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .segment-name {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-mid);
+    width: 130px;
+    flex-shrink: 0;
+  }
+  .segment-bar-track {
+    flex: 1;
+    height: 3px;
+    background: var(--surface-2);
+  }
+  .segment-bar-fill {
+    height: 100%;
+    background: var(--gold);
+    transition: width 0.8s ease;
+  }
+  .segment-pct {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text);
+    width: 35px;
+    text-align: right;
+  }
+  .no-selection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-left">
+    <div class="eyebrow">LiveOps Telemetry · Churn Detection System</div>
+    <h1>Lifecycle Churn System</h1>
+    <div class="subtitle">PostgreSQL · Streamlit · Real-time Frustration Signals · 10,012 Active Sessions</div>
+  </div>
+  <div class="status-badge">
+    <div class="status-dot"></div>
+    System Active
+  </div>
+</div>
+<!-- TOP STATS -->
+<div class="grid-top">
+  <div class="panel">
+    <div class="panel-label">Active Sessions</div>
+    <div class="stat-value" style="color: var(--text)">10,012</div>
+    <div class="stat-label">Players Online</div>
+    <div class="stat-delta delta-up">↑ 342 vs yesterday</div>
+  </div>
+  <div class="panel">
+    <div class="panel-label">At-Risk Players</div>
+    <div class="stat-value" style="color: var(--red)">3</div>
+    <div class="stat-label">Intervention Window Open</div>
+    <div class="stat-delta" style="color: var(--amber); margin-top: 6px; font-family: var(--mono); font-size: 10px;">⚠ ACTION REQUIRED</div>
+  </div>
+  <div class="panel">
+    <div class="panel-label">D7 Retention</div>
+    <div class="stat-value" style="color: var(--gold)">42.3%</div>
+    <div class="stat-label">Avg Across Cohorts</div>
+    <div class="stat-delta delta-up">↑ churn signal: 68%</div>
+  </div>
+  <div class="panel">
+    <div class="panel-label">Rage Quits · Today</div>
+    <div class="stat-value" style="color: var(--amber)">847</div>
+    <div class="stat-label">Loss Streak Trigger</div>
+    <div class="stat-delta" style="color: var(--text-dim); margin-top: 6px; font-family: var(--mono); font-size: 10px;">5+ consecutive losses</div>
+  </div>
+</div>
+<!-- MAIN: PLAYER LIST + DETAIL -->
+<div class="grid-main">
+  <!-- PLAYER LIST -->
+  <div class="panel">
+    <div class="panel-label">Active Player Segments · Select to Inspect</div>
+    <div class="player-list" id="playerList">
+      <div class="player-row at-risk" data-player="2847" onclick="selectPlayer(this, '2847')">
+        <span class="player-id">PLR_2847</span>
+        <span class="player-status status-critical">⚠ CRITICAL</span>
+        <span class="player-matches">5 loss str.</span>
+        <span style="font-family: var(--mono); font-size: 9px; color: var(--red)">68% churn</span>
+      </div>
+      <div class="player-row at-risk" data-player="1104" onclick="selectPlayer(this, '1104')">
+        <span class="player-id">PLR_1104</span>
+        <span class="player-status status-at-risk">AT RISK</span>
+        <span class="player-matches">7d inactive</span>
+        <span style="font-family: var(--mono); font-size: 9px; color: var(--amber)">51% churn</span>
+      </div>
+      <div class="player-row watch" data-player="3817" onclick="selectPlayer(this, '3817')">
+        <span class="player-id">PLR_3817</span>
+        <span class="player-status status-watch">LAPSING</span>
+        <span class="player-matches">3d gap</span>
+        <span style="font-family: var(--mono); font-size: 9px; color: var(--amber)">34% churn</span>
+      </div>
+      <div class="player-row safe" data-player="4821" onclick="selectPlayer(this, '4821')">
+        <span class="player-id">PLR_4821</span>
+        <span class="player-status status-safe">ENGAGED</span>
+        <span class="player-matches">48 matches</span>
+        <span style="font-family: var(--mono); font-size: 9px; color: var(--green)">8% churn</span>
+      </div>
+      <div class="player-row safe" data-player="0559" onclick="selectPlayer(this, '0559')">
+        <span class="player-id">PLR_0559</span>
+        <span class="player-status status-safe">HIGH ENG</span>
+        <span class="player-matches">214 matches</span>
+        <span style="font-family: var(--mono); font-size: 9px; color: var(--green)">4% churn</span>
+      </div>
+      <div class="player-row offline" data-player="5509" onclick="selectPlayer(this, '5509')">
+        <span class="player-id">PLR_5509</span>
+        <span class="player-status status-offline">CHURNED</span>
+        <span class="player-matches">session end</span>
+        <span style="font-family: var(--mono); font-size: 9px; color: var(--text-dim)">offline</span>
+      </div>
+    </div>
+  </div>
+  <!-- DETAIL PANEL -->
+  <div class="panel detail-panel" id="detailPanel">
+    <div class="no-selection" id="noSelection">← Select a player to inspect signals</div>
+    <div id="detailContent" style="display:none">
+      <div class="panel-label" id="detailTitle">PLR_2847 — SIGNAL ANALYSIS</div>
+      <div class="alert-banner" id="alertBanner">
+        <div class="status-dot" style="background: var(--red)"></div>
+        <div class="alert-text" id="alertText">⚠ RAGE QUIT PREDICTED — PLR_2847 — INTERVENTION WINDOW: 4–6 MIN</div>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-stat">
+          <div class="detail-stat-value" id="engScore" style="color: var(--red)">20</div>
+          <div class="detail-stat-label">Engagement Score / 100</div>
+        </div>
+        <div class="detail-stat">
+          <div class="detail-stat-value" id="frustScore" style="color: var(--red)">86</div>
+          <div class="detail-stat-label">Frustration Index / 100</div>
+        </div>
+        <div class="detail-stat">
+          <div class="detail-stat-value" id="lossStreak" style="color: var(--amber)">5</div>
+          <div class="detail-stat-label">Consecutive Losses</div>
+        </div>
+        <div class="detail-stat">
+          <div class="detail-stat-value" id="inactivity" style="color: var(--text-mid)">7d</div>
+          <div class="detail-stat-label">Inactivity Gap</div>
+        </div>
+      </div>
+      <div class="panel-label">Signal Breakdown</div>
+      <div class="bar-row">
+        <div class="bar-header"><span id="signal1Label">Loss Streak Signal</span><span id="signal1Val">78%</span></div>
+        <div class="bar-track"><div class="bar-fill bar-red" id="signal1Bar" style="width: 78%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-header"><span id="signal2Label">Session Intensity Drop</span><span id="signal2Val">65%</span></div>
+        <div class="bar-track"><div class="bar-fill bar-amber" id="signal2Bar" style="width: 65%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-header"><span id="signal3Label">Inactivity Gap Growth</span><span id="signal3Val">42%</span></div>
+        <div class="bar-track"><div class="bar-fill bar-gold" id="signal3Bar" style="width: 42%"></div></div>
+      </div>
+      <div class="intervention-box" id="interventionBox">
+        <div class="intervention-label">Recommended Intervention</div>
+        <div class="intervention-value" id="interventionWindow">4–6 MIN WINDOW</div>
+        <div class="intervention-desc" id="interventionDesc">Matchmaking adjustment + loss streak cooldown recommended. Re-queue into protected lobby. Surface reward reminder.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- BOTTOM: RETENTION + DISTRIBUTION + SEGMENTS -->
+<div class="grid-bottom">
+  <!-- COHORT RETENTION -->
+  <div class="panel">
+    <div class="panel-label">D7 Cohort Retention — Jan → Apr</div>
+    <div class="chart-container">
+      <canvas id="retentionChart"></canvas>
+    </div>
+  </div>
+  <!-- SIGNAL DISTRIBUTION + SEGMENT CHURN -->
+  <div class="panel">
+    <div class="panel-label">Churn Signal Distribution</div>
+    <div class="donut-container" style="margin-bottom: 20px;">
+      <div class="donut-wrap">
+        <canvas id="donutChart" width="120" height="120"></canvas>
+        <div class="donut-center">
+          <div class="donut-pct">68%</div>
+          <div class="donut-sub">Loss<br>Streak</div>
+        </div>
+      </div>
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background: var(--red)"></div>
+          Loss Streak
+          <span class="legend-pct">68%</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background: var(--amber)"></div>
+          Inactivity Gap
+          <span class="legend-pct">19%</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background: var(--blue)"></div>
+          Session Decay
+          <span class="legend-pct">8%</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background: var(--text-dim)"></div>
+          Other Signals
+          <span class="legend-pct">5%</span>
+        </div>
+      </div>
+    </div>
+    <div class="panel-label">Segment Churn Rate</div>
+    <div class="segment-row">
+      <div class="segment-name">New Player</div>
+      <div class="segment-bar-track"><div class="segment-bar-fill" style="width: 72%; background: var(--red)"></div></div>
+      <div class="segment-pct">72%</div>
+    </div>
+    <div class="segment-row">
+      <div class="segment-name">Casual</div>
+      <div class="segment-bar-track"><div class="segment-bar-fill" style="width: 61%; background: var(--amber)"></div></div>
+      <div class="segment-pct">61%</div>
+    </div>
+    <div class="segment-row">
+      <div class="segment-name">Mid-Core</div>
+      <div class="segment-bar-track"><div class="segment-bar-fill" style="width: 38%"></div></div>
+      <div class="segment-pct">38%</div>
+    </div>
+    <div class="segment-row">
+      <div class="segment-name">High Engagement</div>
+      <div class="segment-bar-track"><div class="segment-bar-fill" style="width: 19%; background: var(--green)"></div></div>
+      <div class="segment-pct">19%</div>
+    </div>
+  </div>
+</div>
+<script>
+// PLAYER DATA
+const players = {
+  '2847': {
+    title: 'PLR_2847 — RAGE QUIT RISK',
+    alert: true,
+    alertText: '⚠ RAGE QUIT PREDICTED — PLR_2847 — INTERVENTION WINDOW: 4–6 MIN',
+    eng: 20, engColor: 'var(--red)',
+    frust: 86, frustColor: 'var(--red)',
+    streak: 5, streakColor: 'var(--red)',
+    inactivity: '7d', inactColor: 'var(--amber)',
+    s1l: 'Loss Streak Signal', s1v: '78%', s1w: 78, s1c: 'bar-red',
+    s2l: 'Session Intensity Drop', s2v: '65%', s2w: 65, s2c: 'bar-amber',
+    s3l: 'Inactivity Gap Growth', s3v: '42%', s3w: 42, s3c: 'bar-gold',
+    intervention: true,
+    intWindow: '4–6 MIN WINDOW',
+    intDesc: 'Matchmaking adjustment + loss streak cooldown. Re-queue into protected lobby. Surface reward reminder before next session.'
+  },
+  '1104': {
+    title: 'PLR_1104 — LAPSE RISK',
+    alert: true,
+    alertText: '⚠ INACTIVITY THRESHOLD EXCEEDED — PLR_1104 — 7 DAY GAP DETECTED',
+    eng: 31, engColor: 'var(--amber)',
+    frust: 44, frustColor: 'var(--amber)',
+    streak: 2, streakColor: 'var(--text-mid)',
+    inactivity: '7d', inactColor: 'var(--red)',
+    s1l: 'Inactivity Gap Signal', s1v: '81%', s1w: 81, s1c: 'bar-red',
+    s2l: 'Session Frequency Drop', s2v: '59%', s2w: 59, s2c: 'bar-amber',
+    s3l: 'Loss Streak Contribution', s3v: '22%', s3w: 22, s3c: 'bar-gold',
+    intervention: true,
+    intWindow: 'RE-ENGAGEMENT TRIGGER',
+    intDesc: 'Push notification + daily reward bonus recommended. Highlight new content added since last session. Low-stakes match suggestion.'
+  },
+  '3817': {
+    title: 'PLR_3817 — LAPSING WATCH',
+    alert: false,
+    alertText: '',
+    eng: 52, engColor: 'var(--amber)',
+    frust: 31, frustColor: 'var(--gold)',
+    streak: 1, streakColor: 'var(--text-mid)',
+    inactivity: '3d', inactColor: 'var(--amber)',
+    s1l: 'Session Gap Signal', s1v: '48%', s1w: 48, s1c: 'bar-amber',
+    s2l: 'Engagement Score Decline', s2v: '33%', s2w: 33, s2c: 'bar-gold',
+    s3l: 'Loss Streak Risk', s3v: '18%', s3w: 18, s3c: 'bar-blue',
+    intervention: true,
+    intWindow: 'MONITOR — 48HR WINDOW',
+    intDesc: 'No immediate action required. Flag for re-engagement if gap exceeds 5 days. Watch for loss streak escalation next session.'
+  },
+  '4821': {
+    title: 'PLR_4821 — ENGAGED',
+    alert: false,
+    alertText: '',
+    eng: 88, engColor: 'var(--green)',
+    frust: 12, frustColor: 'var(--green)',
+    streak: 0, streakColor: 'var(--green)',
+    inactivity: '<1d', inactColor: 'var(--green)',
+    s1l: 'Engagement Consistency', s1v: '91%', s1w: 91, s1c: 'bar-green',
+    s2l: 'Session Regularity', s2v: '84%', s2w: 84, s2c: 'bar-green',
+    s3l: 'Reward Loop Engagement', s3v: '76%', s3w: 76, s3c: 'bar-gold',
+    intervention: false,
+    intWindow: 'NO ACTION REQUIRED',
+    intDesc: 'Player is within healthy engagement parameters. Monitor for retention opportunity — potential upsell candidate.'
+  },
+  '0559': {
+    title: 'PLR_0559 — HIGH ENGAGEMENT',
+    alert: false,
+    alertText: '',
+    eng: 97, engColor: 'var(--green)',
+    frust: 4, frustColor: 'var(--green)',
+    streak: 0, streakColor: 'var(--green)',
+    inactivity: '<1d', inactColor: 'var(--green)',
+    s1l: 'Engagement Consistency', s1v: '98%', s1w: 98, s1c: 'bar-green',
+    s2l: 'Session Frequency', s2v: '95%', s2w: 95, s2c: 'bar-green',
+    s3l: 'Community Participation', s3v: '88%', s3w: 88, s3c: 'bar-gold',
+    intervention: false,
+    intWindow: 'RETENTION SAFE',
+    intDesc: 'Core retained player. 214 matches — highest engagement in cohort. Ideal candidate for community ambassador programs.'
+  },
+  '5509': {
+    title: 'PLR_5509 — CHURNED',
+    alert: false,
+    alertText: '',
+    eng: 0, engColor: 'var(--text-dim)',
+    frust: 91, frustColor: 'var(--red)',
+    streak: 8, streakColor: 'var(--red)',
+    inactivity: '14d', inactColor: 'var(--red)',
+    s1l: 'Final Session Loss Streak', s1v: '94%', s1w: 94, s1c: 'bar-red',
+    s2l: 'Pre-Churn Frustration Spike', s2v: '88%', s2w: 88, s2c: 'bar-red',
+    s3l: 'Intervention Miss Window', s3v: '100%', s3w: 100, s3c: 'bar-red',
+    intervention: true,
+    intWindow: 'WINDOW MISSED',
+    intDesc: 'Player churned 14 days ago. Post-mortem: loss streak of 8 triggered exit. Intervention window was 3–5 min before final session end — not acted on.'
+  }
+};
+function selectPlayer(el, id) {
+  document.querySelectorAll('.player-row').forEach(r => r.classList.remove('active'));
+  el.classList.add('active');
+  const p = players[id];
+  document.getElementById('noSelection').style.display = 'none';
+  document.getElementById('detailContent').style.display = 'block';
+  document.getElementById('detailTitle').textContent = p.title;
+  const alert = document.getElementById('alertBanner');
+  if (p.alert) {
+    alert.classList.remove('hidden');
+    document.getElementById('alertText').textContent = p.alertText;
+  } else {
+    alert.classList.add('hidden');
+  }
+  document.getElementById('engScore').textContent = p.eng;
+  document.getElementById('engScore').style.color = p.engColor;
+  document.getElementById('frustScore').textContent = p.frust;
+  document.getElementById('frustScore').style.color = p.frustColor;
+  document.getElementById('lossStreak').textContent = p.streak;
+  document.getElementById('lossStreak').style.color = p.streakColor;
+  document.getElementById('inactivity').textContent = p.inactivity;
+  document.getElementById('inactivity').style.color = p.inactColor;
+  document.getElementById('signal1Label').textContent = p.s1l;
+  document.getElementById('signal1Val').textContent = p.s1v;
+  document.getElementById('signal1Bar').style.width = p.s1w + '%';
+  document.getElementById('signal1Bar').className = 'bar-fill ' + p.s1c;
+  document.getElementById('signal2Label').textContent = p.s2l;
+  document.getElementById('signal2Val').textContent = p.s2v;
+  document.getElementById('signal2Bar').style.width = p.s2w + '%';
+  document.getElementById('signal2Bar').className = 'bar-fill ' + p.s2c;
+  document.getElementById('signal3Label').textContent = p.s3l;
+  document.getElementById('signal3Val').textContent = p.s3v;
+  document.getElementById('signal3Bar').style.width = p.s3w + '%';
+  document.getElementById('signal3Bar').className = 'bar-fill ' + p.s3c;
+  const intBox = document.getElementById('interventionBox');
+  intBox.classList.remove('hidden', 'urgent');
+  if (p.intervention) {
+    if (p.alert) intBox.classList.add('urgent');
+    document.getElementById('interventionWindow').textContent = p.intWindow;
+    document.getElementById('interventionDesc').textContent = p.intDesc;
+  } else {
+    intBox.classList.add('hidden');
+  }
+}
+// RETENTION LINE CHART
+function drawRetentionChart() {
+  const canvas = document.getElementById('retentionChart');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth * window.devicePixelRatio || 600;
+  canvas.height = 160 * window.devicePixelRatio || 160;
+  ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+  const w = canvas.offsetWidth || 600;
+  const h = 160;
+  const pad = { top: 16, right: 16, bottom: 28, left: 36 };
+  const chartW = w - pad.left - pad.right;
+  const chartH = h - pad.top - pad.bottom;
+  const cohorts = [
+    { label: 'Jan', color: '#c9a84c', data: [100, 58, 44, 32, 22, 18] },
+    { label: 'Feb', color: '#2980b9', data: [100, 62, 47, 35, 24, 20] },
+    { label: 'Mar', color: '#27ae60', data: [100, 55, 42, 30, 21, 17] },
+    { label: 'Apr', color: '#e67e22', data: [100, 60, 45, 33, 23, 19] },
+  ];
+  const xLabels = ['D1', 'D7', 'D14', 'D30', 'D60', 'D68'];
+  const maxVal = 100;
+  // Grid lines
+  ctx.strokeStyle = '#1a1a1a';
+  ctx.lineWidth = 1;
+  [0, 25, 50, 75, 100].forEach(v => {
+    const y = pad.top + chartH - (v / maxVal) * chartH;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(pad.left + chartW, y);
+    ctx.stroke();
+    ctx.fillStyle = '#444';
+    ctx.font = '9px Courier New';
+    ctx.textAlign = 'right';
+    ctx.fillText(v + '%', pad.left - 4, y + 3);
+  });
+  // X labels
+  xLabels.forEach((label, i) => {
+    const x = pad.left + (i / (xLabels.length - 1)) * chartW;
+    ctx.fillStyle = '#555';
+    ctx.font = '9px Courier New';
+    ctx.textAlign = 'center';
+    ctx.fillText(label, x, h - 6);
+  });
+  // Lines
+  cohorts.forEach(cohort => {
+    ctx.beginPath();
+    cohort.data.forEach((val, i) => {
+      const x = pad.left + (i / (cohort.data.length - 1)) * chartW;
+      const y = pad.top + chartH - (val / maxVal) * chartH;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = cohort.color;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    // Dots
+    cohort.data.forEach((val, i) => {
+      const x = pad.left + (i / (cohort.data.length - 1)) * chartW;
+      const y = pad.top + chartH - (val / maxVal) * chartH;
+      ctx.beginPath();
+      ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = cohort.color;
+      ctx.fill();
+    });
+  });
+  // Legend
+  cohorts.forEach((c, i) => {
+    const x = pad.left + i * 55;
+    ctx.fillStyle = c.color;
+    ctx.fillRect(x, 2, 12, 3);
+    ctx.fillStyle = '#555';
+    ctx.font = '8px Courier New';
+    ctx.textAlign = 'left';
+    ctx.fillText(c.label, x + 15, 7);
+  });
+}
+// DONUT CHART
+function drawDonut() {
+  const canvas = document.getElementById('donutChart');
+  const ctx = canvas.getContext('2d');
+  const cx = 60, cy = 60, r = 44, inner = 28;
+  const segments = [
+    { pct: 0.68, color: '#c0392b' },
+    { pct: 0.19, color: '#e67e22' },
+    { pct: 0.08, color: '#2980b9' },
+    { pct: 0.05, color: '#333333' },
+  ];
+  let start = -Math.PI / 2;
+  segments.forEach(seg => {
+    const end = start + seg.pct * 2 * Math.PI;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, start, end);
+    ctx.closePath();
+    ctx.fillStyle = seg.color;
+    ctx.fill();
+    start = end;
+  });
+  // Inner circle
+  ctx.beginPath();
+  ctx.arc(cx, cy, inner, 0, Math.PI * 2);
+  ctx.fillStyle = '#111';
+  ctx.fill();
+}
+window.addEventListener('load', () => {
+  drawRetentionChart();
+  drawDonut();
+});
+window.addEventListener('resize', () => {
+  drawRetentionChart();
+});
+</script>
+</body>
+</html>
