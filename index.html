@@ -2800,8 +2800,8 @@ footer{
 <div style="max-width:1440px;margin:0 auto;padding:0 40px" id="work">
   <div class="section-head" style="padding-top:72px;margin-bottom:28px">
     <div>
-      <h2 style="font-size:clamp(1.5rem,2.5vw,2rem);font-weight:700;letter-spacing:-.03em">Game Design</h2>
-      <p style="font-size:.85rem;color:var(--muted2);margin-top:6px">Systems, mechanics, and behavioural architecture — across combat, onboarding, narrative, and world design.</p>
+      <h2 style="font-size:clamp(1.5rem,2.5vw,2rem);font-weight:700;letter-spacing:-.03em">Game &amp; System Design</h2>
+      <p style="font-size:.85rem;color:var(--muted2);margin-top:6px">Systems, mechanics, and behavioural architecture — across combat, progression, onboarding, narrative, and world design.</p>
     </div>
     <div style="display:flex;align-items:center;gap:16px">
       <div class="carousel-arrows">
@@ -3035,6 +3035,87 @@ footer{
       </div>
     </div>
 
+    <!-- FLUENCY — MMO COMBAT IDENTITY & PROGRESSION SYSTEM -->
+    <div class="pcard" onclick="window.open('fluency-combat-design.html','_blank')" style="border-color:#1E1A28;cursor:pointer">
+      <div class="pcard-preview" style="background:#0A0A0D;overflow:hidden;position:relative">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="flBg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#0D0D12"/>
+              <stop offset="100%" stop-color="#0A0A0D"/>
+            </linearGradient>
+            <radialGradient id="flVioletGlow" cx="50%" cy="38%" r="55%">
+              <stop offset="0%" stop-color="#8B7CFF" stop-opacity=".12"/>
+              <stop offset="100%" stop-color="#8B7CFF" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="flGoldGlow" cx="80%" cy="80%" r="40%">
+              <stop offset="0%" stop-color="#E0B84A" stop-opacity=".08"/>
+              <stop offset="100%" stop-color="#E0B84A" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="flFade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="45%" stop-color="#0A0A0D" stop-opacity="0"/>
+              <stop offset="100%" stop-color="#0A0A0D" stop-opacity=".95"/>
+            </linearGradient>
+          </defs>
+          <rect width="680" height="400" fill="url(#flBg)"/>
+          <rect width="680" height="400" fill="url(#flVioletGlow)"/>
+          <rect width="680" height="400" fill="url(#flGoldGlow)"/>
+          <g opacity=".05" stroke="#8B7CFF" stroke-width=".5">
+            <line x1="0" y1="70" x2="680" y2="70"/><line x1="0" y1="130" x2="680" y2="130"/><line x1="0" y1="190" x2="680" y2="190"/>
+            <line x1="90" y1="0" x2="90" y2="400"/><line x1="230" y1="0" x2="230" y2="400"/><line x1="370" y1="0" x2="370" y2="400"/>
+            <line x1="510" y1="0" x2="510" y2="400"/><line x1="620" y1="0" x2="620" y2="400"/>
+          </g>
+
+          <!-- three progression rings — language, grammar, voice -->
+          <circle cx="230" cy="150" r="34" fill="none" stroke="#8B7CFF" stroke-width="1.4" opacity=".5"/>
+          <circle cx="340" cy="150" r="34" fill="none" stroke="#8B7CFF" stroke-width="1.8" opacity=".75"/>
+          <circle cx="340" cy="150" r="44" fill="none" stroke="#E0B84A" stroke-width="1" opacity=".4"/>
+          <circle cx="450" cy="150" r="34" fill="none" stroke="#E0B84A" stroke-width="1.4" opacity=".55"/>
+          <text x="230" y="155" text-anchor="middle" fill="#8B7CFF" font-size="9" font-family="monospace" opacity=".75">01</text>
+          <text x="340" y="156" text-anchor="middle" fill="#ECE8E1" font-size="10" font-family="monospace" font-weight="bold" opacity=".9">02</text>
+          <text x="450" y="155" text-anchor="middle" fill="#E0B84A" font-size="9" font-family="monospace" opacity=".75">03</text>
+          <text x="230" y="200" text-anchor="middle" fill="#5A5A68" font-size="6.5" font-family="monospace" letter-spacing="1">LANGUAGE</text>
+          <text x="340" y="216" text-anchor="middle" fill="#8A8A98" font-size="6.5" font-family="monospace" letter-spacing="1">GRAMMAR</text>
+          <text x="450" y="200" text-anchor="middle" fill="#5A5A68" font-size="6.5" font-family="monospace" letter-spacing="1">VOICE</text>
+
+          <!-- class color chips -->
+          <g>
+            <rect x="255" y="242" width="10" height="10" rx="2" fill="#7C93B0"/>
+            <text x="270" y="251" fill="#8A8A98" font-size="7" font-family="monospace">VANGUARD</text>
+            <rect x="345" y="242" width="10" height="10" rx="2" fill="#E0654A"/>
+            <text x="360" y="251" fill="#8A8A98" font-size="7" font-family="monospace">ENFORCER</text>
+            <rect x="435" y="242" width="10" height="10" rx="2" fill="#E0B84A"/>
+            <text x="450" y="251" fill="#8A8A98" font-size="7" font-family="monospace">SUPPORT</text>
+          </g>
+
+          <!-- elemental dot row -->
+          <g>
+            <circle cx="278" cy="275" r="4" fill="#5AC8E0"/>
+            <circle cx="298" cy="275" r="4" fill="#FF7A45"/>
+            <circle cx="318" cy="275" r="4" fill="#F5D742"/>
+            <circle cx="338" cy="275" r="4" fill="#7ED47A"/>
+            <circle cx="358" cy="275" r="4" fill="#B98CFF"/>
+          </g>
+
+          <text x="340" y="330" text-anchor="middle" fill="#ECE8E1" font-size="19" font-family="'Rajdhani',monospace" font-weight="700" letter-spacing="6" opacity=".95">FLUENCY</text>
+          <text x="340" y="348" text-anchor="middle" fill="#5A5A68" font-size="7" font-family="monospace" letter-spacing="2">MMO COMBAT · IDENTITY · THE LANGUAGE OF MASTERY</text>
+
+          <rect width="680" height="400" fill="url(#flFade)"/>
+        </svg>
+      </div>
+      <div class="pcard-body">
+        <h3 class="pcard-title">Fluency — MMO Combat Identity &amp; Progression System
+          <span style="font-family:var(--mono);font-size:.6rem;color:#B99A3A;border:1px solid #6B5A26;padding:.1rem .4rem;margin-left:6px;vertical-align:middle;background:#0A0A0D">EARLY DEVELOPMENT</span>
+        </h3>
+        <p class="pcard-desc">MMO combat where progression changes how you fight and who you are — not just how hard you hit. Three classes, five elements, and a mastery-driven build system where two players at the same level can fight the same enemy in visibly different ways.</p>
+        <div class="pcard-tags">
+          <span class="ptag">Combat Systems Design</span>
+          <span class="ptag">MMO Design</span>
+          <span class="ptag">Progression Systems</span>
+          <span class="ptag" style="color:#B99A3A;border-color:#6B5A26">● Early Development</span>
+        </div>
+      </div>
+    </div>
 
     <!-- THE COUNTERPLAY GATE — Champion Rework Reception -->
     <div class="pcard" onclick="document.getElementById('modal-rework').classList.add('open')" style="opacity:.82;border-color:#785A28">
@@ -3944,89 +4025,6 @@ footer{
       </div>
     </div>
 
-
-
-    <!-- FLUENCY — MMO COMBAT IDENTITY & PROGRESSION SYSTEM -->
-    <div class="pcard" onclick="window.open('fluency-combat-design.html','_blank')" style="border-color:#1E1A28;cursor:pointer">
-      <div class="pcard-preview" style="background:#0A0A0D;overflow:hidden;position:relative">
-        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-          <defs>
-            <linearGradient id="flBg" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#0D0D12"/>
-              <stop offset="100%" stop-color="#0A0A0D"/>
-            </linearGradient>
-            <radialGradient id="flVioletGlow" cx="50%" cy="38%" r="55%">
-              <stop offset="0%" stop-color="#8B7CFF" stop-opacity=".12"/>
-              <stop offset="100%" stop-color="#8B7CFF" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="flGoldGlow" cx="80%" cy="80%" r="40%">
-              <stop offset="0%" stop-color="#E0B84A" stop-opacity=".08"/>
-              <stop offset="100%" stop-color="#E0B84A" stop-opacity="0"/>
-            </radialGradient>
-            <linearGradient id="flFade" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="45%" stop-color="#0A0A0D" stop-opacity="0"/>
-              <stop offset="100%" stop-color="#0A0A0D" stop-opacity=".95"/>
-            </linearGradient>
-          </defs>
-          <rect width="680" height="400" fill="url(#flBg)"/>
-          <rect width="680" height="400" fill="url(#flVioletGlow)"/>
-          <rect width="680" height="400" fill="url(#flGoldGlow)"/>
-          <g opacity=".05" stroke="#8B7CFF" stroke-width=".5">
-            <line x1="0" y1="70" x2="680" y2="70"/><line x1="0" y1="130" x2="680" y2="130"/><line x1="0" y1="190" x2="680" y2="190"/>
-            <line x1="90" y1="0" x2="90" y2="400"/><line x1="230" y1="0" x2="230" y2="400"/><line x1="370" y1="0" x2="370" y2="400"/>
-            <line x1="510" y1="0" x2="510" y2="400"/><line x1="620" y1="0" x2="620" y2="400"/>
-          </g>
-
-          <!-- three progression rings — language, grammar, voice -->
-          <circle cx="230" cy="150" r="34" fill="none" stroke="#8B7CFF" stroke-width="1.4" opacity=".5"/>
-          <circle cx="340" cy="150" r="34" fill="none" stroke="#8B7CFF" stroke-width="1.8" opacity=".75"/>
-          <circle cx="340" cy="150" r="44" fill="none" stroke="#E0B84A" stroke-width="1" opacity=".4"/>
-          <circle cx="450" cy="150" r="34" fill="none" stroke="#E0B84A" stroke-width="1.4" opacity=".55"/>
-          <text x="230" y="155" text-anchor="middle" fill="#8B7CFF" font-size="9" font-family="monospace" opacity=".75">01</text>
-          <text x="340" y="156" text-anchor="middle" fill="#ECE8E1" font-size="10" font-family="monospace" font-weight="bold" opacity=".9">02</text>
-          <text x="450" y="155" text-anchor="middle" fill="#E0B84A" font-size="9" font-family="monospace" opacity=".75">03</text>
-          <text x="230" y="200" text-anchor="middle" fill="#5A5A68" font-size="6.5" font-family="monospace" letter-spacing="1">LANGUAGE</text>
-          <text x="340" y="216" text-anchor="middle" fill="#8A8A98" font-size="6.5" font-family="monospace" letter-spacing="1">GRAMMAR</text>
-          <text x="450" y="200" text-anchor="middle" fill="#5A5A68" font-size="6.5" font-family="monospace" letter-spacing="1">VOICE</text>
-
-          <!-- class color chips -->
-          <g>
-            <rect x="255" y="242" width="10" height="10" rx="2" fill="#7C93B0"/>
-            <text x="270" y="251" fill="#8A8A98" font-size="7" font-family="monospace">VANGUARD</text>
-            <rect x="345" y="242" width="10" height="10" rx="2" fill="#E0654A"/>
-            <text x="360" y="251" fill="#8A8A98" font-size="7" font-family="monospace">ENFORCER</text>
-            <rect x="435" y="242" width="10" height="10" rx="2" fill="#E0B84A"/>
-            <text x="450" y="251" fill="#8A8A98" font-size="7" font-family="monospace">SUPPORT</text>
-          </g>
-
-          <!-- elemental dot row -->
-          <g>
-            <circle cx="278" cy="275" r="4" fill="#5AC8E0"/>
-            <circle cx="298" cy="275" r="4" fill="#FF7A45"/>
-            <circle cx="318" cy="275" r="4" fill="#F5D742"/>
-            <circle cx="338" cy="275" r="4" fill="#7ED47A"/>
-            <circle cx="358" cy="275" r="4" fill="#B98CFF"/>
-          </g>
-
-          <text x="340" y="330" text-anchor="middle" fill="#ECE8E1" font-size="19" font-family="'Rajdhani',monospace" font-weight="700" letter-spacing="6" opacity=".95">FLUENCY</text>
-          <text x="340" y="348" text-anchor="middle" fill="#5A5A68" font-size="7" font-family="monospace" letter-spacing="2">MMO COMBAT · IDENTITY · THE LANGUAGE OF MASTERY</text>
-
-          <rect width="680" height="400" fill="url(#flFade)"/>
-        </svg>
-      </div>
-      <div class="pcard-body">
-        <h3 class="pcard-title">Fluency — MMO Combat Identity &amp; Progression System
-          <span style="font-family:var(--mono);font-size:.6rem;color:#B99A3A;border:1px solid #6B5A26;padding:.1rem .4rem;margin-left:6px;vertical-align:middle;background:#0A0A0D">EARLY DEVELOPMENT</span>
-        </h3>
-        <p class="pcard-desc">MMO combat where progression changes how you fight and who you are — not just how hard you hit. Three classes, five elements, and a mastery-driven build system where two players at the same level can fight the same enemy in visibly different ways.</p>
-        <div class="pcard-tags">
-          <span class="ptag">Combat Systems Design</span>
-          <span class="ptag">MMO Design</span>
-          <span class="ptag">Progression Systems</span>
-          <span class="ptag" style="color:#B99A3A;border-color:#6B5A26">● Early Development</span>
-        </div>
-      </div>
-    </div>
 
     <!-- INFAMOUS 2 — KARMIC WORLD REACTIVITY -->
     <div class="pcard" onclick="window.open('infamous-karma-redesign.html','_blank')">
