@@ -8009,7 +8009,7 @@ function openModal(key){
   const stored=p.streamlit?localStorage.getItem(p.streamlit):null;
   if(p.embedUrl && p.embedUrl2){
     frame.innerHTML=`
-      <div style="display:flex;flex-direction:column;height:100%;">
+      <div style="display:flex;flex-direction:column;width:100%;height:100%;">
         <div style="display:flex;gap:2px;padding:8px 12px 0;background:var(--bg);flex-shrink:0;">
           <button onclick="switchEmbed('embed-a','embed-b',this)" style="padding:5px 14px;font-size:.73rem;font-weight:600;background:var(--surface2);border:1px solid var(--border2);color:var(--text);cursor:pointer;border-radius:4px 4px 0 0;font-family:var(--sans);">${p.embedLabel}</button>
           <button onclick="switchEmbed('embed-b','embed-a',this)" style="padding:5px 14px;font-size:.73rem;font-weight:500;background:transparent;border:1px solid transparent;color:var(--muted2);cursor:pointer;border-radius:4px 4px 0 0;font-family:var(--sans);">${p.embedLabel2}</button>
