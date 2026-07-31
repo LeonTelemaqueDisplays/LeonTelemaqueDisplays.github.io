@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fluency — MMO Combat, Identity & the Language of Mastery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --void:       #0A0A0D;
+      --deep:       #121216;
+      --surface:    #1B1B22;
+      --surface-2:  #24242C;
+      --violet:     #8B7CFF;
+      --violet-dim: #453D80;
+      --violet-glow:rgba(139,124,255,0.10);
+      --gold:       #E0B84A;
+      --gold-dim:   #6B5A26;
+      --gold-glow:  rgba(224,184,74,0.08);
+      --text:       #ECE8E1;
+      --text-dim:   #9A9AA5;
+      --text-muted: #4C4C58;
+      --mono:       'Space Mono', monospace;
+      /* class colors */
+      --vanguard:   #7C93B0;
+      --enforcer:   #E0654A;
+      --support:    #E0B84A;
+      /* element colors */
+      --ice:        #5AC8E0;
+      --fire:       #FF7A45;
+      --electric:   #F5D742;
+      --toxin:      #7ED47A;
+      --arcana:     #B98CFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--void);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 17px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 9999; opacity: 0.018;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--void); }
+    ::-webkit-scrollbar-thumb { background: var(--violet-dim); }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(to bottom, rgba(10,10,13,0.97) 0%, transparent 100%);
+      backdrop-filter: blur(8px);
+    }
+    .nav-back {
+      font-family: var(--mono); font-size: 0.58rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none;
+      transition: color 0.25s;
+    }
+    .nav-back:hover { color: var(--violet); }
+    .nav-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.75rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted);
+    }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a {
+      font-family: var(--mono); font-size: 0.53rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none; transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+      text-align: center; padding: 8rem 2rem 5rem;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 55%, rgba(139,124,255,0.07) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 35% at 78% 38%, rgba(224,184,74,0.05) 0%, transparent 60%),
+        linear-gradient(180deg, #0D0D12 0%, var(--void) 50%, #08080A 100%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(139,124,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139,124,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 75%);
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 880px; }
+
+    .status-pill {
+      display: inline-block; font-family: var(--mono); font-size: 0.55rem;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--gold); border: 1px solid var(--gold-dim);
+      background: rgba(224,184,74,0.06); padding: 0.3rem 0.8rem;
+      border-radius: 2px; margin-bottom: 1.5rem;
+    }
+    .status-pill::before { content: '●'; margin-right: 0.5rem; font-size: 0.6rem; }
+
+    .eyebrow {
+      font-family: var(--mono); font-size: 0.58rem;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--violet); opacity: 0.85; margin-bottom: 1.25rem; display: block;
+    }
+    .hero-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(3.2rem, 9vw, 6.5rem);
+      font-weight: 700; line-height: 1.0; color: var(--text);
+      letter-spacing: 0.02em; margin-bottom: 0.6rem;
+    }
+    .hero-title .accent { color: var(--violet); }
+    .hero-sub {
+      font-family: 'Rajdhani', sans-serif; font-size: clamp(1rem, 2.2vw, 1.35rem);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 3.5rem; font-weight: 500;
+    }
+    .hero-thesis {
+      max-width: 700px; margin: 0 auto 4rem;
+      font-size: 1.05rem; color: var(--text-dim); line-height: 1.85;
+      border-left: 2px solid var(--violet-dim); padding-left: 1.5rem; text-align: left;
+    }
+
+    /* ── STAT STRIP ── */
+    .stat-strip {
+      display: flex; justify-content: center; gap: 0;
+      background: var(--deep); border: 1px solid var(--surface-2);
+      max-width: 760px; margin: 0 auto;
+    }
+    .stat-cell {
+      flex: 1; padding: 1.25rem 1.25rem; text-align: center;
+      border-right: 1px solid var(--surface-2);
+      position: relative;
+    }
+    .stat-cell:last-child { border-right: none; }
+    .stat-val {
+      font-family: 'Rajdhani', sans-serif; font-size: 2rem;
+      font-weight: 700; color: var(--text); line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+    .stat-val.violet { color: var(--violet); }
+    .stat-val.gold { color: var(--gold); }
+    .stat-label {
+      font-family: var(--mono); font-size: 0.48rem;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      animation: sink 3s ease-in-out infinite; opacity: 0.3;
+    }
+    @keyframes sink {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
+    .scroll-hint span {
+      font-family: var(--mono); font-size: 0.5rem;
+      letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-muted);
+    }
+    .scroll-hint-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--violet-dim), transparent); }
+
+    /* ── LAYER NAV ── */
+    .layer-nav {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: 1px; background: var(--surface);
+      border: 1px solid var(--surface); max-width: 980px; margin: 4rem auto 7rem;
+    }
+    .layer-nav a {
+      background: var(--deep); padding: 1.5rem 1.1rem;
+      text-align: center; text-decoration: none;
+      display: flex; flex-direction: column; gap: 0.4rem;
+      transition: background 0.25s;
+    }
+    .layer-nav a:hover { background: var(--surface-2); }
+    .layer-nav-num {
+      font-family: var(--mono); font-size: 0.48rem;
+      letter-spacing: 0.22em; text-transform: uppercase; color: var(--violet);
+    }
+    .layer-nav-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.82rem;
+      color: var(--text); font-weight: 600; letter-spacing: 0.02em;
+    }
+    .layer-nav-desc { font-family: var(--mono); font-size: 0.48rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* ── SECTION SHELL ── */
+    .layer-section { padding: 6rem 2rem; position: relative; }
+    .layer-section::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, var(--violet-dim) 30%, var(--violet-dim) 70%, transparent);
+      opacity: 0.25;
+    }
+    .layer-inner { max-width: 980px; margin: 0 auto; }
+    .layer-header { display: flex; align-items: flex-start; gap: 2rem; margin-bottom: 3rem; }
+    .layer-num-bg {
+      font-family: 'Rajdhani', sans-serif; font-size: 7rem; font-weight: 700;
+      color: var(--violet); line-height: 1; opacity: 0.12; flex-shrink: 0;
+      user-select: none;
+    }
+    .layer-head-text { padding-top: 0.5rem; }
+    .section-label {
+      font-family: var(--mono); font-size: 0.52rem;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--violet); display: block; margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700; color: var(--text); line-height: 1.15;
+      letter-spacing: 0.02em;
+    }
+    .section-title em { font-style: normal; color: var(--violet); }
+    .section-sub {
+      font-family: var(--mono); font-size: 0.7rem; color: var(--text-muted);
+      margin-top: 0.6rem; letter-spacing: 0.02em;
+    }
+    .accent-line {
+      width: 48px; height: 2px;
+      background: linear-gradient(to right, var(--violet), transparent);
+      margin-top: 1rem;
+    }
+
+    p { margin-bottom: 1.5rem; color: var(--text-dim); }
+    p:last-child { margin-bottom: 0; }
+    strong { color: var(--text); font-weight: 600; }
+    em { color: var(--text); font-style: italic; }
+
+    /* ── PULL QUOTE ── */
+    .pull {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+      font-weight: 500; color: var(--text-dim); line-height: 1.65;
+      border-top: 1px solid var(--violet-dim);
+      border-bottom: 1px solid var(--violet-dim);
+      padding: 1.75rem 2rem; margin: 3rem 0; text-align: center;
+    }
+    .pull em { font-style: normal; color: var(--violet); }
+    .pull strong { color: var(--text); }
+
+    /* ── INSIGHT / EVIDENCE ── */
+    .insight {
+      background: linear-gradient(135deg, rgba(139,124,255,0.06), rgba(139,124,255,0.01));
+      border: 1px solid rgba(139,124,255,0.18);
+      border-left: 3px solid var(--violet);
+      padding: 1.75rem 2rem; margin: 2.5rem 0; position: relative;
+    }
+    .insight::before {
+      content: attr(data-label);
+      position: absolute; top: -0.65rem; left: 1.5rem;
+      background: var(--void); padding: 0 0.5rem;
+      font-family: var(--mono); font-size: 0.48rem;
+      letter-spacing: 0.22em; color: var(--violet);
+    }
+    .insight p { margin-bottom: 1rem; font-size: 0.95rem; }
+    .insight p:last-child { margin-bottom: 0; }
+    .insight p.big { font-style: italic; font-size: 1.02rem; margin-bottom: 0; }
+
+    .evidence-note {
+      background: linear-gradient(135deg, rgba(224,184,74,0.05), rgba(224,184,74,0.01));
+      border: 1px solid rgba(224,184,74,0.18);
+      border-left: 3px solid var(--gold);
+      padding: 1.75rem 2rem; margin: 2.5rem 0; position: relative;
+    }
+    .evidence-note::before {
+      content: attr(data-label);
+      position: absolute; top: -0.65rem; left: 1.5rem;
+      background: var(--void); padding: 0 0.5rem;
+      font-family: var(--mono); font-size: 0.48rem;
+      letter-spacing: 0.22em; color: var(--gold);
+    }
+    .evidence-note p { font-size: 0.92rem; margin-bottom: 1rem; }
+    .evidence-note p:last-child { margin-bottom: 0; }
+
+    /* ── PROGRESSION GRID (3 states) ── */
+    .progression-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: var(--surface);
+      border: 1px solid var(--surface); margin: 3rem 0;
+    }
+    .prog-item { background: var(--deep); padding: 2rem; }
+    .prog-num {
+      font-family: 'Rajdhani', sans-serif; font-size: 2.4rem;
+      font-weight: 700; color: var(--violet); opacity: 0.22;
+      line-height: 1; margin-bottom: 0.5rem;
+    }
+    .prog-tag {
+      font-family: var(--mono); font-size: 0.5rem;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .prog-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 1.05rem;
+      font-weight: 700; color: var(--text); margin-bottom: 0.9rem;
+    }
+    .prog-body { font-size: 0.87rem; color: var(--text-dim); line-height: 1.7; }
+
+    /* ── CLASS GRID (3 classes) ── */
+    .class-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: var(--surface);
+      border: 1px solid var(--surface); margin: 3rem 0;
+    }
+    .class-item { background: var(--deep); padding: 2rem; border-top: 3px solid var(--surface-2); }
+    .class-item.vanguard { border-top-color: var(--vanguard); }
+    .class-item.enforcer { border-top-color: var(--enforcer); }
+    .class-item.support { border-top-color: var(--support); }
+    .class-tag {
+      font-family: var(--mono); font-size: 0.5rem;
+      letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 0.6rem;
+    }
+    .class-item.vanguard .class-tag { color: var(--vanguard); }
+    .class-item.enforcer .class-tag { color: var(--enforcer); }
+    .class-item.support .class-tag { color: var(--support); }
+    .class-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 1.15rem;
+      font-weight: 700; color: var(--text); margin-bottom: 0.3rem;
+    }
+    .class-weapon {
+      font-family: var(--mono); font-size: 0.62rem; color: var(--text-muted);
+      margin-bottom: 1.1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--surface);
+    }
+    .class-body { font-size: 0.88rem; color: var(--text-dim); line-height: 1.7; }
+    .class-stretch {
+      display: inline-block; margin-top: 1rem; font-family: var(--mono); font-size: 0.5rem;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold);
+      border: 1px solid var(--gold-dim); padding: 0.25rem 0.6rem; border-radius: 2px;
+    }
+
+    /* ── SKILL GRID (universal skills) ── */
+    .skill-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: var(--surface);
+      border: 1px solid var(--surface); margin: 3rem 0;
+    }
+    .skill-item { background: var(--deep); padding: 1.75rem; }
+    .skill-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 1rem;
+      font-weight: 700; color: var(--gold); margin-bottom: 0.75rem;
+    }
+    .skill-body { font-size: 0.85rem; color: var(--text-dim); line-height: 1.65; }
+
+    /* ── STATUS / SYSTEM ROWS ── */
+    .system-grid { margin: 3rem 0; }
+    .system-item {
+      background: var(--deep); border: 1px solid var(--surface);
+      border-left: 3px solid var(--surface-2);
+      padding: 1.6rem 2rem; margin-bottom: 1px;
+      display: grid; grid-template-columns: 200px 1fr;
+      gap: 2rem; align-items: start;
+    }
+    .system-item.ice { border-left-color: var(--ice); }
+    .system-item.fire { border-left-color: var(--fire); }
+    .system-item.electric { border-left-color: var(--electric); }
+    .system-item.toxin { border-left-color: var(--toxin); }
+    .system-item.arcana { border-left-color: var(--arcana); }
+    .system-name {
+      font-family: 'Rajdhani', sans-serif; font-size: 1rem;
+      font-weight: 700; color: var(--text); letter-spacing: 0.02em;
+    }
+    .system-item.ice .system-name { color: var(--ice); }
+    .system-item.fire .system-name { color: var(--fire); }
+    .system-item.electric .system-name { color: var(--electric); }
+    .system-item.toxin .system-name { color: var(--toxin); }
+    .system-item.arcana .system-name { color: var(--arcana); }
+    .system-sub {
+      font-family: var(--mono); font-size: 0.55rem;
+      letter-spacing: 0.08em; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.6;
+    }
+    .system-body { font-size: 0.9rem; color: var(--text-dim); line-height: 1.72; }
+
+    /* ── ELEMENTAL MAP ── */
+    .elemental-grid {
+      display: grid; grid-template-columns: repeat(5,1fr);
+      gap: 1px; background: var(--surface);
+      border: 1px solid var(--surface); margin: 3rem 0;
+    }
+    .elem-chip { background: var(--deep); padding: 1.5rem 1rem; text-align: center; }
+    .elem-dot { width: 14px; height: 14px; border-radius: 50%; margin: 0 auto 0.9rem; }
+    .elem-name { font-family: 'Rajdhani', sans-serif; font-size: 0.92rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+    .elem-arrow { font-family: var(--mono); font-size: 0.6rem; color: var(--text-muted); margin-bottom: 0.4rem; }
+    .elem-status { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.04em; }
+
+    /* ── BUILD GRID ── */
+    .build-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: var(--surface);
+      border: 1px solid var(--surface); margin: 3rem 0;
+    }
+    .build-card { background: var(--deep); padding: 1.75rem; }
+    .build-tag {
+      font-family: var(--mono); font-size: 0.48rem;
+      letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 0.6rem;
+    }
+    .build-card.vanguard .build-tag { color: var(--vanguard); }
+    .build-card.enforcer .build-tag { color: var(--enforcer); }
+    .build-card.support .build-tag { color: var(--support); }
+    .build-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.98rem;
+      font-weight: 700; color: var(--text); margin-bottom: 0.7rem;
+    }
+    .build-body { font-size: 0.82rem; color: var(--text-dim); line-height: 1.65; }
+    .build-wide {
+      background: var(--deep); border: 1px solid var(--surface); border-top: 3px solid var(--violet);
+      padding: 1.75rem 2rem; margin-top: 1px;
+    }
+    .build-wide .build-title { color: var(--violet); }
+
+    /* ── DEV NOTES ── */
+    .devnotes { margin: 3rem 0; }
+    .devnote {
+      background: var(--deep); border: 1px solid var(--surface);
+      border-left: 3px solid var(--gold-dim);
+      padding: 1.25rem 1.75rem; margin-bottom: 1px;
+      display: flex; gap: 1.5rem; align-items: baseline;
+    }
+    .devnote-tag {
+      font-family: var(--mono); font-size: 0.6rem; color: var(--gold);
+      flex-shrink: 0; width: 130px;
+    }
+    .devnote-body { font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; }
+
+    /* ── VERDICT ── */
+    .verdict {
+      background: linear-gradient(to bottom, var(--void), #0E0C18, var(--void));
+      padding: 8rem 2rem; text-align: center; position: relative; overflow: hidden;
+    }
+    .verdict-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 55% 40% at 50% 50%, rgba(139,124,255,0.07), transparent);
+      pointer-events: none;
+    }
+    .verdict-inner { position: relative; z-index: 2; max-width: 820px; margin: 0 auto; }
+    .verdict-label {
+      font-family: var(--mono); font-size: 0.55rem;
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--violet); opacity: 0.75; margin-bottom: 2rem; display: block;
+    }
+    .verdict-quote {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(1.15rem, 2.4vw, 1.6rem);
+      font-weight: 500; color: var(--text-dim); line-height: 1.65; margin-bottom: 2rem;
+    }
+    .verdict-quote strong { color: var(--text); font-weight: 700; }
+    .verdict-quote em { font-style: normal; color: var(--violet); }
+    .verdict-line {
+      font-family: 'Rajdhani', sans-serif; font-size: 1.05rem;
+      font-weight: 700; color: var(--gold); letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--void); border-top: 1px solid var(--surface);
+      padding: 5rem 2rem 3rem; text-align: center;
+    }
+    .footer-inner { max-width: 680px; margin: 0 auto; }
+    .footer-name {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.7rem;
+      letter-spacing: 0.28em; text-transform: uppercase; color: var(--text-dim);
+      margin-bottom: 0.4rem;
+    }
+    .footer-tagline { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2.5rem; }
+    .footer-links { display: flex; justify-content: center; gap: 2.5rem; list-style: none; margin-bottom: 3.5rem; }
+    .footer-links a {
+      font-family: var(--mono); font-size: 0.56rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none; transition: color 0.25s;
+    }
+    .footer-links a:hover { color: var(--violet); }
+    .copyright { font-family: var(--mono); font-size: 0.66rem; color: var(--text-muted); opacity: 0.35; }
+
+    /* ── SCROLL REVEAL ── */
+    .fade { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .fade.in { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width: 900px) {
+      .layer-nav { grid-template-columns: repeat(2,1fr); }
+      .progression-grid, .class-grid, .skill-grid, .build-grid { grid-template-columns: 1fr; }
+      .elemental-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media(max-width: 760px) {
+      .system-item { grid-template-columns: 1fr; }
+      .stat-strip { flex-wrap: wrap; }
+      .stat-cell { flex: 0 0 50%; }
+      nav { padding: 0.9rem 1.25rem; }
+      .nav-links { display: none; }
+      .devnote { flex-direction: column; gap: 0.5rem; }
+      .devnote-tag { width: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-back">← Leon Telemaque</a>
+    <span class="nav-title">Fluency</span>
+    <ul class="nav-links">
+      <li><a href="#classes">Classes</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#status">Status</a></li>
+      <li><a href="#elemental">Elements</a></li>
+      <li><a href="#demo">Demo</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content fade">
+      <span class="eyebrow">Game Design Systems · Combat Design Document</span>
+      <h1 class="hero-title"><span class="accent">Fluency</span></h1>
+      <div class="hero-sub">MMO Combat, Identity &amp; the Language of Mastery</div>
+      <div class="status-pill">Early Development</div>
+      <p class="hero-thesis">
+        MMOs are power fantasies built around individual identity. Yet most MMO combat systems express neither — they reward rotation memorisation and stat thresholds over reactive decision making and personal expression. Fluency is a prototype exploring what MMO combat looks like when progression measures mastery and identity, not just power.
+      </p>
+      <div class="stat-strip">
+        <div class="stat-cell">
+          <div class="stat-val violet">3</div>
+          <div class="stat-label">Progression<br>States</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-val">3</div>
+          <div class="stat-label">Classes</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-val gold">5</div>
+          <div class="stat-label">Status<br>Effects</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-val gold">5</div>
+          <div class="stat-label">Elements</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-val violet">6</div>
+          <div class="stat-label">Build<br>Demos</div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-hint-line"></div>
+    </div>
+  </section>
+
+  <!-- ── LAYER NAV ── -->
+  <div class="layer-nav fade">
+    <a href="#argument">
+      <div class="layer-nav-num">01</div>
+      <div class="layer-nav-title">The Argument</div>
+      <div class="layer-nav-desc">Why the WoW foundation isn't the problem</div>
+    </a>
+    <a href="#progression">
+      <div class="layer-nav-num">02</div>
+      <div class="layer-nav-title">Progression States</div>
+      <div class="layer-nav-desc">Language, grammar, voice</div>
+    </a>
+    <a href="#classes">
+      <div class="layer-nav-num">03</div>
+      <div class="layer-nav-title">Class System</div>
+      <div class="layer-nav-desc">Vanguard, Enforcer, Support</div>
+    </a>
+    <a href="#skills">
+      <div class="layer-nav-num">04</div>
+      <div class="layer-nav-title">Skill System</div>
+      <div class="layer-nav-desc">Universal &amp; weapon specific</div>
+    </a>
+    <a href="#status">
+      <div class="layer-nav-num">05</div>
+      <div class="layer-nav-title">Status System</div>
+      <div class="layer-nav-desc">Five effects, five identities</div>
+    </a>
+    <a href="#elemental">
+      <div class="layer-nav-num">06</div>
+      <div class="layer-nav-title">Elemental System</div>
+      <div class="layer-nav-desc">Elements, reactions, Sheer Cold</div>
+    </a>
+    <a href="#demo">
+      <div class="layer-nav-num">07</div>
+      <div class="layer-nav-title">Demo Structure</div>
+      <div class="layer-nav-desc">Six builds, one enemy, one argument</div>
+    </a>
+    <a href="#win-condition">
+      <div class="layer-nav-num">08</div>
+      <div class="layer-nav-title">Win Condition</div>
+      <div class="layer-nav-desc">What the viewer walks away understanding</div>
+    </a>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       01 — THE ARGUMENT
+       ══════════════════════════════════════════════════════ -->
+  <section id="argument" class="layer-section">
+    <div class="layer-inner">
+      <div class="layer-header fade">
+        <div class="layer-num-bg">01</div>
+        <div class="layer-head-text">
+          <span class="section-label">Layer 01</span>
+          <h2 class="section-title">The Argument</h2>
+          <div class="accent-line"></div>
+        </div>
+      </div>
+
+      <p class="fade">Modern MMO combat has a formula. It works. But studios that copy it without evolution produce combat that feels passive, mechanical, and alienating to a console audience raised on action games. Fluency argues that the WoW foundation — telegraphed attacks, resource management, rotational structure — is not the problem. The absence of reactivity and individual expression built on top of that foundation is.</p>
+
+      <p class="fade">Fluency is built around a single design question — what does MMO combat look like when mastery changes the player's combat identity rather than just their damage output? Two players at the same progression level with different skill investments should fight the same enemy in visibly different ways. Not because one is stronger. Because they understood the system differently and built toward a different expression of it.</p>
+
+      <div class="pull fade">
+        Progression should change how you fight, who you are, and how hard you hit. <em>Not just the last one.</em>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       02 — THE THREE PROGRESSION STATES
+       ══════════════════════════════════════════════════════ -->
+  <section id="progression" class="layer-section">
+    <div class="layer-inner">
+      <div class="layer-header fade">
+        <div class="layer-num-bg">02</div>
+        <div class="layer-head-text">
+          <span class="section-label">Layer 02</span>
+          <h2 class="section-title">The Three Progression States</h2>
+          <div class="accent-line"></div>
+        </div>
+      </div>
+
+      <div class="progression-grid fade">
+        <div class="prog-item">
+          <div class="prog-num">01</div>
+          <div class="prog-tag">Early State</div>
+          <div class="prog-title">Learning the Language</div>
+          <div class="prog-body">The player enters combat with a light combo, heavy combo, two abilities, parry, and dodge. Combat is about reading and reacting correctly. Simple enough to learn, deep enough to feel rewarding when executed well. The foundation that never goes away regardless of how far progression advances.</div>
+        </div>
+        <div class="prog-item">
+          <div class="prog-num">02</div>
+          <div class="prog-tag">Mid State</div>
+          <div class="prog-title">Learning the Grammar</div>
+          <div class="prog-body">Elemental attributes, status effects, and two additional abilities are added. Combat now requires two simultaneous layers — reactive reads through parry and dodge, and strategic decisions about elemental and status application. The skill ceiling rises through decision making not just reaction. The player is no longer just responding — they are choosing.</div>
+        </div>
+        <div class="prog-item">
+          <div class="prog-num">03</div>
+          <div class="prog-tag">Late State</div>
+          <div class="prog-title">Developing a Voice</div>
+          <div class="prog-body">Effective mastery of all mechanics and optimal use of acquired skills creates individuality. Two players at the same progression level fight the same enemy in visibly different ways. Not because one is stronger — because they understood the system differently and built toward different expressions of mastery. This is the demo's thesis made visible.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       03 — THE CLASS SYSTEM
+       ══════════════════════════════════════════════════════ -->
+  <section id="classes" class="layer-section">
+    <div class="layer-inner">
+      <div class="layer-header fade">
+        <div class="layer-num-bg">03</div>
+        <div class="layer-head-text">
+          <span class="section-label">Layer 03</span>
+          <h2 class="section-title">The Class System</h2>
+          <div class="accent-line"></div>
+        </div>
+      </div>
+
+      <p class="fade">Three classes with distinct combat philosophies, all built on the same underlying system. Class identity is a starting point, not a ceiling.</p>
+
+      <div class="class-grid fade">
+        <div class="class-item vanguard">
+          <div class="class-tag">Vanguard</div>
+          <div class="class-title">The Greatsword</div>
+          <div class="class-weapon">Bulkier and slower</div>
+          <div class="class-body">Combat is about patience, positioning, and creating openings through deliberate reads. Each attack carries significant weight — elemental application is intentional rather than incidental. The Vanguard absorbs and counters where other classes would dodge and disengage.</div>
+        </div>
+        <div class="class-item enforcer">
+          <div class="class-tag">Enforcer</div>
+          <div class="class-title">The Broadsword</div>
+          <div class="class-weapon">Primary damage dealer, high mobility</div>
+          <div class="class-body">Fast paced and aggressive. High hit rate makes the Enforcer a natural status applicator through volume. Combat is about exploiting windows created by their own mobility and the openings left by enemy animations.</div>
+        </div>
+        <div class="class-item support">
+          <div class="class-tag">Support</div>
+          <div class="class-title">Folly / Mage</div>
+          <div class="class-weapon">Fate manipulation via card play</div>
+          <div class="class-body">The Folly is a card-based weapon unique to the Support class, revolving around fortune and misfortune. Fortune applies Tempered as a buff to allies — an all-around stat increase. Misfortune applies Tempered as a debuff to enemies — an all-around stat reduction. The Support controls the statistical tide of the fight by distributing fate to both sides of the encounter.
+            <div class="class-stretch">Mage weapon style — stretch goal, pending animation sourcing</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       04 — THE SKILL SYSTEM
+       ══════════════════════════════════════════════════════ -->
+  <section id="skills" class="layer-section">
+    <div class="layer-inner">
+      <div class="layer-header fade">
+        <div class="layer-num-bg">04</div>
+        <div class="layer-head-text">
+          <span class="section-label">Layer 04</span>
+          <h2 class="section-title">The Skill System</h2>
+          <div class="accent-line"></div>
+        </div>
+      </div>
+
+      <p class="fade">Inspired by Sword Art Online and Where Winds Meet — Fluency does not use a traditional node-based skill tree. Skills are acquired through world interaction and quest completion, universal to all players and builds. Weapon-specific skills unlock progressively through mastery of the equipped weapon.</p>
+
+      <div class="skill-grid fade">
+        <div class="skill-item">
+          <div class="skill-title">Combo Extender</div>
+          <div class="skill-body">Extends the light or heavy combo string. Each class interprets this differently based on their combat foundation.</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-title">Self Buff</div>
+          <div class="skill-body">Temporary personal stat increase. Context and timing of use varies significantly across class identities.</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-title">Status Application</div>
+          <div class="skill-body">A dedicated status delivery skill outside the normal combo structure. Gives every class reliable, on-demand status effect access.</div>
+        </div>
+      </div>
+
+      <div class="evidence-note fade" data-label="Weapon Specific Skills">
+        <p>Four per class, tied to the equipped weapon and unlocked progressively through weapon mastery. Not detailed at design document stage — developed during implementation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       05 — THE STATUS SYSTEM
+       ══════════════════════════════════════════════════════ -->
+  <section id="status" class="layer-section">
+    <div class="layer-inner">
+      <div class="layer-header fade">
+        <div class="layer-num-bg">05</div>
+        <div class="layer-head-text">
+          <span class="section-label">Layer 05</span>
+          <h2 class="section-title">The Status System</h2>
+          <div class="accent-line"></div>
+        </div>
+      </div>
+
+      <p class="fade">Five status effects with distinct functions. All status effects find application across all classes — individuality comes from which effects a player prioritises and how they apply them.</p>
+
+      <div class="system-grid fade">
+        <div class="system-item electric">
+          <div>
+            <div class="system-name">Paralysis</div>
+            <div class="system-sub">ELECTRIC STUN</div>
+          </div>
+          <div class="system-body">Halts enemy movement. Creates windows for combo execution. Most immediately useful to Enforcers and Supports setting up team opportunities.</div>
+        </div>
+        <div class="system-item toxin">
+          <div>
+            <div class="system-name">Poison</div>
+            <div class="system-sub">DAMAGE OVER TIME</div>
+          </div>
+          <div class="system-body">Constant tick damage with defense reduction. Consistent damage amplification. An Enforcer who constantly reapplies poison through mobility builds a damage-over-time layer on top of burst damage.</div>
+        </div>
+        <div class="system-item fire">
+          <div>
+            <div class="system-name">Burn</div>
+            <div class="system-sub">DAMAGE OVER TIME</div>
+          </div>
+          <div class="system-body">Constant tick damage. Pairs with high-mobility Enforcer hit-and-run patterns. Applied as a secondary damage source by Support alongside other debuff management.</div>
+        </div>
+        <div class="system-item ice">
+          <div>
+            <div class="system-name">Frostbite</div>
+            <div class="system-sub">DEFENSE REDUCTION · SLOW</div>
+          </div>
+          <div class="system-body">Defense reduction and movement slow. Compensates for Vanguard's heavier movement by creating easier parry windows. Enforcer uses the defense reduction to maximise burst in short windows.</div>
+        </div>
+        <div class="system-item arcana">
+          <div>
+            <div class="system-name">Tempered</div>
+            <div class="system-sub">SUPPORT EXCLUSIVE</div>
+          </div>
+          <div class="system-body">Moderate all-around stat reduction on enemies through misfortune, all-around stat increase on allies through fortune. Breadth of effect over depth — the ultimate setup debuff that enables both Vanguard pressure and Enforcer burst.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       06 — THE ELEMENTAL SYSTEM
+       ══════════════════════════════════════════════════════ -->
+  <section id="elemental" class="layer-section">
+    <div class="layer-inner">
+      <div class="layer-header fade">
+        <div class="layer-num-bg">06</div>
+        <div class="layer-head-text">
+          <span class="section-label">Layer 06</span>
+          <h2 class="section-title">The Elemental System</h2>
+          <div class="accent-line"></div>
+        </div>
+      </div>
+
+      <p class="fade">Five elements mapping directly to their status effect counterparts.</p>
+
+      <div class="elemental-grid fade">
+        <div class="elem-chip">
+          <div class="elem-dot" style="background:var(--ice)"></div>
+          <div class="elem-name">Ice</div>
+          <div class="elem-arrow">↓</div>
+          <div class="elem-status" style="color:var(--ice)">Frostbite</div>
+        </div>
+        <div class="elem-chip">
+          <div class="elem-dot" style="background:var(--fire)"></div>
+          <div class="elem-name">Fire</div>
+          <div class="elem-arrow">↓</div>
+          <div class="elem-status" style="color:var(--fire)">Burn</div>
+        </div>
+        <div class="elem-chip">
+          <div class="elem-dot" style="background:var(--electric)"></div>
+          <div class="elem-name">Electricity</div>
+          <div class="elem-arrow">↓</div>
+          <div class="elem-status" style="color:var(--electric)">Paralysis</div>
+        </div>
+        <div class="elem-chip">
+          <div class="elem-dot" style="background:var(--toxin)"></div>
+          <div class="elem-name">Toxin</div>
+          <div class="elem-arrow">↓</div>
+          <div class="elem-status" style="color:var(--toxin)">Poison</div>
+        </div>
+        <div class="elem-chip">
+          <div class="elem-dot" style="background:var(--arcana)"></div>
+          <div class="elem-name">Arcana</div>
+          <div class="elem-arrow">↓</div>
+          <div class="elem-status" style="color:var(--arcana)">Tempered *</div>
+        </div>
+      </div>
+
+      <div class="insight fade" data-label="Elemental Reactions — Late Development Addition">
+        <p>When two elements are applied near-simultaneously, a reaction effect triggers. Example — Burn and Frostbite applied in sequence produce <strong>Sheer Cold</strong>, a reaction damage effect neither element produces alone.</p>
+        <p class="big">Elemental reactions reward player experimentation and deepen the system without requiring immediate comprehension. Planned as a final polish pass after core systems are functional.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       07 — THE DEMO STRUCTURE
+       ══════════════════════════════════════════════════════ -->
+  <section id="demo" class="layer-section">
+    <div class="layer-inner">
+      <div class="layer-header fade">
+        <div class="layer-num-bg">07</div>
+        <div class="layer-head-text">
+          <span class="section-label">Layer 07</span>
+          <h2 class="section-title">The Demo Structure</h2>
+          <div class="accent-line"></div>
+        </div>
+      </div>
+
+      <p class="fade"><strong>Enemy</strong> — one elite enemy with a simple attack set designed to demand different reads and responses from each class. The enemy is the constant. The classes are the variable.</p>
+      <p class="fade"><strong>Environment</strong> — grey box space with grass floor. The environment is irrelevant to the argument. Viewer attention stays on the system.</p>
+
+      <div class="build-grid fade">
+        <div class="build-card vanguard">
+          <div class="build-tag">Vanguard · Standard</div>
+          <div class="build-title">Patience &amp; Counter</div>
+          <div class="build-body">Slow greatsword identity, patience and counter-based combat, deliberate elemental application.</div>
+        </div>
+        <div class="build-card vanguard">
+          <div class="build-tag">Vanguard · Variant</div>
+          <div class="build-title">Speed &amp; Elements</div>
+          <div class="build-body">Attack speed and elemental application build. Same class, same weapon, completely different combat rhythm. Individuality within a single class made visible.</div>
+        </div>
+        <div class="build-card enforcer">
+          <div class="build-tag">Enforcer · Build One</div>
+          <div class="build-title">Stun &amp; Poison</div>
+          <div class="build-body">Paralysis into constant poison reapplication through mobility. Defense-shredding hit-and-run identity.</div>
+        </div>
+        <div class="build-card enforcer">
+          <div class="build-tag">Enforcer · Build Two</div>
+          <div class="build-title">Frostbite &amp; Burn</div>
+          <div class="build-body">Slow the enemy then apply burn for sustained damage while compromised. More calculated than the stun/poison build despite same class and weapon.</div>
+        </div>
+        <div class="build-card support">
+          <div class="build-tag">Support · Build One</div>
+          <div class="build-title">Buffer &amp; Debuffer</div>
+          <div class="build-body">Fortune and misfortune balanced. Managing ally buffs and enemy debuffs simultaneously through the Folly card system. Strategic depth at its fullest.</div>
+        </div>
+        <div class="build-card support">
+          <div class="build-tag">Support · Build Two</div>
+          <div class="build-title">Full Offensive</div>
+          <div class="build-body">All in on damage application through Arcana and Tempered misfortune stacking. The support toolkit used aggressively rather than supportively. Same weapon, completely different intent.</div>
+        </div>
+      </div>
+
+      <div class="build-wide fade">
+        <div class="build-title">Skill System Visualisation</div>
+        <div class="build-body">Each archetype's acquired universal skills and weapon-specific skills displayed alongside the combat demonstration. The viewer sees what the character has learned and how it maps to their combat identity. UX/UI work required.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── VERDICT / WIN CONDITION ── -->
+  <section id="win-condition" class="verdict">
+    <div class="verdict-glow"></div>
+    <div class="verdict-inner fade">
+      <span class="verdict-label">Win Condition</span>
+      <div class="verdict-quote">
+        The viewer walks away understanding what creates individuality in a class system. <strong>Not different characters. Not different weapons.</strong>
+      </div>
+      <div class="verdict-quote">
+        <em>The same underlying system expressed differently</em> — through mastery, skill acquisition, and deliberate build choices.
+      </div>
+      <div class="verdict-line">Progression that changes who you are, not just how hard you hit.</div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       08 — DEVELOPMENT NOTES
+       ══════════════════════════════════════════════════════ -->
+  <section class="layer-section" style="padding-top:5rem">
+    <div class="layer-inner">
+      <div class="layer-header fade">
+        <div class="layer-num-bg" style="opacity:.08">§</div>
+        <div class="layer-head-text">
+          <span class="section-label">Open Items</span>
+          <h2 class="section-title">Development Notes</h2>
+          <div class="accent-line"></div>
+        </div>
+      </div>
+
+      <div class="devnotes fade">
+        <div class="devnote">
+          <div class="devnote-tag">Support / Mage</div>
+          <div class="devnote-body">Mage weapon style for Support — stretch goal, pending animation sourcing.</div>
+        </div>
+        <div class="devnote">
+          <div class="devnote-tag">Elemental Reactions</div>
+          <div class="devnote-body">Late development addition, implemented after core systems are functional.</div>
+        </div>
+        <div class="devnote">
+          <div class="devnote-tag">Skill Viz UI</div>
+          <div class="devnote-body">Required for full demo comprehension, developed alongside combat systems.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-name">Leon Telemaque</div>
+      <div class="footer-tagline">Game Design Systems · Combat Design · Early Development</div>
+      <ul class="footer-links">
+        <li><a href="index.html">← Portfolio</a></li>
+        <li><a href="hero-moment-framework.html">Hero Moment Framework</a></li>
+        <li><a href="https://www.linkedin.com/in/leontelemaque/" target="_blank">LinkedIn</a></li>
+      </ul>
+      <div class="copyright">© 2026 Leon Telemaque</div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const fades = document.querySelectorAll('.fade');
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    fades.forEach(el => io.observe(el));
+
+    // Trigger hero immediately
+    document.querySelectorAll('.hero .fade, .layer-nav.fade').forEach(el => {
+      setTimeout(() => el.classList.add('in'), 200);
+    });
+  </script>
+</body>
+</html>
