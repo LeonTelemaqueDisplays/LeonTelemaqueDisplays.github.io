@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dead by Daylight — Lifecycle Drop-Off Mapping</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface-2: #161616;
+    --border: #222222;
+    --border-active: #333333;
+    --gold: #c9a84c;
+    --gold-dim: #7a6430;
+    --red: #c0392b;
+    --red-dim: #3d1410;
+    --green: #27ae60;
+    --amber: #e67e22;
+    --blue: #2980b9;
+    --purple: #8e44ad;
+    --text: #e8e8e8;
+    --text-dim: #555555;
+    --text-mid: #888888;
+    --mono: 'Courier New', Courier, monospace;
+    --sans: 'Inter', system-ui, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    padding: 24px;
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  h1 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 3px;
+  }
+  .subtitle {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+  .badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    text-align: right;
+    line-height: 1.8;
+  }
+  /* STAT ROW */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 1px;
+  }
+  .stat-card {
+    background: var(--surface);
+    padding: 16px 20px;
+  }
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .stat-value {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-sub {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+  }
+  /* MAIN GRID */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 1px;
+  }
+  .panel {
+    background: var(--surface);
+    padding: 20px;
+  }
+  .panel-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  /* COHORT SELECTOR */
+  .cohort-btn {
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--surface-2);
+    border: 1px solid transparent;
+    color: var(--text-mid);
+    font-family: var(--mono);
+    font-size: 10px;
+    text-align: left;
+    cursor: pointer;
+    margin-bottom: 2px;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+  }
+  .cohort-btn:hover {
+    border-color: var(--border-active);
+    color: var(--text);
+  }
+  .cohort-btn.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: #1a1510;
+  }
+  .cohort-btn .cohort-d7 {
+    display: block;
+    font-size: 9px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .cohort-btn.active .cohort-d7 { color: var(--gold-dim); }
+  /* HEATMAP */
+  .heatmap-wrap { overflow-x: auto; }
+  .heatmap-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 10px;
+  }
+  .heatmap-table th {
+    padding: 8px 10px;
+    color: var(--text-dim);
+    font-weight: normal;
+    letter-spacing: 0.1em;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .heatmap-table th:first-child { text-align: left; }
+  .heatmap-table td {
+    padding: 7px 10px;
+    text-align: center;
+    border-bottom: 1px solid #0f0f0f;
+    transition: background 0.2s;
+  }
+  .heatmap-table td:first-child {
+    text-align: left;
+    color: var(--text-mid);
+    font-size: 9px;
+  }
+  .heatmap-table tr.active-row td { background: #1a1510 !important; }
+  .heatmap-table tr.active-row td:first-child { color: var(--gold); }
+  .cell-value {
+    display: inline-block;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    min-width: 52px;
+    text-align: center;
+  }
+  /* CLIFF INDICATOR */
+  .cliff-marker {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--red);
+    border-radius: 50%;
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+  /* BOTTOM GRID */
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+  }
+  /* DROP-OFF CHART */
+  .chart-wrap { height: 160px; position: relative; margin-top: 8px; }
+  /* SIGNAL PANEL */
+  .signal-list { display: flex; flex-direction: column; gap: 10px; }
+  .signal-item {
+    display: grid;
+    grid-template-columns: 130px 1fr 45px;
+    align-items: center;
+    gap: 10px;
+  }
+  .signal-name {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-mid);
+  }
+  .signal-bar-track {
+    height: 3px;
+    background: var(--surface-2);
+  }
+  .signal-bar-fill {
+    height: 100%;
+    transition: width 0.6s ease;
+  }
+  .signal-pct {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text);
+    text-align: right;
+  }
+  /* CLIFF ANNOTATION */
+  .cliff-box {
+    background: var(--red-dim);
+    border: 1px solid var(--red);
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--red);
+    letter-spacing: 0.05em;
+    line-height: 1.6;
+  }
+  .cliff-box.hidden { display: none; }
+  .select-prompt {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    text-align: center;
+    padding: 40px 0;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <div class="eyebrow">Cohort Retention Analysis · SQL + Tableau · Dead by Daylight</div>
+    <h1>Lifecycle Drop-Off Mapping</h1>
+    <div class="subtitle">Identifying where engagement collapses — and the signals that predict it before it happens</div>
+  </div>
+  <div class="badge">
+    10,012 Players<br>
+    D1 → D68 Tracked<br>
+    4 Cohorts Mapped
+  </div>
+</div>
+<!-- STAT ROW -->
+<div class="stat-row">
+  <div class="stat-card">
+    <div class="stat-label">D7 Avg Retention</div>
+    <div class="stat-value" style="color: var(--gold)">42.3%</div>
+    <div class="stat-sub">Across all cohorts</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Primary Churn Signal</div>
+    <div class="stat-value" style="color: var(--red)">68%</div>
+    <div class="stat-sub">Loss streak trigger</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Lifecycle Cliff</div>
+    <div class="stat-value" style="color: var(--amber)">D7</div>
+    <div class="stat-sub">Steepest drop-off point</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Players Tracked</div>
+    <div class="stat-value" style="color: var(--text)">10,012</div>
+    <div class="stat-sub">Active sessions baseline</div>
+  </div>
+</div>
+<!-- MAIN: COHORT SELECTOR + HEATMAP -->
+<div class="main-grid">
+  <!-- COHORT LIST -->
+  <div class="panel">
+    <div class="panel-label">Select Cohort</div>
+    <button class="cohort-btn active" onclick="selectCohort(this, 'jan')" data-cohort="jan">
+      JAN COHORT
+      <span class="cohort-d7">D7: 38% · n=2,841</span>
+    </button>
+    <button class="cohort-btn" onclick="selectCohort(this, 'feb')" data-cohort="feb">
+      FEB COHORT
+      <span class="cohort-d7">D7: 44% · n=2,612</span>
+    </button>
+    <button class="cohort-btn" onclick="selectCohort(this, 'mar')" data-cohort="mar">
+      MAR COHORT
+      <span class="cohort-d7">D7: 41% · n=2,290</span>
+    </button>
+    <button class="cohort-btn" onclick="selectCohort(this, 'apr')" data-cohort="apr">
+      APR COHORT
+      <span class="cohort-d7">D7: 46% · n=2,269</span>
+    </button>
+    <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);">
+      <div class="panel-label">Cohort Key</div>
+      <div style="font-family: var(--mono); font-size: 9px; color: var(--text-dim); line-height: 2;">
+        <span style="color: var(--red)">●</span> Cliff point<br>
+        <span style="color: var(--amber)">●</span> Danger zone<br>
+        <span style="color: var(--green)">●</span> Stable retained<br>
+        <span style="color: var(--text-dim)">●</span> Baseline
+      </div>
+    </div>
+  </div>
+  <!-- HEATMAP -->
+  <div class="panel">
+    <div class="panel-label">Cohort Retention Heatmap — D1 → D68 <span class="cliff-marker"></span> Lifecycle cliff at D7</div>
+    <div class="heatmap-wrap">
+      <table class="heatmap-table" id="heatmapTable">
+        <thead>
+          <tr>
+            <th>Cohort</th>
+            <th>D1</th>
+            <th>D7 <span class="cliff-marker"></span></th>
+            <th>D14</th>
+            <th>D30</th>
+            <th>D60</th>
+            <th>D68</th>
+          </tr>
+        </thead>
+        <tbody id="heatmapBody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- BOTTOM: CHART + SIGNALS -->
+<div class="bottom-grid">
+  <!-- DROP-OFF CURVE -->
+  <div class="panel">
+    <div class="panel-label">Selected Cohort Drop-Off Curve</div>
+    <div id="cliffBox" class="cliff-box">
+      ⚠ LIFECYCLE CLIFF DETECTED — D1→D7 · JAN COHORT<br>
+      62% of players who quit did so before D7. Loss streak signal present in 78% of pre-D7 exits. Intervention window: D3–D5.
+    </div>
+    <div class="chart-wrap">
+      <canvas id="dropChart"></canvas>
+    </div>
+  </div>
+  <!-- BEHAVIOURAL SIGNALS -->
+  <div class="panel">
+    <div class="panel-label">Behavioural Signals at Cliff Point · <span id="signalCohortLabel" style="color: var(--gold)">Jan Cohort</span></div>
+    <div class="signal-list" id="signalList">
+    </div>
+    <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); font-family: var(--mono); font-size: 9px; color: var(--text-dim); line-height: 1.8;" id="signalInsight">
+    </div>
+  </div>
+</div>
+<script>
+const cohorts = {
+  jan: {
+    label: 'Jan Cohort',
+    n: 2841,
+    data: [100, 38, 28, 19, 13, 10],
+    cliff: 'D1→D7',
+    cliffNote: '62% of players who quit did so before D7. Loss streak signal present in 78% of pre-D7 exits. Intervention window: D3–D5.',
+    signals: [
+      { name: 'Loss Streak (3+)', pct: 78, color: 'var(--red)' },
+      { name: 'Session Gap >2d', pct: 61, color: 'var(--amber)' },
+      { name: 'Match Duration Drop', pct: 44, color: 'var(--gold)' },
+      { name: 'Role Frustration', pct: 38, color: 'var(--blue)' },
+      { name: 'Tutorial Skip', pct: 29, color: 'var(--text-dim)' },
+    ],
+    insight: 'Jan cohort shows highest pre-D7 loss streak correlation. New player protection window insufficient — 3+ consecutive losses in first 5 sessions predicts D7 exit in 78% of cases.'
+  },
+  feb: {
+    label: 'Feb Cohort',
+    n: 2612,
+    data: [100, 44, 33, 23, 16, 13],
+    cliff: 'D1→D7',
+    cliffNote: '58% of exits before D7. Feb cohort coincides with Killer meta shift — survivor frustration signals elevated. Intervention window: D4–D6.',
+    signals: [
+      { name: 'Survivor Frustration', pct: 71, color: 'var(--red)' },
+      { name: 'Loss Streak (3+)', pct: 64, color: 'var(--amber)' },
+      { name: 'Session Gap >2d', pct: 52, color: 'var(--gold)' },
+      { name: 'Role Switch Attempt', pct: 41, color: 'var(--blue)' },
+      { name: 'Match Duration Drop', pct: 33, color: 'var(--text-dim)' },
+    ],
+    insight: 'Feb cohort: Killer meta imbalance elevated survivor frustration signals. Players switching roles mid-lifecycle show 41% lower churn than single-role players — role flexibility as retention lever.'
+  },
+  mar: {
+    label: 'Mar Cohort',
+    n: 2290,
+    data: [100, 41, 30, 20, 14, 11],
+    cliff: 'D1→D7',
+    cliffNote: '61% of exits before D7. Mar cohort shows elevated tutorial-skip correlation. Players skipping onboarding show 2.3× higher D7 churn. Intervention: onboarding re-engagement D2.',
+    signals: [
+      { name: 'Tutorial Skip', pct: 74, color: 'var(--red)' },
+      { name: 'Loss Streak (3+)', pct: 67, color: 'var(--amber)' },
+      { name: 'First Match Exit', pct: 48, color: 'var(--gold)' },
+      { name: 'Session Gap >2d', pct: 39, color: 'var(--blue)' },
+      { name: 'Perk Confusion Signal', pct: 31, color: 'var(--text-dim)' },
+    ],
+    insight: 'Mar cohort: tutorial skip rate highest in dataset at 74% of D7 exits. Players who completed onboarding show D7 retention of 61% vs 22% for skippers — strongest onboarding signal across all cohorts.'
+  },
+  apr: {
+    label: 'Apr Cohort',
+    n: 2269,
+    data: [100, 46, 35, 25, 17, 14],
+    cliff: 'D7→D14',
+    cliffNote: 'Apr cohort shows improved D7 retention (46%) but elevated D7→D14 cliff. Mid-game engagement collapse — players reaching prestige 1 show 44% drop between D7 and D14.',
+    signals: [
+      { name: 'Post-Prestige Drop', pct: 69, color: 'var(--red)' },
+      { name: 'Reward Loop Gap', pct: 58, color: 'var(--amber)' },
+      { name: 'Loss Streak (3+)', pct: 51, color: 'var(--gold)' },
+      { name: 'Session Decay', pct: 43, color: 'var(--blue)' },
+      { name: 'Event End Drop', pct: 36, color: 'var(--text-dim)' },
+    ],
+    insight: 'Apr cohort anomaly: D7 retention improved but D14 cliff steepened. Post-prestige reward gap — players who hit Prestige 1 without clear next goal show 69% churn signal. Progression clarity failure, not frustration.'
+  }
+};
+const checkpoints = ['D1', 'D7', 'D14', 'D30', 'D60', 'D68'];
+function getColor(value) {
+  if (value >= 80) return { bg: '#0d2a1a', text: '#27ae60' };
+  if (value >= 60) return { bg: '#1a2a0d', text: '#52be80' };
+  if (value >= 40) return { bg: '#2a1f0d', text: '#e67e22' };
+  if (value >= 25) return { bg: '#2a1510', text: '#e74c3c' };
+  if (value >= 15) return { bg: '#1f0d0d', text: '#c0392b' };
+  return { bg: '#150808', text: '#922b21' };
+}
+function buildHeatmap(activeCohort) {
+  const tbody = document.getElementById('heatmapBody');
+  tbody.innerHTML = '';
+  Object.entries(cohorts).forEach(([key, c]) => {
+    const tr = document.createElement('tr');
+    if (key === activeCohort) tr.classList.add('active-row');
+    const tdLabel = document.createElement('td');
+    tdLabel.textContent = c.label.toUpperCase();
+    tr.appendChild(tdLabel);
+    c.data.forEach((val, i) => {
+      const td = document.createElement('td');
+      const col = getColor(val);
+      const span = document.createElement('span');
+      span.className = 'cell-value';
+      span.style.background = col.bg;
+      span.style.color = col.text;
+      span.textContent = val + '%';
+      td.appendChild(span);
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+function buildSignals(cohortKey) {
+  const c = cohorts[cohortKey];
+  const list = document.getElementById('signalList');
+  list.innerHTML = '';
+  c.signals.forEach(s => {
+    const div = document.createElement('div');
+    div.className = 'signal-item';
+    div.innerHTML = `
+      <div class="signal-name">${s.name}</div>
+      <div class="signal-bar-track"><div class="signal-bar-fill" style="width: ${s.pct}%; background: ${s.color}"></div></div>
+      <div class="signal-pct">${s.pct}%</div>
+    `;
+    list.appendChild(div);
+  });
+  document.getElementById('signalInsight').textContent = c.insight;
+  document.getElementById('signalCohortLabel').textContent = c.label;
+}
+let dropChart = null;
+function buildDropChart(cohortKey) {
+  const c = cohorts[cohortKey];
+  const canvas = document.getElementById('dropChart');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth * window.devicePixelRatio || 500;
+  canvas.height = 160 * window.devicePixelRatio || 160;
+  ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+  const w = canvas.offsetWidth || 500;
+  const h = 160;
+  const pad = { top: 16, right: 16, bottom: 28, left: 40 };
+  const cW = w - pad.left - pad.right;
+  const cH = h - pad.top - pad.bottom;
+  ctx.clearRect(0, 0, w, h);
+  // Grid
+  [0, 25, 50, 75, 100].forEach(v => {
+    const y = pad.top + cH - (v / 100) * cH;
+    ctx.strokeStyle = '#1a1a1a';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(pad.left + cW, y);
+    ctx.stroke();
+    ctx.fillStyle = '#444';
+    ctx.font = '9px Courier New';
+    ctx.textAlign = 'right';
+    ctx.fillText(v + '%', pad.left - 4, y + 3);
+  });
+  // X labels
+  checkpoints.forEach((label, i) => {
+    const x = pad.left + (i / (checkpoints.length - 1)) * cW;
+    ctx.fillStyle = '#444';
+    ctx.font = '9px Courier New';
+    ctx.textAlign = 'center';
+    ctx.fillText(label, x, h - 6);
+  });
+  // Cliff zone highlight — D1 to D7
+  const x0 = pad.left;
+  const x1 = pad.left + (1 / 5) * cW;
+  ctx.fillStyle = 'rgba(192,57,43,0.06)';
+  ctx.fillRect(x0, pad.top, x1 - x0, cH);
+  // Line
+  ctx.beginPath();
+  c.data.forEach((val, i) => {
+    const x = pad.left + (i / (c.data.length - 1)) * cW;
+    const y = pad.top + cH - (val / 100) * cH;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = '#c9a84c';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  // Fill under line
+  ctx.beginPath();
+  c.data.forEach((val, i) => {
+    const x = pad.left + (i / (c.data.length - 1)) * cW;
+    const y = pad.top + cH - (val / 100) * cH;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.lineTo(pad.left + cW, pad.top + cH);
+  ctx.lineTo(pad.left, pad.top + cH);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(201,168,76,0.06)';
+  ctx.fill();
+  // Dots
+  c.data.forEach((val, i) => {
+    const x = pad.left + (i / (c.data.length - 1)) * cW;
+    const y = pad.top + cH - (val / 100) * cH;
+    const isCliff = i === 1;
+    ctx.beginPath();
+    ctx.arc(x, y, isCliff ? 4 : 3, 0, Math.PI * 2);
+    ctx.fillStyle = isCliff ? '#c0392b' : '#c9a84c';
+    ctx.fill();
+    if (isCliff) {
+      ctx.strokeStyle = 'rgba(192,57,43,0.3)';
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.arc(x, y, 8, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  });
+  // Cliff label
+  const cliffX = pad.left + (1 / 5) * cW;
+  const cliffY = pad.top + cH - (c.data[1] / 100) * cH;
+  ctx.fillStyle = '#c0392b';
+  ctx.font = '8px Courier New';
+  ctx.textAlign = 'left';
+  ctx.fillText('← CLIFF', cliffX + 6, cliffY - 6);
+}
+function selectCohort(btn, key) {
+  document.querySelectorAll('.cohort-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const c = cohorts[key];
+  document.getElementById('cliffBox').textContent = `⚠ LIFECYCLE CLIFF DETECTED — ${c.cliff} · ${c.label.toUpperCase()}\n${c.cliffNote}`;
+  document.getElementById('cliffBox').style.whiteSpace = 'pre-line';
+  buildHeatmap(key);
+  buildSignals(key);
+  buildDropChart(key);
+}
+// INIT
+window.addEventListener('load', () => {
+  buildHeatmap('jan');
+  buildSignals('jan');
+  buildDropChart('jan');
+});
+window.addEventListener('resize', () => {
+  const active = document.querySelector('.cohort-btn.active');
+  if (active) buildDropChart(active.dataset.cohort);
+});
+</script>
+</body>
+</html>
