@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tapped Out: How The Simpsons Built a Decade of Mobile Retention | Leon Telemaque</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #08070a;
+  --bg-card: #100e14;
+  --bg-card-h: #16131a;
+  --yellow: #e8b923;
+  --yellow-bright: #f7d24a;
+  --yellow-faint: rgba(232,185,35,0.07);
+  --blue: #3d7cc9;
+  --blue-bright: #6ba3e8;
+  --blue-faint: rgba(61,124,201,0.08);
+  --red: #b8391f;
+  --red-bright: #d8542f;
+  --red-faint: rgba(184,57,31,0.08);
+  --pink: #c94d8c;
+  --pink-bright: #e871ac;
+  --pink-faint: rgba(201,77,140,0.08);
+  --t1: #e4e0d8;
+  --t2: #8c8578;
+  --t3: #4a463e;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;line-height:1.7;overflow-x:hidden;}
+
+#progress{position:fixed;top:0;left:0;height:2px;width:0%;background:var(--yellow-bright);z-index:200;transition:width 0.1s linear;box-shadow:0 0 8px rgba(247,210,74,0.5);}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:58px;background:rgba(8,7,10,0.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;}
+.nav-brand{font-family:'Oswald',sans-serif;font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--t3);}
+.nav-brand span{color:var(--yellow-bright);}
+.nav-links{display:flex;list-style:none;}
+.nav-links a{display:block;height:58px;line-height:58px;padding:0 1.1rem;font-family:'Oswald',sans-serif;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t3);text-decoration:none;border-bottom:2px solid transparent;transition:color 0.2s,border-color 0.2s;}
+.nav-links a:hover{color:var(--t2);}
+.nav-links a.active{color:var(--yellow-bright);border-bottom-color:var(--yellow-bright);}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:7rem 4rem 5.5rem;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;pointer-events:none;}
+.hero-bg::before{content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(232,185,35,0.10) 0%,transparent 60%),
+    radial-gradient(ellipse at 85% 45%,rgba(61,124,201,0.08) 0%,transparent 45%),
+    radial-gradient(ellipse at 0% 100%,rgba(201,77,140,0.06) 0%,transparent 50%),
+    linear-gradient(180deg,rgba(0,0,0,0.6) 0%,rgba(8,7,10,0.2) 40%,rgba(8,7,10,0.88) 80%,var(--bg) 100%);
+}
+.hero-noise{position:absolute;inset:0;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;}
+.hero-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,transparent 40%,rgba(0,0,0,0.75) 100%);pointer-events:none;}
+
+.hero-eyebrow{font-family:'Oswald',sans-serif;font-size:0.68rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--t3);margin-bottom:1.5rem;position:relative;}
+.hero-eyebrow span{color:var(--yellow-bright);}
+.hero-title{font-family:'Oswald',sans-serif;font-size:clamp(2.4rem,5.6vw,5.2rem);font-weight:700;line-height:0.98;letter-spacing:-0.02em;text-transform:uppercase;max-width:980px;margin-bottom:2rem;position:relative;}
+.hero-title em{font-style:normal;color:var(--yellow-bright);display:block;text-shadow:0 0 60px rgba(247,210,74,0.3);}
+.hero-thesis{max-width:660px;font-size:1rem;color:var(--t2);line-height:1.78;margin-bottom:3rem;border-left:2px solid var(--yellow);padding-left:1.5rem;position:relative;}
+.hero-thesis strong{color:var(--t1);font-weight:600;}
+.hero-meta{display:flex;gap:2rem;align-items:center;flex-wrap:wrap;position:relative;}
+.badge{font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--t3);padding:0.35rem 0.9rem;border:1px solid rgba(255,255,255,0.06);border-radius:2px;}
+.hero-scroll{display:flex;align-items:center;gap:0.7rem;color:var(--t3);font-family:'Oswald',sans-serif;font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;margin-left:auto;transition:color 0.2s;}
+.hero-scroll:hover{color:var(--yellow-bright);}
+.hero-scroll-line{width:36px;height:1px;background:currentColor;transition:width 0.25s;}
+.hero-scroll:hover .hero-scroll-line{width:56px;}
+
+.section{padding:6.5rem 4rem;border-top:1px solid rgba(255,255,255,0.03);opacity:0;transform:translateY(28px);transition:opacity 0.65s ease,transform 0.65s ease;}
+.section.vis{opacity:1;transform:translateY(0);}
+.section-inner{max-width:1080px;margin:0 auto;}
+.section-header{display:grid;grid-template-columns:80px 1fr;gap:2.5rem;margin-bottom:4rem;align-items:start;}
+.section-num{font-family:'Oswald',sans-serif;font-size:4.5rem;font-weight:700;line-height:1;letter-spacing:-0.04em;user-select:none;opacity:0.1;}
+.section-eyebrow{font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:0.6rem;}
+.section-title{font-family:'Oswald',sans-serif;font-size:clamp(1.5rem,2.8vw,2.3rem);font-weight:600;line-height:1.15;letter-spacing:-0.01em;text-transform:uppercase;margin-bottom:0.85rem;}
+.section-sub{font-size:0.95rem;color:var(--t2);max-width:600px;line-height:1.7;}
+
+#opening .section-eyebrow{color:var(--yellow-bright);}
+#l1{background:linear-gradient(180deg,transparent,rgba(184,57,31,0.045));}
+#l1 .section-num{color:var(--red-bright);}
+#l1 .section-eyebrow{color:var(--red-bright);}
+#l2{background:linear-gradient(180deg,transparent,rgba(61,124,201,0.05));}
+#l2 .section-num{color:var(--blue-bright);}
+#l2 .section-eyebrow{color:var(--blue-bright);}
+#l3{background:linear-gradient(180deg,transparent,rgba(232,185,35,0.045));}
+#l3 .section-num{color:var(--yellow-bright);}
+#l3 .section-eyebrow{color:var(--yellow-bright);}
+#l4{background:linear-gradient(180deg,transparent,rgba(201,77,140,0.05));}
+#l4 .section-num{color:var(--pink-bright);}
+#l4 .section-eyebrow{color:var(--pink-bright);}
+
+.prose{font-size:0.95rem;color:var(--t2);line-height:1.78;}
+.prose+.prose{margin-top:1rem;}
+.prose strong{color:var(--t1);font-weight:600;}
+.prose em{font-style:italic;color:var(--t1);}
+.t-yellow{color:var(--yellow-bright);}
+.t-blue{color:var(--blue-bright);}
+.t-red{color:var(--red-bright);}
+.t-pink{color:var(--pink-bright);}
+.mt-2{margin-top:2rem;}
+.mt-3{margin-top:3rem;}
+
+.divider{width:48px;height:2px;background:rgba(255,255,255,0.1);margin:2.5rem 0;}
+.divider-yellow{background:rgba(232,185,35,0.45);}
+.divider-blue{background:rgba(61,124,201,0.4);}
+.divider-red{background:rgba(184,57,31,0.45);}
+.divider-pink{background:rgba(201,77,140,0.4);}
+
+/* Highlight box */
+.hi-box{background:rgba(232,185,35,0.05);border:1px solid rgba(232,185,35,0.18);border-left:3px solid var(--yellow);border-radius:0 3px 3px 0;padding:1.75rem 2rem;margin-top:2.5rem;}
+.hi-label{font-family:'Oswald',sans-serif;font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--yellow-bright);margin-bottom:0.65rem;}
+.hi-box p{font-size:1rem;color:var(--t1);line-height:1.72;}
+.hi-box.blue{background:rgba(61,124,201,0.05);border-color:rgba(61,124,201,0.2);border-left-color:var(--blue);}
+.hi-box.blue .hi-label{color:var(--blue-bright);}
+.hi-box.red{background:rgba(184,57,31,0.05);border-color:rgba(184,57,31,0.2);border-left-color:var(--red);}
+.hi-box.red .hi-label{color:var(--red-bright);}
+.hi-box.pink{background:rgba(201,77,140,0.05);border-color:rgba(201,77,140,0.2);border-left-color:var(--pink);}
+.hi-box.pink .hi-label{color:var(--pink-bright);}
+
+/* System summary cards (four systems overview) */
+.sys-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem;margin-top:2rem;}
+.sys-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:1.25rem 1.4rem;border-top:2px solid transparent;}
+.sys-card.s1{border-top-color:rgba(184,57,31,0.45);}
+.sys-card.s2{border-top-color:rgba(61,124,201,0.4);}
+.sys-card.s3{border-top-color:rgba(232,185,35,0.45);}
+.sys-card.s4{border-top-color:rgba(201,77,140,0.4);}
+.sys-num{font-family:'Oswald',sans-serif;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--t3);margin-bottom:0.5rem;}
+.sys-name{font-size:0.82rem;font-weight:600;color:var(--t1);line-height:1.35;}
+
+/* Mechanism cards (used inside each system layer) */
+.mech-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-top:2.5rem;}
+.mech-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:1.75rem;position:relative;overflow:hidden;transition:all 0.3s;}
+.mech-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0.5;}
+.mech-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,0.5);}
+.mech-card:hover::after{opacity:1;}
+.mech-red{border-top:2px solid rgba(184,57,31,0.4);}
+.mech-red::after{background:var(--red);}
+.mech-blue{border-top:2px solid rgba(61,124,201,0.4);}
+.mech-blue::after{background:var(--blue);}
+.mech-yellow{border-top:2px solid rgba(232,185,35,0.4);}
+.mech-yellow::after{background:var(--yellow);}
+.mech-pink{border-top:2px solid rgba(201,77,140,0.4);}
+.mech-pink::after{background:var(--pink);}
+.mech-tag{font-family:'Oswald',sans-serif;font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;padding:0.22rem 0.6rem;border-radius:2px;display:inline-block;margin-bottom:1rem;}
+.tag-red{color:var(--red-bright);border:1px solid rgba(216,84,47,0.3);background:var(--red-faint);}
+.tag-blue{color:var(--blue-bright);border:1px solid rgba(107,163,232,0.3);background:var(--blue-faint);}
+.tag-yellow{color:var(--yellow-bright);border:1px solid rgba(247,210,74,0.3);background:var(--yellow-faint);}
+.tag-pink{color:var(--pink-bright);border:1px solid rgba(232,113,172,0.3);background:var(--pink-faint);}
+.mech-title{font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--t1);margin-bottom:0.75rem;}
+.mech-body{font-size:0.875rem;color:var(--t2);line-height:1.72;}
+
+/* Checklist / steal grid */
+#checklist{background:linear-gradient(180deg,transparent,rgba(232,185,35,0.05));}
+#checklist .section-num{color:var(--yellow-bright);}
+#checklist .section-eyebrow{color:var(--yellow-bright);}
+.steal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-top:2.5rem;}
+.steal-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:1.75rem 1.75rem 1.75rem 2rem;position:relative;overflow:hidden;transition:all 0.3s;border-left:3px solid rgba(232,185,35,0.15);}
+.steal-card:hover{background:var(--bg-card-h);border-color:rgba(232,185,35,0.2);border-left-color:var(--yellow-bright);transform:translateX(3px);box-shadow:-4px 0 20px rgba(232,185,35,0.1);}
+.steal-num{position:absolute;top:-0.5rem;right:1rem;font-family:'Oswald',sans-serif;font-size:4rem;font-weight:700;color:rgba(232,185,35,0.07);line-height:1;user-select:none;}
+.steal-tag{display:inline-block;font-family:'Oswald',sans-serif;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--yellow-bright);border:1px solid rgba(232,185,35,0.3);padding:0.18rem 0.55rem;border-radius:2px;margin-bottom:0.9rem;}
+.steal-title{font-family:'Oswald',sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--t1);margin-bottom:0.65rem;}
+.steal-body{font-size:0.875rem;color:var(--t2);line-height:1.72;}
+
+/* Closing statement */
+.closing{margin-top:4rem;padding:3rem;background:var(--bg-card);border:1px solid rgba(232,185,35,0.2);border-top:2px solid var(--yellow);border-radius:0 0 3px 3px;text-align:center;}
+.closing-line{width:40px;height:2px;background:var(--yellow-bright);margin:0 auto 2rem;box-shadow:0 0 12px rgba(247,210,74,0.5);}
+.closing p{font-family:'Oswald',sans-serif;font-size:clamp(1.05rem,2.1vw,1.4rem);font-weight:400;line-height:1.5;color:var(--t2);max-width:700px;margin:0 auto;}
+.closing p em{font-style:normal;color:var(--yellow-bright);}
+
+footer{padding:3.5rem 4rem;border-top:1px solid rgba(255,255,255,0.04);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;}
+.footer-name{font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--t3);}
+.footer-name span{color:var(--yellow-bright);}
+.footer-note{font-size:0.75rem;color:var(--t3);}
+
+@media(max-width:900px){
+  .mech-grid,.sys-grid,.steal-grid{grid-template-columns:1fr 1fr;}
+  nav{padding:0 1.25rem;}
+}
+@media(max-width:680px){
+  .hero{padding:6rem 1.5rem 4rem;}
+  .section{padding:5rem 1.5rem;}
+  .section-header{grid-template-columns:1fr;gap:0.5rem;}
+  .section-num{font-size:2.5rem;}
+  .mech-grid,.sys-grid,.steal-grid{grid-template-columns:1fr;}
+  .nav-brand{display:none;}
+  footer{padding:2.5rem 1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+  <div class="nav-brand"><span>Leon Telemaque</span> &nbsp;/&nbsp; Portfolio</div>
+  <ul class="nav-links">
+    <li><a href="#l1">Seasonal Loop</a></li>
+    <li><a href="#l2">Social Prestige</a></li>
+    <li><a href="#l3">Build Timers</a></li>
+    <li><a href="#l4">Brand Power</a></li>
+    <li><a href="#checklist">Steal This</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="hero-noise"></div>
+    <div class="hero-vignette"></div>
+  </div>
+
+  <div class="hero-eyebrow">Mobile Game Design Analysis &nbsp;·&nbsp; <span>The Simpsons: Tapped Out</span> &nbsp;·&nbsp; EA · 2012–2023</div>
+
+  <h1 class="hero-title">
+    Tapped Out:
+    <em>How The Simpsons Built a Decade of Mobile Retention</em>
+  </h1>
+
+  <p class="hero-thesis">
+    <strong>Mobile doesn't need to replicate console gaming to compete with it.</strong> Tapped Out proved that stripping a genre down to its essential power fantasy and optimizing entirely around that is a more effective mobile strategy than chasing feature parity. But Tapped Out went further — it understood that brand power isn't just marketing. It's a design tool.
+  </p>
+
+  <div class="hero-meta">
+    <span class="badge">EA · Tapped Out</span>
+    <span class="badge">Town Building · Mobile</span>
+    <span class="badge">Four Retention Systems</span>
+    <span class="badge">A Decade of Live Service</span>
+    <a href="#opening" class="hero-scroll">
+      <span class="hero-scroll-line"></span>
+      Begin the Analysis
+    </a>
+  </div>
+</section>
+
+<!-- OPENING -->
+<section class="section" id="opening">
+  <div class="section-inner">
+    <div class="section-header">
+      <div></div>
+      <div>
+        <div class="section-eyebrow">The Opening</div>
+        <h2 class="section-title">A Cultural Institution, Not Just an IP</h2>
+        <p class="section-sub">The town building genre had already proven itself by the time EA came to the table. What EA brought to it was something most mobile studios couldn't.</p>
+      </div>
+    </div>
+
+    <p class="prose">Dragon City and its contemporaries had shown that mobile players would invest time, money, and genuine emotional attachment into virtual spaces they controlled and curated. The genre worked. EA saw the opening and brought something no competitor could replicate — the brand power of one of the most recognizable television franchises in North America. The Simpsons wasn't just an IP. It was a cultural institution with decades of character attachment already built in before a single player tapped their first donut.</p>
+    <p class="prose mt-2">What EA built on top of that foundation lasted ten years. And when EA shut the servers down in 2023 the players didn't leave — they built private servers to keep Springfield alive. That's not engagement. That's devotion.</p>
+
+    <div class="hi-box">
+      <div class="hi-label">The Question</div>
+      <p>What systems inside Tapped Out earned that kind of loyalty from a mobile audience that has a thousand other games competing for the same session?</p>
+    </div>
+
+    <div class="sys-grid">
+      <div class="sys-card s1">
+        <div class="sys-num">System 01</div>
+        <div class="sys-name">Seasonal Scarcity &amp; the Urgency Loop</div>
+      </div>
+      <div class="sys-card s2">
+        <div class="sys-num">System 02</div>
+        <div class="sys-name">Social Prestige &amp; the Observation Loop</div>
+      </div>
+      <div class="sys-card s3">
+        <div class="sys-num">System 03</div>
+        <div class="sys-name">Build Timers &amp; Delayed Progression</div>
+      </div>
+      <div class="sys-card s4">
+        <div class="sys-num">System 04</div>
+        <div class="sys-name">Brand Powered Quest Lines</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SYSTEM 1: SEASONAL SCARCITY -->
+<section class="section" id="l1">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div>
+        <div class="section-eyebrow">System One</div>
+        <h2 class="section-title">Seasonal Scarcity &amp; the Urgency Loop</h2>
+        <p class="section-sub">Tapped Out's most aggressive retention tool and its most elegant one, running at the same time.</p>
+      </div>
+    </div>
+
+    <p class="prose">Every seasonal event placed a timer on the player. Complete the quest line, unlock the exclusive items, finish before the season ends — or lose access forever. That urgency is manufactured, but it doesn't feel cynical, because the reward is real. The Halloween decorations, the Christmas buildings, the limited character skins — these are permanent additions to your Springfield that signal to every visitor exactly which seasons you were present for.</p>
+    <p class="prose mt-2">For the most invested players the seasonal event didn't just create urgency — it created a complete redesign project. Redecorating Springfield around the seasonal theme became its own form of creative expression. The timer wasn't just pushing players to complete content. It was pushing them to build something.</p>
+
+    <div class="mech-grid">
+      <div class="mech-card mech-red">
+        <span class="mech-tag tag-red">Casual Layer</span>
+        <div class="mech-title">Structured Progression</div>
+        <div class="mech-body">The quest line keeps casual players engaged through a clear sequence of objectives, tuned to the length of the season. It's a retention loop that asks for consistent but modest attention.</div>
+      </div>
+      <div class="mech-card mech-yellow">
+        <span class="mech-tag tag-yellow">Invested Layer</span>
+        <div class="mech-title">Identity Expression</div>
+        <div class="mech-body">The decoration layer keeps invested players engaged through creative control over their own Springfield. The same seasonal event serves both audiences without asking either one to play differently.</div>
+      </div>
+    </div>
+
+    <div class="divider divider-red"></div>
+
+    <p class="prose">The seasonal system also functions as a re-engagement trigger for lapsed players. A player who drifted away from Springfield for a few months returns to find a Halloween event they've never seen, limited items they don't own, and a quest line with a timer already running. The content they missed doesn't feel like punishment — it feels like a reason to come back. And for players who stayed through previous seasons, new seasonal content signals that the game is still alive and still rewarding investment. Springfield kept growing.</p>
+
+    <div class="hi-box red mt-3">
+      <div class="hi-label">The Core Insight</div>
+      <p>One seasonal mechanic, two audiences, no compromise. The quest line holds the casual player. The decoration layer holds the veteran. Neither has to play the other's game to feel the season was worth showing up for.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SYSTEM 2: SOCIAL PRESTIGE -->
+<section class="section" id="l2">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div>
+        <div class="section-eyebrow">System Two</div>
+        <h2 class="section-title">Social Prestige &amp; the Observation Loop</h2>
+        <p class="section-sub">No leaderboards. No PvP. No rankings. And yet the social layer drives some of the most powerful retention behavior in the game.</p>
+      </div>
+    </div>
+
+    <p class="prose">Visiting another player's Springfield creates aspiration. A newer player walking through a fully developed town — premium buildings, rare seasonal items, years of careful decoration — sees not just what the game contains but what their own Springfield could become. The gap between where they are and where that veteran player is doesn't feel discouraging. It feels like a goal. The game gives you a destination without ever explicitly telling you to go there.</p>
+    <p class="prose mt-2">The inverse effect is equally powerful. Knowing that other players can and will visit your Springfield changes how you engage with it. Your town is no longer just a personal project — it's a public statement. The care you put into layout, decoration, and completion becomes something other players will see and judge. That social visibility turns passive city building into active performance. Players spend more time improving their town not just for themselves but for an audience they may never directly interact with.</p>
+
+    <div class="mech-grid">
+      <div class="mech-card mech-blue">
+        <span class="mech-tag tag-blue">Effect One</span>
+        <div class="mech-title">Aspiration Without Competition</div>
+        <div class="mech-body">A veteran's Springfield functions as an unspoken roadmap. No score, no rank — just a visible destination that makes the distance to travel feel like progress waiting to happen rather than a deficit.</div>
+      </div>
+      <div class="mech-card mech-blue">
+        <span class="mech-tag tag-blue">Effect Two</span>
+        <div class="mech-title">Performance Without an Audience Metric</div>
+        <div class="mech-body">Knowing your town can be seen reframes every decoration choice as a public statement. Investment increases even though no one is required to look, and no scoreboard ever tells you if they did.</div>
+      </div>
+    </div>
+
+    <div class="hi-box blue mt-3">
+      <div class="hi-label">The Core Insight</div>
+      <p>Together these two forces create a social retention loop that requires no multiplayer infrastructure at all. Tapped Out engineered community investment through observation alone.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SYSTEM 3: BUILD TIMERS -->
+<section class="section" id="l3">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div>
+        <div class="section-eyebrow">System Three</div>
+        <h2 class="section-title">Build Timers &amp; Delayed Progression</h2>
+        <p class="section-sub">Where most mobile games risk burning players out through rapid content delivery, Tapped Out engineered deliberate friction into its progression.</p>
+      </div>
+    </div>
+
+    <p class="prose">A quest line doesn't resolve instantly. A player asked to build the Itchy &amp; Scratchy Store waits six hours for construction to complete. That wait is not an accident — it is the mechanism. The timer creates a scheduled return window. A player who taps away knowing their building finishes in six hours has a reason to open the game again in six hours. The game isn't asking for their attention constantly — it's asking for it at specific intervals, which is a fundamentally more sustainable retention model than demanding continuous engagement.</p>
+
+    <div class="mech-grid">
+      <div class="mech-card mech-yellow">
+        <span class="mech-tag tag-yellow">The Impatient Player</span>
+        <div class="mech-title">Pays to Rush</div>
+        <div class="mech-body">Premium currency skips the wait entirely. The monetization moment feels optional rather than forced, because the alternative — simply waiting — is always available and always free.</div>
+      </div>
+      <div class="mech-card mech-yellow">
+        <span class="mech-tag tag-yellow">The Patient Player</span>
+        <div class="mech-title">Waits and Returns</div>
+        <div class="mech-body">No purchase required — just a scheduled reason to open the app again. The system works whether or not the player spends. One outcome generates revenue, the other generates a return session.</div>
+      </div>
+    </div>
+
+    <div class="divider divider-yellow"></div>
+
+    <p class="prose">This delayed progression model keeps Tapped Out present in the player's life without consuming it. Springfield is always waiting for something to finish. There is always a reason to come back.</p>
+
+    <div class="hi-box mt-3">
+      <div class="hi-label">The Core Insight</div>
+      <p>A build timer is not a limitation bolted onto the game. It's a scheduling tool disguised as construction — and it monetizes and retains through the exact same mechanic, simultaneously, without contradiction.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SYSTEM 4: BRAND POWERED QUEST LINES -->
+<section class="section" id="l4">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div>
+        <div class="section-eyebrow">System Four</div>
+        <h2 class="section-title">Brand Powered Quest Lines</h2>
+        <p class="section-sub">Most town building games use quest lines as a thin wrapper around construction requirements. Tapped Out reframed the entire model.</p>
+      </div>
+    </div>
+
+    <p class="prose">Build five banks. Place four skyscrapers. In most town builders the objective exists only to prompt the player toward spending resources — the context is an afterthought. Tapped Out aligned quest lines with town level progression and anchored every objective to the Simpsons IP instead. You weren't building a generic commercial district. You were rebuilding Springfield after Homer's nuclear plant exploded. You weren't placing a school — you were restoring Springfield Elementary so Bart had somewhere to get sent to the principal's office.</p>
+    <p class="prose mt-2">The brand power did something no pure game mechanic could replicate — it gave construction meaning. Every building unlocked a character, triggered a scene, or advanced a story beat that fans of the show already had emotional context for. The quest line wasn't instructing you to build. It was inviting you to restore something you already cared about.</p>
+
+    <div class="hi-box pink mt-3">
+      <div class="hi-label">The Core Insight</div>
+      <p>The mechanics of a town builder are easily replicated. The feeling of rebuilding a world you grew up watching is not. That distinction is the reason Tapped Out outlasted virtually every competitor in the genre.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKLIST: WHAT STUDIOS SHOULD STEAL -->
+<section class="section" id="checklist">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <div>
+        <div class="section-eyebrow">The Checklist</div>
+        <h2 class="section-title">What Studios Should Steal</h2>
+        <p class="section-sub">Four systems, one pattern underneath all of them. Here's the checklist for any studio trying to build the next decade-long Springfield.</p>
+      </div>
+    </div>
+
+    <p class="prose">None of these systems work because they're clever mechanics. They work because each one was built around a specific understanding of what keeps a mobile player coming back — and none of that understanding is Simpsons-specific. Here's what transfers.</p>
+
+    <div class="steal-grid">
+      <div class="steal-card">
+        <div class="steal-num">01</div>
+        <div class="steal-tag">Principle</div>
+        <div class="steal-title">Serve Two Audiences With One Mechanic</div>
+        <div class="steal-body">Don't build separate systems for casual and invested players — design one mechanic that pays out differently depending on how deep a player wants to go. The seasonal quest line held the casual player through structure and the veteran through creative expression, without either one feeling like a second-class experience.</div>
+      </div>
+
+      <div class="steal-card">
+        <div class="steal-num">02</div>
+        <div class="steal-tag">Principle</div>
+        <div class="steal-title">Build Observation Loops, Not Leaderboards</div>
+        <div class="steal-body">Competitive ranking isn't the only way to make players care what others think. Letting players see each other's progress — with no score attached — creates aspiration and performance pressure without the infrastructure cost or the anxiety of direct competition.</div>
+      </div>
+
+      <div class="steal-card">
+        <div class="steal-num">03</div>
+        <div class="steal-tag">Principle</div>
+        <div class="steal-title">Make the Timer a Scheduling Tool, Not Just a Paywall</div>
+        <div class="steal-body">A wait mechanic shouldn't only exist to sell a skip. Design it so the wait itself is a reason to return — the timer books a future session with the player, and the option to pay for early access is a bonus outcome, not the point of the mechanic.</div>
+      </div>
+
+      <div class="steal-card">
+        <div class="steal-num">04</div>
+        <div class="steal-tag">Principle</div>
+        <div class="steal-title">Anchor Every Mechanic to Something Players Already Love</div>
+        <div class="steal-body">A generic objective asks for compliance. An objective wrapped around a character, a story beat, or a world a player already has emotional context for asks for participation instead. If you have brand power, spend it on meaning — not just on the loading screen.</div>
+      </div>
+
+      <div class="steal-card">
+        <div class="steal-num">05</div>
+        <div class="steal-tag">Principle</div>
+        <div class="steal-title">Design for the Player Who Left, Not Just the One Who Stayed</div>
+        <div class="steal-body">Recurring content shouldn't just reward presence — it should make absence forgivable. A lapsed player returning to unseen seasonal content should feel like they've been handed a reason to come back, not a backlog of what they missed.</div>
+      </div>
+    </div>
+
+    <div class="hi-box mt-3">
+      <div class="hi-label">The Throughline</div>
+      <p>Every item on this list is really the same instruction stated five different ways: understand exactly why a player would care, then build the mechanic around that reason instead of around the genre's default assumptions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="section" id="closing-section" style="border-top:1px solid rgba(255,255,255,0.03);">
+  <div class="section-inner">
+    <div class="section-header">
+      <div></div>
+      <div>
+        <div class="section-eyebrow t-yellow">Closing Argument</div>
+        <h2 class="section-title">Mechanics Are Easy. Meaning Isn't.</h2>
+        <p class="section-sub">What ten years of Springfield actually proved about mobile retention.</p>
+      </div>
+    </div>
+
+    <p class="prose">Tapped Out wasn't the first mobile city builder. It wasn't the most technically sophisticated. But it was one of the first to fully understand what brand power actually means in a mobile context — not just a recognizable name on a loading screen, but a reason for every mechanic to feel meaningful.</p>
+    <p class="prose mt-2">The quest lines worked because they were written for characters players already loved. The social prestige layer worked because Springfield was worth showing off. The seasonal events worked because returning to Springfield felt like returning to something familiar rather than logging back into a game.</p>
+    <p class="prose mt-2">What Tapped Out proved is that mobile retention doesn't require the most innovative mechanics — it requires mechanics that are deeply understood and deliberately aligned. Quest lines tied to beloved characters. Comparison and prestige systems that make personal investment visible to others. Seasonal content cycles that serve both the player who never left and the player who needed a reason to come back.</p>
+
+    <div class="closing">
+      <div class="closing-line"></div>
+      <p>Studios chasing mobile retention with raw mechanical complexity missed the lesson Tapped Out taught for a decade. The most powerful retention tool in mobile isn't <em>the system</em> — it's the reason the player cares about the world the system exists inside.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-name"><span>Leon Telemaque</span> &nbsp;·&nbsp; Mobile Game Design Analysis</div>
+  <div class="footer-note">Portfolio · Retention Systems &amp; Brand-Driven Design · 2026</div>
+</footer>
+
+<script>
+const prog = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.width = (total > 0 ? (scrolled / total) * 100 : 0) + '%';
+});
+
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-40% 0px -55% 0px' });
+sections.forEach(s => obs.observe(s));
+
+const fadeObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('vis');
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.section').forEach(s => fadeObs.observe(s));
+</script>
+
+</body>
+</html>
