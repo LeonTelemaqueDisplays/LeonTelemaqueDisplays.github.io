@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Master Duel: Why Brand Loyalty Isn't a Live Service Strategy | Leon Telemaque</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07060b;
+  --bg-card: #0f0d16;
+  --bg-card-h: #15121c;
+  --gold: #c8962c;
+  --gold-bright: #e8b94a;
+  --gold-faint: rgba(200,150,44,0.07);
+  --purple: #7b4fb8;
+  --purple-bright: #a179dd;
+  --purple-faint: rgba(123,79,184,0.08);
+  --red: #b8321f;
+  --red-bright: #d8542f;
+  --red-faint: rgba(184,50,31,0.08);
+  --teal: #2a8f96;
+  --teal-bright: #4fc4cc;
+  --teal-faint: rgba(42,143,150,0.08);
+  --t1: #e2e0e6;
+  --t2: #857f92;
+  --t3: #46424f;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;line-height:1.7;overflow-x:hidden;}
+
+#progress{position:fixed;top:0;left:0;height:2px;width:0%;background:var(--gold-bright);z-index:200;transition:width 0.1s linear;box-shadow:0 0 8px rgba(232,185,74,0.5);}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:58px;background:rgba(7,6,11,0.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;}
+.nav-brand{font-family:'Oswald',sans-serif;font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--t3);}
+.nav-brand span{color:var(--gold-bright);}
+.nav-links{display:flex;list-style:none;}
+.nav-links a{display:block;height:58px;line-height:58px;padding:0 1.1rem;font-family:'Oswald',sans-serif;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t3);text-decoration:none;border-bottom:2px solid transparent;transition:color 0.2s,border-color 0.2s;}
+.nav-links a:hover{color:var(--t2);}
+.nav-links a.active{color:var(--gold-bright);border-bottom-color:var(--gold-bright);}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:7rem 4rem 5.5rem;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;pointer-events:none;}
+.hero-bg::before{content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(200,150,44,0.12) 0%,transparent 60%),
+    radial-gradient(ellipse at 85% 45%,rgba(123,79,184,0.1) 0%,transparent 45%),
+    radial-gradient(ellipse at 0% 100%,rgba(184,50,31,0.08) 0%,transparent 50%),
+    linear-gradient(180deg,rgba(0,0,0,0.6) 0%,rgba(7,6,11,0.2) 40%,rgba(7,6,11,0.88) 80%,var(--bg) 100%);
+}
+.hero-noise{position:absolute;inset:0;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;}
+.hero-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,transparent 40%,rgba(0,0,0,0.75) 100%);pointer-events:none;}
+
+.hero-eyebrow{font-family:'Oswald',sans-serif;font-size:0.68rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--t3);margin-bottom:1.5rem;position:relative;}
+.hero-eyebrow span{color:var(--gold-bright);}
+.hero-title{font-family:'Oswald',sans-serif;font-size:clamp(2.3rem,5.4vw,5rem);font-weight:700;line-height:0.98;letter-spacing:-0.02em;text-transform:uppercase;max-width:980px;margin-bottom:2rem;position:relative;}
+.hero-title em{font-style:normal;color:var(--gold-bright);display:block;text-shadow:0 0 60px rgba(232,185,74,0.3);}
+.hero-thesis{max-width:660px;font-size:1rem;color:var(--t2);line-height:1.78;margin-bottom:3rem;border-left:2px solid var(--gold);padding-left:1.5rem;position:relative;}
+.hero-thesis strong{color:var(--t1);font-weight:600;}
+.hero-meta{display:flex;gap:2rem;align-items:center;flex-wrap:wrap;position:relative;}
+.badge{font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--t3);padding:0.35rem 0.9rem;border:1px solid rgba(255,255,255,0.06);border-radius:2px;}
+.hero-scroll{display:flex;align-items:center;gap:0.7rem;color:var(--t3);font-family:'Oswald',sans-serif;font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;margin-left:auto;transition:color 0.2s;}
+.hero-scroll:hover{color:var(--gold-bright);}
+.hero-scroll-line{width:36px;height:1px;background:currentColor;transition:width 0.25s;}
+.hero-scroll:hover .hero-scroll-line{width:56px;}
+
+.section{padding:6.5rem 4rem;border-top:1px solid rgba(255,255,255,0.03);opacity:0;transform:translateY(28px);transition:opacity 0.65s ease,transform 0.65s ease;}
+.section.vis{opacity:1;transform:translateY(0);}
+.section-inner{max-width:1080px;margin:0 auto;}
+.section-header{display:grid;grid-template-columns:80px 1fr;gap:2.5rem;margin-bottom:4rem;align-items:start;}
+.section-num{font-family:'Oswald',sans-serif;font-size:4.5rem;font-weight:700;line-height:1;letter-spacing:-0.04em;user-select:none;opacity:0.1;}
+.section-eyebrow{font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:0.6rem;}
+.section-title{font-family:'Oswald',sans-serif;font-size:clamp(1.5rem,2.8vw,2.3rem);font-weight:600;line-height:1.15;letter-spacing:-0.01em;text-transform:uppercase;margin-bottom:0.85rem;}
+.section-sub{font-size:0.95rem;color:var(--t2);max-width:600px;line-height:1.7;}
+
+#opening .section-eyebrow{color:var(--gold-bright);}
+#l1{background:linear-gradient(180deg,transparent,rgba(184,50,31,0.045));}
+#l1 .section-num{color:var(--red-bright);}
+#l1 .section-eyebrow{color:var(--red-bright);}
+#l2{background:linear-gradient(180deg,transparent,rgba(123,79,184,0.05));}
+#l2 .section-num{color:var(--purple-bright);}
+#l2 .section-eyebrow{color:var(--purple-bright);}
+#l3{background:linear-gradient(180deg,transparent,rgba(200,150,44,0.045));}
+#l3 .section-num{color:var(--gold-bright);}
+#l3 .section-eyebrow{color:var(--gold-bright);}
+#l4{background:linear-gradient(180deg,transparent,rgba(42,143,150,0.05));}
+#l4 .section-num{color:var(--teal-bright);}
+#l4 .section-eyebrow{color:var(--teal-bright);}
+
+.prose{font-size:0.95rem;color:var(--t2);line-height:1.78;}
+.prose+.prose{margin-top:1rem;}
+.prose strong{color:var(--t1);font-weight:600;}
+.prose em{font-style:italic;color:var(--t1);}
+.t-gold{color:var(--gold-bright);}
+.t-purple{color:var(--purple-bright);}
+.t-red{color:var(--red-bright);}
+.t-teal{color:var(--teal-bright);}
+.mt-2{margin-top:2rem;}
+.mt-3{margin-top:3rem;}
+
+.divider{width:48px;height:2px;background:rgba(255,255,255,0.1);margin:2.5rem 0;}
+.divider-gold{background:rgba(200,150,44,0.45);}
+.divider-purple{background:rgba(123,79,184,0.4);}
+.divider-red{background:rgba(184,50,31,0.45);}
+.divider-teal{background:rgba(42,143,150,0.4);}
+
+/* Highlight box */
+.hi-box{background:rgba(200,150,44,0.05);border:1px solid rgba(200,150,44,0.18);border-left:3px solid var(--gold);border-radius:0 3px 3px 0;padding:1.75rem 2rem;margin-top:2.5rem;}
+.hi-label{font-family:'Oswald',sans-serif;font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:0.65rem;}
+.hi-box p{font-size:1rem;color:var(--t1);line-height:1.72;}
+.hi-box.red{background:rgba(184,50,31,0.05);border-color:rgba(184,50,31,0.2);border-left-color:var(--red);}
+.hi-box.red .hi-label{color:var(--red-bright);}
+.hi-box.purple{background:rgba(123,79,184,0.05);border-color:rgba(123,79,184,0.2);border-left-color:var(--purple);}
+.hi-box.purple .hi-label{color:var(--purple-bright);}
+.hi-box.teal{background:rgba(42,143,150,0.05);border-color:rgba(42,143,150,0.2);border-left-color:var(--teal);}
+.hi-box.teal .hi-label{color:var(--teal-bright);}
+
+/* Failure overview grid */
+.sys-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem;margin-top:2rem;}
+.sys-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:1.25rem 1.4rem;border-top:2px solid transparent;}
+.sys-card.s1{border-top-color:rgba(184,50,31,0.45);}
+.sys-card.s2{border-top-color:rgba(123,79,184,0.4);}
+.sys-card.s3{border-top-color:rgba(200,150,44,0.45);}
+.sys-card.s4{border-top-color:rgba(42,143,150,0.4);}
+.sys-num{font-family:'Oswald',sans-serif;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--t3);margin-bottom:0.5rem;}
+.sys-name{font-size:0.82rem;font-weight:600;color:var(--t1);line-height:1.35;}
+
+/* Mechanism cards */
+.mech-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-top:2.5rem;}
+.mech-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:1.75rem;position:relative;overflow:hidden;transition:all 0.3s;}
+.mech-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0.5;}
+.mech-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,0.5);}
+.mech-card:hover::after{opacity:1;}
+.mech-red{border-top:2px solid rgba(184,50,31,0.4);}
+.mech-red::after{background:var(--red);}
+.mech-purple{border-top:2px solid rgba(123,79,184,0.4);}
+.mech-purple::after{background:var(--purple);}
+.mech-gold{border-top:2px solid rgba(200,150,44,0.4);}
+.mech-gold::after{background:var(--gold);}
+.mech-teal{border-top:2px solid rgba(42,143,150,0.4);}
+.mech-teal::after{background:var(--teal);}
+.mech-tag{font-family:'Oswald',sans-serif;font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;padding:0.22rem 0.6rem;border-radius:2px;display:inline-block;margin-bottom:1rem;}
+.tag-red{color:var(--red-bright);border:1px solid rgba(216,84,47,0.3);background:var(--red-faint);}
+.tag-purple{color:var(--purple-bright);border:1px solid rgba(161,121,221,0.3);background:var(--purple-faint);}
+.tag-gold{color:var(--gold-bright);border:1px solid rgba(232,185,74,0.3);background:var(--gold-faint);}
+.tag-teal{color:var(--teal-bright);border:1px solid rgba(79,196,204,0.3);background:var(--teal-faint);}
+.mech-title{font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--t1);margin-bottom:0.75rem;}
+.mech-body{font-size:0.875rem;color:var(--t2);line-height:1.72;}
+
+/* Closing statement */
+.closing{margin-top:4rem;padding:3rem;background:var(--bg-card);border:1px solid rgba(200,150,44,0.2);border-top:2px solid var(--gold);border-radius:0 0 3px 3px;text-align:center;}
+.closing-line{width:40px;height:2px;background:var(--gold-bright);margin:0 auto 2rem;box-shadow:0 0 12px rgba(232,185,74,0.5);}
+.closing p{font-family:'Oswald',sans-serif;font-size:clamp(1.05rem,2.1vw,1.4rem);font-weight:400;line-height:1.5;color:var(--t2);max-width:720px;margin:0 auto;}
+.closing p em{font-style:normal;color:var(--gold-bright);}
+
+footer{padding:3.5rem 4rem;border-top:1px solid rgba(255,255,255,0.04);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;}
+.footer-name{font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--t3);}
+.footer-name span{color:var(--gold-bright);}
+.footer-note{font-size:0.75rem;color:var(--t3);}
+
+@media(max-width:900px){
+  .mech-grid{grid-template-columns:1fr 1fr;}
+  .sys-grid{grid-template-columns:1fr 1fr;}
+  nav{padding:0 1.25rem;}
+}
+@media(max-width:680px){
+  .hero{padding:6rem 1.5rem 4rem;}
+  .section{padding:5rem 1.5rem;}
+  .section-header{grid-template-columns:1fr;gap:0.5rem;}
+  .section-num{font-size:2.5rem;}
+  .mech-grid,.sys-grid{grid-template-columns:1fr;}
+  .nav-brand{display:none;}
+  footer{padding:2.5rem 1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+  <div class="nav-brand"><span>Leon Telemaque</span> &nbsp;/&nbsp; Portfolio</div>
+  <ul class="nav-links">
+    <li><a href="#l1">Reward System</a></li>
+    <li><a href="#l2">Event Cadence</a></li>
+    <li><a href="#l3">Microtransactions</a></li>
+    <li><a href="#l4">Playable Modes</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="hero-noise"></div>
+    <div class="hero-vignette"></div>
+  </div>
+
+  <div class="hero-eyebrow">LiveOps Case Study &nbsp;·&nbsp; <span>Yu-Gi-Oh! Master Duel</span> &nbsp;·&nbsp; Konami · 2022–2026</div>
+
+  <h1 class="hero-title">
+    Master Duel:
+    <em>Why Brand Loyalty Isn't a Live Service Strategy</em>
+  </h1>
+
+  <p class="hero-thesis">
+    <strong>Master Duel inherited one of the most loyal player bases in card gaming and still struggles to retain them.</strong> The brand brought players in — but Konami trusted brand loyalty to do the work that a reward system, event cadence, and onboarding infrastructure should be doing. The result is a technically impressive digital card game that fails its players at the LiveOps level.
+  </p>
+
+  <div class="hero-meta">
+    <span class="badge">Konami · Master Duel</span>
+    <span class="badge">Trading Card Game · Live Service</span>
+    <span class="badge">Four LiveOps Failures</span>
+    <span class="badge">Reward &amp; Event Design</span>
+    <a href="#opening" class="hero-scroll">
+      <span class="hero-scroll-line"></span>
+      Begin the Case Study
+    </a>
+  </div>
+</section>
+
+<!-- OPENING -->
+<section class="section" id="opening">
+  <div class="section-inner">
+    <div class="section-header">
+      <div></div>
+      <div>
+        <div class="section-eyebrow">The Opening</div>
+        <h2 class="section-title">Everything Was In Konami's Favor</h2>
+        <p class="section-sub">On paper, Master Duel should not have a retention problem. The brand did the hardest part of live service before a single system shipped.</p>
+      </div>
+    </div>
+
+    <p class="prose">Yu-Gi-Oh is one of the most successful trading card games on the planet. Worldwide popularity, decades of cultural presence, multiple anime adaptations, a competitive scene with global reach, and a player base that has demonstrated willingness to invest serious time and money into the franchise across physical cards, video games, and digital platforms.</p>
+    <p class="prose mt-2">The brand does the acquisition work most live service games spend years and millions of marketing budget trying to achieve. Players already know what Yu-Gi-Oh is. They already have an emotional relationship with it. They arrive at the game with context, history, and intent to play.</p>
+    <p class="prose mt-2">Master Duel's launch confirmed this. The game exploded onto the scene generating genuine debate about whether it would become the primary competitive format for the franchise — displacing the physical card game as the main way people played Yu-Gi-Oh competitively. The numbers were there. The community engagement was there. The cards were in Konami's favor completely.</p>
+
+    <div class="hi-box">
+      <div class="hi-label">And Yet</div>
+      <p>Master Duel struggles to keep them. The brand brought players in. The launch momentum confirmed the appetite was real. What happened next is a LiveOps story.</p>
+    </div>
+
+    <div class="sys-grid">
+      <div class="sys-card s1">
+        <div class="sys-num">Failure 01</div>
+        <div class="sys-name">The Reward System</div>
+      </div>
+      <div class="sys-card s2">
+        <div class="sys-num">Failure 02</div>
+        <div class="sys-name">The Event System</div>
+      </div>
+      <div class="sys-card s3">
+        <div class="sys-num">Failure 03</div>
+        <div class="sys-name">Microtransaction Overconfidence</div>
+      </div>
+      <div class="sys-card s4">
+        <div class="sys-num">Failure 04</div>
+        <div class="sys-name">Lack of Playable Modes</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAILURE 1: REWARD SYSTEM -->
+<section class="section" id="l1">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div>
+        <div class="section-eyebrow">Failure One</div>
+        <h2 class="section-title">The Reward System</h2>
+        <p class="section-sub">Master Duel's reward system was designed for a smaller game. It never scaled up with the game that grew around it.</p>
+      </div>
+    </div>
+
+    <p class="prose">At launch the gem economy was passable — the number of playable archetypes was manageable and the resources available through normal play could get a player into a competitive deck without spending money. That window did not last. As the card pool expanded and new archetypes entered the game, the gem economy failed to scale with it. The problem isn't that Master Duel is stingy in isolation — it's that the cost of staying competitive grew faster than the rewards kept pace with.</p>
+    <p class="prose mt-2">A returning player who hasn't played for two seasons doesn't just need a few packs. They need an entirely new deck to compete at the current meta level, and the gems available through normal play won't cover it.</p>
+
+    <div class="mech-grid">
+      <div class="mech-card mech-red">
+        <span class="mech-tag tag-red">The Re-Engagement Trap</span>
+        <div class="mech-title">Excitement Meets a Gem Wall</div>
+        <div class="mech-body">A player sees a new archetype they want to build. The excitement of that archetype is the thing pulling them back. But the gem wall between them and that deck is the thing that sends them away again — at the exact moment retention should be highest.</div>
+      </div>
+      <div class="mech-card mech-red">
+        <span class="mech-tag tag-red">The Gatekept Pathway</span>
+        <div class="mech-title">Rentals Aren't a Real Answer</div>
+        <div class="mech-body">The most consistent gem income is locked behind competitive events, which requires winning. Rental decks exist as an accessibility measure, but a rental is not an optimized deck — a player renting into a competitive event is structurally disadvantaged against a fully built meta deck.</div>
+      </div>
+    </div>
+
+    <div class="hi-box red mt-3">
+      <div class="hi-label">The Core Insight</div>
+      <p>The content that should be driving return behavior instead surfaces the gap between the free-to-play experience and the paying one. The reward pathway that should be most accessible is, in practice, gatekept by the very resource gap it's supposed to help players close.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAILURE 2: EVENT SYSTEM -->
+<section class="section" id="l2">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div>
+        <div class="section-eyebrow">Failure Two</div>
+        <h2 class="section-title">The Event System</h2>
+        <p class="section-sub">A live service game's event system is its heartbeat. Master Duel's barely has a pulse outside of ranked.</p>
+      </div>
+    </div>
+
+    <p class="prose">The cadence of events determines how often players have a reason to log in beyond their personal investment in the game. Get the cadence right and players develop a habit. Get it wrong and the game becomes something they check occasionally rather than something they return to consistently. Master Duel gets it wrong.</p>
+    <p class="prose mt-2">The game's event system leans almost entirely on competitive events as the primary driver of engagement. Outside of those, meaningful gem rewards are reserved for download milestone events and anniversary celebrations — occasions that by definition occur rarely and cannot be planned around as a reliable retention loop. A player who isn't competitive enough to grind ranked events and isn't lucky enough to be playing during a milestone window has very little pulling them back on any given week.</p>
+
+    <div class="mech-grid">
+      <div class="mech-card mech-purple">
+        <span class="mech-tag tag-purple">The Comparison</span>
+        <div class="mech-title">What Genshin Does Instead</div>
+        <div class="mech-body">Genshin Impact runs event content consistently — story events, limited challenges, rotating game modes — all of which distribute resources regularly enough that the player always has something to work toward. It's a reliable weekly rhythm, not a rare occasion.</div>
+      </div>
+      <div class="mech-card mech-purple">
+        <span class="mech-tag tag-purple">The Gap</span>
+        <div class="mech-title">Master Duel's Non-Competitive Player Has Nothing</div>
+        <div class="mech-body">The game asks for loyalty it hasn't earned through consistent reward cadence. There is no equivalent rhythm for the player who isn't grinding ranked — no regular reason to open the app on an ordinary week.</div>
+      </div>
+    </div>
+
+    <div class="hi-box purple mt-3">
+      <div class="hi-label">The Core Insight</div>
+      <p>The result is a retention rhythm that spikes during competitive seasons and collapses between them. That's not a sustainable live service model — it's a game that works for the top percentage of its player base and struggles to hold everyone else.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAILURE 3: MICROTRANSACTION OVERCONFIDENCE -->
+<section class="section" id="l3">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div>
+        <div class="section-eyebrow">Failure Three</div>
+        <h2 class="section-title">Microtransaction Overconfidence</h2>
+        <p class="section-sub">Microtransactions in a live service card game should serve a specific function. Master Duel broke the contract that makes them work.</p>
+      </div>
+    </div>
+
+    <p class="prose">Whales spend on excess — extra decks, cosmetic accessories, exclusive bundles that signal investment without gatekeeping competitive viability. The free-to-play player grinds their way into a functional deck and the spending player accelerates past that baseline or expresses identity through cosmetics. Both players coexist because the free path is credible enough to make the spending feel optional rather than mandatory.</p>
+    <p class="prose mt-2">New deck archetypes arrive monthly to bi-monthly. The gem income available through normal play cannot cover the cost of keeping pace with that release cadence even for a player who has completed every available story mode and solo content. A player who has grinded through everything Master Duel offers in terms of free content would still struggle to build two modern-era competitive decks.</p>
+
+    <div class="mech-grid">
+      <div class="mech-card mech-gold">
+        <span class="mech-tag tag-gold">The Intended Contract</span>
+        <div class="mech-title">Spending as Opportunity</div>
+        <div class="mech-body">In a healthy model, a resource-secure player looks at a gem bundle and sees acceleration or expression. The free path already got them somewhere real — spending is upside, not survival.</div>
+      </div>
+      <div class="mech-card mech-gold">
+        <span class="mech-tag tag-gold">What Master Duel Broke</span>
+        <div class="mech-title">Spending as Temporary Fix</div>
+        <div class="mech-body">A resource-starved player doesn't see opportunity in a gem bundle — they see a patch on a structural problem. They know spending now doesn't solve it, because next month another archetype arrives and the gap reopens.</div>
+      </div>
+    </div>
+
+    <div class="hi-box mt-3">
+      <div class="hi-label">The Core Insight</div>
+      <p>Konami built a microtransaction model that assumes players will spend consistently but gave them no financial goodwill to spend from. The generosity deficit from Konami has produced a generosity deficit in return from the player base.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAILURE 4: LACK OF PLAYABLE MODES -->
+<section class="section" id="l4">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div>
+        <div class="section-eyebrow">Failure Four</div>
+        <h2 class="section-title">Lack of Playable Modes</h2>
+        <p class="section-sub">Ranked and casual. On paper that covers the competitive and non-competitive player. In practice neither mode serves its intended audience well enough.</p>
+      </div>
+    </div>
+
+    <p class="prose">Casual mode has no MMR structure. A veteran player with three optimized meta decks queues into the same pool as a new player still learning the basics of the game. The veteran gets no meaningful challenge. The new player gets repeatedly dismantled by decks they have no context for and no resources to compete against. Neither player gets what they came for. The mode designed to be the pressure release valve for the ranked grind becomes a space most serious players avoid and most new players leave quickly.</p>
+
+    <div class="mech-grid">
+      <div class="mech-card mech-teal">
+        <span class="mech-tag tag-teal">The Goldmine Left Unused</span>
+        <div class="mech-title">Decades of Format Heritage</div>
+        <div class="mech-body">Yu-Gi-Oh has iconic eras and distinct rule sets players have deep nostalgic attachment to. A Classic mode built around the original card sets — the era most of the current player base grew up with — would be a completely different competitive environment, with its own strategic depth and its own community.</div>
+      </div>
+      <div class="mech-card mech-teal">
+        <span class="mech-tag tag-teal">Gated, Not Homed</span>
+        <div class="mech-title">A Taste, Then It's Gone</div>
+        <div class="mech-body">Those concepts are gated behind limited event windows — gimmick modes that appear briefly and disappear before they can build a dedicated player base. The player who would return specifically for a draft or old-school format has no permanent home in Master Duel.</div>
+      </div>
+    </div>
+
+    <div class="hi-box teal mt-3">
+      <div class="hi-label">The Core Insight</div>
+      <p>A game with ranked, casual, classic, draft, and a rotating experimental mode has something for every type of Yu-Gi-Oh player. Master Duel has two modes and trusts brand loyalty to fill the gap.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="section" id="closing-section" style="border-top:1px solid rgba(255,255,255,0.03);">
+  <div class="section-inner">
+    <div class="section-header">
+      <div></div>
+      <div>
+        <div class="section-eyebrow t-gold">Closing Argument</div>
+        <h2 class="section-title">Consistent Generosity, Not Radical Generosity</h2>
+        <p class="section-sub">What Master Duel is actually missing — and why it's a LiveOps problem, not a game design problem.</p>
+      </div>
+    </div>
+
+    <p class="prose">Master Duel's retention failure is not a game design failure. The card game underneath is as deep and competitive as it has ever been. The problem is what surrounds it.</p>
+    <p class="prose mt-2">Overconfidence in microtransactions without giving players the carrot to bite on the stick will undermine any retention model — but it's especially damaging in a game where players are constantly incentivized to upgrade, rebuild, and chase the next competitive deck. The spending impulse exists. Konami didn't manufacture it. Yu-Gi-Oh players have spent on cards for decades. But that impulse requires goodwill to activate. A player who feels resource starved doesn't feel generous toward the team asking them to spend.</p>
+    <p class="prose mt-2">The correction isn't radical generosity. It's <strong>consistent</strong> generosity. A reward system that scales with the expanding card pool. An event cadence that gives every type of player a reason to log in every week. Game modes that serve the full spectrum of the franchise's audience rather than just the competitive core. And microtransactions positioned as a way to close the gap between where a player is and where they want to be — not as the only viable path to competitive relevance.</p>
+    <p class="prose mt-2">A player who receives fair rewards consistently earned through normal play is more likely to spend on transactions, because the transaction feels like a choice rather than a necessity. They support a team that has shown generosity because generosity creates reciprocity.</p>
+
+    <div class="closing">
+      <div class="closing-line"></div>
+      <p>Master Duel has the brand. It has the game. It has the audience. What it's missing is <em>the LiveOps infrastructure to honor all three.</em></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-name"><span>Leon Telemaque</span> &nbsp;·&nbsp; LiveOps Case Study</div>
+  <div class="footer-note">Portfolio · Retention Systems &amp; Live Service Design · 2026</div>
+</footer>
+
+<script>
+const prog = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.width = (total > 0 ? (scrolled / total) * 100 : 0) + '%';
+});
+
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-40% 0px -55% 0px' });
+sections.forEach(s => obs.observe(s));
+
+const fadeObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('vis');
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.section').forEach(s => fadeObs.observe(s));
+</script>
+
+</body>
+</html>
