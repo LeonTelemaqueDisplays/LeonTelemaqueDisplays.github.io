@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Leon Telemaque — Product Analytics</title>
+<title>Leon Telemaque — Player Systems Designer</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -2815,225 +2815,23 @@ footer{
   <!-- ALL PROJECTS — single carousel -->
   <div class="work-carousel-wrap">
   <div class="work-carousel" id="workCarousel">
-
-
-
-    <!-- MOURNFUL FLOWER & VENGEFUL PLIGHT — Combat Systems Prototype -->
-    <div class="pcard" onclick="document.getElementById('modal-mfvp').classList.add('open')" style="border-color:#1E1208;opacity:.9;cursor:pointer">
-      <div class="pcard-preview" style="background:#0A0805;overflow:hidden;position:relative">
-        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-          <defs>
-            <radialGradient id="mfInkL" cx="25%" cy="50%" r="60%">
-              <stop offset="0%" stop-color="#0F1528" stop-opacity=".9"/>
-              <stop offset="100%" stop-color="#0A0805" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="vpInkR" cx="75%" cy="50%" r="60%">
-              <stop offset="0%" stop-color="#1A0608" stop-opacity=".9"/>
-              <stop offset="100%" stop-color="#0A0805" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#3A5A90" stop-opacity=".12"/>
-              <stop offset="100%" stop-color="#3A5A90" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="emberGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#881111" stop-opacity=".16"/>
-              <stop offset="100%" stop-color="#881111" stop-opacity="0"/>
-            </radialGradient>
-            <linearGradient id="sumiDivide" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#C89B3C" stop-opacity="0"/>
-              <stop offset="15%" stop-color="#C89B3C" stop-opacity=".5"/>
-              <stop offset="85%" stop-color="#C89B3C" stop-opacity=".5"/>
-              <stop offset="100%" stop-color="#C89B3C" stop-opacity="0"/>
-            </linearGradient>
-            <linearGradient id="bladeSheen" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stop-color="#6A90C0" stop-opacity="0"/>
-              <stop offset="40%" stop-color="#A0C0E8" stop-opacity=".8"/>
-              <stop offset="100%" stop-color="#6A90C0" stop-opacity="0"/>
-            </linearGradient>
-            <filter id="inkBlur"><feGaussianBlur stdDeviation="22"/></filter>
-            <filter id="softS"><feGaussianBlur stdDeviation="5"/></filter>
-            <filter id="moonBlur"><feGaussianBlur stdDeviation="3"/></filter>
-          </defs>
-
-          <!-- ── SUMI INK BASE ── -->
-          <rect width="680" height="400" fill="#0A0805"/>
-          <!-- Ink wash pools -->
-          <ellipse cx="170" cy="200" rx="220" ry="200" fill="url(#mfInkL)"/>
-          <ellipse cx="510" cy="200" rx="220" ry="200" fill="url(#vpInkR)"/>
-
-          <!-- ── LARGE ENSO — the warrior's circle, spanning the full card ── -->
-          <!-- The enso is open at top-right (traditional form) -->
-          <circle cx="340" cy="200" r="165" fill="none" stroke="#C89B3C" stroke-width="1" opacity=".055"
-            stroke-dasharray="900 180" stroke-dashoffset="260"/>
-          <circle cx="340" cy="200" r="165" fill="none" stroke="#C89B3C" stroke-width=".4" opacity=".08"
-            stroke-dasharray="1000 80" stroke-dashoffset="200"/>
-          <!-- Inner enso ring — moon-thin -->
-          <circle cx="340" cy="200" r="130" fill="none" stroke="#785A28" stroke-width=".4" opacity=".07"/>
-
-          <!-- ── MOURNFUL FLOWER SIDE ── -->
-          <!-- Moon glow — cold, precise -->
-          <ellipse cx="160" cy="185" rx="110" ry="110" fill="url(#moonGlow)" filter="url(#inkBlur)"/>
-
-          <!-- Water rings — parry timing visualised as ripples -->
-          <ellipse cx="160" cy="195" rx="88" ry="20" fill="none" stroke="#1A3060" stroke-width=".6" opacity=".35"/>
-          <ellipse cx="160" cy="195" rx="64" ry="14" fill="none" stroke="#2A4080" stroke-width=".5" opacity=".4"/>
-          <ellipse cx="160" cy="195" rx="40" ry="9" fill="none" stroke="#3A5090" stroke-width=".6" opacity=".4"/>
-          <ellipse cx="160" cy="195" rx="20" ry="4" fill="none" stroke="#4A60A0" stroke-width=".7" opacity=".5"/>
-
-          <!-- Falling petals — sakura -->
-          <ellipse cx="95"  cy="110" rx="5" ry="2.5" fill="#A0B8D8" opacity=".2" transform="rotate(-30,95,110)"/>
-          <ellipse cx="128" cy="140" rx="4" ry="2"   fill="#A0B8D8" opacity=".18" transform="rotate(-15,128,140)"/>
-          <ellipse cx="200" cy="95"  rx="4.5" ry="2" fill="#A0B8D8" opacity=".15" transform="rotate(-45,200,95)"/>
-          <ellipse cx="76"  cy="250" rx="3.5" ry="1.8" fill="#A0B8D8" opacity=".12" transform="rotate(-10,76,250)"/>
-          <ellipse cx="220" cy="300" rx="4" ry="2"   fill="#A0B8D8" opacity=".1"  transform="rotate(-55,220,300)"/>
-
-          <!-- Mist at base of MF side -->
-          <ellipse cx="150" cy="340" rx="150" ry="50" fill="#0F1528" opacity=".5" filter="url(#softS)"/>
-
-          <!-- KATANA — vertical, still, a line of silver in darkness -->
-          <!-- Blade — long, slender, slightly reflective -->
-          <rect x="158.5" y="52" width="3" height="218" rx="1.5" fill="#7090B8" opacity=".6"/>
-          <rect x="159.5" y="52" width="1.5" height="218" fill="url(#bladeSheen)" opacity=".7"/>
-          <!-- Kissaki (blade tip) -->
-          <polygon points="158.5,52 162,52 160,44" fill="#8AAAD0" opacity=".7"/>
-          <!-- Habaki (blade collar) -->
-          <rect x="155" y="270" width="10" height="6" rx="1" fill="#3A4A6A" opacity=".8"/>
-          <!-- Tsuba (guard) — simple round form -->
-          <ellipse cx="160" cy="276" rx="16" ry="5" fill="none" stroke="#4A6A90" stroke-width="1" opacity=".6"/>
-          <ellipse cx="160" cy="276" rx="16" ry="5" fill="#1A2A40" opacity=".6"/>
-          <!-- Tsuka (handle) wrapped -->
-          <rect x="156" y="281" width="8" height="52" rx="1" fill="#1A2030" opacity=".85"/>
-          <!-- Tsuka ito (handle wrap) marks -->
-          <line x1="156" y1="288" x2="164" y2="288" stroke="#2A3A58" stroke-width="1" opacity=".6"/>
-          <line x1="156" y1="297" x2="164" y2="297" stroke="#2A3A58" stroke-width="1" opacity=".5"/>
-          <line x1="156" y1="306" x2="164" y2="306" stroke="#2A3A58" stroke-width="1" opacity=".6"/>
-          <line x1="156" y1="315" x2="164" y2="315" stroke="#2A3A58" stroke-width="1" opacity=".5"/>
-          <line x1="156" y1="324" x2="164" y2="324" stroke="#2A3A58" stroke-width="1" opacity=".6"/>
-          <!-- Kashira (pommel) -->
-          <rect x="156" y="333" width="8" height="5" rx="2" fill="#2A3A58" opacity=".7"/>
-          <!-- Moon on the blade — reflection point -->
-          <ellipse cx="160" cy="140" rx="2" ry="12" fill="#C0D8F0" opacity=".25" filter="url(#moonBlur)"/>
-
-          <!-- ── VENGEFUL PLIGHT SIDE ── -->
-          <!-- Ember glow — hot, aggressive -->
-          <ellipse cx="520" cy="200" rx="130" ry="130" fill="url(#emberGlow)" filter="url(#inkBlur)"/>
-
-          <!-- Brushstroke slashes — sumi-e style (filled paths, tapered) -->
-          <!-- Primary slash: diagonal, thick center, tapered ends -->
-          <path d="M 415 75 C 418 80, 445 115, 475 155 C 505 195, 545 245, 568 278 C 575 290, 572 298, 565 294 C 558 290, 550 278, 520 238 C 490 198, 458 152, 430 112 C 412 88, 410 78, 415 75 Z" fill="#7A0E0E" opacity=".45"/>
-          <!-- Counter slash -->
-          <path d="M 615 68 C 612 74, 588 102, 562 140 C 536 178, 498 228, 476 265 C 469 278, 472 286, 479 282 C 486 278, 494 266, 520 228 C 546 190, 582 140, 608 102 C 624 80, 618 62, 615 68 Z" fill="#881111" opacity=".38"/>
-          <!-- Secondary slash marks — smaller, more chaotic -->
-          <path d="M 430 290 C 432 292, 448 268, 462 248 C 466 253, 452 274, 436 296 Z" fill="#6A0808" opacity=".5"/>
-          <path d="M 580 160 C 582 158, 598 140, 608 128 C 610 132, 596 146, 582 164 Z" fill="#6A0808" opacity=".45"/>
-
-          <!-- Ink splatter — impact marks -->
-          <circle cx="498" cy="195" r="3.5" fill="#6A0808" opacity=".55"/>
-          <circle cx="508" cy="188" r="2"   fill="#7A1111" opacity=".5"/>
-          <circle cx="486" cy="204" r="2.5" fill="#6A0808" opacity=".45"/>
-          <circle cx="515" cy="200" r="1.5" fill="#881111" opacity=".5"/>
-          <circle cx="494" cy="181" r="1"   fill="#6A0808" opacity=".4"/>
-          <circle cx="524" cy="215" r="1.5" fill="#6A0808" opacity=".35"/>
-          <circle cx="478" cy="210" r="1"   fill="#881111" opacity=".4"/>
-          <circle cx="540" cy="172" r="1"   fill="#6A0808" opacity=".35"/>
-          <!-- Larger splatter -->
-          <circle cx="556" cy="230" r="4"   fill="#5A0808" opacity=".3"/>
-          <circle cx="460" cy="155" r="3"   fill="#6A0808" opacity=".3"/>
-
-          <!-- Dual blades — crossed, aggressive, more dramatic angle -->
-          <!-- Left blade (-30 deg) -->
-          <g transform="translate(500,200) rotate(-30)">
-            <rect x="-2" y="-105" width="4.5" height="170" rx="1" fill="#B05060" opacity=".7"/>
-            <!-- Blade edge sheen -->
-            <rect x="-1" y="-105" width="1.5" height="170" rx=".5" fill="#E07080" opacity=".5"/>
-            <!-- Blood groove (hi) -->
-            <rect x=".5" y="-80" width=".8" height="130" fill="#903040" opacity=".4"/>
-            <!-- Guard -->
-            <rect x="-7" y="65" width="14" height="6" rx="1" fill="#3A1010" opacity=".9"/>
-            <rect x="-6" y="71" width="12" height="36" rx="1" fill="#280808" opacity=".9"/>
-            <!-- Blood on blade tip -->
-            <ellipse cx="0" cy="-95" rx="2" ry="4" fill="#881111" opacity=".5" filter="url(#moonBlur)"/>
-          </g>
-          <!-- Right blade (+30 deg) -->
-          <g transform="translate(535,196) rotate(30)">
-            <rect x="-2" y="-105" width="4.5" height="170" rx="1" fill="#B05060" opacity=".65"/>
-            <rect x="-1" y="-105" width="1.5" height="170" rx=".5" fill="#E07080" opacity=".45"/>
-            <rect x=".5" y="-80" width=".8" height="130" fill="#903040" opacity=".35"/>
-            <rect x="-7" y="65" width="14" height="6" rx="1" fill="#3A1010" opacity=".9"/>
-            <rect x="-6" y="71" width="12" height="36" rx="1" fill="#280808" opacity=".9"/>
-            <ellipse cx="0" cy="-95" rx="2" ry="4" fill="#881111" opacity=".45" filter="url(#moonBlur)"/>
-          </g>
-
-          <!-- Ember embers rising -->
-          <circle cx="470" cy="310" r="1.5" fill="#AA2020" opacity=".4"/>
-          <circle cx="482" cy="298" r="1"   fill="#CC3030" opacity=".35"/>
-          <circle cx="565" cy="302" r="1.5" fill="#AA2020" opacity=".35"/>
-          <circle cx="580" cy="285" r="1"   fill="#BB2828" opacity=".3"/>
-
-          <!-- ── CENTRE DIVIDER — The cut ── -->
-          <!-- Vertical brushstroke-style divider (slightly irregular) -->
-          <path d="M 339 0 C 340 40, 338 100, 340 200 C 342 300, 339 360, 341 400" fill="none" stroke="url(#sumiDivide)" stroke-width="1.5"/>
-          <!-- Centre mon (family seal / warrior's crest) -->
-          <circle cx="340" cy="200" r="18" fill="#0A0805" stroke="#C89B3C" stroke-width=".8" opacity=".8"/>
-          <circle cx="340" cy="200" r="13" fill="none" stroke="#785A28" stroke-width=".4" opacity=".5"/>
-          <!-- Interior cross — four-direction symbol -->
-          <line x1="340" y1="186" x2="340" y2="194" stroke="#C89B3C" stroke-width=".8" opacity=".5"/>
-          <line x1="340" y1="206" x2="340" y2="214" stroke="#C89B3C" stroke-width=".8" opacity=".5"/>
-          <line x1="326" y1="200" x2="334" y2="200" stroke="#C89B3C" stroke-width=".8" opacity=".5"/>
-          <line x1="346" y1="200" x2="354" y2="200" stroke="#C89B3C" stroke-width=".8" opacity=".5"/>
-          <!-- Corner diamonds of mon -->
-          <rect x="337.5" y="197.5" width="5" height="5" fill="#C89B3C" opacity=".3" transform="rotate(45,340,200)"/>
-
-          <!-- ── STANCE LABELS — calligraphic, sepia ── -->
-          <!-- MF label — vertical orientation hint -->
-          <text x="160" y="32" text-anchor="middle" fill="#2A4080" font-size="7.5" font-family="Georgia, serif" letter-spacing="4" opacity=".7">MOURNFUL FLOWER</text>
-          <line x1="80" y1="37" x2="240" y2="37" stroke="#1A2850" stroke-width=".4" opacity=".4"/>
-          <text x="160" y="48" text-anchor="middle" fill="#1A2850" font-size="6" font-family="Georgia, serif" letter-spacing="2" font-style="italic" opacity=".5">Stillness before the cut</text>
-
-          <!-- VP label -->
-          <text x="512" y="32" text-anchor="middle" fill="#771111" font-size="7.5" font-family="Georgia, serif" letter-spacing="4" opacity=".7">VENGEFUL PLIGHT</text>
-          <line x1="400" y1="37" x2="624" y2="37" stroke="#4A0808" stroke-width=".4" opacity=".4"/>
-          <text x="512" y="48" text-anchor="middle" fill="#4A0808" font-size="6" font-family="Georgia, serif" letter-spacing="2" font-style="italic" opacity=".5">No pause. No retreat.</text>
-
-          <!-- ── BOTTOM STRIP ── -->
-          <rect x="0" y="368" width="680" height="32" fill="rgba(6,4,2,.88)"/>
-          <line x1="20" y1="368" x2="660" y2="368" stroke="#1E1208" stroke-width=".5" opacity=".7"/>
-
-          <!-- Read → Convert loop — subtle, sepia -->
-          <text x="28" y="382" fill="#2A1A0A" font-size="6.5" font-family="monospace" letter-spacing="1.5">READ</text>
-          <text x="62"  y="382" fill="#1A1008" font-size="6" font-family="monospace">→</text>
-          <text x="72"  y="382" fill="#2A1A0A" font-size="6.5" font-family="monospace" letter-spacing="1.5">ADVANTAGE</text>
-          <text x="142" y="382" fill="#1A1008" font-size="6" font-family="monospace">→</text>
-          <text x="152" y="382" fill="#2A1A0A" font-size="6.5" font-family="monospace" letter-spacing="1.5">CONVERT</text>
-          <text x="212" y="382" fill="#1A1008" font-size="6" font-family="monospace">→</text>
-          <text x="222" y="382" fill="#2A1A0A" font-size="6.5" font-family="monospace" letter-spacing="1.5">RESET</text>
-
-          <!-- Centre separator mark -->
-          <text x="340" y="388" text-anchor="middle" fill="#3A2A10" font-size="8" font-family="Georgia">◆</text>
-
-          <!-- Right label -->
-          <text x="652" y="381" text-anchor="end" fill="#5A3A10" font-size="6.5" font-family="Georgia, serif" letter-spacing="1" font-style="italic">Stance-Based Duel Combat</text>
-          <text x="652" y="393" text-anchor="end" fill="#2A1808" font-size="6" font-family="monospace">Unreal Engine 5 · In Development</text>
-
-          <!-- Decorative vertical strokes on far edges — like torii pillars -->
-          <rect x="4" y="0" width="1.5" height="368" fill="#1A1008" opacity=".4"/>
-          <rect x="674.5" y="0" width="1.5" height="368" fill="#1A1008" opacity=".4"/>
-        </svg>
+    <!-- TAPPED OUT — HOW THE SIMPSONS BUILT A DECADE OF MOBILE RETENTION -->
+    <div class="pcard" onclick="window.open('tapped-out-mobile-retention.html','_blank')">
+      <div class="pcard-preview">
+        <img src="./tapped-out-cover.jpg" alt="The Simpsons: Tapped Out — official cover art of Springfield" style="width:100%;height:100%;object-fit:cover;object-position:center 35%;display:block;position:absolute;inset:0">
       </div>
-      <div class="pcard-body" style="background:#0A0805;border-top:1px solid #1E1208">
-        <h3 class="pcard-title" style="color:#C89B3C">Mournful Flower &amp; Vengeful Plight
-          <span style="font-family:var(--mono);font-size:.6rem;color:#5A3A10;border:1px solid #1E1208;padding:.1rem .4rem;margin-left:6px;vertical-align:middle;background:#07050A">IN DEVELOPMENT</span>
-        </h3>
-        <p class="pcard-desc" style="color:#5A4830">A stance-based duel combat prototype built around two opposing philosophies — <em style="color:#8A7050">Mournful Flower</em> rewards precise parries and tempo control through katana discipline, while <em style="color:#8A7050">Vengeful Plight</em> converts perfect dodges into relentless offensive chains. Advantage is earned through defense and spent through aggression.</p>
+      <div class="pcard-body">
+        <h3 class="pcard-title">Tapped Out — How The Simpsons Built a Decade of Mobile Retention</h3>
+        <p class="pcard-desc">Mobile doesn't need console feature parity to compete with it. A four-system analysis of EA's decade-long Springfield — seasonal scarcity, social prestige without leaderboards, build timers that monetize and retain simultaneously, and brand-powered quest lines that gave construction meaning no generic mechanic could replicate.</p>
         <div class="pcard-tags">
-          <span class="ptag" style="color:#3A2A18;border-color:#1E1208">Combat Systems Design</span>
-          <span class="ptag" style="color:#3A2A18;border-color:#1E1208">Unreal Engine 5</span>
-          <span class="ptag" style="color:#3A2A18;border-color:#1E1208">Stance Design</span>
-          <span class="ptag" style="color:#3A2A18;border-color:#1E1208">Posture Economy</span>
-          <span class="ptag" style="color:#C89B3C;border-color:#5A3A10">● In Development</span>
+          <span class="ptag" style="border-color:rgba(232,185,35,.35);color:#f7d24a">Mobile Game Design</span>
+          <span class="ptag">Retention Systems</span>
+          <span class="ptag">Brand-Driven Design</span>
+          <span class="ptag" style="border-color:rgba(61,124,201,.3);color:#6ba3e8">EA · Tapped Out</span>
         </div>
       </div>
     </div>
+
 
     <!-- FLUENCY — MMO COMBAT IDENTITY & PROGRESSION SYSTEM -->
     <div class="pcard" onclick="window.open('fluency-combat-design.html','_blank')" style="border-color:#1E1A28;cursor:pointer">
@@ -3468,6 +3266,223 @@ footer{
     </div>
 
 
+    <!-- MOURNFUL FLOWER & VENGEFUL PLIGHT — Combat Systems Prototype -->
+    <div class="pcard" onclick="document.getElementById('modal-mfvp').classList.add('open')" style="border-color:#1E1208;opacity:.9;cursor:pointer">
+      <div class="pcard-preview" style="background:#0A0805;overflow:hidden;position:relative">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <radialGradient id="mfInkL" cx="25%" cy="50%" r="60%">
+              <stop offset="0%" stop-color="#0F1528" stop-opacity=".9"/>
+              <stop offset="100%" stop-color="#0A0805" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="vpInkR" cx="75%" cy="50%" r="60%">
+              <stop offset="0%" stop-color="#1A0608" stop-opacity=".9"/>
+              <stop offset="100%" stop-color="#0A0805" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#3A5A90" stop-opacity=".12"/>
+              <stop offset="100%" stop-color="#3A5A90" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="emberGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#881111" stop-opacity=".16"/>
+              <stop offset="100%" stop-color="#881111" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="sumiDivide" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#C89B3C" stop-opacity="0"/>
+              <stop offset="15%" stop-color="#C89B3C" stop-opacity=".5"/>
+              <stop offset="85%" stop-color="#C89B3C" stop-opacity=".5"/>
+              <stop offset="100%" stop-color="#C89B3C" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="bladeSheen" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#6A90C0" stop-opacity="0"/>
+              <stop offset="40%" stop-color="#A0C0E8" stop-opacity=".8"/>
+              <stop offset="100%" stop-color="#6A90C0" stop-opacity="0"/>
+            </linearGradient>
+            <filter id="inkBlur"><feGaussianBlur stdDeviation="22"/></filter>
+            <filter id="softS"><feGaussianBlur stdDeviation="5"/></filter>
+            <filter id="moonBlur"><feGaussianBlur stdDeviation="3"/></filter>
+          </defs>
+
+          <!-- ── SUMI INK BASE ── -->
+          <rect width="680" height="400" fill="#0A0805"/>
+          <!-- Ink wash pools -->
+          <ellipse cx="170" cy="200" rx="220" ry="200" fill="url(#mfInkL)"/>
+          <ellipse cx="510" cy="200" rx="220" ry="200" fill="url(#vpInkR)"/>
+
+          <!-- ── LARGE ENSO — the warrior's circle, spanning the full card ── -->
+          <!-- The enso is open at top-right (traditional form) -->
+          <circle cx="340" cy="200" r="165" fill="none" stroke="#C89B3C" stroke-width="1" opacity=".055"
+            stroke-dasharray="900 180" stroke-dashoffset="260"/>
+          <circle cx="340" cy="200" r="165" fill="none" stroke="#C89B3C" stroke-width=".4" opacity=".08"
+            stroke-dasharray="1000 80" stroke-dashoffset="200"/>
+          <!-- Inner enso ring — moon-thin -->
+          <circle cx="340" cy="200" r="130" fill="none" stroke="#785A28" stroke-width=".4" opacity=".07"/>
+
+          <!-- ── MOURNFUL FLOWER SIDE ── -->
+          <!-- Moon glow — cold, precise -->
+          <ellipse cx="160" cy="185" rx="110" ry="110" fill="url(#moonGlow)" filter="url(#inkBlur)"/>
+
+          <!-- Water rings — parry timing visualised as ripples -->
+          <ellipse cx="160" cy="195" rx="88" ry="20" fill="none" stroke="#1A3060" stroke-width=".6" opacity=".35"/>
+          <ellipse cx="160" cy="195" rx="64" ry="14" fill="none" stroke="#2A4080" stroke-width=".5" opacity=".4"/>
+          <ellipse cx="160" cy="195" rx="40" ry="9" fill="none" stroke="#3A5090" stroke-width=".6" opacity=".4"/>
+          <ellipse cx="160" cy="195" rx="20" ry="4" fill="none" stroke="#4A60A0" stroke-width=".7" opacity=".5"/>
+
+          <!-- Falling petals — sakura -->
+          <ellipse cx="95"  cy="110" rx="5" ry="2.5" fill="#A0B8D8" opacity=".2" transform="rotate(-30,95,110)"/>
+          <ellipse cx="128" cy="140" rx="4" ry="2"   fill="#A0B8D8" opacity=".18" transform="rotate(-15,128,140)"/>
+          <ellipse cx="200" cy="95"  rx="4.5" ry="2" fill="#A0B8D8" opacity=".15" transform="rotate(-45,200,95)"/>
+          <ellipse cx="76"  cy="250" rx="3.5" ry="1.8" fill="#A0B8D8" opacity=".12" transform="rotate(-10,76,250)"/>
+          <ellipse cx="220" cy="300" rx="4" ry="2"   fill="#A0B8D8" opacity=".1"  transform="rotate(-55,220,300)"/>
+
+          <!-- Mist at base of MF side -->
+          <ellipse cx="150" cy="340" rx="150" ry="50" fill="#0F1528" opacity=".5" filter="url(#softS)"/>
+
+          <!-- KATANA — vertical, still, a line of silver in darkness -->
+          <!-- Blade — long, slender, slightly reflective -->
+          <rect x="158.5" y="52" width="3" height="218" rx="1.5" fill="#7090B8" opacity=".6"/>
+          <rect x="159.5" y="52" width="1.5" height="218" fill="url(#bladeSheen)" opacity=".7"/>
+          <!-- Kissaki (blade tip) -->
+          <polygon points="158.5,52 162,52 160,44" fill="#8AAAD0" opacity=".7"/>
+          <!-- Habaki (blade collar) -->
+          <rect x="155" y="270" width="10" height="6" rx="1" fill="#3A4A6A" opacity=".8"/>
+          <!-- Tsuba (guard) — simple round form -->
+          <ellipse cx="160" cy="276" rx="16" ry="5" fill="none" stroke="#4A6A90" stroke-width="1" opacity=".6"/>
+          <ellipse cx="160" cy="276" rx="16" ry="5" fill="#1A2A40" opacity=".6"/>
+          <!-- Tsuka (handle) wrapped -->
+          <rect x="156" y="281" width="8" height="52" rx="1" fill="#1A2030" opacity=".85"/>
+          <!-- Tsuka ito (handle wrap) marks -->
+          <line x1="156" y1="288" x2="164" y2="288" stroke="#2A3A58" stroke-width="1" opacity=".6"/>
+          <line x1="156" y1="297" x2="164" y2="297" stroke="#2A3A58" stroke-width="1" opacity=".5"/>
+          <line x1="156" y1="306" x2="164" y2="306" stroke="#2A3A58" stroke-width="1" opacity=".6"/>
+          <line x1="156" y1="315" x2="164" y2="315" stroke="#2A3A58" stroke-width="1" opacity=".5"/>
+          <line x1="156" y1="324" x2="164" y2="324" stroke="#2A3A58" stroke-width="1" opacity=".6"/>
+          <!-- Kashira (pommel) -->
+          <rect x="156" y="333" width="8" height="5" rx="2" fill="#2A3A58" opacity=".7"/>
+          <!-- Moon on the blade — reflection point -->
+          <ellipse cx="160" cy="140" rx="2" ry="12" fill="#C0D8F0" opacity=".25" filter="url(#moonBlur)"/>
+
+          <!-- ── VENGEFUL PLIGHT SIDE ── -->
+          <!-- Ember glow — hot, aggressive -->
+          <ellipse cx="520" cy="200" rx="130" ry="130" fill="url(#emberGlow)" filter="url(#inkBlur)"/>
+
+          <!-- Brushstroke slashes — sumi-e style (filled paths, tapered) -->
+          <!-- Primary slash: diagonal, thick center, tapered ends -->
+          <path d="M 415 75 C 418 80, 445 115, 475 155 C 505 195, 545 245, 568 278 C 575 290, 572 298, 565 294 C 558 290, 550 278, 520 238 C 490 198, 458 152, 430 112 C 412 88, 410 78, 415 75 Z" fill="#7A0E0E" opacity=".45"/>
+          <!-- Counter slash -->
+          <path d="M 615 68 C 612 74, 588 102, 562 140 C 536 178, 498 228, 476 265 C 469 278, 472 286, 479 282 C 486 278, 494 266, 520 228 C 546 190, 582 140, 608 102 C 624 80, 618 62, 615 68 Z" fill="#881111" opacity=".38"/>
+          <!-- Secondary slash marks — smaller, more chaotic -->
+          <path d="M 430 290 C 432 292, 448 268, 462 248 C 466 253, 452 274, 436 296 Z" fill="#6A0808" opacity=".5"/>
+          <path d="M 580 160 C 582 158, 598 140, 608 128 C 610 132, 596 146, 582 164 Z" fill="#6A0808" opacity=".45"/>
+
+          <!-- Ink splatter — impact marks -->
+          <circle cx="498" cy="195" r="3.5" fill="#6A0808" opacity=".55"/>
+          <circle cx="508" cy="188" r="2"   fill="#7A1111" opacity=".5"/>
+          <circle cx="486" cy="204" r="2.5" fill="#6A0808" opacity=".45"/>
+          <circle cx="515" cy="200" r="1.5" fill="#881111" opacity=".5"/>
+          <circle cx="494" cy="181" r="1"   fill="#6A0808" opacity=".4"/>
+          <circle cx="524" cy="215" r="1.5" fill="#6A0808" opacity=".35"/>
+          <circle cx="478" cy="210" r="1"   fill="#881111" opacity=".4"/>
+          <circle cx="540" cy="172" r="1"   fill="#6A0808" opacity=".35"/>
+          <!-- Larger splatter -->
+          <circle cx="556" cy="230" r="4"   fill="#5A0808" opacity=".3"/>
+          <circle cx="460" cy="155" r="3"   fill="#6A0808" opacity=".3"/>
+
+          <!-- Dual blades — crossed, aggressive, more dramatic angle -->
+          <!-- Left blade (-30 deg) -->
+          <g transform="translate(500,200) rotate(-30)">
+            <rect x="-2" y="-105" width="4.5" height="170" rx="1" fill="#B05060" opacity=".7"/>
+            <!-- Blade edge sheen -->
+            <rect x="-1" y="-105" width="1.5" height="170" rx=".5" fill="#E07080" opacity=".5"/>
+            <!-- Blood groove (hi) -->
+            <rect x=".5" y="-80" width=".8" height="130" fill="#903040" opacity=".4"/>
+            <!-- Guard -->
+            <rect x="-7" y="65" width="14" height="6" rx="1" fill="#3A1010" opacity=".9"/>
+            <rect x="-6" y="71" width="12" height="36" rx="1" fill="#280808" opacity=".9"/>
+            <!-- Blood on blade tip -->
+            <ellipse cx="0" cy="-95" rx="2" ry="4" fill="#881111" opacity=".5" filter="url(#moonBlur)"/>
+          </g>
+          <!-- Right blade (+30 deg) -->
+          <g transform="translate(535,196) rotate(30)">
+            <rect x="-2" y="-105" width="4.5" height="170" rx="1" fill="#B05060" opacity=".65"/>
+            <rect x="-1" y="-105" width="1.5" height="170" rx=".5" fill="#E07080" opacity=".45"/>
+            <rect x=".5" y="-80" width=".8" height="130" fill="#903040" opacity=".35"/>
+            <rect x="-7" y="65" width="14" height="6" rx="1" fill="#3A1010" opacity=".9"/>
+            <rect x="-6" y="71" width="12" height="36" rx="1" fill="#280808" opacity=".9"/>
+            <ellipse cx="0" cy="-95" rx="2" ry="4" fill="#881111" opacity=".45" filter="url(#moonBlur)"/>
+          </g>
+
+          <!-- Ember embers rising -->
+          <circle cx="470" cy="310" r="1.5" fill="#AA2020" opacity=".4"/>
+          <circle cx="482" cy="298" r="1"   fill="#CC3030" opacity=".35"/>
+          <circle cx="565" cy="302" r="1.5" fill="#AA2020" opacity=".35"/>
+          <circle cx="580" cy="285" r="1"   fill="#BB2828" opacity=".3"/>
+
+          <!-- ── CENTRE DIVIDER — The cut ── -->
+          <!-- Vertical brushstroke-style divider (slightly irregular) -->
+          <path d="M 339 0 C 340 40, 338 100, 340 200 C 342 300, 339 360, 341 400" fill="none" stroke="url(#sumiDivide)" stroke-width="1.5"/>
+          <!-- Centre mon (family seal / warrior's crest) -->
+          <circle cx="340" cy="200" r="18" fill="#0A0805" stroke="#C89B3C" stroke-width=".8" opacity=".8"/>
+          <circle cx="340" cy="200" r="13" fill="none" stroke="#785A28" stroke-width=".4" opacity=".5"/>
+          <!-- Interior cross — four-direction symbol -->
+          <line x1="340" y1="186" x2="340" y2="194" stroke="#C89B3C" stroke-width=".8" opacity=".5"/>
+          <line x1="340" y1="206" x2="340" y2="214" stroke="#C89B3C" stroke-width=".8" opacity=".5"/>
+          <line x1="326" y1="200" x2="334" y2="200" stroke="#C89B3C" stroke-width=".8" opacity=".5"/>
+          <line x1="346" y1="200" x2="354" y2="200" stroke="#C89B3C" stroke-width=".8" opacity=".5"/>
+          <!-- Corner diamonds of mon -->
+          <rect x="337.5" y="197.5" width="5" height="5" fill="#C89B3C" opacity=".3" transform="rotate(45,340,200)"/>
+
+          <!-- ── STANCE LABELS — calligraphic, sepia ── -->
+          <!-- MF label — vertical orientation hint -->
+          <text x="160" y="32" text-anchor="middle" fill="#2A4080" font-size="7.5" font-family="Georgia, serif" letter-spacing="4" opacity=".7">MOURNFUL FLOWER</text>
+          <line x1="80" y1="37" x2="240" y2="37" stroke="#1A2850" stroke-width=".4" opacity=".4"/>
+          <text x="160" y="48" text-anchor="middle" fill="#1A2850" font-size="6" font-family="Georgia, serif" letter-spacing="2" font-style="italic" opacity=".5">Stillness before the cut</text>
+
+          <!-- VP label -->
+          <text x="512" y="32" text-anchor="middle" fill="#771111" font-size="7.5" font-family="Georgia, serif" letter-spacing="4" opacity=".7">VENGEFUL PLIGHT</text>
+          <line x1="400" y1="37" x2="624" y2="37" stroke="#4A0808" stroke-width=".4" opacity=".4"/>
+          <text x="512" y="48" text-anchor="middle" fill="#4A0808" font-size="6" font-family="Georgia, serif" letter-spacing="2" font-style="italic" opacity=".5">No pause. No retreat.</text>
+
+          <!-- ── BOTTOM STRIP ── -->
+          <rect x="0" y="368" width="680" height="32" fill="rgba(6,4,2,.88)"/>
+          <line x1="20" y1="368" x2="660" y2="368" stroke="#1E1208" stroke-width=".5" opacity=".7"/>
+
+          <!-- Read → Convert loop — subtle, sepia -->
+          <text x="28" y="382" fill="#2A1A0A" font-size="6.5" font-family="monospace" letter-spacing="1.5">READ</text>
+          <text x="62"  y="382" fill="#1A1008" font-size="6" font-family="monospace">→</text>
+          <text x="72"  y="382" fill="#2A1A0A" font-size="6.5" font-family="monospace" letter-spacing="1.5">ADVANTAGE</text>
+          <text x="142" y="382" fill="#1A1008" font-size="6" font-family="monospace">→</text>
+          <text x="152" y="382" fill="#2A1A0A" font-size="6.5" font-family="monospace" letter-spacing="1.5">CONVERT</text>
+          <text x="212" y="382" fill="#1A1008" font-size="6" font-family="monospace">→</text>
+          <text x="222" y="382" fill="#2A1A0A" font-size="6.5" font-family="monospace" letter-spacing="1.5">RESET</text>
+
+          <!-- Centre separator mark -->
+          <text x="340" y="388" text-anchor="middle" fill="#3A2A10" font-size="8" font-family="Georgia">◆</text>
+
+          <!-- Right label -->
+          <text x="652" y="381" text-anchor="end" fill="#5A3A10" font-size="6.5" font-family="Georgia, serif" letter-spacing="1" font-style="italic">Stance-Based Duel Combat</text>
+          <text x="652" y="393" text-anchor="end" fill="#2A1808" font-size="6" font-family="monospace">Unreal Engine 5 · In Development</text>
+
+          <!-- Decorative vertical strokes on far edges — like torii pillars -->
+          <rect x="4" y="0" width="1.5" height="368" fill="#1A1008" opacity=".4"/>
+          <rect x="674.5" y="0" width="1.5" height="368" fill="#1A1008" opacity=".4"/>
+        </svg>
+      </div>
+      <div class="pcard-body" style="background:#0A0805;border-top:1px solid #1E1208">
+        <h3 class="pcard-title" style="color:#C89B3C">Mournful Flower &amp; Vengeful Plight
+          <span style="font-family:var(--mono);font-size:.6rem;color:#5A3A10;border:1px solid #1E1208;padding:.1rem .4rem;margin-left:6px;vertical-align:middle;background:#07050A">IN DEVELOPMENT</span>
+        </h3>
+        <p class="pcard-desc" style="color:#5A4830">A stance-based duel combat prototype built around two opposing philosophies — <em style="color:#8A7050">Mournful Flower</em> rewards precise parries and tempo control through katana discipline, while <em style="color:#8A7050">Vengeful Plight</em> converts perfect dodges into relentless offensive chains. Advantage is earned through defense and spent through aggression.</p>
+        <div class="pcard-tags">
+          <span class="ptag" style="color:#3A2A18;border-color:#1E1208">Combat Systems Design</span>
+          <span class="ptag" style="color:#3A2A18;border-color:#1E1208">Unreal Engine 5</span>
+          <span class="ptag" style="color:#3A2A18;border-color:#1E1208">Stance Design</span>
+          <span class="ptag" style="color:#3A2A18;border-color:#1E1208">Posture Economy</span>
+          <span class="ptag" style="color:#C89B3C;border-color:#5A3A10">● In Development</span>
+        </div>
+      </div>
+    </div>
+
     <!-- ARKHAM CITY — NARRATIVE PACING ANALYSIS -->
     <div class="pcard" onclick="openModal('arkham')">
       <div class="pcard-preview">
@@ -3564,24 +3579,6 @@ footer{
         </div>
       </div>
     </div>
-
-    <!-- TAPPED OUT — HOW THE SIMPSONS BUILT A DECADE OF MOBILE RETENTION -->
-    <div class="pcard" onclick="window.open('tapped-out-mobile-retention.html','_blank')">
-      <div class="pcard-preview">
-        <img src="./tapped-out-cover.jpg" alt="The Simpsons: Tapped Out — official cover art of Springfield" style="width:100%;height:100%;object-fit:cover;object-position:center 35%;display:block;position:absolute;inset:0">
-      </div>
-      <div class="pcard-body">
-        <h3 class="pcard-title">Tapped Out — How The Simpsons Built a Decade of Mobile Retention</h3>
-        <p class="pcard-desc">Mobile doesn't need console feature parity to compete with it. A four-system analysis of EA's decade-long Springfield — seasonal scarcity, social prestige without leaderboards, build timers that monetize and retain simultaneously, and brand-powered quest lines that gave construction meaning no generic mechanic could replicate.</p>
-        <div class="pcard-tags">
-          <span class="ptag" style="border-color:rgba(232,185,35,.35);color:#f7d24a">Mobile Game Design</span>
-          <span class="ptag">Retention Systems</span>
-          <span class="ptag">Brand-Driven Design</span>
-          <span class="ptag" style="border-color:rgba(61,124,201,.3);color:#6ba3e8">EA · Tapped Out</span>
-        </div>
-      </div>
-    </div>
-
 
     <!-- INFAMOUS 2 — KARMIC WORLD REACTIVITY -->
     <div class="pcard" onclick="window.open('infamous-karma-redesign.html','_blank')">
@@ -6880,7 +6877,7 @@ footer{
   <div class="about-grid">
     <div>
       <div class="about-text">
-        <p>I study game systems — how they're designed, what they promise players, and why they succeed or fall apart. Combat architecture, onboarding loops, economy design, narrative pacing — I pull these apart to understand <em>what's actually going on.</em></p>
+        <p>I study game systems — how they're designed, what they promise players, and why they succeed or fall apart. Progression systems, LiveOps design, player behaviour, combat architecture — I pull these apart to understand <em>what's actually going on.</em></p>
         <p>Then I build the data layer that proves it. SQL, Python, Streamlit — from scratch. Most people who think about game design don't have that. Most people who build analytics dashboards don't think about game design. <em>I do both.</em></p>
       </div>
       <a href="https://diamond-apparel-ca4.notion.site/Portfolio-36d20d328f448012af39c1beddca4704" target="_blank" class="read-more">READ MORE →</a>
@@ -7013,40 +7010,14 @@ footer{
         </div>
       </div>
 
-      <!-- Snap 3: Credit score gauge -->
-      <div class="snap-card" onclick="openModal('credit')">
+      <!-- Snap 3: DBD Lifecycle interactive dashboard -->
+      <div class="snap-card snap-card-lg" onclick="window.open('dbd-retention-dashboard.html','_blank')">
         <div class="snap-card-img">
-          <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-            <rect width="320" height="200" fill="#0c0918"/>
-            <text x="10" y="16" fill="#9b6dff" font-size="7" font-family="monospace" opacity=".8">CREDIT SCORE TRANSPARENCY</text>
-            <circle cx="100" cy="108" r="62" fill="none" stroke="#1a1030" stroke-width="13"/>
-            <circle cx="100" cy="108" r="62" fill="none" stroke="#9b6dff" stroke-width="13" stroke-dasharray="260 130" stroke-dashoffset="100" stroke-linecap="round" opacity=".72"/>
-            <text x="100" y="101" text-anchor="middle" fill="#f2f2f2" font-size="26" font-weight="700" font-family="-apple-system,sans-serif">742</text>
-            <text x="100" y="117" text-anchor="middle" fill="#9b6dff" font-size="8" font-family="monospace">GOOD ↑ +12</text>
-            <!-- nudge panel -->
-            <rect x="178" y="28" width="132" height="44" fill="#110e20" stroke="#9b6dff" stroke-width=".5" rx="2"/>
-            <text x="188" y="43" fill="#9b6dff" font-size="6.5" font-family="monospace">WHY DID THIS CHANGE?</text>
-            <text x="188" y="56" fill="#777" font-size="7" font-family="-apple-system,sans-serif">Utilization: 38% → 22%</text>
-            <text x="188" y="68" fill="#3de8a0" font-size="6.5" font-family="monospace">→ Stay below 30%</text>
-            <!-- goals -->
-            <rect x="178" y="82" width="60" height="40" fill="#0f0c22" stroke="#1e1a3a" stroke-width=".5" rx="2"/>
-            <text x="208" y="96" text-anchor="middle" fill="#555" font-size="6" font-family="monospace">RENT APT</text>
-            <text x="208" y="108" text-anchor="middle" fill="#f2f2f2" font-size="9" font-weight="600" font-family="-apple-system,sans-serif">On Track</text>
-            <rect x="250" y="82" width="60" height="40" fill="#0f0c22" stroke="#1e1a3a" stroke-width=".5" rx="2"/>
-            <text x="280" y="96" text-anchor="middle" fill="#555" font-size="6" font-family="monospace">CAR LOAN</text>
-            <text x="280" y="108" text-anchor="middle" fill="#9b6dff" font-size="8.5" font-weight="600" font-family="-apple-system,sans-serif">In Progress</text>
-            <!-- bars -->
-            <text x="10" y="158" fill="#333" font-size="6.5" font-family="monospace">PAYMENTS</text>
-            <rect x="10" y="163" width="140" height="4" fill="#1a1030" rx="2"/>
-            <rect x="10" y="163" width="124" height="4" fill="#9b6dff" rx="2" opacity=".65"/>
-            <text x="10" y="180" fill="#333" font-size="6.5" font-family="monospace">UTILIZATION</text>
-            <rect x="10" y="185" width="140" height="4" fill="#1a1030" rx="2"/>
-            <rect x="10" y="185" width="70" height="4" fill="#3de8a0" rx="2" opacity=".65"/>
-          </svg>
+          <iframe src="snapshot-dbd-lifecycle.html" scrolling="no" title="Lifecycle Drop-Off Mapping — Dead by Daylight"></iframe>
         </div>
         <div class="snap-card-label">
-          <div class="snap-card-title">Credit Transparency Dashboard</div>
-          <div class="snap-card-sub">Fintech UX · Behavioural Finance</div>
+          <div class="snap-card-title">Lifecycle Drop-Off Mapping</div>
+          <div class="snap-card-sub">Dead by Daylight · Interactive Dashboard</div>
         </div>
       </div>
 
@@ -7720,28 +7691,13 @@ footer{
       <a href="#work" class="acard-btn">See Projects</a>
     </div>
     <div class="acard">
-      <h3>Design Analysis &amp; Research</h3>
-      <p>I pull apart how existing games are built — combat flows, onboarding loops, economy structures, narrative pacing — and build the case for why they work or don't.</p>
-      <a href="#work" class="acard-btn">See Projects</a>
-    </div>
-    <div class="acard">
       <h3>LiveOps &amp; Retention Analytics</h3>
       <p>Telemetry infrastructure, churn signals, cohort views, frustration detection. I build the data layer that tells you where players drop off — and what the design should do about it.</p>
       <a href="#liveops" class="acard-btn">See Projects</a>
     </div>
     <div class="acard">
-      <h3>SQL + Python + Streamlit</h3>
-      <p>I write the queries, build the pipelines, and ship the dashboards. End-to-end — schema design through interactive front end. Built from scratch, not templates.</p>
-      <a href="https://diamond-apparel-ca4.notion.site/Portfolio-36d20d328f448012af39c1beddca4704" target="_blank" class="acard-btn">Full Portfolio →</a>
-    </div>
-    <div class="acard">
       <h3>Behavioural Modelling</h3>
       <p>Churn modelling, session decay, progression funnel breakdowns. I don't just identify when users leave — I map the design signals that precede it and connect them back to product decisions.</p>
-      <a href="#liveops" class="acard-btn">See Projects</a>
-    </div>
-    <div class="acard">
-      <h3>Cross-Domain UX Research</h3>
-      <p>The systems thinking from game design applies beyond gaming — fintech activation funnels, urban commuter behaviour, avoidance patterns. Same frameworks, different context.</p>
       <a href="#liveops" class="acard-btn">See Projects</a>
     </div>
   </div>

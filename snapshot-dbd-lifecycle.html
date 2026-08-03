@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lifecycle Drop-Off Mapping — Dead by Daylight</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 540px; height: 380px; overflow: hidden; background: #0a0a0a; }
+</style>
+</head>
+<body>
+<svg width="540" height="380" viewBox="0 0 540 380" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="dbdBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d0f14"/>
+      <stop offset="100%" stop-color="#08090c"/>
+    </linearGradient>
+    <linearGradient id="rowJan" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#ff6b5b"/><stop offset="100%" stop-color="#c0392b"/></linearGradient>
+    <linearGradient id="rowFeb" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#5b8fff"/><stop offset="100%" stop-color="#2980b9"/></linearGradient>
+    <linearGradient id="rowMar" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#3de8a0"/><stop offset="100%" stop-color="#27ae60"/></linearGradient>
+    <linearGradient id="rowApr" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f5c451"/><stop offset="100%" stop-color="#e67e22"/></linearGradient>
+    <radialGradient id="dbdGlow" cx="50%" cy="0%" r="60%">
+      <stop offset="0%" stop-color="#5b8fff" stop-opacity=".08"/>
+      <stop offset="100%" stop-color="#5b8fff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="540" height="380" fill="url(#dbdBg)"/>
+  <rect width="540" height="380" fill="url(#dbdGlow)"/>
+
+  <!-- Top bar -->
+  <rect width="540" height="28" fill="#07080a"/>
+  <rect width="540" height="1" y="28" fill="#5b8fff" opacity=".4"/>
+  <rect width="4" height="28" fill="#5b8fff"/>
+  <text x="12" y="18" fill="#5b8fff" font-size="8.5" font-family="'Courier New',monospace" letter-spacing="1.5">LIFECYCLE DROP-OFF MAPPING · DEAD BY DAYLIGHT</text>
+  <text x="528" y="18" text-anchor="end" fill="#ff6b5b" font-size="7" font-family="'Courier New',monospace">LIVE DASHBOARD</text>
+
+  <!-- Heatmap header row -->
+  <text x="20" y="48" fill="#555" font-size="7" font-family="'Courier New',monospace" letter-spacing="1">COHORT</text>
+  <text x="220" y="48" fill="#555" font-size="7" font-family="'Courier New',monospace" letter-spacing="1">D1</text>
+  <text x="270" y="48" fill="#ff6b5b" font-size="7" font-family="'Courier New',monospace" letter-spacing="1">D7 ●</text>
+  <text x="325" y="48" fill="#555" font-size="7" font-family="'Courier New',monospace" letter-spacing="1">D14</text>
+  <text x="380" y="48" fill="#555" font-size="7" font-family="'Courier New',monospace" letter-spacing="1">D30</text>
+  <text x="435" y="48" fill="#555" font-size="7" font-family="'Courier New',monospace" letter-spacing="1">D60</text>
+  <text x="490" y="48" fill="#555" font-size="7" font-family="'Courier New',monospace" letter-spacing="1">D68</text>
+
+  <!-- Row template: label + colored bar + values -->
+  <!-- JAN -->
+  <rect x="12" y="56" width="516" height="36" fill="#111318" stroke="#c0392b" stroke-width=".7" rx="2"/>
+  <rect x="12" y="56" width="4" height="36" fill="url(#rowJan)"/>
+  <text x="24" y="78" fill="#ff6b5b" font-size="8" font-family="'Courier New',monospace" font-weight="bold">JAN</text>
+  <text x="215" y="78" fill="#ccc" font-size="7.5" font-family="'Courier New',monospace">100%</text>
+  <text x="265" y="78" fill="#ff6b5b" font-size="8" font-family="'Courier New',monospace" font-weight="bold">38%</text>
+  <text x="320" y="78" fill="#999" font-size="7.5" font-family="'Courier New',monospace">28%</text>
+  <text x="375" y="78" fill="#999" font-size="7.5" font-family="'Courier New',monospace">19%</text>
+  <text x="430" y="78" fill="#777" font-size="7.5" font-family="'Courier New',monospace">13%</text>
+  <text x="485" y="78" fill="#777" font-size="7.5" font-family="'Courier New',monospace">10%</text>
+
+  <!-- FEB -->
+  <rect x="12" y="96" width="516" height="36" fill="#111318" stroke="#2980b9" stroke-width=".7" rx="2"/>
+  <rect x="12" y="96" width="4" height="36" fill="url(#rowFeb)"/>
+  <text x="24" y="118" fill="#5b8fff" font-size="8" font-family="'Courier New',monospace" font-weight="bold">FEB</text>
+  <text x="215" y="118" fill="#ccc" font-size="7.5" font-family="'Courier New',monospace">100%</text>
+  <text x="265" y="118" fill="#5b8fff" font-size="8" font-family="'Courier New',monospace" font-weight="bold">44%</text>
+  <text x="320" y="118" fill="#999" font-size="7.5" font-family="'Courier New',monospace">33%</text>
+  <text x="375" y="118" fill="#999" font-size="7.5" font-family="'Courier New',monospace">23%</text>
+  <text x="430" y="118" fill="#777" font-size="7.5" font-family="'Courier New',monospace">16%</text>
+  <text x="485" y="118" fill="#777" font-size="7.5" font-family="'Courier New',monospace">13%</text>
+
+  <!-- MAR -->
+  <rect x="12" y="136" width="516" height="36" fill="#111318" stroke="#27ae60" stroke-width=".7" rx="2"/>
+  <rect x="12" y="136" width="4" height="36" fill="url(#rowMar)"/>
+  <text x="24" y="158" fill="#3de8a0" font-size="8" font-family="'Courier New',monospace" font-weight="bold">MAR</text>
+  <text x="215" y="158" fill="#ccc" font-size="7.5" font-family="'Courier New',monospace">100%</text>
+  <text x="265" y="158" fill="#3de8a0" font-size="8" font-family="'Courier New',monospace" font-weight="bold">41%</text>
+  <text x="320" y="158" fill="#999" font-size="7.5" font-family="'Courier New',monospace">30%</text>
+  <text x="375" y="158" fill="#999" font-size="7.5" font-family="'Courier New',monospace">20%</text>
+  <text x="430" y="158" fill="#777" font-size="7.5" font-family="'Courier New',monospace">14%</text>
+  <text x="485" y="158" fill="#777" font-size="7.5" font-family="'Courier New',monospace">11%</text>
+
+  <!-- APR -->
+  <rect x="12" y="176" width="516" height="36" fill="#111318" stroke="#e67e22" stroke-width=".7" rx="2"/>
+  <rect x="12" y="176" width="4" height="36" fill="url(#rowApr)"/>
+  <text x="24" y="198" fill="#f5c451" font-size="8" font-family="'Courier New',monospace" font-weight="bold">APR</text>
+  <text x="215" y="198" fill="#ccc" font-size="7.5" font-family="'Courier New',monospace">100%</text>
+  <text x="265" y="198" fill="#f5c451" font-size="8" font-family="'Courier New',monospace" font-weight="bold">46%</text>
+  <text x="320" y="198" fill="#999" font-size="7.5" font-family="'Courier New',monospace">35%</text>
+  <text x="375" y="198" fill="#999" font-size="7.5" font-family="'Courier New',monospace">25%</text>
+  <text x="430" y="198" fill="#777" font-size="7.5" font-family="'Courier New',monospace">17%</text>
+  <text x="485" y="198" fill="#777" font-size="7.5" font-family="'Courier New',monospace">14%</text>
+
+  <!-- Cliff annotation -->
+  <line x1="264" y1="44" x2="264" y2="216" stroke="#ff6b5b" stroke-width="1" stroke-dasharray="3 2" opacity=".4"/>
+  <text x="264" y="228" text-anchor="middle" fill="#ff6b5b" font-size="6.5" font-family="'Courier New',monospace">↑ LIFECYCLE CLIFF</text>
+
+  <!-- Bottom stats bar -->
+  <rect x="12" y="248" width="516" height="52" fill="#07080a" stroke="#1c1e24" stroke-width=".7" rx="2"/>
+  <line x1="142" y1="248" x2="142" y2="300" stroke="#1c1e24" stroke-width=".7"/>
+  <line x1="272" y1="248" x2="272" y2="300" stroke="#1c1e24" stroke-width=".7"/>
+  <line x1="402" y1="248" x2="402" y2="300" stroke="#1c1e24" stroke-width=".7"/>
+
+  <text x="77" y="265" text-anchor="middle" fill="#444" font-size="6.5" font-family="'Courier New',monospace">D7 AVG RETENTION</text>
+  <text x="77" y="286" text-anchor="middle" fill="#5b8fff" font-size="18" font-weight="700" font-family="'Courier New',monospace">42.3%</text>
+
+  <text x="207" y="265" text-anchor="middle" fill="#444" font-size="6.5" font-family="'Courier New',monospace">PRIMARY SIGNAL</text>
+  <text x="207" y="286" text-anchor="middle" fill="#ff6b5b" font-size="18" font-weight="700" font-family="'Courier New',monospace">68%</text>
+
+  <text x="337" y="265" text-anchor="middle" fill="#444" font-size="6.5" font-family="'Courier New',monospace">CLIFF POINT</text>
+  <text x="337" y="286" text-anchor="middle" fill="#f5c451" font-size="18" font-weight="700" font-family="'Courier New',monospace">D7</text>
+
+  <text x="461" y="265" text-anchor="middle" fill="#444" font-size="6.5" font-family="'Courier New',monospace">PLAYERS TRACKED</text>
+  <text x="461" y="286" text-anchor="middle" fill="#e8e8e8" font-size="16" font-weight="700" font-family="'Courier New',monospace">10,012</text>
+
+  <!-- Footer -->
+  <text x="12" y="320" fill="#2a2c33" font-size="6.5" font-family="'Courier New',monospace">4 COHORTS · D1 → D68 TRACKED</text>
+  <text x="528" y="320" text-anchor="end" fill="#2a2c33" font-size="6.5" font-family="'Courier New',monospace">SQL + TABLEAU · INTERACTIVE DASHBOARD</text>
+
+  <!-- Bottom hint bar -->
+  <rect x="12" y="336" width="516" height="30" fill="rgba(91,143,255,.06)" stroke="rgba(91,143,255,.25)" stroke-width=".7"/>
+  <text x="270" y="355" text-anchor="middle" fill="#5b8fff" font-size="7.5" font-family="'Courier New',monospace" letter-spacing="1">SELECT A COHORT TO INSPECT BEHAVIOURAL SIGNALS →</text>
+</svg>
+</body>
+</html>
