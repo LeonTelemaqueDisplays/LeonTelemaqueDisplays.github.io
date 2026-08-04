@@ -1,0 +1,3142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Player Systems Lab — Leon Telemaque</title>
+<style>
+  :root {
+    --bg: #080808;
+    --surface: #0f0f0f;
+    --surface-2: #141414;
+    --surface-3: #1a1a1a;
+    --border: #1e1e1e;
+    --border-2: #2a2a2a;
+    --gold: #c9a84c;
+    --gold-dim: #6a571f;
+    --gold-glow: rgba(201,168,76,0.08);
+    --red: #c0392b;
+    --red-dim: rgba(192,57,43,0.15);
+    --green: #27ae60;
+    --green-dim: rgba(39,174,96,0.12);
+    --amber: #e67e22;
+    --blue: #2980b9;
+    --purple: #8e44ad;
+    --text: #e8e8e8;
+    --text-mid: #888;
+    --text-dim: #444;
+    --mono: 'Courier New', monospace;
+    --sans: system-ui, -apple-system, sans-serif;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  .lab-header {
+    padding: 28px 40px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 100;
+  }
+
+  .lab-wordmark {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .lab-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .lab-subtitle {
+    font-size: 13px;
+    color: var(--text-mid);
+    max-width: 480px;
+    line-height: 1.5;
+  }
+
+  .lab-nav {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+  }
+
+  .nav-btn {
+    padding: 7px 14px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .nav-btn:hover { color: var(--text-mid); border-color: var(--border-2); }
+  .nav-btn.active { color: var(--gold); border-color: var(--gold-dim); background: var(--gold-glow); }
+
+  /* ── MAIN LAYOUT ── */
+  .lab-body {
+    display: grid;
+    grid-template-columns: 320px 1fr 300px;
+    height: calc(100vh - 85px);
+    overflow: hidden;
+  }
+
+  /* ── LEFT: CONTROLS ── */
+  .controls-panel {
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .controls-panel::-webkit-scrollbar { width: 3px; }
+  .controls-panel::-webkit-scrollbar-track { background: transparent; }
+  .controls-panel::-webkit-scrollbar-thumb { background: var(--border-2); }
+
+  .panel-section-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .slider-group { display: flex; flex-direction: column; gap: 14px; }
+
+  .slider-row { display: flex; flex-direction: column; gap: 6px; }
+
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .slider-label {
+    font-size: 12px;
+    color: var(--text-mid);
+    font-weight: 500;
+  }
+
+  .slider-value {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gold);
+    min-width: 32px;
+    text-align: right;
+  }
+
+  .slider-hint {
+    font-size: 10px;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 2px;
+    background: var(--border-2);
+    outline: none;
+    cursor: pointer;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--gold);
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.3); }
+
+  /* ── CENTER: VISUALIZATION ── */
+  .viz-panel {
+    overflow-y: auto;
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .viz-panel::-webkit-scrollbar { width: 3px; }
+  .viz-panel::-webkit-scrollbar-track { background: transparent; }
+  .viz-panel::-webkit-scrollbar-thumb { background: var(--border-2); }
+
+  /* ── ARCHETYPES ── */
+  .archetypes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .archetype-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .archetype-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent-color, var(--gold));
+    opacity: 0.6;
+  }
+
+  .archetype-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .archetype-emoji { font-size: 18px; }
+
+  .archetype-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .archetype-state {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    padding: 3px 7px;
+    display: inline-block;
+    border: 1px solid currentColor;
+    opacity: 0.85;
+  }
+
+  .archetype-mood {
+    display: none;
+  }
+
+  .archetype-bars { display: flex; flex-direction: column; gap: 5px; }
+
+  .mini-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .mini-bar-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--text-dim);
+    width: 52px;
+    flex-shrink: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .mini-bar-track {
+    flex: 1;
+    height: 2px;
+    background: var(--border-2);
+  }
+
+  .mini-bar-fill {
+    height: 100%;
+    transition: width 0.5s ease;
+  }
+
+  /* ── OUTPUT METRICS ── */
+  .outputs-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .output-cell {
+    background: var(--surface);
+    padding: 14px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .output-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .output-value {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    transition: color 0.4s;
+  }
+
+  .output-delta {
+    font-family: var(--mono);
+    font-size: 9px;
+  }
+
+  /* ── CHART ── */
+  .chart-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+
+  .chart-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  canvas { width: 100% !important; }
+
+  /* ── TRADEOFF ── */
+  .tradeoff-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+
+  .tradeoff-title {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .tradeoff-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .tradeoff-column { display: flex; flex-direction: column; gap: 6px; }
+
+  .tradeoff-column-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+
+  .winner { color: var(--green); }
+  .loser { color: var(--red); }
+
+  .tradeoff-player {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    padding: 5px 8px;
+    background: var(--surface-2);
+  }
+
+  .tradeoff-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── RIGHT: DESIGN PHILOSOPHY ── */
+  .philosophy-panel {
+    border-left: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .philosophy-panel::-webkit-scrollbar { width: 3px; }
+  .philosophy-panel::-webkit-scrollbar-track { background: transparent; }
+  .philosophy-panel::-webkit-scrollbar-thumb { background: var(--border-2); }
+
+  .philosophy-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px;
+  }
+
+  .philosophy-card-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .philosophy-principle {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+
+  .philosophy-body {
+    font-size: 11px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  .philosophy-examples {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .example-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 3px 7px;
+    background: var(--surface-3);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    letter-spacing: 0.05em;
+  }
+
+  .active-slider-highlight {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gold);
+    padding: 8px 10px;
+    background: var(--gold-glow);
+    border: 1px solid var(--gold-dim);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+
+  /* ── REAL WORLD EXAMPLES ── */
+  .examples-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px;
+  }
+
+  .examples-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .example-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+
+  .example-row:last-child { border-bottom: none; }
+
+  .example-game {
+    font-weight: 600;
+    color: var(--text);
+    min-width: 90px;
+    flex-shrink: 0;
+  }
+
+  .example-note { color: var(--text-mid); line-height: 1.4; }
+
+  /* ── MODULE STATUS ── */
+  .module-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+
+  .status-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .coming-soon {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    letter-spacing: 0.08em;
+  }
+
+  /* ── FULL WIDTH MODE ── */
+  .lab-body.full-width {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+
+  .full-panel {
+    padding: 32px 40px;
+    overflow-y: auto;
+  }
+
+  .full-panel::-webkit-scrollbar { width: 3px; }
+  .full-panel::-webkit-scrollbar-thumb { background: var(--border-2); }
+
+  /* ── TRADEOFF EXPLORER ── */
+  .tradeoff-page-title {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .tradeoff-page-headline {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .tradeoff-page-sub {
+    font-size: 13px;
+    color: var(--text-mid);
+    margin-bottom: 32px;
+    max-width: 600px;
+    line-height: 1.6;
+  }
+
+  .tradeoff-archetype-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 32px;
+  }
+
+  .tradeoff-archetype-col {
+    background: var(--surface);
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .tradeoff-archetype-header {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tradeoff-archetype-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .tradeoff-archetype-desc {
+    font-size: 11px;
+    color: var(--text-mid);
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  .tradeoff-system-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .tradeoff-system-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
+  .tradeoff-system-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .tradeoff-lesson {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 32px;
+  }
+
+  .tradeoff-lesson-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .tradeoff-lesson-text {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.7;
+    max-width: 800px;
+  }
+
+  /* ── SYSTEM INTERACTIONS ── */
+  .interactions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 32px;
+  }
+
+  .interaction-card {
+    background: var(--surface);
+    padding: 20px;
+  }
+
+  .interaction-from {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .interaction-to {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  .interaction-arrow {
+    color: var(--text-dim);
+    font-size: 12px;
+  }
+
+  .interaction-desc {
+    font-size: 11px;
+    color: var(--text-mid);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .interaction-example {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    padding: 6px 10px;
+    background: var(--surface-2);
+    border-left: 2px solid var(--gold-dim);
+    line-height: 1.5;
+  }
+
+  .system-node-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 32px;
+    margin-bottom: 32px;
+    position: relative;
+    min-height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .node-container {
+    position: relative;
+    width: 600px;
+    height: 280px;
+  }
+
+  .system-node {
+    position: absolute;
+    padding: 10px 16px;
+    background: var(--surface-2);
+    border: 1px solid var(--border-2);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .system-node:hover, .system-node.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: var(--gold-glow);
+  }
+
+  .system-node.combat { top: 0; left: 50%; transform: translateX(-50%); }
+  .system-node.progression { top: 50%; left: 0; transform: translateY(-50%); }
+  .system-node.liveops { top: 50%; right: 0; transform: translateY(-50%); }
+  .system-node.economy { bottom: 0; left: 20%; }
+  .system-node.attachment { bottom: 0; right: 20%; }
+  .system-node.onboarding { bottom: 30%; left: 50%; transform: translateX(-50%); }
+
+  .node-connection-desc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.6;
+    min-height: 60px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.03em;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="lab-header">
+  <div class="lab-wordmark">
+    <div class="lab-title">⬡ Player Systems Lab</div>
+    <div class="lab-subtitle">An interactive laboratory for exploring how game systems shape player behavior, mastery, identity, and long-term engagement.</div>
+  </div>
+  <nav class="lab-nav">
+    <button class="nav-btn active" onclick="switchModule('progression', this)">Progression</button>
+    <button class="nav-btn" onclick="switchModule('combat', this)">Combat</button>
+    <button class="nav-btn" onclick="switchModule('liveops', this)">LiveOps</button>
+    <button class="nav-btn" onclick="switchModule('economy', this)">Economy</button>
+    <button class="nav-btn" onclick="switchModule('attachment', this)">Attachment</button>
+    <button class="nav-btn" onclick="switchModule('onboarding', this)">Onboarding</button>
+    <button class="nav-btn" onclick="switchModule('tradeoff', this)">Trade-Off</button>
+    <button class="nav-btn" onclick="switchModule('systems', this)">Interactions</button>
+    <div class="module-status"><div class="status-dot"></div>Live</div>
+  </nav>
+</header>
+
+<!-- MAIN -->
+<main class="lab-body">
+
+  <!-- LEFT: CONTROLS -->
+  <aside class="controls-panel">
+    <div>
+      <div class="panel-section-label">Inputs — Progression Lab</div>
+      <div class="slider-group">
+
+        <div class="slider-row">
+          <div class="slider-header">
+            <span class="slider-label">XP Curve</span>
+            <span class="slider-value" id="val-xp">5</span>
+          </div>
+          <input type="range" min="1" max="10" value="5" id="sl-xp"
+            oninput="updateSlider('xp', this.value, 'How fast players level up. Low = slow grind. High = rapid advancement.')">
+          <div class="slider-hint">How steeply XP requirements scale between levels.</div>
+        </div>
+
+        <div class="slider-row">
+          <div class="slider-header">
+            <span class="slider-label">Skill Unlock Speed</span>
+            <span class="slider-value" id="val-skill">5</span>
+          </div>
+          <input type="range" min="1" max="10" value="5" id="sl-skill"
+            oninput="updateSlider('skill', this.value, 'How quickly players gain access to new abilities and tools. Fast unlocks feel rewarding but reduce the depth of each stage.')">
+          <div class="slider-hint">Rate at which players access new abilities and tools.</div>
+        </div>
+
+        <div class="slider-row">
+          <div class="slider-header">
+            <span class="slider-label">Build Diversity</span>
+            <span class="slider-value" id="val-build">5</span>
+          </div>
+          <input type="range" min="1" max="10" value="5" id="sl-build"
+            oninput="updateSlider('build', this.value, 'How many meaningfully different playstyles are viable. High diversity rewards experimentation but risks balancing nightmares.')">
+          <div class="slider-hint">Number of viable playstyle paths in the skill system.</div>
+        </div>
+
+        <div class="slider-row">
+          <div class="slider-header">
+            <span class="slider-label">Difficulty Ramp</span>
+            <span class="slider-value" id="val-diff">5</span>
+          </div>
+          <input type="range" min="1" max="10" value="5" id="sl-diff"
+            oninput="updateSlider('diff', this.value, 'How sharply challenge escalates as players progress. Too steep causes burnout. Too flat causes boredom.')">
+          <div class="slider-hint">How sharply challenge escalates as players advance.</div>
+        </div>
+
+        <div class="slider-row">
+          <div class="slider-header">
+            <span class="slider-label">Quest Density</span>
+            <span class="slider-value" id="val-quest">5</span>
+          </div>
+          <input type="range" min="1" max="10" value="5" id="sl-quest"
+            oninput="updateSlider('quest', this.value, 'How many objectives are available at any given time. High density keeps players busy but dilutes the sense of purpose.')">
+          <div class="slider-hint">Volume of active objectives available to the player.</div>
+        </div>
+
+        <div class="slider-row">
+          <div class="slider-header">
+            <span class="slider-label">Respec Cost</span>
+            <span class="slider-value" id="val-respec">5</span>
+          </div>
+          <input type="range" min="1" max="10" value="5" id="sl-respec"
+            oninput="updateSlider('respec', this.value, 'How expensive it is to change your build. High cost creates identity investment. Low cost removes commitment.')">
+          <div class="slider-hint">Cost of changing or resetting a player's skill build.</div>
+        </div>
+
+      </div>
+    </div>
+  </aside>
+
+  <!-- CENTER: VISUALIZATION -->
+  <section class="viz-panel">
+
+    <!-- ARCHETYPES -->
+    <div>
+      <div class="panel-section-label">Player Archetypes — Current Emotional State</div>
+      <div class="archetypes-grid" id="archetypes-grid">
+
+        <div class="archetype-card" style="--accent-color: #27ae60">
+          <div class="archetype-header">
+            <span class="archetype-emoji">⚔️</span>
+            <span class="archetype-name">Completionist</span>
+          </div>
+          <div class="archetype-state" id="state-completionist">ENGAGED</div>
+          <span class="archetype-mood" id="mood-completionist">😊</span>
+          <div class="archetype-bars">
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">Satisfaction</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" id="bar-comp-sat" style="width:60%;background:var(--green)"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">Burnout Risk</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" id="bar-comp-burn" style="width:30%;background:var(--amber)"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="archetype-card" style="--accent-color: #e67e22">
+          <div class="archetype-header">
+            <span class="archetype-emoji">🔥</span>
+            <span class="archetype-name">Competitive</span>
+          </div>
+          <div class="archetype-state" id="state-competitive">FOCUSED</div>
+          <span class="archetype-mood" id="mood-competitive">😤</span>
+          <div class="archetype-bars">
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">Mastery Drive</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" id="bar-comp2-mas" style="width:75%;background:var(--amber)"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">Frustration</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" id="bar-comp2-frus" style="width:40%;background:var(--red)"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="archetype-card" style="--accent-color: #8e44ad">
+          <div class="archetype-header">
+            <span class="archetype-emoji">🎨</span>
+            <span class="archetype-name">Explorer</span>
+          </div>
+          <div class="archetype-state" id="state-explorer">CURIOUS</div>
+          <span class="archetype-mood" id="mood-explorer">🤩</span>
+          <div class="archetype-bars">
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">Discovery Joy</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" id="bar-exp-joy" style="width:70%;background:var(--purple)"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">Overwhelm</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" id="bar-exp-over" style="width:25%;background:var(--red)"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="archetype-card" style="--accent-color: #2980b9">
+          <div class="archetype-header">
+            <span class="archetype-emoji">☕</span>
+            <span class="archetype-name">Casual</span>
+          </div>
+          <div class="archetype-state" id="state-casual">RELAXED</div>
+          <span class="archetype-mood" id="mood-casual">😌</span>
+          <div class="archetype-bars">
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">Accessibility</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" id="bar-cas-acc" style="width:65%;background:var(--blue)"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">Dropout Risk</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" id="bar-cas-drop" style="width:35%;background:var(--red)"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="archetype-card" style="--accent-color: #c9a84c">
+          <div class="archetype-header">
+            <span class="archetype-emoji">📦</span>
+            <span class="archetype-name">Collector</span>
+          </div>
+          <div class="archetype-state" id="state-collector">MOTIVATED</div>
+          <span class="archetype-mood" id="mood-collector">😍</span>
+          <div class="archetype-bars">
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">Investment</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" id="bar-col-inv" style="width:80%;background:var(--gold)"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">FOMO</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" id="bar-col-fomo" style="width:50%;background:var(--amber)"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="archetype-card" style="--accent-color: #27ae60">
+          <div class="archetype-header">
+            <span class="archetype-emoji">👥</span>
+            <span class="archetype-name">Social</span>
+          </div>
+          <div class="archetype-state" id="state-social">CONNECTED</div>
+          <span class="archetype-mood" id="mood-social">🤝</span>
+          <div class="archetype-bars">
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">Group Fit</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" id="bar-soc-fit" style="width:60%;background:var(--green)"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">Left Behind</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" id="bar-soc-left" style="width:30%;background:var(--red)"></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- OUTPUTS -->
+    <div>
+      <div class="panel-section-label">System Outputs</div>
+      <div class="outputs-grid">
+        <div class="output-cell">
+          <div class="output-label">New Player Ret.</div>
+          <div class="output-value" id="out-retention" style="color:var(--green)">62%</div>
+          <div class="output-delta" style="color:var(--text-dim)">D7 estimate</div>
+        </div>
+        <div class="output-cell">
+          <div class="output-label">Mastery Satisfaction</div>
+          <div class="output-value" id="out-mastery" style="color:var(--gold)">71%</div>
+          <div class="output-delta" style="color:var(--text-dim)">veteran score</div>
+        </div>
+        <div class="output-cell">
+          <div class="output-label">Build Diversity</div>
+          <div class="output-value" id="out-diversity" style="color:var(--blue)">4.2</div>
+          <div class="output-delta" style="color:var(--text-dim)">viable paths</div>
+        </div>
+        <div class="output-cell">
+          <div class="output-label">Burnout Risk</div>
+          <div class="output-value" id="out-burnout" style="color:var(--amber)">34%</div>
+          <div class="output-delta" style="color:var(--text-dim)">30d estimate</div>
+        </div>
+        <div class="output-cell">
+          <div class="output-label">Session Length</div>
+          <div class="output-value" id="out-session" style="color:var(--text)">42m</div>
+          <div class="output-delta" style="color:var(--text-dim)">avg estimate</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RETENTION CURVE -->
+    <div class="chart-container">
+      <div class="chart-label">Projected Retention Curve — D1 to D30</div>
+      <canvas id="retentionCurve" height="140"></canvas>
+    </div>
+
+    <!-- TRADEOFF EXPLORER -->
+    <div class="tradeoff-section">
+      <div class="tradeoff-title">Trade-Off Explorer — Who Does This Configuration Serve?</div>
+      <div class="tradeoff-grid">
+        <div class="tradeoff-column">
+          <div class="tradeoff-column-label winner">▲ Winners</div>
+          <div id="winners-list"></div>
+        </div>
+        <div class="tradeoff-column">
+          <div class="tradeoff-column-label loser">▼ Challenged</div>
+          <div id="losers-list"></div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- RIGHT: DESIGN PHILOSOPHY -->
+  <aside class="philosophy-panel">
+
+    <div>
+      <div class="panel-section-label">Design Philosophy</div>
+
+      <div id="active-slider-info" class="active-slider-highlight" style="display:none"></div>
+
+      <div class="philosophy-card">
+        <div class="philosophy-card-label">Active Principle</div>
+        <div class="philosophy-principle" id="philosophy-principle">Progression as Identity Formation</div>
+        <div class="philosophy-body" id="philosophy-body">
+          The most powerful progression systems don't just make players stronger — they make players feel like a specific kind of person. When XP curves, skill unlocks, and build choices align, players stop saying "I leveled up" and start saying "I'm a berserker" or "I'm a tactician." That identity investment is what retains them.
+        </div>
+        <div class="philosophy-examples" id="philosophy-examples">
+          <span class="example-tag">Diablo IV</span>
+          <span class="example-tag">WoW</span>
+          <span class="example-tag">Monster Hunter</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="examples-section">
+      <div class="examples-label">Real World Reference</div>
+      <div class="example-row">
+        <span class="example-game">Diablo Series</span>
+        <span class="example-note">Paragon system solved post-cap retention by making progression infinite without invalidating mastery.</span>
+      </div>
+      <div class="example-row">
+        <span class="example-game">Monster Hunter</span>
+        <span class="example-note">Unlock speed deliberately slow — each weapon type mastery is a separate identity investment.</span>
+      </div>
+      <div class="example-row">
+        <span class="example-game">Path of Exile</span>
+        <span class="example-note">Maximum build diversity, extreme respec cost. Rewards commitment, punishes indecision.</span>
+      </div>
+      <div class="example-row">
+        <span class="example-game">Pokémon</span>
+        <span class="example-note">Low difficulty ramp creates accessibility but sacrifices mastery satisfaction for veteran players.</span>
+      </div>
+      <div class="example-row">
+        <span class="example-game">Warframe</span>
+        <span class="example-note">High quest density risks purpose dilution — players often lose track of what they're working toward.</span>
+      </div>
+    </div>
+
+    <div class="philosophy-card">
+      <div class="philosophy-card-label">Behavioral Principle</div>
+      <div class="philosophy-principle" id="behavioral-principle">Delayed Competence & Mastery Investment</div>
+      <div class="philosophy-body" id="behavioral-body">
+        Delayed competence increases long-term investment only if players receive meaningful feedback before frustration dominates. The window between confusion and capability is where most players quit — or commit for life.
+      </div>
+    </div>
+
+  </aside>
+
+</main>
+
+<script>
+// ── STATE ──
+const state = {
+  xp: 5, skill: 5, build: 5, diff: 5, quest: 5, respec: 5,
+  activeSlider: null
+};
+
+const philosophyMap = {
+  xp: {
+    principle: 'XP Curve — The Pacing Contract',
+    body: 'The XP curve is a promise to the player about how their time will be rewarded. A steep curve creates longer investment windows per level — but risks frustration if feedback loops are weak. A shallow curve creates frequent wins that feel hollow over time. The ideal curve accelerates early and plateaus intentionally at mastery thresholds.',
+    examples: ['Diablo IV', 'WoW Classic', 'FFXIV'],
+    hint: null
+  },
+  skill: {
+    principle: 'Skill Unlock Speed — Access vs Depth',
+    body: 'Fast skill unlocks feel generous but erode the meaning of each new ability. When everything arrives quickly nothing feels earned. Slow unlocks force players to master what they have before receiving more — creating genuine depth at each stage rather than an ever-expanding but unexplored toolbox.',
+    examples: ['Monster Hunter', 'Dark Souls', 'Hades'],
+    hint: 'Likely Benefits: Deeper mastery per stage, stronger ability memory. Likely Risks: New player frustration, early dropout.'
+  },
+  build: {
+    principle: 'Build Diversity — Identity Architecture',
+    body: 'Build diversity is the system\'s answer to the question: who can I be? High diversity creates genuine identity formation — players stop describing their character by level and start describing them by playstyle. The risk is balancing complexity: every viable path requires design and maintenance resources proportional to its existence.',
+    examples: ['Path of Exile', 'Elden Ring', 'Divinity 2'],
+    hint: 'High diversity: Completionists and Explorers thrive. Casuals and new players may feel lost.'
+  },
+  diff: {
+    principle: 'Difficulty Ramp — The Stress Curve',
+    body: 'The difficulty ramp defines the emotional arc of the entire game. Too steep and players hit frustration walls that cause dropout. Too shallow and the experience never generates the tension that makes victory meaningful. The ideal ramp creates peaks of challenge followed by valleys of competence — the rhythm that produces flow state.',
+    examples: ['Sekiro', 'Hollow Knight', 'Celeste'],
+    hint: 'Likely Benefits: Higher mastery satisfaction, memorable moments. Likely Risks: Casual player dropout, accessibility concerns.'
+  },
+  quest: {
+    principle: 'Quest Density — Purpose vs Noise',
+    body: 'Quest density determines whether players feel driven or overwhelmed. High density keeps players active but risks purpose dilution — when everything is urgent nothing feels important. Low density creates clear goals but can produce dead sessions where players log in and feel there is nothing to do. The tension is intentional direction vs player autonomy.',
+    examples: ['Warframe', 'GTA Online', 'FFXIV'],
+    hint: null
+  },
+  respec: {
+    principle: 'Respec Cost — Commitment & Identity',
+    body: 'Respec cost is the mechanical enforcement of identity commitment. When changing your build is expensive players invest more deeply in who they currently are — they justify and defend their choices rather than abandoning them. Free respecs feel generous but undermine the psychological weight of the choices that define a player\'s identity in the system.',
+    examples: ['Path of Exile', 'Diablo II', 'WoW Classic'],
+    hint: 'High respec cost: Stronger identity investment, deeper build commitment. Low cost: More experimentation, less ownership.'
+  }
+};
+
+// ── SLIDER UPDATE ──
+function updateSlider(key, value, hint) {
+  state[key] = parseInt(value);
+  state.activeSlider = key;
+  document.getElementById('val-' + key).textContent = value;
+
+  const p = philosophyMap[key];
+  document.getElementById('philosophy-principle').textContent = p.principle;
+  document.getElementById('philosophy-body').textContent = p.body;
+
+  const exEl = document.getElementById('philosophy-examples');
+  exEl.innerHTML = p.examples.map(e => `<span class="example-tag">${e}</span>`).join('');
+
+  const hintEl = document.getElementById('active-slider-info');
+  if (p.hint) {
+    hintEl.style.display = 'block';
+    hintEl.textContent = p.hint;
+  } else {
+    hintEl.style.display = 'none';
+  }
+
+  updateOutputs();
+  updateArchetypes();
+  updateTradeoffs();
+  drawChart();
+}
+
+// ── OUTPUTS ──
+function updateOutputs() {
+  const { xp, skill, build, diff, quest, respec } = state;
+
+  const retention = Math.round(clamp(85 - (xp * 3) - (diff * 2) + (skill * 1.5) + (quest * 0.5), 20, 95));
+  const mastery = Math.round(clamp(40 + (diff * 4) + (respec * 2) - (skill * 1.5) + (build * 1), 20, 98));
+  const diversity = +(clamp(1 + (build * 0.9) - (respec * 0.2), 1, 10)).toFixed(1);
+  const burnout = Math.round(clamp(10 + (quest * 4) + (diff * 2) - (skill * 1) - (xp * 0.5), 5, 95));
+  const session = Math.round(clamp(15 + (quest * 4) + (diff * 2) - (xp * 1.5) + (skill * 1), 10, 90));
+
+  setOutput('out-retention', retention + '%', retention > 65 ? 'var(--green)' : retention > 45 ? 'var(--amber)' : 'var(--red)');
+  setOutput('out-mastery', mastery + '%', mastery > 70 ? 'var(--gold)' : mastery > 50 ? 'var(--amber)' : 'var(--red)');
+  setOutput('out-diversity', diversity, 'var(--blue)');
+  setOutput('out-burnout', burnout + '%', burnout < 30 ? 'var(--green)' : burnout < 60 ? 'var(--amber)' : 'var(--red)');
+  setOutput('out-session', session + 'm', 'var(--text)');
+}
+
+function setOutput(id, val, color) {
+  const el = document.getElementById(id);
+  el.textContent = val;
+  el.style.color = color;
+}
+
+// ── ARCHETYPES ──
+function updateArchetypes() {
+  const { xp, skill, build, diff, quest, respec } = state;
+
+  // Completionist
+  const compSat = clamp(40 + quest * 5 + xp * 2 - diff * 2, 10, 100);
+  const compBurn = clamp(10 + quest * 6 + diff * 3 - skill * 2, 5, 100);
+  setBar('bar-comp-sat', compSat);
+  setBar('bar-comp-burn', compBurn);
+  setArchetypeState('completionist', compSat, compBurn,
+    ['😊','😄','😤','😰','🥵'],
+    ['ENGAGED','THRIVING','GRINDING','STRESSED','BURNT OUT']);
+
+  // Competitive
+  const compMas = clamp(20 + diff * 7 + respec * 2, 10, 100);
+  const compFrus = clamp(5 + diff * 5 - skill * 3 + xp * 2, 5, 100);
+  setBar('bar-comp2-mas', compMas);
+  setBar('bar-comp2-frus', compFrus);
+  setArchetypeState('competitive', compMas, compFrus,
+    ['😤','🔥','😡','🤬','💀'],
+    ['FOCUSED','IN FLOW','FRUSTRATED','RAGING','QUIT']);
+
+  // Explorer
+  const expJoy = clamp(30 + build * 5 + skill * 3 - quest * 2, 10, 100);
+  const expOver = clamp(5 + quest * 4 + build * 3 - skill * 2, 5, 100);
+  setBar('bar-exp-joy', expJoy);
+  setBar('bar-exp-over', expOver);
+  setArchetypeState('explorer', expJoy, expOver,
+    ['🤩','😍','🤔','😵','🙅'],
+    ['CURIOUS','DELIGHTED','SEARCHING','LOST','OVERWHELMED']);
+
+  // Casual
+  const casAcc = clamp(80 - diff * 5 - xp * 3 + skill * 2, 10, 100);
+  const casDrop = clamp(5 + diff * 6 + xp * 3 - skill * 3 - quest * 1, 5, 100);
+  setBar('bar-cas-acc', casAcc);
+  setBar('bar-cas-drop', casDrop);
+  setArchetypeState('casual', casAcc, casDrop,
+    ['😌','😊','😐','😟','🚪'],
+    ['RELAXED','ENJOYING','UNCERTAIN','STRUGGLING','LEAVING']);
+
+  // Collector
+  const colInv = clamp(20 + quest * 5 + build * 3 + xp * 2, 10, 100);
+  const colFomo = clamp(5 + quest * 4 - skill * 2 + diff * 1, 5, 100);
+  setBar('bar-col-inv', colInv);
+  setBar('bar-col-fomo', colFomo);
+  setArchetypeState('collector', colInv, colFomo,
+    ['😍','🤩','😊','😬','😭'],
+    ['MOTIVATED','OBSESSED','PROGRESSING','ANXIOUS','FOMO PAIN']);
+
+  // Social
+  const socFit = clamp(50 + skill * 3 - diff * 2 - xp * 2, 10, 100);
+  const socLeft = clamp(5 + xp * 4 + diff * 3 - skill * 3, 5, 100);
+  setBar('bar-soc-fit', socFit);
+  setBar('bar-soc-left', socLeft);
+  setArchetypeState('social', socFit, socLeft,
+    ['🤝','😄','😐','😟','😢'],
+    ['CONNECTED','THRIVING','KEEPING UP','FALLING BEHIND','LEFT BEHIND']);
+}
+
+function setBar(id, pct) {
+  const el = document.getElementById(id);
+  if (el) el.style.width = Math.round(pct) + '%';
+}
+
+function setArchetypeState(name, primary, risk, moods, states) {
+  const score = primary - risk * 0.5;
+  const idx = score > 70 ? 1 : score > 50 ? 0 : score > 30 ? 2 : score > 10 ? 3 : 4;
+  const stateEl = document.getElementById('state-' + name);
+  const stateColors = ['var(--gold)', 'var(--green)', 'var(--amber)', 'var(--red)', 'var(--red)'];
+  if (stateEl) {
+    stateEl.textContent = states[Math.min(idx, states.length - 1)];
+    stateEl.style.color = stateColors[Math.min(idx, stateColors.length - 1)];
+  }
+}
+
+// ── TRADEOFFS ──
+function updateTradeoffs() {
+  const { xp, skill, build, diff, quest, respec } = state;
+
+  const scores = {
+    'Completionists': quest * 10 + xp * 5 - diff * 3,
+    'Competitive': diff * 12 + respec * 5 - skill * 3,
+    'Explorers': build * 10 + skill * 5 - quest * 2,
+    'Casuals': -diff * 8 - xp * 5 + skill * 8,
+    'Collectors': quest * 8 + build * 5 + xp * 3,
+    'Social Players': skill * 6 - diff * 4 - xp * 3
+  };
+
+  const colors = {
+    'Completionists': 'var(--green)',
+    'Competitive': 'var(--amber)',
+    'Explorers': 'var(--purple)',
+    'Casuals': 'var(--blue)',
+    'Collectors': 'var(--gold)',
+    'Social Players': 'var(--green)'
+  };
+
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const winners = sorted.slice(0, 3);
+  const losers = sorted.slice(3).reverse();
+
+  document.getElementById('winners-list').innerHTML = winners.map(([name]) =>
+    `<div class="tradeoff-player"><div class="tradeoff-dot" style="background:${colors[name]}"></div>${name}</div>`
+  ).join('');
+
+  document.getElementById('losers-list').innerHTML = losers.map(([name]) =>
+    `<div class="tradeoff-player"><div class="tradeoff-dot" style="background:var(--red)"></div>${name}</div>`
+  ).join('');
+}
+
+// ── CHART ──
+function drawChart() {
+  const canvas = document.getElementById('retentionCurve');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = canvas.offsetWidth * dpr;
+  canvas.height = 140 * dpr;
+  ctx.scale(dpr, dpr);
+
+  const w = canvas.offsetWidth;
+  const h = 140;
+  const pad = { top: 12, right: 16, bottom: 28, left: 36 };
+  const cW = w - pad.left - pad.right;
+  const cH = h - pad.top - pad.bottom;
+
+  ctx.clearRect(0, 0, w, h);
+
+  const { xp, skill, diff, quest } = state;
+  const points = [];
+  for (let d = 0; d <= 30; d++) {
+    const base = 100;
+    const dayDecay = d === 0 ? 100 :
+      base * Math.pow(0.97 - (xp * 0.005) - (diff * 0.004) + (skill * 0.003) + (quest * 0.001), d);
+    points.push(clamp(dayDecay, 5, 100));
+  }
+
+  // Grid
+  [0, 25, 50, 75, 100].forEach(v => {
+    const y = pad.top + cH - (v / 100) * cH;
+    ctx.strokeStyle = '#1a1a1a';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(pad.left + cW, y);
+    ctx.stroke();
+    ctx.fillStyle = '#444';
+    ctx.font = `9px Courier New`;
+    ctx.textAlign = 'right';
+    ctx.fillText(v + '%', pad.left - 4, y + 3);
+  });
+
+  ['D1','D7','D14','D21','D30'].forEach((label, i) => {
+    const x = pad.left + (i * 7.5 / 30) * cW;
+    ctx.fillStyle = '#444';
+    ctx.font = `9px Courier New`;
+    ctx.textAlign = 'center';
+    ctx.fillText(label, pad.left + ([0,6,13,20,29][i] / 30) * cW, h - 6);
+  });
+
+  // Fill
+  ctx.beginPath();
+  points.forEach((val, i) => {
+    const x = pad.left + (i / 30) * cW;
+    const y = pad.top + cH - (val / 100) * cH;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.lineTo(pad.left + cW, pad.top + cH);
+  ctx.lineTo(pad.left, pad.top + cH);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(201,168,76,0.06)';
+  ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  points.forEach((val, i) => {
+    const x = pad.left + (i / 30) * cW;
+    const y = pad.top + cH - (val / 100) * cH;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = '#c9a84c';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Dots at key points
+  [0, 6, 13, 20, 29].forEach(i => {
+    const x = pad.left + (i / 30) * cW;
+    const y = pad.top + cH - (points[i] / 100) * cH;
+    ctx.beginPath();
+    ctx.arc(x, y, 3, 0, Math.PI * 2);
+    ctx.fillStyle = '#c9a84c';
+    ctx.fill();
+  });
+}
+
+// ── UTILS ──
+function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
+
+// ── MODULE CONTENT ──
+const modules = {
+  progression: {
+    controlsLabel: 'Inputs — Progression Lab',
+    controls: `
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">XP Curve</span><span class="slider-value" id="val-xp">5</span></div>
+        <input type="range" min="1" max="10" value="5" id="sl-xp" oninput="updateSlider('xp',this.value,'How fast players level up. Low = slow grind. High = rapid advancement.')">
+        <div class="slider-hint">How steeply XP requirements scale between levels.</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Skill Unlock Speed</span><span class="slider-value" id="val-skill">5</span></div>
+        <input type="range" min="1" max="10" value="5" id="sl-skill" oninput="updateSlider('skill',this.value,'How quickly players gain access to new abilities and tools.')">
+        <div class="slider-hint">Rate at which players access new abilities and tools.</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Build Diversity</span><span class="slider-value" id="val-build">5</span></div>
+        <input type="range" min="1" max="10" value="5" id="sl-build" oninput="updateSlider('build',this.value,'How many meaningfully different playstyles are viable.')">
+        <div class="slider-hint">Number of viable playstyle paths in the skill system.</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Difficulty Ramp</span><span class="slider-value" id="val-diff">5</span></div>
+        <input type="range" min="1" max="10" value="5" id="sl-diff" oninput="updateSlider('diff',this.value,'How sharply challenge escalates as players progress.')">
+        <div class="slider-hint">How sharply challenge escalates as players advance.</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Quest Density</span><span class="slider-value" id="val-quest">5</span></div>
+        <input type="range" min="1" max="10" value="5" id="sl-quest" oninput="updateSlider('quest',this.value,'How many objectives are available at any given time.')">
+        <div class="slider-hint">Volume of active objectives available to the player.</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Respec Cost</span><span class="slider-value" id="val-respec">5</span></div>
+        <input type="range" min="1" max="10" value="5" id="sl-respec" oninput="updateSlider('respec',this.value,'How expensive it is to change your build.')">
+        <div class="slider-hint">Cost of changing or resetting a player\'s skill build.</div>
+      </div>`,
+    outputsLabel: 'System Outputs',
+    outputs: `
+      <div class="output-cell"><div class="output-label">New Player Ret.</div><div class="output-value" id="out-retention" style="color:var(--green)">62%</div><div class="output-delta" style="color:var(--text-dim)">D7 estimate</div></div>
+      <div class="output-cell"><div class="output-label">Mastery Satisfaction</div><div class="output-value" id="out-mastery" style="color:var(--gold)">71%</div><div class="output-delta" style="color:var(--text-dim)">veteran score</div></div>
+      <div class="output-cell"><div class="output-label">Build Diversity</div><div class="output-value" id="out-diversity" style="color:var(--blue)">4.2</div><div class="output-delta" style="color:var(--text-dim)">viable paths</div></div>
+      <div class="output-cell"><div class="output-label">Burnout Risk</div><div class="output-value" id="out-burnout" style="color:var(--amber)">34%</div><div class="output-delta" style="color:var(--text-dim)">30d estimate</div></div>
+      <div class="output-cell"><div class="output-label">Session Length</div><div class="output-value" id="out-session" style="color:var(--text)">42m</div><div class="output-delta" style="color:var(--text-dim)">avg estimate</div></div>`,
+    chartLabel: 'Projected Retention Curve — D1 to D30',
+    philosophyInit: {
+      principle: 'Progression as Identity Formation',
+      body: 'The most powerful progression systems don\'t just make players stronger — they make players feel like a specific kind of person. When XP curves, skill unlocks, and build choices align, players stop saying "I leveled up" and start saying "I\'m a berserker" or "I\'m a tactician." That identity investment is what retains them.',
+      examples: ['Diablo IV', 'WoW', 'Monster Hunter']
+    },
+    examples: [
+      { game: 'Diablo Series', note: 'Paragon system solved post-cap retention by making progression infinite without invalidating mastery.' },
+      { game: 'Monster Hunter', note: 'Unlock speed deliberately slow — each weapon type mastery is a separate identity investment.' },
+      { game: 'Path of Exile', note: 'Maximum build diversity, extreme respec cost. Rewards commitment, punishes indecision.' },
+      { game: 'Pokémon', note: 'Low difficulty ramp creates accessibility but sacrifices mastery satisfaction for veterans.' },
+      { game: 'Warframe', note: 'High quest density risks purpose dilution — players lose track of what they\'re working toward.' }
+    ],
+    behavioralPrinciple: 'Delayed Competence & Mastery Investment',
+    behavioralBody: 'Delayed competence increases long-term investment only if players receive meaningful feedback before frustration dominates. The window between confusion and capability is where most players quit — or commit for life.'
+  },
+
+  combat: {
+    controlsLabel: 'Inputs — Combat Lab',
+    controls: `
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Enemy Aggression</span><span class="slider-value" id="val-aggression">5</span></div>
+        <input type="range" min="1" max="10" value="5" id="sl-aggression" oninput="updateCombatSlider('aggression',this.value,'How relentlessly enemies pressure the player. High aggression forces reactive play. Low aggression rewards proactive control.')">
+        <div class="slider-hint">How frequently and aggressively enemies initiate attacks.</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Recovery Frames</span><span class="slider-value" id="val-recovery">5</span></div>
+        <input type="range" min="1" max="10" value="5" id="sl-recovery" oninput="updateCombatSlider('recovery',this.value,'How much time the player has to recover after an attack. Short recovery enables aggression. Long recovery creates vulnerability windows.')">
+        <div class="slider-hint">Time window after player actions before the next input is accepted.</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Parry Window</span><span class="slider-value" id="val-parry">5</span></div>
+        <input type="range" min="1" max="10" value="5" id="sl-parry" oninput="updateCombatSlider('parry',this.value,'Size of the defensive timing window. Tight parry windows create high skill expression. Wide windows increase accessibility at the cost of mastery depth.')">
+        <div class="slider-hint">How precise the timing window is for successful defensive reads.</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Stagger Resistance</span><span class="slider-value" id="val-stagger">5</span></div>
+        <input type="range" min="1" max="10" value="5" id="sl-stagger" oninput="updateCombatSlider('stagger',this.value,'How much punishment enemies can absorb before being interrupted. High resistance rewards commitment. Low resistance rewards rapid aggression.')">
+        <div class="slider-hint">How much damage enemies absorb before their actions are interrupted.</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Damage Punishment</span><span class="slider-value" id="val-punishment">5</span></div>
+        <input type="range" min="1" max="10" value="5" id="sl-punishment" oninput="updateCombatSlider('punishment',this.value,'How severely mistakes are penalized. High punishment creates tense consequential combat. Low punishment allows experimentation but reduces stakes.')">
+        <div class="slider-hint">Severity of player health loss when hit by enemy attacks.</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Encounter Length</span><span class="slider-value" id="val-encounter">5</span></div>
+        <input type="range" min="1" max="10" value="5" id="sl-encounter" oninput="updateCombatSlider('encounter',this.value,'How long individual combat encounters last. Long encounters create epic moments but risk fatigue. Short encounters reward efficiency and tempo.')">
+        <div class="slider-hint">Average duration of a single combat engagement.</div>
+      </div>`,
+    outputsLabel: 'Combat System Outputs',
+    outputs: `
+      <div class="output-cell"><div class="output-label">Hero Moment Freq.</div><div class="output-value" id="out-herofreq" style="color:var(--gold)">3.2</div><div class="output-delta" style="color:var(--text-dim)">per session</div></div>
+      <div class="output-cell"><div class="output-label">Frustration Index</div><div class="output-value" id="out-frustration" style="color:var(--amber)">38%</div><div class="output-delta" style="color:var(--text-dim)">rage quit risk</div></div>
+      <div class="output-cell"><div class="output-label">Flow State</div><div class="output-value" id="out-flow" style="color:var(--green)">61%</div><div class="output-delta" style="color:var(--text-dim)">engagement quality</div></div>
+      <div class="output-cell"><div class="output-label">Mech. Mastery</div><div class="output-value" id="out-mechmastery" style="color:var(--blue)">54%</div><div class="output-delta" style="color:var(--text-dim)">skill ceiling use</div></div>
+      <div class="output-cell"><div class="output-label">Skill Expression</div><div class="output-value" id="out-skillexp" style="color:var(--purple)">47%</div><div class="output-delta" style="color:var(--text-dim)">individuality score</div></div>`,
+    chartLabel: 'Hero Moment Frequency vs Frustration — Encounter Curve',
+    philosophyInit: {
+      principle: 'Combat as Designed Conversation',
+      body: 'The best combat systems are not about damage numbers — they are about legible exchanges of pressure and release. Every attack the enemy makes is a question. Every parry, dodge, or counter is an answer. The quality of combat is measured by how clearly that conversation can be read and how deeply it can be mastered.',
+      examples: ['Sekiro', 'Mournful Flower', 'Monster Hunter']
+    },
+    examples: [
+      { game: 'Sekiro', note: 'Tight parry window, high punishment — extreme skill expression at the cost of casual accessibility.' },
+      { game: 'God of War', note: 'Long encounters with high stagger resistance create cinematic weight and deliberate combat tempo.' },
+      { game: 'Hades', note: 'Short encounters, moderate punishment — fast feedback loop rewards experimentation over memorisation.' },
+      { game: 'Monster Hunter', note: 'High stagger resistance rewards weapon mastery and positional awareness over raw aggression.' },
+      { game: 'DOOM Eternal', note: 'Extreme aggression from enemies forces constant reactive play — frustration and flow exist in the same encounter.' }
+    ],
+    behavioralPrinciple: 'The Hero Moment Framework',
+    behavioralBody: 'A hero moment qualifies when three conditions are met: the moment is systemic by design, it requires earned knowledge or skill to execute, and it is consequential to the outcome of the encounter. Adjust these sliders to see how system configurations create or destroy the conditions for hero moments to emerge.'
+  }
+};
+
+// ── COMBAT STATE ──
+const combatState = {
+  aggression: 5, recovery: 5, parry: 5, stagger: 5, punishment: 5, encounter: 5,
+  activeSlider: null
+};
+
+const combatPhilosophyMap = {
+  aggression: {
+    principle: 'Enemy Aggression — Pressure Architecture',
+    body: 'Enemy aggression defines the baseline tension of every encounter. High aggression forces the player into a reactive role — reading, responding, surviving. Low aggression hands control to the player and tests their ability to create opportunities. Neither is inherently better. The question is what emotional experience the combat is designed to produce.',
+    examples: ['DOOM Eternal', 'Bloodborne', 'Devil May Cry'],
+    hint: 'High aggression: Competitive and Mastery players thrive. Casuals face high dropout risk.'
+  },
+  recovery: {
+    principle: 'Recovery Frames — The Cost of Action',
+    body: 'Recovery frames are the mechanical enforcement of commitment. Long recovery after an attack means the player must choose wisely — each action has a cost that creates a vulnerability window. Short recovery enables fluid aggression but reduces the consequence of each decision. Recovery frames are where action game depth lives.',
+    examples: ['Sekiro', 'Street Fighter', 'Mournful Flower'],
+    hint: 'Long recovery: Deeper combat decisions, higher mastery ceiling. Short recovery: More fluid, lower commitment cost.'
+  },
+  parry: {
+    principle: 'Parry Window — The Skill Expression Gate',
+    body: 'The parry window is the single most powerful lever in action combat design. A tight parry window creates a high skill ceiling that rewards dedicated practice with moments of extraordinary performance. A wide window makes defense accessible but removes the mastery dimension that makes successful parries feel meaningful. This is the dial between accessibility and expression.',
+    examples: ['Sekiro', 'Mournful Flower Post-Perfect Action', 'Sifu'],
+    hint: 'Tight window: High hero moment frequency for skilled players, high frustration for casuals. Wide window: Accessible but low skill expression.'
+  },
+  stagger: {
+    principle: 'Stagger Resistance — Enemy Identity & Weight',
+    body: 'Stagger resistance gives enemies a sense of presence and weight. An enemy that interrupts immediately at the first hit feels like a ragdoll. An enemy that absorbs pressure and keeps coming forces the player to read patterns rather than simply out-damage them. High stagger resistance is what separates a combat encounter from a damage race.',
+    examples: ['Monster Hunter', 'God of War', 'Dark Souls'],
+    hint: 'High resistance: Rewards patience and positioning. Low resistance: Rewards aggression and burst damage.'
+  },
+  punishment: {
+    principle: 'Damage Punishment — Stakes & Consequence',
+    body: 'Punishment level defines how much mistakes cost. High punishment makes every decision feel consequential — survival is earned, not assumed. But without appropriate skill expression tools high punishment produces frustration rather than mastery. Low punishment enables experimentation and reduces anxiety but removes the weight that makes survival meaningful.',
+    examples: ['Sekiro', 'Elden Ring', 'Celeste'],
+    hint: 'High punishment: Intense consequential encounters. Low punishment: More casual, lower emotional stakes.'
+  },
+  encounter: {
+    principle: 'Encounter Length — The Narrative Arc of Combat',
+    body: 'Every combat encounter has a narrative arc — tension, escalation, resolution. Long encounters give that arc room to breathe, building toward a climactic moment. Short encounters reward efficiency and create a fast rhythm. The encounter length defines what kind of story the combat tells and how frequently it tells it.',
+    examples: ['Monster Hunter', 'Hades', 'God of War Ragnarok'],
+    hint: 'Long encounters: Epic moments, fatigue risk. Short encounters: Fast feedback, lower individual stakes.'
+  }
+};
+
+function updateCombatSlider(key, value, hint) {
+  combatState[key] = parseInt(value);
+  combatState.activeSlider = key;
+  document.getElementById('val-' + key).textContent = value;
+
+  const p = combatPhilosophyMap[key];
+  document.getElementById('philosophy-principle').textContent = p.principle;
+  document.getElementById('philosophy-body').textContent = p.body;
+
+  const exEl = document.getElementById('philosophy-examples');
+  exEl.innerHTML = p.examples.map(e => `<span class="example-tag">${e}</span>`).join('');
+
+  const hintEl = document.getElementById('active-slider-info');
+  if (p.hint) {
+    hintEl.style.display = 'block';
+    hintEl.textContent = p.hint;
+  } else {
+    hintEl.style.display = 'none';
+  }
+
+  updateCombatOutputs();
+  updateCombatArchetypes();
+  updateCombatTradeoffs();
+  drawCombatChart();
+}
+
+function updateCombatOutputs() {
+  const { aggression, recovery, parry, punishment, encounter, stagger } = combatState;
+
+  const heroFreq = +clamp(1 + (parry * 0.4) + (aggression * 0.3) - (punishment * 0.1) + (stagger * 0.2), 0.5, 8).toFixed(1);
+  const frustration = Math.round(clamp(10 + (punishment * 6) + (parry * 4) - (recovery * 3) - (stagger * 1), 5, 95));
+  const flow = Math.round(clamp(20 + (aggression * 4) + (recovery * 3) - (punishment * 3) - (parry * 2) + (encounter * 2), 10, 95));
+  const mechMastery = Math.round(clamp(15 + (parry * 7) + (stagger * 4) + (punishment * 3) - (recovery * 2), 10, 98));
+  const skillExp = Math.round(clamp(10 + (parry * 6) + (aggression * 4) - (punishment * 2) + (stagger * 3), 10, 95));
+
+  setOutput('out-herofreq', heroFreq + '/hr', heroFreq > 5 ? 'var(--gold)' : heroFreq > 3 ? 'var(--amber)' : 'var(--text-dim)');
+  setOutput('out-frustration', frustration + '%', frustration < 30 ? 'var(--green)' : frustration < 60 ? 'var(--amber)' : 'var(--red)');
+  setOutput('out-flow', flow + '%', flow > 65 ? 'var(--green)' : flow > 45 ? 'var(--amber)' : 'var(--red)');
+  setOutput('out-mechmastery', mechMastery + '%', mechMastery > 70 ? 'var(--blue)' : mechMastery > 50 ? 'var(--amber)' : 'var(--text-dim)');
+  setOutput('out-skillexp', skillExp + '%', skillExp > 65 ? 'var(--purple)' : skillExp > 45 ? 'var(--amber)' : 'var(--text-dim)');
+}
+
+function updateCombatArchetypes() {
+  const { aggression, recovery, parry, punishment, encounter, stagger } = combatState;
+
+  // Completionist
+  const compSat = clamp(60 - punishment * 3 - parry * 2 + encounter * 3, 10, 100);
+  const compBurn = clamp(10 + punishment * 4 + parry * 3 - recovery * 2, 5, 100);
+  setBar('bar-comp-sat', compSat);
+  setBar('bar-comp-burn', compBurn);
+  setArchetypeState('completionist', compSat, compBurn, [], ['ENGAGED','THRIVING','GRINDING','STRESSED','BURNT OUT']);
+
+  // Competitive
+  const compMas = clamp(20 + parry * 8 + aggression * 5 + punishment * 3, 10, 100);
+  const compFrus = clamp(5 + punishment * 4 - parry * 2 - recovery * 3, 5, 100);
+  setBar('bar-comp2-mas', compMas);
+  setBar('bar-comp2-frus', compFrus);
+  setArchetypeState('competitive', compMas, compFrus, [], ['FOCUSED','IN FLOW','FRUSTRATED','RAGING','QUIT']);
+
+  // Explorer
+  const expJoy = clamp(40 + stagger * 5 - punishment * 3 + recovery * 3, 10, 100);
+  const expOver = clamp(5 + aggression * 4 + punishment * 3 - recovery * 3, 5, 100);
+  setBar('bar-exp-joy', expJoy);
+  setBar('bar-exp-over', expOver);
+  setArchetypeState('explorer', expJoy, expOver, [], ['CURIOUS','DELIGHTED','SEARCHING','LOST','OVERWHELMED']);
+
+  // Casual
+  const casAcc = clamp(80 - punishment * 7 - parry * 5 - aggression * 3 + recovery * 4, 10, 100);
+  const casDrop = clamp(5 + punishment * 8 + parry * 5 - recovery * 4, 5, 100);
+  setBar('bar-cas-acc', casAcc);
+  setBar('bar-cas-drop', casDrop);
+  setArchetypeState('casual', casAcc, casDrop, [], ['RELAXED','ENJOYING','UNCERTAIN','STRUGGLING','LEAVING']);
+
+  // Collector
+  const colInv = clamp(50 + encounter * 4 - punishment * 2, 10, 100);
+  const colFomo = clamp(10 + punishment * 3 - encounter * 2, 5, 100);
+  setBar('bar-col-inv', colInv);
+  setBar('bar-col-fomo', colFomo);
+  setArchetypeState('collector', colInv, colFomo, [], ['MOTIVATED','OBSESSED','PROGRESSING','ANXIOUS','FOMO PAIN']);
+
+  // Social
+  const socFit = clamp(55 - punishment * 4 - parry * 3 + recovery * 3, 10, 100);
+  const socLeft = clamp(5 + punishment * 5 + aggression * 2 - recovery * 3, 5, 100);
+  setBar('bar-soc-fit', socFit);
+  setBar('bar-soc-left', socLeft);
+  setArchetypeState('social', socFit, socLeft, [], ['CONNECTED','THRIVING','KEEPING UP','FALLING BEHIND','LEFT BEHIND']);
+}
+
+function updateCombatTradeoffs() {
+  const { aggression, parry, punishment, stagger, recovery, encounter } = combatState;
+
+  const scores = {
+    'Completionists': encounter * 8 - punishment * 5 + stagger * 3,
+    'Competitive': parry * 12 + aggression * 6 + punishment * 4,
+    'Explorers': stagger * 8 + recovery * 5 - punishment * 3,
+    'Casuals': -punishment * 9 - parry * 6 + recovery * 7,
+    'Collectors': encounter * 7 + stagger * 4 - punishment * 2,
+    'Social Players': recovery * 6 - punishment * 5 - aggression * 3
+  };
+
+  const colors = {
+    'Completionists': 'var(--green)',
+    'Competitive': 'var(--amber)',
+    'Explorers': 'var(--purple)',
+    'Casuals': 'var(--blue)',
+    'Collectors': 'var(--gold)',
+    'Social Players': 'var(--green)'
+  };
+
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const winners = sorted.slice(0, 3);
+  const losers = sorted.slice(3).reverse();
+
+  document.getElementById('winners-list').innerHTML = winners.map(([name]) =>
+    `<div class="tradeoff-player"><div class="tradeoff-dot" style="background:${colors[name]}"></div>${name}</div>`
+  ).join('');
+
+  document.getElementById('losers-list').innerHTML = losers.map(([name]) =>
+    `<div class="tradeoff-player"><div class="tradeoff-dot" style="background:var(--red)"></div>${name}</div>`
+  ).join('');
+}
+
+function drawCombatChart() {
+  const canvas = document.getElementById('retentionCurve');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = canvas.offsetWidth * dpr;
+  canvas.height = 140 * dpr;
+  ctx.scale(dpr, dpr);
+
+  const w = canvas.offsetWidth;
+  const h = 140;
+  const pad = { top: 12, right: 16, bottom: 28, left: 36 };
+  const cW = w - pad.left - pad.right;
+  const cH = h - pad.top - pad.bottom;
+
+  ctx.clearRect(0, 0, w, h);
+
+  const { aggression, parry, punishment, stagger, recovery, encounter } = combatState;
+
+  // Hero moment frequency line (gold)
+  const heroPoints = [];
+  // Frustration line (red)
+  const frustPoints = [];
+
+  for (let i = 0; i <= 20; i++) {
+    const t = i / 20;
+    const mastery = t;
+    const hero = clamp((parry * 0.5 + aggression * 0.3 + stagger * 0.2) * mastery * 10, 0, 100);
+    const frust = clamp(punishment * 8 * (1 - mastery * 0.7) + parry * 3 * (1 - mastery * 0.8), 0, 100);
+    heroPoints.push(hero);
+    frustPoints.push(frust);
+  }
+
+  // Grid
+  [0, 25, 50, 75, 100].forEach(v => {
+    const y = pad.top + cH - (v / 100) * cH;
+    ctx.strokeStyle = '#1a1a1a';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(pad.left + cW, y);
+    ctx.stroke();
+    ctx.fillStyle = '#444';
+    ctx.font = `9px Courier New`;
+    ctx.textAlign = 'right';
+    ctx.fillText(v + '%', pad.left - 4, y + 3);
+  });
+
+  ['Beginner','Intermediate','Veteran','Expert','Master'].forEach((label, i) => {
+    const x = pad.left + (i / 4) * cW;
+    ctx.fillStyle = '#333';
+    ctx.font = `8px Courier New`;
+    ctx.textAlign = 'center';
+    ctx.fillText(label, x, h - 6);
+  });
+
+  // Draw frustration line
+  ctx.beginPath();
+  frustPoints.forEach((val, i) => {
+    const x = pad.left + (i / 20) * cW;
+    const y = pad.top + cH - (val / 100) * cH;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = 'rgba(192,57,43,0.6)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4, 3]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Draw hero moment line
+  ctx.beginPath();
+  heroPoints.forEach((val, i) => {
+    const x = pad.left + (i / 20) * cW;
+    const y = pad.top + cH - (val / 100) * cH;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = '#c9a84c';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Legend
+  ctx.fillStyle = '#c9a84c';
+  ctx.fillRect(pad.left, 4, 12, 3);
+  ctx.fillStyle = '#555';
+  ctx.font = '8px Courier New';
+  ctx.textAlign = 'left';
+  ctx.fillText('Hero Moment Freq.', pad.left + 16, 9);
+
+  ctx.strokeStyle = 'rgba(192,57,43,0.6)';
+  ctx.setLineDash([4, 3]);
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(pad.left + 130, 5.5);
+  ctx.lineTo(pad.left + 142, 5.5);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#555';
+  ctx.fillText('Frustration Index', pad.left + 146, 9);
+}
+
+function switchModule(mod, btn) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  currentModule = mod;
+
+  if (mod === 'progression') {
+    setFullWidth(false);
+    renderProgressionModule();
+  } else if (mod === 'combat') {
+    setFullWidth(false);
+    renderCombatModule();
+  } else if (mod === 'liveops') {
+    setFullWidth(false);
+    renderLiveOpsModule();
+  } else if (mod === 'economy') {
+    setFullWidth(false);
+    renderEconomyModule();
+  } else if (mod === 'attachment') {
+    setFullWidth(false);
+    renderAttachmentModule();
+  } else if (mod === 'onboarding') {
+    setFullWidth(false);
+    renderOnboardingModule();
+  } else if (mod === 'tradeoff') {
+    renderTradeoffExplorer();
+  } else if (mod === 'systems') {
+    renderSystemInteractions();
+  }
+}
+
+function setFullWidth(full) {
+  const body = document.querySelector('.lab-body');
+  const controls = document.querySelector('.controls-panel');
+  const philosophy = document.querySelector('.philosophy-panel');
+  const viz = document.querySelector('.viz-panel');
+  if (full) {
+    body.style.gridTemplateColumns = '1fr';
+    controls.style.display = 'none';
+    philosophy.style.display = 'none';
+    viz.style.gridColumn = '1';
+  } else {
+    body.style.gridTemplateColumns = '320px 1fr 300px';
+    controls.style.display = '';
+    philosophy.style.display = '';
+    viz.style.gridColumn = '';
+  }
+}
+
+const systemConnections = {
+  combat: {
+    label: 'Combat',
+    connections: {
+      progression: 'Combat mastery determines when progression milestones feel meaningful. A difficulty ramp that outpaces progression creates frustration. Aligned properly, each unlock creates a new hero moment.',
+      liveops: 'Combat events and seasonal challenges are the primary LiveOps tool for re-engaging players. The quality of the combat experience determines whether event participation translates to sustained retention.',
+      economy: 'Combat performance gates access to economy rewards. High damage punishment in a pay-to-win adjacent economy creates coercive spending pressure. Balanced combat keeps economy optional.',
+      attachment: 'Character identity is expressed through combat playstyle. A character with a unique combat mechanic creates stronger attachment than one who plays like everyone else.',
+      onboarding: 'The first combat encounter is the first test of the player contract. A first win that feels earned rather than given sets the correct expectation for the rest of the game.'
+    }
+  },
+  progression: {
+    label: 'Progression',
+    connections: {
+      combat: 'Progression unlocks define the combat vocabulary available at each stage. Poorly paced unlocks produce combat that feels static early and overwhelming late.',
+      liveops: 'Seasonal progression systems are the primary retention loop in live service games. The rate at which progress is earned determines whether the event cadence feels rewarding or exhausting.',
+      economy: 'Progression speed is the primary variable the economy is built around. Fast free progression reduces spending pressure. Slow progression creates the currency gap that monetization fills.',
+      attachment: 'Character progression is identity formation. Players who invest in a character\'s progression develop attachment that outlasts any individual mechanic.',
+      onboarding: 'The progression curve in the first session determines whether the player experiences a competence window or an anxiety window. Early unlocks create investment. Withheld unlocks create frustration.'
+    }
+  },
+  liveops: {
+    label: 'LiveOps',
+    connections: {
+      combat: 'LiveOps events that introduce new combat challenges create re-engagement spikes. The quality of the combat experience determines whether event players stay after the event ends.',
+      progression: 'Event progression systems are the heartbeat of live service retention. The relationship between event effort and reward defines whether the event cadence feels fair or exploitative.',
+      economy: 'LiveOps events are the primary vehicle for economy interventions. Event currency, limited items, and seasonal passes all live at the intersection of LiveOps and economy design.',
+      attachment: 'Seasonal stories and character events are the most powerful attachment tools in live service design. A character event that advances the lore creates attachment that a mechanical banner cannot.',
+      onboarding: 'LiveOps events create re-onboarding moments for lapsed players. The strength of catch-up mechanics determines whether returning players feel welcomed or punished.'
+    }
+  },
+  economy: {
+    label: 'Economy',
+    connections: {
+      combat: 'Pay-to-win economies corrupt the combat experience by introducing external variables into a system that should reward skill. A healthy economy keeps combat legible — performance reflects mastery, not spending.',
+      progression: 'The economy determines the rate at which free players can progress. When spending accelerates progression dramatically the free path feels like a punishment rather than a choice.',
+      liveops: 'Event economies are the monetization moment of the LiveOps calendar. A well-designed event economy creates genuine desire. A poorly designed one creates resentment.',
+      attachment: 'The cost of acquiring characters directly shapes attachment intensity. A character who required significant investment becomes part of the player\'s identity in a way that a freely given character rarely does.',
+      onboarding: 'The first economy interaction sets the player\'s expectation for the relationship between time invested and value received.'
+    }
+  },
+  attachment: {
+    label: 'Attachment',
+    connections: {
+      combat: 'Players who are attached to a character will learn their kit more deeply and feel nerfs more personally. Attachment amplifies every other combat metric.',
+      progression: 'Character attachment transforms progression from a numbers game into a relationship. A player who loves their character doesn\'t grind for stats — they invest in someone.',
+      liveops: 'Character events are the highest-performing LiveOps interventions in character-driven games. A new story chapter featuring a beloved character outperforms generic content releases significantly.',
+      economy: 'Attachment is the primary driver of willingness to spend. A player who feels nothing for a character has no motivation to spend on them.',
+      onboarding: 'Early character attachment during onboarding is the single most powerful retention mechanism in character-driven games.'
+    }
+  },
+  onboarding: {
+    label: 'Onboarding',
+    connections: {
+      combat: 'The onboarding combat encounter defines the player\'s combat identity. A first encounter that teaches through consequence produces players who understand the system.',
+      progression: 'Onboarding sets the progression expectation. The rate at which the player earns in their first session becomes the standard they measure every subsequent session against.',
+      liveops: 'Players who are successfully onboarded become the returning player base that LiveOps re-engagement is designed for. Failed onboarding means no one to re-engage.',
+      economy: 'The first economy interaction during onboarding sets the player\'s willingness to engage with monetization. A generous first interaction creates reciprocity.',
+      attachment: 'Onboarding is the first opportunity to create character attachment. A player who bonds with a character during their first hour has a reason to return that no mechanic alone can provide.'
+    }
+  }
+};
+
+let activeSystemNode = null;
+
+function renderTradeoffExplorer() {
+  setFullWidth(true);
+  const viz = document.querySelector('.viz-panel');
+  viz.innerHTML = `
+    <div style="padding:32px 40px;overflow-y:auto;height:100%">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;color:var(--text-dim);text-transform:uppercase;margin-bottom:6px">Trade-Off Explorer</div>
+      <div style="font-size:28px;font-weight:700;letter-spacing:-0.02em;color:var(--text);margin-bottom:8px">Good systems don't help everyone equally.</div>
+      <div style="font-size:13px;color:var(--text-mid);margin-bottom:32px;max-width:600px;line-height:1.6">Every design decision serves some players and challenges others. This is not a flaw — it is the nature of design. The question is never "who does this help?" but "who does this help, who does this hurt, and is that trade-off intentional?"</div>
+
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--border);margin-bottom:32px">
+        ${[
+          { num:'01', name:'Completionist', desc:'Driven by completion. Wants to see everything, earn everything, finish everything.', wins:['High quest density','Clear XP curve','Seasonal events'], hurts:['High FOMO','Short seasons','High difficulty ramp'] },
+          { num:'02', name:'Competitive', desc:'Driven by mastery and ranking. Wants challenge, skill expression, and clear feedback.', wins:['Tight parry windows','High difficulty ramp','Premium pass value'], hurts:['High FOMO','Frequent patches','High hint frequency'] },
+          { num:'03', name:'Explorer', desc:'Driven by discovery. Wants hidden depth and experimentation. Frustrated by hand-holding.', wins:['High build diversity','Deep story density','Low hint frequency'], hurts:['High banner frequency','High quest density','Long tutorials'] },
+          { num:'04', name:'Casual', desc:'Driven by relaxation. Wants accessible fun without anxiety or obligation.', wins:['Strong catch-up','High hint frequency','High currency income'], hurts:['High FOMO','High damage punishment','High shop prices'] },
+          { num:'05', name:'Collector', desc:'Driven by acquisition. Wants rare items, complete rosters, and to display investment.', wins:['Low availability','High bond events','High duplicate value'], hurts:['High banner frequency','Low duplicate value','High shop prices'] },
+          { num:'06', name:'Social', desc:'Driven by connection. Wants shared experiences and community.', wins:['Strong mentor systems','High seasonal story','High voiceline updates'], hurts:['High damage punishment','High FOMO intensity','High shop prices'] }
+        ].map(a => `
+          <div style="background:var(--surface);padding:20px 16px">
+            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text-dim);text-transform:uppercase;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:12px">Archetype ${a.num}</div>
+            <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">${a.name}</div>
+            <div style="font-size:11px;color:var(--text-mid);line-height:1.5;margin-bottom:12px">${a.desc}</div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              ${a.wins.map(w=>`<div style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;color:var(--text-dim)"><div style="width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0"></div>${w}</div>`).join('')}
+              ${a.hurts.map(h=>`<div style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;color:var(--text-dim)"><div style="width:5px;height:5px;border-radius:50%;background:var(--red);flex-shrink:0"></div>${h}</div>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);padding:24px;margin-bottom:32px">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.15em;color:var(--gold);text-transform:uppercase;margin-bottom:10px">The Core Lesson</div>
+        <div style="font-size:14px;color:var(--text);line-height:1.7;max-width:800px">
+          A design decision that serves Completionists often hurts Casuals. A decision that serves Collectors often frustrates Explorers. A decision that serves Competitive players often alienates Social ones. This is not a problem to be solved — it is a reality to be understood and made intentional. The question every systems designer must answer is not "who does this serve?" but "who does this serve, who does this challenge, and is that the trade-off we are choosing to make?"
+          <br><br>
+          Good systems don't help everyone equally. Great systems know exactly who they help, who they challenge, and why.
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderSystemInteractions() {
+  setFullWidth(true);
+  const viz = document.querySelector('.viz-panel');
+  viz.innerHTML = `
+    <div style="padding:32px 40px;overflow-y:auto;height:100%">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;color:var(--text-dim);text-transform:uppercase;margin-bottom:6px">System Interactions</div>
+      <div style="font-size:28px;font-weight:700;letter-spacing:-0.02em;color:var(--text);margin-bottom:8px">Everything is connected.</div>
+      <div style="font-size:13px;color:var(--text-mid);margin-bottom:32px;max-width:600px;line-height:1.6">Game systems are never truly independent. Combat shapes retention. Retention shapes economy. Economy shapes attachment. Click any system node to see how it influences every other system in the design.</div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);padding:32px;margin-bottom:24px;position:relative;min-height:280px;display:flex;align-items:center;justify-content:center">
+        <div style="position:relative;width:580px;height:240px">
+          ${Object.entries({
+            combat:     {x:260,y:0,   label:'Combat'},
+            progression:{x:0,  y:100, label:'Progression'},
+            liveops:    {x:490,y:100, label:'LiveOps'},
+            economy:    {x:80, y:200, label:'Economy'},
+            attachment: {x:400,y:200, label:'Attachment'},
+            onboarding: {x:240,y:160, label:'Onboarding'}
+          }).map(([key,pos])=>`
+            <div class="system-node ${key}" onclick="activateNode('${key}')"
+              style="position:absolute;left:${pos.x}px;top:${pos.y}px;padding:8px 14px;background:var(--surface-2);border:1px solid var(--border-2);font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mid);cursor:pointer;transition:0.2s;white-space:nowrap"
+              onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'"
+              onmouseout="if(!this.classList.contains('active-node')){this.style.borderColor='var(--border-2)';this.style.color='var(--text-mid)'}"
+            >${pos.label}</div>`).join('')}
+          <svg style="position:absolute;top:0;left:0;width:580px;height:240px;pointer-events:none" id="connectionSvg">
+            <line x1="280" y1="16" x2="50"  y2="116" stroke="#1e1e1e" stroke-width="1"/>
+            <line x1="280" y1="16" x2="510" y2="116" stroke="#1e1e1e" stroke-width="1"/>
+            <line x1="280" y1="16" x2="120" y2="216" stroke="#1e1e1e" stroke-width="1"/>
+            <line x1="280" y1="16" x2="440" y2="216" stroke="#1e1e1e" stroke-width="1"/>
+            <line x1="280" y1="16" x2="270" y2="176" stroke="#1e1e1e" stroke-width="1"/>
+            <line x1="50"  y1="116" x2="510" y2="116" stroke="#1e1e1e" stroke-width="1"/>
+            <line x1="50"  y1="116" x2="120" y2="216" stroke="#1e1e1e" stroke-width="1"/>
+            <line x1="50"  y1="116" x2="440" y2="216" stroke="#1e1e1e" stroke-width="1"/>
+            <line x1="50"  y1="116" x2="270" y2="176" stroke="#1e1e1e" stroke-width="1"/>
+            <line x1="510" y1="116" x2="120" y2="216" stroke="#1e1e1e" stroke-width="1"/>
+            <line x1="510" y1="116" x2="440" y2="216" stroke="#1e1e1e" stroke-width="1"/>
+            <line x1="510" y1="116" x2="270" y2="176" stroke="#1e1e1e" stroke-width="1"/>
+            <line x1="120" y1="216" x2="440" y2="216" stroke="#1e1e1e" stroke-width="1"/>
+            <line x1="120" y1="216" x2="270" y2="176" stroke="#1e1e1e" stroke-width="1"/>
+            <line x1="440" y1="216" x2="270" y2="176" stroke="#1e1e1e" stroke-width="1"/>
+          </svg>
+        </div>
+      </div>
+
+      <div id="nodeDesc" style="background:var(--surface);border:1px solid var(--border);padding:14px 20px;margin-bottom:24px;font-family:var(--mono);font-size:10px;color:var(--text-dim);letter-spacing:0.03em;line-height:1.6">
+        Select a system node above to explore how it influences every other system in the design.
+      </div>
+
+      <div id="interactionsGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-bottom:32px"></div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);padding:24px">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.15em;color:var(--gold);text-transform:uppercase;margin-bottom:10px">The Central Insight</div>
+        <div style="font-size:14px;color:var(--text);line-height:1.7;max-width:800px">
+          Most game analysis treats systems independently — the combat is good, the economy is bad, the onboarding is confusing. But systems don't exist in isolation. A combat system that would be excellent in one economy becomes predatory in another. An onboarding flow that works in a low-FOMO LiveOps environment becomes anxiety-inducing in a high-FOMO one.<br><br>
+          This is why the systems designer's job is never to design a system. It is to design a system within a system — and to understand what every dial touches before turning it.
+        </div>
+      </div>
+    </div>`;
+}
+
+function activateNode(nodeKey) {
+  document.querySelectorAll('.system-node').forEach(n => {
+    n.classList.remove('active-node');
+    n.style.borderColor = 'var(--border-2)';
+    n.style.color = 'var(--text-mid)';
+  });
+  const activeEl = document.querySelector('.system-node.' + nodeKey);
+  if (activeEl) {
+    activeEl.classList.add('active-node');
+    activeEl.style.borderColor = 'var(--gold)';
+    activeEl.style.color = 'var(--gold)';
+  }
+
+  const conn = systemConnections[nodeKey];
+  document.getElementById('nodeDesc').textContent = conn.label.toUpperCase() + ' — Click a connection card below to read how this system shapes each other.';
+
+  const otherSystems = Object.keys(systemConnections).filter(k => k !== nodeKey);
+  document.getElementById('interactionsGrid').innerHTML = otherSystems.map(targetKey => {
+    const target = systemConnections[targetKey];
+    const desc = conn.connections[targetKey];
+    return `<div style="background:var(--surface);padding:20px">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text-dim);text-transform:uppercase;margin-bottom:4px">${conn.label} <span style="color:var(--border-2)">→</span></div>
+      <div style="font-size:16px;font-weight:700;color:var(--gold);margin-bottom:12px;letter-spacing:-0.01em">${target.label}</div>
+      <div style="font-size:11px;color:var(--text-mid);line-height:1.6;margin-bottom:10px">${desc}</div>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--gold-dim);padding:6px 10px;background:var(--surface-2);border-left:2px solid var(--gold-dim);cursor:pointer" onclick="document.querySelector('.nav-btn[onclick*=\\'${targetKey}\\']').click()">→ Open ${target.label} Lab</div>
+    </div>`;
+  }).join('');
+}
+
+function renderProgressionModule() {
+  document.querySelector('.panel-section-label').textContent = 'Inputs — Progression Lab';
+  document.querySelector('.slider-group').innerHTML = modules.progression.controls;
+  document.querySelector('.outputs-grid').innerHTML = modules.progression.outputs;
+  document.querySelector('.chart-label').textContent = modules.progression.chartLabel;
+
+  const p = modules.progression.philosophyInit;
+  document.getElementById('philosophy-principle').textContent = p.principle;
+  document.getElementById('philosophy-body').textContent = p.body;
+  document.getElementById('philosophy-examples').innerHTML = p.examples.map(e => `<span class="example-tag">${e}</span>`).join('');
+  document.getElementById('active-slider-info').style.display = 'none';
+
+  const exSection = document.querySelector('.examples-section .examples-label');
+  exSection.parentElement.innerHTML = '<div class="examples-label">Real World Reference</div>' +
+    modules.progression.examples.map(e => `<div class="example-row"><span class="example-game">${e.game}</span><span class="example-note">${e.note}</span></div>`).join('');
+
+  document.getElementById('behavioral-principle').textContent = modules.progression.behavioralPrinciple;
+  document.getElementById('behavioral-body').textContent = modules.progression.behavioralBody;
+
+  updateOutputs();
+  updateArchetypes();
+  updateTradeoffs();
+  drawChart();
+}
+
+function renderCombatModule() {
+  document.querySelector('.panel-section-label').textContent = 'Inputs — Combat Lab';
+  document.querySelector('.slider-group').innerHTML = modules.combat.controls;
+  document.querySelector('.outputs-grid').innerHTML = modules.combat.outputs;
+  document.querySelector('.chart-label').textContent = modules.combat.chartLabel;
+
+  const p = modules.combat.philosophyInit;
+  document.getElementById('philosophy-principle').textContent = p.principle;
+  document.getElementById('philosophy-body').textContent = p.body;
+  document.getElementById('philosophy-examples').innerHTML = p.examples.map(e => `<span class="example-tag">${e}</span>`).join('');
+  document.getElementById('active-slider-info').style.display = 'none';
+
+  const exSection = document.querySelector('.examples-section');
+  exSection.innerHTML = '<div class="examples-label">Real World Reference</div>' +
+    modules.combat.examples.map(e => `<div class="example-row"><span class="example-game">${e.game}</span><span class="example-note">${e.note}</span></div>`).join('');
+
+  document.getElementById('behavioral-principle').textContent = modules.combat.behavioralPrinciple;
+  document.getElementById('behavioral-body').textContent = modules.combat.behavioralBody;
+
+  updateCombatOutputs();
+  updateCombatArchetypes();
+  updateCombatTradeoffs();
+  drawCombatChart();
+}
+
+let currentModule = 'progression';
+
+// ── LIVEOPS MODULE ──
+modules.liveops = {
+  controlsLabel: 'Inputs — LiveOps Lab',
+  controls: `
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Event Frequency</span><span class="slider-value" id="val-eventfreq">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-eventfreq" oninput="updateLiveOpsSlider('eventfreq',this.value,'How often meaningful events are deployed. Too low and players have no reason to return. Too high and events lose meaning and players burn out.')">
+      <div class="slider-hint">How often meaningful in-game events are deployed to players.</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Battle Pass Length</span><span class="slider-value" id="val-bplength">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-bplength" oninput="updateLiveOpsSlider('bplength',this.value,'How long a season lasts. Short seasons create urgency and prevent burnout. Long seasons allow deeper engagement but risk staleness.')">
+      <div class="slider-hint">Duration of each seasonal content cycle in weeks.</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Catch-Up Mechanics</span><span class="slider-value" id="val-catchup">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-catchup" oninput="updateLiveOpsSlider('catchup',this.value,'How easy it is for returning players to reach parity. Strong catch-up reduces the cost of lapsing. Weak catch-up punishes absence and can permanently lose churned players.')">
+      <div class="slider-hint">How easily lapsed players can re-engage and reach content parity.</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">FOMO Intensity</span><span class="slider-value" id="val-fomo">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-fomo" oninput="updateLiveOpsSlider('fomo',this.value,'How aggressively limited-time scarcity is used. High FOMO drives short-term engagement but creates anxiety and resentment. Low FOMO reduces urgency but also reduces event participation.')">
+      <div class="slider-hint">Degree of limited-time scarcity applied to events and rewards.</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Seasonal Story</span><span class="slider-value" id="val-seasonstory">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-seasonstory" oninput="updateLiveOpsSlider('seasonstory',this.value,'How much narrative context is woven into seasonal events. Strong story creates emotional investment and community discourse. Weak story makes events feel like pure content delivery.')">
+      <div class="slider-hint">Depth of narrative investment embedded in seasonal content cycles.</div>
+    </div>`,
+  outputsLabel: 'LiveOps System Outputs',
+  outputs: `
+    <div class="output-cell"><div class="output-label">Returning Players</div><div class="output-value" id="out-returning" style="color:var(--green)">41%</div><div class="output-delta" style="color:var(--text-dim)">re-engagement rate</div></div>
+    <div class="output-cell"><div class="output-label">Burnout Risk</div><div class="output-value" id="out-loburnout" style="color:var(--amber)">33%</div><div class="output-delta" style="color:var(--text-dim)">30d estimate</div></div>
+    <div class="output-cell"><div class="output-label">Completion Rate</div><div class="output-value" id="out-completion" style="color:var(--blue)">58%</div><div class="output-delta" style="color:var(--text-dim)">season finish %</div></div>
+    <div class="output-cell"><div class="output-label">Community Heat</div><div class="output-value" id="out-community" style="color:var(--gold)">62%</div><div class="output-delta" style="color:var(--text-dim)">discourse score</div></div>
+    <div class="output-cell"><div class="output-label">Churn Rate</div><div class="output-value" id="out-lochurn" style="color:var(--red)">28%</div><div class="output-delta" style="color:var(--text-dim)">monthly estimate</div></div>`,
+  chartLabel: 'Player Activity — Event Spike & Collapse Pattern',
+  philosophyInit: {
+    principle: 'LiveOps as a Retention Contract',
+    body: 'A live service game makes an implicit contract with its players: show up consistently and we will reward your time. When the event cadence is too sparse that contract feels broken. When it is too aggressive players feel exploited. The LiveOps designer\'s job is to keep that contract legible, fair, and worth honoring.',
+    examples: ['Destiny 2', 'Tapped Out', 'Dead by Daylight']
+  },
+  examples: [
+    { game: 'Tapped Out', note: 'Seasonal scarcity paired with build timers created return loops that sustained 10 years of mobile retention.' },
+    { game: 'Marathon', note: 'Free week and Vault Breaker interventions created spikes but no sustained retention — treating symptoms not causes.' },
+    { game: 'Master Duel', note: 'Event frequency too low outside ranked seasons — non-competitive players had no consistent reason to return.' },
+    { game: 'Dead by Daylight', note: 'Consistent tome and anniversary events create reliable return windows without burnout.' },
+    { game: 'Genshin Impact', note: 'Dense event cadence with narrative context drives strong completion rates and community discourse each patch.' }
+  ],
+  behavioralPrinciple: 'Intervention Timing & The Spike-Collapse Pattern',
+  behavioralBody: 'LiveOps interventions create player activity spikes. The failure mode is treating each spike as success rather than asking why the baseline collapsed in the first place. A well-designed intervention builds toward a new baseline — not a temporary lift followed by the same cliff.'
+};
+
+// ── LIVEOPS STATE ──
+const liveOpsState = {
+  eventfreq: 5, bplength: 5, catchup: 5, fomo: 5, seasonstory: 5,
+  activeSlider: null
+};
+
+const liveOpsPhilosophyMap = {
+  eventfreq: {
+    principle: 'Event Frequency — The Heartbeat of Retention',
+    body: 'Event frequency is the heartbeat of a live service game. Too slow and the game goes quiet between major updates — players lose the habit of logging in. Too fast and events lose meaning because nothing feels special anymore. The ideal cadence creates a rhythm players can anticipate and plan around — a reason to return that feels reliable rather than desperate.',
+    examples: ['Dead by Daylight', 'Genshin Impact', 'Master Duel'],
+    hint: 'Low frequency: Players lose login habit between events. High frequency: Events become noise, burnout risk rises.'
+  },
+  bplength: {
+    principle: 'Battle Pass Length — Urgency vs Fatigue',
+    body: 'Season length defines the emotional arc of a player\'s engagement cycle. Short seasons create urgency and a clear beginning-middle-end narrative. Long seasons give players breathing room but risk the mid-season slump where completion feels both distant and inevitable. The sweet spot keeps the finish line visible without rushing players toward it.',
+    examples: ['Fortnite', 'Apex Legends', 'Dead by Daylight'],
+    hint: 'Short seasons: High urgency, higher FOMO risk. Long seasons: More breathing room, mid-season engagement dip.'
+  },
+  catchup: {
+    principle: 'Catch-Up Mechanics — The Cost of Absence',
+    body: 'Catch-up mechanics determine the price of lapsing. Without them a returning player faces an overwhelming content debt that makes re-engagement feel futile. With strong catch-up the game signals that it values the player\'s return regardless of how long they were gone. This is one of the most important re-engagement signals a live service can send.',
+    examples: ['World of Warcraft', 'Destiny 2', 'FFXIV'],
+    hint: 'Strong catch-up: Lower re-engagement barrier, higher returning player conversion. Weak catch-up: Lapsed players permanently lost.'
+  },
+  fomo: {
+    principle: 'FOMO Intensity — Scarcity as Motivation',
+    body: 'FOMO is the most powerful short-term engagement lever in live service design — and the most dangerous long-term one. Scarcity creates urgency and drives participation. But when every event feels like a must-not-miss obligation the game stops feeling like entertainment and starts feeling like a job. The Tapped Out seasonal model worked because the scarcity was real but the stakes were never punishing enough to feel manipulative.',
+    examples: ['Tapped Out', 'Genshin Impact', 'Marathon'],
+    hint: 'High FOMO: Short-term engagement spike, long-term resentment and burnout. Low FOMO: Reduced urgency, healthier player relationship.'
+  },
+  seasonstory: {
+    principle: 'Seasonal Story — Context as Retention',
+    body: 'Narrative context transforms a content delivery schedule into something players talk about. When an event has a story behind it players don\'t just engage with mechanics — they engage with meaning. Community discourse, fan theories, emotional investment in outcomes — all of these are retention multipliers that pure mechanical content cannot produce. Story is the most undervalued LiveOps tool.',
+    examples: ['Destiny 2', 'Dead by Daylight', 'Fortnite'],
+    hint: 'Strong seasonal story: Community discourse, emotional investment, organic social sharing. Weak story: Higher completion but lower emotional attachment.'
+  }
+};
+
+function updateLiveOpsSlider(key, value, hint) {
+  liveOpsState[key] = parseInt(value);
+  liveOpsState.activeSlider = key;
+  document.getElementById('val-' + key).textContent = value;
+
+  const p = liveOpsPhilosophyMap[key];
+  document.getElementById('philosophy-principle').textContent = p.principle;
+  document.getElementById('philosophy-body').textContent = p.body;
+  document.getElementById('philosophy-examples').innerHTML = p.examples.map(e => `<span class="example-tag">${e}</span>`).join('');
+
+  const hintEl = document.getElementById('active-slider-info');
+  if (p.hint) {
+    hintEl.style.display = 'block';
+    hintEl.textContent = p.hint;
+  } else {
+    hintEl.style.display = 'none';
+  }
+
+  updateLiveOpsOutputs();
+  updateLiveOpsArchetypes();
+  updateLiveOpsTradeoffs();
+  drawLiveOpsChart();
+}
+
+function updateLiveOpsOutputs() {
+  const { eventfreq, bplength, catchup, fomo, seasonstory } = liveOpsState;
+
+  const returning = Math.round(clamp(10 + catchup * 6 + eventfreq * 3 - fomo * 2 + seasonstory * 2, 5, 90));
+  const burnout = Math.round(clamp(5 + fomo * 7 + eventfreq * 3 - bplength * 2 - catchup * 2, 5, 95));
+  const completion = Math.round(clamp(20 + bplength * 4 - fomo * 2 + seasonstory * 4 + catchup * 2, 10, 95));
+  const community = Math.round(clamp(10 + seasonstory * 8 + eventfreq * 3 - bplength * 1, 5, 98));
+  const churn = Math.round(clamp(60 - catchup * 5 - eventfreq * 3 - seasonstory * 2 + fomo * 3, 5, 85));
+
+  setOutput('out-returning', returning + '%', returning > 55 ? 'var(--green)' : returning > 35 ? 'var(--amber)' : 'var(--red)');
+  setOutput('out-loburnout', burnout + '%', burnout < 25 ? 'var(--green)' : burnout < 55 ? 'var(--amber)' : 'var(--red)');
+  setOutput('out-completion', completion + '%', completion > 65 ? 'var(--blue)' : completion > 45 ? 'var(--amber)' : 'var(--red)');
+  setOutput('out-community', community + '%', community > 65 ? 'var(--gold)' : community > 45 ? 'var(--amber)' : 'var(--text-dim)');
+  setOutput('out-lochurn', churn + '%', churn < 20 ? 'var(--green)' : churn < 40 ? 'var(--amber)' : 'var(--red)');
+}
+
+function updateLiveOpsArchetypes() {
+  const { eventfreq, bplength, catchup, fomo, seasonstory } = liveOpsState;
+
+  const compSat = clamp(40 + eventfreq * 5 + seasonstory * 4 - fomo * 2, 10, 100);
+  const compBurn = clamp(5 + fomo * 6 + eventfreq * 3 - catchup * 3, 5, 100);
+  setBar('bar-comp-sat', compSat);
+  setBar('bar-comp-burn', compBurn);
+  setArchetypeState('completionist', compSat, compBurn, [], ['ENGAGED','THRIVING','GRINDING','STRESSED','BURNT OUT']);
+
+  const compMas = clamp(30 + eventfreq * 4 - bplength * 2 + fomo * 2, 10, 100);
+  const compFrus = clamp(10 + fomo * 4 - catchup * 4 + bplength * 2, 5, 100);
+  setBar('bar-comp2-mas', compMas);
+  setBar('bar-comp2-frus', compFrus);
+  setArchetypeState('competitive', compMas, compFrus, [], ['FOCUSED','IN FLOW','FRUSTRATED','RAGING','QUIT']);
+
+  const expJoy = clamp(35 + seasonstory * 7 + eventfreq * 3 - fomo * 3, 10, 100);
+  const expOver = clamp(5 + eventfreq * 4 + fomo * 3 - catchup * 2, 5, 100);
+  setBar('bar-exp-joy', expJoy);
+  setBar('bar-exp-over', expOver);
+  setArchetypeState('explorer', expJoy, expOver, [], ['CURIOUS','DELIGHTED','SEARCHING','LOST','OVERWHELMED']);
+
+  const casAcc = clamp(60 - fomo * 7 - eventfreq * 3 + catchup * 5 + bplength * 2, 10, 100);
+  const casDrop = clamp(5 + fomo * 8 - catchup * 5 - bplength * 2, 5, 100);
+  setBar('bar-cas-acc', casAcc);
+  setBar('bar-cas-drop', casDrop);
+  setArchetypeState('casual', casAcc, casDrop, [], ['RELAXED','ENJOYING','UNCERTAIN','STRUGGLING','LEAVING']);
+
+  const colInv = clamp(20 + fomo * 8 + eventfreq * 4 + seasonstory * 3, 10, 100);
+  const colFomo = clamp(5 + fomo * 9 - catchup * 2, 5, 100);
+  setBar('bar-col-inv', colInv);
+  setBar('bar-col-fomo', colFomo);
+  setArchetypeState('collector', colInv, colFomo, [], ['MOTIVATED','OBSESSED','PROGRESSING','ANXIOUS','FOMO PAIN']);
+
+  const socFit = clamp(40 + seasonstory * 6 + eventfreq * 3 - fomo * 2, 10, 100);
+  const socLeft = clamp(5 + fomo * 4 + bplength * 3 - catchup * 4, 5, 100);
+  setBar('bar-soc-fit', socFit);
+  setBar('bar-soc-left', socLeft);
+  setArchetypeState('social', socFit, socLeft, [], ['CONNECTED','THRIVING','KEEPING UP','FALLING BEHIND','LEFT BEHIND']);
+}
+
+function updateLiveOpsTradeoffs() {
+  const { eventfreq, bplength, catchup, fomo, seasonstory } = liveOpsState;
+
+  const scores = {
+    'Completionists': eventfreq * 8 + seasonstory * 5 - fomo * 3,
+    'Competitive': eventfreq * 6 + fomo * 4 - bplength * 2,
+    'Explorers': seasonstory * 9 + eventfreq * 3 - fomo * 4,
+    'Casuals': catchup * 10 - fomo * 8 + bplength * 3,
+    'Collectors': fomo * 10 + eventfreq * 5 + seasonstory * 2,
+    'Social Players': seasonstory * 8 + catchup * 4 - fomo * 3
+  };
+
+  const colors = {
+    'Completionists': 'var(--green)',
+    'Competitive': 'var(--amber)',
+    'Explorers': 'var(--purple)',
+    'Casuals': 'var(--blue)',
+    'Collectors': 'var(--gold)',
+    'Social Players': 'var(--green)'
+  };
+
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  document.getElementById('winners-list').innerHTML = sorted.slice(0, 3).map(([name]) =>
+    `<div class="tradeoff-player"><div class="tradeoff-dot" style="background:${colors[name]}"></div>${name}</div>`).join('');
+  document.getElementById('losers-list').innerHTML = sorted.slice(3).reverse().map(([name]) =>
+    `<div class="tradeoff-player"><div class="tradeoff-dot" style="background:var(--red)"></div>${name}</div>`).join('');
+}
+
+function drawLiveOpsChart() {
+  const canvas = document.getElementById('retentionCurve');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = canvas.offsetWidth * dpr;
+  canvas.height = 140 * dpr;
+  ctx.scale(dpr, dpr);
+
+  const w = canvas.offsetWidth;
+  const h = 140;
+  const pad = { top: 12, right: 16, bottom: 28, left: 36 };
+  const cW = w - pad.left - pad.right;
+  const cH = h - pad.top - pad.bottom;
+
+  ctx.clearRect(0, 0, w, h);
+
+  const { eventfreq, catchup, fomo, seasonstory } = liveOpsState;
+
+  // Simulate 16 weeks with event spikes
+  const baseRetention = clamp(30 + catchup * 4 + seasonstory * 2, 15, 70);
+  const spikeHeight = clamp(eventfreq * 7 + fomo * 4 + seasonstory * 3, 10, 60);
+  const spikeDecay = clamp(0.4 + (1 - catchup / 10) * 0.4, 0.3, 0.8);
+  const eventSpacing = Math.round(clamp(12 - eventfreq, 2, 10));
+
+  const points = [];
+  for (let w = 0; w <= 16; w++) {
+    let val = baseRetention;
+    // Add spikes at event moments
+    for (let e = eventSpacing; e <= 16; e += eventSpacing) {
+      const dist = Math.abs(w - e);
+      if (dist < 3) {
+        val += spikeHeight * Math.pow(spikeDecay, dist);
+      }
+    }
+    points.push(clamp(val, 5, 95));
+  }
+
+  // Grid
+  [0, 25, 50, 75, 100].forEach(v => {
+    const y = pad.top + cH - (v / 100) * cH;
+    ctx.strokeStyle = '#1a1a1a';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(pad.left + cW, y);
+    ctx.stroke();
+    ctx.fillStyle = '#444';
+    ctx.font = `9px Courier New`;
+    ctx.textAlign = 'right';
+    ctx.fillText(v + '%', pad.left - 4, y + 3);
+  });
+
+  // Week labels
+  [0, 4, 8, 12, 16].forEach(w => {
+    const x = pad.left + (w / 16) * cW;
+    ctx.fillStyle = '#444';
+    ctx.font = `8px Courier New`;
+    ctx.textAlign = 'center';
+    ctx.fillText('W' + w, x, h - 6);
+  });
+
+  // Baseline dotted line
+  const baseY = pad.top + cH - (baseRetention / 100) * cH;
+  ctx.strokeStyle = '#333';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3, 4]);
+  ctx.beginPath();
+  ctx.moveTo(pad.left, baseY);
+  ctx.lineTo(pad.left + cW, baseY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Event markers
+  for (let e = eventSpacing; e <= 16; e += eventSpacing) {
+    const x = pad.left + (e / 16) * cW;
+    ctx.strokeStyle = 'rgba(201,168,76,0.2)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x, pad.top);
+    ctx.lineTo(x, pad.top + cH);
+    ctx.stroke();
+    ctx.fillStyle = '#6a571f';
+    ctx.font = '7px Courier New';
+    ctx.textAlign = 'center';
+    ctx.fillText('EVENT', x, pad.top + 8);
+  }
+
+  // Fill under curve
+  ctx.beginPath();
+  points.forEach((val, i) => {
+    const x = pad.left + (i / 16) * cW;
+    const y = pad.top + cH - (val / 100) * cH;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.lineTo(pad.left + cW, pad.top + cH);
+  ctx.lineTo(pad.left, pad.top + cH);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(201,168,76,0.05)';
+  ctx.fill();
+
+  // Main line
+  ctx.beginPath();
+  points.forEach((val, i) => {
+    const x = pad.left + (i / 16) * cW;
+    const y = pad.top + cH - (val / 100) * cH;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = '#c9a84c';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Baseline label
+  ctx.fillStyle = '#444';
+  ctx.font = '8px Courier New';
+  ctx.textAlign = 'left';
+  ctx.fillText('baseline', pad.left + 4, baseY - 4);
+}
+
+// ── ECONOMY MODULE ──
+modules.economy = {
+  controlsLabel: 'Inputs — Economy Lab',
+  controls: `
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Currency Income</span><span class="slider-value" id="val-income">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-income" oninput="updateEconomySlider('income',this.value,'How generously free currency is distributed through normal play. High income empowers F2P players. Low income creates spending pressure that feels coercive rather than optional.')">
+      <div class="slider-hint">Rate at which free-to-play currency is earned through normal gameplay.</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Shop Prices</span><span class="slider-value" id="val-shopprices">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-shopprices" oninput="updateEconomySlider('shopprices',this.value,'How expensive premium items are relative to currency income. High prices create aspirational goals. Prices that outpace income create resentment.')">
+      <div class="slider-hint">Cost of premium items relative to earned and purchasable currency.</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Crafting Costs</span><span class="slider-value" id="val-crafting">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-crafting" oninput="updateEconomySlider('crafting',this.value,'How expensive it is to convert resources into desired items. High crafting costs slow progression. Low costs devalue the act of earning materials.')">
+      <div class="slider-hint">Resource cost required to craft or convert earned materials into items.</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Duplicate Value</span><span class="slider-value" id="val-dupvalue">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-dupvalue" oninput="updateEconomySlider('dupvalue',this.value,'How much value duplicates provide — through pity systems, constellation upgrades, or conversion. High duplicate value rewards persistence. Low value makes randomized acquisition feel punishing.')">
+      <div class="slider-hint">Value returned when a player receives a duplicate item from a randomized system.</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Premium Pass Value</span><span class="slider-value" id="val-passvalue">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-passvalue" oninput="updateEconomySlider('passvalue',this.value,'How much additional value a premium subscription or battle pass provides relative to its cost. High value justifies spending. Low value makes the pass feel like a tax on engagement.')">
+      <div class="slider-hint">Value ratio of premium subscription or battle pass relative to its cost.</div>
+    </div>`,
+  outputsLabel: 'Economy System Outputs',
+  outputs: `
+    <div class="output-cell"><div class="output-label">Spending Pressure</div><div class="output-value" id="out-spendpressure" style="color:var(--amber)">42%</div><div class="output-delta" style="color:var(--text-dim)">coercion index</div></div>
+    <div class="output-cell"><div class="output-label">Inflation Risk</div><div class="output-value" id="out-inflation" style="color:var(--red)">31%</div><div class="output-delta" style="color:var(--text-dim)">economy health</div></div>
+    <div class="output-cell"><div class="output-label">F2P Satisfaction</div><div class="output-value" id="out-f2psat" style="color:var(--green)">57%</div><div class="output-delta" style="color:var(--text-dim)">free player score</div></div>
+    <div class="output-cell"><div class="output-label">Whale Spending</div><div class="output-value" id="out-whale" style="color:var(--gold)">64%</div><div class="output-delta" style="color:var(--text-dim)">high spender index</div></div>
+    <div class="output-cell"><div class="output-label">Long-Term Retention</div><div class="output-value" id="out-econretention" style="color:var(--blue)">51%</div><div class="output-delta" style="color:var(--text-dim)">12 month estimate</div></div>`,
+  chartLabel: 'F2P vs Paying Player Satisfaction Gap — Over Time',
+  philosophyInit: {
+    principle: 'Economy as a Trust System',
+    body: 'A game economy is a trust system between the developer and the player. Every purchase decision is the player asking: is this worth it? Every free reward is the developer answering: we value your time. When the economy answers that question honestly and consistently it earns long-term spending. When it answers dishonestly it earns short-term revenue and long-term churn.',
+    examples: ['Warframe', 'Path of Exile', 'Genshin Impact']
+  },
+  examples: [
+    { game: 'Warframe', note: 'High currency income with trading economy creates F2P satisfaction without undermining whale spending.' },
+    { game: 'Master Duel', note: 'Income failed to scale with expanding card pool — spending pressure felt coercive rather than optional.' },
+    { game: 'WuWa vs Genshin', note: 'WuWa\'s higher pity and guaranteed rates created higher F2P satisfaction at lower whale ceiling.' },
+    { game: 'Path of Exile', note: 'Cosmetic-only monetization with high crafting costs — zero spending pressure on progression, strong whale ceiling.' },
+    { game: 'Pokemon GO', note: 'Remote pass pricing created spending pressure for rural players who needed access mechanics to participate at all.' }
+  ],
+  behavioralPrinciple: 'Generosity Creates Reciprocity',
+  behavioralBody: 'A player who feels resource-starved doesn\'t look at a shop and see opportunity — they see a temporary fix to a structural problem. Consistent generosity in the free economy creates the financial goodwill that makes optional spending feel like a choice rather than a necessity. The player who feels respected by the economy is far more likely to spend on it.'
+};
+
+const economyState = {
+  income: 5, shopprices: 5, crafting: 5, dupvalue: 5, passvalue: 5,
+  activeSlider: null
+};
+
+const economyPhilosophyMap = {
+  income: {
+    principle: 'Currency Income — The Foundation of F2P Trust',
+    body: 'Currency income is the primary signal the game sends about how much it values the free-to-play player\'s time. Generous income says your engagement has worth. Stingy income says your engagement is only a vehicle for extracting payment. Master Duel\'s retention failure began here — as the card pool expanded, income failed to scale, and the gap between what players could earn and what they needed to compete became a wall.',
+    examples: ['Warframe', 'Genshin Impact', 'Master Duel'],
+    hint: 'High income: Strong F2P satisfaction, lower spending pressure. Low income: Higher revenue short-term, higher churn long-term.'
+  },
+  shopprices: {
+    principle: 'Shop Prices — Aspiration vs Coercion',
+    body: 'The difference between aspirational and coercive pricing is whether the player feels like they\'re choosing to spend or being pushed into it. Prices that feel attainable through sustained play create desire. Prices that are permanently out of reach for free players create resentment. The ideal price point sits just above what comfortable free play provides — close enough to feel reachable, far enough to motivate spending.',
+    examples: ['Fortnite', 'Apex Legends', 'Genshin Impact'],
+    hint: 'High prices relative to income: Coercive spending pressure. Balanced prices: Aspirational goal-setting.'
+  },
+  crafting: {
+    principle: 'Crafting Costs — The Value of Earned Materials',
+    body: 'Crafting costs determine how meaningful the act of earning materials actually is. High crafting costs make each material feel valuable — the player tracks their progress and anticipates the moment they can finally craft the item they\'ve been working toward. Low costs make materials feel disposable and undermine the satisfaction of acquisition. The crafting moment should be a reward in itself.',
+    examples: ['Path of Exile', 'Warframe', 'Destiny 2'],
+    hint: 'High crafting costs: Materials feel meaningful, progression feels earned. Low costs: Faster gratification, lower sense of achievement.'
+  },
+  dupvalue: {
+    principle: 'Duplicate Value — The Pity Economy',
+    body: 'How a game handles duplicates reveals its relationship with randomized acquisition. Systems that return meaningful value from duplicates — through pity counters, power upgrades, or currency conversion — acknowledge that the player\'s luck is not their fault and their time has worth regardless of outcome. Systems that return nothing create the feeling that the randomized acquisition is designed to exploit rather than entertain. The WuWa vs Genshin comparison proved this — higher pity rates shifted player sentiment dramatically despite similar price points.',
+    examples: ['Genshin Impact', 'WuWa', 'FGO'],
+    hint: 'High duplicate value: Randomized systems feel fair, longer engagement. Low duplicate value: Gambling psychology, resentment spikes.'
+  },
+  passvalue: {
+    principle: 'Premium Pass Value — The Subscription Contract',
+    body: 'A premium pass or subscription is a recurring contract between the player and the game. The player commits a fixed payment and the game commits a fixed return. When the value is clearly in the player\'s favor the subscription feels like a smart choice. When the value is unclear or the game keeps reducing what the pass provides the player feels cheated. The Pokemon GO Plus subscription worked because it tied premium access to mechanics players already valued — remote raids, prioritized matchmaking.',
+    examples: ['Pokemon GO', 'Dead by Daylight', 'Fortnite'],
+    hint: 'High pass value: Strong subscription retention, recurring revenue. Low pass value: Subscribers churn, single-purchase behavior.'
+  }
+};
+
+function updateEconomySlider(key, value, hint) {
+  economyState[key] = parseInt(value);
+  economyState.activeSlider = key;
+  document.getElementById('val-' + key).textContent = value;
+
+  const p = economyPhilosophyMap[key];
+  document.getElementById('philosophy-principle').textContent = p.principle;
+  document.getElementById('philosophy-body').textContent = p.body;
+  document.getElementById('philosophy-examples').innerHTML = p.examples.map(e => `<span class="example-tag">${e}</span>`).join('');
+
+  const hintEl = document.getElementById('active-slider-info');
+  if (p.hint) {
+    hintEl.style.display = 'block';
+    hintEl.textContent = p.hint;
+  } else {
+    hintEl.style.display = 'none';
+  }
+
+  updateEconomyOutputs();
+  updateEconomyArchetypes();
+  updateEconomyTradeoffs();
+  drawEconomyChart();
+}
+
+function updateEconomyOutputs() {
+  const { income, shopprices, crafting, dupvalue, passvalue } = economyState;
+
+  const spendPressure = Math.round(clamp(10 + shopprices * 7 - income * 5 - dupvalue * 2 + crafting * 2, 5, 95));
+  const inflation = Math.round(clamp(5 + income * 4 - crafting * 4 - shopprices * 2, 5, 90));
+  const f2pSat = Math.round(clamp(15 + income * 7 + dupvalue * 5 - shopprices * 4 - crafting * 2, 5, 95));
+  const whale = Math.round(clamp(20 + shopprices * 6 + passvalue * 5 - income * 2 - dupvalue * 1, 10, 98));
+  const econRetention = Math.round(clamp(10 + income * 5 + dupvalue * 4 + passvalue * 3 - shopprices * 4 - crafting * 2, 5, 95));
+
+  setOutput('out-spendpressure', spendPressure + '%', spendPressure < 30 ? 'var(--green)' : spendPressure < 60 ? 'var(--amber)' : 'var(--red)');
+  setOutput('out-inflation', inflation + '%', inflation < 25 ? 'var(--green)' : inflation < 55 ? 'var(--amber)' : 'var(--red)');
+  setOutput('out-f2psat', f2pSat + '%', f2pSat > 65 ? 'var(--green)' : f2pSat > 45 ? 'var(--amber)' : 'var(--red)');
+  setOutput('out-whale', whale + '%', whale > 70 ? 'var(--gold)' : whale > 50 ? 'var(--amber)' : 'var(--text-dim)');
+  setOutput('out-econretention', econRetention + '%', econRetention > 60 ? 'var(--blue)' : econRetention > 40 ? 'var(--amber)' : 'var(--red)');
+}
+
+function updateEconomyArchetypes() {
+  const { income, shopprices, crafting, dupvalue, passvalue } = economyState;
+
+  const compSat = clamp(50 + income * 4 - shopprices * 3 + dupvalue * 2, 10, 100);
+  const compBurn = clamp(5 + shopprices * 5 - income * 4 + crafting * 2, 5, 100);
+  setBar('bar-comp-sat', compSat); setBar('bar-comp-burn', compBurn);
+  setArchetypeState('completionist', compSat, compBurn, [], ['ENGAGED','THRIVING','GRINDING','STRESSED','BURNT OUT']);
+
+  const compMas = clamp(40 + passvalue * 5 - shopprices * 2 + income * 2, 10, 100);
+  const compFrus = clamp(5 + shopprices * 4 - income * 3 - passvalue * 2, 5, 100);
+  setBar('bar-comp2-mas', compMas); setBar('bar-comp2-frus', compFrus);
+  setArchetypeState('competitive', compMas, compFrus, [], ['FOCUSED','IN FLOW','FRUSTRATED','RAGING','QUIT']);
+
+  const expJoy = clamp(45 + income * 5 + dupvalue * 3 - crafting * 3, 10, 100);
+  const expOver = clamp(5 + shopprices * 4 + crafting * 3 - income * 4, 5, 100);
+  setBar('bar-exp-joy', expJoy); setBar('bar-exp-over', expOver);
+  setArchetypeState('explorer', expJoy, expOver, [], ['CURIOUS','DELIGHTED','SEARCHING','LOST','OVERWHELMED']);
+
+  const casAcc = clamp(60 + income * 6 - shopprices * 6 + dupvalue * 2, 10, 100);
+  const casDrop = clamp(5 + shopprices * 7 - income * 6 + crafting * 2, 5, 100);
+  setBar('bar-cas-acc', casAcc); setBar('bar-cas-drop', casDrop);
+  setArchetypeState('casual', casAcc, casDrop, [], ['RELAXED','ENJOYING','UNCERTAIN','STRUGGLING','LEAVING']);
+
+  const colInv = clamp(20 + shopprices * 5 + dupvalue * 6 - income * 2, 10, 100);
+  const colFomo = clamp(5 + shopprices * 5 - dupvalue * 4 - income * 2, 5, 100);
+  setBar('bar-col-inv', colInv); setBar('bar-col-fomo', colFomo);
+  setArchetypeState('collector', colInv, colFomo, [], ['MOTIVATED','OBSESSED','PROGRESSING','ANXIOUS','FOMO PAIN']);
+
+  const socFit = clamp(50 + income * 4 + dupvalue * 3 - shopprices * 3, 10, 100);
+  const socLeft = clamp(5 + shopprices * 5 - income * 4 - passvalue * 2, 5, 100);
+  setBar('bar-soc-fit', socFit); setBar('bar-soc-left', socLeft);
+  setArchetypeState('social', socFit, socLeft, [], ['CONNECTED','THRIVING','KEEPING UP','FALLING BEHIND','LEFT BEHIND']);
+}
+
+function updateEconomyTradeoffs() {
+  const { income, shopprices, crafting, dupvalue, passvalue } = economyState;
+
+  const scores = {
+    'Completionists': income * 7 + dupvalue * 5 - shopprices * 3,
+    'Competitive': passvalue * 8 + income * 3 - crafting * 2,
+    'Explorers': income * 6 + dupvalue * 4 - shopprices * 4,
+    'Casuals': income * 9 - shopprices * 7 + dupvalue * 3,
+    'Collectors': shopprices * 5 + dupvalue * 7 - income * 1,
+    'Social Players': income * 6 + dupvalue * 4 - shopprices * 4
+  };
+
+  const colors = { 'Completionists':'var(--green)','Competitive':'var(--amber)','Explorers':'var(--purple)','Casuals':'var(--blue)','Collectors':'var(--gold)','Social Players':'var(--green)' };
+  const sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('winners-list').innerHTML = sorted.slice(0,3).map(([n])=>`<div class="tradeoff-player"><div class="tradeoff-dot" style="background:${colors[n]}"></div>${n}</div>`).join('');
+  document.getElementById('losers-list').innerHTML = sorted.slice(3).reverse().map(([n])=>`<div class="tradeoff-player"><div class="tradeoff-dot" style="background:var(--red)"></div>${n}</div>`).join('');
+}
+
+function drawEconomyChart() {
+  const canvas = document.getElementById('retentionCurve');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = canvas.offsetWidth * dpr;
+  canvas.height = 140 * dpr;
+  ctx.scale(dpr, dpr);
+
+  const w = canvas.offsetWidth;
+  const h = 140;
+  const pad = { top: 12, right: 16, bottom: 28, left: 36 };
+  const cW = w - pad.left - pad.right;
+  const cH = h - pad.top - pad.bottom;
+  ctx.clearRect(0, 0, w, h);
+
+  const { income, shopprices, crafting, dupvalue, passvalue } = economyState;
+
+  const f2pPoints = [];
+  const payPoints = [];
+
+  for (let m = 0; m <= 12; m++) {
+    const t = m / 12;
+    const f2p = clamp(20 + income * 7 + dupvalue * 4 - shopprices * 5 - crafting * 2 - (shopprices - income) * t * 3, 5, 95);
+    const pay = clamp(40 + passvalue * 6 + shopprices * 2 - income * 1, 10, 98);
+    f2pPoints.push(f2p);
+    payPoints.push(pay);
+  }
+
+  [0,25,50,75,100].forEach(v => {
+    const y = pad.top + cH - (v/100)*cH;
+    ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(pad.left,y); ctx.lineTo(pad.left+cW,y); ctx.stroke();
+    ctx.fillStyle='#444'; ctx.font='9px Courier New'; ctx.textAlign='right';
+    ctx.fillText(v+'%', pad.left-4, y+3);
+  });
+
+  ['M1','M3','M6','M9','M12'].forEach((l,i) => {
+    const x = pad.left + ([0,2,5,8,11][i]/12)*cW;
+    ctx.fillStyle='#444'; ctx.font='8px Courier New'; ctx.textAlign='center';
+    ctx.fillText(l, x, h-6);
+  });
+
+  // F2P line
+  ctx.beginPath();
+  f2pPoints.forEach((v,i) => {
+    const x = pad.left+(i/12)*cW; const y = pad.top+cH-(v/100)*cH;
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.strokeStyle='#2980b9'; ctx.lineWidth=1.5; ctx.stroke();
+
+  // Paying line
+  ctx.beginPath();
+  payPoints.forEach((v,i) => {
+    const x = pad.left+(i/12)*cW; const y = pad.top+cH-(v/100)*cH;
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.strokeStyle='#c9a84c'; ctx.lineWidth=1.5; ctx.stroke();
+
+  // Gap fill
+  ctx.beginPath();
+  payPoints.forEach((v,i) => { const x=pad.left+(i/12)*cW; const y=pad.top+cH-(v/100)*cH; if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); });
+  f2pPoints.slice().reverse().forEach((v,i) => { const ri=12-i; const x=pad.left+(ri/12)*cW; const y=pad.top+cH-(v/100)*cH; ctx.lineTo(x,y); });
+  ctx.closePath();
+  ctx.fillStyle='rgba(192,57,43,0.06)'; ctx.fill();
+
+  // Legend
+  ctx.fillStyle='#2980b9'; ctx.fillRect(pad.left,4,12,3);
+  ctx.fillStyle='#555'; ctx.font='8px Courier New'; ctx.textAlign='left';
+  ctx.fillText('F2P Satisfaction', pad.left+16, 9);
+  ctx.fillStyle='#c9a84c'; ctx.fillRect(pad.left+110,4,12,3);
+  ctx.fillText('Paying Player Satisfaction', pad.left+126, 9);
+}
+
+// ── CHARACTER ATTACHMENT MODULE ──
+modules.attachment = {
+  controlsLabel: 'Inputs — Character Attachment Lab',
+  controls: `
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Story Density</span><span class="slider-value" id="val-storydensity">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-storydensity" oninput="updateAttachmentSlider('storydensity',this.value,'How much narrative context surrounds each character. High story density creates emotional investment before gameplay. Low density relies on mechanical performance to create attachment.')">
+      <div class="slider-hint">Volume of narrative context surrounding each character.</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Banner Frequency</span><span class="slider-value" id="val-bannerfreq">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-bannerfreq" oninput="updateAttachmentSlider('bannerfreq',this.value,'How often new characters are introduced. High frequency keeps the roster fresh but dilutes individual character investment. Low frequency makes each new character an event.')">
+      <div class="slider-hint">Rate at which new characters are introduced to the roster.</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Bond Events</span><span class="slider-value" id="val-bondevents">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-bondevents" oninput="updateAttachmentSlider('bondevents',this.value,'Depth of character-specific story events and interactions. High bond event density creates parasocial investment. Low density makes characters feel like mechanical tools.')">
+      <div class="slider-hint">Depth of character-specific story events and player interactions.</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Voiceline Updates</span><span class="slider-value" id="val-voicelines">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-voicelines" oninput="updateAttachmentSlider('voicelines',this.value,'How frequently character voicelines and dialogue are updated to reflect world events. High update frequency makes characters feel alive. Low frequency makes them feel static.')">
+      <div class="slider-hint">Frequency of character voiceline updates reflecting world changes.</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Character Availability</span><span class="slider-value" id="val-availability">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-availability" oninput="updateAttachmentSlider('availability',this.value,'How accessible characters are to acquire. High availability reduces attachment through scarcity but democratizes roster access. Low availability creates stronger identity investment for those who have the character.')">
+      <div class="slider-hint">How easily players can acquire any given character.</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Patch Cadence</span><span class="slider-value" id="val-patchcadence">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-patchcadence" oninput="updateAttachmentSlider('patchcadence',this.value,'How frequently characters are rebalanced. Frequent patches signal active care but risk invalidating player investment. Infrequent patches create stability but allow imbalance to fester.')">
+      <div class="slider-hint">Frequency of character balance and kit updates.</div>
+    </div>`,
+  outputsLabel: 'Character Attachment Outputs',
+  outputs: `
+    <div class="output-cell"><div class="output-label">Emotional Attachment</div><div class="output-value" id="out-attachment" style="color:var(--gold)">61%</div><div class="output-delta" style="color:var(--text-dim)">investment score</div></div>
+    <div class="output-cell"><div class="output-label">Banner Conversion</div><div class="output-value" id="out-bannerconv" style="color:var(--green)">34%</div><div class="output-delta" style="color:var(--text-dim)">pull rate est.</div></div>
+    <div class="output-cell"><div class="output-label">Fan Art Potential</div><div class="output-value" id="out-fanart" style="color:var(--purple)">58%</div><div class="output-delta" style="color:var(--text-dim)">community signal</div></div>
+    <div class="output-cell"><div class="output-label">Character Recall</div><div class="output-value" id="out-recall" style="color:var(--blue)">72%</div><div class="output-delta" style="color:var(--text-dim)">memory retention</div></div>
+    <div class="output-cell"><div class="output-label">Long-Term Loyalty</div><div class="output-value" id="out-loyalty" style="color:var(--amber)">55%</div><div class="output-delta" style="color:var(--text-dim)">12 month estimate</div></div>`,
+  chartLabel: 'Emotional Investment vs Banner Conversion — Character Lifecycle',
+  philosophyInit: {
+    principle: 'Character as Identity Anchor',
+    body: 'The most retained players in character-driven games don\'t describe their progress in levels or stats. They describe it in characters. "I main Hu Tao." "I\'ve been a Yuuki player since launch." The character becomes an extension of the player\'s identity — and that identity investment is what separates engagement from attachment.',
+    examples: ['Genshin Impact', 'FGO', 'Pokémon']
+  },
+  examples: [
+    { game: 'Genshin Impact', note: 'High story density per character combined with limited availability creates intense banner conversion events.' },
+    { game: 'FGO', note: 'Extreme story investment per servant drives loyalty even when gacha rates are punishing by industry standards.' },
+    { game: 'Dead by Daylight', note: 'Licensed character IP creates instant attachment through pre-existing cultural investment.' },
+    { game: 'League of Legends', note: 'High banner frequency diluted per-champion investment — the solution was lore expansions and Arcane.' },
+    { game: 'Pokémon', note: 'Voiceline updates absent for decades — characters are mechanical tools with design attachment, not parasocial investment.' }
+  ],
+  behavioralPrinciple: 'Extended Self Theory in Character Design',
+  behavioralBody: 'Players who develop genuine character attachment are not engaging with a game mechanic — they are engaging with an extension of their own identity. When a character is nerfed it doesn\'t just feel like a balance change. It feels personal. Understanding this is the difference between designing a character and designing a relationship.'
+};
+
+const attachmentState = {
+  storydensity: 5, bannerfreq: 5, bondevents: 5, voicelines: 5, availability: 5, patchcadence: 5,
+  activeSlider: null
+};
+
+const attachmentPhilosophyMap = {
+  storydensity: {
+    principle: 'Story Density — Building Before Playing',
+    body: 'The most powerful character attachment begins before the player ever uses the character in gameplay. A character whose motivations, history, and personality are established through story creates an emotional context that makes every gameplay moment more meaningful. When the character succeeds the player feels pride. When they struggle the player feels protective. Story density is the investment that makes gameplay feel personal.',
+    examples: ['FGO', 'Genshin Impact', 'Persona Series'],
+    hint: 'High story density: Deep emotional investment, higher banner conversion. Low density: Mechanical attachment only, lower loyalty.'
+  },
+  bannerfreq: {
+    principle: 'Banner Frequency — Scarcity of Character Events',
+    body: 'A new character\'s arrival should feel like an event. When new characters arrive constantly each one is normalized into the background noise of the roster. When new characters arrive rarely each introduction carries weight — the community prepares, speculates, and invests. Banner frequency is the scarcity lever for character anticipation.',
+    examples: ['Genshin Impact', 'League of Legends', 'FGO'],
+    hint: 'Low frequency: Each character feels like an event, higher anticipation. High frequency: Roster freshness at the cost of individual investment.'
+  },
+  bondevents: {
+    principle: 'Bond Events — The Parasocial Architecture',
+    body: 'Bond events are the mechanics that simulate a relationship between player and character. Story scenes that respond to player choices, interactions that remember what the player has done, dialogue that makes the character feel aware of the player\'s presence — these mechanics create the parasocial investment that drives the deepest retention numbers in character-driven live service games.',
+    examples: ['FGO Bond System', 'Genshin Hangout Events', 'Fire Emblem'],
+    hint: 'High bond events: Strong parasocial investment, loyalty spikes. Low bond events: Characters feel like tools rather than companions.'
+  },
+  voicelines: {
+    principle: 'Voiceline Updates — Characters as Living Entities',
+    body: 'A character who comments on world events, acknowledges seasonal changes, and reacts to the player\'s progress feels alive in a way that static characters never can. Voiceline updates signal that the character exists in the same world the player is living in — not as a frozen artifact from their introduction patch but as an ongoing presence.',
+    examples: ['Genshin Impact', 'Overwatch', 'Pokémon GO'],
+    hint: 'High update frequency: Characters feel alive and present. Low frequency: Characters feel like archived content.'
+  },
+  availability: {
+    principle: 'Character Availability — Scarcity and Identity',
+    body: 'The rarity of a character shapes how players relate to owning them. A character anyone can acquire becomes a tool. A character that requires significant investment to obtain becomes an identity statement — proof of dedication, timing, or spending. The tension is that high availability democratizes the roster while low availability creates the identity investment that drives the deepest attachment.',
+    examples: ['Genshin Standard vs Limited', 'FGO Limited Servants', 'Dead by Daylight DLC'],
+    hint: 'Low availability: Stronger identity investment, higher per-character attachment. High availability: Broader access, lower individual significance.'
+  },
+  patchcadence: {
+    principle: 'Patch Cadence — Stability vs Active Care',
+    body: 'Every balance patch sends two messages simultaneously: we are paying attention to this character, and the investment you made in this character may change. High patch cadence signals active care but risks invalidating build investment and creating anxiety around the characters players have committed to. Low patch cadence creates stability but allows imbalance to fester and signals neglect.',
+    examples: ['League of Legends', 'Genshin Impact', 'Dead by Daylight'],
+    hint: 'High cadence: Active care signal, instability risk. Low cadence: Stable investment, neglect perception risk.'
+  }
+};
+
+function updateAttachmentSlider(key, value, hint) {
+  attachmentState[key] = parseInt(value);
+  document.getElementById('val-' + key).textContent = value;
+  const p = attachmentPhilosophyMap[key];
+  document.getElementById('philosophy-principle').textContent = p.principle;
+  document.getElementById('philosophy-body').textContent = p.body;
+  document.getElementById('philosophy-examples').innerHTML = p.examples.map(e=>`<span class="example-tag">${e}</span>`).join('');
+  const hintEl = document.getElementById('active-slider-info');
+  if (p.hint) { hintEl.style.display='block'; hintEl.textContent=p.hint; } else { hintEl.style.display='none'; }
+  updateAttachmentOutputs(); updateAttachmentArchetypes(); updateAttachmentTradeoffs(); drawAttachmentChart();
+}
+
+function updateAttachmentOutputs() {
+  const { storydensity, bannerfreq, bondevents, voicelines, availability, patchcadence } = attachmentState;
+  const attachment = Math.round(clamp(10 + storydensity*7 + bondevents*5 + voicelines*3 - bannerfreq*2, 5, 98));
+  const bannerConv = Math.round(clamp(5 + storydensity*5 + bondevents*4 - availability*3 - bannerfreq*2, 5, 90));
+  const fanart = Math.round(clamp(10 + storydensity*6 + voicelines*4 + bondevents*3 - bannerfreq*2, 5, 95));
+  const recall = Math.round(clamp(20 + storydensity*5 + voicelines*4 + bondevents*3 - bannerfreq*3, 10, 98));
+  const loyalty = Math.round(clamp(10 + bondevents*6 + storydensity*4 + voicelines*3 - patchcadence*2 - bannerfreq*2, 5, 95));
+  setOutput('out-attachment', attachment+'%', attachment>65?'var(--gold)':attachment>45?'var(--amber)':'var(--red)');
+  setOutput('out-bannerconv', bannerConv+'%', bannerConv>45?'var(--green)':bannerConv>25?'var(--amber)':'var(--red)');
+  setOutput('out-fanart', fanart+'%', fanart>60?'var(--purple)':fanart>40?'var(--amber)':'var(--text-dim)');
+  setOutput('out-recall', recall+'%', recall>70?'var(--blue)':recall>50?'var(--amber)':'var(--text-dim)');
+  setOutput('out-loyalty', loyalty+'%', loyalty>60?'var(--amber)':loyalty>40?'var(--amber)':'var(--red)');
+}
+
+function updateAttachmentArchetypes() {
+  const { storydensity, bannerfreq, bondevents, voicelines, availability, patchcadence } = attachmentState;
+  const c=(a,b,c)=>clamp(a,b,c);
+  setBar('bar-comp-sat', c(40+storydensity*5+bondevents*4-bannerfreq*2,10,100));
+  setBar('bar-comp-burn', c(5+bannerfreq*5+patchcadence*3-bondevents*3,5,100));
+  setArchetypeState('completionist', c(40+storydensity*5+bondevents*4,10,100), c(5+bannerfreq*5,5,100), [], ['ENGAGED','THRIVING','GRINDING','STRESSED','BURNT OUT']);
+  setBar('bar-comp2-mas', c(30+patchcadence*4+storydensity*3,10,100));
+  setBar('bar-comp2-frus', c(10+patchcadence*5-bondevents*3,5,100));
+  setArchetypeState('competitive', c(30+patchcadence*4,10,100), c(10+patchcadence*5,5,100), [], ['FOCUSED','IN FLOW','FRUSTRATED','RAGING','QUIT']);
+  setBar('bar-exp-joy', c(40+storydensity*6+voicelines*4,10,100));
+  setBar('bar-exp-over', c(5+bannerfreq*5-voicelines*2,5,100));
+  setArchetypeState('explorer', c(40+storydensity*6,10,100), c(5+bannerfreq*5,5,100), [], ['CURIOUS','DELIGHTED','SEARCHING','LOST','OVERWHELMED']);
+  setBar('bar-cas-acc', c(60+availability*5-bannerfreq*3,10,100));
+  setBar('bar-cas-drop', c(5+bannerfreq*4-availability*3,5,100));
+  setArchetypeState('casual', c(60+availability*5,10,100), c(5+bannerfreq*4,5,100), [], ['RELAXED','ENJOYING','UNCERTAIN','STRUGGLING','LEAVING']);
+  setBar('bar-col-inv', c(20+bondevents*7+storydensity*5-availability*3,10,100));
+  setBar('bar-col-fomo', c(5+bannerfreq*4+(10-availability)*3,5,100));
+  setArchetypeState('collector', c(20+bondevents*7,10,100), c(5+bannerfreq*4,5,100), [], ['MOTIVATED','OBSESSED','PROGRESSING','ANXIOUS','FOMO PAIN']);
+  setBar('bar-soc-fit', c(40+voicelines*5+bondevents*4,10,100));
+  setBar('bar-soc-left', c(5+bannerfreq*4-voicelines*3,5,100));
+  setArchetypeState('social', c(40+voicelines*5,10,100), c(5+bannerfreq*4,5,100), [], ['CONNECTED','THRIVING','KEEPING UP','FALLING BEHIND','LEFT BEHIND']);
+}
+
+function updateAttachmentTradeoffs() {
+  const { storydensity, bannerfreq, bondevents, voicelines, availability } = attachmentState;
+  const scores = { 'Completionists':storydensity*7+bondevents*5-bannerfreq*3, 'Competitive':storydensity*4-bannerfreq*2, 'Explorers':storydensity*8+voicelines*5-bannerfreq*3, 'Casuals':availability*8-bondevents*2, 'Collectors':bondevents*9+(10-availability)*4, 'Social Players':voicelines*7+bondevents*4-bannerfreq*2 };
+  const colors = { 'Completionists':'var(--green)','Competitive':'var(--amber)','Explorers':'var(--purple)','Casuals':'var(--blue)','Collectors':'var(--gold)','Social Players':'var(--green)' };
+  const sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('winners-list').innerHTML = sorted.slice(0,3).map(([n])=>`<div class="tradeoff-player"><div class="tradeoff-dot" style="background:${colors[n]}"></div>${n}</div>`).join('');
+  document.getElementById('losers-list').innerHTML = sorted.slice(3).reverse().map(([n])=>`<div class="tradeoff-player"><div class="tradeoff-dot" style="background:var(--red)"></div>${n}</div>`).join('');
+}
+
+function drawAttachmentChart() {
+  const canvas = document.getElementById('retentionCurve');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = canvas.offsetWidth * dpr;
+  canvas.height = 140 * dpr;
+  ctx.scale(dpr, dpr);
+  const w = canvas.offsetWidth; const h = 140;
+  const pad = { top:12, right:16, bottom:28, left:36 };
+  const cW = w-pad.left-pad.right; const cH = h-pad.top-pad.bottom;
+  ctx.clearRect(0,0,w,h);
+  const { storydensity, bannerfreq, bondevents, voicelines, availability } = attachmentState;
+  const attachPts=[], convPts=[];
+  for(let i=0;i<=10;i++){
+    const t=i/10;
+    attachPts.push(clamp(20+storydensity*6*t+bondevents*4*Math.min(t*1.5,1)+voicelines*2*t-bannerfreq*2*(1-t),5,95));
+    convPts.push(clamp(5+(storydensity*5+bondevents*4)*t*(1-(availability/15)),5,85));
+  }
+  [0,25,50,75,100].forEach(v=>{
+    const y=pad.top+cH-(v/100)*cH;
+    ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(pad.left,y); ctx.lineTo(pad.left+cW,y); ctx.stroke();
+    ctx.fillStyle='#444'; ctx.font='9px Courier New'; ctx.textAlign='right';
+    ctx.fillText(v+'%',pad.left-4,y+3);
+  });
+  ['New','Early','Mid','Invested','Committed'].forEach((l,i)=>{
+    ctx.fillStyle='#444'; ctx.font='8px Courier New'; ctx.textAlign='center';
+    ctx.fillText(l,pad.left+(i/4)*cW,h-6);
+  });
+  ctx.beginPath();
+  attachPts.forEach((v,i)=>{const x=pad.left+(i/10)*cW;const y=pad.top+cH-(v/100)*cH;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});
+  ctx.strokeStyle='#c9a84c'; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.beginPath();
+  convPts.forEach((v,i)=>{const x=pad.left+(i/10)*cW;const y=pad.top+cH-(v/100)*cH;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});
+  ctx.strokeStyle='#8e44ad'; ctx.lineWidth=1.5; ctx.setLineDash([4,3]); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle='#c9a84c'; ctx.fillRect(pad.left,4,12,3);
+  ctx.fillStyle='#555'; ctx.font='8px Courier New'; ctx.textAlign='left'; ctx.fillText('Emotional Attachment',pad.left+16,9);
+  ctx.strokeStyle='#8e44ad'; ctx.setLineDash([4,3]); ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(pad.left+120,5.5); ctx.lineTo(pad.left+132,5.5); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle='#555'; ctx.fillText('Banner Conversion',pad.left+136,9);
+}
+
+function renderAttachmentModule() {
+  document.querySelector('.panel-section-label').textContent = modules.attachment.controlsLabel;
+  document.querySelector('.slider-group').innerHTML = modules.attachment.controls;
+  document.querySelector('.outputs-grid').innerHTML = modules.attachment.outputs;
+  document.querySelector('.chart-label').textContent = modules.attachment.chartLabel;
+  const p = modules.attachment.philosophyInit;
+  document.getElementById('philosophy-principle').textContent = p.principle;
+  document.getElementById('philosophy-body').textContent = p.body;
+  document.getElementById('philosophy-examples').innerHTML = p.examples.map(e=>`<span class="example-tag">${e}</span>`).join('');
+  document.getElementById('active-slider-info').style.display = 'none';
+  document.querySelector('.examples-section').innerHTML = '<div class="examples-label">Real World Reference</div>'+modules.attachment.examples.map(e=>`<div class="example-row"><span class="example-game">${e.game}</span><span class="example-note">${e.note}</span></div>`).join('');
+  document.getElementById('behavioral-principle').textContent = modules.attachment.behavioralPrinciple;
+  document.getElementById('behavioral-body').textContent = modules.attachment.behavioralBody;
+  updateAttachmentOutputs(); updateAttachmentArchetypes(); updateAttachmentTradeoffs(); drawAttachmentChart();
+}
+
+// ── ONBOARDING MODULE ──
+modules.onboarding = {
+  controlsLabel: 'Inputs — Onboarding Lab',
+  controls: `
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Tutorial Length</span><span class="slider-value" id="val-tutlength">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-tutlength" oninput="updateOnboardingSlider('tutlength',this.value,'How long the guided introduction lasts before the player has full control. Long tutorials ensure comprehension but delay the reward of autonomy. Short tutorials respect player intelligence but risk confusion.')">
+      <div class="slider-hint">Duration of the guided introduction before full player autonomy.</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Early Failure Rate</span><span class="slider-value" id="val-earlyfail">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-earlyfail" oninput="updateOnboardingSlider('earlyfail',this.value,'How often new players fail in the first hour. Some failure is necessary for learning. Too much failure before the player understands the systems creates dropout without teaching anything.')">
+      <div class="slider-hint">Frequency of player failure during the first session.</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Hint Frequency</span><span class="slider-value" id="val-hintfreq">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-hintfreq" oninput="updateOnboardingSlider('hintfreq',this.value,'How often the game provides guidance and hints. High frequency prevents confusion but undermines the satisfaction of discovery. Low frequency respects player intelligence but risks frustration.')">
+      <div class="slider-hint">Frequency of in-game guidance and hint delivery.</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">Mentor Systems</span><span class="slider-value" id="val-mentor">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-mentor" oninput="updateOnboardingSlider('mentor',this.value,'Strength of systems that connect new players with experienced ones. Strong mentor systems accelerate learning and create social bonds early. Weak mentor systems leave new players to navigate alone.')">
+      <div class="slider-hint">Strength of systems connecting new players with experienced mentors.</div>
+    </div>
+    <div class="slider-row">
+      <div class="slider-header"><span class="slider-label">First Win Timing</span><span class="slider-value" id="val-firstwin">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sl-firstwin" oninput="updateOnboardingSlider('firstwin',this.value,'How quickly the game delivers a first meaningful win or achievement. Early wins create emotional investment before the player has decided to commit. Late wins risk dropout before the hook is set.')">
+      <div class="slider-hint">How quickly a new player experiences their first meaningful success.</div>
+    </div>`,
+  outputsLabel: 'Onboarding System Outputs',
+  outputs: `
+    <div class="output-cell"><div class="output-label">D1 Retention</div><div class="output-value" id="out-d1retention" style="color:var(--green)">68%</div><div class="output-delta" style="color:var(--text-dim)">first session return</div></div>
+    <div class="output-cell"><div class="output-label">Confidence Score</div><div class="output-value" id="out-confidence" style="color:var(--gold)">61%</div><div class="output-delta" style="color:var(--text-dim)">new player clarity</div></div>
+    <div class="output-cell"><div class="output-label">Cognitive Load</div><div class="output-value" id="out-cogload" style="color:var(--amber)">44%</div><div class="output-delta" style="color:var(--text-dim)">overwhelm risk</div></div>
+    <div class="output-cell"><div class="output-label">Social Adoption</div><div class="output-value" id="out-socialadopt" style="color:var(--blue)">38%</div><div class="output-delta" style="color:var(--text-dim)">community entry rate</div></div>
+    <div class="output-cell"><div class="output-label">Quit Rate</div><div class="output-value" id="out-quitrate" style="color:var(--red)">31%</div><div class="output-delta" style="color:var(--text-dim)">first hour dropout</div></div>`,
+  chartLabel: 'New Player Journey — Confidence vs Cognitive Load',
+  philosophyInit: {
+    principle: 'Onboarding as the First Contract',
+    body: 'The onboarding experience is the game\'s first contract with the player. It says: here is what we expect of you, and here is what we will give you in return. A good onboarding sets accurate expectations, delivers an early reward, and leaves the player feeling capable rather than confused. A bad onboarding sets the wrong expectations, delays reward, and loses the player before the real game even begins.',
+    examples: ['Destiny 2 Guided Raid', 'Hollow Knight', 'Pokémon']
+  },
+  examples: [
+    { game: 'Destiny 2', note: 'Endgame Onboarding System analysis: 5-layer behavioural model reducing abandonment from 56% to 29% by verifying readiness through behaviour.' },
+    { game: 'Hollow Knight', note: 'Minimal hints, early failure tolerated — teaches through consequence rather than instruction. High dropout, extremely high loyalty for those who pass.' },
+    { game: 'Pokémon Modern', note: 'Excessive hint frequency and zero early failure removed the sense of discovery that made original games memorable.' },
+    { game: 'Monster Hunter World', note: 'Reduced tutorial length vs previous entries while adding a companion mentor system — dramatically increased new player adoption.' },
+    { game: 'Fortnite', note: 'Fast first win timing through bot lobbies — early victory creates emotional investment before skill gap becomes apparent.' }
+  ],
+  behavioralPrinciple: 'The Competence Window',
+  behavioralBody: 'Every new player passes through a competence window — the gap between confusion and capability. If the game delivers a sense of mastery before frustration dominates, the player commits. If frustration arrives first, they leave. Onboarding design is the art of managing that window: delivering enough guidance to prevent dropout without so much that discovery is removed.'
+};
+
+const onboardingState = {
+  tutlength: 5, earlyfail: 5, hintfreq: 5, mentor: 5, firstwin: 5,
+  activeSlider: null
+};
+
+const onboardingPhilosophyMap = {
+  tutlength: {
+    principle: 'Tutorial Length — The Autonomy Delay',
+    body: 'Every minute of mandatory tutorial is a minute the player cannot explore on their own terms. Long tutorials guarantee comprehension but create resentment — the player knows what they want to do and the game keeps stopping them. Short tutorials respect intelligence but can leave players adrift in systems they don\'t understand. The best tutorials are tutorials the player doesn\'t notice because they\'re embedded in play rather than layered on top of it.',
+    examples: ['Monster Hunter World', 'Pokémon', 'Dark Souls'],
+    hint: 'Long tutorial: Lower confusion, higher resentment of hand-holding. Short tutorial: Faster autonomy, higher early confusion risk.'
+  },
+  earlyfail: {
+    principle: 'Early Failure Rate — Learning Through Consequence',
+    body: 'Failure is how games teach. A player who never fails in the first hour hasn\'t learned anything — they\'ve been carried. But failure without understanding produces frustration not learning. The ideal early failure rate is high enough that the player must engage with the systems, low enough that each failure teaches rather than discourages. Hollow Knight\'s brutality creates loyalty in the players it keeps precisely because it has no interest in keeping the wrong ones.',
+    examples: ['Hollow Knight', 'Celeste', 'Pokémon Modern'],
+    hint: 'High early failure: Steep learning curve, high dropout but high loyalty for those who persist. Low failure: Accessible, lower mastery investment.'
+  },
+  hintfreq: {
+    principle: 'Hint Frequency — Guidance vs Discovery',
+    body: 'The hint is a trade: the game gives the player information and takes away the satisfaction of discovering it themselves. Used sparingly hints prevent critical confusion without undermining discovery. Used excessively they remove the entire reason exploration and experimentation feel rewarding. Modern Pokémon\'s hint saturation didn\'t make the game more accessible — it made it feel like the game didn\'t trust the player to figure anything out.',
+    examples: ['Pokémon Scarlet/Violet', 'The Legend of Zelda', 'Metroid'],
+    hint: 'High hints: Prevents confusion, removes discovery satisfaction. Low hints: Preserves discovery, increases confusion risk.'
+  },
+  mentor: {
+    principle: 'Mentor Systems — Social Onboarding',
+    body: 'The most effective teacher in any game is a human who has already learned what the new player is trying to learn. Mentor systems create social bonds at the most critical moment — when the player is deciding whether the game is worth committing to. A positive mentor interaction doesn\'t just teach mechanics — it integrates the new player into a community, which is the single most powerful retention mechanism in multiplayer games.',
+    examples: ['Destiny 2 Sherpa System', 'FFXIV Mentor System', 'WoW Classic'],
+    hint: 'Strong mentor system: Social bonds formed early, significantly higher D7 retention. Weak system: Players learn alone, lower community integration.'
+  },
+  firstwin: {
+    principle: 'First Win Timing — The Hook Before the Hook',
+    body: 'The first win is the moment the player decides whether the game is for them. It arrives before they understand the full depth of what they\'re playing — and that\'s the point. The first win sets a feeling: I can do this, I want to do more of this. Fortnite\'s bot lobbies were controversial but their function was clear — deliver the emotional payoff of victory before the skill gap becomes apparent, creating investment that carries the player past the learning curve.',
+    examples: ['Fortnite', 'Hades', 'Pokémon'],
+    hint: 'Early first win: Emotional investment set before dropout risk. Late first win: Player may quit before experiencing the reward.'
+  }
+};
+
+function updateOnboardingSlider(key, value, hint) {
+  onboardingState[key] = parseInt(value);
+  document.getElementById('val-' + key).textContent = value;
+  const p = onboardingPhilosophyMap[key];
+  document.getElementById('philosophy-principle').textContent = p.principle;
+  document.getElementById('philosophy-body').textContent = p.body;
+  document.getElementById('philosophy-examples').innerHTML = p.examples.map(e=>`<span class="example-tag">${e}</span>`).join('');
+  const hintEl = document.getElementById('active-slider-info');
+  if (p.hint) { hintEl.style.display='block'; hintEl.textContent=p.hint; } else { hintEl.style.display='none'; }
+  updateOnboardingOutputs(); updateOnboardingArchetypes(); updateOnboardingTradeoffs(); drawOnboardingChart();
+}
+
+function updateOnboardingOutputs() {
+  const { tutlength, earlyfail, hintfreq, mentor, firstwin } = onboardingState;
+  const d1 = Math.round(clamp(20 + firstwin*8 + mentor*4 - earlyfail*4 + hintfreq*2 - tutlength*2, 10, 95));
+  const conf = Math.round(clamp(15 + hintfreq*6 + firstwin*5 + mentor*4 - earlyfail*4 - tutlength*1, 10, 95));
+  const cogload = Math.round(clamp(10 + tutlength*6 + earlyfail*4 - hintfreq*4 - mentor*2, 5, 95));
+  const social = Math.round(clamp(5 + mentor*9 + firstwin*3 - earlyfail*3, 5, 95));
+  const quit = Math.round(clamp(60 - firstwin*6 - mentor*4 - hintfreq*3 + earlyfail*5 + tutlength*2, 5, 90));
+  setOutput('out-d1retention', d1+'%', d1>60?'var(--green)':d1>40?'var(--amber)':'var(--red)');
+  setOutput('out-confidence', conf+'%', conf>65?'var(--gold)':conf>45?'var(--amber)':'var(--red)');
+  setOutput('out-cogload', cogload+'%', cogload<30?'var(--green)':cogload<60?'var(--amber)':'var(--red)');
+  setOutput('out-socialadopt', social+'%', social>55?'var(--blue)':social>35?'var(--amber)':'var(--text-dim)');
+  setOutput('out-quitrate', quit+'%', quit<20?'var(--green)':quit<40?'var(--amber)':'var(--red)');
+}
+
+function updateOnboardingArchetypes() {
+  const { tutlength, earlyfail, hintfreq, mentor, firstwin } = onboardingState;
+  const c=(a,b,d)=>clamp(a,b,d);
+  setBar('bar-comp-sat', c(40+firstwin*5+hintfreq*3-earlyfail*2,10,100));
+  setBar('bar-comp-burn', c(5+tutlength*4+earlyfail*3-firstwin*3,5,100));
+  setArchetypeState('completionist', c(40+firstwin*5,10,100), c(5+tutlength*4,5,100), [], ['ENGAGED','THRIVING','GRINDING','STRESSED','BURNT OUT']);
+  setBar('bar-comp2-mas', c(30+earlyfail*5-hintfreq*3+firstwin*2,10,100));
+  setBar('bar-comp2-frus', c(5+earlyfail*4-mentor*3-firstwin*2,5,100));
+  setArchetypeState('competitive', c(30+earlyfail*5,10,100), c(5+earlyfail*4,5,100), [], ['FOCUSED','IN FLOW','FRUSTRATED','RAGING','QUIT']);
+  setBar('bar-exp-joy', c(45-hintfreq*4+firstwin*4+mentor*2,10,100));
+  setBar('bar-exp-over', c(5+tutlength*4+earlyfail*3-hintfreq*2,5,100));
+  setArchetypeState('explorer', c(45-hintfreq*4+firstwin*4,10,100), c(5+tutlength*4,5,100), [], ['CURIOUS','DELIGHTED','SEARCHING','LOST','OVERWHELMED']);
+  setBar('bar-cas-acc', c(60+hintfreq*6+firstwin*5-earlyfail*6,10,100));
+  setBar('bar-cas-drop', c(5+earlyfail*8-firstwin*5-hintfreq*4,5,100));
+  setArchetypeState('casual', c(60+hintfreq*6+firstwin*5,10,100), c(5+earlyfail*8,5,100), [], ['RELAXED','ENJOYING','UNCERTAIN','STRUGGLING','LEAVING']);
+  setBar('bar-col-inv', c(30+firstwin*5+mentor*4-earlyfail*2,10,100));
+  setBar('bar-col-fomo', c(10+tutlength*3-firstwin*3,5,100));
+  setArchetypeState('collector', c(30+firstwin*5,10,100), c(10+tutlength*3,5,100), [], ['MOTIVATED','OBSESSED','PROGRESSING','ANXIOUS','FOMO PAIN']);
+  setBar('bar-soc-fit', c(30+mentor*9+firstwin*3,10,100));
+  setBar('bar-soc-left', c(5+earlyfail*4-mentor*5,5,100));
+  setArchetypeState('social', c(30+mentor*9,10,100), c(5+earlyfail*4,5,100), [], ['CONNECTED','THRIVING','KEEPING UP','FALLING BEHIND','LEFT BEHIND']);
+}
+
+function updateOnboardingTradeoffs() {
+  const { tutlength, earlyfail, hintfreq, mentor, firstwin } = onboardingState;
+  const scores = { 'Completionists':firstwin*8+hintfreq*4-earlyfail*3, 'Competitive':earlyfail*8-hintfreq*4+firstwin*2, 'Explorers':-hintfreq*5+firstwin*5+mentor*3, 'Casuals':hintfreq*9+firstwin*6-earlyfail*7, 'Collectors':firstwin*7+mentor*4-earlyfail*2, 'Social Players':mentor*10+firstwin*4-earlyfail*3 };
+  const colors = { 'Completionists':'var(--green)','Competitive':'var(--amber)','Explorers':'var(--purple)','Casuals':'var(--blue)','Collectors':'var(--gold)','Social Players':'var(--green)' };
+  const sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('winners-list').innerHTML = sorted.slice(0,3).map(([n])=>`<div class="tradeoff-player"><div class="tradeoff-dot" style="background:${colors[n]}"></div>${n}</div>`).join('');
+  document.getElementById('losers-list').innerHTML = sorted.slice(3).reverse().map(([n])=>`<div class="tradeoff-player"><div class="tradeoff-dot" style="background:var(--red)"></div>${n}</div>`).join('');
+}
+
+function drawOnboardingChart() {
+  const canvas = document.getElementById('retentionCurve');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = canvas.offsetWidth * dpr;
+  canvas.height = 140 * dpr;
+  ctx.scale(dpr, dpr);
+  const w = canvas.offsetWidth; const h = 140;
+  const pad = { top:12, right:16, bottom:28, left:36 };
+  const cW = w-pad.left-pad.right; const cH = h-pad.top-pad.bottom;
+  ctx.clearRect(0,0,w,h);
+  const { tutlength, earlyfail, hintfreq, mentor, firstwin } = onboardingState;
+  const confPts=[], loadPts=[];
+  for(let i=0;i<=10;i++){
+    const t=i/10;
+    const firstWinBoost = i >= Math.round(10-(firstwin)) ? firstwin*5 : 0;
+    confPts.push(clamp(10 + hintfreq*4*t + mentor*3*t + firstWinBoost - earlyfail*2*(1-t*0.8), 5, 95));
+    loadPts.push(clamp(80 - hintfreq*4*t - mentor*3*t - firstwin*3*Math.min(t*2,1) + earlyfail*2*(1-t*0.7) + tutlength*2*(1-t*0.5), 5, 95));
+  }
+  [0,25,50,75,100].forEach(v=>{
+    const y=pad.top+cH-(v/100)*cH;
+    ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(pad.left,y); ctx.lineTo(pad.left+cW,y); ctx.stroke();
+    ctx.fillStyle='#444'; ctx.font='9px Courier New'; ctx.textAlign='right';
+    ctx.fillText(v+'%',pad.left-4,y+3);
+  });
+  ['0m','10m','20m','30m','40m','50m+'].forEach((l,i)=>{
+    if(i<5){ctx.fillStyle='#444';ctx.font='8px Courier New';ctx.textAlign='center';ctx.fillText(l,pad.left+(i/4)*cW,h-6);}
+  });
+  // First win marker
+  const fwX = pad.left + ((10-firstwin)/10)*cW;
+  ctx.strokeStyle='rgba(201,168,76,0.3)'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+  ctx.beginPath(); ctx.moveTo(fwX,pad.top); ctx.lineTo(fwX,pad.top+cH); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle='var(--gold-dim)'; ctx.font='7px Courier New'; ctx.textAlign='center';
+  ctx.fillText('FIRST WIN',fwX,pad.top+8);
+  // Confidence line
+  ctx.beginPath();
+  confPts.forEach((v,i)=>{const x=pad.left+(i/10)*cW;const y=pad.top+cH-(v/100)*cH;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});
+  ctx.strokeStyle='#27ae60'; ctx.lineWidth=1.5; ctx.stroke();
+  // Cognitive load line
+  ctx.beginPath();
+  loadPts.forEach((v,i)=>{const x=pad.left+(i/10)*cW;const y=pad.top+cH-(v/100)*cH;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});
+  ctx.strokeStyle='rgba(192,57,43,0.7)'; ctx.lineWidth=1.5; ctx.setLineDash([4,3]); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle='#27ae60'; ctx.fillRect(pad.left,4,12,3);
+  ctx.fillStyle='#555'; ctx.font='8px Courier New'; ctx.textAlign='left'; ctx.fillText('Player Confidence',pad.left+16,9);
+  ctx.strokeStyle='rgba(192,57,43,0.7)'; ctx.setLineDash([4,3]); ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(pad.left+110,5.5); ctx.lineTo(pad.left+122,5.5); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle='#555'; ctx.fillText('Cognitive Load',pad.left+126,9);
+}
+
+function renderOnboardingModule() {
+  document.querySelector('.panel-section-label').textContent = modules.onboarding.controlsLabel;
+  document.querySelector('.slider-group').innerHTML = modules.onboarding.controls;
+  document.querySelector('.outputs-grid').innerHTML = modules.onboarding.outputs;
+  document.querySelector('.chart-label').textContent = modules.onboarding.chartLabel;
+  const p = modules.onboarding.philosophyInit;
+  document.getElementById('philosophy-principle').textContent = p.principle;
+  document.getElementById('philosophy-body').textContent = p.body;
+  document.getElementById('philosophy-examples').innerHTML = p.examples.map(e=>`<span class="example-tag">${e}</span>`).join('');
+  document.getElementById('active-slider-info').style.display = 'none';
+  document.querySelector('.examples-section').innerHTML = '<div class="examples-label">Real World Reference</div>'+modules.onboarding.examples.map(e=>`<div class="example-row"><span class="example-game">${e.game}</span><span class="example-note">${e.note}</span></div>`).join('');
+  document.getElementById('behavioral-principle').textContent = modules.onboarding.behavioralPrinciple;
+  document.getElementById('behavioral-body').textContent = modules.onboarding.behavioralBody;
+  updateOnboardingOutputs(); updateOnboardingArchetypes(); updateOnboardingTradeoffs(); drawOnboardingChart();
+}
+
+function renderEconomyModule() {
+  document.querySelector('.panel-section-label').textContent = modules.economy.controlsLabel;
+  document.querySelector('.slider-group').innerHTML = modules.economy.controls;
+  document.querySelector('.outputs-grid').innerHTML = modules.economy.outputs;
+  document.querySelector('.chart-label').textContent = modules.economy.chartLabel;
+
+  const p = modules.economy.philosophyInit;
+  document.getElementById('philosophy-principle').textContent = p.principle;
+  document.getElementById('philosophy-body').textContent = p.body;
+  document.getElementById('philosophy-examples').innerHTML = p.examples.map(e=>`<span class="example-tag">${e}</span>`).join('');
+  document.getElementById('active-slider-info').style.display = 'none';
+
+  document.querySelector('.examples-section').innerHTML = '<div class="examples-label">Real World Reference</div>' +
+    modules.economy.examples.map(e=>`<div class="example-row"><span class="example-game">${e.game}</span><span class="example-note">${e.note}</span></div>`).join('');
+
+  document.getElementById('behavioral-principle').textContent = modules.economy.behavioralPrinciple;
+  document.getElementById('behavioral-body').textContent = modules.economy.behavioralBody;
+
+  updateEconomyOutputs();
+  updateEconomyArchetypes();
+  updateEconomyTradeoffs();
+  drawEconomyChart();
+}
+
+function renderLiveOpsModule() {
+  document.querySelector('.panel-section-label').textContent = modules.liveops.controlsLabel;
+  document.querySelector('.slider-group').innerHTML = modules.liveops.controls;
+  document.querySelector('.outputs-grid').innerHTML = modules.liveops.outputs;
+  document.querySelector('.chart-label').textContent = modules.liveops.chartLabel;
+
+  const p = modules.liveops.philosophyInit;
+  document.getElementById('philosophy-principle').textContent = p.principle;
+  document.getElementById('philosophy-body').textContent = p.body;
+  document.getElementById('philosophy-examples').innerHTML = p.examples.map(e => `<span class="example-tag">${e}</span>`).join('');
+  document.getElementById('active-slider-info').style.display = 'none';
+
+  document.querySelector('.examples-section').innerHTML = '<div class="examples-label">Real World Reference</div>' +
+    modules.liveops.examples.map(e => `<div class="example-row"><span class="example-game">${e.game}</span><span class="example-note">${e.note}</span></div>`).join('');
+
+  document.getElementById('behavioral-principle').textContent = modules.liveops.behavioralPrinciple;
+  document.getElementById('behavioral-body').textContent = modules.liveops.behavioralBody;
+
+  updateLiveOpsOutputs();
+  updateLiveOpsArchetypes();
+  updateLiveOpsTradeoffs();
+  drawLiveOpsChart();
+}
+
+// ── INIT ──
+window.addEventListener('load', () => {
+  updateOutputs();
+  updateArchetypes();
+  updateTradeoffs();
+  drawChart();
+});
+
+window.addEventListener('resize', drawChart);
+</script>
+
+</body>
+</html>
