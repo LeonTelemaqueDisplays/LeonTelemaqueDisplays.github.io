@@ -3257,17 +3257,14 @@ window.addEventListener('resize', drawChart);
 
 <script>
 (function(){
-  var KEY = 'psl_onboarded_v1';
+  // Intentionally shows on every visit — the lab is opened fresh each time
+  // the project card is clicked, so the intro replays every time rather
+  // than being suppressed after a first dismissal.
   var overlay = document.getElementById('onboardOverlay');
   if (!overlay) return;
 
-  var seen = false;
-  try { seen = localStorage.getItem(KEY) === '1'; } catch(e) {}
-  if (seen) { overlay.remove(); return; }
-
   var btn = document.getElementById('onboardEnter');
   btn.addEventListener('click', function(){
-    try { localStorage.setItem(KEY, '1'); } catch(e) {}
     overlay.classList.add('closing');
     setTimeout(function(){ overlay.remove(); }, 320);
   });
