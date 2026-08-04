@@ -10,18 +10,18 @@
   --bg: #07060b;
   --bg-card: #0f0d16;
   --bg-card-h: #15121c;
-  --gold: #c8962c;
-  --gold-bright: #e8b94a;
-  --gold-faint: rgba(200,150,44,0.07);
-  --blue: #2f6fb0;
-  --blue-bright: #5b9bd8;
-  --blue-faint: rgba(47,111,176,0.08);
-  --red: #b8321f;
-  --red-bright: #d8542f;
-  --red-faint: rgba(184,50,31,0.08);
-  --teal: #2a8f96;
-  --teal-bright: #4fc4cc;
-  --teal-faint: rgba(42,143,150,0.08);
+  --gold: #f0b429;
+  --gold-bright: #ffd23f;
+  --gold-faint: rgba(240,180,41,0.07);
+  --blue: #2a75bb;
+  --blue-bright: #4fa3e8;
+  --blue-faint: rgba(42,117,187,0.08);
+  --red: #ee1515;
+  --red-bright: #ff4d4d;
+  --red-faint: rgba(238,21,21,0.08);
+  --teal: #2f9e44;
+  --teal-bright: #4ecb6b;
+  --teal-faint: rgba(47,158,68,0.08);
   --t1: #e2e0e6;
   --t2: #857f92;
   --t3: #46424f;
@@ -30,7 +30,7 @@
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;line-height:1.7;overflow-x:hidden;}
 
-#progress{position:fixed;top:0;left:0;height:2px;width:0%;background:var(--gold-bright);z-index:200;transition:width 0.1s linear;box-shadow:0 0 8px rgba(232,185,74,0.5);}
+#progress{position:fixed;top:0;left:0;height:2px;width:0%;background:var(--gold-bright);z-index:200;transition:width 0.1s linear;box-shadow:0 0 8px rgba(255,210,63,0.5);}
 
 nav{position:fixed;top:0;left:0;right:0;z-index:100;height:58px;background:rgba(7,6,11,0.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;}
 .nav-brand{font-family:'Oswald',sans-serif;font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--t3);}
@@ -44,9 +44,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:58px;background:rgba(
 .hero-bg{position:absolute;inset:0;pointer-events:none;}
 .hero-bg::before{content:'';position:absolute;inset:0;
   background:
-    radial-gradient(ellipse at 50% 0%,rgba(200,150,44,0.14) 0%,transparent 60%),
-    radial-gradient(ellipse at 85% 45%,rgba(47,111,176,0.16) 0%,transparent 45%),
-    radial-gradient(ellipse at 0% 100%,rgba(184,50,31,0.1) 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 0%,rgba(240,180,41,0.14) 0%,transparent 60%),
+    radial-gradient(ellipse at 85% 45%,rgba(42,117,187,0.16) 0%,transparent 45%),
+    radial-gradient(ellipse at 0% 100%,rgba(238,21,21,0.1) 0%,transparent 50%),
     linear-gradient(180deg,rgba(7,6,11,0.6) 0%,rgba(7,6,11,0.4) 40%,rgba(7,6,11,0.92) 80%,var(--bg) 100%);
 }
 .hero-noise{position:absolute;inset:0;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;}
@@ -55,7 +55,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:58px;background:rgba(
 .hero-eyebrow{font-family:'Oswald',sans-serif;font-size:0.68rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--t3);margin-bottom:1.5rem;position:relative;}
 .hero-eyebrow span{color:var(--gold-bright);}
 .hero-title{font-family:'Oswald',sans-serif;font-size:clamp(2.3rem,5.4vw,5rem);font-weight:700;line-height:0.98;letter-spacing:-0.02em;text-transform:uppercase;max-width:980px;margin-bottom:2rem;position:relative;}
-.hero-title em{font-style:normal;color:var(--gold-bright);display:block;text-shadow:0 0 60px rgba(232,185,74,0.3);}
+.hero-title em{font-style:normal;color:var(--gold-bright);display:block;text-shadow:0 0 60px rgba(255,210,63,0.3);}
 .hero-thesis{max-width:660px;font-size:1rem;color:var(--t2);line-height:1.78;margin-bottom:3rem;border-left:2px solid var(--gold);padding-left:1.5rem;position:relative;}
 .hero-thesis strong{color:var(--t1);font-weight:600;}
 .hero-meta{display:flex;gap:2rem;align-items:center;flex-wrap:wrap;position:relative;}
@@ -69,22 +69,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:58px;background:rgba(
 .section.vis{opacity:1;transform:translateY(0);}
 .section-inner{max-width:1080px;margin:0 auto;}
 .section-header{display:grid;grid-template-columns:80px 1fr;gap:2.5rem;margin-bottom:4rem;align-items:start;}
-.section-num{font-family:'Oswald',sans-serif;font-size:4.5rem;font-weight:700;line-height:1;letter-spacing:-0.04em;user-select:none;opacity:0.1;}
+.section-num{font-family:'Oswald',sans-serif;font-size:3.1rem;font-weight:700;line-height:1;letter-spacing:-0.03em;user-select:none;opacity:0.12;}
 .section-eyebrow{font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:0.6rem;}
 .section-title{font-family:'Oswald',sans-serif;font-size:clamp(1.5rem,2.8vw,2.3rem);font-weight:600;line-height:1.15;letter-spacing:-0.01em;text-transform:uppercase;margin-bottom:0.85rem;}
 .section-sub{font-size:0.95rem;color:var(--t2);max-width:600px;line-height:1.7;}
 
 #opening .section-eyebrow{color:var(--gold-bright);}
-#l1{background:linear-gradient(180deg,transparent,rgba(184,50,31,0.045));}
+#l1{background:linear-gradient(180deg,transparent,rgba(238,21,21,0.045));}
 #l1 .section-num{color:var(--red-bright);}
 #l1 .section-eyebrow{color:var(--red-bright);}
-#l2{background:linear-gradient(180deg,transparent,rgba(47,111,176,0.05));}
+#l2{background:linear-gradient(180deg,transparent,rgba(42,117,187,0.05));}
 #l2 .section-num{color:var(--blue-bright);}
 #l2 .section-eyebrow{color:var(--blue-bright);}
-#l3{background:linear-gradient(180deg,transparent,rgba(200,150,44,0.045));}
+#l3{background:linear-gradient(180deg,transparent,rgba(240,180,41,0.045));}
 #l3 .section-num{color:var(--gold-bright);}
 #l3 .section-eyebrow{color:var(--gold-bright);}
-#l4{background:linear-gradient(180deg,transparent,rgba(42,143,150,0.05));}
+#l4{background:linear-gradient(180deg,transparent,rgba(47,158,68,0.05));}
 #l4 .section-num{color:var(--teal-bright);}
 #l4 .section-eyebrow{color:var(--teal-bright);}
 
@@ -100,28 +100,28 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:58px;background:rgba(
 .mt-3{margin-top:3rem;}
 
 .divider{width:48px;height:2px;background:rgba(255,255,255,0.1);margin:2.5rem 0;}
-.divider-gold{background:rgba(200,150,44,0.45);}
-.divider-blue{background:rgba(47,111,176,0.4);}
-.divider-red{background:rgba(184,50,31,0.45);}
-.divider-teal{background:rgba(42,143,150,0.4);}
+.divider-gold{background:rgba(240,180,41,0.45);}
+.divider-blue{background:rgba(42,117,187,0.4);}
+.divider-red{background:rgba(238,21,21,0.45);}
+.divider-teal{background:rgba(47,158,68,0.4);}
 
 /* Highlight box */
-.hi-box{background:rgba(200,150,44,0.05);border:1px solid rgba(200,150,44,0.18);border-left:3px solid var(--gold);border-radius:0 3px 3px 0;padding:1.75rem 2rem;margin-top:2.5rem;}
+.hi-box{background:rgba(240,180,41,0.05);border:1px solid rgba(240,180,41,0.18);border-left:3px solid var(--gold);border-radius:0 3px 3px 0;padding:1.75rem 2rem;margin-top:2.5rem;}
 .hi-label{font-family:'Oswald',sans-serif;font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:0.65rem;}
 .hi-box p{font-size:1rem;color:var(--t1);line-height:1.72;}
-.hi-box.red{background:rgba(184,50,31,0.05);border-color:rgba(184,50,31,0.2);border-left-color:var(--red);}
+.hi-box.red{background:rgba(238,21,21,0.05);border-color:rgba(238,21,21,0.2);border-left-color:var(--red);}
 .hi-box.red .hi-label{color:var(--red-bright);}
-.hi-box.blue{background:rgba(47,111,176,0.05);border-color:rgba(47,111,176,0.2);border-left-color:var(--blue);}
+.hi-box.blue{background:rgba(42,117,187,0.05);border-color:rgba(42,117,187,0.2);border-left-color:var(--blue);}
 .hi-box.blue .hi-label{color:var(--blue-bright);}
-.hi-box.teal{background:rgba(42,143,150,0.05);border-color:rgba(42,143,150,0.2);border-left-color:var(--teal);}
+.hi-box.teal{background:rgba(47,158,68,0.05);border-color:rgba(47,158,68,0.2);border-left-color:var(--teal);}
 .hi-box.teal .hi-label{color:var(--teal-bright);}
 
 /* Problem overview grid */
 .sys-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:2rem;}
 .sys-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:1.25rem 1.4rem;border-top:2px solid transparent;}
-.sys-card.s1{border-top-color:rgba(184,50,31,0.45);}
-.sys-card.s2{border-top-color:rgba(47,111,176,0.4);}
-.sys-card.s3{border-top-color:rgba(200,150,44,0.45);}
+.sys-card.s1{border-top-color:rgba(238,21,21,0.45);}
+.sys-card.s2{border-top-color:rgba(42,117,187,0.4);}
+.sys-card.s3{border-top-color:rgba(240,180,41,0.45);}
 .sys-num{font-family:'Oswald',sans-serif;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--t3);margin-bottom:0.5rem;}
 .sys-name{font-size:0.82rem;font-weight:600;color:var(--t1);line-height:1.35;}
 
@@ -131,35 +131,35 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:58px;background:rgba(
 .mech-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0.5;}
 .mech-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,0.5);}
 .mech-card:hover::after{opacity:1;}
-.mech-red{border-top:2px solid rgba(184,50,31,0.4);}
+.mech-red{border-top:2px solid rgba(238,21,21,0.4);}
 .mech-red::after{background:var(--red);}
-.mech-blue{border-top:2px solid rgba(47,111,176,0.4);}
+.mech-blue{border-top:2px solid rgba(42,117,187,0.4);}
 .mech-blue::after{background:var(--blue);}
-.mech-gold{border-top:2px solid rgba(200,150,44,0.4);}
+.mech-gold{border-top:2px solid rgba(240,180,41,0.4);}
 .mech-gold::after{background:var(--gold);}
-.mech-teal{border-top:2px solid rgba(42,143,150,0.4);}
+.mech-teal{border-top:2px solid rgba(47,158,68,0.4);}
 .mech-teal::after{background:var(--teal);}
 .mech-tag{font-family:'Oswald',sans-serif;font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;padding:0.22rem 0.6rem;border-radius:2px;display:inline-block;margin-bottom:1rem;}
-.tag-red{color:var(--red-bright);border:1px solid rgba(216,84,47,0.3);background:var(--red-faint);}
-.tag-blue{color:var(--blue-bright);border:1px solid rgba(91,155,216,0.3);background:var(--blue-faint);}
-.tag-gold{color:var(--gold-bright);border:1px solid rgba(232,185,74,0.3);background:var(--gold-faint);}
-.tag-teal{color:var(--teal-bright);border:1px solid rgba(79,196,204,0.3);background:var(--teal-faint);}
+.tag-red{color:var(--red-bright);border:1px solid rgba(255,77,77,0.3);background:var(--red-faint);}
+.tag-blue{color:var(--blue-bright);border:1px solid rgba(79,163,232,0.3);background:var(--blue-faint);}
+.tag-gold{color:var(--gold-bright);border:1px solid rgba(255,210,63,0.3);background:var(--gold-faint);}
+.tag-teal{color:var(--teal-bright);border:1px solid rgba(78,203,107,0.3);background:var(--teal-faint);}
 .mech-title{font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--t1);margin-bottom:0.75rem;}
 .mech-body{font-size:0.875rem;color:var(--t2);line-height:1.72;}
 
 /* Steal / solution cards */
 #l4{}
 .steal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-top:2.5rem;}
-.steal-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:1.75rem 1.75rem 1.75rem 2rem;position:relative;overflow:hidden;transition:all 0.3s;border-left:3px solid rgba(42,143,150,0.15);}
-.steal-card:hover{background:var(--bg-card-h);border-color:rgba(42,143,150,0.2);border-left-color:var(--teal-bright);transform:translateX(3px);box-shadow:-4px 0 20px rgba(42,143,150,0.1);}
-.steal-num{position:absolute;top:-0.5rem;right:1rem;font-family:'Oswald',sans-serif;font-size:4rem;font-weight:700;color:rgba(42,143,150,0.09);line-height:1;user-select:none;}
-.steal-tag{display:inline-block;font-family:'Oswald',sans-serif;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--teal-bright);border:1px solid rgba(42,143,150,0.3);padding:0.18rem 0.55rem;border-radius:2px;margin-bottom:0.9rem;}
+.steal-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:1.75rem 1.75rem 1.75rem 2rem;position:relative;overflow:hidden;transition:all 0.3s;border-left:3px solid rgba(47,158,68,0.15);}
+.steal-card:hover{background:var(--bg-card-h);border-color:rgba(47,158,68,0.2);border-left-color:var(--teal-bright);transform:translateX(3px);box-shadow:-4px 0 20px rgba(47,158,68,0.1);}
+.steal-num{position:absolute;top:-0.5rem;right:1rem;font-family:'Oswald',sans-serif;font-size:4rem;font-weight:700;color:rgba(47,158,68,0.09);line-height:1;user-select:none;}
+.steal-tag{display:inline-block;font-family:'Oswald',sans-serif;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--teal-bright);border:1px solid rgba(47,158,68,0.3);padding:0.18rem 0.55rem;border-radius:2px;margin-bottom:0.9rem;}
 .steal-title{font-family:'Oswald',sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--t1);margin-bottom:0.65rem;}
 .steal-body{font-size:0.875rem;color:var(--t2);line-height:1.72;}
 
 /* Closing statement */
-.closing{margin-top:4rem;padding:3rem;background:var(--bg-card);border:1px solid rgba(200,150,44,0.2);border-top:2px solid var(--gold);border-radius:0 0 3px 3px;text-align:center;}
-.closing-line{width:40px;height:2px;background:var(--gold-bright);margin:0 auto 2rem;box-shadow:0 0 12px rgba(232,185,74,0.5);}
+.closing{margin-top:4rem;padding:3rem;background:var(--bg-card);border:1px solid rgba(240,180,41,0.2);border-top:2px solid var(--gold);border-radius:0 0 3px 3px;text-align:center;}
+.closing-line{width:40px;height:2px;background:var(--gold-bright);margin:0 auto 2rem;box-shadow:0 0 12px rgba(255,210,63,0.5);}
 .closing p{font-family:'Oswald',sans-serif;font-size:clamp(1.05rem,2.1vw,1.4rem);font-weight:400;line-height:1.5;color:var(--t2);max-width:720px;margin:0 auto;}
 .closing p em{font-style:normal;color:var(--gold-bright);}
 
@@ -189,7 +189,7 @@ footer{padding:3.5rem 4rem;border-top:1px solid rgba(255,255,255,0.04);display:f
 <div id="progress"></div>
 
 <nav>
-  <div class="nav-brand"><span>Leon Telemaque</span> &nbsp;/&nbsp; Portfolio</div>
+  <div class="nav-brand"><svg class="pball" width="13" height="13" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:-2px;margin-right:6px"><path d="M20 2 A18 18 0 0 1 38 20 H2 A18 18 0 0 1 20 2 Z" fill="#ee1515"/><path d="M2 20 A18 18 0 0 0 20 38 A18 18 0 0 0 38 20 Z" fill="#f0eee8"/><rect x="2" y="18.5" width="36" height="3" fill="#141318"/><circle cx="20" cy="20" r="18" fill="none" stroke="#141318" stroke-width="2"/><circle cx="20" cy="20" r="6.5" fill="#f0eee8" stroke="#141318" stroke-width="2"/><circle cx="20" cy="20" r="2.6" fill="#141318"/></svg><span>Leon Telemaque</span> &nbsp;/&nbsp; Portfolio</div>
   <ul class="nav-links">
     <li><a href="#l1">Raid System</a></li>
     <li><a href="#l2">Trading</a></li>
@@ -201,11 +201,16 @@ footer{padding:3.5rem 4rem;border-top:1px solid rgba(255,255,255,0.04);display:f
 <!-- HERO -->
 <section class="hero" id="hero">
   <div class="hero-bg">
+    <svg width="620" height="620" viewBox="0 0 40 40" style="position:absolute;top:-140px;right:-140px;opacity:.05;pointer-events:none">
+      <circle cx="20" cy="20" r="18" fill="none" stroke="#e2e0e6" stroke-width=".7"/>
+      <line x1="2" y1="20" x2="38" y2="20" stroke="#e2e0e6" stroke-width=".7"/>
+      <circle cx="20" cy="20" r="6.5" fill="none" stroke="#e2e0e6" stroke-width=".7"/>
+    </svg>
     <div class="hero-noise"></div>
     <div class="hero-vignette"></div>
   </div>
 
-  <div class="hero-eyebrow">Product Design Case Study &nbsp;·&nbsp; <span>Pokémon GO</span> &nbsp;·&nbsp; Niantic · 2026</div>
+  <div class="hero-eyebrow"><svg class="pball" width="13" height="13" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:-2px;margin-right:8px"><path d="M20 2 A18 18 0 0 1 38 20 H2 A18 18 0 0 1 20 2 Z" fill="#ee1515"/><path d="M2 20 A18 18 0 0 0 20 38 A18 18 0 0 0 38 20 Z" fill="#f0eee8"/><rect x="2" y="18.5" width="36" height="3" fill="#141318"/><circle cx="20" cy="20" r="18" fill="none" stroke="#141318" stroke-width="2"/><circle cx="20" cy="20" r="6.5" fill="#f0eee8" stroke="#141318" stroke-width="2"/><circle cx="20" cy="20" r="2.6" fill="#141318"/></svg>Product Design Case Study &nbsp;·&nbsp; <span>Pokémon GO</span> &nbsp;·&nbsp; Niantic · 2026</div>
 
   <h1 class="hero-title">
     Pokémon GO:
@@ -234,7 +239,7 @@ footer{padding:3.5rem 4rem;border-top:1px solid rgba(255,255,255,0.04);display:f
     <div class="section-header">
       <div></div>
       <div>
-        <div class="section-eyebrow">The Opening</div>
+        <div class="section-eyebrow"><svg width="11" height="11" viewBox="0 0 40 40" style="display:inline-block;vertical-align:-1px;margin-right:6px"><circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="3"/><line x1="4" y1="20" x2="36" y2="20" stroke="currentColor" stroke-width="3"/><circle cx="20" cy="20" r="6" fill="var(--bg)" stroke="currentColor" stroke-width="3"/></svg>The Opening</div>
         <h2 class="section-title">Built for Cities, Not for Everyone</h2>
         <p class="section-sub">Pokemon GO is one of the most culturally dominant mobile games ever made. But step outside the density it was designed around, and the experience changes entirely.</p>
       </div>
@@ -270,9 +275,9 @@ footer{padding:3.5rem 4rem;border-top:1px solid rgba(255,255,255,0.04);display:f
 <section class="section" id="l1">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-num">01</div>
+      <div class="section-num">N°01</div>
       <div>
-        <div class="section-eyebrow">Problem One</div>
+        <div class="section-eyebrow"><svg width="11" height="11" viewBox="0 0 40 40" style="display:inline-block;vertical-align:-1px;margin-right:6px"><circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="3"/><line x1="4" y1="20" x2="36" y2="20" stroke="currentColor" stroke-width="3"/><circle cx="20" cy="20" r="6" fill="var(--bg)" stroke="currentColor" stroke-width="3"/></svg>Problem One</div>
         <h2 class="section-title">The Raid System</h2>
         <p class="section-sub">Pokemon GO raids were built around group participation. For an urban player that's a feature. For a rural player, it's a wall.</p>
       </div>
@@ -305,9 +310,9 @@ footer{padding:3.5rem 4rem;border-top:1px solid rgba(255,255,255,0.04);display:f
 <section class="section" id="l2">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-num">02</div>
+      <div class="section-num">N°02</div>
       <div>
-        <div class="section-eyebrow">Problem Two</div>
+        <div class="section-eyebrow"><svg width="11" height="11" viewBox="0 0 40 40" style="display:inline-block;vertical-align:-1px;margin-right:6px"><circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="3"/><line x1="4" y1="20" x2="36" y2="20" stroke="currentColor" stroke-width="3"/><circle cx="20" cy="20" r="6" fill="var(--bg)" stroke="currentColor" stroke-width="3"/></svg>Problem Two</div>
         <h2 class="section-title">Trading</h2>
         <p class="section-sub">Trading in Pokemon GO requires proximity — a design decision that made sense in dense cities and creates a systemic barrier everywhere else.</p>
       </div>
@@ -340,9 +345,9 @@ footer{padding:3.5rem 4rem;border-top:1px solid rgba(255,255,255,0.04);display:f
 <section class="section" id="l3">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-num">03</div>
+      <div class="section-num">N°03</div>
       <div>
-        <div class="section-eyebrow">Problem Three</div>
+        <div class="section-eyebrow"><svg width="11" height="11" viewBox="0 0 40 40" style="display:inline-block;vertical-align:-1px;margin-right:6px"><circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="3"/><line x1="4" y1="20" x2="36" y2="20" stroke="currentColor" stroke-width="3"/><circle cx="20" cy="20" r="6" fill="var(--bg)" stroke="currentColor" stroke-width="3"/></svg>Problem Three</div>
         <h2 class="section-title">Quests &amp; Spawns</h2>
         <p class="section-sub">Pokemon GO's spawn system treats geography as a meaningful variable. For players whose geography is limited, so is the game.</p>
       </div>
@@ -376,9 +381,9 @@ footer{padding:3.5rem 4rem;border-top:1px solid rgba(255,255,255,0.04);display:f
 <section class="section" id="l4">
   <div class="section-inner">
     <div class="section-header">
-      <div class="section-num">04</div>
+      <div class="section-num">N°04</div>
       <div>
-        <div class="section-eyebrow">The Framework</div>
+        <div class="section-eyebrow"><svg width="11" height="11" viewBox="0 0 40 40" style="display:inline-block;vertical-align:-1px;margin-right:6px"><circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="3"/><line x1="4" y1="20" x2="36" y2="20" stroke="currentColor" stroke-width="3"/><circle cx="20" cy="20" r="6" fill="var(--bg)" stroke="currentColor" stroke-width="3"/></svg>The Framework</div>
         <h2 class="section-title">Three Solutions, One Coherent System</h2>
         <p class="section-sub">None of these fixes require dismantling what makes Pokemon GO work. They extend it to the players it was never built for.</p>
       </div>
@@ -422,7 +427,7 @@ footer{padding:3.5rem 4rem;border-top:1px solid rgba(255,255,255,0.04);display:f
     <div class="section-header">
       <div></div>
       <div>
-        <div class="section-eyebrow t-gold">Closing Argument</div>
+        <div class="section-eyebrow t-gold"><svg width="11" height="11" viewBox="0 0 40 40" style="display:inline-block;vertical-align:-1px;margin-right:6px"><circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="3"/><line x1="4" y1="20" x2="36" y2="20" stroke="currentColor" stroke-width="3"/><circle cx="20" cy="20" r="6" fill="var(--bg)" stroke="currentColor" stroke-width="3"/></svg>Closing Argument</div>
         <h2 class="section-title">A Recoverable, Monetizable Retention Funnel</h2>
         <p class="section-sub">Niantic is sitting on one of the largest untapped retention funnels in mobile gaming.</p>
       </div>
@@ -441,7 +446,7 @@ footer{padding:3.5rem 4rem;border-top:1px solid rgba(255,255,255,0.04);display:f
 </section>
 
 <footer>
-  <div class="footer-name"><span>Leon Telemaque</span> &nbsp;·&nbsp; Product Design Case Study</div>
+  <div class="footer-name"><svg width="12" height="12" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:-1px;margin-right:6px"><path d="M20 2 A18 18 0 0 1 38 20 H2 A18 18 0 0 1 20 2 Z" fill="#ee1515"/><path d="M2 20 A18 18 0 0 0 20 38 A18 18 0 0 0 38 20 Z" fill="#f0eee8"/><rect x="2" y="18.5" width="36" height="3" fill="#141318"/><circle cx="20" cy="20" r="18" fill="none" stroke="#141318" stroke-width="2"/><circle cx="20" cy="20" r="6.5" fill="#f0eee8" stroke="#141318" stroke-width="2"/><circle cx="20" cy="20" r="2.6" fill="#141318"/></svg><span>Leon Telemaque</span> &nbsp;·&nbsp; Product Design Case Study</div>
   <div class="footer-note">Portfolio · Retention Systems &amp; Location-Based Game Design · 2026</div>
 </footer>
 
