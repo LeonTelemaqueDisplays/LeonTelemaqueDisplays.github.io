@@ -42,6 +42,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:58px;background:rgba(
 
 .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:7rem 4rem 5.5rem;position:relative;overflow:hidden;}
 .hero-bg{position:absolute;inset:0;pointer-events:none;}
+.hero-cover{position:absolute;inset:0;background-image:url('./pokemon-go-cover.webp');background-size:cover;background-position:center 35%;opacity:.42;filter:saturate(.8) brightness(.82);}
 .hero-bg::before{content:'';position:absolute;inset:0;
   background:
     radial-gradient(ellipse at 50% 0%,rgba(240,180,41,0.14) 0%,transparent 60%),
@@ -201,6 +202,7 @@ footer{padding:3.5rem 4rem;border-top:1px solid rgba(255,255,255,0.04);display:f
 <!-- HERO -->
 <section class="hero" id="hero">
   <div class="hero-bg">
+    <div class="hero-cover"></div>
     <svg width="620" height="620" viewBox="0 0 40 40" style="position:absolute;top:-140px;right:-140px;opacity:.05;pointer-events:none">
       <circle cx="20" cy="20" r="18" fill="none" stroke="#e2e0e6" stroke-width=".7"/>
       <line x1="2" y1="20" x2="38" y2="20" stroke="#e2e0e6" stroke-width=".7"/>
