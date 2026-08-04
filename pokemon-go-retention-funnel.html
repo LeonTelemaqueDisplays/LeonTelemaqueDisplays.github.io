@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokémon GO: The Retention Funnel Niantic Is Ignoring | Leon Telemaque</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07060b;
+  --bg-card: #0f0d16;
+  --bg-card-h: #15121c;
+  --gold: #c8962c;
+  --gold-bright: #e8b94a;
+  --gold-faint: rgba(200,150,44,0.07);
+  --blue: #2f6fb0;
+  --blue-bright: #5b9bd8;
+  --blue-faint: rgba(47,111,176,0.08);
+  --red: #b8321f;
+  --red-bright: #d8542f;
+  --red-faint: rgba(184,50,31,0.08);
+  --teal: #2a8f96;
+  --teal-bright: #4fc4cc;
+  --teal-faint: rgba(42,143,150,0.08);
+  --t1: #e2e0e6;
+  --t2: #857f92;
+  --t3: #46424f;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;line-height:1.7;overflow-x:hidden;}
+
+#progress{position:fixed;top:0;left:0;height:2px;width:0%;background:var(--gold-bright);z-index:200;transition:width 0.1s linear;box-shadow:0 0 8px rgba(232,185,74,0.5);}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:58px;background:rgba(7,6,11,0.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;}
+.nav-brand{font-family:'Oswald',sans-serif;font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--t3);}
+.nav-brand span{color:var(--gold-bright);}
+.nav-links{display:flex;list-style:none;}
+.nav-links a{display:block;height:58px;line-height:58px;padding:0 1.1rem;font-family:'Oswald',sans-serif;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--t3);text-decoration:none;border-bottom:2px solid transparent;transition:color 0.2s,border-color 0.2s;}
+.nav-links a:hover{color:var(--t2);}
+.nav-links a.active{color:var(--gold-bright);border-bottom-color:var(--gold-bright);}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:7rem 4rem 5.5rem;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;pointer-events:none;}
+.hero-bg::before{content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(200,150,44,0.14) 0%,transparent 60%),
+    radial-gradient(ellipse at 85% 45%,rgba(47,111,176,0.16) 0%,transparent 45%),
+    radial-gradient(ellipse at 0% 100%,rgba(184,50,31,0.1) 0%,transparent 50%),
+    linear-gradient(180deg,rgba(7,6,11,0.6) 0%,rgba(7,6,11,0.4) 40%,rgba(7,6,11,0.92) 80%,var(--bg) 100%);
+}
+.hero-noise{position:absolute;inset:0;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;}
+.hero-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,transparent 40%,rgba(0,0,0,0.75) 100%);pointer-events:none;}
+
+.hero-eyebrow{font-family:'Oswald',sans-serif;font-size:0.68rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--t3);margin-bottom:1.5rem;position:relative;}
+.hero-eyebrow span{color:var(--gold-bright);}
+.hero-title{font-family:'Oswald',sans-serif;font-size:clamp(2.3rem,5.4vw,5rem);font-weight:700;line-height:0.98;letter-spacing:-0.02em;text-transform:uppercase;max-width:980px;margin-bottom:2rem;position:relative;}
+.hero-title em{font-style:normal;color:var(--gold-bright);display:block;text-shadow:0 0 60px rgba(232,185,74,0.3);}
+.hero-thesis{max-width:660px;font-size:1rem;color:var(--t2);line-height:1.78;margin-bottom:3rem;border-left:2px solid var(--gold);padding-left:1.5rem;position:relative;}
+.hero-thesis strong{color:var(--t1);font-weight:600;}
+.hero-meta{display:flex;gap:2rem;align-items:center;flex-wrap:wrap;position:relative;}
+.badge{font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--t3);padding:0.35rem 0.9rem;border:1px solid rgba(255,255,255,0.06);border-radius:2px;}
+.hero-scroll{display:flex;align-items:center;gap:0.7rem;color:var(--t3);font-family:'Oswald',sans-serif;font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;margin-left:auto;transition:color 0.2s;}
+.hero-scroll:hover{color:var(--gold-bright);}
+.hero-scroll-line{width:36px;height:1px;background:currentColor;transition:width 0.25s;}
+.hero-scroll:hover .hero-scroll-line{width:56px;}
+
+.section{padding:6.5rem 4rem;border-top:1px solid rgba(255,255,255,0.03);opacity:0;transform:translateY(28px);transition:opacity 0.65s ease,transform 0.65s ease;}
+.section.vis{opacity:1;transform:translateY(0);}
+.section-inner{max-width:1080px;margin:0 auto;}
+.section-header{display:grid;grid-template-columns:80px 1fr;gap:2.5rem;margin-bottom:4rem;align-items:start;}
+.section-num{font-family:'Oswald',sans-serif;font-size:4.5rem;font-weight:700;line-height:1;letter-spacing:-0.04em;user-select:none;opacity:0.1;}
+.section-eyebrow{font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:0.6rem;}
+.section-title{font-family:'Oswald',sans-serif;font-size:clamp(1.5rem,2.8vw,2.3rem);font-weight:600;line-height:1.15;letter-spacing:-0.01em;text-transform:uppercase;margin-bottom:0.85rem;}
+.section-sub{font-size:0.95rem;color:var(--t2);max-width:600px;line-height:1.7;}
+
+#opening .section-eyebrow{color:var(--gold-bright);}
+#l1{background:linear-gradient(180deg,transparent,rgba(184,50,31,0.045));}
+#l1 .section-num{color:var(--red-bright);}
+#l1 .section-eyebrow{color:var(--red-bright);}
+#l2{background:linear-gradient(180deg,transparent,rgba(47,111,176,0.05));}
+#l2 .section-num{color:var(--blue-bright);}
+#l2 .section-eyebrow{color:var(--blue-bright);}
+#l3{background:linear-gradient(180deg,transparent,rgba(200,150,44,0.045));}
+#l3 .section-num{color:var(--gold-bright);}
+#l3 .section-eyebrow{color:var(--gold-bright);}
+#l4{background:linear-gradient(180deg,transparent,rgba(42,143,150,0.05));}
+#l4 .section-num{color:var(--teal-bright);}
+#l4 .section-eyebrow{color:var(--teal-bright);}
+
+.prose{font-size:0.95rem;color:var(--t2);line-height:1.78;}
+.prose+.prose{margin-top:1rem;}
+.prose strong{color:var(--t1);font-weight:600;}
+.prose em{font-style:italic;color:var(--t1);}
+.t-gold{color:var(--gold-bright);}
+.t-blue{color:var(--blue-bright);}
+.t-red{color:var(--red-bright);}
+.t-teal{color:var(--teal-bright);}
+.mt-2{margin-top:2rem;}
+.mt-3{margin-top:3rem;}
+
+.divider{width:48px;height:2px;background:rgba(255,255,255,0.1);margin:2.5rem 0;}
+.divider-gold{background:rgba(200,150,44,0.45);}
+.divider-blue{background:rgba(47,111,176,0.4);}
+.divider-red{background:rgba(184,50,31,0.45);}
+.divider-teal{background:rgba(42,143,150,0.4);}
+
+/* Highlight box */
+.hi-box{background:rgba(200,150,44,0.05);border:1px solid rgba(200,150,44,0.18);border-left:3px solid var(--gold);border-radius:0 3px 3px 0;padding:1.75rem 2rem;margin-top:2.5rem;}
+.hi-label{font-family:'Oswald',sans-serif;font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:0.65rem;}
+.hi-box p{font-size:1rem;color:var(--t1);line-height:1.72;}
+.hi-box.red{background:rgba(184,50,31,0.05);border-color:rgba(184,50,31,0.2);border-left-color:var(--red);}
+.hi-box.red .hi-label{color:var(--red-bright);}
+.hi-box.blue{background:rgba(47,111,176,0.05);border-color:rgba(47,111,176,0.2);border-left-color:var(--blue);}
+.hi-box.blue .hi-label{color:var(--blue-bright);}
+.hi-box.teal{background:rgba(42,143,150,0.05);border-color:rgba(42,143,150,0.2);border-left-color:var(--teal);}
+.hi-box.teal .hi-label{color:var(--teal-bright);}
+
+/* Problem overview grid */
+.sys-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:2rem;}
+.sys-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:1.25rem 1.4rem;border-top:2px solid transparent;}
+.sys-card.s1{border-top-color:rgba(184,50,31,0.45);}
+.sys-card.s2{border-top-color:rgba(47,111,176,0.4);}
+.sys-card.s3{border-top-color:rgba(200,150,44,0.45);}
+.sys-num{font-family:'Oswald',sans-serif;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--t3);margin-bottom:0.5rem;}
+.sys-name{font-size:0.82rem;font-weight:600;color:var(--t1);line-height:1.35;}
+
+/* Mechanism cards */
+.mech-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-top:2.5rem;}
+.mech-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:1.75rem;position:relative;overflow:hidden;transition:all 0.3s;}
+.mech-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0.5;}
+.mech-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,0.5);}
+.mech-card:hover::after{opacity:1;}
+.mech-red{border-top:2px solid rgba(184,50,31,0.4);}
+.mech-red::after{background:var(--red);}
+.mech-blue{border-top:2px solid rgba(47,111,176,0.4);}
+.mech-blue::after{background:var(--blue);}
+.mech-gold{border-top:2px solid rgba(200,150,44,0.4);}
+.mech-gold::after{background:var(--gold);}
+.mech-teal{border-top:2px solid rgba(42,143,150,0.4);}
+.mech-teal::after{background:var(--teal);}
+.mech-tag{font-family:'Oswald',sans-serif;font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;padding:0.22rem 0.6rem;border-radius:2px;display:inline-block;margin-bottom:1rem;}
+.tag-red{color:var(--red-bright);border:1px solid rgba(216,84,47,0.3);background:var(--red-faint);}
+.tag-blue{color:var(--blue-bright);border:1px solid rgba(91,155,216,0.3);background:var(--blue-faint);}
+.tag-gold{color:var(--gold-bright);border:1px solid rgba(232,185,74,0.3);background:var(--gold-faint);}
+.tag-teal{color:var(--teal-bright);border:1px solid rgba(79,196,204,0.3);background:var(--teal-faint);}
+.mech-title{font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--t1);margin-bottom:0.75rem;}
+.mech-body{font-size:0.875rem;color:var(--t2);line-height:1.72;}
+
+/* Steal / solution cards */
+#l4{}
+.steal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-top:2.5rem;}
+.steal-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:1.75rem 1.75rem 1.75rem 2rem;position:relative;overflow:hidden;transition:all 0.3s;border-left:3px solid rgba(42,143,150,0.15);}
+.steal-card:hover{background:var(--bg-card-h);border-color:rgba(42,143,150,0.2);border-left-color:var(--teal-bright);transform:translateX(3px);box-shadow:-4px 0 20px rgba(42,143,150,0.1);}
+.steal-num{position:absolute;top:-0.5rem;right:1rem;font-family:'Oswald',sans-serif;font-size:4rem;font-weight:700;color:rgba(42,143,150,0.09);line-height:1;user-select:none;}
+.steal-tag{display:inline-block;font-family:'Oswald',sans-serif;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--teal-bright);border:1px solid rgba(42,143,150,0.3);padding:0.18rem 0.55rem;border-radius:2px;margin-bottom:0.9rem;}
+.steal-title{font-family:'Oswald',sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--t1);margin-bottom:0.65rem;}
+.steal-body{font-size:0.875rem;color:var(--t2);line-height:1.72;}
+
+/* Closing statement */
+.closing{margin-top:4rem;padding:3rem;background:var(--bg-card);border:1px solid rgba(200,150,44,0.2);border-top:2px solid var(--gold);border-radius:0 0 3px 3px;text-align:center;}
+.closing-line{width:40px;height:2px;background:var(--gold-bright);margin:0 auto 2rem;box-shadow:0 0 12px rgba(232,185,74,0.5);}
+.closing p{font-family:'Oswald',sans-serif;font-size:clamp(1.05rem,2.1vw,1.4rem);font-weight:400;line-height:1.5;color:var(--t2);max-width:720px;margin:0 auto;}
+.closing p em{font-style:normal;color:var(--gold-bright);}
+
+footer{padding:3.5rem 4rem;border-top:1px solid rgba(255,255,255,0.04);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;}
+.footer-name{font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--t3);}
+.footer-name span{color:var(--gold-bright);}
+.footer-note{font-size:0.75rem;color:var(--t3);}
+
+@media(max-width:900px){
+  .mech-grid,.steal-grid{grid-template-columns:1fr 1fr;}
+  .sys-grid{grid-template-columns:1fr 1fr;}
+  nav{padding:0 1.25rem;}
+}
+@media(max-width:680px){
+  .hero{padding:6rem 1.5rem 4rem;}
+  .section{padding:5rem 1.5rem;}
+  .section-header{grid-template-columns:1fr;gap:0.5rem;}
+  .section-num{font-size:2.5rem;}
+  .mech-grid,.sys-grid,.steal-grid{grid-template-columns:1fr;}
+  .nav-brand{display:none;}
+  footer{padding:2.5rem 1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+  <div class="nav-brand"><span>Leon Telemaque</span> &nbsp;/&nbsp; Portfolio</div>
+  <ul class="nav-links">
+    <li><a href="#l1">Raid System</a></li>
+    <li><a href="#l2">Trading</a></li>
+    <li><a href="#l3">Quests &amp; Spawns</a></li>
+    <li><a href="#l4">The Framework</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="hero-noise"></div>
+    <div class="hero-vignette"></div>
+  </div>
+
+  <div class="hero-eyebrow">Product Design Case Study &nbsp;·&nbsp; <span>Pokémon GO</span> &nbsp;·&nbsp; Niantic · 2026</div>
+
+  <h1 class="hero-title">
+    Pokémon GO:
+    <em>The Retention Funnel Niantic Is Ignoring</em>
+  </h1>
+
+  <p class="hero-thesis">
+    <strong>Pokemon GO has a retention funnel problem hiding in plain sight.</strong> Players outside dense population areas are structurally excluded from core mechanics — trading, raid access, quest completion, spawn diversity. Niantic acknowledged the problem with remote features and then half-designed the solution. The rural player base isn't a niche — it's a missed market.
+  </p>
+
+  <div class="hero-meta">
+    <span class="badge">Niantic · Pokémon GO</span>
+    <span class="badge">Live Service · Location-Based</span>
+    <span class="badge">Geographic Retention Gap</span>
+    <span class="badge">Product Design Framework</span>
+    <a href="#opening" class="hero-scroll">
+      <span class="hero-scroll-line"></span>
+      Begin the Case Study
+    </a>
+  </div>
+</section>
+
+<!-- OPENING -->
+<section class="section" id="opening">
+  <div class="section-inner">
+    <div class="section-header">
+      <div></div>
+      <div>
+        <div class="section-eyebrow">The Opening</div>
+        <h2 class="section-title">Built for Cities, Not for Everyone</h2>
+        <p class="section-sub">Pokemon GO is one of the most culturally dominant mobile games ever made. But step outside the density it was designed around, and the experience changes entirely.</p>
+      </div>
+    </div>
+
+    <p class="prose">Pokemon GO is one of the most culturally dominant mobile games ever made. During GO Fest, during Team Rocket takeovers, during Community Days — cities come alive. Players flood parks, cluster around gyms, coordinate raids in real time. The shared experience of dozens of trainers in the same physical space is unlike anything else in mobile gaming.</p>
+    <p class="prose mt-2">But step outside that density and ask the same question. Can the same be said for a trainer in a rural town with two pokestops and no gym within walking distance? For a player in a small city where raid coordination requires a Discord server and a prayer that enough people show up? For anyone whose geography placed them outside the radius of Niantic's design assumptions?</p>
+    <p class="prose mt-2">The answer reveals one of the most overlooked product design failures in live service gaming. Pokemon GO didn't just build a mobile game — it built a mobile game for cities. And then it called the rest of the world an edge case.</p>
+
+    <div class="hi-box">
+      <div class="hi-label">The Pattern</div>
+      <p>Three systems — raids, trading, quests and spawns — all share the same design assumption: that a player's geography is dense enough to support them. When it isn't, the game doesn't fail gracefully. It simply stops being playable at the same level.</p>
+    </div>
+
+    <div class="sys-grid">
+      <div class="sys-card s1">
+        <div class="sys-num">Problem 01</div>
+        <div class="sys-name">The Raid System</div>
+      </div>
+      <div class="sys-card s2">
+        <div class="sys-num">Problem 02</div>
+        <div class="sys-name">Trading</div>
+      </div>
+      <div class="sys-card s3">
+        <div class="sys-num">Problem 03</div>
+        <div class="sys-name">Quests &amp; Spawns</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM 1: RAID SYSTEM -->
+<section class="section" id="l1">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div>
+        <div class="section-eyebrow">Problem One</div>
+        <h2 class="section-title">The Raid System</h2>
+        <p class="section-sub">Pokemon GO raids were built around group participation. For an urban player that's a feature. For a rural player, it's a wall.</p>
+      </div>
+    </div>
+
+    <p class="prose">Pokemon GO raids are not designed to be soloed. The difficulty scales intentionally around group participation — legendary raids in particular require multiple trainers to complete. For an urban player this is a feature. For a rural player it is a wall.</p>
+    <p class="prose mt-2">Without access to a local community of active players, the only viable path to raid participation is third party recruitment apps like PokeGenie. And PokeGenie works — until you examine what working actually means. Without a paid membership, the wait time for a host to enter your lobby is long enough that without coordinating prior to the raid egg hatching, the window closes before you can fill the group. The solution the community built for Niantic's product gap is itself gated behind a paywall and time coordination that defeats the purpose of accessibility.</p>
+
+    <div class="mech-grid">
+      <div class="mech-card mech-red">
+        <span class="mech-tag tag-red">The Third-Party Patch</span>
+        <div class="mech-title">PokeGenie Isn't a Fix</div>
+        <div class="mech-body">What Niantic created is a system where the most valuable content in the game — legendary raids, three star raids, the raids that drive the loot loop and end game retention — is structurally inaccessible to any player whose geography doesn't provide them with a local community. The market filled the gap with a paywalled workaround, not a design solution.</div>
+      </div>
+      <div class="mech-card mech-red">
+        <span class="mech-tag tag-red">The Half-Measure</span>
+        <div class="mech-title">A Pass Without a Lobby</div>
+        <div class="mech-body">The remote raid pass was introduced as the fix. But a pass without matchmaking, without an official lobby system, without a way to find and join strangers efficiently is not a solution. It is an acknowledgement that the problem exists without the product design work to actually solve it.</div>
+      </div>
+    </div>
+
+    <div class="hi-box red mt-3">
+      <div class="hi-label">The Core Insight</div>
+      <p>The retention cost is measurable in the players who stopped logging in because the content they needed required resources their location couldn't provide.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM 2: TRADING -->
+<section class="section" id="l2">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div>
+        <div class="section-eyebrow">Problem Two</div>
+        <h2 class="section-title">Trading</h2>
+        <p class="section-sub">Trading in Pokemon GO requires proximity — a design decision that made sense in dense cities and creates a systemic barrier everywhere else.</p>
+      </div>
+    </div>
+
+    <p class="prose">Trading in Pokemon GO requires proximity. Two trainers must be physically near each other to exchange pokemon — a design decision that made sense when the game was built around shared physical spaces but creates a systemic barrier for players whose local community is too small to provide meaningful trade partners.</p>
+    <p class="prose mt-2">The consequence is predictable. Rare pokemon locked behind regional exclusivity, raid completion, or high spawn density areas become effectively inaccessible to rural players through legitimate means. The demand doesn't disappear — it moves to third party markets. Accounts with rare pokemon, illegitimately obtained catches, purchased collections — all of these exist because Niantic created a product gap and the market filled it.</p>
+
+    <div class="mech-grid">
+      <div class="mech-card mech-blue">
+        <span class="mech-tag tag-blue">The Proximity Wall</span>
+        <div class="mech-title">Rare Pokemon, Zero Access</div>
+        <div class="mech-body">A rural player's local community is too small to provide meaningful trade partners. Regional exclusives, raid-exclusive catches, and high-density spawns stay permanently out of reach through legitimate play — pushing demand into a black market Niantic never designed for.</div>
+      </div>
+      <div class="mech-card mech-blue">
+        <span class="mech-tag tag-blue">The Remote Trade Pass</span>
+        <div class="mech-title">Access Without Undermining Scarcity</div>
+        <div class="mech-body">A remote trade pass doesn't make every pokemon freely available. It makes the trading system available to every trainer regardless of geography — addressing the accessibility gap while preserving the scarcity that gives rare pokemon their value.</div>
+      </div>
+    </div>
+
+    <div class="hi-box blue mt-3">
+      <div class="hi-label">The Core Insight</div>
+      <p>Niantic didn't eliminate demand for rare pokemon by locking trading behind proximity — it just redirected that demand to third party markets it doesn't control and can't monetize.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM 3: QUESTS & SPAWNS -->
+<section class="section" id="l3">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div>
+        <div class="section-eyebrow">Problem Three</div>
+        <h2 class="section-title">Quests &amp; Spawns</h2>
+        <p class="section-sub">Pokemon GO's spawn system treats geography as a meaningful variable. For players whose geography is limited, so is the game.</p>
+      </div>
+    </div>
+
+    <p class="prose">Pokemon GO's spawn system was designed around geography. Water pokemon appear near water. City pokemon cluster in urban centers. Regional exclusives exist specifically because the game treats physical location as a meaningful variable. That design philosophy creates a rich and varied world for players in diverse environments — and a systematically incomplete experience for players whose geography limits what they can encounter.</p>
+    <p class="prose mt-2">The problem compounds when quests enter the equation. A quest requiring a water type catch, a city specific spawn, or a pokemon tied to a geographic hotzone is not equally completable by every trainer. For a rural player, some quests are not difficult — they are impossible without traveling to an environment the game was designed around but they were not born into.</p>
+    <p class="prose mt-2">The product design solution doesn't require dismantling geographic scarcity. It requires creating a controlled access point to that scarcity for players who can't physically reach it — a mechanic that portals players to designated geographic hotzones for a limited window each day. Enough time to attempt a raid or two. Enough time to encounter and capture spawn types tied to that environment. Enough time to progress through quests that would otherwise be structurally inaccessible.</p>
+
+    <div class="mech-grid">
+      <div class="mech-card mech-gold">
+        <span class="mech-tag tag-gold">The Impossible Quest</span>
+        <div class="mech-title">Not Difficult — Impossible</div>
+        <div class="mech-body">A quest tied to a geographic hotzone a player was never born into isn't a challenge to overcome through skill or effort. It's a wall with no door — completable only by traveling to an environment the game assumes you already have access to.</div>
+      </div>
+      <div class="mech-card mech-gold">
+        <span class="mech-tag tag-gold">Remote Walk</span>
+        <div class="mech-title">Twenty Minutes, Every Day</div>
+        <div class="mech-body">A daily twenty minute portal to designated hotzones — San Francisco, Tokyo, London. Not enough time to farm a regional exclusive into abundance. Enough time to give every trainer a fair path to completion.</div>
+      </div>
+    </div>
+
+    <div class="hi-box mt-3">
+      <div class="hi-label">The Core Insight</div>
+      <p>Remote Walk is the free to play solution. It democratizes access to geographic diversity without making regional scarcity meaningless.</p>
+    </div>
+  </div>
+</section>
+
+<!-- THE PRODUCT DESIGN FRAMEWORK -->
+<section class="section" id="l4">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div>
+        <div class="section-eyebrow">The Framework</div>
+        <h2 class="section-title">Three Solutions, One Coherent System</h2>
+        <p class="section-sub">None of these fixes require dismantling what makes Pokemon GO work. They extend it to the players it was never built for.</p>
+      </div>
+    </div>
+
+    <p class="prose">Three solutions. One coherent system. Together they bridge the geographic equity gap without dismantling the community structure that defines Pokemon GO at its best. The paying player gains convenience. The free player gains access. The rural player gains parity. The disabled player gains inclusion.</p>
+
+    <div class="steal-grid">
+      <div class="steal-card">
+        <div class="steal-num">01</div>
+        <div class="steal-tag">Solution</div>
+        <div class="steal-title">Remote Raid Matchmaking</div>
+        <div class="steal-body">A room based lobby system built directly into Pokemon GO that allows trainers globally to join and host raids without third party apps. GO Pass subscribers receive unlimited daily access and priority matchmaking — strengthening the value proposition of an existing monetization tier. Free to play trainers receive limited daily access sufficient to participate in the end game without requiring a subscription. No more PokeGenie. No more Discord coordination. The infrastructure Niantic should have built when remote raids became a permanent feature.</div>
+      </div>
+
+      <div class="steal-card">
+        <div class="steal-num">02</div>
+        <div class="steal-tag">Solution</div>
+        <div class="steal-title">Remote Trade Pass</div>
+        <div class="steal-body">A monetized mechanic that enables global trading between friends regardless of physical proximity. GO Pass subscribers receive up to 50 remote trades per week. Standard remote trade pass holders receive a maximum of 10 trades per week — enough access to close the geographic gap without undermining the scarcity that gives rare pokemon their value. Third party markets lose their primary reason to exist. Niantic monetizes a demand that currently flows entirely outside their ecosystem.</div>
+      </div>
+
+      <div class="steal-card">
+        <div class="steal-num">03</div>
+        <div class="steal-tag">Solution</div>
+        <div class="steal-title">Remote Walk</div>
+        <div class="steal-body">A daily twenty minute portal to designated geographic hotzones. Free to play. Available to every trainer regardless of location or physical ability. Enough access to complete quests, encounter regional spawns, and participate in raids. Not enough to undermine the scarcity that makes the game worth playing.</div>
+      </div>
+    </div>
+
+    <div class="hi-box teal mt-3">
+      <div class="hi-label">The Throughline</div>
+      <p>Niantic gains the retention funnel it has been ignoring — not by giving anything away, but by finally building the infrastructure to reach the players its own design has been quietly excluding.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="section" id="closing-section" style="border-top:1px solid rgba(255,255,255,0.03);">
+  <div class="section-inner">
+    <div class="section-header">
+      <div></div>
+      <div>
+        <div class="section-eyebrow t-gold">Closing Argument</div>
+        <h2 class="section-title">A Recoverable, Monetizable Retention Funnel</h2>
+        <p class="section-sub">Niantic is sitting on one of the largest untapped retention funnels in mobile gaming.</p>
+      </div>
+    </div>
+
+    <p class="prose">The players who quit Pokemon GO because their geography made end game content structurally inaccessible didn't leave because they lost interest in the game. They left because the product wasn't designed for them. That is a recoverable situation — and a monetizable one. Re-engaging a lapsed player who already has the emotional investment is significantly cheaper than acquiring a new one.</p>
+    <p class="prose mt-2">The solutions proposed here don't abandon what makes Pokemon GO work. They extend it. Remote raid matchmaking built into the game preserves the community structure of raids while removing the geographic barrier to participation. Remote trade passes monetize a mechanic that currently drives players to third party markets. Remote Walk democratizes geographic diversity without dismantling regional scarcity.</p>
+    <p class="prose mt-2">And Remote Walk does something the other solutions don't — it opens the game to a player group Niantic has never explicitly designed for. Players with mobility limitations, disabilities, or health conditions that make physical walking difficult or impossible are functionally excluded from a game whose core mechanic is movement. Remote Walk is not just a rural accessibility feature. It is a UX decision that acknowledges the full spectrum of who plays this game and what they need from it in order to stay.</p>
+    <p class="prose mt-2">Pokemon GO doesn't have an audience problem. It has a product design problem. The audience is there — in rural towns, in small cities, in communities that formed around the game and then quietly left when the product stopped meeting them where they were.</p>
+
+    <div class="closing">
+      <div class="closing-line"></div>
+      <p>The retention funnel isn't waiting to be discovered. <em>It's waiting to be designed for.</em></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-name"><span>Leon Telemaque</span> &nbsp;·&nbsp; Product Design Case Study</div>
+  <div class="footer-note">Portfolio · Retention Systems &amp; Location-Based Game Design · 2026</div>
+</footer>
+
+<script>
+const prog = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.width = (total > 0 ? (scrolled / total) * 100 : 0) + '%';
+});
+
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-40% 0px -55% 0px' });
+sections.forEach(s => obs.observe(s));
+
+const fadeObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('vis');
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.section').forEach(s => fadeObs.observe(s));
+</script>
+
+</body>
+</html>
