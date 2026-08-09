@@ -421,6 +421,15 @@ function navigate(side) {
     }
   }, 400);
 }
+
+// When navigating away, the browser can restore this page from its
+// back/forward cache exactly as it was mid-transition — cover still
+// active, fully opaque, blocking clicks — which looks like a blank
+// page until a manual refresh. Reset it whenever the page is (re)shown,
+// including bfcache restores, so returning via the back button works.
+window.addEventListener('pageshow', () => {
+  document.getElementById('cover').classList.remove('active');
+});
 </script>
 
 </body>
