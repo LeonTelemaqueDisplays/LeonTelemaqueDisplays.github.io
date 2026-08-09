@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leon Telemaque — Consumer Behaviour & Product Systems</title>
+<style>
+  :root {
+    --bg: #080808;
+    --surface: #0f0f0f;
+    --surface-2: #141414;
+    --border: #1e1e1e;
+    --border-2: #2a2a2a;
+    --blue: #c2714f;
+    --blue-dim: rgba(194,113,79,0.08);
+    --blue-mid: rgba(194,113,79,0.15);
+    --teal: #0d9488;
+    --teal-dim: rgba(13,148,136,0.08);
+    --amber: #d97706;
+    --red: #c0392b;
+    --green: #16a34a;
+    --text: #e8e8e8;
+    --text-mid: #888;
+    --text-dim: #444;
+    --mono: 'Courier New', monospace;
+    --sans: system-ui, -apple-system, sans-serif;
+    --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 52px;
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--blue);
+    text-decoration: none;
+    text-transform: uppercase;
+    border: 1px solid var(--blue);
+    padding: 6px 14px;
+    transition: var(--transition);
+  }
+
+  .nav-cta:hover { background: var(--blue-dim); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 0;
+    padding: 80px 40px 60px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 30%, rgba(37,99,235,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 20px;
+  }
+
+  .hero-subtitle {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .hero-headline {
+    font-size: clamp(52px, 8vw, 88px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .hero-headline .accent { color: var(--blue); display: block; }
+
+  .hero-supporting {
+    font-size: clamp(18px, 2.5vw, 26px);
+    font-weight: 400;
+    color: var(--text-mid);
+    line-height: 1.5;
+    margin-bottom: 40px;
+    max-width: 560px;
+  }
+
+  .hero-supporting em {
+    font-style: italic;
+    color: var(--text-dim);
+    display: block;
+  }
+
+  .hero-points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 32px;
+    max-width: 580px;
+    border-top: 1px solid var(--border);
+  }
+
+  .hero-points li {
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.6;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .point-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    padding-top: 2px;
+  }
+
+  .hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    text-transform: uppercase;
+  }
+
+  .hero-avail {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .avail-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* HERO RIGHT */
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 16px;
+    padding-left: 40px;
+  }
+
+  .hero-stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--blue);
+    opacity: 0.5;
+  }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--blue);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-sub {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+
+  /* ── SECTION SHARED ── */
+  .section {
+    padding: 80px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-eyebrow {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .section-title {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 12px;
+    line-height: 1.15;
+  }
+
+  .section-title em { color: var(--blue); font-style: normal; }
+
+  .section-desc {
+    font-size: 14px;
+    color: var(--text-mid);
+    max-width: 600px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .about-panel {
+    background: var(--surface);
+    padding: 40px;
+  }
+
+  .about-panel p {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+
+  .about-panel p:last-child { margin-bottom: 0; }
+
+  .about-panel strong { color: var(--text); font-weight: 600; }
+
+  .about-pull {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.5;
+    border-left: 2px solid var(--blue);
+    padding-left: 20px;
+    margin-bottom: 24px;
+  }
+
+  /* ── CAROUSEL ── */
+  .carousel-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+
+  .carousel-nav {
+    display: flex;
+    gap: 4px;
+  }
+
+  .carousel-btn {
+    width: 36px;
+    height: 36px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+  }
+
+  .carousel-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+  .carousel-track-wrap { overflow: hidden; }
+
+  .carousel-track {
+    display: flex;
+    gap: 1px;
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* ── PROJECT CARD ── */
+  .project-card {
+    min-width: calc(33.333% - 1px);
+    background: var(--surface);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    flex-shrink: 0;
+  }
+
+  .project-card:hover { border-color: var(--border-2); }
+
+  .card-thumb {
+    height: 200px;
+    background: var(--surface-2);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-thumb-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    position: absolute;
+    top: 12px;
+    left: 12px;
+  }
+
+  /* Fintech thumb */
+  .thumb-fintech {
+    background: linear-gradient(135deg, #080808 0%, #0f1a2e 100%);
+  }
+
+  .thumb-fintech .thumb-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 80%;
+    opacity: 0.4;
+  }
+
+  .thumb-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .thumb-bar-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--text-dim);
+    width: 40px;
+    flex-shrink: 0;
+  }
+
+  .thumb-bar {
+    height: 3px;
+    background: var(--blue);
+    border-radius: 0;
+  }
+
+  /* Subscription thumb */
+  .thumb-sub {
+    background: linear-gradient(135deg, #080808 0%, #0d1a14 100%);
+  }
+
+  .thumb-sub .thumb-visual {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    width: 70%;
+    opacity: 0.35;
+  }
+
+  .thumb-sub-cell {
+    height: 24px;
+    background: var(--teal);
+    border-radius: 0;
+  }
+
+  .thumb-sub-cell.dim { background: var(--border-2); }
+
+  /* Media thumb */
+  .thumb-media {
+    background: linear-gradient(135deg, #080808 0%, #1a1008 100%);
+  }
+
+  .thumb-media .thumb-visual {
+    display: flex;
+    gap: 6px;
+    align-items: flex-end;
+    opacity: 0.35;
+  }
+
+  .thumb-media-bar {
+    width: 14px;
+    background: var(--amber);
+  }
+
+  .card-body { padding: 24px; }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .card-desc {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .card-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    text-transform: uppercase;
+  }
+
+  .card-tag.primary {
+    color: var(--blue);
+    border-color: rgba(37,99,235,0.3);
+  }
+
+  .coming-soon-card {
+    min-width: calc(33.333% - 1px);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 340px;
+    gap: 12px;
+  }
+
+  .coming-soon-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .coming-soon-title {
+    font-size: 14px;
+    color: var(--text-dim);
+    text-align: center;
+    max-width: 200px;
+    line-height: 1.5;
+  }
+
+  /* ── SNAPSHOTS ── */
+  .snapshots-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .snapshot-card {
+    background: var(--surface);
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .snapshot-thumb {
+    height: 160px;
+    background: var(--surface-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .snapshot-body {
+    padding: 16px 20px;
+  }
+
+  .snapshot-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .snapshot-sub {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+
+  /* ── CONTACT ── */
+  .contact-section {
+    padding: 80px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .contact-headline {
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    line-height: 1.1;
+  }
+
+  .contact-cta {
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text-dim);
+    line-height: 1.1;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 28px 40px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-left {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    line-height: 2;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 32px;
+  }
+
+  .footer-link {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .footer-link:hover { color: var(--text); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">LT — Consumer Systems</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#fintech">Fintech</a></li>
+    <li><a href="#subscription">Subscription</a></li>
+    <li><a href="#media">Media</a></li>
+    <li><a href="#snapshots">Snapshots</a></li>
+  </ul>
+  <a href="mailto:leon@email.com" class="nav-cta">Let's talk →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-subtitle">I'm Leon — consumer behaviour analyst & product systems designer</div>
+    <h1 class="hero-headline">
+      I study why
+      <span class="accent">consumers act</span>
+      the way they do
+    </h1>
+    <p class="hero-supporting">
+      the decisions, the patterns, the systems underneath.
+      <em>The data just makes the argument stronger.</em>
+    </p>
+
+    <ul class="hero-points">
+      <li>
+        <span class="point-num">1.</span>
+        <span>Consumer behaviour analyst and product designer — retention architecture, decision psychology, and the behavioural systems underneath</span>
+      </li>
+      <li>
+        <span class="point-num">2.</span>
+        <span>I think in ecosystems — every user segment, every system interaction, every design trade-off simultaneously</span>
+      </li>
+      <li>
+        <span class="point-num">3.</span>
+        <span>Academic training in consumer behaviour applied at product scale — why people decide the way they do across every designed system</span>
+      </li>
+    </ul>
+
+    <div class="hero-tags">
+      <div class="hero-tag">Consumer Behaviour</div>
+      <div class="hero-tag">Product Management</div>
+      <div class="hero-tag">UX Research</div>
+      <div class="hero-tag">Retention Design</div>
+      <div class="hero-tag">Behavioural Analytics</div>
+    </div>
+
+    <div class="hero-avail">
+      <div class="avail-dot"></div>
+      Available for internship and junior roles — product management and UXR. Toronto based, open to remote and international.
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-stat-card">
+      <div class="stat-label">Academic Foundation</div>
+      <div class="stat-value">BBA</div>
+      <div class="stat-sub">Marketing & Consumer Culture — Trent University</div>
+    </div>
+    <div class="hero-stat-card">
+      <div class="stat-label">Disciplines</div>
+      <div class="stat-value">3</div>
+      <div class="stat-sub">Fintech · Subscription · Media</div>
+    </div>
+    <div class="hero-stat-card">
+      <div class="stat-label">Core Lens</div>
+      <div class="stat-value" style="font-size:20px;color:var(--text)">Why do people decide the way they do?</div>
+      <div class="stat-sub">Applied across every designed consumer system</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="section-eyebrow">About</div>
+  <h2 class="section-title">Consumer behaviour is not a <em>discipline.</em> It's a lens.</h2>
+
+  <div class="about-grid">
+    <div class="about-panel">
+      <div class="about-pull">
+        The data tells you where the system broke. The behaviour tells you why.
+      </div>
+      <p>I didn't come to product and UX research through a design program. I came through <strong>consumer behaviour</strong> — and it turns out the frameworks for understanding why people buy things, why they stay, and why they leave are closer to product design than most designers think.</p>
+      <p>My academic background in Marketing and Consumer Culture gives me a different entry point into product systems. I study why consumers make decisions the same way a behavioural economist would — through the lens of psychology, incentive design, and system architecture. That lens applies directly to fintech products, subscription platforms, and media strategy.</p>
+    </div>
+    <div class="about-panel">
+      <p>On the research side I analyse consumer decision patterns, retention funnels, and behavioural signals across designed systems — building the case for why users act the way they do and what product decisions can shift those patterns.</p>
+      <p>On the design side I think in systems — mapping how individual product decisions ripple across user segments, time horizons, and business outcomes simultaneously. Every design decision serves some users and challenges others. The question is whether that trade-off is intentional.</p>
+      <p><strong>The two sides are not separate disciplines. The research tells you where the design broke. The design tells you why the research looks the way it does.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- FINTECH CAROUSEL -->
+<section class="section" id="fintech">
+  <div class="carousel-header">
+    <div>
+      <div class="section-eyebrow">Fintech Psychology</div>
+      <h2 class="section-title">Why people make <em>financial decisions</em> the way they do</h2>
+      <p class="section-desc">Spending behaviour, savings mechanics, habit formation, and the psychology of money — consumer behaviour theory applied to financial product design.</p>
+    </div>
+    <div class="carousel-nav">
+      <button class="carousel-btn" onclick="scroll('fintech-track', -1)">←</button>
+      <button class="carousel-btn" onclick="scroll('fintech-track', 1)">→</button>
+    </div>
+  </div>
+
+  <div class="carousel-track-wrap">
+    <div class="carousel-track" id="fintech-track">
+
+      <div class="project-card">
+        <div class="card-thumb thumb-fintech">
+          <div class="card-thumb-label">Fintech Psychology · Coming Soon</div>
+          <div class="thumb-visual">
+            <div class="thumb-bar-row"><span class="thumb-bar-label">Spend</span><div class="thumb-bar" style="width:80%"></div></div>
+            <div class="thumb-bar-row"><span class="thumb-bar-label">Save</span><div class="thumb-bar" style="width:45%;background:var(--teal)"></div></div>
+            <div class="thumb-bar-row"><span class="thumb-bar-label">Churn</span><div class="thumb-bar" style="width:62%;background:var(--red)"></div></div>
+            <div class="thumb-bar-row"><span class="thumb-bar-label">Return</span><div class="thumb-bar" style="width:38%;background:var(--green)"></div></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Piece 01 — In Development</div>
+          <div class="card-desc">First fintech psychology analysis coming soon. The spending behaviour, savings mechanics, and decision psychology of a major Canadian fintech product.</div>
+          <div class="card-tags">
+            <div class="card-tag primary">Fintech Psychology</div>
+            <div class="card-tag">In Development</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="coming-soon-card">
+        <div class="coming-soon-label">Piece 02</div>
+        <div class="coming-soon-title">Coming — Fall 2026</div>
+      </div>
+
+      <div class="coming-soon-card">
+        <div class="coming-soon-label">Piece 03</div>
+        <div class="coming-soon-title">Coming — Winter 2027</div>
+      </div>
+
+      <div class="coming-soon-card">
+        <div class="coming-soon-label">Piece 04</div>
+        <div class="coming-soon-title">Coming — 2027</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SUBSCRIPTION CAROUSEL -->
+<section class="section" id="subscription">
+  <div class="carousel-header">
+    <div>
+      <div class="section-eyebrow">Subscription & Retention Design</div>
+      <h2 class="section-title">Why users <em>stay, lapse,</em> and come back</h2>
+      <p class="section-desc">Retention architecture, churn psychology, and the behavioural design of subscription products — the same thinking that drives LiveOps applied to consumer platforms.</p>
+    </div>
+    <div class="carousel-nav">
+      <button class="carousel-btn" onclick="scroll('sub-track', -1)">←</button>
+      <button class="carousel-btn" onclick="scroll('sub-track', 1)">→</button>
+    </div>
+  </div>
+
+  <div class="carousel-track-wrap">
+    <div class="carousel-track" id="sub-track">
+
+      <div class="project-card">
+        <div class="card-thumb thumb-sub">
+          <div class="card-thumb-label">Subscription Design · Coming Soon</div>
+          <div class="thumb-visual">
+            <div class="thumb-sub-cell"></div>
+            <div class="thumb-sub-cell dim"></div>
+            <div class="thumb-sub-cell"></div>
+            <div class="thumb-sub-cell dim"></div>
+            <div class="thumb-sub-cell dim"></div>
+            <div class="thumb-sub-cell"></div>
+            <div class="thumb-sub-cell dim"></div>
+            <div class="thumb-sub-cell"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Piece 01 — In Development</div>
+          <div class="card-desc">First subscription retention analysis coming soon. Why users engage, lapse, and return — and what the product design does to shape each phase.</div>
+          <div class="card-tags">
+            <div class="card-tag primary">Retention Design</div>
+            <div class="card-tag">In Development</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="coming-soon-card">
+        <div class="coming-soon-label">Piece 02</div>
+        <div class="coming-soon-title">Coming — Fall 2026</div>
+      </div>
+
+      <div class="coming-soon-card">
+        <div class="coming-soon-label">Piece 03</div>
+        <div class="coming-soon-title">Coming — Winter 2027</div>
+      </div>
+
+      <div class="coming-soon-card">
+        <div class="coming-soon-label">Piece 04</div>
+        <div class="coming-soon-title">Coming — 2027</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MEDIA CAROUSEL -->
+<section class="section" id="media">
+  <div class="carousel-header">
+    <div>
+      <div class="section-eyebrow">Media & Entertainment Product Strategy</div>
+      <h2 class="section-title">How media companies <em>build and hold</em> audiences</h2>
+      <p class="section-desc">IP strategy, audience retention, platform product decisions, and the behavioural economics of how entertainment companies compete for attention.</p>
+    </div>
+    <div class="carousel-nav">
+      <button class="carousel-btn" onclick="scroll('media-track', -1)">←</button>
+      <button class="carousel-btn" onclick="scroll('media-track', 1)">→</button>
+    </div>
+  </div>
+
+  <div class="carousel-track-wrap">
+    <div class="carousel-track" id="media-track">
+
+      <div class="project-card">
+        <div class="card-thumb thumb-media">
+          <div class="card-thumb-label">Media Strategy · Coming Soon</div>
+          <div class="thumb-visual">
+            <div class="thumb-media-bar" style="height:40px"></div>
+            <div class="thumb-media-bar" style="height:64px"></div>
+            <div class="thumb-media-bar" style="height:28px"></div>
+            <div class="thumb-media-bar" style="height:52px"></div>
+            <div class="thumb-media-bar" style="height:72px"></div>
+            <div class="thumb-media-bar" style="height:36px"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Piece 01 — In Development</div>
+          <div class="card-desc">First media product strategy analysis coming soon. IP management, audience retention, and the product decisions that determine whether a franchise grows or collapses.</div>
+          <div class="card-tags">
+            <div class="card-tag primary">Media Strategy</div>
+            <div class="card-tag">In Development</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="coming-soon-card">
+        <div class="coming-soon-label">Piece 02</div>
+        <div class="coming-soon-title">Coming — 2027</div>
+      </div>
+
+      <div class="coming-soon-card">
+        <div class="coming-soon-label">Piece 03</div>
+        <div class="coming-soon-title">Coming — 2027</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SNAPSHOTS -->
+<section class="section" id="snapshots">
+  <div class="section-eyebrow">Snapshots</div>
+  <h2 class="section-title">Analytical work <em>in progress</em></h2>
+  <p class="section-desc">Frameworks, models, and visualisations from the consumer behaviour research pipeline — built as the pieces develop.</p>
+
+  <div class="snapshots-grid">
+    <div class="snapshot-card">
+      <div class="snapshot-thumb" style="background:linear-gradient(135deg,#080808,#0f1a2e)">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase">Consumer Decision Model</div>
+      </div>
+      <div class="snapshot-body">
+        <div class="snapshot-title">Decision Architecture Framework</div>
+        <div class="snapshot-sub">Behavioural Economics · In Development</div>
+      </div>
+    </div>
+    <div class="snapshot-card">
+      <div class="snapshot-thumb" style="background:linear-gradient(135deg,#080808,#0d1a14)">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase">Retention Funnel Model</div>
+      </div>
+      <div class="snapshot-body">
+        <div class="snapshot-title">Consumer Retention Mapping</div>
+        <div class="snapshot-sub">Subscription Design · In Development</div>
+      </div>
+    </div>
+    <div class="snapshot-card">
+      <div class="snapshot-thumb" style="background:linear-gradient(135deg,#080808,#1a1008)">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase">Spending Psychology</div>
+      </div>
+      <div class="snapshot-body">
+        <div class="snapshot-title">Fintech Behavioural Signals</div>
+        <div class="snapshot-sub">Fintech Psychology · In Development</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<div class="contact-section">
+  <div class="contact-headline">Working on a product —</div>
+  <div class="contact-headline">or trying to understand</div>
+  <div class="contact-cta">your users better? <span style="color:var(--blue)">Let's talk.</span> 👋</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    © 2026 Leon Telemaque<br>
+    Currently based in Toronto, Ontario
+  </div>
+  <div class="footer-links">
+    <a href="https://leon-telemaque-portfolio.vercel.app" class="footer-link">Game Portfolio ↗</a>
+    <a href="https://linkedin.com/in/leontelemaque" class="footer-link">LinkedIn ↗</a>
+    <a href="mailto:leon@email.com" class="footer-link">Mail ↗</a>
+  </div>
+</footer>
+
+<script>
+const positions = { 'fintech-track': 0, 'sub-track': 0, 'media-track': 0 };
+
+function scroll(trackId, dir) {
+  const track = document.getElementById(trackId);
+  const cardWidth = track.querySelector('.project-card, .coming-soon-card').offsetWidth + 1;
+  const max = track.children.length - 3;
+
+  positions[trackId] = Math.max(0, Math.min(max, positions[trackId] + dir));
+  track.style.transform = `translateX(-${positions[trackId] * cardWidth}px)`;
+}
+</script>
+
+</body>
+</html>
