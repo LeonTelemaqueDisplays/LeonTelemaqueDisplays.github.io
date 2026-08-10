@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokemon — The Eternal Nostalgia Funnel</title>
+<style>
+  :root {
+    --bg: #080808;
+    --surface: #0f0f0f;
+    --surface-2: #141414;
+    --border: #1e1e1e;
+    --border-2: #2a2a2a;
+    --terra: #c2714f;
+    --terra-dim: rgba(194,113,79,0.08);
+    --terra-glow: rgba(194,113,79,0.04);
+    --text: #e8e8e8;
+    --text-mid: #888;
+    --text-dim: #444;
+    --mono: 'Courier New', monospace;
+    --sans: system-ui, -apple-system, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 60px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 80%, rgba(194,113,79,0.07) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 20%, rgba(194,113,79,0.04) 0%, transparent 50%),
+      repeating-linear-gradient(
+        -8deg,
+        transparent,
+        transparent 48px,
+        rgba(194,113,79,0.025) 48px,
+        rgba(194,113,79,0.025) 50px,
+        transparent 50px,
+        transparent 98px,
+        rgba(194,113,79,0.015) 98px,
+        rgba(194,113,79,0.015) 100px
+      ),
+      repeating-linear-gradient(
+        82deg,
+        transparent,
+        transparent 68px,
+        rgba(255,255,255,0.012) 68px,
+        rgba(255,255,255,0.012) 69px
+      );
+    pointer-events: none;
+  }
+
+  .hero-meta {
+    position: absolute;
+    top: 60px;
+    right: 60px;
+    text-align: right;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    line-height: 2;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--terra);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .hero-title {
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+    color: var(--text);
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .hero-title span {
+    color: var(--terra);
+    display: block;
+  }
+
+  .hero-subtitle {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .hero-thesis {
+    font-size: 18px;
+    color: var(--text-mid);
+    max-width: 680px;
+    line-height: 1.7;
+    position: relative;
+    border-left: 2px solid var(--terra);
+    padding-left: 20px;
+    margin-bottom: 32px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    position: relative;
+  }
+
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .hero-stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--terra);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .hero-stat-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* BODY */
+  .doc-body {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 60px;
+  }
+
+  .section {
+    margin-bottom: 80px;
+    padding-bottom: 80px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 24px;
+    line-height: 1.15;
+  }
+
+  .section-title em {
+    color: var(--terra);
+    font-style: normal;
+  }
+
+  .body-text {
+    font-size: 15px;
+    color: var(--text-mid);
+    line-height: 1.85;
+    max-width: 720px;
+    margin-bottom: 24px;
+  }
+
+  /* PULL QUOTE */
+  .pull-quote {
+    border-left: 2px solid var(--terra);
+    padding: 16px 24px;
+    margin: 32px 0;
+    background: var(--terra-glow);
+  }
+
+  .pull-quote-text {
+    font-size: 18px;
+    color: var(--text);
+    line-height: 1.6;
+    font-weight: 500;
+    max-width: 640px;
+  }
+
+  /* MECHANISM CARDS */
+  .mechanism-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  .mechanism-card {
+    background: var(--surface);
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mechanism-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--terra);
+    opacity: 0.5;
+  }
+
+  .mechanism-num {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .mechanism-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .mechanism-desc {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+
+  /* PRODUCT SYNC TABLE */
+  .sync-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  .sync-card {
+    background: var(--surface);
+    padding: 24px;
+  }
+
+  .sync-product {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--terra);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .sync-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .sync-desc {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+
+  /* WEB DIAGRAM */
+  .web-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 40px;
+    margin: 32px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .web-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    align-self: flex-start;
+  }
+
+  .web-nodes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    width: 100%;
+    position: relative;
+  }
+
+  .web-node {
+    background: var(--surface-2);
+    border: 1px solid var(--border-2);
+    padding: 16px 20px;
+    text-align: center;
+    flex: 1;
+    position: relative;
+  }
+
+  .web-node.center {
+    border-color: var(--terra);
+    background: var(--terra-dim);
+  }
+
+  .web-node-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .web-node-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .web-node.center .web-node-title {
+    color: var(--terra);
+  }
+
+  .web-arrow {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-dim);
+    padding: 0 8px;
+    flex-shrink: 0;
+  }
+
+  /* PRESTIGE TABLE */
+  .prestige-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  .prestige-card {
+    background: var(--surface);
+    padding: 28px;
+  }
+
+  .prestige-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .prestige-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--terra);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .prestige-body {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+
+  /* FOOTER */
+  .doc-footer {
+    padding: 40px 60px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-credit {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    line-height: 2;
+  }
+
+  .footer-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .footer-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    padding: 4px 10px;
+    border: 1px solid var(--border-2);
+    letter-spacing: 0.08em;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+
+  <div class="hero-meta">
+    Consumer Behaviour Analysis<br>
+    Media & Entertainment<br>
+    Leon Telemaque · 2026
+  </div>
+
+  <div class="hero-eyebrow">Consumer Behaviour · Media & Entertainment · Pokemon</div>
+  <h1 class="hero-title">
+    The Eternal
+    <span>Nostalgia Funnel</span>
+  </h1>
+  <div class="hero-subtitle">How the Pokemon Company runs two audience strategies simultaneously. Neither one knows about the other.</div>
+
+  <p class="hero-thesis">
+    The Pokemon Company has engineered one of the most sophisticated dual audience retention systems in consumer entertainment. A low barrier entry point continuously onboards new generations through the anime and mainline games, while a deeply interconnected web of nostalgic content simultaneously reactivates and retains the adults who grew up with the original 151. Neither audience knows they are in the same funnel. Both are.
+  </p>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-value">$150B+</div>
+      <div class="hero-stat-label">Total Franchise Revenue</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value">30+</div>
+      <div class="hero-stat-label">Years of Continuous Operation</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value">46.2B</div>
+      <div class="hero-stat-label">Cards Sold as of 2022</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value">25-35</div>
+      <div class="hero-stat-label">Primary TCG Collector Age Range</div>
+    </div>
+  </div>
+</section>
+
+<!-- BODY -->
+<div class="doc-body">
+
+  <!-- OPENING -->
+  <section class="section">
+    <div class="section-label">The Setting</div>
+    <h2 class="section-title">Thirty years. One IP. <em>Two audiences.</em></h2>
+
+    <p class="body-text">Thirty years. One IP. The most valuable media franchise on the planet.</p>
+
+    <p class="body-text">Pokemon surpassed $150 billion in total franchise revenue in 2023, more than Star Wars, more than Marvel, more than Hello Kitty combined. The TCG alone generated $2.1 billion in annual revenue globally in 2024, capturing 60% of the entire global trading card game market by itself. In 2024 nearly 10.2 billion cards were printed, confirming that demand for the physical product has not meaningfully declined despite three decades of operation.</p>
+
+    <p class="body-text">The demographic data makes the dual audience argument concrete. 42% of TCG players are between the ages of 18 and 34, making them the largest demographic in the market. Players aged 6 to 17 make up only 28%. The average TCG player is 28 years old. The product marketed to children is predominantly purchased by adults. That is not a coincidence. It is the output of a thirty year dual audience architecture operating exactly as designed.</p>
+
+    <p class="body-text">The question worth asking is not whether Pokemon is successful. That answer has been settled for three decades. The question worth asking is how a franchise built around 151 creatures designed for Japanese children in 1996 maintains this kind of commercial dominance across generations, across media formats, and across the psychological distance between a seven year old discovering Pikachu for the first time and a thirty two year old paying $400 for a PSA graded Charizard.</p>
+
+    <p class="body-text">The answer is not nostalgia alone. Every entertainment franchise tries nostalgia. Most of them do it badly. A single reunion film. A reboot that alienates both old fans and new ones. A limited edition product that sells once and retains nobody.</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">Pokemon does something structurally different. It runs two parallel audience strategies simultaneously without either one interfering with the other.</div>
+    </div>
+
+    <p class="body-text">New generations are welcomed through a low barrier entry point that has barely changed in thirty years. Older generations are reactivated and retained through a deeply interconnected web of nostalgic content, engineered scarcity, societal prestige systems, and influencer culture that none of them experienced the first time around.</p>
+
+    <div class="mechanism-grid">
+      <div class="mechanism-card">
+        <div class="mechanism-num">Mechanism 01</div>
+        <div class="mechanism-title">The Dual Audience Architecture</div>
+        <div class="mechanism-desc">A synchronized three product launch system that onboards new generations every two years while manufacturing the future nostalgia consumers it will reactivate in two decades.</div>
+      </div>
+      <div class="mechanism-card">
+        <div class="mechanism-num">Mechanism 02</div>
+        <div class="mechanism-title">The Nostalgia Web</div>
+        <div class="mechanism-desc">Ash as connective tissue across thirty years. The National Dex and Pokemon Bank as relationship continuity mechanics. The TCG value reactivation through card appreciation and older Pokemon in newer sets.</div>
+      </div>
+      <div class="mechanism-card">
+        <div class="mechanism-num">Mechanism 03</div>
+        <div class="mechanism-title">The Prestige Economy</div>
+        <div class="mechanism-desc">The influencer layer that supercharged organic collector behaviour into a societal prestige system. Scarcity and desire as two sides of the same mechanism. Cultural momentum Pokemon didn't engineer but benefits from entirely.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DUAL AUDIENCE -->
+  <section class="section">
+    <div class="section-label">Mechanism 01</div>
+    <h2 class="section-title">The Dual Audience <em>Architecture</em></h2>
+
+    <p class="body-text">Pokemon's commercial resilience is built on a formula so consistent it has become invisible. Every two years a new generation of games launches featuring a brand new region, brand new Pokemon, and a standalone storyline with no narrative dependency on its predecessors. That game launches in synchronized coordination with a new anime season set in the same region and a new era of the TCG featuring Pokemon from that generation.</p>
+
+    <div class="sync-grid">
+      <div class="sync-card">
+        <div class="sync-product">Product One</div>
+        <div class="sync-title">The Mainline Games</div>
+        <div class="sync-desc">New region. New starter Pokemon. Standalone story accessible to anyone regardless of prior Pokemon knowledge. The lowest barrier entry point in the franchise. A child who has never heard of Pokemon can pick up the game and be fully engaged within minutes.</div>
+      </div>
+      <div class="sync-card">
+        <div class="sync-product">Product Two</div>
+        <div class="sync-title">The Anime</div>
+        <div class="sync-desc">New region. Same anchor character. The show follows the game's setting and introduces the generation's new Pokemon to a television audience that may never buy a game or a card. Brand awareness at scale for zero additional marketing spend on the games or TCG.</div>
+      </div>
+      <div class="sync-card">
+        <div class="sync-product">Product Three</div>
+        <div class="sync-title">The TCG Era</div>
+        <div class="sync-desc">New set focused on the generation's Pokemon. Physical product that extends the media relationship into a tactile collecting experience. The child who watches the show and plays the game now wants the cards. The three products feed each other in a closed loop.</div>
+      </div>
+    </div>
+
+    <p class="body-text">The two year cadence is deliberate. Short enough that the franchise never goes quiet and loses cultural relevance with children. Long enough to build a complete world with sufficient depth to generate genuine emotional attachment before the next generation arrives.</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">Pokemon isn't just acquiring new consumers with each generation. It is manufacturing the future nostalgia customers it will reactivate in two decades. Every Hoenn kid, every Sinnoh kid, every Galar kid is a future adult collector in waiting.</div>
+    </div>
+
+    <p class="body-text">Each regional generation produces a cohort of children who develop a distinct identity within the same franchise. The Hoenn kid and the Sinnoh kid share the same Pokemon brand but inhabit completely different emotional landscapes within it. That cohort identity is precisely what the nostalgia web exploits twenty years later. The Pokemon Company is not just selling to children. It is building the emotional architecture it will monetise when those children become adults with disposable income.</p>
+  </section>
+
+  <!-- NOSTALGIA WEB -->
+  <section class="section">
+    <div class="section-label">Mechanism 02</div>
+    <h2 class="section-title">The Nostalgia <em>Web</em></h2>
+
+    <p class="body-text">The nostalgia web operates across all three product categories simultaneously. Each one targets the lapsed consumer through a different emotional mechanism but all of them lead back to the same funnel.</p>
+
+    <div class="pokemon-web-embed" style="margin:32px 0;background:#0d0d0d;padding:0">
+<style>
+.pokemon-web-embed body { background: transparent !important; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --surface-2: #1e1e1e;
+    --border: #2a2a2a;
+    --terra: #c2714f;
+    --terra-dim: rgba(194,113,79,0.12);
+    --terra-glow: rgba(194,113,79,0.06);
+    --blue: #4a9eff;
+    --green: #4ade80;
+    --purple: #a78bfa;
+    --yellow: #fbbf24;
+    --text: #e8e8e8;
+    --text-mid: #888;
+    --text-dim: #444;
+    --mono: 'Courier New', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  .pokemon-web-embed-inner {
+    background: var(--bg);
+    font-family: system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  .diagram-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .diagram-eyebrow {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--terra);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .diagram-title {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .diagram-sub {
+    font-size: 13px;
+    color: var(--text-dim);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* CANVAS */
+  .canvas {
+    position: relative;
+    width: 900px;
+    height: 580px;
+  }
+
+  /* NODES */
+  .node {
+    position: absolute;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .node:hover { transform: translateY(-2px); }
+  .node:hover .node-glow { opacity: 1; }
+
+  .node-glow {
+    position: absolute;
+    inset: -8px;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.25s;
+    pointer-events: none;
+  }
+
+  /* PRODUCT NODES */
+  .node-product {
+    width: 200px;
+    background: var(--surface);
+    border: 1px solid var(--terra);
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .node-product .node-glow {
+    background: radial-gradient(ellipse at center, rgba(194,113,79,0.15) 0%, transparent 70%);
+  }
+
+  .node-product-bar {
+    height: 3px;
+    background: var(--terra);
+  }
+
+  .node-product-inner {
+    padding: 14px 16px;
+  }
+
+  .node-product-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: var(--terra);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .node-product-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .node-product-desc {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+  }
+
+  .node-product-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-top: 8px;
+  }
+
+  .node-product-tag {
+    font-family: var(--mono);
+    font-size: 7px;
+    color: var(--terra);
+    padding: 2px 5px;
+    border: 1px solid rgba(194,113,79,0.3);
+    letter-spacing: 0.05em;
+  }
+
+  /* SEGMENT NODES */
+  .node-segment {
+    width: 160px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 12px 14px;
+  }
+
+  .node-segment-label {
+    font-family: var(--mono);
+    font-size: 7px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  .node-segment-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-mid);
+    margin-bottom: 3px;
+  }
+
+  .node-segment-sub {
+    font-family: var(--mono);
+    font-size: 7px;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+
+  .node-segment-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
+  /* CENTRE NODE */
+  .node-centre {
+    width: 160px;
+    background: var(--surface);
+    border: 1px solid rgba(194,113,79,0.4);
+    padding: 16px;
+    text-align: center;
+  }
+
+  .node-centre-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: var(--terra);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .node-centre-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+
+  /* CONNECTION LINES */
+  .lines-canvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  /* LABELS ON LINES */
+  .line-label {
+    position: absolute;
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--terra);
+    opacity: 0.7;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .line-label-dim {
+    color: var(--text-dim);
+    opacity: 0.6;
+  }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    gap: 32px;
+    margin-top: 32px;
+    align-items: center;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
+  .legend-line {
+    width: 32px;
+    height: 1px;
+  }
+
+  .legend-line-solid { background: var(--terra); opacity: 0.7; }
+  .legend-line-dashed {
+    background: repeating-linear-gradient(90deg, var(--terra) 0, var(--terra) 4px, transparent 4px, transparent 8px);
+    opacity: 0.5;
+  }
+  .legend-line-dim {
+    background: repeating-linear-gradient(90deg, #444 0, #444 3px, transparent 3px, transparent 6px);
+    opacity: 0.6;
+  }
+
+  /* TOOLTIP */
+  .tooltip {
+    position: absolute;
+    background: var(--surface);
+    border: 1px solid var(--terra);
+    padding: 12px 16px;
+    font-size: 12px;
+    color: var(--text-mid);
+    max-width: 220px;
+    line-height: 1.6;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 100;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.03em;
+  }
+
+  .tooltip.visible { opacity: 1; }
+
+</style>
+<div class="pokemon-web-embed-inner" style="background:#0d0d0d;padding:40px 20px;display:flex;flex-direction:column;align-items:center">
+
+
+<div class="diagram-header">
+  <div class="diagram-eyebrow">Consumer Behaviour · Media Analysis</div>
+  <div class="diagram-title">The Pokemon Nostalgia Web</div>
+  <div class="diagram-sub">Three products. Four consumer segments. One funnel neither audience knows they share. Hover each node to explore the connections.</div>
+</div>
+
+<div class="canvas" id="canvas">
+
+  <!-- SVG LINES LAYER -->
+  <svg class="lines-canvas" id="lines"></svg>
+
+  <!-- PRODUCT NODES -->
+
+  <!-- Anime - top centre -->
+  <div class="node node-product" id="node-anime" style="left:350px;top:20px"
+    onmouseenter="showTooltip(event,'anime')" onmouseleave="hideTooltip()">
+    <div class="node-glow"></div>
+    <div class="node-product-bar"></div>
+    <div class="node-product-inner">
+      <div class="node-product-label">Product 01</div>
+      <div class="node-product-title">The Anime</div>
+      <div class="node-product-desc">Brand awareness engine. Runs in sync with each game generation. Ash as thirty-year trust signal bridging old and new audiences.</div>
+      <div class="node-product-tags">
+        <div class="node-product-tag">Awareness</div>
+        <div class="node-product-tag">Trust Signal</div>
+        <div class="node-product-tag">Entry Point</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Games - bottom left -->
+  <div class="node node-product" id="node-games" style="left:80px;top:380px"
+    onmouseenter="showTooltip(event,'games')" onmouseleave="hideTooltip()">
+    <div class="node-glow"></div>
+    <div class="node-product-bar"></div>
+    <div class="node-product-inner">
+      <div class="node-product-label">Product 02</div>
+      <div class="node-product-title">The Games</div>
+      <div class="node-product-desc">Deepest relationship tool. National Dex and Pokemon Bank create twenty-year companion continuity. Remakes reactivate generation-specific nostalgia.</div>
+      <div class="node-product-tags">
+        <div class="node-product-tag">Relationship</div>
+        <div class="node-product-tag">National Dex</div>
+        <div class="node-product-tag">Continuity</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TCG - bottom right -->
+  <div class="node node-product" id="node-tcg" style="left:620px;top:380px"
+    onmouseenter="showTooltip(event,'tcg')" onmouseleave="hideTooltip()">
+    <div class="node-glow"></div>
+    <div class="node-product-bar"></div>
+    <div class="node-product-inner">
+      <div class="node-product-label">Product 03</div>
+      <div class="node-product-title">The TCG</div>
+      <div class="node-product-desc">$2.1B annual revenue. 60% of global TCG market. Value appreciation reactivates lapsed collectors. Prestige economy drives new entry.</div>
+      <div class="node-product-tags">
+        <div class="node-product-tag">Value</div>
+        <div class="node-product-tag">Scarcity</div>
+        <div class="node-product-tag">Prestige</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTRE FUNNEL -->
+  <div class="node node-centre" id="node-centre" style="left:370px;top:260px">
+    <div class="node-centre-label">The Funnel</div>
+    <div class="node-centre-title">Neither audience knows the other exists. Both are here.</div>
+  </div>
+
+  <!-- SEGMENT NODES -->
+
+  <!-- New Generation - top left -->
+  <div class="node node-segment" id="seg-new" style="left:30px;top:60px"
+    onmouseenter="showTooltip(event,'new')" onmouseleave="hideTooltip()">
+    <div class="node-segment-label">Segment A</div>
+    <div class="node-segment-title">
+      <span class="node-segment-dot" style="background:#4ade80"></span>New Generation
+    </div>
+    <div class="node-segment-sub">Ages 6-17<br>Onboarded through anime and games. Future nostalgia consumers in waiting.</div>
+  </div>
+
+  <!-- Lapsed Fans - top right -->
+  <div class="node node-segment" id="seg-lapsed" style="left:710px;top:60px"
+    onmouseenter="showTooltip(event,'lapsed')" onmouseleave="hideTooltip()">
+    <div class="node-segment-label">Segment B</div>
+    <div class="node-segment-title">
+      <span class="node-segment-dot" style="background:#c2714f"></span>Lapsed Fans
+    </div>
+    <div class="node-segment-sub">Ages 25-35<br>Reactivated through Ash, older regions, and TCG card value appreciation.</div>
+  </div>
+
+  <!-- Adult Collectors - bottom left -->
+  <div class="node node-segment" id="seg-collectors" style="left:30px;top:490px"
+    onmouseenter="showTooltip(event,'collectors')" onmouseleave="hideTooltip()">
+    <div class="node-segment-label">Segment C</div>
+    <div class="node-segment-title">
+      <span class="node-segment-dot" style="background:#a78bfa"></span>Adult Collectors
+    </div>
+    <div class="node-segment-sub">Ages 25-40<br>Retained through National Dex, Bank, and remake strategy.</div>
+  </div>
+
+  <!-- Prestige Buyers - bottom right -->
+  <div class="node node-segment" id="seg-prestige" style="left:710px;top:490px"
+    onmouseenter="showTooltip(event,'prestige')" onmouseleave="hideTooltip()">
+    <div class="node-segment-label">Segment D</div>
+    <div class="node-segment-title">
+      <span class="node-segment-dot" style="background:#fbbf24"></span>Prestige Buyers
+    </div>
+    <div class="node-segment-sub">Ages 18-35<br>Driven by PSA grading culture, influencer content, and social status.</div>
+  </div>
+
+  <!-- TOOLTIP -->
+  <div class="tooltip" id="tooltip"></div>
+
+</div>
+
+<div class="legend">
+  <div class="legend-item">
+    <div class="legend-line legend-line-solid"></div>
+    Product synchronisation
+  </div>
+  <div class="legend-item">
+    <div class="legend-line legend-line-dashed"></div>
+    Nostalgia reactivation
+  </div>
+  <div class="legend-item">
+    <div class="legend-line legend-line-dim"></div>
+    New audience onboarding
+  </div>
+</div>
+
+<script>
+const tooltipData = {
+  anime: 'The anime runs in synchronized cadence with each game generation. Every new region gets a new season. Ash bridges generations — familiar enough to reactivate lapsed fans, fresh enough to onboard new ones.',
+  games: 'The National Dex and Pokemon Bank allow players to transfer Pokemon across games spanning decades. A companion raised in 2004 travels to 2022. This is not a feature. It is a relationship continuity system.',
+  tcg: 'The TCG generated $2.1 billion in 2024 — 60% of the global TCG market. Adults aged 18-34 are its largest demographic. Card value appreciation reactivates collectors. Scarcity creates prestige. Both feed the same funnel.',
+  new: 'The new generation enters through the anime and games — the same two products that have onboarded every generation since 1996. Low barrier, familiar formula. They are also the nostalgia consumers Pokemon will monetise in 2045.',
+  lapsed: 'Lapsed fans re-enter through recognition. Ash in a new region. An original generation Pokemon in a new set. A childhood card suddenly worth hundreds of dollars. One thread of the web catches them and the rest pulls them in.',
+  collectors: 'Adult collectors are retained through product features that make their history matter. The National Dex means older Pokemon remain relevant. Pokemon Bank means old companions travel forward. The past is always accessible.',
+  prestige: 'The prestige buyer may have no prior emotional relationship with Pokemon at all. They enter through the social status value of rare cards — PSA grading, influencer culture, investment potential. A new entry point that requires no nostalgia.'
+};
+
+function showTooltip(e, key) {
+  const tooltip = document.getElementById('tooltip');
+  tooltip.textContent = tooltipData[key];
+  const rect = e.currentTarget.getBoundingClientRect();
+  const canvas = document.getElementById('canvas').getBoundingClientRect();
+  let left = rect.left - canvas.left + rect.width / 2 - 110;
+  let top = rect.top - canvas.top - 80;
+  if (top < 0) top = rect.bottom - canvas.top + 8;
+  left = Math.max(0, Math.min(left, 680));
+  tooltip.style.left = left + 'px';
+  tooltip.style.top = top + 'px';
+  tooltip.classList.add('visible');
+}
+
+function hideTooltip() {
+  document.getElementById('tooltip').classList.remove('visible');
+}
+
+function getNodeCentre(id) {
+  const el = document.getElementById(id);
+  const canvas = document.getElementById('canvas');
+  const er = el.getBoundingClientRect();
+  const cr = canvas.getBoundingClientRect();
+  return {
+    x: er.left - cr.left + er.width / 2,
+    y: er.top - cr.top + er.height / 2
+  };
+}
+
+function drawLines() {
+  const svg = document.getElementById('lines');
+  svg.innerHTML = '';
+
+  const nodes = {
+    anime: getNodeCentre('node-anime'),
+    games: getNodeCentre('node-games'),
+    tcg: getNodeCentre('node-tcg'),
+    centre: getNodeCentre('node-centre'),
+    new: getNodeCentre('seg-new'),
+    lapsed: getNodeCentre('seg-lapsed'),
+    collectors: getNodeCentre('seg-collectors'),
+    prestige: getNodeCentre('seg-prestige')
+  };
+
+  function line(x1,y1,x2,y2,color,dash,opacity,width) {
+    const l = document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',x1); l.setAttribute('y1',y1);
+    l.setAttribute('x2',x2); l.setAttribute('y2',y2);
+    l.setAttribute('stroke',color);
+    if(dash) l.setAttribute('stroke-dasharray',dash);
+    l.setAttribute('stroke-opacity',opacity||0.5);
+    l.setAttribute('stroke-width',width||1);
+    svg.appendChild(l);
+  }
+
+  function curve(x1,y1,cx,cy,x2,y2,color,dash,opacity) {
+    const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d',`M${x1},${y1} Q${cx},${cy} ${x2},${y2}`);
+    p.setAttribute('fill','none');
+    p.setAttribute('stroke',color);
+    if(dash) p.setAttribute('stroke-dasharray',dash);
+    p.setAttribute('stroke-opacity',opacity||0.4);
+    p.setAttribute('stroke-width',1);
+    svg.appendChild(p);
+  }
+
+  // Product sync lines (solid terra)
+  line(nodes.anime.x, nodes.anime.y, nodes.games.x, nodes.games.y, '#c2714f', '6,4', 0.35, 1.5);
+  line(nodes.anime.x, nodes.anime.y, nodes.tcg.x, nodes.tcg.y, '#c2714f', '6,4', 0.35, 1.5);
+  line(nodes.games.x, nodes.games.y, nodes.tcg.x, nodes.tcg.y, '#c2714f', '6,4', 0.35, 1.5);
+
+  // Product to centre
+  line(nodes.anime.x, nodes.anime.y, nodes.centre.x, nodes.centre.y, '#c2714f', null, 0.15, 1);
+  line(nodes.games.x, nodes.games.y, nodes.centre.x, nodes.centre.y, '#c2714f', null, 0.15, 1);
+  line(nodes.tcg.x, nodes.tcg.y, nodes.centre.x, nodes.centre.y, '#c2714f', null, 0.15, 1);
+
+  // New generation to anime (dim, onboarding)
+  line(nodes.new.x, nodes.new.y, nodes.anime.x, nodes.anime.y, '#444', '3,4', 0.6, 1);
+
+  // Lapsed to anime (terra, reactivation)
+  line(nodes.lapsed.x, nodes.lapsed.y, nodes.anime.x, nodes.anime.y, '#c2714f', '4,3', 0.6, 1);
+
+  // Collectors to games (terra)
+  line(nodes.collectors.x, nodes.collectors.y, nodes.games.x, nodes.games.y, '#c2714f', '4,3', 0.6, 1);
+
+  // Prestige to TCG (terra)
+  line(nodes.prestige.x, nodes.prestige.y, nodes.tcg.x, nodes.tcg.y, '#c2714f', '4,3', 0.6, 1);
+
+  // Lapsed also connects to TCG
+  line(nodes.lapsed.x, nodes.lapsed.y, nodes.tcg.x, nodes.tcg.y, '#c2714f', '3,5', 0.3, 1);
+
+  // Future nostalgia arc — new generation curves down to collectors
+  curve(nodes.new.x, nodes.new.y, 10, 290, nodes.collectors.x, nodes.collectors.y, '#333', '2,6', 0.5);
+
+  // Segment labels
+  function label(x, y, text, color, angle) {
+    const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x', x); t.setAttribute('y', y);
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-family','Courier New,monospace');
+    t.setAttribute('font-size','8');
+    t.setAttribute('fill', color || '#c2714f');
+    t.setAttribute('opacity','0.75');
+    if(angle) t.setAttribute('transform',`rotate(${angle},${x},${y})`);
+    t.textContent = text;
+    svg.appendChild(t);
+  }
+
+  label(195, 180, 'Regional + Era sync', '#c2714f');
+  label(250, 92, 'Onboarded', '#555');
+  label(650, 92, 'Ash reactivates', '#c2714f');
+  label(140, 460, 'Nat. Dex retains', '#c2714f', -55);
+  label(770, 460, 'Grading drives spend', '#c2714f', 55);
+  label(28, 290, 'Future nostalgia', '#444', -90);
+}
+
+window.addEventListener('load', drawLines);
+window.addEventListener('resize', drawLines);
+</script>
+
+</div>
+</div>
+
+    <p class="body-text">Until 2026 Ash Ketchum served as the main character of the Pokemon anime since its very first episode. Thirty years of the same protagonist exploring new regions, meeting new Pokemon, and carrying the same relationship with Pikachu that defined the franchise's original emotional identity. Ash wasn't just a character. He was a trust signal.</p>
+
+    <p class="body-text">An adult who drifted away from Pokemon at sixteen and encounters the anime at thirty two does not see a children's show. They see a familiar face in a new context. Ash in the Galar region is not alienating. He is a bridge. The new content becomes accessible because the anchor character hasn't changed. The barrier to re-engagement drops immediately.</p>
+
+    <p class="body-text">The games operate on a different but equally deliberate nostalgia mechanism. Beyond the surface level references to older soundtracks, dialogue, and map locations that reward longtime players, the deepest retention tool in Pokemon's game catalogue is the National Dex and Pokemon Bank system.</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">The Pokemon you raised in FireRed in 2004 can travel with you in Scarlet in 2022. That is not a game feature. That is a twenty year relationship management system.</div>
+    </div>
+
+    <p class="body-text">The National Dex is an endgame mechanic that allows players to access and catch Pokemon from every previous generation. Pokemon Bank extends this further, enabling players to transfer their companions across games as far back as the original titles. The emotional attachment a player formed with a specific Charizard or Blastoise as a child becomes a reason to purchase every subsequent game. The relationship doesn't reset. It continues. And continuation is the most powerful retention mechanic in any product system.</p>
+
+    <p class="body-text">The TCG closes the web from a third direction. The inclusion of older generation Pokemon in newer sets means every booster pack opening has the potential to trigger a memory. A Blastoise in a modern set is not just a card. It is a reference to something the collector felt at nine years old. And the appreciation of cards they already own does something even more powerful — it validates the original emotional investment. The Shadowless Charizard sitting in a binder since 1999 is now worth hundreds of dollars. The thing they loved as a child was worth loving. That validation is the most effective reactivation signal in the entire web.</p>
+  </section>
+
+  <!-- PRESTIGE ECONOMY -->
+  <section class="section">
+    <div class="section-label">Mechanism 03</div>
+    <h2 class="section-title">The Prestige <em>Economy</em></h2>
+
+    <p class="body-text">Pokemon cards were already appreciating in value before 2020. The collector market existed, the rare card culture existed, and the emotional reactivation cycle was already running quietly for adults who remembered their childhood collections. Then the influencer layer arrived and supercharged everything.</p>
+
+    <p class="body-text">Logan Paul paying $150,000 for a PSA 10 Shadowless Charizard on camera did three things simultaneously. It reactivated every lapsed collector who remembered having or wanting that card as a child and immediately recalculated its emotional and financial significance. It introduced an entirely new audience with no prior relationship with Pokemon cards to the idea that these objects carry significant monetary and social value. It established a prestige hierarchy where the rarest cards became status symbols signalling wealth, taste, and cultural knowledge simultaneously.</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">In the weeks immediately following Logan Paul's first public box break in October 2020, StockX saw a 300% increase in Pokemon card trades. The average price of a Charizard Base Set Unlimited Print PSA 9 was $470 before the break. In the month following it the average sale price jumped to $4,366. A single YouTube video produced a 829% price increase on a card that had not changed in any way.</div>
+    </div>
+
+    <p class="body-text">The cascade did not stop there. Rapper Logic purchased a 1st Edition Shadowless Charizard PSA 10 for $226,000 the day after Logan Paul's box break. In December 2020 Paul purchased an individual Charizard and wore it around his neck in a custom pendant during his exhibition boxing match with Floyd Mayweather, broadcast to millions worldwide. By the time Paul purchased the Pikachu Illustrator PSA 10 for $5.275 million in 2021 the market had taken on a dimension that no toy company could have manufactured through conventional marketing. In February 2026 Paul sold that same card at auction for $16.5 million, a Guinness World Record for the most expensive trading card ever sold.</p>
+
+    <p class="body-text">The market corrected after the 2021 peak. The same Base Set Charizard fell approximately 70% from its 2021 high while the card itself remained identical. But what the correction revealed was equally instructive. The floor did not return to pre-Logan Paul levels. The Charizard Base Set Unlimited Print that averaged $470 before October 2020 was trading at $2,284 even after the correction — a 386% permanent increase sustained entirely by the cultural legitimacy the influencer layer established. The prestige economy did not disappear when the bubble deflated. It stabilised at a permanently higher baseline.</p>
+
+    <div class="prestige-grid">
+      <div class="prestige-card">
+        <div class="prestige-label">The Scarcity Effect</div>
+        <div class="prestige-title">Higher Value. Higher Desire. Higher Barrier.</div>
+        <div class="prestige-body">As card values increase through influencer attention and grading culture the product becomes less accessible to the casual buyer and simultaneously more desirable. Scarcity and prestige are the same mechanism viewed from two different positions. The person who cannot afford the card wants it more because others can. The person who can afford it wants it more because others cannot.</div>
+      </div>
+      <div class="prestige-card">
+        <div class="prestige-label">The Twin Edge Blade</div>
+        <div class="prestige-title">Worse for the Consumer. Better for the Brand.</div>
+        <div class="prestige-body">The influencer prestige layer creates a dynamic that is demonstrably worse for the individual collector trying to complete a set at reasonable cost and demonstrably better for the Pokemon Company's brand positioning and secondary market momentum. Pokemon did not engineer this dynamic. It emerged organically from thirty years of brand building. The company simply declined to interfere with it.</div>
+      </div>
+    </div>
+
+    <p class="body-text">The scale of the grading culture confirms how seriously the prestige economy is taken. Over 20 million cards were professionally graded in 2024, a 16% increase from 2023. A first edition Charizard PSA 10 sold for $550,000 in 2026, more than doubling its 2021 peak value. Adult Pokemon consumers spend significantly more per transaction than younger players and hold onto purchases longer, creating secondary market value that makes the brand attractive to premium collaborators including luxury watchmaker Seiko, fashion brand Levi's, and streetwear label Eric Emanuel — partnerships that would have been unthinkable when Pokemon was strictly a children's franchise.</p> The prestige economy around Pokemon cards generates cultural relevance, media coverage, and new consumer acquisition without the Pokemon Company spending a dollar on it. Pack opening content on YouTube, PSA grading culture, the secondary market on eBay and TCGPlayer — all of it drives brand awareness and consumer desire through channels the company does not control and does not need to.</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">The influencer layer converted a nostalgia economy into a prestige economy. The cards were always emotionally valuable. Now they are socially valuable as well. That is a fundamentally different and significantly more powerful retention mechanism.</div>
+    </div>
+
+    <p class="body-text">The societal prestige that comes with owning rare cards in the current collector environment creates a motivation for acquisition that exists completely independently of nostalgia. A twenty five year old who was too young for the original card era can now participate in the prestige economy without any prior emotional relationship with the franchise. The prestige mechanism has created a new entry point into the Pokemon funnel that requires no nostalgia at all.</p>
+  </section>
+
+  <!-- ASH RETIREMENT -->
+  <section class="section">
+    <div class="section-label">The Signal</div>
+    <h2 class="section-title">Why Pokemon Retired <em>Ash Ketchum</em></h2>
+
+    <p class="body-text">In 2023 the Pokemon Company retired Ash Ketchum after twenty six years as the primary protagonist of the anime. The coverage treated it as a creative decision. The character had completed his journey, winning the World Championship after a decade of near misses, and it was time for something new. Liko and Roy replaced him as the central characters of a new era.</p>
+
+    <p class="body-text">Read through a consumer behaviour lens the decision looks different. It is not a creative pivot. It is a product strategy decision about audience segmentation — and it signals something significant about the Pokemon Company's confidence in its own nostalgia architecture.</p>
+
+    <p class="body-text">Ash served a dual purpose for thirty years simultaneously. He was the onboarding mechanism for new children entering the franchise and the trust signal for lapsed adults returning to it. One character carrying both functions was efficient but created a structural dependency. The nostalgia web needed Ash to remain recognizable across generations which meant he could never fully age, never fundamentally change, never reflect the experience of the adults who had grown up alongside him. He was frozen at approximately ten years old for a generation that was now in its thirties.</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">By retiring Ash and introducing new protagonists, Pokemon is splitting the dual audience architecture into two distinct channels. The anime becomes a pure new generation onboarding tool. The TCG and games carry the adult retention load independently. The web no longer needs a single connective thread to function.</div>
+    </div>
+
+    <p class="body-text">The new protagonists Liko and Roy can grow, evolve, and reflect contemporary childhood without the weight of thirty years of history attached to them. They are clean onboarding vehicles uncomplicated by nostalgia. The adult consumer who returned to Pokemon through the TCG in 2021 does not need Ash in the anime to stay engaged. The National Dex retains them. The card value retains them. The prestige economy retains them. The systems are now strong enough to hold adult consumers without a character acting as the bridge.</p>
+
+    <p class="body-text">The retirement is therefore not a concession. It is a declaration of structural confidence. Pokemon is signalling that the nostalgia web it spent thirty years building is self-sustaining enough to operate without the character who held it together. The lowest cost entry to the franchise — the anime — is now optimised entirely for new generation acquisition. The higher value products — the TCG and the games — are optimised entirely for adult retention. The dual audience architecture has matured to the point where it no longer needs to run through a single shared protagonist.</p>
+
+    <p class="body-text">Most entertainment franchises retire a beloved character and lose a generation of loyal consumers in the process. Pokemon retired Ash and lost nothing because the consumers he was retaining were never staying for him. They were staying for the web he was part of. And the web outlasts any single node within it.</p>
+  </section>
+
+  <!-- COUNTERARGUMENT -->
+  <section class="section">
+    <div class="section-label">The Strongest Objection</div>
+    <h2 class="section-title">Accident or <em>Architecture?</em></h2>
+
+    <p class="body-text">The most credible objection to the dual audience argument is that it overstates intentionality. Pokemon has been running for thirty years. Of course some of its original audience grew up and kept buying. Of course cards appreciated in value over time. The nostalgia web, the argument goes, is not an engineered strategy. It is what happens when a franchise survives long enough for its audience to become adults with disposable income.</p>
+
+    <p class="body-text">This objection would be more persuasive if the nostalgia mechanics were passive. If the Pokemon Company simply kept releasing new games and the adult audience returned organically that would be luck. But the National Dex and Pokemon Bank are not passive features. They required deliberate engineering — the decision to build a cross-game companion transfer system that makes a Pokemon raised in 2004 relevant to a game released in 2022 is an explicit product decision about relationship continuity across decades. You do not accidentally build a twenty year relationship management system into your game mechanic.</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">The anime's return to older regions with fan favourite Pokemon requires a creative decision to prioritise nostalgia reactivation over pure new audience acquisition. The inclusion of original generation Pokemon in every new TCG set requires a design decision to serve the collector who remembers those creatures from childhood. Neither of these is accidental. Both are intentional.</div>
+    </div>
+
+    <p class="body-text">The strongest evidence of intentionality is what the Pokemon Company has not done. It has not rebooted the franchise with a new protagonist that replaces the original continuity. It has not retired the original 151 in favour of more commercially productive newer generations. It has not simplified the TCG to remove the vintage card value that sustains the collector market. Every decision that could have broken the nostalgia web has been declined. That pattern of restraint across thirty years is not accidental. It is architectural.</p>
+  </section>
+
+  <!-- COMPARISON TABLE -->
+  <section class="section">
+    <div class="section-label">Competitive Comparison</div>
+    <h2 class="section-title">Pokemon vs The <em>Typical Franchise</em></h2>
+    <p class="body-text">The dual audience strategy becomes fully legible when placed against how a typical entertainment franchise attempts the same nostalgia opportunity. Most franchises have one lever. Pokemon has three. Most franchises deplete their nostalgia capital in a single moment. Pokemon manufactures new nostalgia continuously.</p>
+
+    <div style="overflow-x:auto;margin-top:32px">
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding:14px 20px;font-family:var(--mono);font-size:9px;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;border-bottom:1px solid var(--border);background:var(--surface);width:22%">Dimension</th>
+            <th style="text-align:left;padding:14px 20px;font-family:var(--mono);font-size:9px;letter-spacing:0.15em;color:var(--terra);text-transform:uppercase;border-bottom:1px solid var(--border);background:var(--surface);width:39%">Pokemon</th>
+            <th style="text-align:left;padding:14px 20px;font-family:var(--mono);font-size:9px;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;border-bottom:1px solid var(--border);background:var(--surface);width:39%">Typical Entertainment Franchise</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:16px 20px;color:var(--text-mid);font-weight:600;border-bottom:1px solid var(--border);background:var(--surface);vertical-align:top">Nostalgia Strategy</td>
+            <td style="padding:16px 20px;color:var(--text-mid);border-bottom:1px solid var(--border);background:var(--surface-2);vertical-align:top">Continuous production. New generations manufactured every two years become the nostalgia consumers of two decades later. The system replenishes itself permanently</td>
+            <td style="padding:16px 20px;color:var(--text-dim);border-bottom:1px solid var(--border);background:var(--surface);vertical-align:top">Single moment. A reunion film, a reboot, a limited anniversary product. Depletes existing nostalgia capital without manufacturing new supply</td>
+          </tr>
+          <tr>
+            <td style="padding:16px 20px;color:var(--text-mid);font-weight:600;border-bottom:1px solid var(--border);background:var(--surface);vertical-align:top">Audience Architecture</td>
+            <td style="padding:16px 20px;color:var(--text-mid);border-bottom:1px solid var(--border);background:var(--surface-2);vertical-align:top">Dual. New generation onboarding and adult reactivation run simultaneously without interference. Neither audience knows they share the same product ecosystem</td>
+            <td style="padding:16px 20px;color:var(--text-dim);border-bottom:1px solid var(--border);background:var(--surface);vertical-align:top">Single. Either targets new audiences and alienates existing ones, or targets nostalgia and confuses new entrants. The two audiences are treated as mutually exclusive</td>
+          </tr>
+          <tr>
+            <td style="padding:16px 20px;color:var(--text-mid);font-weight:600;border-bottom:1px solid var(--border);background:var(--surface);vertical-align:top">Relationship Continuity</td>
+            <td style="padding:16px 20px;color:var(--text-mid);border-bottom:1px solid var(--border);background:var(--surface-2);vertical-align:top">Engineered across decades. National Dex and Pokemon Bank allow companions raised in 2004 to travel to 2022. The consumer's history with the franchise is always accessible and always relevant</td>
+            <td style="padding:16px 20px;color:var(--text-dim);border-bottom:1px solid var(--border);background:var(--surface);vertical-align:top">Absent or superficial. Each new entry typically resets or reboots rather than building on prior consumer investment. Past engagement has no mechanical value in the present</td>
+          </tr>
+          <tr>
+            <td style="padding:16px 20px;color:var(--text-mid);font-weight:600;border-bottom:1px solid var(--border);background:var(--surface);vertical-align:top">Product Synchronisation</td>
+            <td style="padding:16px 20px;color:var(--text-mid);border-bottom:1px solid var(--border);background:var(--surface-2);vertical-align:top">Three products launch in coordinated cadence every two years. Games, anime, and TCG each reinforce the others. A consumer who enters through any one product is pulled toward the other two</td>
+            <td style="padding:16px 20px;color:var(--text-dim);border-bottom:1px solid var(--border);background:var(--surface);vertical-align:top">Fragmented. Merchandise, media, and games are licensed separately and rarely coordinate. Each product extension is treated as a standalone revenue opportunity rather than a system</td>
+          </tr>
+          <tr>
+            <td style="padding:16px 20px;color:var(--text-mid);font-weight:600;border-bottom:1px solid var(--border);background:var(--surface);vertical-align:top">Secondary Market</td>
+            <td style="padding:16px 20px;color:var(--text-mid);border-bottom:1px solid var(--border);background:var(--surface-2);vertical-align:top">Self-sustaining prestige economy. Card value appreciation, PSA grading culture, and influencer content generate brand momentum and new consumer acquisition without Pokemon spending a dollar on it</td>
+            <td style="padding:16px 20px;color:var(--text-dim);border-bottom:1px solid var(--border);background:var(--surface);vertical-align:top">Incidental. Secondary market exists but is not structurally embedded in the product design. Appreciation of vintage merchandise is coincidental rather than engineered</td>
+          </tr>
+          <tr>
+            <td style="padding:16px 20px;color:var(--text-mid);font-weight:600;border-bottom:1px solid var(--border);background:var(--surface);vertical-align:top">Revenue Resilience</td>
+            <td style="padding:16px 20px;color:var(--text-mid);border-bottom:1px solid var(--border);background:var(--surface-2);vertical-align:top">Demonstrated across thirty years. $150B+ total franchise revenue. $2.1B TCG revenue in 2024 alone. Dual audience architecture insulates against single demographic decline</td>
+            <td style="padding:16px 20px;color:var(--text-dim);border-bottom:1px solid var(--border);background:var(--surface);vertical-align:top">Correlated with content cycle. Revenue spikes around major releases and declines between them. No structural mechanism for sustained engagement outside active content windows</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="body-text" style="margin-top:24px">The table makes the structural gap visible. A typical franchise treats nostalgia as a campaign. Pokemon treats it as an infrastructure. The difference compounds across decades into a commercial advantage no single nostalgia moment can replicate.</p>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="section">
+    <div class="section-label">Closing Argument</div>
+    <h2 class="section-title">Neither audience knows. <em>Both are in the funnel.</em></h2>
+
+    <p class="body-text">The seven year old watching the anime in 2026 and the thirty two year old opening a booster pack at the same moment are consuming completely different products with completely different emotional motivations. The child is experiencing discovery. The adult is experiencing memory. The child wants to know what happens next. The adult wants to feel what they felt before.</p>
+
+    <p class="body-text">Pokemon serves both of them simultaneously without either one noticing the other. The child's entry into the franchise today is the raw material for the adult collector the Pokemon Company will reactivate in 2046. The adult's return to the franchise today validates the brand's cultural permanence for the child watching from the same cultural moment.</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">The most instructive thing about the Pokemon Company's strategy is not that it understood nostalgia. Every entertainment company understands nostalgia. What the Pokemon Company understood is that nostalgia has to be manufactured before it can be monetised. The dual audience architecture is not a retention strategy. It is a nostalgia production system running thirty years in advance of the revenue it will eventually generate.</div>
+    </div>
+
+    <p class="body-text">The TCG is the highest revenue expression of this system but it is not the system itself. The games are the deepest relationship management tool but they are not the system itself. The anime is the broadest awareness vehicle but it is not the system itself. The system is the web between all three. The self-reinforcing loop where each product reactivates the emotional relationship the others established. Where a show triggers a game purchase. Where a game triggers a card purchase. Where a card's appreciation triggers a return to the show.</p>
+
+    <p class="body-text">Thirty years of running that web is why a franchise built for Japanese children in 1996 is the most valuable media property on earth in 2026. And thirty years from now the children watching the anime today will be opening booster packs, downloading remakes, and returning to regions they first explored before they were ten years old.</p>
+
+    <p class="body-text">The funnel never closes. It just moves forward in time. And every entertainment company that relies on a single nostalgia moment rather than a thirty year nostalgia production system will eventually discover why Pokemon is still growing while they are still trying to recapture something that already happened once.</p>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="doc-footer">
+  <div class="footer-credit">
+    Leon Telemaque · Consumer Behaviour Analysis<br>
+    Pokemon — The Eternal Nostalgia Funnel · 2026<br>
+    Media Strategy · Behavioural Economics · Retention Design
+  </div>
+  <div class="footer-tags">
+    <div class="footer-tag">Consumer Behaviour</div>
+    <div class="footer-tag">Nostalgia Economics</div>
+    <div class="footer-tag">Retention Design</div>
+    <div class="footer-tag">Media Strategy</div>
+    <div class="footer-tag">Prestige Economy</div>
+  </div>
+</footer>
+
+</body>
+</html>
