@@ -382,12 +382,13 @@
 
   /* ── PROJECT CARD ── */
   .project-card {
-    min-width: calc(33.333% - 1px);
+    flex: 0 0 calc(33.333% - 1px);
+    max-width: calc(33.333% - 1px);
+    min-width: 0;
     background: var(--surface);
     border: 1px solid transparent;
     cursor: pointer;
     transition: border-color 0.2s;
-    flex-shrink: 0;
   }
 
   .project-card:hover { border-color: var(--border-2); }
@@ -523,10 +524,11 @@
   }
 
   .coming-soon-card {
-    min-width: calc(33.333% - 1px);
+    flex: 0 0 calc(33.333% - 1px);
+    max-width: calc(33.333% - 1px);
+    min-width: 0;
     background: var(--surface);
     border: 1px solid var(--border);
-    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
