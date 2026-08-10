@@ -388,13 +388,16 @@
     background: var(--surface);
     border: 1px solid transparent;
     cursor: pointer;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, transform 0.18s;
+    display: flex;
+    flex-direction: column;
   }
 
-  .project-card:hover { border-color: var(--border-2); }
+  .project-card:hover { border-color: var(--border-2); transform: translateY(-3px); }
 
   .card-thumb {
-    height: 200px;
+    width: 100%;
+    aspect-ratio: 16/9.5;
     background: var(--surface-2);
     position: relative;
     overflow: hidden;
@@ -485,7 +488,13 @@
     background: var(--amber);
   }
 
-  .card-body { padding: 24px; }
+  .card-body {
+    padding: 20px 24px 24px;
+    border-top: 1px solid var(--border);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
 
   .card-title {
     font-size: 16px;
