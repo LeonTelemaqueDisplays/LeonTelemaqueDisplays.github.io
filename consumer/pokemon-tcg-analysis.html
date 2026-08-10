@@ -43,6 +43,16 @@
     border-bottom: 1px solid var(--border);
   }
 
+  .hero-bg-photo {
+    position: absolute;
+    inset: 0;
+    background-image: url('/consumer/pokemon-cards-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.08;
+    filter: saturate(0.7);
+  }
+
   .hero-bg {
     position: absolute;
     inset: 0;
@@ -448,7 +458,9 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-bg"></div>
+  <div class="hero-bg">
+    <div class="hero-bg-photo"></div>
+  </div>
 
   <div class="hero-meta">
     Consumer Behaviour Analysis<br>
