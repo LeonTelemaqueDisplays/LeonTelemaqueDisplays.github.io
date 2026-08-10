@@ -52,6 +52,22 @@
     pointer-events: none;
   }
 
+  .hero-cover {
+    position: absolute;
+    inset: 0;
+    background-image: url('./lego-marvel-cover.jpg');
+    background-size: cover;
+    background-position: center 38%;
+    opacity: 0.5;
+    filter: saturate(0.85) brightness(0.8);
+  }
+
+  .hero-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(8,8,8,0.25) 0%, rgba(8,8,8,0.5) 35%, rgba(8,8,8,0.94) 82%, var(--bg) 100%);
+  }
+
   .hero-meta {
     position: absolute;
     top: 60px;
@@ -356,7 +372,10 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-bg"></div>
+  <div class="hero-bg">
+    <div class="hero-cover"></div>
+    <div class="hero-gradient"></div>
+  </div>
 
   <div class="hero-meta">
     Media Product Strategy<br>
