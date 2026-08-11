@@ -395,6 +395,12 @@
 
   .project-card:hover { border-color: var(--border-2); transform: translateY(-3px); }
 
+  /* Fintech track has fewer pieces published so far — fixed card width instead of
+     percentage-based sizing avoids implying missing siblings, and scales cleanly
+     as more pieces are added. */
+  #fintech-track.carousel-track { justify-content: flex-start; }
+  #fintech-track .project-card { flex: 0 0 380px; max-width: 380px; }
+
   .card-thumb {
     width: 100%;
     aspect-ratio: 16/9.5;
@@ -796,21 +802,6 @@
             <div class="card-tag">Credit Transparency</div>
           </div>
         </div>
-      </div>
-
-      <div class="coming-soon-card">
-        <div class="coming-soon-label">Piece 02</div>
-        <div class="coming-soon-title">Coming — Fall 2026</div>
-      </div>
-
-      <div class="coming-soon-card">
-        <div class="coming-soon-label">Piece 03</div>
-        <div class="coming-soon-title">Coming — Winter 2027</div>
-      </div>
-
-      <div class="coming-soon-card">
-        <div class="coming-soon-label">Piece 04</div>
-        <div class="coming-soon-title">Coming — 2027</div>
       </div>
 
     </div>
