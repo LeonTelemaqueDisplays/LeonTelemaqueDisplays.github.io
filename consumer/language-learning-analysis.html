@@ -353,7 +353,7 @@
 
   .model-embed iframe {
     width: 100%;
-    height: 700px;
+    height: 1450px;
     border: none;
     display: block;
   }
@@ -636,7 +636,7 @@
 
     <div class="model-embed">
       <div class="model-embed-label">Interactive Retention Model — Adjust variables to identify your archetype</div>
-      <iframe src="/consumer/language-retention-model.html" scrolling="no"></iframe>
+      <iframe id="retentionModelFrame" src="/consumer/language-retention-model.html" scrolling="no" onload="try{var d=this.contentWindow.document;this.style.height=(d.documentElement.scrollHeight||d.body.scrollHeight)+40+'px';}catch(e){}"></iframe>
     </div>
   </section>
 
