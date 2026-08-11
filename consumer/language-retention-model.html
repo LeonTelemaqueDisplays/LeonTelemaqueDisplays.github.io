@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Language Learning Retention Model</title>
+<style>
+  :root {
+    --bg: #080808;
+    --surface: #0f0f0f;
+    --surface-2: #141414;
+    --surface-3: #181818;
+    --border: #1e1e1e;
+    --border-2: #2a2a2a;
+    --terra: #c2714f;
+    --terra-dim: rgba(194,113,79,0.1);
+    --terra-glow: rgba(194,113,79,0.05);
+    --green: #4ade80;
+    --green-dim: rgba(74,222,128,0.08);
+    --amber: #fbbf24;
+    --amber-dim: rgba(251,191,36,0.08);
+    --red: #f87171;
+    --red-dim: rgba(248,113,113,0.08);
+    --blue: #60a5fa;
+    --blue-dim: rgba(96,165,250,0.08);
+    --text: #e8e8e8;
+    --text-mid: #888;
+    --text-dim: #444;
+    --mono: 'Courier New', monospace;
+    --sans: system-ui, -apple-system, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    padding: 48px 32px;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .header-eyebrow {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--terra);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .header-title {
+    font-size: clamp(24px, 4vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .header-sub {
+    font-size: 13px;
+    color: var(--text-mid);
+    max-width: 540px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* MAIN LAYOUT */
+  .main {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* CONTROLS PANEL */
+  .controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .controls-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 1px;
+  }
+
+  .controls-section-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .slider-group {
+    margin-bottom: 20px;
+  }
+
+  .slider-group:last-child { margin-bottom: 0; }
+
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .slider-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .slider-value {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--terra);
+    font-weight: 600;
+  }
+
+  .slider-desc {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+
+  input[type="range"] {
+    width: 100%;
+    height: 2px;
+    background: var(--border-2);
+    outline: none;
+    border-radius: 0;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    background: var(--terra);
+    border-radius: 0;
+    cursor: pointer;
+    border: none;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    background: var(--terra);
+    border-radius: 0;
+    cursor: pointer;
+    border: none;
+  }
+
+  .slider-endpoints {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+
+  .slider-endpoint {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
+  /* OUTPUT PANEL */
+  .output {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  /* ARCHETYPE CARD */
+  .archetype-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .archetype-top-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    transition: background 0.3s;
+  }
+
+  .archetype-eyebrow {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    transition: color 0.3s;
+  }
+
+  .archetype-name {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 4px;
+    line-height: 1.1;
+  }
+
+  .archetype-tagline {
+    font-size: 13px;
+    color: var(--text-mid);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  /* STATS ROW */
+  .archetype-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 20px;
+  }
+
+  .archetype-stat {
+    background: var(--surface-2);
+    padding: 12px 14px;
+  }
+
+  .archetype-stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 4px;
+    transition: color 0.3s;
+  }
+
+  .archetype-stat-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* RETENTION BAR */
+  .retention-section {
+    margin-bottom: 20px;
+  }
+
+  .retention-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .retention-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .retention-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .retention-period {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    width: 32px;
+    flex-shrink: 0;
+  }
+
+  .retention-bar-track {
+    flex: 1;
+    height: 4px;
+    background: var(--border-2);
+    position: relative;
+  }
+
+  .retention-bar-fill {
+    height: 100%;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1), background 0.3s;
+  }
+
+  .retention-pct {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-mid);
+    width: 36px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* CHURN TRIGGER */
+  .churn-section {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+
+  .churn-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .churn-text {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  /* APP RECOMMENDATION */
+  .apps-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+
+  .apps-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .apps-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .app-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+  }
+
+  .app-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .app-fit {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 2px 8px;
+    letter-spacing: 0.06em;
+  }
+
+  .fit-high { color: var(--green); border: 1px solid rgba(74,222,128,0.3); }
+  .fit-mid { color: var(--amber); border: 1px solid rgba(251,191,36,0.3); }
+  .fit-low { color: var(--red); border: 1px solid rgba(248,113,113,0.3); }
+
+  /* INSIGHT CARD */
+  .insight-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+
+  .insight-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .insight-text {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+
+  /* FOOTER NOTE */
+  .footer-note {
+    text-align: center;
+    margin-top: 32px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">Subscription & Retention · Interactive Model</div>
+  <div class="header-title">Language Learning Retention Model</div>
+  <div class="header-sub">Adjust the learner and app variables to identify which archetype emerges and what their retention profile looks like across 90 days.</div>
+</div>
+
+<div class="main">
+
+  <!-- CONTROLS -->
+  <div class="controls">
+
+    <div class="controls-section">
+      <div class="controls-section-label">[ Learner Variables ]</div>
+
+      <div class="slider-group">
+        <div class="slider-header">
+          <div class="slider-label">Daily Time Commitment</div>
+          <div class="slider-value" id="val-time">15 min</div>
+        </div>
+        <div class="slider-desc">How many minutes per day the learner dedicates to study</div>
+        <input type="range" id="sl-time" min="1" max="10" value="3" oninput="update()">
+        <div class="slider-endpoints">
+          <span class="slider-endpoint">5 min</span>
+          <span class="slider-endpoint">60+ min</span>
+        </div>
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-header">
+          <div class="slider-label">Motivation Type</div>
+          <div class="slider-value" id="val-motivation">Hobby</div>
+        </div>
+        <div class="slider-desc">Whether learning is casual interest or a genuine fluency goal</div>
+        <input type="range" id="sl-motivation" min="1" max="10" value="3" oninput="update()">
+        <div class="slider-endpoints">
+          <span class="slider-endpoint">Casual hobby</span>
+          <span class="slider-endpoint">Fluency goal</span>
+        </div>
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-header">
+          <div class="slider-label">Frustration Tolerance</div>
+          <div class="slider-value" id="val-frustration">Low</div>
+        </div>
+        <div class="slider-desc">How quickly the learner disengages when content becomes difficult</div>
+        <input type="range" id="sl-frustration" min="1" max="10" value="3" oninput="update()">
+        <div class="slider-endpoints">
+          <span class="slider-endpoint">Quits when hard</span>
+          <span class="slider-endpoint">Pushes through</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="controls-section">
+      <div class="controls-section-label">[ App Variables ]</div>
+
+      <div class="slider-group">
+        <div class="slider-header">
+          <div class="slider-label">Gamification Intensity</div>
+          <div class="slider-value" id="val-gamification">High</div>
+        </div>
+        <div class="slider-desc">How heavily the app relies on streaks, points, lives, and leagues</div>
+        <input type="range" id="sl-gamification" min="1" max="10" value="8" oninput="update()">
+        <div class="slider-endpoints">
+          <span class="slider-endpoint">Pure curriculum</span>
+          <span class="slider-endpoint">Full gamification</span>
+        </div>
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-header">
+          <div class="slider-label">Curriculum Rigour</div>
+          <div class="slider-value" id="val-rigour">Low</div>
+        </div>
+        <div class="slider-desc">How structured and academically progressive the content is</div>
+        <input type="range" id="sl-rigour" min="1" max="10" value="3" oninput="update()">
+        <div class="slider-endpoints">
+          <span class="slider-endpoint">Loose and fun</span>
+          <span class="slider-endpoint">Academic structure</span>
+        </div>
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-header">
+          <div class="slider-label">Session Friction</div>
+          <div class="slider-value" id="val-friction">Very Low</div>
+        </div>
+        <div class="slider-desc">How easy it is to open the app and complete a meaningful session</div>
+        <input type="range" id="sl-friction" min="1" max="10" value="2" oninput="update()">
+        <div class="slider-endpoints">
+          <span class="slider-endpoint">One tap, 2 min</span>
+          <span class="slider-endpoint">Structured, 30 min</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="output">
+
+    <div class="archetype-card" id="archetype-card">
+      <div class="archetype-top-bar" id="archetype-bar"></div>
+      <div class="archetype-eyebrow" id="archetype-eyebrow">Archetype Identified</div>
+      <div class="archetype-name" id="archetype-name">The Tourist</div>
+      <div class="archetype-tagline" id="archetype-tagline">Low commitment, high gamification. Here for the streak, not the language.</div>
+
+      <div class="archetype-stats">
+        <div class="archetype-stat">
+          <div class="archetype-stat-value" id="stat-retention">D30: 34%</div>
+          <div class="archetype-stat-label">30-Day Retention</div>
+        </div>
+        <div class="archetype-stat">
+          <div class="archetype-stat-value" id="stat-ltv">Low</div>
+          <div class="archetype-stat-label">Lifetime Value</div>
+        </div>
+        <div class="archetype-stat">
+          <div class="archetype-stat-value" id="stat-churn">Day 12</div>
+          <div class="archetype-stat-label">Avg Churn Point</div>
+        </div>
+      </div>
+
+      <div class="retention-section">
+        <div class="retention-label">Projected Retention Curve — 90 Days</div>
+        <div class="retention-bars">
+          <div class="retention-row">
+            <div class="retention-period">D7</div>
+            <div class="retention-bar-track"><div class="retention-bar-fill" id="bar-d7" style="width:80%"></div></div>
+            <div class="retention-pct" id="pct-d7">80%</div>
+          </div>
+          <div class="retention-row">
+            <div class="retention-period">D14</div>
+            <div class="retention-bar-track"><div class="retention-bar-fill" id="bar-d14" style="width:55%"></div></div>
+            <div class="retention-pct" id="pct-d14">55%</div>
+          </div>
+          <div class="retention-row">
+            <div class="retention-period">D30</div>
+            <div class="retention-bar-track"><div class="retention-bar-fill" id="bar-d30" style="width:34%"></div></div>
+            <div class="retention-pct" id="pct-d30">34%</div>
+          </div>
+          <div class="retention-row">
+            <div class="retention-period">D60</div>
+            <div class="retention-bar-track"><div class="retention-bar-fill" id="bar-d60" style="width:18%"></div></div>
+            <div class="retention-pct" id="pct-d60">18%</div>
+          </div>
+          <div class="retention-row">
+            <div class="retention-period">D90</div>
+            <div class="retention-bar-track"><div class="retention-bar-fill" id="bar-d90" style="width:10%"></div></div>
+            <div class="retention-pct" id="pct-d90">10%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="churn-section">
+        <div class="churn-label">Primary Churn Trigger</div>
+        <div class="churn-text" id="churn-text">Streak broken. The gamification system removes its own hook the moment the user misses a day. Without the streak there is no reason to return tomorrow.</div>
+      </div>
+    </div>
+
+    <div class="apps-section">
+      <div class="apps-label">App Fit Assessment</div>
+      <div class="apps-grid" id="apps-grid">
+        <div class="app-row">
+          <div class="app-name">Duolingo</div>
+          <div class="app-fit fit-high" id="fit-duolingo">High Fit</div>
+        </div>
+        <div class="app-row">
+          <div class="app-name">Babbel</div>
+          <div class="app-fit fit-low" id="fit-babbel">Poor Fit</div>
+        </div>
+        <div class="app-row">
+          <div class="app-name">Pimsleur</div>
+          <div class="app-fit fit-low" id="fit-pimsleur">Poor Fit</div>
+        </div>
+        <div class="app-row">
+          <div class="app-name">Rosetta Stone</div>
+          <div class="app-fit fit-low" id="fit-rosetta">Poor Fit</div>
+        </div>
+        <div class="app-row">
+          <div class="app-name">italki</div>
+          <div class="app-fit fit-low" id="fit-italki">Poor Fit</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-card">
+      <div class="insight-label">Behavioural Insight</div>
+      <div class="insight-text" id="insight-text">The Tourist is Duolingo's core acquisition demographic and its most difficult retention challenge simultaneously. High downloads, low lifetime value. The streak mechanic is the only thing keeping this user engaged — which means the streak breaking is the only thing needed to lose them permanently.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer-note">
+  Consumer Behaviour Analysis · Subscription & Retention Design · Leon Telemaque · 2026
+</div>
+
+<script>
+const archetypes = {
+  tourist: {
+    name: 'The Tourist',
+    tagline: 'Low commitment, high gamification. Here for the streak, not the language.',
+    eyebrow: 'Casual Learner · Gamified App',
+    color: '#fbbf24',
+    colorDim: 'rgba(251,191,36,0.08)',
+    d7: 78, d14: 52, d30: 32, d60: 16, d90: 9,
+    ltv: 'Low',
+    churnDay: 'Day 12',
+    churnText: 'Streak broken. The gamification system removes its own hook the moment the user misses a day. Without the streak there is no reason to return tomorrow. The app designed to retain through fear of loss loses the user the moment that fear is realised.',
+    duolingo: ['High Fit', 'fit-high'],
+    babbel: ['Poor Fit', 'fit-low'],
+    pimsleur: ['Poor Fit', 'fit-low'],
+    rosetta: ['Poor Fit', 'fit-low'],
+    italki: ['Poor Fit', 'fit-low'],
+    insight: 'The Tourist is Duolingo\'s core acquisition demographic and its most difficult retention challenge simultaneously. High downloads, low lifetime value. The streak mechanic is the only thing keeping this user engaged — which means the streak breaking is the only thing needed to lose them permanently. High volume, low depth.'
+  },
+  overwhelmed: {
+    name: 'The Overwhelmed',
+    tagline: 'Casual motivation, academic rigour. Signed up with good intentions. Gone within weeks.',
+    eyebrow: 'Casual Learner · Academic App',
+    color: '#f87171',
+    colorDim: 'rgba(248,113,113,0.08)',
+    d7: 65, d14: 38, d30: 18, d60: 8, d90: 4,
+    ltv: 'Very Low',
+    churnDay: 'Day 9',
+    churnText: 'Content difficulty exceeds motivation level. The learner arrives with enthusiasm and encounters structured grammar exercises, vocabulary drilling, and progressive curriculum that demands more than they are willing to give. The mismatch between expectation and reality produces rapid churn.',
+    duolingo: ['Better Fit', 'fit-mid'],
+    babbel: ['Poor Fit', 'fit-low'],
+    pimsleur: ['Poor Fit', 'fit-low'],
+    rosetta: ['Poor Fit', 'fit-low'],
+    italki: ['Poor Fit', 'fit-low'],
+    insight: 'The Overwhelmed represents the most avoidable churn in language learning subscriptions. This user was never going to succeed on an academic platform — the product-learner mismatch was built in at the point of acquisition. Better onboarding, motivation assessment, and product matching at signup would retain a significant portion of this archetype on more appropriate platforms.'
+  },
+  frustrated: {
+    name: 'The Frustrated Achiever',
+    tagline: 'High commitment, low ceiling. Using a toy when they need a tool.',
+    eyebrow: 'Hardcore Learner · Gamified App',
+    color: '#60a5fa',
+    colorDim: 'rgba(96,165,250,0.08)',
+    d7: 88, d14: 75, d30: 58, d60: 35, d90: 20,
+    ltv: 'Medium',
+    churnDay: 'Day 45',
+    churnText: 'Gamification ceiling reached. The hardcore learner exhausts the genuine learning value of the gamified platform and begins to recognise that their vocabulary is not growing, their grammar is not improving, and their streak is not a proxy for fluency. Platform migration to a more rigorous product becomes inevitable.',
+    duolingo: ['Temporary Fit', 'fit-mid'],
+    babbel: ['High Fit', 'fit-high'],
+    pimsleur: ['High Fit', 'fit-high'],
+    rosetta: ['Mid Fit', 'fit-mid'],
+    italki: ['High Fit', 'fit-high'],
+    insight: 'The Frustrated Achiever is the most commercially interesting archetype for academic platforms. This user is already committed, already spending time daily, and actively searching for something more rigorous. The acquisition cost is low — they arrive already motivated. The retention ceiling is high — they will stay as long as the product continues to challenge them. Babbel and Pimsleur\'s ideal customer.'
+  },
+  committed: {
+    name: 'The Committed',
+    tagline: 'High commitment, structured curriculum. Here to actually learn the language.',
+    eyebrow: 'Hardcore Learner · Academic App',
+    color: '#4ade80',
+    colorDim: 'rgba(74,222,128,0.08)',
+    d7: 92, d14: 85, d30: 76, d60: 64, d90: 55,
+    ltv: 'High',
+    churnDay: 'Month 8+',
+    churnText: 'Goal achieved or life circumstance change. The Committed learner does not churn from product failure — they churn from success or external disruption. The app retained them as long as the language goal remained active. This is the only archetype whose churn is genuinely not a product problem.',
+    duolingo: ['Poor Fit', 'fit-low'],
+    babbel: ['High Fit', 'fit-high'],
+    pimsleur: ['High Fit', 'fit-high'],
+    rosetta: ['High Fit', 'fit-high'],
+    italki: ['High Fit', 'fit-high'],
+    insight: 'The Committed is every language learning platform\'s ideal subscriber and rarest demographic. High lifetime value, low churn, genuine word of mouth generation when they succeed. The challenge is acquisition — this learner is rare, self-directed, and often researches platforms extensively before committing. Organic search and structured onboarding that surfaces curriculum depth are the most effective acquisition channels.'
+  }
+};
+
+function getLabelValue(val, labels) {
+  const idx = Math.round((val - 1) / 9 * (labels.length - 1));
+  return labels[Math.min(idx, labels.length - 1)];
+}
+
+function update() {
+  const time = parseInt(document.getElementById('sl-time').value);
+  const motivation = parseInt(document.getElementById('sl-motivation').value);
+  const frustration = parseInt(document.getElementById('sl-frustration').value);
+  const gamification = parseInt(document.getElementById('sl-gamification').value);
+  const rigour = parseInt(document.getElementById('sl-rigour').value);
+  const friction = parseInt(document.getElementById('sl-friction').value);
+
+  // Update display values
+  const timeLabels = ['5 min','8 min','12 min','15 min','20 min','25 min','30 min','40 min','50 min','60+ min'];
+  const motivationLabels = ['Hobby','Hobby','Casual','Casual','Mixed','Mixed','Goal-driven','Goal-driven','Fluency goal','Fluency goal'];
+  const frustrationLabels = ['Very Low','Low','Low','Moderate','Moderate','Moderate','High','High','Very High','Very High'];
+  const gamificationLabels = ['None','Very Low','Low','Low','Moderate','Moderate','High','High','Very High','Full'];
+  const rigourLabels = ['Very Low','Low','Low','Moderate','Moderate','Moderate','High','High','Very High','Academic'];
+  const frictionLabels = ['Very Low','Very Low','Low','Low','Moderate','Moderate','High','High','Very High','Very High'];
+
+  document.getElementById('val-time').textContent = timeLabels[time - 1];
+  document.getElementById('val-motivation').textContent = motivationLabels[motivation - 1];
+  document.getElementById('val-frustration').textContent = frustrationLabels[frustration - 1];
+  document.getElementById('val-gamification').textContent = gamificationLabels[gamification - 1];
+  document.getElementById('val-rigour').textContent = rigourLabels[rigour - 1];
+  document.getElementById('val-friction').textContent = frictionLabels[friction - 1];
+
+  // Calculate learner score (1-10, higher = more hardcore)
+  const learnerScore = (time + motivation + frustration) / 3;
+
+  // Calculate app score (1-10, higher = more academic)
+  const appScore = (rigour + friction + (11 - gamification)) / 3;
+
+  // Determine archetype
+  let archetype;
+  const isHardcore = learnerScore >= 5.5;
+  const isAcademic = appScore >= 5.5;
+
+  if (!isHardcore && !isAcademic) archetype = archetypes.tourist;
+  else if (!isHardcore && isAcademic) archetype = archetypes.overwhelmed;
+  else if (isHardcore && !isAcademic) archetype = archetypes.frustrated;
+  else archetype = archetypes.committed;
+
+  // Apply archetype to UI
+  document.getElementById('archetype-bar').style.background = archetype.color;
+  document.getElementById('archetype-card').style.borderColor = archetype.color + '40';
+  document.getElementById('archetype-eyebrow').style.color = archetype.color;
+  document.getElementById('archetype-eyebrow').textContent = archetype.eyebrow;
+  document.getElementById('archetype-name').textContent = archetype.name;
+  document.getElementById('archetype-tagline').textContent = archetype.tagline;
+
+  // Stats
+  document.getElementById('stat-retention').textContent = 'D30: ' + archetype.d30 + '%';
+  document.getElementById('stat-retention').style.color = archetype.color;
+  document.getElementById('stat-ltv').textContent = archetype.ltv;
+  document.getElementById('stat-ltv').style.color = archetype.color;
+  document.getElementById('stat-churn').textContent = archetype.churnDay;
+  document.getElementById('stat-churn').style.color = archetype.color;
+
+  // Retention bars
+  const periods = ['d7','d14','d30','d60','d90'];
+  periods.forEach(p => {
+    const val = archetype[p];
+    document.getElementById('bar-' + p).style.width = val + '%';
+    document.getElementById('bar-' + p).style.background = archetype.color;
+    document.getElementById('pct-' + p).textContent = val + '%';
+  });
+
+  // Churn
+  document.getElementById('churn-text').textContent = archetype.churnText;
+
+  // App fits
+  const apps = ['duolingo','babbel','pimsleur','rosetta','italki'];
+  apps.forEach(app => {
+    const el = document.getElementById('fit-' + app);
+    const [label, cls] = archetype[app];
+    el.textContent = label;
+    el.className = 'app-fit ' + cls;
+  });
+
+  // Insight
+  document.getElementById('insight-text').textContent = archetype.insight;
+}
+
+update();
+</script>
+</body>
+</html>
