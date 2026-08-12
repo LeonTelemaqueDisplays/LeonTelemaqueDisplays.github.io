@@ -92,6 +92,19 @@
 
   .nav-cta:hover { background: var(--blue-dim); }
 
+  .nav-resume {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    cursor: not-allowed;
+  }
+
+  .nav-resume:hover { color: var(--text); }
+
   /* ── HERO ── */
   .hero {
     min-height: 100vh;
@@ -680,7 +693,10 @@
     <li><a href="#media">Media</a></li>
     <li><a href="#snapshots">Snapshots</a></li>
   </ul>
-  <a href="mailto:leon@email.com" class="nav-cta">Let's talk →</a>
+  <div style="display:flex;align-items:center;gap:20px">
+    <a href="mailto:leon@email.com" class="nav-cta">Let's talk →</a>
+    <a href="#" class="nav-resume" title="Coming soon">Resume ↗</a>
+  </div>
 </nav>
 
 <!-- HERO -->
