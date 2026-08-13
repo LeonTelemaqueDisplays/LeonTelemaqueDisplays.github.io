@@ -316,6 +316,27 @@
     opacity: 1;
     pointer-events: all;
   }
+
+  .browse-all-link {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-decoration: none;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--bg);
+    transition: color 0.3s, border-color 0.3s;
+    white-space: nowrap;
+  }
+  .browse-all-link:hover { color: var(--text); border-color: rgba(255,255,255,.3); }
 </style>
 </head>
 <body>
@@ -406,6 +427,8 @@
     <div class="side-visual-line"></div>
   </div>
 
+  <a href="#" class="browse-all-link" onclick="event.stopPropagation(); navigate('all'); return false;">Just browse all work →</a>
+
 </div>
 
 <script>
@@ -414,7 +437,7 @@ function navigate(side) {
   cover.classList.add('active');
 
   setTimeout(() => {
-    if (side === 'games') {
+    if (side === 'games' || side === 'all') {
       window.location.href = '/home.html';
     } else {
       window.location.href = 'https://leon-telemaque-portfolio.vercel.app/consumer';

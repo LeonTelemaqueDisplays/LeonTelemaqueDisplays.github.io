@@ -105,6 +105,20 @@
 
   .nav-resume:hover { color: var(--text); }
 
+  .nav-toggle {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.03em;
+    color: var(--text-dim);
+    border: 1px solid rgba(255,255,255,0.14);
+    padding: 5px 10px;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+  .nav-toggle:hover { color: var(--text); border-color: rgba(255,255,255,0.35); }
+
   /* ── HERO ── */
   .hero {
     min-height: 100vh;
@@ -696,6 +710,7 @@
   <div style="display:flex;align-items:center;gap:20px">
     <a href="mailto:leon@email.com" class="nav-cta">Let's talk →</a>
     <a href="#" class="nav-resume" title="Coming soon">Resume ↗</a>
+    <a href="/home.html" class="nav-toggle" title="Switch to Game Systems portfolio">[ Game Systems ⇄ Product Systems ]</a>
   </div>
 </nav>
 
@@ -929,11 +944,6 @@
             <div class="card-tag">Spotify</div>
           </div>
         </div>
-      </div>
-
-      <div class="coming-soon-card">
-        <div class="coming-soon-label">Piece 04</div>
-        <div class="coming-soon-title">Coming — 2027</div>
       </div>
 
     </div>

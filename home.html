@@ -83,6 +83,13 @@ nav{
   text-decoration:none;
 }
 .nav-links{display:flex;gap:32px;list-style:none;align-items:center}
+.nav-toggle{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.03em;
+  color:var(--muted2);border:1px solid rgba(255,255,255,.14);
+  padding:5px 10px;border-radius:20px;text-decoration:none;
+  transition:border-color .15s,color .15s;white-space:nowrap;
+}
+.nav-toggle:hover{color:var(--text);border-color:rgba(255,255,255,.35)}
 .nav-links a{
   color:var(--muted2);text-decoration:none;
   font-size:.88rem;font-weight:400;
@@ -2436,6 +2443,7 @@ footer{
       </a>
     </li>
     <li><a href="#" title="Coming soon" style="cursor:not-allowed" onclick="closeNav()">Resume ↗</a></li>
+    <li><a href="/consumer" class="nav-toggle" title="Switch to Product Systems portfolio" onclick="closeNav()">[ Game Systems ⇄ Product Systems ]</a></li>
   </ul>
   <button class="nav-hamburger" id="navHamburger" aria-label="Menu" onclick="toggleNav()">
     <span></span><span></span><span></span>
