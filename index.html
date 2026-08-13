@@ -317,6 +317,21 @@
     pointer-events: all;
   }
 
+  .shared-tagline {
+    position: absolute;
+    bottom: 62px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    color: var(--text-mid);
+    text-align: center;
+    max-width: 480px;
+    line-height: 1.5;
+  }
+
   .browse-all-link {
     position: absolute;
     bottom: 28px;
@@ -426,6 +441,8 @@
     <button class="side-cta">Enter Consumer Portfolio →</button>
     <div class="side-visual-line"></div>
   </div>
+
+  <div class="shared-tagline">Two industries. One core engine: systems designed around how people actually behave.</div>
 
   <a href="#" class="browse-all-link" onclick="event.stopPropagation(); navigate('all'); return false;">Just browse all work →</a>
 
