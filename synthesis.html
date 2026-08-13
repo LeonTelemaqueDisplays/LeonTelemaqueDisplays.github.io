@@ -99,18 +99,22 @@
 
   /* GRID */
   .grid-wrap {
-    max-width: 1080px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 40px 80px;
   }
 
   .synth-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
   }
 
-  @media (max-width: 860px) {
+  @media (max-width: 1080px) {
+    .synth-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 700px) {
     .synth-grid { grid-template-columns: 1fr; }
   }
 
@@ -147,6 +151,19 @@
     overflow: hidden;
   }
   .synth-visual svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .synth-visual img { width: 100%; height: 100%; object-fit: cover; display: block; position: absolute; inset: 0; }
+  .synth-visual-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 1;
+    color: #e8e8e8;
+    text-shadow: 0 1px 4px rgba(0,0,0,.8);
+  }
 
   /* Reused consumer thumb-bar visual */
   .thumb-visual {
@@ -508,7 +525,71 @@
       </div>
     </div>
 
-    <!-- 3: Youth Investment — Product Systems / Design -->
+    <!-- 3: Marathon — Game Systems / Analytics -->
+    <div class="synth-card track-game" onclick="window.open('/marathon-liveops-case-study.html','_blank')">
+      <div class="synth-eyebrow">Game Systems · Analytics</div>
+      <div class="synth-visual" style="background:#0A0B0D">
+        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="synthMarBg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#0D0E11"/>
+              <stop offset="100%" stop-color="#0A0B0D"/>
+            </linearGradient>
+            <radialGradient id="synthMarAmberGlow" cx="50%" cy="60%" r="50%">
+              <stop offset="0%" stop-color="#F0A020" stop-opacity=".10"/>
+              <stop offset="100%" stop-color="#F0A020" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="synthMarFade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="45%" stop-color="#0A0B0D" stop-opacity="0"/>
+              <stop offset="100%" stop-color="#0A0B0D" stop-opacity=".95"/>
+            </linearGradient>
+            <linearGradient id="synthMarFillGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#F0A020" stop-opacity=".22"/>
+              <stop offset="100%" stop-color="#F0A020" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <rect width="680" height="400" fill="url(#synthMarBg)"/>
+          <rect width="680" height="400" fill="url(#synthMarAmberGlow)"/>
+          <g opacity=".05" stroke="#F0A020" stroke-width=".5">
+            <line x1="0" y1="70" x2="680" y2="70"/><line x1="0" y1="130" x2="680" y2="130"/><line x1="0" y1="190" x2="680" y2="190"/>
+            <line x1="0" y1="250" x2="680" y2="250"/><line x1="0" y1="310" x2="680" y2="310"/>
+            <line x1="90" y1="0" x2="90" y2="400"/><line x1="230" y1="0" x2="230" y2="400"/><line x1="370" y1="0" x2="370" y2="400"/>
+            <line x1="510" y1="0" x2="510" y2="400"/><line x1="620" y1="0" x2="620" y2="400"/>
+          </g>
+          <rect x="0" y="0" width="680" height="30" fill="#08090B"/>
+          <line x1="0" y1="30" x2="680" y2="30" stroke="rgba(240,160,32,.25)" stroke-width="1"/>
+          <circle cx="16" cy="15" r="4.5" fill="rgba(240,160,32,.8)"/>
+          <circle cx="16" cy="15" r="2.5" fill="#F0A020"/>
+          <text x="27" y="18.5" fill="rgba(240,160,32,.9)" font-size="8" font-family="monospace" font-weight="bold" letter-spacing="1.3">LIVEOPS CASE STUDY — BUNGIE · MARATHON · 2026</text>
+          <path d="M 90,90 L 130,155 L 175,225 L 430,205 L 470,240 L 590,232 L 620,244 L 620,300 L 90,300 Z" fill="url(#synthMarFillGrad)" stroke="none"/>
+          <path d="M 90,90 L 130,155 L 175,225 L 430,205 L 470,240 L 590,232 L 620,244" fill="none" stroke="#F0A020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
+          <circle cx="90" cy="90" r="3" fill="#F0A020"/>
+          <circle cx="130" cy="155" r="3" fill="#F0A020"/>
+          <circle cx="590" cy="232" r="3" fill="#4FD1C5"/>
+          <circle cx="620" cy="244" r="3" fill="#F0A020"/>
+          <line x1="590" y1="90" x2="590" y2="300" stroke="#4FD1C5" stroke-width="1" stroke-dasharray="3 3" opacity=".4"/>
+          <text x="590" y="82" fill="#4FD1C5" font-size="6.5" font-family="monospace" text-anchor="middle" opacity=".8">VAULT BREAKER</text>
+          <text x="90" y="105" fill="#ECE8E1" font-size="8.5" font-family="monospace" font-weight="bold">88,337</text>
+          <text x="620" y="266" fill="#ECE8E1" font-size="8.5" font-family="monospace" font-weight="bold" text-anchor="end">2K–7K</text>
+          <text x="340" y="345" text-anchor="middle" fill="#ECE8E1" font-size="15" font-family="monospace" font-weight="bold" letter-spacing="3" opacity=".92">MISREADING YOUR AUDIENCE</text>
+          <text x="340" y="360" text-anchor="middle" fill="#4A4E56" font-size="7" font-family="monospace" letter-spacing="2">A PVE COMMUNITY ASKED TO BECOME PVP OVERNIGHT</text>
+          <text x="340" y="378" text-anchor="middle" fill="rgba(240,160,32,.4)" font-size="6" font-family="monospace" letter-spacing="1">STEAMDB · STEAMCHARTS · COMMUNITY TELEMETRY</text>
+          <rect width="680" height="400" fill="url(#synthMarFade)"/>
+        </svg>
+      </div>
+      <div class="synth-body">
+        <h3 class="synth-title">Marathon &amp; the Cost of Misreading Your Audience</h3>
+        <p class="synth-desc">88,337 launch concurrent players collapsed to 2,000–7,000 by July. Not a bad game — a PvE-first player base asked to become a PvP one overnight, with no pressure release valve. A full LiveOps case study: the identity argument, the Vault Breaker spike Bungie shouldn't have taken down, a D30/D60/D90 intervention design doc, and a three-principle framework for any studio launching into an established audience.</p>
+        <div class="synth-tags">
+          <span class="synth-tag primary track-tag-game">LiveOps Case Study</span>
+          <span class="synth-tag">Player Retention</span>
+          <span class="synth-tag">Marathon</span>
+          <span class="synth-tag">Bungie · 2026</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4: Youth Investment — Product Systems / Design -->
     <div class="synth-card track-product" onclick="window.open('/consumer/investment','_blank')">
       <div class="synth-eyebrow">Product Systems · Design</div>
       <div class="synth-visual">
@@ -548,6 +629,24 @@
           <span class="synth-tag primary track-tag-product">Risk Analytics</span>
           <span class="synth-tag">Fintech Psychology</span>
           <span class="synth-tag">Interactive Prototype</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6: Language Learning Apps — Product Systems / Design -->
+    <div class="synth-card track-product" onclick="window.open('/consumer/language-learning-analysis.html','_blank')">
+      <div class="synth-eyebrow">Product Systems · Design</div>
+      <div class="synth-visual" style="overflow:hidden">
+        <img src="/consumer/duolingo-cover.jpg" alt="Duolingo owl mascot">
+        <div class="synth-visual-label">Subscription &amp; Retention · Language Learning</div>
+      </div>
+      <div class="synth-body">
+        <h3 class="synth-title">Language Learning Apps — The Balance Problem</h3>
+        <p class="synth-desc">Why language learning subscription apps struggle to serve two fundamentally incompatible audiences — the casual hobbyist and the hardcore learner — and what most platforms give up when they design for one over the other. Includes an interactive model for identifying learner archetypes and their 90-day retention curves.</p>
+        <div class="synth-tags">
+          <span class="synth-tag primary track-tag-product">Subscription Design</span>
+          <span class="synth-tag">Interactive Model</span>
+          <span class="synth-tag">Duolingo · Babbel</span>
         </div>
       </div>
     </div>
