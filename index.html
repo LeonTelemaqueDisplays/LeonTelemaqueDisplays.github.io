@@ -448,7 +448,7 @@
 
   <div class="shared-tagline">Two industries. One core engine: systems designed around how people actually behave.</div>
 
-  <a href="#" class="browse-all-link" onclick="event.stopPropagation(); navigate('all'); return false;">Just browse all work →</a>
+  <a href="#" class="browse-all-link" onclick="event.stopPropagation(); navigate('all'); return false;">Not sure yet? See the throughline →</a>
 
 </div>
 
@@ -458,7 +458,9 @@ function navigate(side) {
   cover.classList.add('active');
 
   setTimeout(() => {
-    if (side === 'games' || side === 'all') {
+    if (side === 'all') {
+      window.location.href = '/synthesis.html';
+    } else if (side === 'games') {
       window.location.href = '/home.html';
     } else {
       window.location.href = 'https://leon-telemaque-portfolio.vercel.app/consumer';

@@ -8017,6 +8017,12 @@ function closeModal(){
   document.getElementById('modal-frame').innerHTML='';
 }
 
+/* Deep-link support: /home.html#case=<key> auto-opens the matching case study modal */
+(function(){
+  var m = location.hash.match(/^#case=([a-zA-Z0-9_-]+)$/);
+  if(m && typeof DATA!=='undefined' && DATA[m[1]]) openModal(m[1]);
+})();
+
 function bgClick(e){if(e.target===document.getElementById('modal-bg'))closeModal();}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
