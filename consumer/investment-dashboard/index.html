@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Transparency Dashboard</title>
+<style>
+  :root {
+    --bg: #1a1917;
+    --surface: #24221f;
+    --surface-2: #2c2a27;
+    --surface-3: #32302d;
+    --border: #3a3835;
+    --border-2: #4a4845;
+    --dune-text: #f0ede8;
+    --dune-mid: #b8b0a8;
+    --dune-dim: #7a7268;
+    --dune-faint: #4a4845;
+    --teal: #00c896;
+    --teal-dim: rgba(0,200,150,0.12);
+    --teal-glow: rgba(0,200,150,0.06);
+    --red: #ff6b6b;
+    --red-dim: rgba(255,107,107,0.10);
+    --amber: #f0a030;
+    --text: #f0ede8;
+    --text-mid: #b8b0a8;
+    --text-dim: #7a7268;
+    --mono: 'Courier New', monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    padding: 32px 28px;
+  }
+
+  .header { margin-bottom: 28px; }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 4px;
+  }
+
+  .header-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--teal);
+    font-weight: 500;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    font-family: var(--mono);
+  }
+
+  .header-title {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+
+  .header-sub {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 3px;
+  }
+
+  .time-toggle {
+    display: flex;
+    gap: 4px;
+    background: var(--surface-3);
+    padding: 4px;
+    border-radius: 8px;
+  }
+
+  .time-btn {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-dim);
+    padding: 6px 14px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.15s;
+    font-family: var(--sans);
+  }
+
+  .time-btn.active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+
+  .portfolio-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .summary-card {
+    background: var(--surface);
+    padding: 18px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .summary-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-weight: 500;
+    margin-bottom: 6px;
+    letter-spacing: 0.02em;
+  }
+
+  .summary-value {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .summary-change { font-size: 12px; font-weight: 500; }
+  .pos { color: var(--teal); }
+  .neg { color: var(--red); }
+  .neu { color: var(--text-dim); }
+
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 16px;
+  }
+
+  .holdings-panel {
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .panel-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .panel-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .panel-hint {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .holding-row {
+    display: grid;
+    grid-template-columns: 52px 1fr 80px 70px 60px;
+    gap: 0;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.12s;
+    align-items: center;
+  }
+
+  .holding-row:last-child { border-bottom: none; }
+  .holding-row:hover { background: var(--surface-2); }
+
+  .holding-row.selected {
+    background: var(--teal-glow);
+    border-left: 3px solid var(--teal);
+    padding-left: 17px;
+  }
+
+  .holding-ticker {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--teal);
+    letter-spacing: 0.04em;
+    font-family: var(--mono);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .holding-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--surface-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .holding-icon img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+  }
+
+  .holding-info { padding-right: 12px; }
+
+  .holding-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+
+  .holding-reason {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+
+  .holding-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    text-align: right;
+  }
+
+  .holding-change {
+    font-size: 11px;
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .holding-bar-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .holding-bar {
+    height: 4px;
+    border-radius: 2px;
+    min-width: 6px;
+    max-width: 48px;
+  }
+
+  .drill-panel {
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .drill-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 40px;
+    text-align: center;
+  }
+
+  .drill-empty-icon { font-size: 32px; opacity: 0.2; }
+
+  .drill-empty-text {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .drill-content { display: none; flex-direction: column; height: 100%; }
+  .drill-content.visible { display: flex; }
+
+  .drill-header {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+  }
+
+  .drill-ticker {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--teal);
+    margin-bottom: 3px;
+    font-family: var(--mono);
+    text-transform: uppercase;
+  }
+
+  .drill-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+
+  .drill-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .drill-price {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .drill-change { font-size: 13px; font-weight: 600; }
+
+  .mini-chart {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mini-chart-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  .chart-svg-wrap { width: 100%; height: 72px; }
+
+  .factors-section {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    flex: 1;
+  }
+
+  .factors-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 12px;
+    letter-spacing: 0.01em;
+  }
+
+  .factor-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+
+  .factor-item:last-child { margin-bottom: 0; }
+
+  .factor-tag {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    font-weight: 600;
+    margin-top: 1px;
+  }
+
+  .factor-tag.up { background: var(--teal-dim); color: var(--teal); letter-spacing:0.02em; }
+  .factor-tag.down { background: var(--red-dim); color: var(--red); letter-spacing:0.02em; }
+  .factor-tag.neutral { background: var(--surface-3); color: var(--text-dim); letter-spacing:0.02em; }
+
+  .factor-text {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.55;
+  }
+
+  .company-desc {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+  }
+
+  .company-desc-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .company-desc-text {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  .sentiment-row {
+    padding: 14px 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .sentiment-card {
+    background: var(--surface-2);
+    padding: 10px 12px;
+    text-align: center;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .sentiment-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    font-weight: 500;
+    margin-bottom: 4px;
+    letter-spacing: 0.02em;
+  }
+
+  .sentiment-value {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="header-eyebrow">Fintech · Investment Transparency</div>
+<div style="display:inline-flex;align-items:center;gap:6px;background:rgba(240,160,48,0.08);border:1px solid rgba(240,160,48,0.2);border-radius:6px;padding:4px 10px;margin-bottom:8px">
+  <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1L6 1Z" stroke="#f0a030" stroke-width="1.2" stroke-linejoin="round"/><path d="M6 5V7M6 8.5V9" stroke="#f0a030" stroke-width="1.2" stroke-linecap="round"/></svg>
+  <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.08em;color:#f0a030">Sample data — illustrative only. Numbers are fabricated for demonstration.</span>
+</div>
+      <div class="header-title">My Portfolio</div>
+      <div class="header-sub">Click any holding to understand why it moved</div>
+    </div>
+    <div class="time-toggle">
+      <button class="time-btn active" onclick="setTime('today',this)">Today</button>
+      <button class="time-btn" onclick="setTime('week',this)">1W</button>
+      <button class="time-btn" onclick="setTime('month',this)">1M</button>
+    </div>
+  </div>
+</div>
+
+<!-- PORTFOLIO SUMMARY -->
+<div class="portfolio-summary">
+  <div class="summary-card">
+    <div class="summary-label" style="display:flex;align-items:center;gap:5px">
+  <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M1 9L4 6L6.5 8.5L11 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  Total Value
+</div>
+    <div class="summary-value" id="total-value">$4,832.40</div>
+    <div class="summary-change pos" id="total-change">+$61.20 today</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-label" style="display:flex;align-items:center;gap:5px">
+  <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M6 3.5V6L7.5 7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+  Today's Return
+</div>
+    <div class="summary-value pos" id="today-return">+1.28%</div>
+    <div class="summary-change neu">vs yesterday's close</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-label" style="display:flex;align-items:center;gap:5px">
+  <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1L7.2 4.5H11L8 6.8L9.2 10.5L6 8.2L2.8 10.5L4 6.8L1 4.5H4.8L6 1Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/></svg>
+  Best Performer
+</div>
+    <div class="summary-value" id="best-name">SHOP</div>
+    <div class="summary-change pos" id="best-change">+3.4% today</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-label" style="display:flex;align-items:center;gap:5px">
+  <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1L6 1Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M6 5V7M6 8.5V9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+  Needs Attention
+</div>
+    <div class="summary-value" id="watch-name">SU</div>
+    <div class="summary-change neg" id="watch-change">-2.1% today</div>
+  </div>
+</div>
+
+<!-- MAIN GRID -->
+<div class="main-grid">
+
+  <!-- HOLDINGS -->
+  <div class="holdings-panel">
+    <div class="panel-header">
+      <div class="panel-title">Holdings</div>
+      <div class="panel-hint" style="display:flex;align-items:center;gap:4px"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 6H2M2 6L4.5 3.5M2 6L4.5 8.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg> select to see why</div>
+    </div>
+
+    <div class="holding-row" id="row-AAPL" onclick="selectHolding('AAPL')">
+      <div class="holding-ticker">
+        <div class="holding-icon"><img src="https://www.google.com/s2/favicons?domain=apple.com&sz=32" alt="AAPL" onerror="this.style.display='none'"/></div>
+        AAPL
+      </div>
+      <div class="holding-info">
+        <div class="holding-name">Apple Inc.</div>
+        <div class="holding-reason" id="reason-AAPL">iPhone 17 pre-orders beat analyst estimates — services revenue up 12% YoY</div>
+      </div>
+      <div class="holding-value" id="val-AAPL">$1,240.80</div>
+      <div class="holding-change pos" id="chg-AAPL">+1.8%</div>
+      <div class="holding-bar-wrap">
+        <div class="holding-bar" id="bar-AAPL" style="background:var(--green);width:45px"></div>
+      </div>
+    </div>
+
+    <div class="holding-row" id="row-SHOP" onclick="selectHolding('SHOP')">
+      <div class="holding-ticker">
+        <div class="holding-icon"><img src="https://www.google.com/s2/favicons?domain=shopify.com&sz=32" alt="SHOP" onerror="this.style.display='none'"/></div>
+        SHOP
+      </div>
+      <div class="holding-info">
+        <div class="holding-name">Shopify Inc.</div>
+        <div class="holding-reason" id="reason-SHOP">Q2 earnings beat by 18% — merchant growth in emerging markets driving optimism</div>
+      </div>
+      <div class="holding-value" id="val-SHOP">$892.50</div>
+      <div class="holding-change pos" id="chg-SHOP">+3.4%</div>
+      <div class="holding-bar-wrap">
+        <div class="holding-bar" id="bar-SHOP" style="background:var(--green);width:60px"></div>
+      </div>
+    </div>
+
+    <div class="holding-row" id="row-RY" onclick="selectHolding('RY')">
+      <div class="holding-ticker">
+        <div class="holding-icon"><img src="https://www.google.com/s2/favicons?domain=rbc.com&sz=32" alt="RY" onerror="this.style.display='none'"/></div>
+        RY
+      </div>
+      <div class="holding-info">
+        <div class="holding-name">Royal Bank of Canada</div>
+        <div class="holding-reason" id="reason-RY">Bank of Canada rate hold announced — financial sector stable, dividend confirmed</div>
+      </div>
+      <div class="holding-value" id="val-RY">$1,105.60</div>
+      <div class="holding-change pos" id="chg-RY">+0.6%</div>
+      <div class="holding-bar-wrap">
+        <div class="holding-bar" id="bar-RY" style="background:var(--green);width:16px"></div>
+      </div>
+    </div>
+
+    <div class="holding-row" id="row-TSLA" onclick="selectHolding('TSLA')">
+      <div class="holding-ticker">
+        <div class="holding-icon"><img src="https://www.google.com/s2/favicons?domain=tesla.com&sz=32" alt="TSLA" onerror="this.style.display='none'"/></div>
+        TSLA
+      </div>
+      <div class="holding-info">
+        <div class="holding-name">Tesla Inc.</div>
+        <div class="holding-reason" id="reason-TSLA">Delivery numbers missed expectations — China EV competition intensifying</div>
+      </div>
+      <div class="holding-value" id="val-TSLA">$648.30</div>
+      <div class="holding-change neg" id="chg-TSLA">-1.2%</div>
+      <div class="holding-bar-wrap">
+        <div class="holding-bar" id="bar-TSLA" style="background:var(--red);width:28px"></div>
+      </div>
+    </div>
+
+    <div class="holding-row" id="row-SU" onclick="selectHolding('SU')">
+      <div class="holding-ticker">
+        <div class="holding-icon"><img src="https://www.google.com/s2/favicons?domain=suncor.com&sz=32" alt="SU" onerror="this.style.display='none'"/></div>
+        SU
+      </div>
+      <div class="holding-info">
+        <div class="holding-name">Suncor Energy</div>
+        <div class="holding-reason" id="reason-SU">Oil prices dropped on higher-than-expected US inventory report — energy sector pressured</div>
+      </div>
+      <div class="holding-value" id="val-SU">$562.10</div>
+      <div class="holding-change neg" id="chg-SU">-2.1%</div>
+      <div class="holding-bar-wrap">
+        <div class="holding-bar" id="bar-SU" style="background:var(--red);width:40px"></div>
+      </div>
+    </div>
+
+    <div class="holding-row" id="row-XIU" onclick="selectHolding('XIU')">
+      <div class="holding-ticker">
+        <div class="holding-icon"><img src="https://www.google.com/s2/favicons?domain=blackrock.com&sz=32" alt="XIU" onerror="this.style.display='none'"/></div>
+        XIU
+      </div>
+      <div class="holding-info">
+        <div class="holding-name">iShares S&P/TSX 60 ETF</div>
+        <div class="holding-reason" id="reason-XIU">Broad Canadian market slightly up — financial and energy sectors offsetting each other</div>
+      </div>
+      <div class="holding-value" id="val-XIU">$383.10</div>
+      <div class="holding-change pos" id="chg-XIU">+0.3%</div>
+      <div class="holding-bar-wrap">
+        <div class="holding-bar" id="bar-XIU" style="background:var(--green);width:10px"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DRILL DOWN -->
+  <div class="drill-panel">
+
+    <div class="drill-empty" id="drill-empty">
+      <div class="drill-empty-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="18" width="5" height="10" rx="1" fill="currentColor" opacity="0.3"/><rect x="13" y="12" width="5" height="16" rx="1" fill="currentColor" opacity="0.3"/><rect x="22" y="6" width="5" height="22" rx="1" fill="currentColor" opacity="0.3"/></svg></div>
+      <div class="drill-empty-text">Select a holding<br>to understand why it moved</div>
+    </div>
+
+    <div class="drill-content" id="drill-content">
+
+      <div class="drill-header">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <div id="d-icon" style="width:36px;height:36px;border-radius:10px;background:var(--surface-3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
+          <img id="d-icon-img" src="" alt="" style="width:22px;height:22px;object-fit:contain" onerror="this.style.display='none'"/>
+        </div>
+        <div>
+          <div class="drill-ticker" id="d-ticker">AAPL</div>
+          <div class="drill-name" id="d-name" style="margin-bottom:0">Apple Inc.</div>
+        </div>
+      </div>
+        <div class="drill-name" id="d-name">Apple Inc.</div>
+        <div class="drill-price-row">
+          <div class="drill-price" id="d-price">$218.40</div>
+          <div class="drill-change pos" id="d-change">+$3.86 (+1.8%)</div>
+        </div>
+      </div>
+
+      <div class="mini-chart">
+        <div class="mini-chart-label" id="chart-label">Price — Last 30 Days</div>
+        <div class="chart-svg-wrap">
+          <svg id="chart-svg" width="100%" height="80" viewBox="0 0 340 80" preserveAspectRatio="none">
+            <polyline id="chart-line" fill="none" stroke="var(--terra)" stroke-width="1.5"
+              points="0,60 20,55 40,58 60,50 80,48 100,52 120,44 140,40 160,42 180,36 200,38 220,32 240,28 260,30 280,24 300,20 320,18 340,14"/>
+            <polyline id="chart-fill" fill="rgba(194,113,79,0.08)" stroke="none"
+              points="0,60 20,55 40,58 60,50 80,48 100,52 120,44 140,40 160,42 180,36 200,38 220,32 240,28 260,30 280,24 300,20 320,18 340,14 340,80 0,80"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="factors-section">
+        <div class="factors-label">Why it moved today</div>
+        <div id="factors-list"></div>
+      </div>
+
+      <div class="company-desc">
+        <div class="company-desc-label">What this company does</div>
+        <div class="company-desc-text" id="d-desc"></div>
+      </div>
+
+      <div class="sentiment-row">
+        <div class="sentiment-card">
+          <div class="sentiment-label">News Sentiment</div>
+          <div class="sentiment-value" id="d-sentiment"></div>
+        </div>
+        <div class="sentiment-card">
+          <div class="sentiment-label">Volatility</div>
+          <div class="sentiment-value" id="d-volatility"></div>
+        </div>
+        <div class="sentiment-card">
+          <div class="sentiment-label">Sector</div>
+          <div class="sentiment-value" id="d-sector" style="font-size:9px;padding-top:3px"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const timeData = {
+  today: {
+    totalValue: '$4,832.40', totalChange: '+$61.20 today', todayReturn: '+1.28%',
+    bestName: 'SHOP', bestChange: '+3.4% today', watchName: 'SU', watchChange: '-2.1% today',
+    holdings: {
+      AAPL: { val: '$1,240.80', chg: '+1.8%', pos: true, barW: 45, reason: 'iPhone 17 pre-orders beat analyst estimates — services revenue up 12% YoY' },
+      SHOP: { val: '$892.50', chg: '+3.4%', pos: true, barW: 60, reason: 'Q2 earnings beat by 18% — merchant growth in emerging markets driving optimism' },
+      RY:   { val: '$1,105.60', chg: '+0.6%', pos: true, barW: 16, reason: 'Bank of Canada rate hold announced — financial sector stable, dividend confirmed' },
+      TSLA: { val: '$648.30', chg: '-1.2%', pos: false, barW: 28, reason: 'Delivery numbers missed expectations — China EV competition intensifying' },
+      SU:   { val: '$562.10', chg: '-2.1%', pos: false, barW: 40, reason: 'Oil prices dropped on higher-than-expected US inventory report' },
+      XIU:  { val: '$383.10', chg: '+0.3%', pos: true, barW: 10, reason: 'Broad Canadian market slightly up — financial and energy sectors offsetting each other' }
+    }
+  },
+  week: {
+    totalValue: '$4,790.20', totalChange: '+$19.00 this week', todayReturn: '+0.40%',
+    bestName: 'SHOP', bestChange: '+5.2% this week', watchName: 'TSLA', watchChange: '-3.8% this week',
+    holdings: {
+      AAPL: { val: '$1,228.40', chg: '+2.1%', pos: true, barW: 42, reason: 'Strong product cycle momentum and services growth story intact' },
+      SHOP: { val: '$880.10', chg: '+5.2%', pos: true, barW: 60, reason: 'Earnings beat drove analyst upgrades — price targets raised across 6 firms' },
+      RY:   { val: '$1,098.20', chg: '+0.4%', pos: true, barW: 12, reason: 'Stable week — rate environment supportive for Canadian banks' },
+      TSLA: { val: '$638.90', chg: '-3.8%', pos: false, barW: 52, reason: 'Delivery miss and margin pressure concerns weighing on sentiment' },
+      SU:   { val: '$568.40', chg: '-1.2%', pos: false, barW: 24, reason: 'Energy sector soft on global demand concerns and stronger CAD' },
+      XIU:  { val: '$376.20', chg: '-0.4%', pos: false, barW: 12, reason: 'Energy drag offset gains elsewhere — TSX 60 slightly negative for week' }
+    }
+  },
+  month: {
+    totalValue: '$4,612.80', totalChange: '-$158.80 this month', todayReturn: '-3.33%',
+    bestName: 'RY', bestChange: '+4.1% this month', watchName: 'TSLA', watchChange: '-9.2% this month',
+    holdings: {
+      AAPL: { val: '$1,198.20', chg: '+3.2%', pos: true, barW: 38, reason: 'WWDC announcements and services growth keeping investors confident' },
+      SHOP: { val: '$851.30', chg: '-0.8%', pos: false, barW: 14, reason: 'Mixed month — strong earnings offset by broader tech sector rotation' },
+      RY:   { val: '$1,124.80', chg: '+4.1%', pos: true, barW: 60, reason: 'Rate environment improving for banks — mortgage book holding strong' },
+      TSLA: { val: '$592.10', chg: '-9.2%', pos: false, barW: 60, reason: 'Persistent delivery concerns and margin compression — difficult month' },
+      SU:   { val: '$478.30', chg: '-7.8%', pos: false, barW: 52, reason: 'Oil price decline hit energy sector hard — OPEC uncertainty weighing' },
+      XIU:  { val: '$368.10', chg: '-2.1%', pos: false, barW: 24, reason: 'Broad Canadian market down — energy and materials sector drag' }
+    }
+  }
+};
+
+const stockData = {
+  AAPL: {
+    name: 'Apple Inc.',
+    price: { today: '$218.40', week: '$216.22', month: '$210.80' },
+    change: { today: '+$3.86 (+1.8%)', week: '+$4.53 (+2.1%)', month: '+$6.88 (+3.2%)' },
+    pos: { today: true, week: true, month: true },
+    desc: 'Apple designs and sells iPhones, Macs, iPads, and wearables. Their growing Services division — the App Store, Apple Music, iCloud — now generates over $100 billion annually and is their most profitable segment.',
+    sentiment: { today: 'Positive', week: 'Positive', month: 'Mixed' },
+    volatility: { today: 'Low', week: 'Low', month: 'Moderate' },
+    sector: 'Technology',
+    factors: {
+      today: [
+        { tag: 'up', text: 'iPhone 17 pre-order data from supply chain sources exceeded analyst models by an estimated 15-20%' },
+        { tag: 'up', text: 'Services segment tracking ahead of Q3 guidance — App Store spending up in key markets' },
+        { tag: 'neutral', text: 'Broader tech sector slightly positive today following Fed rate commentary' }
+      ],
+      week: [
+        { tag: 'up', text: 'Product cycle momentum building ahead of September iPhone event' },
+        { tag: 'up', text: 'Six analyst firms raised price targets following services revenue data' },
+        { tag: 'neutral', text: 'No major negative catalysts this week — stock drifting upward on positive sentiment' }
+      ],
+      month: [
+        { tag: 'up', text: 'WWDC AI announcements well received — Apple Intelligence positioning seen as competitive' },
+        { tag: 'up', text: 'Services revenue growth story intact — subscription base still expanding' },
+        { tag: 'neutral', text: 'Hardware growth modest — upgrade cycle maturing in developed markets' }
+      ]
+    },
+    charts: {
+      today: '0,40 20,38 40,42 60,36 80,32 100,34 120,28 140,24 160,26 180,20 200,22 220,16 240,14 260,16 280,12 300,10 320,8 340,6',
+      week: '0,55 40,50 80,46 120,42 160,38 200,34 240,30 280,26 340,18',
+      month: '0,65 40,58 80,52 120,44 160,38 200,30 240,24 280,18 340,10'
+    }
+  },
+  SHOP: {
+    name: 'Shopify Inc.',
+    price: { today: '$89.25', week: '$87.85', month: '$84.62' },
+    change: { today: '+$2.94 (+3.4%)', week: '+$4.35 (+5.2%)', month: '-$0.68 (-0.8%)' },
+    pos: { today: true, week: true, month: false },
+    desc: 'Shopify is a Canadian e-commerce platform that lets businesses build online stores. They make money through monthly subscriptions and a cut of every transaction processed — over two million merchants worldwide use their platform.',
+    sentiment: { today: 'Very Positive', week: 'Positive', month: 'Mixed' },
+    volatility: { today: 'Elevated', week: 'Elevated', month: 'High' },
+    sector: 'Technology / E-Commerce',
+    factors: {
+      today: [
+        { tag: 'up', text: 'Q2 earnings released this morning — revenue beat expectations by 18%, gross profit margins expanded' },
+        { tag: 'up', text: 'Merchant count growing fastest in Southeast Asia and Latin America — new market penetration positive signal' },
+        { tag: 'neutral', text: 'Guidance for Q3 was in-line, not above — limiting the upside from the earnings beat' }
+      ],
+      week: [
+        { tag: 'up', text: 'Earnings beat drove price target upgrades across multiple analyst firms' },
+        { tag: 'up', text: 'Offline retail tools (POS hardware) gaining traction — diversifying revenue beyond online' },
+        { tag: 'neutral', text: 'Stock is now up significantly from 52-week low — some profit-taking possible' }
+      ],
+      month: [
+        { tag: 'up', text: 'Strong earnings beat was the major positive catalyst of the month' },
+        { tag: 'down', text: 'Broader tech sector rotation hurt growth stocks for much of the month before earnings' },
+        { tag: 'neutral', text: 'Overall flat month despite strong fundamentals — market positioning was negative heading in' }
+      ]
+    },
+    charts: {
+      today: '0,60 20,56 40,58 60,52 80,50 100,46 120,40 140,36 160,30 180,24 200,18 220,14 240,12 260,10 280,8 300,6 320,4 340,2',
+      week: '0,62 40,58 80,54 120,48 160,38 200,28 240,18 280,12 340,4',
+      month: '0,45 40,50 80,55 120,52 160,58 200,56 240,48 280,20 340,44'
+    }
+  },
+  RY: {
+    name: 'Royal Bank of Canada',
+    price: { today: '$147.20', week: '$146.80', month: '$150.00' },
+    change: { today: '+$0.88 (+0.6%)', week: '+$0.59 (+0.4%)', month: '+$5.92 (+4.1%)' },
+    pos: { today: true, week: true, month: true },
+    desc: 'RBC is Canada\'s largest bank by market capitalization. They earn money through personal banking, mortgages, wealth management, and capital markets. Their quarterly dividend makes them popular with long-term investors.',
+    sentiment: { today: 'Positive', week: 'Neutral', month: 'Positive' },
+    volatility: { today: 'Very Low', week: 'Very Low', month: 'Low' },
+    sector: 'Financial Services',
+    factors: {
+      today: [
+        { tag: 'up', text: 'Bank of Canada held rates steady — stable rate environment is positive for bank net interest margins' },
+        { tag: 'up', text: 'Quarterly dividend confirmed at $1.42/share — income investors holding positions' },
+        { tag: 'neutral', text: 'No major news catalysts today — stock moving with broader financial sector sentiment' }
+      ],
+      week: [
+        { tag: 'neutral', text: 'Quiet week for Canadian financials — holding gains from earlier in the month' },
+        { tag: 'up', text: 'Mortgage portfolio data shows lower-than-expected delinquency rates' },
+        { tag: 'neutral', text: 'Broader market rotation into defensive stocks supporting the position' }
+      ],
+      month: [
+        { tag: 'up', text: 'Rate environment improvement — market expects Bank of Canada to pause, positive for margins' },
+        { tag: 'up', text: 'HSBC Canada acquisition integration progressing — adding wealth management clients' },
+        { tag: 'up', text: 'Defensive characteristics attractive as growth stocks sold off mid-month' }
+      ]
+    },
+    charts: {
+      today: '0,42 40,40 80,38 120,36 160,34 200,32 240,30 280,28 340,26',
+      week: '0,44 40,42 80,40 120,38 160,36 200,34 240,32 280,30 340,28',
+      month: '0,65 40,60 80,54 120,46 160,40 200,34 240,28 280,22 340,14'
+    }
+  },
+  TSLA: {
+    name: 'Tesla Inc.',
+    price: { today: '$216.10', week: '$214.30', month: '$197.80' },
+    change: { today: '-$2.64 (-1.2%)', week: '-$8.48 (-3.8%)', month: '-$20.08 (-9.2%)' },
+    pos: { today: false, week: false, month: false },
+    desc: 'Tesla makes electric vehicles, solar panels, and energy storage systems. They also sell software upgrades and autonomous driving features. Their Gigafactories in the US, Germany, and China produce the cars.',
+    sentiment: { today: 'Negative', week: 'Negative', month: 'Negative' },
+    volatility: { today: 'High', week: 'High', month: 'Very High' },
+    sector: 'Automotive / Clean Energy',
+    factors: {
+      today: [
+        { tag: 'down', text: 'Q2 delivery numbers released — 443,956 vehicles delivered vs 448,000 analyst consensus estimate' },
+        { tag: 'down', text: 'BYD and other Chinese EV makers gaining market share in key European markets' },
+        { tag: 'neutral', text: 'Cybertruck production ramping but full self-driving regulatory timeline still uncertain' }
+      ],
+      week: [
+        { tag: 'down', text: 'Delivery miss set a negative tone early in the week — sentiment failed to recover' },
+        { tag: 'down', text: 'Margin pressure concerns — aggressive pricing to maintain volume is compressing profits' },
+        { tag: 'neutral', text: 'Energy storage business growing but not large enough to offset vehicle segment concerns' }
+      ],
+      month: [
+        { tag: 'down', text: 'Persistent delivery concerns throughout the month — no positive catalysts to offset' },
+        { tag: 'down', text: 'China market share declining — local competitors offering comparable range at lower prices' },
+        { tag: 'down', text: 'Gross margin declined again — price cuts maintaining volume but hurting profitability' }
+      ]
+    },
+    charts: {
+      today: '0,20 40,22 80,24 120,28 160,32 200,36 240,40 280,46 340,52',
+      week: '0,15 40,20 80,28 120,34 160,40 200,46 240,52 280,56 340,62',
+      month: '0,10 40,18 80,26 120,34 160,40 200,46 240,52 280,58 340,66'
+    }
+  },
+  SU: {
+    name: 'Suncor Energy',
+    price: { today: '$46.84', week: '$47.82', month: '$50.72' },
+    change: { today: '-$1.00 (-2.1%)', week: '-$0.57 (-1.2%)', month: '-$4.28 (-7.8%)' },
+    pos: { today: false, week: false, month: false },
+    desc: 'Suncor is Canada\'s largest integrated oil and gas company. They extract oil from Alberta\'s oil sands, refine it into fuel, and sell it through their Petro-Canada gas stations. Their performance tracks closely with oil prices.',
+    sentiment: { today: 'Negative', week: 'Negative', month: 'Negative' },
+    volatility: { today: 'Elevated', week: 'Moderate', month: 'High' },
+    sector: 'Energy / Oil & Gas',
+    factors: {
+      today: [
+        { tag: 'down', text: 'US Energy Information Administration reported crude inventories 4.2 million barrels above expectations — excess supply pressure' },
+        { tag: 'down', text: 'WTI crude fell 1.8% today — Suncor\'s revenue directly tied to oil prices' },
+        { tag: 'neutral', text: 'Operational performance strong — the price decline is macro, not company-specific' }
+      ],
+      week: [
+        { tag: 'down', text: 'Global demand concerns weighing on energy sector — Chinese economic data disappointing' },
+        { tag: 'neutral', text: 'Suncor\'s own operations performed well — refinery utilization above 90%' },
+        { tag: 'neutral', text: 'Share buyback program continuing — management confidence in long-term value' }
+      ],
+      month: [
+        { tag: 'down', text: 'Oil prices fell approximately 8% this month — direct hit to Suncor\'s revenue projections' },
+        { tag: 'down', text: 'OPEC+ supply uncertainty — potential production increase adding to price pressure' },
+        { tag: 'neutral', text: 'Dividend yield now over 5% — long-term income investors buying at current levels' }
+      ]
+    },
+    charts: {
+      today: '0,18 40,22 80,28 120,34 160,40 200,46 240,50 280,56 340,62',
+      week: '0,22 40,28 80,34 120,40 160,44 200,50 240,54 280,58 340,62',
+      month: '0,12 40,20 80,28 120,36 160,44 200,52 240,58 280,64 340,70'
+    }
+  },
+  XIU: {
+    name: 'iShares S&P/TSX 60 ETF',
+    price: { today: '$38.31', week: '$38.20', month: '$39.12' },
+    change: { today: '+$0.11 (+0.3%)', week: '-$0.15 (-0.4%)', month: '-$0.83 (-2.1%)' },
+    pos: { today: true, week: false, month: false },
+    desc: 'XIU tracks the 60 largest companies on the Toronto Stock Exchange. When you own XIU you own a small piece of RBC, Shopify, Suncor, and 57 other major Canadian companies simultaneously — instant diversification in one holding.',
+    sentiment: { today: 'Neutral', week: 'Neutral', month: 'Slight Neg.' },
+    volatility: { today: 'Very Low', week: 'Very Low', month: 'Low' },
+    sector: 'Diversified / Canadian Market',
+    factors: {
+      today: [
+        { tag: 'up', text: 'Financial sector strength (RBC, TD, BMO all positive) offsetting energy sector weakness today' },
+        { tag: 'neutral', text: 'Tech exposure through Shopify positive but small weighting limits impact' },
+        { tag: 'neutral', text: 'As an ETF, XIU moves with the average of its holdings — no single story today' }
+      ],
+      week: [
+        { tag: 'down', text: 'Energy sector drag — oil price weakness hit the large energy component of the index' },
+        { tag: 'up', text: 'Financial stocks provided some offset — banks stable in rate hold environment' },
+        { tag: 'neutral', text: 'Mixed week reflects the diversity of the Canadian economy in one number' }
+      ],
+      month: [
+        { tag: 'down', text: 'Energy sector was the biggest drag — Suncor, CNQ, and Cenovus all declined on oil prices' },
+        { tag: 'down', text: 'Materials sector weak — mining companies pressured by slower Chinese demand' },
+        { tag: 'up', text: 'Financial sector strength partially offset declines elsewhere — banks had a good month' }
+      ]
+    },
+    charts: {
+      today: '0,40 40,38 80,36 120,34 160,32 200,34 240,36 280,34 340,32',
+      week: '0,38 40,40 80,42 120,44 160,42 200,40 240,38 280,36 340,38',
+      month: '0,30 40,35 80,40 120,45 160,48 200,50 240,48 280,44 340,40'
+    }
+  }
+};
+
+let currentTime = 'today';
+let selectedTicker = null;
+
+function setTime(period, btn) {
+  currentTime = period;
+  document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const d = timeData[period];
+  document.getElementById('total-value').textContent = d.totalValue;
+  document.getElementById('total-change').textContent = d.totalChange;
+  document.getElementById('today-return').textContent = d.todayReturn;
+  document.getElementById('best-name').textContent = d.bestName;
+  document.getElementById('best-change').textContent = d.bestChange;
+  document.getElementById('watch-name').textContent = d.watchName;
+  document.getElementById('watch-change').textContent = d.watchChange;
+
+  Object.keys(d.holdings).forEach(ticker => {
+    const h = d.holdings[ticker];
+    document.getElementById('val-' + ticker).textContent = h.val;
+    const chgEl = document.getElementById('chg-' + ticker);
+    chgEl.textContent = h.chg;
+    chgEl.className = 'holding-change ' + (h.pos ? 'pos' : 'neg');
+    const bar = document.getElementById('bar-' + ticker);
+    bar.style.width = h.barW + 'px';
+    bar.style.background = h.pos ? 'var(--green)' : 'var(--red)';
+    document.getElementById('reason-' + ticker).textContent = h.reason;
+  });
+
+  if (selectedTicker) selectHolding(selectedTicker);
+}
+
+const iconMap = {"AAPL": "https://www.google.com/s2/favicons?domain=apple.com&sz=32", "SHOP": "https://www.google.com/s2/favicons?domain=shopify.com&sz=32", "RY": "https://www.google.com/s2/favicons?domain=rbc.com&sz=32", "TSLA": "https://www.google.com/s2/favicons?domain=tesla.com&sz=32", "SU": "https://www.google.com/s2/favicons?domain=suncor.com&sz=32", "XIU": "https://www.google.com/s2/favicons?domain=blackrock.com&sz=32"};
+
+function selectHolding(ticker) {
+  selectedTicker = ticker;
+  document.querySelectorAll('.holding-row').forEach(r => r.classList.remove('selected'));
+  document.getElementById('row-' + ticker).classList.add('selected');
+
+  const s = stockData[ticker];
+  const t = currentTime;
+
+  document.getElementById('drill-empty').style.display = 'none';
+  document.getElementById('drill-content').classList.add('visible');
+
+  document.getElementById('d-ticker').textContent = ticker;
+  document.getElementById('d-name').textContent = s.name;
+  const iconImg = document.getElementById('d-icon-img');
+  if (iconMap[ticker]) { iconImg.src = iconMap[ticker]; iconImg.style.display = 'block'; }
+  document.getElementById('d-price').textContent = s.price[t];
+  const chgEl = document.getElementById('d-change');
+  chgEl.textContent = s.change[t];
+  chgEl.className = 'drill-change ' + (s.pos[t] ? 'pos' : 'neg');
+
+  document.getElementById('d-desc').textContent = s.desc;
+  const sentEl = document.getElementById('d-sentiment');
+  sentEl.textContent = s.sentiment[t];
+  sentEl.style.color = s.pos[t] ? 'var(--teal)' : 'var(--red)';
+  document.getElementById('d-volatility').textContent = s.volatility[t];
+  document.getElementById('d-sector').textContent = s.sector;
+
+  const periodLabel = { today: 'Last 30 Days', week: 'Last 3 Months', month: 'Last 6 Months' };
+  document.getElementById('chart-label').textContent = 'Price — ' + periodLabel[t];
+
+  const chartLine = document.getElementById('chart-line');
+  const chartFill = document.getElementById('chart-fill');
+  const pts = s.charts[t];
+  chartLine.setAttribute('points', pts);
+  chartFill.setAttribute('points', pts + ' 340,80 0,80');
+
+  const isPos = s.pos[t];
+  chartLine.setAttribute('stroke', isPos ? 'var(--green)' : 'var(--red)');
+  chartFill.setAttribute('fill', isPos ? 'rgba(74,222,128,0.06)' : 'rgba(248,113,113,0.06)');
+
+  const factorsList = document.getElementById('factors-list');
+  factorsList.innerHTML = '';
+  s.factors[t].forEach(f => {
+    const div = document.createElement('div');
+    div.className = 'factor-item';
+    div.innerHTML = `<span class="factor-tag ${f.tag}">${f.tag === 'up' ? '+' : f.tag === 'down' ? '−' : '·'}</span><span class="factor-text">${f.text}</span>`;
+    factorsList.appendChild(div);
+  });
+}
+</script>
+</body>
+</html>
