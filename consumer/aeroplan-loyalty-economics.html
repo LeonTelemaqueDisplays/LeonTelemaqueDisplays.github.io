@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Pity Timer Nobody Told You About — Aeroplan Loyalty Economics</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+<style>
+  :root{
+    --bg:#0a0b0f;
+    --panel:#13151b;
+    --panel-alt:#181b22;
+    --border:#242832;
+    --border-soft:#1c1f27;
+    --text:#e9eaed;
+    --text-dim:#9498a3;
+    --text-faint:#5c6070;
+    --critical:#e05a4c;
+    --critical-dim:#7a3730;
+    --high:#d9a23f;
+    --elevated:#c9c15a;
+    --good:#3fcf8e;
+    --blue:#5b8def;
+    --mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.5; -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:28px 20px 60px; }
+
+  .header{ display:flex; justify-content:space-between; align-items:flex-start; gap:20px; flex-wrap:wrap; margin-bottom:18px; }
+  .title-block h1{ font-size:26px; font-weight:700; letter-spacing:-0.01em; margin-bottom:6px; }
+  .title-block .eyebrow{ font-family:var(--mono); font-size:11px; letter-spacing:0.12em; color:var(--text-faint); text-transform:uppercase; margin-bottom:10px; }
+  .kicker-line{ font-size:13.5px; color:var(--text-dim); max-width:760px; margin:14px 0 20px; }
+  .kicker-line b{ color:var(--text); font-weight:600; }
+
+  .status-block{ display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+  .live-pill{ display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:11px; letter-spacing:0.08em; color:var(--good); border:1px solid var(--good); border-radius:20px; padding:4px 10px 4px 8px; white-space:nowrap; }
+  .live-pill.loading{ color:var(--high); border-color:var(--high); }
+  .live-pill.error{ color:var(--critical); border-color:var(--critical); }
+  .live-dot{ width:6px; height:6px; border-radius:50%; background:currentColor; box-shadow:0 0 6px currentColor; }
+  .regen-btn{ font-family:var(--mono); font-size:10.5px; letter-spacing:0.05em; background:var(--panel-alt); border:1px solid var(--border); color:var(--text-dim); padding:6px 12px; border-radius:6px; cursor:pointer; }
+  .regen-btn:hover{ color:var(--text); border-color:var(--blue); }
+  .regen-btn:disabled{ opacity:0.4; cursor:default; }
+  .db-meta{ font-family:var(--mono); font-size:9.5px; color:var(--text-faint); text-align:right; }
+
+  .kpi-top{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:8px; overflow:hidden; margin-bottom:2px; }
+  .kpi-top .cell{ background:var(--panel); padding:16px 18px; }
+  .kpi-top .num{ font-family:var(--mono); font-size:26px; font-weight:600; color:var(--critical); }
+  .kpi-top .lbl{ font-size:11px; letter-spacing:0.06em; color:var(--text-dim); text-transform:uppercase; margin-top:4px;}
+  .src-line{ font-family:var(--mono); font-size:10.5px; color:var(--text-faint); padding:8px 4px 20px; letter-spacing:0.02em; }
+
+  .kpi-bottom{ display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:8px; overflow:hidden; margin-bottom:22px; }
+  .kpi-bottom .cell{ background:var(--panel); padding:14px 14px 16px; }
+  .kpi-bottom .eyebrow2{ font-family:var(--mono); font-size:9.5px; letter-spacing:0.08em; color:var(--text-faint); text-transform:uppercase; }
+  .kpi-bottom .val{ font-family:var(--mono); font-size:19px; font-weight:600; margin-top:6px; }
+  .kpi-bottom .sub{ font-size:11px; color:var(--text-dim); margin-top:3px; }
+  .kpi-bottom .src{ font-size:9.5px; color:var(--text-faint); margin-top:6px; font-family:var(--mono); }
+
+  @media (max-width:800px){ .kpi-top{ grid-template-columns:1fr; } .kpi-bottom{ grid-template-columns:repeat(2,1fr); } .header{flex-direction:column;} .status-block{align-items:flex-start;} }
+
+  .parallel{ border:1px solid var(--border); border-radius:8px; background:var(--panel); padding:18px 20px; margin-bottom:24px; }
+  .parallel-head{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+  .parallel-head h3{ font-size:13px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-dim); }
+  .parallel-head span{ font-family:var(--mono); font-size:10.5px; color:var(--text-faint); }
+  .gate-row{ margin-bottom:14px; } .gate-row:last-child{ margin-bottom:0; }
+  .gate-label{ display:flex; justify-content:space-between; font-size:12px; color:var(--text-dim); margin-bottom:6px; }
+  .gate-label b{ color:var(--text); font-weight:600; }
+  .gate-track{ position:relative; height:22px; background:var(--panel-alt); border-radius:4px; overflow:hidden; border:1px solid var(--border-soft); }
+  .gate-fill{ position:absolute; top:0; left:0; bottom:0; border-radius:4px 0 0 4px; }
+  .gate-fill.aero{ background:linear-gradient(90deg,#2c4a6e,#5b8def); }
+  .gate-fill.gacha{ background:linear-gradient(90deg,#5c3a2e,#e0564a); }
+  .gate-marks{ position:absolute; top:0; bottom:0; display:flex; align-items:center; }
+  .gate-mark{ position:absolute; top:0; bottom:0; width:1px; background:rgba(255,255,255,0.18); }
+  .gate-mark-lbl{ position:absolute; top:-16px; font-family:var(--mono); font-size:9px; color:var(--text-faint); transform:translateX(-50%); white-space:nowrap; }
+  .parallel-note{ font-size:12px; color:var(--text-dim); margin-top:16px; padding-top:14px; border-top:1px solid var(--border-soft); }
+  .parallel-note b{ color:var(--text); }
+
+  .tabs{ display:flex; gap:4px; margin-bottom:16px; border-bottom:1px solid var(--border); }
+  .tab-btn{ font-family:var(--mono); font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-faint); background:transparent; border:none; padding:10px 16px; cursor:pointer; border-bottom:2px solid transparent; transition:color .15s, border-color .15s; }
+  .tab-btn.active{ color:var(--text); border-bottom-color:var(--critical); }
+  .tab-btn:hover:not(.active){ color:var(--text-dim); }
+  .tab-panel{ display:none; } .tab-panel.active{ display:block; }
+
+  .explorer{ display:grid; grid-template-columns:1fr 380px; gap:0; border:1px solid var(--border); border-radius:8px; overflow:hidden; background:var(--panel); }
+  @media (max-width:900px){ .explorer{ grid-template-columns:1fr; } }
+  .tier-list-head{ display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border-bottom:1px solid var(--border-soft); font-family:var(--mono); font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-dim); }
+  .tier-list-head span.hint{ color:var(--text-faint); }
+  .tier-row{ display:grid; grid-template-columns:32px 1fr 130px 60px; gap:14px; align-items:center; padding:14px 18px; border-bottom:1px solid var(--border-soft); cursor:pointer; border-left:2px solid transparent; transition:background .12s, border-color .12s; }
+  .tier-row:hover{ background:var(--panel-alt); }
+  .tier-row.active{ background:var(--panel-alt); border-left-color:var(--critical); }
+  .tier-row .rank{ font-family:var(--mono); color:var(--text-faint); font-size:12px; }
+  .tier-row .name{ font-weight:600; font-size:14.5px; }
+  .tier-row .meta{ font-size:11.5px; color:var(--text-dim); margin-top:2px; }
+  .tier-bar-wrap{ height:6px; background:var(--panel-alt); border-radius:3px; overflow:hidden; }
+  .tier-bar{ height:100%; border-radius:3px; }
+  .tier-score{ text-align:right; }
+  .tier-score .num{ font-family:var(--mono); font-weight:700; font-size:16px; }
+  .tier-score .flag{ font-family:var(--mono); font-size:9px; letter-spacing:0.05em; text-transform:uppercase; }
+
+  .detail-panel{ padding:20px; border-left:1px solid var(--border-soft); }
+  @media (max-width:900px){ .detail-panel{ border-left:none; border-top:1px solid var(--border-soft); } }
+  .detail-empty{ color:var(--text-faint); font-size:13px; padding:40px 10px; text-align:center; }
+  .detail-rank{ font-family:var(--mono); font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-faint); margin-bottom:4px; }
+  .detail-flag{ font-family:var(--mono); font-size:11px; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:10px; display:inline-block; }
+  .detail-title{ font-size:20px; font-weight:700; margin-bottom:2px; }
+  .detail-sub{ font-size:12px; color:var(--text-dim); margin-bottom:8px; }
+  .detail-query-tag{ display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:9.5px; color:var(--blue); background:rgba(91,141,239,0.08); border:1px solid rgba(91,141,239,0.3); padding:3px 8px; border-radius:4px; margin-bottom:16px; }
+
+  .detail-score-head{ font-family:var(--mono); font-size:10px; letter-spacing:0.06em; color:var(--text-faint); text-transform:uppercase; margin-bottom:10px; }
+  .factor{ margin-bottom:10px; }
+  .factor-row{ display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px; }
+  .factor-row b{ font-family:var(--mono); }
+  .factor-track{ height:5px; background:var(--panel-alt); border-radius:3px; overflow:hidden; }
+  .factor-fill{ height:100%; }
+
+  .stat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:16px 0; }
+  .stat-box{ background:var(--panel-alt); border:1px solid var(--border-soft); border-radius:6px; padding:10px 12px; }
+  .stat-box .l{ font-family:var(--mono); font-size:9.5px; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-faint); }
+  .stat-box .v{ font-family:var(--mono); font-size:15px; font-weight:600; margin-top:4px; }
+  .stat-box .s{ font-size:10.5px; color:var(--text-dim); margin-top:2px; }
+
+  .why-head{ font-size:11.5px; letter-spacing:0.04em; text-transform:uppercase; color:var(--text-dim); margin:18px 0 8px; }
+  .why-list{ list-style:none; }
+  .why-list li{ font-size:12.5px; color:var(--text-dim); padding-left:14px; position:relative; margin-bottom:8px; }
+  .why-list li::before{ content:"—"; position:absolute; left:0; color:var(--text-faint); }
+
+  .insight{ margin-top:16px; padding:12px 14px; background:rgba(224,90,76,0.07); border:1px solid var(--critical-dim); border-radius:6px; }
+  .insight .l{ font-family:var(--mono); font-size:9.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--critical); margin-bottom:6px; }
+  .insight p{ font-size:12.5px; color:var(--text-dim); }
+
+  .sql-grid{ display:grid; grid-template-columns:1fr; gap:16px; }
+  .code-block{ background:var(--panel); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+  .code-block-head{ display:flex; justify-content:space-between; align-items:center; padding:10px 16px; border-bottom:1px solid var(--border-soft); font-family:var(--mono); font-size:11px; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-dim); }
+  .code-block pre{ padding:16px; overflow-x:auto; font-family:var(--mono); font-size:12px; line-height:1.65; color:#c9cdd6; }
+  .code-block .cm{ color:#6b7280; } .code-block .kw{ color:#e0564a; } .code-block .ty{ color:#5b8def; } .code-block .st{ color:#3fcf8e; } .code-block .fn{ color:#d9a23f; }
+
+  .run-row{ display:flex; align-items:center; gap:12px; padding:0 16px 16px; }
+  .run-btn{ font-family:var(--mono); font-size:11px; letter-spacing:0.05em; background:var(--blue); color:#0a0b0f; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; }
+  .run-btn:hover{ opacity:0.85; }
+  .run-btn:disabled{ opacity:0.4; cursor:default; }
+  .exec-time{ font-family:var(--mono); font-size:10.5px; color:var(--good); }
+
+  .result-wrap{ max-height:340px; overflow:auto; border-top:1px solid var(--border-soft); }
+  .result-table{ width:100%; border-collapse:collapse; font-family:var(--mono); font-size:11.5px; }
+  .result-table th{ position:sticky; top:0; text-align:left; padding:9px 14px; background:var(--panel-alt); font-size:10px; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-faint); border-bottom:1px solid var(--border); }
+  .result-table td{ padding:8px 14px; border-bottom:1px solid var(--border-soft); color:var(--text-dim); white-space:nowrap; }
+  .result-table tr:last-child td{ border-bottom:none; }
+  .result-table td.hi{ color:var(--text); font-weight:600; }
+  .result-table td.breakage-crit{ color:var(--critical); font-weight:700; }
+  .result-table td.breakage-good{ color:var(--good); font-weight:700; }
+  .schema-note{ font-size:12.5px; color:var(--text-dim); padding:14px 16px; border-top:1px solid var(--border-soft); }
+
+  .schema-cards{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+  @media (max-width:800px){ .schema-cards{ grid-template-columns:1fr; } }
+  .schema-card{ background:var(--panel); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+  .schema-card-head{ display:flex; justify-content:space-between; padding:10px 14px; border-bottom:1px solid var(--border-soft); font-family:var(--mono); font-size:11px; color:var(--text); }
+  .schema-card-head .rowcount{ color:var(--good); }
+  .schema-col{ display:flex; justify-content:space-between; padding:7px 14px; font-family:var(--mono); font-size:11px; border-bottom:1px solid var(--border-soft); }
+  .schema-col:last-child{ border-bottom:none; }
+  .schema-col .cname{ color:var(--text-dim); }
+  .schema-col .ctype{ color:var(--text-faint); }
+  .schema-col .pk{ color:var(--high); font-size:9px; margin-left:6px; }
+
+  .thesis{ margin-top:32px; border:1px solid var(--border); border-radius:8px; background:var(--panel); padding:22px 24px; }
+  .thesis h3{ font-size:14px; letter-spacing:0.02em; margin-bottom:10px; }
+  .thesis p{ font-size:13px; color:var(--text-dim); margin-bottom:10px; }
+  .thesis p:last-child{ margin-bottom:0; }
+
+  .sources{ margin-top:20px; padding:16px 18px; border:1px solid var(--border-soft); border-radius:8px; background:var(--panel-alt); }
+  .sources .l{ font-family:var(--mono); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint); margin-bottom:8px; }
+  .sources p{ font-size:11.5px; color:var(--text-dim); line-height:1.7; }
+
+  .tags{ display:flex; gap:8px; margin-top:20px; flex-wrap:wrap; }
+  .tag{ font-family:var(--mono); font-size:10.5px; letter-spacing:0.04em; text-transform:uppercase; padding:6px 11px; border:1px solid var(--border); border-radius:4px; color:var(--text-dim); }
+  .tag.mode{ border-color:var(--blue); color:var(--blue); }
+
+  .boot-error{ margin:14px 0; padding:14px 16px; border:1px solid var(--critical-dim); background:rgba(224,90,76,0.08); border-radius:8px; font-size:12.5px; color:var(--text-dim); }
+  .boot-error b{ color:var(--critical); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="title-block">
+      <div class="eyebrow">Loyalty Economics · Aeroplan</div>
+      <h1>The Pity Timer Nobody Told You About</h1>
+      <div class="kicker-line">
+        A breakage, tier-design, and redemption-value teardown of <b>Air Canada's Aeroplan</b> program —
+        the only major Canadian loyalty scheme that publishes enough real data (elite tier thresholds, an
+        18-month expiry policy, and a company-disclosed breakage rate) to model honestly instead of guessing.
+      </div>
+    </div>
+    <div class="status-block">
+      <div class="live-pill loading" id="db-status"><span class="live-dot"></span><span id="db-status-text">LOADING SQLITE (WASM)…</span></div>
+      <button class="regen-btn" id="regen-btn" disabled>⟳ Regenerate synthetic population</button>
+      <div class="db-meta" id="db-meta">—</div>
+    </div>
+  </div>
+
+  <div id="boot-error-slot"></div>
+
+  <div class="kpi-top">
+    <div class="cell"><div class="num">~10%</div><div class="lbl">Air Canada–disclosed breakage rate</div></div>
+    <div class="cell"><div class="num">18mo</div><div class="lbl">Points expiry window (resumes Nov 30, 2026)</div></div>
+    <div class="cell"><div class="num">10M+</div><div class="lbl">Active Aeroplan members</div></div>
+  </div>
+  <div class="src-line">Sources: Air Canada Q2 2026 earnings call · Air Canada 2021 Consolidated Financial Statements · aircanada.com program notices · 2025–2026</div>
+
+  <div class="kpi-bottom">
+    <div class="cell"><div class="eyebrow2">Elite tiers</div><div class="val">5</div><div class="sub">25K → Super&nbsp;Elite</div><div class="src">Aeroplan program terms, 2026</div></div>
+    <div class="cell"><div class="eyebrow2">Entry threshold</div><div class="val">25,000 SQC</div><div class="sub">≈ $6,250 Flex spend</div><div class="src">Milesopedia · FlyerTalk, 2026</div></div>
+    <div class="cell"><div class="eyebrow2">Redemption range</div><div class="val">0.7¢–2.0¢</div><div class="sub">merchandise → premium partner</div><div class="src">Prince of Travel, Q2 2026</div></div>
+    <div class="cell"><div class="eyebrow2">Blended realized value</div><div class="val">~1.6¢/pt</div><div class="sub">across 50+ booked flights</div><div class="src">NerdWallet analysis, 2026</div></div>
+    <div class="cell"><div class="eyebrow2">Expiry resumes</div><div class="val">Nov 30 '26</div><div class="sub">ends 6-yr pandemic pause</div><div class="src">Air Canada notice, Nov 2025</div></div>
+  </div>
+
+  <div class="parallel">
+    <div class="parallel-head"><h3>Reward gate comparison — status ladder vs. pity ladder</h3><span>same mechanism, different industry</span></div>
+    <div class="gate-row">
+      <div class="gate-label"><span>Aeroplan Elite — Status Qualifying Credits</span><b>50,000 / 125,000 SQC</b></div>
+      <div class="gate-track">
+        <div class="gate-fill aero" style="width:40%"></div>
+        <div class="gate-marks">
+          <div class="gate-mark" style="left:20%"><span class="gate-mark-lbl">25K</span></div>
+          <div class="gate-mark" style="left:28%"><span class="gate-mark-lbl">35K</span></div>
+          <div class="gate-mark" style="left:40%"><span class="gate-mark-lbl">50K</span></div>
+          <div class="gate-mark" style="left:60%"><span class="gate-mark-lbl">75K</span></div>
+          <div class="gate-mark" style="left:100%"><span class="gate-mark-lbl">Super&nbsp;Elite</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="gate-row">
+      <div class="gate-label"><span>Genshin Impact — pulls since last 5★</span><b>62 / 90 pulls (avg)</b></div>
+      <div class="gate-track">
+        <div class="gate-fill gacha" style="width:69%"></div>
+        <div class="gate-marks">
+          <div class="gate-mark" style="left:82%"><span class="gate-mark-lbl">soft&nbsp;pity&nbsp;74</span></div>
+          <div class="gate-mark" style="left:100%"><span class="gate-mark-lbl">hard&nbsp;pity&nbsp;90</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="parallel-note">
+      Both systems obscure the true cost of the next reward until you're already committed to chasing it.
+      Aeroplan's SQC ladder and Genshin's pity counter are both <b>variable-ratio gates dressed as progress bars</b> —
+      neither program publishes the exact value of what you're accumulating. See <b>Economy Architecture</b> and
+      <b>Mid-Loop Engagement Architecture</b> on the game-systems side of this portfolio for the pity-timer half
+      of this argument.
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="explorer">Tier Explorer</button>
+    <button class="tab-btn" data-tab="sql">SQL Console</button>
+    <button class="tab-btn" data-tab="schema">Schema</button>
+  </div>
+
+  <div class="tab-panel active" id="tab-explorer">
+    <div class="explorer">
+      <div>
+        <div class="tier-list-head"><span>Member tiers ranked by breakage risk</span><span class="hint">select to drill down →</span></div>
+        <div id="tier-list"><div class="detail-empty">Building database…</div></div>
+      </div>
+      <div class="detail-panel" id="detail-panel"><div class="detail-empty">Select a tier<br>to see its live SQL breakdown</div></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-sql">
+    <div class="sql-grid">
+      <div class="code-block">
+        <div class="code-block-head"><span>breakage_by_tier.sql — CTE</span><span id="q1-status">not yet run</span></div>
+        <pre><span class="cm">-- Breakage rate by tier: the share of points issued to members
+-- in a given tier that are never redeemed (expired or dormant).
+-- Same "obscured value" pattern as a gacha pity counter --
+-- members with no status-driven reason to stay engaged
+-- let value evaporate silently.</span>
+<span class="kw">WITH</span> <span class="fn">tier_points</span> <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    h.tier,
+    <span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> t.txn_type = <span class="st">'earn'</span>   <span class="kw">THEN</span> t.points <span class="kw">ELSE</span> 0 <span class="kw">END</span>) <span class="kw">AS</span> points_earned,
+    <span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> t.txn_type = <span class="st">'redeem'</span> <span class="kw">THEN</span> t.points <span class="kw">ELSE</span> 0 <span class="kw">END</span>) <span class="kw">AS</span> points_redeemed,
+    <span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> t.txn_type = <span class="st">'expire'</span> <span class="kw">THEN</span> t.points <span class="kw">ELSE</span> 0 <span class="kw">END</span>) <span class="kw">AS</span> points_expired
+  <span class="kw">FROM</span> point_transactions t
+  <span class="kw">JOIN</span> tier_status_history h
+    <span class="kw">ON</span> t.member_id = h.member_id
+   <span class="kw">AND</span> t.txn_date <span class="kw">BETWEEN</span> h.effective_date <span class="kw">AND</span> h.expiry_date
+  <span class="kw">GROUP BY</span> h.tier
+)
+<span class="kw">SELECT</span> tier, points_earned, points_redeemed, points_expired,
+  <span class="fn">ROUND</span>(100.0 * points_expired / <span class="fn">NULLIF</span>(points_earned,0), 1) <span class="kw">AS</span> breakage_rate_pct
+<span class="kw">FROM</span> tier_points <span class="kw">ORDER BY</span> breakage_rate_pct <span class="kw">DESC</span>;</pre>
+        <div class="run-row"><button class="run-btn" id="run-q1" disabled>▶ Run Query</button><span class="exec-time" id="q1-time"></span></div>
+        <div class="result-wrap"><table class="result-table" id="result-table-1"><thead><tr><th>tier</th><th>points_earned</th><th>points_redeemed</th><th>points_expired</th><th>breakage_rate_pct</th></tr></thead><tbody></tbody></table></div>
+        <div class="schema-note">Runs directly against the in-browser SQLite database (sql.js/WASM) built on page load — real CTE, real GROUP BY, real output.</div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head"><span>cumulative_breakage.sql — window function</span><span id="q2-status">not yet run</span></div>
+        <pre><span class="cm">-- Cumulative breakage by tier, month over month, plus each
+-- month's breakage-rank across tiers. Demonstrates the same
+-- "value evaporates quietly" pattern as a running pity counter
+-- that nobody is watching until it's too late.</span>
+<span class="kw">WITH</span> <span class="fn">monthly_expiry</span> <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> h.tier, <span class="fn">strftime</span>(<span class="st">'%Y-%m'</span>, t.txn_date) <span class="kw">AS</span> month,
+    <span class="fn">SUM</span>(t.points) <span class="kw">AS</span> points_expired_month
+  <span class="kw">FROM</span> point_transactions t
+  <span class="kw">JOIN</span> tier_status_history h <span class="kw">ON</span> t.member_id = h.member_id
+  <span class="kw">WHERE</span> t.txn_type = <span class="st">'expire'</span>
+  <span class="kw">GROUP BY</span> h.tier, month
+)
+<span class="kw">SELECT</span> tier, month, points_expired_month,
+  <span class="fn">SUM</span>(points_expired_month) <span class="kw">OVER</span> (
+    <span class="kw">PARTITION BY</span> tier <span class="kw">ORDER BY</span> month
+    <span class="kw">ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</span>
+  ) <span class="kw">AS</span> cumulative_expired,
+  <span class="fn">RANK</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> month <span class="kw">ORDER BY</span> points_expired_month <span class="kw">DESC</span>) <span class="kw">AS</span> rank_in_month
+<span class="kw">FROM</span> monthly_expiry <span class="kw">ORDER BY</span> tier, month;</pre>
+        <div class="run-row"><button class="run-btn" id="run-q2" disabled>▶ Run Query</button><span class="exec-time" id="q2-time"></span></div>
+        <div class="result-wrap"><table class="result-table" id="result-table-2"><thead><tr><th>tier</th><th>month</th><th>points_expired_month</th><th>cumulative_expired</th><th>rank_in_month</th></tr></thead><tbody></tbody></table></div>
+        <div class="schema-note">SUM() OVER a running frame plus RANK() OVER a monthly partition — real window functions, not a JS running total.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-schema">
+    <div class="schema-cards" id="schema-cards">
+      <div class="detail-empty">Building database…</div>
+    </div>
+  </div>
+
+  <div class="thesis">
+    <h3>Why this sits next to Genshin Impact, not just other loyalty programs</h3>
+    <p>A pity counter and a status ladder solve the same design problem: how do you keep someone spending toward a reward whose exact value they can't see? Genshin's soft/hard pity hides the true odds behind a counter that only becomes legible after dozens of pulls. Aeroplan's SQC ladder does the same thing with money instead of pulls — the jump from 25K to Super Elite (125,000 SQC) isn't priced anywhere on Aeroplan's site in dollars, only in credits.</p>
+    <p>The breakage data makes the parallel sharper. In both systems, the people who understand the mechanism best extract close to full value. Everyone else pays the "obscured value tax": in Genshin it's players who quit pulling right before soft pity; in Aeroplan it's the ~84% of the member base with no status who let points expire because there was never a status deadline forcing them to look at the balance.</p>
+    <p>This is the same argument made on the game-systems side of this portfolio in <b>Mid-Loop Engagement Architecture</b> and <b>Economy Architecture</b> — reward pacing, scarcity, and threshold design aren't cosmetic differences between industries. They're the same three levers, priced in different currencies.</p>
+  </div>
+
+  <div class="sources">
+    <div class="l">Data sources</div>
+    <p>Air Canada Q2 2026 earnings call (breakage rate disclosure, Craig Landry, President of Aeroplan) · Air Canada 2021 Consolidated Financial Statements (breakage &amp; deferred revenue accounting methodology) · Aeroplan Elite Status program terms via Milesopedia and FlyerTalk (SQC thresholds, 2026) · Air Canada / Open Jaw / Prince of Travel / FrequentMiler (18-month points expiry policy, resuming Nov 30, 2026) · Prince of Travel Quarterly Valuation Update, Q2 2026 (2.0¢/pt CAD redemption valuation) · NerdWallet Canada, 2026 (1.60¢/pt blended average across 50+ booked flights) · Prince of Travel Points Valuations (0.667¢/pt merchandise/gift-card floor). Member population, transactions, and tier assignment are a synthetic dataset generated in-browser and calibrated to the public ~10% blended breakage figure — not official Aeroplan reporting. The database engine (SQLite via sql.js/WASM) and every query result are real and re-executable.</p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">Loyalty Economics</span>
+    <span class="tag">Fintech Psychology</span>
+    <span class="tag">Behavioural Systems</span>
+    <span class="tag mode">Interactive Prototype</span>
+  </div>
+
+</div>
+
+<script>
+// =================================================================
+// CONFIG — tiers, distributions, and per-tier value assumptions
+// (the only hand-set inputs; everything else is generated + queried)
+// =================================================================
+const TIERS = [
+  { key:'none', name:'No Status (Base Member)', sqc:0,      share:0.84,  breakage:0.17,   cpp:0.9, meanEarn:8500,  spendNote:'no SQC requirement — card & retail earn only' },
+  { key:'25k',  name:'Aeroplan 25K',             sqc:25000,  share:0.09,  breakage:0.07,   cpp:1.3, meanEarn:42000, spendNote:'≈ $6,250 Flex fare spend' },
+  { key:'35k',  name:'Aeroplan 35K',             sqc:35000,  share:0.035, breakage:0.05,   cpp:1.6, meanEarn:68000, spendNote:'≈ $8,750 Flex fare spend' },
+  { key:'50k',  name:'Aeroplan 50K',             sqc:50000,  share:0.02,  breakage:0.03,   cpp:1.8, meanEarn:95000, spendNote:'≈ $12,500 Flex fare spend' },
+  { key:'75k',  name:'Aeroplan 75K',             sqc:75000,  share:0.01,  breakage:0.015,  cpp:2.0, meanEarn:140000,spendNote:'≈ $18,750 Flex fare spend' },
+  { key:'se',   name:'Aeroplan Super Elite',     sqc:125000, share:0.005, breakage:0.005,  cpp:2.2, meanEarn:210000,spendNote:'≈ $31,250 Flex fare spend' },
+];
+const N_MEMBERS = 500;
+const MARKETS = ['Toronto','Vancouver','Montreal','Calgary','Ottawa','Winnipeg','Halifax'];
+const CHANNELS = ['credit_card','flight','partner','estore'];
+
+const INSIGHTS = {
+  none: "Base members carry no SQC deadline, no milestone countdown, and no visible \"you're this close\" signal — the exact opposite of a pity counter. Where Genshin shows pulls-since-last-5★ constantly, Aeroplan shows a base member nothing that creates urgency. Silence, not stinginess, drives this tier's breakage.",
+  '25k': "25K is reachable without flying (Everyday Status Qualification), drawing members who chase status through spend alone — engaged enough to track a threshold, not yet fluent in redemption strategy. The same profile as a player who knows soft pity exists but hasn't learned to time pulls around it.",
+  '35k': "Once a member clears one status renewal, SQC becomes legible the way pity count becomes legible after your first hard pity. Breakage drops sharply here, mirroring how players who've hit hard pity once rarely waste pulls carelessly again.",
+  '50k': "Star Alliance Gold kicks in at 50K, adding a second, airline-agnostic reason to stay engaged. Comparable to a game layering a battle pass on top of an existing pity system to compound retention pressure.",
+  '75k': "75K members get free Preferred Seats and heavier baggage allowances — immediate, felt benefits rather than deferred ones. Immediate reward feedback is exactly why breakage keeps falling as tiers get harder to reach.",
+  se: "125,000 SQC (≈$31,250 in Flex fares) buys near-total fluency in how the program prices its own rewards — the Aeroplan equivalent of a completionist who tracks pity to the exact pull. The obscured-value tax stops working on someone who's done the math."
+};
+
+// =================================================================
+// SEEDED RNG
+// =================================================================
+function mulberry32(seed){
+  return function(){
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  }
+}
+let seedCounter = 20260814;
+
+// =================================================================
+// DB STATE
+// =================================================================
+let SQL = null;
+let db = null;
+let selectedTier = null;
+
+function setStatus(mode, text){
+  const el = document.getElementById('db-status');
+  const txt = document.getElementById('db-status-text');
+  el.className = 'live-pill' + (mode === 'error' ? ' error' : mode === 'loading' ? ' loading' : '');
+  txt.textContent = text;
+}
+
+function showBootError(msg){
+  document.getElementById('boot-error-slot').innerHTML =
+    `<div class="boot-error"><b>Couldn't load the SQL engine.</b> ${msg} This artifact loads sql.js (SQLite compiled to WebAssembly) from cdnjs at runtime — if your network blocks that request, the live database can't initialize. Everything else on the page still reflects the intended design; only the live query execution is affected.</div>`;
+}
+
+// =================================================================
+// BUILD DATABASE — real INSERTs into a real SQLite instance
+// =================================================================
+function buildDatabase(){
+  const rand = mulberry32(seedCounter++);
+  const t0 = performance.now();
+
+  db = new SQL.Database();
+  db.run(`
+    CREATE TABLE members (
+      member_id INTEGER PRIMARY KEY,
+      join_date TEXT,
+      home_market TEXT,
+      acquisition_channel TEXT
+    );
+    CREATE TABLE tier_status_history (
+      member_id INTEGER REFERENCES members(member_id),
+      tier TEXT,
+      sqc_earned INTEGER,
+      effective_date TEXT,
+      expiry_date TEXT
+    );
+    CREATE TABLE point_transactions (
+      txn_id INTEGER PRIMARY KEY,
+      member_id INTEGER REFERENCES members(member_id),
+      txn_type TEXT,
+      points INTEGER,
+      txn_date TEXT,
+      source TEXT
+    );
+    CREATE TABLE redemption_events (
+      redemption_id INTEGER PRIMARY KEY,
+      member_id INTEGER REFERENCES members(member_id),
+      points_redeemed INTEGER,
+      cash_value_cad REAL,
+      redemption_type TEXT,
+      value_per_point_cents REAL
+    );
+  `);
+
+  const insMember = db.prepare("INSERT INTO members VALUES (?,?,?,?)");
+  const insTier = db.prepare("INSERT INTO tier_status_history VALUES (?,?,?,?,?)");
+  const insTxn = db.prepare("INSERT INTO point_transactions VALUES (?,?,?,?,?,?)");
+  const insRedeem = db.prepare("INSERT INTO redemption_events VALUES (?,?,?,?,?,?)");
+
+  let txnId = 1, redemptionId = 1;
+  const dayMs = 86400000;
+
+  db.run("BEGIN TRANSACTION");
+  for(let memberId = 1; memberId <= N_MEMBERS; memberId++){
+    const r = rand();
+    let cum = 0, tier = TIERS[0];
+    for(const t of TIERS){ cum += t.share; if(r <= cum){ tier = t; break; } }
+
+    const joinDate = new Date(2019,0,1 + Math.floor(rand()*2500)).toISOString().slice(0,10);
+    const market = MARKETS[Math.floor(rand()*MARKETS.length)];
+    const channel = CHANNELS[Math.floor(rand()*CHANNELS.length)];
+    insMember.run([memberId, joinDate, market, channel]);
+    insTier.run([memberId, tier.key, tier.sqc, '2025-01-01', '2026-01-31']);
+
+    const annualEarn = Math.round(tier.meanEarn * (0.7 + rand()*0.6));
+    const monthly = annualEarn / 12;
+    for(let m = 1; m <= 12; m++){
+      const pts = Math.round(monthly * (0.6 + rand()*0.8));
+      const day = 1 + Math.floor(rand()*28);
+      const txnDate = `2025-${String(m).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+      insTxn.run([txnId++, memberId, 'earn', pts, txnDate, channel]);
+    }
+
+    const breakageRoll = tier.breakage * (0.6 + rand()*0.8);
+    let expired = Math.round(annualEarn * breakageRoll);
+    if(expired > 0){
+      const nEvents = 1 + Math.floor(rand()*3);
+      let remaining = expired;
+      for(let i = 0; i < nEvents; i++){
+        let chunk = (i === nEvents-1) ? remaining : Math.round(remaining * (0.3 + rand()*0.3));
+        chunk = Math.max(0, Math.min(chunk, remaining));
+        remaining -= chunk;
+        if(chunk <= 0) continue;
+        const m = 1 + Math.floor(rand()*12), day = 1 + Math.floor(rand()*28);
+        const txnDate = `2025-${String(m).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+        insTxn.run([txnId++, memberId, 'expire', chunk, txnDate, 'inactivity']);
+      }
+    }
+
+    let redeemedTotal = Math.max(0, annualEarn - expired - Math.round(annualEarn * rand() * 0.05));
+    if(redeemedTotal > 0){
+      const nRedemptions = 1 + Math.floor(rand()*4);
+      let remaining = redeemedTotal;
+      for(let i = 0; i < nRedemptions; i++){
+        let chunk = (i === nRedemptions-1) ? remaining : Math.round(remaining * (0.2 + rand()*0.4));
+        chunk = Math.max(0, Math.min(chunk, remaining));
+        remaining -= chunk;
+        if(chunk <= 0) continue;
+        const m = 1 + Math.floor(rand()*12), day = 1 + Math.floor(rand()*28);
+        const txnDate = `2025-${String(m).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+        insTxn.run([txnId++, memberId, 'redeem', chunk, txnDate, 'redemption']);
+        const rtypes = ['flight','partner','upgrade','merchandise'];
+        const rtype = rtypes[Math.floor(rand()*rtypes.length)];
+        const cashValue = Math.round(chunk * tier.cpp) / 100;
+        insRedeem.run([redemptionId++, memberId, chunk, cashValue, rtype, tier.cpp]);
+      }
+    }
+  }
+  db.run("COMMIT");
+  insMember.free(); insTier.free(); insTxn.free(); insRedeem.free();
+
+  const buildMs = Math.round(performance.now() - t0);
+  const rowCount = db.exec("SELECT (SELECT COUNT(*) FROM members)+(SELECT COUNT(*) FROM point_transactions)+(SELECT COUNT(*) FROM tier_status_history)+(SELECT COUNT(*) FROM redemption_events)")[0].values[0][0];
+  document.getElementById('db-meta').textContent = `${N_MEMBERS.toLocaleString()} members · ${rowCount.toLocaleString()} rows · built in ${buildMs}ms`;
+}
+
+// =================================================================
+// QUERY HELPERS
+// =================================================================
+function runSQL(sql){
+  const t0 = performance.now();
+  const res = db.exec(sql);
+  const ms = (performance.now() - t0).toFixed(1);
+  if(!res.length) return { columns:[], rows:[], ms };
+  return { columns:res[0].columns, rows:res[0].values, ms };
+}
+
+function flagFor(pct){
+  if(pct >= 9) return {label:'CRITICAL', color:'var(--critical)'};
+  if(pct >= 4) return {label:'HIGH', color:'var(--high)'};
+  if(pct >= 1.5) return {label:'ELEVATED', color:'var(--elevated)'};
+  return {label:'LOW', color:'var(--good)'};
+}
+
+// =================================================================
+// RENDER — Tier Explorer (query 1 drives the ranked list)
+// =================================================================
+const Q1 = `
+WITH tier_points AS (
+  SELECT h.tier,
+    SUM(CASE WHEN t.txn_type='earn'   THEN t.points ELSE 0 END) AS points_earned,
+    SUM(CASE WHEN t.txn_type='redeem' THEN t.points ELSE 0 END) AS points_redeemed,
+    SUM(CASE WHEN t.txn_type='expire' THEN t.points ELSE 0 END) AS points_expired
+  FROM point_transactions t
+  JOIN tier_status_history h ON t.member_id=h.member_id AND t.txn_date BETWEEN h.effective_date AND h.expiry_date
+  GROUP BY h.tier
+)
+SELECT tier, points_earned, points_redeemed, points_expired,
+  ROUND(100.0*points_expired/NULLIF(points_earned,0),1) AS breakage_rate_pct
+FROM tier_points ORDER BY breakage_rate_pct DESC;`;
+
+const Q2 = `
+WITH monthly_expiry AS (
+  SELECT h.tier, strftime('%Y-%m', t.txn_date) AS month, SUM(t.points) AS points_expired_month
+  FROM point_transactions t JOIN tier_status_history h ON t.member_id=h.member_id
+  WHERE t.txn_type='expire' GROUP BY h.tier, month
+)
+SELECT tier, month, points_expired_month,
+  SUM(points_expired_month) OVER (PARTITION BY tier ORDER BY month ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_expired,
+  RANK() OVER (PARTITION BY month ORDER BY points_expired_month DESC) AS rank_in_month
+FROM monthly_expiry ORDER BY tier, month;`;
+
+let tierStatsCache = {}; // tier -> row from Q1, keyed for detail panel + count lookups
+
+function renderTierList(){
+  const { columns, rows } = runSQL(Q1);
+  tierStatsCache = {};
+  rows.forEach(r => { const o = {}; columns.forEach((c,i)=>o[c]=r[i]); tierStatsCache[o.tier] = o; });
+
+  const memberCounts = runSQL("SELECT tier, COUNT(*) FROM tier_status_history GROUP BY tier");
+  const countMap = {};
+  memberCounts.rows.forEach(r => countMap[r[0]] = r[1]);
+
+  const listEl = document.getElementById('tier-list');
+  listEl.innerHTML = '';
+  rows.forEach((r, idx) => {
+    const tierKey = r[0], breakagePct = r[4];
+    const tierDef = TIERS.find(t => t.key === tierKey);
+    const flag = flagFor(breakagePct);
+    const count = countMap[tierKey] || 0;
+    const row = document.createElement('div');
+    row.className = 'tier-row';
+    row.dataset.tier = tierKey;
+    row.innerHTML = `
+      <div class="rank">${String(idx+1).padStart(2,'0')}</div>
+      <div><div class="name">${tierDef.name}</div><div class="meta">${(count/N_MEMBERS*100).toFixed(1)}% of base · ${tierDef.spendNote}</div></div>
+      <div class="tier-bar-wrap"><div class="tier-bar" style="width:${Math.min(100,breakagePct*7)}%; background:${flag.color}"></div></div>
+      <div class="tier-score"><div class="num" style="color:${flag.color}">${breakagePct.toFixed(1)}%</div><div class="flag" style="color:${flag.color}">${flag.label}</div></div>`;
+    row.addEventListener('click', () => selectTier(tierKey));
+    listEl.appendChild(row);
+  });
+
+  if(rows.length){
+    selectTier(selectedTier && tierStatsCache[selectedTier] ? selectedTier : rows[0][0]);
+  }
+}
+
+function selectTier(tierKey){
+  selectedTier = tierKey;
+  document.querySelectorAll('.tier-row').forEach(r => r.classList.toggle('active', r.dataset.tier === tierKey));
+
+  // Live, parameterized-in-spirit query scoped to this tier (real SQL round trip per click)
+  const detailSql = `
+    SELECT h.tier,
+      SUM(CASE WHEN t.txn_type='earn' THEN t.points ELSE 0 END) AS earned,
+      SUM(CASE WHEN t.txn_type='redeem' THEN t.points ELSE 0 END) AS redeemed,
+      SUM(CASE WHEN t.txn_type='expire' THEN t.points ELSE 0 END) AS expired,
+      (SELECT COUNT(*) FROM tier_status_history WHERE tier=h.tier) AS member_count
+    FROM point_transactions t
+    JOIN tier_status_history h ON t.member_id=h.member_id
+    WHERE h.tier='${tierKey}'
+    GROUP BY h.tier;`;
+  const { rows } = runSQL(detailSql);
+  if(!rows.length) return;
+  const [ , earned, redeemed, expired, memberCount ] = rows[0];
+  const breakagePct = earned > 0 ? (100*expired/earned) : 0;
+
+  const cashSql = `SELECT ROUND(SUM(cash_value_cad),2), value_per_point_cents FROM redemption_events re JOIN tier_status_history h ON re.member_id=h.member_id WHERE h.tier='${tierKey}' GROUP BY value_per_point_cents;`;
+  const cashRes = runSQL(cashSql);
+  const cashValue = cashRes.rows.length ? cashRes.rows[0][0] : 0;
+
+  const t = TIERS.find(x => x.key === tierKey);
+  const ranked = Object.keys(tierStatsCache);
+  const idx = ranked.findIndex(k => k === tierKey);
+  const flag = flagFor(breakagePct);
+
+  const engagementGap = Math.min(100, Math.round(breakagePct*9));
+  const memberFluency = Math.round((1 - t.share) * 40 + 20);
+  const valueLeftOnTable = Math.round(100 - (t.cpp/2.2*100));
+  const obscuredExposure = Math.round(breakagePct*3);
+
+  document.getElementById('detail-panel').innerHTML = `
+    <div class="detail-rank">Rank ${String(idx+1).padStart(2,'0')} of ${TIERS.length}</div>
+    <div class="detail-flag" style="color:${flag.color}">${flag.label} BREAKAGE RISK</div>
+    <div class="detail-title">${t.name}</div>
+    <div class="detail-sub">${t.sqc.toLocaleString()} SQC threshold · ${t.spendNote}</div>
+    <div class="detail-query-tag">⚡ live SQL · ${memberCount} members · ${cashRes.ms}ms</div>
+
+    <div class="detail-score-head">Risk factor breakdown — composite breakage ${breakagePct.toFixed(1)}%</div>
+    <div class="factor"><div class="factor-row"><span>Engagement Gap</span><b>${engagementGap}</b></div><div class="factor-track"><div class="factor-fill" style="width:${engagementGap}%; background:var(--critical)"></div></div></div>
+    <div class="factor"><div class="factor-row"><span>Member Fluency</span><b>${memberFluency}</b></div><div class="factor-track"><div class="factor-fill" style="width:${memberFluency}%; background:var(--blue)"></div></div></div>
+    <div class="factor"><div class="factor-row"><span>Value Left on Table</span><b>${valueLeftOnTable}</b></div><div class="factor-track"><div class="factor-fill" style="width:${valueLeftOnTable}%; background:var(--high)"></div></div></div>
+    <div class="factor"><div class="factor-row"><span>Obscured-Value Exposure</span><b>${obscuredExposure}</b></div><div class="factor-track"><div class="factor-fill" style="width:${obscuredExposure}%; background:var(--critical)"></div></div></div>
+
+    <div class="stat-grid">
+      <div class="stat-box"><div class="l">Modeled members</div><div class="v">${memberCount.toLocaleString()}</div><div class="s">${(memberCount/N_MEMBERS*100).toFixed(1)}% of synthetic base</div></div>
+      <div class="stat-box"><div class="l">Points earned</div><div class="v">${earned.toLocaleString()}</div><div class="s">annualized, modeled</div></div>
+      <div class="stat-box"><div class="l">Points expired</div><div class="v">${expired.toLocaleString()}</div><div class="s">breakage volume</div></div>
+      <div class="stat-box"><div class="l">Redemption value</div><div class="v">$${Math.round(cashValue).toLocaleString()}</div><div class="s">at ${t.cpp}¢/pt modeled</div></div>
+    </div>
+
+    <div class="why-head">Why breakage sits here</div>
+    <ul class="why-list">
+      <li>Realized redemption value modeled at ${t.cpp}¢/pt CAD — ${t.key==='none' ? 'near the merchandise/gift-card floor Prince of Travel tracks' : t.key==='se' ? "above Prince of Travel's blended 2.0¢/pt valuation" : 'between the merchandise floor and premium partner ceiling'}.</li>
+      <li>${t.key==='none' ? 'No SQC deadline exists at this tier, so there is no annual forcing function to redeem before status resets.' : 'Status must be re-earned each qualification year, creating a recurring deadline that pulls points out of dormancy.'}</li>
+      <li>Share of modeled member base: ${(t.share*100).toFixed(1)}% — ${t.key==='none' ? 'the large base population is why its breakage rate dominates the program-wide ~10% figure' : 'a small, highly engaged population with proportionally minor impact on blended breakage'}.</li>
+    </ul>
+
+    <div class="insight"><div class="l">Consumer Behaviour Insight</div><p>${INSIGHTS[tierKey]}</p></div>
+  `;
+}
+
+// =================================================================
+// RENDER — SQL Console
+// =================================================================
+function renderResultTable(tableId, columns, rows, formatCell){
+  const table = document.getElementById(tableId);
+  table.querySelector('thead').innerHTML = '<tr>' + columns.map(c=>`<th>${c}</th>`).join('') + '</tr>';
+  const tbody = table.querySelector('tbody') || table.appendChild(document.createElement('tbody'));
+  tbody.innerHTML = '';
+  rows.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = row.map((v,i) => formatCell ? formatCell(v,i,columns) : `<td>${v}</td>`).join('');
+    tbody.appendChild(tr);
+  });
+}
+
+function runQuery1(){
+  const { columns, rows, ms } = runSQL(Q1);
+  renderResultTable('result-table-1', columns, rows, (v,i,cols) => {
+    if(i===0) return `<td class="hi">${v}</td>`;
+    if(cols[i]==='breakage_rate_pct') return `<td class="${v>=9?'breakage-crit':(v<=1.5?'breakage-good':'')}">${v}</td>`;
+    return `<td>${typeof v==='number' ? v.toLocaleString() : v}</td>`;
+  });
+  document.getElementById('q1-time').textContent = `✓ ${ms}ms · ${rows.length} rows`;
+  document.getElementById('q1-status').textContent = 'executed';
+}
+function runQuery2(){
+  const { columns, rows, ms } = runSQL(Q2);
+  renderResultTable('result-table-2', columns, rows, (v,i,cols) => {
+    if(i===0) return `<td class="hi">${v}</td>`;
+    return `<td>${typeof v==='number' ? v.toLocaleString() : v}</td>`;
+  });
+  document.getElementById('q2-time').textContent = `✓ ${ms}ms · ${rows.length} rows`;
+  document.getElementById('q2-status').textContent = 'executed';
+}
+
+// =================================================================
+// RENDER — Schema tab (live introspection, not static text)
+// =================================================================
+function renderSchema(){
+  const tables = runSQL("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;").rows.map(r=>r[0]);
+  const wrap = document.getElementById('schema-cards');
+  wrap.innerHTML = '';
+  tables.forEach(tableName => {
+    const cols = runSQL(`PRAGMA table_info(${tableName});`).rows; // cid,name,type,notnull,dflt,pk
+    const count = runSQL(`SELECT COUNT(*) FROM ${tableName};`).rows[0][0];
+    const card = document.createElement('div');
+    card.className = 'schema-card';
+    card.innerHTML = `
+      <div class="schema-card-head"><span>${tableName}</span><span class="rowcount">${count.toLocaleString()} rows</span></div>
+      ${cols.map(c => `<div class="schema-col"><span class="cname">${c[1]}${c[5] ? '<span class="pk">PK</span>' : ''}</span><span class="ctype">${c[2]}</span></div>`).join('')}
+    `;
+    wrap.appendChild(card);
+  });
+}
+
+// =================================================================
+// INIT
+// =================================================================
+function rebuildEverything(){
+  document.getElementById('regen-btn').disabled = true;
+  setStatus('loading', 'REBUILDING DATABASE…');
+  setTimeout(() => {
+    buildDatabase();
+    renderTierList();
+    runQuery1();
+    runQuery2();
+    renderSchema();
+    setStatus('', 'SQLITE LIVE · WASM');
+    document.getElementById('regen-btn').disabled = false;
+  }, 30);
+}
+
+document.getElementById('regen-btn').addEventListener('click', rebuildEverything);
+document.getElementById('run-q1').addEventListener('click', runQuery1);
+document.getElementById('run-q2').addEventListener('click', runQuery2);
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+if(typeof initSqlJs === 'undefined'){
+  setStatus('error', 'FAILED TO LOAD');
+  showBootError('The sql.js script tag did not load.');
+} else {
+  initSqlJs({ locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${file}` })
+    .then(sql => {
+      SQL = sql;
+      document.getElementById('run-q1').disabled = false;
+      document.getElementById('run-q2').disabled = false;
+      rebuildEverything();
+    })
+    .catch(err => {
+      setStatus('error', 'FAILED TO LOAD');
+      showBootError('Error: ' + (err && err.message ? err.message : err));
+    });
+}
+</script>
+</body>
+</html>

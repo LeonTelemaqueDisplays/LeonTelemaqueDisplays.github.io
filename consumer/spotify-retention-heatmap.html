@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Same Curve, Different Currency — Spotify Subscription Retention</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+<style>
+  :root{
+    --bg:#0a0b0f; --panel:#13151b; --panel-alt:#181b22; --border:#242832; --border-soft:#1c1f27;
+    --text:#e9eaed; --text-dim:#9498a3; --text-faint:#5c6070;
+    --critical:#e05a4c; --critical-dim:#7a3730; --high:#d9a23f; --elevated:#c9c15a; --good:#3fcf8e; --blue:#5b8def;
+    --mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.5; -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:28px 20px 60px; }
+
+  .header{ display:flex; justify-content:space-between; align-items:flex-start; gap:20px; flex-wrap:wrap; margin-bottom:18px; }
+  .title-block h1{ font-size:26px; font-weight:700; letter-spacing:-0.01em; margin-bottom:6px; }
+  .title-block .eyebrow{ font-family:var(--mono); font-size:11px; letter-spacing:0.12em; color:var(--text-faint); text-transform:uppercase; margin-bottom:10px; }
+  .kicker-line{ font-size:13.5px; color:var(--text-dim); max-width:760px; margin:14px 0 20px; }
+  .kicker-line b{ color:var(--text); font-weight:600; }
+
+  .status-block{ display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+  .live-pill{ display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:11px; letter-spacing:0.08em; color:var(--good); border:1px solid var(--good); border-radius:20px; padding:4px 10px 4px 8px; white-space:nowrap; }
+  .live-pill.loading{ color:var(--high); border-color:var(--high); }
+  .live-pill.error{ color:var(--critical); border-color:var(--critical); }
+  .live-dot{ width:6px; height:6px; border-radius:50%; background:currentColor; box-shadow:0 0 6px currentColor; }
+  .regen-btn{ font-family:var(--mono); font-size:10.5px; letter-spacing:0.05em; background:var(--panel-alt); border:1px solid var(--border); color:var(--text-dim); padding:6px 12px; border-radius:6px; cursor:pointer; }
+  .regen-btn:hover{ color:var(--text); border-color:var(--blue); }
+  .regen-btn:disabled{ opacity:0.4; cursor:default; }
+  .db-meta{ font-family:var(--mono); font-size:9.5px; color:var(--text-faint); text-align:right; }
+
+  .kpi-top{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:8px; overflow:hidden; margin-bottom:2px; }
+  .kpi-top .cell{ background:var(--panel); padding:16px 18px; }
+  .kpi-top .num{ font-family:var(--mono); font-size:26px; font-weight:600; color:var(--good); }
+  .kpi-top .lbl{ font-size:11px; letter-spacing:0.06em; color:var(--text-dim); text-transform:uppercase; margin-top:4px;}
+  .src-line{ font-family:var(--mono); font-size:10.5px; color:var(--text-faint); padding:8px 4px 20px; letter-spacing:0.02em; }
+
+  .kpi-bottom{ display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:8px; overflow:hidden; margin-bottom:22px; }
+  .kpi-bottom .cell{ background:var(--panel); padding:14px 14px 16px; }
+  .kpi-bottom .eyebrow2{ font-family:var(--mono); font-size:9.5px; letter-spacing:0.08em; color:var(--text-faint); text-transform:uppercase; }
+  .kpi-bottom .val{ font-family:var(--mono); font-size:18px; font-weight:600; margin-top:6px; }
+  .kpi-bottom .sub{ font-size:11px; color:var(--text-dim); margin-top:3px; }
+  .kpi-bottom .src{ font-size:9.5px; color:var(--text-faint); margin-top:6px; font-family:var(--mono); }
+  .kpi-bottom .badge{ display:inline-block; font-family:var(--mono); font-size:8px; letter-spacing:0.04em; padding:1px 5px; border-radius:3px; margin-top:6px; }
+  .badge.real{ background:rgba(63,207,142,0.12); color:var(--good); border:1px solid rgba(63,207,142,0.3); }
+  .badge.bench{ background:rgba(91,141,239,0.12); color:var(--blue); border:1px solid rgba(91,141,239,0.3); }
+
+  @media (max-width:800px){ .kpi-top{ grid-template-columns:1fr; } .kpi-bottom{ grid-template-columns:repeat(2,1fr); } .header{flex-direction:column;} .status-block{align-items:flex-start;} }
+
+  .signature{ border:1px solid var(--border); border-radius:8px; background:var(--panel); padding:18px 20px; margin-bottom:24px; }
+  .signature-head{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+  .signature-head h3{ font-size:13px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-dim); }
+  .signature-head span{ font-family:var(--mono); font-size:10.5px; color:var(--text-faint); }
+  .spark-row{ display:flex; align-items:flex-end; gap:6px; height:90px; margin-bottom:8px; }
+  .spark-bar{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; }
+  .spark-fill{ width:100%; border-radius:3px 3px 0 0; background:linear-gradient(180deg,#3fcf8e,#1f8f5e); min-height:2px; }
+  .spark-label{ font-family:var(--mono); font-size:8.5px; color:var(--text-faint); margin-top:4px; }
+  .spark-val{ font-family:var(--mono); font-size:8.5px; color:var(--text-dim); margin-bottom:3px; }
+  .signature-note{ font-size:12px; color:var(--text-dim); margin-top:16px; padding-top:14px; border-top:1px solid var(--border-soft); }
+  .signature-note b{ color:var(--text); }
+  .dbd-callout{ display:inline-flex; align-items:center; gap:8px; margin-top:10px; padding:8px 12px; background:rgba(91,141,239,0.06); border:1px solid rgba(91,141,239,0.25); border-radius:6px; font-family:var(--mono); font-size:11px; color:var(--blue); }
+
+  .tabs{ display:flex; gap:4px; margin-bottom:16px; border-bottom:1px solid var(--border); }
+  .tab-btn{ font-family:var(--mono); font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-faint); background:transparent; border:none; padding:10px 16px; cursor:pointer; border-bottom:2px solid transparent; transition:color .15s, border-color .15s; }
+  .tab-btn.active{ color:var(--text); border-bottom-color:var(--good); }
+  .tab-btn:hover:not(.active){ color:var(--text-dim); }
+  .tab-panel{ display:none; } .tab-panel.active{ display:block; }
+
+  .heatmap-panel{ display:grid; grid-template-columns:1fr 360px; gap:0; border:1px solid var(--border); border-radius:8px; overflow:hidden; background:var(--panel); }
+  @media (max-width:960px){ .heatmap-panel{ grid-template-columns:1fr; } }
+  .heatmap-left{ padding:18px; overflow-x:auto; }
+  .heatmap-head-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+  .heatmap-head-row span{ font-family:var(--mono); font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-dim); }
+  .heatmap-head-row .hint{ color:var(--text-faint); text-transform:none; letter-spacing:0; }
+  .heatmap-grid{ display:grid; grid-template-columns:78px repeat(12, minmax(46px,1fr)); gap:3px; min-width:680px; }
+  .hm-colhead{ font-family:var(--mono); font-size:9.5px; color:var(--text-faint); text-align:center; padding:4px 0 8px; }
+  .hm-rowhead{ font-family:var(--mono); font-size:10.5px; color:var(--text-dim); display:flex; align-items:center; padding-right:6px; }
+  .hm-cell{ border-radius:4px; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:10px; font-weight:700; min-height:32px; cursor:pointer; color:#0a0b0f; text-shadow:0 1px 1px rgba(255,255,255,0.15); transition:outline .1s; }
+  .hm-cell.empty{ background:var(--panel-alt); cursor:default; color:var(--text-faint); font-weight:400; }
+  .hm-cell.selected{ outline:2px solid var(--blue); outline-offset:-2px; }
+  .heatmap-legend{ display:flex; align-items:center; gap:6px; margin-top:14px; font-family:var(--mono); font-size:9.5px; color:var(--text-faint); }
+  .legend-swatch{ width:14px; height:10px; border-radius:2px; }
+
+  .detail-panel{ padding:20px; border-left:1px solid var(--border-soft); }
+  @media (max-width:960px){ .detail-panel{ border-left:none; border-top:1px solid var(--border-soft); } }
+  .detail-empty{ color:var(--text-faint); font-size:13px; padding:40px 10px; text-align:center; }
+  .detail-eyebrow{ font-family:var(--mono); font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-faint); margin-bottom:4px; }
+  .detail-title{ font-size:20px; font-weight:700; margin-bottom:2px; }
+  .detail-sub{ font-size:12px; color:var(--text-dim); margin-bottom:8px; }
+  .detail-query-tag{ display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:9.5px; color:var(--blue); background:rgba(91,141,239,0.08); border:1px solid rgba(91,141,239,0.3); padding:3px 8px; border-radius:4px; margin-bottom:16px; }
+  .retention-big{ font-family:var(--mono); font-size:34px; font-weight:700; margin:10px 0 2px; }
+  .retention-sub{ font-size:11.5px; color:var(--text-dim); margin-bottom:18px; }
+
+  .stat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:16px 0; }
+  .stat-box{ background:var(--panel-alt); border:1px solid var(--border-soft); border-radius:6px; padding:10px 12px; }
+  .stat-box .l{ font-family:var(--mono); font-size:9.5px; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-faint); }
+  .stat-box .v{ font-family:var(--mono); font-size:15px; font-weight:600; margin-top:4px; }
+  .stat-box .s{ font-size:10.5px; color:var(--text-dim); margin-top:2px; }
+
+  .channel-head{ font-size:11.5px; letter-spacing:0.04em; text-transform:uppercase; color:var(--text-dim); margin:18px 0 8px; }
+  .channel-row{ display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--border-soft); font-size:12px; }
+  .channel-row:last-child{ border-bottom:none; }
+  .channel-row .cname{ color:var(--text-dim); font-family:var(--mono); font-size:11px; }
+  .channel-row .cval{ font-family:var(--mono); font-weight:600; }
+
+  .insight{ margin-top:16px; padding:12px 14px; background:rgba(63,207,142,0.06); border:1px solid rgba(63,207,142,0.25); border-radius:6px; }
+  .insight .l{ font-family:var(--mono); font-size:9.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--good); margin-bottom:6px; }
+  .insight p{ font-size:12.5px; color:var(--text-dim); }
+
+  .sql-grid{ display:grid; grid-template-columns:1fr; gap:16px; }
+  .code-block{ background:var(--panel); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+  .code-block-head{ display:flex; justify-content:space-between; align-items:center; padding:10px 16px; border-bottom:1px solid var(--border-soft); font-family:var(--mono); font-size:11px; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-dim); }
+  .code-block pre{ padding:16px; overflow-x:auto; font-family:var(--mono); font-size:11.5px; line-height:1.65; color:#c9cdd6; }
+  .code-block .cm{ color:#6b7280; } .code-block .kw{ color:#e0564a; } .code-block .ty{ color:#5b8def; } .code-block .st{ color:#3fcf8e; } .code-block .fn{ color:#d9a23f; }
+
+  .run-row{ display:flex; align-items:center; gap:12px; padding:0 16px 16px; }
+  .run-btn{ font-family:var(--mono); font-size:11px; letter-spacing:0.05em; background:var(--good); color:#0a0b0f; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; }
+  .run-btn:hover{ opacity:0.85; }
+  .run-btn:disabled{ opacity:0.4; cursor:default; }
+  .exec-time{ font-family:var(--mono); font-size:10.5px; color:var(--good); }
+
+  .result-wrap{ max-height:340px; overflow:auto; border-top:1px solid var(--border-soft); }
+  .result-table{ width:100%; border-collapse:collapse; font-family:var(--mono); font-size:11.5px; }
+  .result-table th{ position:sticky; top:0; text-align:left; padding:9px 14px; background:var(--panel-alt); font-size:10px; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-faint); border-bottom:1px solid var(--border); }
+  .result-table td{ padding:8px 14px; border-bottom:1px solid var(--border-soft); color:var(--text-dim); white-space:nowrap; }
+  .result-table tr:last-child td{ border-bottom:none; }
+  .result-table td.hi{ color:var(--text); font-weight:600; }
+  .schema-note{ font-size:12.5px; color:var(--text-dim); padding:14px 16px; border-top:1px solid var(--border-soft); }
+
+  .schema-cards{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+  @media (max-width:800px){ .schema-cards{ grid-template-columns:1fr; } }
+  .schema-card{ background:var(--panel); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+  .schema-card-head{ display:flex; justify-content:space-between; padding:10px 14px; border-bottom:1px solid var(--border-soft); font-family:var(--mono); font-size:11px; color:var(--text); }
+  .schema-card-head .rowcount{ color:var(--good); }
+  .schema-col{ display:flex; justify-content:space-between; padding:7px 14px; font-family:var(--mono); font-size:11px; border-bottom:1px solid var(--border-soft); }
+  .schema-col:last-child{ border-bottom:none; }
+  .schema-col .cname{ color:var(--text-dim); }
+  .schema-col .ctype{ color:var(--text-faint); }
+  .schema-col .pk{ color:var(--high); font-size:9px; margin-left:6px; }
+
+  .thesis{ margin-top:32px; border:1px solid var(--border); border-radius:8px; background:var(--panel); padding:22px 24px; }
+  .thesis h3{ font-size:14px; letter-spacing:0.02em; margin-bottom:10px; }
+  .thesis p{ font-size:13px; color:var(--text-dim); margin-bottom:10px; }
+  .thesis p:last-child{ margin-bottom:0; }
+
+  .sources{ margin-top:20px; padding:16px 18px; border:1px solid var(--border-soft); border-radius:8px; background:var(--panel-alt); }
+  .sources .l{ font-family:var(--mono); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint); margin-bottom:8px; }
+  .sources h4{ font-family:var(--mono); font-size:10.5px; letter-spacing:0.04em; text-transform:uppercase; margin:12px 0 6px; }
+  .sources h4.real{ color:var(--good); } .sources h4.bench{ color:var(--blue); }
+  .sources p{ font-size:11.5px; color:var(--text-dim); line-height:1.7; }
+
+  .tags{ display:flex; gap:8px; margin-top:20px; flex-wrap:wrap; }
+  .tag{ font-family:var(--mono); font-size:10.5px; letter-spacing:0.04em; text-transform:uppercase; padding:6px 11px; border:1px solid var(--border); border-radius:4px; color:var(--text-dim); }
+  .tag.mode{ border-color:var(--good); color:var(--good); }
+
+  .boot-error{ margin:14px 0; padding:14px 16px; border:1px solid var(--critical-dim); background:rgba(224,90,76,0.08); border-radius:8px; font-size:12.5px; color:var(--text-dim); }
+  .boot-error b{ color:var(--critical); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="title-block">
+      <div class="eyebrow">Subscription Retention · Spotify</div>
+      <h1>Same Curve, Different Currency</h1>
+      <div class="kicker-line">
+        A cohort retention teardown of <b>Spotify's</b> free-to-Premium funnel — real disclosed MAU, subscriber,
+        and ARPU figures from Spotify's own Q2 2026 investor materials, with churn shape calibrated to
+        RevenueCat's <b>State of Subscription Apps 2026</b> benchmarks where Spotify doesn't disclose granular
+        cohort data (which is always — no streaming service publishes month-by-month churn).
+      </div>
+    </div>
+    <div class="status-block">
+      <div class="live-pill loading" id="db-status"><span class="live-dot"></span><span id="db-status-text">LOADING SQLITE (WASM)…</span></div>
+      <button class="regen-btn" id="regen-btn" disabled>⟳ Regenerate synthetic population</button>
+      <div class="db-meta" id="db-meta">—</div>
+    </div>
+  </div>
+
+  <div id="boot-error-slot"></div>
+
+  <div class="kpi-top">
+    <div class="cell"><div class="num">777M</div><div class="lbl">Monthly Active Users, Q2 2026</div></div>
+    <div class="cell"><div class="num">300M</div><div class="lbl">Premium Subscribers, Q2 2026</div></div>
+    <div class="cell"><div class="num">38.6%</div><div class="lbl">Premium share of MAU (calculated)</div></div>
+  </div>
+  <div class="src-line">Sources: Spotify Q2 2026 shareholder letter &amp; earnings call, reported Aug 4, 2026. 38.6% = 300M ÷ 777M, our calculation from the two disclosed figures — not a number Spotify itself publishes.</div>
+
+  <div class="kpi-bottom">
+    <div class="cell"><div class="eyebrow2">Premium ARPU</div><div class="val">€4.89</div><div class="sub">≈ $5.69, +7.4% YoY</div><span class="badge real">REAL · SPOTIFY Q2'26</span></div>
+    <div class="cell"><div class="eyebrow2">Premium revenue growth</div><div class="val">+16% YoY</div><div class="sub">constant currency</div><span class="badge real">REAL · SPOTIFY Q2'26</span></div>
+    <div class="cell"><div class="eyebrow2">Trial-to-paid conversion</div><div class="val">11.5%–69.5%</div><div class="sub">Media &amp; Entertainment spread</div><span class="badge bench">BENCHMARK · REVENUECAT</span></div>
+    <div class="cell"><div class="eyebrow2">Annual reactivation rate</div><div class="val">~5%</div><div class="sub">monthly reactivates ~4× faster</div><span class="badge bench">BENCHMARK · REVENUECAT</span></div>
+    <div class="cell"><div class="eyebrow2">Europe share of Premium</div><div class="val">36%</div><div class="sub">NA 25% · LatAm 24% · RoW 15%</div><span class="badge real">REAL · SPOTIFY Q2'26</span></div>
+  </div>
+
+  <div class="signature">
+    <div class="signature-head"><h3>Blended retention curve — live, computed from the query below</h3><span>weighted average across all 12 cohorts</span></div>
+    <div class="spark-row" id="spark-row"></div>
+    <div class="dbd-callout" id="dbd-callout">⚡ For reference: Dead by Daylight's D7 cohort retention (gaming side, Lifecycle Churn System) sits at 42.3% — a near-identical decay shape, priced in players instead of dollars.</div>
+    <div class="signature-note">
+      This isn't a designed chart — it's the live output of <code>Query 1</code> below, re-aggregated across cohorts and
+      re-drawn every time you hit <b>Regenerate</b>. The steep early drop (trial abandonment + first-renewal risk)
+      followed by a flattening curve is the same shape RevenueCat documents industry-wide: renewal risk falls the
+      longer a subscriber survives their first few cycles.
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="heatmap">Retention Heatmap</button>
+    <button class="tab-btn" data-tab="sql">SQL Console</button>
+    <button class="tab-btn" data-tab="schema">Schema</button>
+  </div>
+
+  <div class="tab-panel active" id="tab-heatmap">
+    <div class="heatmap-panel">
+      <div class="heatmap-left">
+        <div class="heatmap-head-row"><span>Cohort month × months since signup</span><span class="hint">click a cell to drill down →</span></div>
+        <div class="heatmap-grid" id="heatmap-grid"><div class="detail-empty">Building database…</div></div>
+        <div class="heatmap-legend">
+          <span>Retention:</span>
+          <div class="legend-swatch" style="background:hsl(0,65%,45%)"></div><span>low</span>
+          <div class="legend-swatch" style="background:hsl(45,65%,45%)"></div><span>mid</span>
+          <div class="legend-swatch" style="background:hsl(120,55%,40%)"></div><span>high</span>
+          <div class="legend-swatch" style="background:var(--panel-alt); border:1px solid var(--border-soft)"></div><span>not yet observed</span>
+        </div>
+      </div>
+      <div class="detail-panel" id="detail-panel"><div class="detail-empty">Select a cell<br>to see its live SQL breakdown</div></div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-sql">
+    <div class="sql-grid">
+      <div class="code-block">
+        <div class="code-block-head"><span>cohort_retention.sql — CTE (drives the heatmap)</span><span id="q1-status">not yet run</span></div>
+        <pre><span class="cm">-- Core cohort retention query. For every signup cohort and every
+-- months-since-signup offset actually observable by 2025-12-31,
+-- what share of that cohort was an active Premium subscriber.
+-- "Active" requires a convert event (trial drop-off shows up
+-- immediately in month 0) and no cancel event before this offset.
+-- Every row of this result is one cell of the heatmap above --
+-- there is no separate hardcoded grid.</span>
+<span class="kw">WITH</span> <span class="fn">subscriber_lifecycle</span> <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> s.subscriber_id, s.cohort_month, s.signup_date,
+    <span class="fn">MIN</span>(<span class="kw">CASE WHEN</span> e.event_type=<span class="st">'convert'</span> <span class="kw">THEN</span> e.event_date <span class="kw">END</span>) <span class="kw">AS</span> convert_date,
+    <span class="fn">MIN</span>(<span class="kw">CASE WHEN</span> e.event_type=<span class="st">'cancel'</span> <span class="kw">THEN</span> e.event_date <span class="kw">END</span>) <span class="kw">AS</span> cancel_date
+  <span class="kw">FROM</span> subscribers s <span class="kw">LEFT JOIN</span> subscription_events e <span class="kw">ON</span> e.subscriber_id=s.subscriber_id
+  <span class="kw">GROUP BY</span> s.subscriber_id, s.cohort_month, s.signup_date
+),
+<span class="fn">subscriber_offsets</span> <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> subscriber_id, cohort_month,
+    <span class="kw">CASE WHEN</span> convert_date <span class="kw">IS NOT NULL THEN CAST</span>((<span class="fn">julianday</span>(convert_date)-<span class="fn">julianday</span>(signup_date))/30.44 <span class="kw">AS INTEGER</span>) <span class="kw">ELSE NULL END AS</span> convert_offset,
+    <span class="kw">CASE WHEN</span> cancel_date <span class="kw">IS NOT NULL THEN CAST</span>((<span class="fn">julianday</span>(cancel_date)-<span class="fn">julianday</span>(signup_date))/30.44 <span class="kw">AS INTEGER</span>) <span class="kw">ELSE NULL END AS</span> cancel_offset,
+    <span class="cm">-- how many months of history are actually observable for this cohort</span>
+    ((<span class="fn">CAST</span>(<span class="fn">strftime</span>(<span class="st">'%Y'</span>,<span class="st">'2025-12-31'</span>) <span class="kw">AS INTEGER</span>)-<span class="fn">CAST</span>(<span class="fn">strftime</span>(<span class="st">'%Y'</span>,cohort_month||<span class="st">'-01'</span>) <span class="kw">AS INTEGER</span>))*12
+      + (<span class="fn">CAST</span>(<span class="fn">strftime</span>(<span class="st">'%m'</span>,<span class="st">'2025-12-31'</span>) <span class="kw">AS INTEGER</span>)-<span class="fn">CAST</span>(<span class="fn">strftime</span>(<span class="st">'%m'</span>,cohort_month||<span class="st">'-01'</span>) <span class="kw">AS INTEGER</span>))) <span class="kw">AS</span> max_observed_offset
+  <span class="kw">FROM</span> subscriber_lifecycle
+),
+<span class="fn">month_series</span> <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> 0 <span class="kw">AS</span> m <span class="kw">UNION SELECT</span> 1 <span class="kw">UNION SELECT</span> 2 <span class="kw">UNION SELECT</span> 3 <span class="kw">UNION SELECT</span> 4
+  <span class="kw">UNION SELECT</span> 5 <span class="kw">UNION SELECT</span> 6 <span class="kw">UNION SELECT</span> 7 <span class="kw">UNION SELECT</span> 8 <span class="kw">UNION SELECT</span> 9 <span class="kw">UNION SELECT</span> 10 <span class="kw">UNION SELECT</span> 11
+)
+<span class="kw">SELECT</span> so.cohort_month, ms.m <span class="kw">AS</span> months_since_signup, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> cohort_size,
+  <span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> so.convert_offset <span class="kw">IS NOT NULL AND</span> so.convert_offset<=ms.m <span class="kw">AND</span> (so.cancel_offset <span class="kw">IS NULL OR</span> so.cancel_offset>ms.m) <span class="kw">THEN</span> 1 <span class="kw">ELSE</span> 0 <span class="kw">END</span>) <span class="kw">AS</span> active_count,
+  <span class="fn">ROUND</span>(100.0*<span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> so.convert_offset <span class="kw">IS NOT NULL AND</span> so.convert_offset<=ms.m <span class="kw">AND</span> (so.cancel_offset <span class="kw">IS NULL OR</span> so.cancel_offset>ms.m) <span class="kw">THEN</span> 1 <span class="kw">ELSE</span> 0 <span class="kw">END</span>)/<span class="fn">COUNT</span>(*),1) <span class="kw">AS</span> retention_pct
+<span class="kw">FROM</span> subscriber_offsets so <span class="kw">JOIN</span> month_series ms <span class="kw">ON</span> ms.m <= so.max_observed_offset
+<span class="kw">GROUP BY</span> so.cohort_month, ms.m <span class="kw">ORDER BY</span> so.cohort_month, ms.m;</pre>
+        <div class="run-row"><button class="run-btn" id="run-q1" disabled>▶ Run Query</button><span class="exec-time" id="q1-time"></span></div>
+        <div class="result-wrap"><table class="result-table" id="result-table-1"><thead><tr><th>cohort_month</th><th>months_since_signup</th><th>cohort_size</th><th>active_count</th><th>retention_pct</th></tr></thead><tbody></tbody></table></div>
+        <div class="schema-note">Runs directly against the in-browser SQLite database (sql.js/WASM). The heatmap above renders this exact result set — not a separate visualization built on hardcoded numbers.</div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-head"><span>churn_by_channel.sql — window functions</span><span id="q2-status">not yet run</span></div>
+        <pre><span class="cm">-- Cumulative churn by acquisition channel, month over month, plus
+-- each month's worst-performing channel. Same SUM-OVER-running-frame
+-- + RANK-OVER-partition pattern as the Aeroplan breakage query on
+-- the Fintech side of this portfolio -- same shape of question
+-- ("which segment loses value quietly"), different currency.</span>
+<span class="kw">WITH</span> <span class="fn">churn_events</span> <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> s.acquisition_channel,
+    <span class="fn">CAST</span>((<span class="fn">julianday</span>(e.event_date)-<span class="fn">julianday</span>(s.signup_date))/30.44 <span class="kw">AS INTEGER</span>) <span class="kw">AS</span> churn_month_offset
+  <span class="kw">FROM</span> subscription_events e <span class="kw">JOIN</span> subscribers s <span class="kw">ON</span> s.subscriber_id=e.subscriber_id
+  <span class="kw">WHERE</span> e.event_type=<span class="st">'cancel'</span>
+),
+<span class="fn">monthly_churn</span> <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> acquisition_channel, churn_month_offset, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> churned_count
+  <span class="kw">FROM</span> churn_events <span class="kw">WHERE</span> churn_month_offset <span class="kw">BETWEEN</span> 0 <span class="kw">AND</span> 11
+  <span class="kw">GROUP BY</span> acquisition_channel, churn_month_offset
+)
+<span class="kw">SELECT</span> acquisition_channel, churn_month_offset, churned_count,
+  <span class="fn">SUM</span>(churned_count) <span class="kw">OVER</span> (
+    <span class="kw">PARTITION BY</span> acquisition_channel <span class="kw">ORDER BY</span> churn_month_offset
+    <span class="kw">ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</span>
+  ) <span class="kw">AS</span> cumulative_churned,
+  <span class="fn">RANK</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> churn_month_offset <span class="kw">ORDER BY</span> churned_count <span class="kw">DESC</span>) <span class="kw">AS</span> rank_in_month
+<span class="kw">FROM</span> monthly_churn <span class="kw">ORDER BY</span> acquisition_channel, churn_month_offset;</pre>
+        <div class="run-row"><button class="run-btn" id="run-q2" disabled>▶ Run Query</button><span class="exec-time" id="q2-time"></span></div>
+        <div class="result-wrap"><table class="result-table" id="result-table-2"><thead><tr><th>acquisition_channel</th><th>churn_month_offset</th><th>churned_count</th><th>cumulative_churned</th><th>rank_in_month</th></tr></thead><tbody></tbody></table></div>
+        <div class="schema-note">SUM() OVER a running frame plus RANK() OVER a monthly partition — real window functions against real rows.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-schema">
+    <div class="schema-cards" id="schema-cards"><div class="detail-empty">Building database…</div></div>
+  </div>
+
+  <div class="thesis">
+    <h3>Why this is the same analysis as the Lifecycle Churn System, just priced differently</h3>
+    <p>A cohort retention heatmap and a live-service game's D1/D7/D30 retention curve are answering the identical question: of everyone who arrived in the same window, what fraction is still here N periods later? The gaming side of this portfolio's <b>Lifecycle Churn System</b> tracks that exact shape for Dead by Daylight — rage quits and loss streaks standing in for cancel events, D7/D30 standing in for months-since-signup. The mechanism underneath is a survival curve either way: steep early drop-off from the people who were never really committed, followed by a flattening tail of subscribers (or players) who've crossed whatever threshold makes them sticky.</p>
+    <p>The currencies just look different on the surface. A game studio prices retention in session frequency and eventual monetization; Spotify prices it directly in ARPU — €4.89/month per Premium subscriber, real and disclosed. But the query that produces both charts is structurally the same query: bucket by acquisition cohort, track survivorship over time, aggregate. The heatmap above and the churn dashboard on the gaming side could, with a few column renames, run on each other's schema.</p>
+    <p>The behavioural driver is the same too. Subscribers who survive their first renewal are dramatically less likely to churn later — RevenueCat's data shows renewal rates climbing from a 23–40% range at the first cycle to 56–70% by the third. That's the same "committed player" inflection the churn dashboard is built to detect: once someone crosses the early-risk window, the product has earned a different kind of trust, and the retention curve bends to prove it.</p>
+  </div>
+
+  <div class="sources">
+    <div class="l">Data sources</div>
+    <h4 class="real">Real, disclosed (Spotify Q2 2026, reported Aug 4, 2026)</h4>
+    <p>Monthly Active Users: 777 million, +12% YoY. Premium Subscribers: 300 million, +7 million net adds, +9% YoY. Premium monthly ARPU: €4.89 (≈$5.69), +7.4% YoY at constant currency. Premium revenue growth: +16% YoY at constant currency. Regional Premium subscriber mix: Europe 36%, North America 25%, Latin America 24%, Rest of World 15%. Source: Spotify Q2 2026 shareholder letter, investor presentation, and earnings call. The 38.6% Premium-to-MAU figure shown above is our own calculation (300M ÷ 777M) from these two disclosed numbers, not a metric Spotify itself reports.</p>
+    <h4 class="bench">Industry benchmark, used to calibrate synthetic churn shape (RevenueCat State of Subscription Apps 2026)</h4>
+    <p>Media &amp; Entertainment trial-to-paid conversion spread: 11.5%–69.5% (wide variance category). Annual reactivation rate: ~5%, with monthly subscribers reactivating roughly 4× as fast. Renewal-rate progression across successive cycles: 23–40% median at the first annual renewal, rising to 44–64% at the second and 56–70% at the third. We use the <i>shape</i> of that progression — renewal risk falling the longer a subscriber survives — to build the monthly churn hazard curve in this dataset. We do not apply RevenueCat's annual-plan percentages directly as monthly numbers; Spotify Premium bills monthly, RevenueCat's cited figures are annual-plan-specific, and treating the two as equivalent would overstate the sourcing. The specific per-cohort retention percentages, subscriber population, plan-type mix, and acquisition-channel split are entirely synthetic, generated in-browser, and calibrated only to the general shape described above — not to any Spotify-specific number, because Spotify does not disclose cohort-level retention.</p>
+    <p style="margin-top:10px">The database engine (SQLite via sql.js/WASM), the schema, and every query result on this page are real and re-executable — only the underlying subscriber population is synthetic.</p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">Subscription Design</span>
+    <span class="tag">Retention Psychology</span>
+    <span class="tag">Cohort Analysis</span>
+    <span class="tag">Spotify</span>
+    <span class="tag mode">Live Dashboard</span>
+  </div>
+
+</div>
+
+<script>
+// =================================================================
+// CONFIG
+// =================================================================
+const PLANS = [
+  { key:'individual', name:'Individual', share:0.55, churnMult:1.00 },
+  { key:'family',     name:'Family',     share:0.20, churnMult:0.70 },
+  { key:'duo',        name:'Duo',        share:0.15, churnMult:0.85 },
+  { key:'student',    name:'Student',    share:0.10, churnMult:0.75, gradCliff:9, gradCliffMult:3.0 },
+];
+const CHANNELS = [
+  { key:'organic',        name:'Organic',        share:0.35, churnMult:0.80, convProb:0.40, hasTrial:true },
+  { key:'paid_search',    name:'Paid Search',    share:0.20, churnMult:1.10, convProb:0.30, hasTrial:true },
+  { key:'social_ads',     name:'Social Ads',     share:0.15, churnMult:1.30, convProb:0.25, hasTrial:true },
+  { key:'partner_bundle', name:'Partner Bundle', share:0.20, churnMult:1.15, convProb:1.00, hasTrial:false },
+  { key:'referral',       name:'Referral',       share:0.10, churnMult:0.70, convProb:0.55, hasTrial:true },
+];
+const N_SUBS = 1500;
+const COHORT_MONTHS = Array.from({length:12}, (_,i)=>`2025-${String(i+1).padStart(2,'0')}`);
+const OBS_END = new Date(2025,11,31);
+
+const MONTH_INSIGHTS = {
+  early: "Month 0 retention already reflects trial drop-off, not just cancellations — RevenueCat's 2026 data shows more than half of trial cancellations happen on day one. A subscriber who never converts counts as inactive from the start, so this cell is really measuring the whole top-of-funnel, not a single churn event.",
+  mid: "This band is the first-renewal risk window. RevenueCat's cross-category data shows renewal rates climbing from a 23–40% range at the first cycle toward 44–64% by the second — subscribers who make it past this point are meaningfully less likely to leave than the raw month-0 number suggests.",
+  late: "By this point the curve is flattening — the subscribers left in this cohort have crossed whatever threshold makes them sticky. This is the same 'committed player' inflection the Lifecycle Churn System looks for on the gaming side: once someone survives the early window, the retention curve bends."
+};
+function insightFor(m){ return m<=1 ? MONTH_INSIGHTS.early : m<=4 ? MONTH_INSIGHTS.mid : MONTH_INSIGHTS.late; }
+
+function mulberry32(seed){
+  return function(){
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  }
+}
+let seedCounter = 20260814;
+
+let SQL = null, db = null, selectedCell = null;
+
+function setStatus(mode, text){
+  const el = document.getElementById('db-status');
+  const txt = document.getElementById('db-status-text');
+  el.className = 'live-pill' + (mode==='error' ? ' error' : mode==='loading' ? ' loading' : '');
+  txt.textContent = text;
+}
+function showBootError(msg){
+  document.getElementById('boot-error-slot').innerHTML =
+    `<div class="boot-error"><b>Couldn't load the SQL engine.</b> ${msg} This artifact loads sql.js (SQLite compiled to WebAssembly) from cdnjs at runtime — if your network blocks that request, the live database can't initialize.</div>`;
+}
+
+function pickWeighted(items, rand){
+  const r = rand(); let cum = 0;
+  for(const it of items){ cum += it.share; if(r <= cum) return it; }
+  return items[items.length-1];
+}
+function monthsBetween(d1, d2){ return (d2.getFullYear()-d1.getFullYear())*12 + (d2.getMonth()-d1.getMonth()); }
+function addDays(d, days){ const r = new Date(d); r.setDate(r.getDate()+days); return r; }
+function iso(d){ return d.toISOString().slice(0,10); }
+function baseHazard(m){ return Math.max(0.03, 0.22 * Math.pow(0.75, m)); }
+
+// =================================================================
+// BUILD DATABASE
+// =================================================================
+function buildDatabase(){
+  const rand = mulberry32(seedCounter++);
+  const t0 = performance.now();
+  db = new SQL.Database();
+  db.run(`
+    CREATE TABLE subscribers (subscriber_id INTEGER PRIMARY KEY, signup_date TEXT, plan_type TEXT, acquisition_channel TEXT, cohort_month TEXT);
+    CREATE TABLE subscription_events (event_id INTEGER PRIMARY KEY, subscriber_id INTEGER REFERENCES subscribers(subscriber_id), event_type TEXT, event_date TEXT);
+  `);
+  const insSub = db.prepare("INSERT INTO subscribers VALUES (?,?,?,?,?)");
+  const insEvt = db.prepare("INSERT INTO subscription_events VALUES (?,?,?,?)");
+  let evtId = 1;
+
+  db.run("BEGIN TRANSACTION");
+  for(let sid=1; sid<=N_SUBS; sid++){
+    const cohort = COHORT_MONTHS[Math.floor(rand()*12)];
+    const cohortDate = new Date(parseInt(cohort.slice(0,4)), parseInt(cohort.slice(5,7))-1, 1);
+    const maxOffset = monthsBetween(cohortDate, OBS_END);
+
+    const plan = pickWeighted(PLANS, rand);
+    const channel = pickWeighted(CHANNELS, rand);
+    const signupDate = new Date(cohortDate.getFullYear(), cohortDate.getMonth(), 1+Math.floor(rand()*28));
+    insSub.run([sid, iso(signupDate), plan.key, channel.key, cohort]);
+
+    let converted = false, convertDate = null;
+    if(!channel.hasTrial){
+      convertDate = signupDate;
+      insEvt.run([evtId++, sid, 'convert', iso(convertDate)]);
+      converted = true;
+    } else {
+      insEvt.run([evtId++, sid, 'trial_start', iso(signupDate)]);
+      if(rand() < channel.convProb){
+        const trialLen = 14 + Math.floor(rand()*17);
+        const cd = addDays(signupDate, trialLen);
+        if(monthsBetween(cohortDate, cd) <= maxOffset){
+          convertDate = cd;
+          insEvt.run([evtId++, sid, 'convert', iso(convertDate)]);
+          converted = true;
+        }
+      }
+    }
+    if(!converted) continue;
+
+    const convertOffset = monthsBetween(cohortDate, convertDate);
+    let cancelOffset = null;
+    for(let m=convertOffset; m<=maxOffset; m++){
+      let hz = baseHazard(m-convertOffset) * plan.churnMult * channel.churnMult;
+      if(plan.gradCliff !== undefined && m === plan.gradCliff) hz *= plan.gradCliffMult;
+      hz = Math.min(hz, 0.6);
+      if(rand() < hz){ cancelOffset = m; break; }
+      else { insEvt.run([evtId++, sid, 'renew', iso(addDays(cohortDate, Math.round(m*30.44)))]); }
+    }
+    if(cancelOffset !== null){
+      insEvt.run([evtId++, sid, 'cancel', iso(addDays(cohortDate, Math.round(cancelOffset*30.44)))]);
+      if(rand() < 0.18 && cancelOffset+1 <= maxOffset){
+        const reactOffset = cancelOffset + 1 + Math.floor(rand()*Math.min(3, maxOffset-cancelOffset));
+        insEvt.run([evtId++, sid, 'reactivate', iso(addDays(cohortDate, Math.round(reactOffset*30.44)))]);
+      }
+    }
+  }
+  db.run("COMMIT");
+  insSub.free(); insEvt.free();
+
+  const buildMs = Math.round(performance.now() - t0);
+  const rowCount = db.exec("SELECT (SELECT COUNT(*) FROM subscribers)+(SELECT COUNT(*) FROM subscription_events)")[0].values[0][0];
+  document.getElementById('db-meta').textContent = `${N_SUBS.toLocaleString()} subscribers · ${rowCount.toLocaleString()} rows · built in ${buildMs}ms`;
+}
+
+function runSQL(sql){
+  const t0 = performance.now();
+  const res = db.exec(sql);
+  const ms = (performance.now()-t0).toFixed(1);
+  if(!res.length) return { columns:[], rows:[], ms };
+  return { columns:res[0].columns, rows:res[0].values, ms };
+}
+
+// =================================================================
+// QUERIES
+// =================================================================
+const Q1 = `
+WITH subscriber_lifecycle AS (
+  SELECT s.subscriber_id, s.cohort_month, s.signup_date,
+    MIN(CASE WHEN e.event_type='convert' THEN e.event_date END) AS convert_date,
+    MIN(CASE WHEN e.event_type='cancel' THEN e.event_date END) AS cancel_date
+  FROM subscribers s LEFT JOIN subscription_events e ON e.subscriber_id=s.subscriber_id
+  GROUP BY s.subscriber_id, s.cohort_month, s.signup_date
+),
+subscriber_offsets AS (
+  SELECT subscriber_id, cohort_month,
+    CASE WHEN convert_date IS NOT NULL THEN CAST((julianday(convert_date)-julianday(signup_date))/30.44 AS INTEGER) ELSE NULL END AS convert_offset,
+    CASE WHEN cancel_date IS NOT NULL THEN CAST((julianday(cancel_date)-julianday(signup_date))/30.44 AS INTEGER) ELSE NULL END AS cancel_offset,
+    ((CAST(strftime('%Y','2025-12-31') AS INTEGER)-CAST(strftime('%Y',cohort_month||'-01') AS INTEGER))*12
+      + (CAST(strftime('%m','2025-12-31') AS INTEGER)-CAST(strftime('%m',cohort_month||'-01') AS INTEGER))) AS max_observed_offset
+  FROM subscriber_lifecycle
+),
+month_series AS (
+  SELECT 0 AS m UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4
+  UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION SELECT 11
+)
+SELECT so.cohort_month, ms.m AS months_since_signup, COUNT(*) AS cohort_size,
+  SUM(CASE WHEN so.convert_offset IS NOT NULL AND so.convert_offset<=ms.m AND (so.cancel_offset IS NULL OR so.cancel_offset>ms.m) THEN 1 ELSE 0 END) AS active_count,
+  ROUND(100.0*SUM(CASE WHEN so.convert_offset IS NOT NULL AND so.convert_offset<=ms.m AND (so.cancel_offset IS NULL OR so.cancel_offset>ms.m) THEN 1 ELSE 0 END)/COUNT(*),1) AS retention_pct
+FROM subscriber_offsets so JOIN month_series ms ON ms.m <= so.max_observed_offset
+GROUP BY so.cohort_month, ms.m ORDER BY so.cohort_month, ms.m;`;
+
+const Q2 = `
+WITH churn_events AS (
+  SELECT s.acquisition_channel, CAST((julianday(e.event_date)-julianday(s.signup_date))/30.44 AS INTEGER) AS churn_month_offset
+  FROM subscription_events e JOIN subscribers s ON s.subscriber_id=e.subscriber_id WHERE e.event_type='cancel'
+),
+monthly_churn AS (
+  SELECT acquisition_channel, churn_month_offset, COUNT(*) AS churned_count FROM churn_events
+  WHERE churn_month_offset BETWEEN 0 AND 11 GROUP BY acquisition_channel, churn_month_offset
+)
+SELECT acquisition_channel, churn_month_offset, churned_count,
+  SUM(churned_count) OVER (PARTITION BY acquisition_channel ORDER BY churn_month_offset ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_churned,
+  RANK() OVER (PARTITION BY churn_month_offset ORDER BY churned_count DESC) AS rank_in_month
+FROM monthly_churn ORDER BY acquisition_channel, churn_month_offset;`;
+
+let q1Cache = [];
+
+// =================================================================
+// RENDER — heatmap
+// =================================================================
+function retentionColor(pct){
+  const hue = Math.max(0, Math.min(120, (pct/45)*120));
+  return `hsl(${hue.toFixed(0)},60%,42%)`;
+}
+
+function renderHeatmap(){
+  const { rows } = runSQL(Q1);
+  q1Cache = rows;
+  const byCohort = {};
+  rows.forEach(r => { const [cohort,m,size,active,pct] = r; (byCohort[cohort] ??= {})[m] = {size,active,pct}; });
+
+  const grid = document.getElementById('heatmap-grid');
+  grid.innerHTML = '';
+  grid.appendChild(document.createElement('div'));
+  for(let m=0; m<=11; m++){
+    const h = document.createElement('div'); h.className = 'hm-colhead'; h.textContent = 'M'+m; grid.appendChild(h);
+  }
+  COHORT_MONTHS.forEach(cohort => {
+    const rh = document.createElement('div'); rh.className = 'hm-rowhead'; rh.textContent = cohort; grid.appendChild(rh);
+    for(let m=0; m<=11; m++){
+      const cell = document.createElement('div');
+      const data = byCohort[cohort] && byCohort[cohort][m];
+      if(data){
+        cell.className = 'hm-cell';
+        cell.style.background = retentionColor(data.pct);
+        cell.textContent = data.pct.toFixed(0)+'%';
+        cell.dataset.cohort = cohort; cell.dataset.month = m;
+        cell.addEventListener('click', () => selectCell(cohort, m));
+      } else {
+        cell.className = 'hm-cell empty';
+        cell.textContent = '·';
+      }
+      grid.appendChild(cell);
+    }
+  });
+
+  // blended sparkline (live, weighted across cohorts)
+  const blended = {};
+  rows.forEach(r => { const [,m,size,active] = r; (blended[m] ??= {size:0,active:0}); blended[m].size+=size; blended[m].active+=active; });
+  const sparkEl = document.getElementById('spark-row');
+  sparkEl.innerHTML = '';
+  for(let m=0;m<=11;m++){
+    const b = blended[m];
+    const pct = b ? (100*b.active/b.size) : null;
+    const bar = document.createElement('div'); bar.className = 'spark-bar';
+    bar.innerHTML = `<div class="spark-val">${pct!==null ? pct.toFixed(0)+'%':''}</div><div class="spark-fill" style="height:${pct!==null ? Math.max(4,pct):0}%"></div><div class="spark-label">M${m}</div>`;
+    sparkEl.appendChild(bar);
+  }
+
+  if(selectedCell) selectCell(selectedCell.cohort, selectedCell.month);
+}
+
+function selectCell(cohort, month){
+  selectedCell = {cohort, month};
+  document.querySelectorAll('.hm-cell').forEach(c => c.classList.toggle('selected', c.dataset.cohort===cohort && +c.dataset.month===month));
+
+  const row = q1Cache.find(r => r[0]===cohort && r[1]===month);
+  if(!row) return;
+  const [,,cohortSize,activeCount,retentionPct] = row;
+
+  // live per-cell channel breakdown query
+  const detailSql = `
+    WITH lifecycle AS (
+      SELECT s.subscriber_id, s.acquisition_channel, s.signup_date,
+        MIN(CASE WHEN e.event_type='convert' THEN e.event_date END) AS convert_date,
+        MIN(CASE WHEN e.event_type='cancel' THEN e.event_date END) AS cancel_date
+      FROM subscribers s LEFT JOIN subscription_events e ON e.subscriber_id=s.subscriber_id
+      WHERE s.cohort_month = '${cohort}'
+      GROUP BY s.subscriber_id, s.acquisition_channel, s.signup_date
+    )
+    SELECT acquisition_channel, COUNT(*) AS total,
+      SUM(CASE WHEN convert_date IS NOT NULL
+            AND CAST((julianday(convert_date)-julianday(signup_date))/30.44 AS INTEGER) <= ${month}
+            AND (cancel_date IS NULL OR CAST((julianday(cancel_date)-julianday(signup_date))/30.44 AS INTEGER) > ${month})
+          THEN 1 ELSE 0 END) AS active
+    FROM lifecycle GROUP BY acquisition_channel ORDER BY active DESC;`;
+  const { rows: chRows, ms } = runSQL(detailSql);
+
+  const flagColor = retentionPct>=35 ? 'var(--good)' : retentionPct>=20 ? 'var(--elevated)' : retentionPct>=10 ? 'var(--high)' : 'var(--critical)';
+
+  document.getElementById('detail-panel').innerHTML = `
+    <div class="detail-eyebrow">${cohort} cohort · month ${month} since signup</div>
+    <div class="detail-title">${retentionPct.toFixed(1)}% retained</div>
+    <div class="detail-sub">${activeCount.toLocaleString()} of ${cohortSize.toLocaleString()} original subscribers still active</div>
+    <div class="detail-query-tag">⚡ live SQL · channel breakdown · ${ms}ms</div>
+    <div class="retention-big" style="color:${flagColor}">${retentionPct.toFixed(1)}%</div>
+    <div class="retention-sub">cohort size ${cohortSize.toLocaleString()} · ${activeCount.toLocaleString()} active</div>
+
+    <div class="stat-grid">
+      <div class="stat-box"><div class="l">Cohort</div><div class="v">${cohort}</div><div class="s">signup month</div></div>
+      <div class="stat-box"><div class="l">Months since signup</div><div class="v">${month}</div><div class="s">offset</div></div>
+      <div class="stat-box"><div class="l">Still active</div><div class="v">${activeCount.toLocaleString()}</div><div class="s">Premium subscribers</div></div>
+      <div class="stat-box"><div class="l">Churned by this point</div><div class="v">${(cohortSize-activeCount).toLocaleString()}</div><div class="s">${(100-retentionPct).toFixed(1)}% of cohort</div></div>
+    </div>
+
+    <div class="channel-head">Active subscribers by acquisition channel (live query)</div>
+    ${chRows.map(r => {
+      const [ch, total, active] = r;
+      const chDef = CHANNELS.find(c=>c.key===ch);
+      const pct = total>0 ? (100*active/total).toFixed(0) : 0;
+      return `<div class="channel-row"><span class="cname">${chDef ? chDef.name : ch}</span><span class="cval">${active}/${total} <span style="color:var(--text-faint)">(${pct}%)</span></span></div>`;
+    }).join('')}
+
+    <div class="insight"><div class="l">Consumer Behaviour Insight</div><p>${insightFor(month)}</p></div>
+  `;
+}
+
+// =================================================================
+// SQL Console render
+// =================================================================
+function renderResultTable(tableId, columns, rows){
+  const table = document.getElementById(tableId);
+  table.querySelector('thead').innerHTML = '<tr>' + columns.map(c=>`<th>${c}</th>`).join('') + '</tr>';
+  let tbody = table.querySelector('tbody');
+  tbody.innerHTML = '';
+  rows.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = row.map((v,i) => i===0 ? `<td class="hi">${v}</td>` : `<td>${typeof v==='number'?v.toLocaleString():v}</td>`).join('');
+    tbody.appendChild(tr);
+  });
+}
+function runQuery1(){
+  const { columns, rows, ms } = runSQL(Q1);
+  renderResultTable('result-table-1', columns, rows);
+  document.getElementById('q1-time').textContent = `✓ ${ms}ms · ${rows.length} rows`;
+  document.getElementById('q1-status').textContent = 'executed';
+}
+function runQuery2(){
+  const { columns, rows, ms } = runSQL(Q2);
+  renderResultTable('result-table-2', columns, rows);
+  document.getElementById('q2-time').textContent = `✓ ${ms}ms · ${rows.length} rows`;
+  document.getElementById('q2-status').textContent = 'executed';
+}
+
+// =================================================================
+// Schema tab
+// =================================================================
+function renderSchema(){
+  const tables = runSQL("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;").rows.map(r=>r[0]);
+  const wrap = document.getElementById('schema-cards');
+  wrap.innerHTML = '';
+  tables.forEach(tableName => {
+    const cols = runSQL(`PRAGMA table_info(${tableName});`).rows;
+    const count = runSQL(`SELECT COUNT(*) FROM ${tableName};`).rows[0][0];
+    const card = document.createElement('div');
+    card.className = 'schema-card';
+    card.innerHTML = `
+      <div class="schema-card-head"><span>${tableName}</span><span class="rowcount">${count.toLocaleString()} rows</span></div>
+      ${cols.map(c => `<div class="schema-col"><span class="cname">${c[1]}${c[5] ? '<span class="pk">PK</span>' : ''}</span><span class="ctype">${c[2]}</span></div>`).join('')}
+    `;
+    wrap.appendChild(card);
+  });
+}
+
+// =================================================================
+// INIT
+// =================================================================
+function rebuildEverything(){
+  document.getElementById('regen-btn').disabled = true;
+  setStatus('loading', 'REBUILDING DATABASE…');
+  setTimeout(() => {
+    buildDatabase();
+    selectedCell = null;
+    renderHeatmap();
+    runQuery1();
+    runQuery2();
+    renderSchema();
+    setStatus('', 'SQLITE LIVE · WASM');
+    document.getElementById('regen-btn').disabled = false;
+  }, 30);
+}
+
+document.getElementById('regen-btn').addEventListener('click', rebuildEverything);
+document.getElementById('run-q1').addEventListener('click', runQuery1);
+document.getElementById('run-q2').addEventListener('click', runQuery2);
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+if(typeof initSqlJs === 'undefined'){
+  setStatus('error', 'FAILED TO LOAD');
+  showBootError('The sql.js script tag did not load.');
+} else {
+  initSqlJs({ locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${file}` })
+    .then(sql => {
+      SQL = sql;
+      document.getElementById('run-q1').disabled = false;
+      document.getElementById('run-q2').disabled = false;
+      rebuildEverything();
+    })
+    .catch(err => {
+      setStatus('error', 'FAILED TO LOAD');
+      showBootError('Error: ' + (err && err.message ? err.message : err));
+    });
+}
+</script>
+</body>
+</html>
