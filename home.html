@@ -7769,14 +7769,30 @@ window.addEventListener('resize', () => {
   if(window.innerWidth > 768) closeNav();
 });
 
-/* ── ANIMATED FILM GRAIN ── */
+/* ── ANIMATED FILM GRAIN ──
+   Throttled to ~12fps and rendered at quarter resolution (then scaled up
+   with CSS) instead of redrawing every pixel of the full-res viewport on
+   every single frame. The untouched version was a genuine main-thread
+   hog on real phones -- expensive enough to starve other requestAnimation-
+   Frame work elsewhere on the page (see the carousel scroll fix above). */
 (function(){
   const c=document.getElementById('grain');
   const ctx=c.getContext('2d');
-  function resize(){c.width=window.innerWidth;c.height=window.innerHeight}
+  const SCALE=4; // render at 1/4 resolution, upscale via CSS width/height
+  function resize(){
+    c.width=Math.ceil(window.innerWidth/SCALE);
+    c.height=Math.ceil(window.innerHeight/SCALE);
+    c.style.width=window.innerWidth+'px';
+    c.style.height=window.innerHeight+'px';
+  }
   resize();
   window.addEventListener('resize',resize);
-  function draw(){
+  let last=0;
+  const frameInterval=1000/12; // ~12fps
+  function draw(now){
+    requestAnimationFrame(draw);
+    if(now-last<frameInterval) return;
+    last=now;
     const w=c.width,h=c.height;
     const img=ctx.createImageData(w,h);
     const d=img.data;
@@ -7786,9 +7802,8 @@ window.addEventListener('resize', () => {
       d[i+3]=22;
     }
     ctx.putImageData(img,0,0);
-    requestAnimationFrame(draw);
   }
-  draw();
+  requestAnimationFrame(draw);
 })();
 
 /* ── PROJECT DATA ── */
@@ -8085,12 +8100,15 @@ function switchEmbed(showId, hideId, btn){
 }
 
 /* ── WORK CAROUSELS SCROLL + DRAG ──
-   Animate by setting scrollLeft directly on each frame (same mechanism
-   the drag/touch handlers below use) instead of relying on
-   scrollTo(...,{behavior:'smooth'}) / CSS scroll-behavior:smooth, which
-   proved unreliable for JS-triggered scrolls on some real devices even
-   though native drag-scrolling worked fine. Direct scrollLeft writes are
-   the one mechanism confirmed to work everywhere. */
+   Jump scrollLeft in a single synchronous write instead of animating it
+   over several requestAnimationFrame callbacks. The rAF-driven version
+   competed with the film-grain canvas below (a full-viewport, every-
+   -single-frame redraw on the main thread) and lost — on a real phone
+   the grain loop can starve a second rAF callback badly enough that the
+   arrow scroll never visibly progresses, even though the exact same code
+   ran fine on desktop Chrome. A single synchronous property write can't
+   be starved like that: it takes effect the instant the click handler
+   runs, no animation frame required. */
 function scrollCarousel(id, fallbackStep, dir){
   const c=document.getElementById(id);
   if(!c)return;
@@ -8101,19 +8119,8 @@ function scrollCarousel(id, fallbackStep, dir){
     step=card.getBoundingClientRect().width+gap;
   }
   const max=c.scrollWidth-c.clientWidth;
-  const start=c.scrollLeft;
-  const target=Math.max(0,Math.min(max,start+dir*step));
-  const dist=target-start;
-  if(Math.abs(dist)<1){ c.scrollLeft=target; return; }
-  const duration=320;
-  const t0=performance.now();
-  function ease(t){ return 1-Math.pow(1-t,3); }
-  function step_(now){
-    const t=Math.min(1,(now-t0)/duration);
-    c.scrollLeft=start+dist*ease(t);
-    if(t<1) requestAnimationFrame(step_);
-  }
-  requestAnimationFrame(step_);
+  const target=Math.max(0,Math.min(max,c.scrollLeft+dir*step));
+  c.scrollLeft=target;
 }
 function scrollFeatured(dir){scrollCarousel('featuredCarousel',436,dir);}
 function scrollWork(dir){scrollCarousel('workCarousel',416,dir);}
