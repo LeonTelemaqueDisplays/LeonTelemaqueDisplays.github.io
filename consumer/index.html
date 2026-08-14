@@ -427,13 +427,17 @@
   #fintech-track.carousel-track { justify-content: flex-start; }
   #fintech-track .project-card { flex: 0 0 380px; max-width: 380px; }
 
-  /* ── Mobile: one card visible at a time ── */
+  /* ── Mobile: one card visible at a time ──
+     100% of the flex container, not calc(100vw-...) — the section's own side
+     padding varies, so a fixed vw-minus-Npx width can drift wider or narrower
+     than the actual visible track and throw off the arrow-step math in
+     scroll(). 100% always matches exactly, at every breakpoint. */
   @media (max-width: 768px) {
     .carousel-track-wrap { overflow-x: hidden; -webkit-overflow-scrolling: touch; }
     .project-card,
     #fintech-track .project-card {
-      flex: 0 0 calc(100vw - 48px);
-      max-width: calc(100vw - 48px);
+      flex: 0 0 100%;
+      max-width: 100%;
     }
   }
 
@@ -1121,6 +1125,25 @@ function scroll(trackId, dir) {
   positions[trackId] = Math.max(0, Math.min(max, positions[trackId] + dir));
   track.style.transform = `translateX(-${positions[trackId] * cardWidth}px)`;
 }
+
+/* Touch swipe — this carousel moves via JS transform, not native scroll,
+   so it never responded to a finger swipe, only the arrow buttons. On
+   mobile that reads as "stuck on one card." */
+Object.keys(positions).forEach(trackId => {
+  const track = document.getElementById(trackId);
+  if (!track) return;
+  let startX = 0, tracking = false;
+  track.addEventListener('touchstart', e => {
+    startX = e.touches[0].pageX;
+    tracking = true;
+  }, { passive: true });
+  track.addEventListener('touchend', e => {
+    if (!tracking) return;
+    tracking = false;
+    const dx = e.changedTouches[0].pageX - startX;
+    if (Math.abs(dx) > 40) scroll(trackId, dx < 0 ? 1 : -1);
+  }, { passive: true });
+});
 </script>
 
 </body>
