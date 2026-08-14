@@ -885,7 +885,16 @@ footer{
   /* Work section wrapper padding */
   #work{padding:0 16px !important}
   .hero-work-grid{grid-template-columns:1fr;gap:12px}
-  .work-carousel .pcard{flex:0 0 280px}
+
+  /* Carousel — single card visible at a time on mobile */
+  .work-carousel{
+    overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
+  }
+  .work-carousel .pcard{
+    flex:0 0 calc(100vw - 48px);
+    width:calc(100vw - 48px);
+  }
 
   /* pcard body padding */
   .pcard-body{padding:16px 18px 20px}
@@ -942,7 +951,7 @@ footer{
 
   /* Work */
   #work{padding:0 12px !important}
-  .work-carousel .pcard{flex:0 0 280px}
+  .work-carousel .pcard{flex:0 0 calc(100vw - 48px);width:calc(100vw - 48px)}
   .pcard-body{padding:14px 14px 18px}
   .pcard-title{font-size:.9rem}
 

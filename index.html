@@ -356,6 +356,43 @@
     white-space: nowrap;
   }
   .browse-all-link:hover { color: var(--text); border-color: rgba(255,255,255,.3); }
+
+  /* ── Mobile: stack the two panels instead of splitting the viewport ── */
+  @media (max-width: 768px) {
+    body { height: auto; min-height: 100vh; overflow-y: auto; overflow-x: hidden; }
+
+    .overlay {
+      position: relative;
+      inset: auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .divider { display: none; }
+
+    .side {
+      width: 100%;
+      min-height: 100vh;
+      padding: 48px 28px;
+    }
+
+    .center-wordmark { top: 20px; }
+    .wordmark-name { font-size: 10px; }
+    .wordmark-prompt { font-size: 8px; }
+
+    .side-title { font-size: clamp(20px, 7vw, 26px); max-width: 100%; }
+    .side-desc { font-size: 12.5px; max-width: 100%; }
+    .side-disciplines { max-width: 100%; }
+
+    .shared-tagline,
+    .browse-all-link {
+      position: static;
+      transform: none;
+    }
+    .shared-tagline { max-width: 90%; margin: 24px auto 8px; }
+    .browse-all-link { display: block; width: fit-content; margin: 0 auto 28px; }
+  }
 </style>
 </head>
 <body>
