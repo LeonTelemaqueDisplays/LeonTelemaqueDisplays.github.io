@@ -377,40 +377,35 @@
     margin-bottom: 32px;
   }
 
-  .carousel-nav {
-    display: flex;
-    gap: 4px;
+  /* ── CAROUSEL — native scroll, no arrows ──
+     Arrow buttons drove a JS transform() + hand-rolled position tracker
+     (scroll()/positions{}) that had to recompute card width and cards-
+     per-view on every click. That math broke for the fintech track
+     specifically (its cards use a fixed 380px width, not the 33.333%
+     the other two tracks use) and, separately, arrow clicks proved
+     unreliable to fix reliably across devices. Replaced entirely with
+     native horizontal scroll + CSS scroll-snap: the browser owns
+     position tracking, touch/trackpad/mouse-drag all work for free, and
+     there's no JS left to get out of sync. */
+  .carousel-track-wrap {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
   }
-
-  .carousel-btn {
-    width: 36px;
-    height: 36px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    font-size: 16px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--transition);
-  }
-
-  .carousel-btn:hover { border-color: var(--blue); color: var(--blue); }
-
-  .carousel-track-wrap { overflow: hidden; }
+  .carousel-track-wrap::-webkit-scrollbar { display: none; }
 
   .carousel-track {
     display: flex;
-    gap: 1px;
-    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+    gap: 16px;
   }
 
   /* ── PROJECT CARD ── */
   .project-card {
-    flex: 0 0 calc(33.333% - 1px);
-    max-width: calc(33.333% - 1px);
+    flex: 0 0 calc(33.333% - 11px);
+    max-width: calc(33.333% - 11px);
     min-width: 0;
+    scroll-snap-align: center;
     background: var(--surface);
     border: 1px solid transparent;
     cursor: pointer;
@@ -427,17 +422,18 @@
   #fintech-track.carousel-track { justify-content: flex-start; }
   #fintech-track .project-card { flex: 0 0 380px; max-width: 380px; }
 
-  /* ── Mobile: one card visible at a time ──
-     100% of the flex container, not calc(100vw-...) — the section's own side
-     padding varies, so a fixed vw-minus-Npx width can drift wider or narrower
-     than the actual visible track and throw off the arrow-step math in
-     scroll(). 100% always matches exactly, at every breakpoint. */
+  /* ── Mobile: peek carousel ──
+     Cards are narrower than the viewport so the next/previous card is
+     visibly peeking in on both sides — a visual cue to swipe, and proof
+     the carousel keeps going even with no arrows on screen. Side padding
+     on the track (not the wrap) centers the peek evenly and lets the
+     first/last card still snap to center. */
   @media (max-width: 768px) {
-    .carousel-track-wrap { overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+    .carousel-track { padding: 0 9%; gap: 12px; }
     .project-card,
     #fintech-track .project-card {
-      flex: 0 0 100%;
-      max-width: 100%;
+      flex: 0 0 82%;
+      max-width: 82%;
     }
   }
 
@@ -841,10 +837,6 @@
       <h2 class="section-title">Why people make <em>financial decisions</em> the way they do</h2>
       <p class="section-desc">Spending behaviour, savings mechanics, habit formation, and the psychology of money — consumer behaviour theory applied to financial product design.</p>
     </div>
-    <div class="carousel-nav">
-      <button class="carousel-btn" onclick="scroll('fintech-track', -1)">←</button>
-      <button class="carousel-btn" onclick="scroll('fintech-track', 1)">→</button>
-    </div>
   </div>
 
   <div class="carousel-track-wrap">
@@ -925,10 +917,6 @@
       <h2 class="section-title">Why users <em>stay, lapse,</em> and come back</h2>
       <p class="section-desc">Retention architecture, churn psychology, and the behavioural design of subscription products — the same thinking that drives LiveOps applied to consumer platforms.</p>
     </div>
-    <div class="carousel-nav">
-      <button class="carousel-btn" onclick="scroll('sub-track', -1)">←</button>
-      <button class="carousel-btn" onclick="scroll('sub-track', 1)">→</button>
-    </div>
   </div>
 
   <div class="carousel-track-wrap">
@@ -993,10 +981,6 @@
       <div class="section-eyebrow">Media & Entertainment Product Strategy</div>
       <h2 class="section-title">How media companies <em>build and hold</em> audiences</h2>
       <p class="section-desc">IP strategy, audience retention, platform product decisions, and the behavioural economics of how entertainment companies compete for attention.</p>
-    </div>
-    <div class="carousel-nav">
-      <button class="carousel-btn" onclick="scroll('media-track', -1)">←</button>
-      <button class="carousel-btn" onclick="scroll('media-track', 1)">→</button>
     </div>
   </div>
 
@@ -1112,39 +1096,10 @@
   </div>
 </footer>
 
-<script>
-const positions = { 'fintech-track': 0, 'sub-track': 0, 'media-track': 0 };
-
-function scroll(trackId, dir) {
-  const track = document.getElementById(trackId);
-  const wrap = track.parentElement;
-  const cardWidth = track.querySelector('.project-card, .coming-soon-card').offsetWidth + 1;
-  const perView = Math.max(1, Math.round(wrap.offsetWidth / cardWidth));
-  const max = Math.max(0, track.children.length - perView);
-
-  positions[trackId] = Math.max(0, Math.min(max, positions[trackId] + dir));
-  track.style.transform = `translateX(-${positions[trackId] * cardWidth}px)`;
-}
-
-/* Touch swipe — this carousel moves via JS transform, not native scroll,
-   so it never responded to a finger swipe, only the arrow buttons. On
-   mobile that reads as "stuck on one card." */
-Object.keys(positions).forEach(trackId => {
-  const track = document.getElementById(trackId);
-  if (!track) return;
-  let startX = 0, tracking = false;
-  track.addEventListener('touchstart', e => {
-    startX = e.touches[0].pageX;
-    tracking = true;
-  }, { passive: true });
-  track.addEventListener('touchend', e => {
-    if (!tracking) return;
-    tracking = false;
-    const dx = e.changedTouches[0].pageX - startX;
-    if (Math.abs(dx) > 40) scroll(trackId, dx < 0 ? 1 : -1);
-  }, { passive: true });
-});
-</script>
+<!-- No carousel JS left — .carousel-track-wrap scrolls natively (overflow-x:
+     auto + scroll-snap-type:x proximity), so touch drag, trackpad, mouse-
+     wheel-shift, and keyboard arrow-key scrolling all work without any
+     hand-rolled position tracking to keep in sync. -->
 
 </body>
 </html>
