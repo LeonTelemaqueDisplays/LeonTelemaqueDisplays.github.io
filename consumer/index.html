@@ -702,6 +702,29 @@
   }
 
   .footer-link:hover { color: var(--text); }
+
+  /* ── Mobile ── */
+  @media (max-width: 768px) {
+    html, body { overflow-x: hidden; }
+
+    /* Nav — drop the anchor-link row and let logo / actions wrap instead of overflowing */
+    nav { flex-wrap: wrap; height: auto; padding: 12px 16px; row-gap: 10px; }
+    .nav-links { display: none; }
+    .nav-actions { gap: 10px; flex-wrap: wrap; }
+    .nav-toggle { font-size: 8px; padding: 5px 8px; }
+
+    /* Hero */
+    .hero { grid-template-columns: 1fr; min-height: auto; padding: 32px 20px 40px; gap: 32px; }
+
+    /* About */
+    .about-grid { grid-template-columns: 1fr; }
+
+    /* Snapshots */
+    .snapshots-grid { grid-template-columns: 1fr; }
+
+    /* Carousel header — let the arrows wrap under the title instead of squeezing */
+    .carousel-header { flex-wrap: wrap; gap: 12px; }
+  }
 </style>
 </head>
 <body>
@@ -716,7 +739,7 @@
     <li><a href="#media">Media</a></li>
     <li><a href="#snapshots">Snapshots</a></li>
   </ul>
-  <div style="display:flex;align-items:center;gap:20px">
+  <div class="nav-actions" style="display:flex;align-items:center;gap:20px">
     <a href="mailto:leon@email.com" class="nav-cta">Let's talk →</a>
     <a href="/resume-consumer.pdf" target="_blank" class="nav-resume">Resume ↗</a>
     <a href="/home.html" class="nav-toggle" title="Switch to Game Systems portfolio">[ Game Systems ⇄ Product Systems ]</a>

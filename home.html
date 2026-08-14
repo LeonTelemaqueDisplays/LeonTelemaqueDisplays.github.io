@@ -880,9 +880,12 @@ footer{
   #featured{padding:0 16px !important}
   .hero-work-grid{grid-template-columns:1fr;gap:12px}
 
-  /* Carousel — single card visible at a time on mobile */
+  /* Carousel — single card visible at a time on mobile.
+     overflow-x stays auto (not hidden) — iOS Safari can silently block both
+     touch-swipe and scrollBy() on overflow:hidden elements; scrollbar is
+     already hidden via .work-carousel::-webkit-scrollbar / scrollbar-width. */
   .work-carousel{
-    overflow-x:hidden;
+    overflow-x:auto;
     -webkit-overflow-scrolling:touch;
   }
   .work-carousel .pcard{
