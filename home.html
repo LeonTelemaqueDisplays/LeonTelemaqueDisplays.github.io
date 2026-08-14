@@ -278,7 +278,7 @@ nav{
   gap:16px;
   overflow-x:auto;
   scroll-behavior:smooth;
-  scroll-snap-type:x mandatory;
+  scroll-snap-type:x proximity;
   scrollbar-width:none;
   cursor:grab;
   user-select:none;
@@ -8080,9 +8080,26 @@ function switchEmbed(showId, hideId, btn){
 }
 
 /* ── WORK CAROUSELS SCROLL + DRAG ── */
-function scrollFeatured(dir){const c=document.getElementById('featuredCarousel');if(c)c.scrollBy({left:dir*436,behavior:'smooth'});}
-function scrollWork(dir){const c=document.getElementById('workCarousel');if(c)c.scrollBy({left:dir*416,behavior:'smooth'});}
-function scrollMore(dir){const c=document.getElementById('moreCarousel');if(c)c.scrollBy({left:dir*416,behavior:'smooth'});}
+function scrollCarousel(id, fallbackStep, dir){
+  const c=document.getElementById(id);
+  if(!c)return;
+  const card=c.querySelector('.pcard');
+  let step=fallbackStep;
+  if(card){
+    const gap=parseFloat(getComputedStyle(c).columnGap||getComputedStyle(c).gap)||16;
+    step=card.getBoundingClientRect().width+gap;
+  }
+  const max=c.scrollWidth-c.clientWidth;
+  const target=Math.max(0,Math.min(max,c.scrollLeft+dir*step));
+  if('scrollTo' in c){
+    c.scrollTo({left:target,behavior:'smooth'});
+  } else {
+    c.scrollLeft=target;
+  }
+}
+function scrollFeatured(dir){scrollCarousel('featuredCarousel',436,dir);}
+function scrollWork(dir){scrollCarousel('workCarousel',416,dir);}
+function scrollMore(dir){scrollCarousel('moreCarousel',416,dir);}
 function makeDraggable(id){
   const c=document.getElementById(id);
   if(!c)return;
