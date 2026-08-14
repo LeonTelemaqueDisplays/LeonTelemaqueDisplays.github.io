@@ -318,16 +318,9 @@ nav{
 }
 .pcard:hover{border-color:#333;transform:translateY(-3px)}
 
-.featured-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
-  gap:20px;
-  margin-bottom:8px;
-}
-.featured-grid .pcard{width:100%}
+.featured-grid .pcard{flex:0 0 420px}
 .featured-grid .pcard-title{font-size:1.15rem}
 .featured-grid .pcard-desc{font-size:.86rem}
-@media (max-width:900px){.featured-grid{grid-template-columns:1fr}}
 
 /* All cards uniform in carousel */
 
@@ -884,6 +877,7 @@ footer{
 
   /* Work section wrapper padding */
   #work{padding:0 16px !important}
+  #featured{padding:0 16px !important}
   .hero-work-grid{grid-template-columns:1fr;gap:12px}
 
   /* Carousel — single card visible at a time on mobile */
@@ -951,6 +945,7 @@ footer{
 
   /* Work */
   #work{padding:0 12px !important}
+  #featured{padding:0 12px !important}
   .work-carousel .pcard{flex:0 0 calc(100vw - 48px);width:calc(100vw - 48px)}
   .pcard-body{padding:14px 14px 18px}
   .pcard-title{font-size:.9rem}
@@ -2783,8 +2778,16 @@ footer{
       <h2 style="font-size:clamp(1.5rem,2.5vw,2rem);font-weight:700;letter-spacing:-.03em">The Strongest Case Studies, Curated</h2>
       <p style="font-size:.85rem;color:var(--muted2);margin-top:6px">Seven pieces pulled from the full archive below — interactive tools, live dashboards, a combat prototype, and the most fully-realized analytical essays.</p>
     </div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="carousel-arrows">
+        <button class="carousel-btn" onclick="scrollFeatured(-1)" aria-label="Previous">←</button>
+        <button class="carousel-btn" onclick="scrollFeatured(1)" aria-label="Next">→</button>
+      </div>
+    </div>
   </div>
-  <div class="featured-grid">
+
+  <div class="work-carousel-wrap">
+  <div class="featured-grid work-carousel" id="featuredCarousel">
     <!-- PLAYER SYSTEMS LAB — FLAGSHIP INTERACTIVE TOOL -->
     <div class="pcard" onclick="window.open('/player-systems-lab','_blank')" style="border-color:#2a2410;cursor:pointer">
       <div class="pcard-preview" style="background:#080808;overflow:hidden;position:relative">
@@ -3928,6 +3931,7 @@ footer{
       </div>
     </div>
   </div>
+  </div><!-- /work-carousel-wrap -->
 </div>
 
 <div class="divider"></div>
@@ -8069,6 +8073,7 @@ function switchEmbed(showId, hideId, btn){
 }
 
 /* ── WORK CAROUSELS SCROLL + DRAG ── */
+function scrollFeatured(dir){const c=document.getElementById('featuredCarousel');if(c)c.scrollBy({left:dir*436,behavior:'smooth'});}
 function scrollWork(dir){const c=document.getElementById('workCarousel');if(c)c.scrollBy({left:dir*416,behavior:'smooth'});}
 function scrollMore(dir){const c=document.getElementById('moreCarousel');if(c)c.scrollBy({left:dir*416,behavior:'smooth'});}
 function makeDraggable(id){
