@@ -883,10 +883,15 @@ footer{
   /* Carousel — single card visible at a time on mobile.
      overflow-x stays auto (not hidden) — iOS Safari can silently block both
      touch-swipe and scrollBy() on overflow:hidden elements; scrollbar is
-     already hidden via .work-carousel::-webkit-scrollbar / scrollbar-width. */
+     already hidden via .work-carousel::-webkit-scrollbar / scrollbar-width.
+     -webkit-overflow-scrolling:touch deliberately omitted — on iOS Safari
+     it hands scrolling to a legacy native overlay scroller that silently
+     overrides any JS-driven scrollLeft write on the next frame, which is
+     what made the arrow buttons register the tap but never move the
+     cards while drag/swipe (native, untouched by JS) kept working. Modern
+     iOS (13+) has momentum scrolling by default without this property. */
   .work-carousel{
     overflow-x:auto;
-    -webkit-overflow-scrolling:touch;
   }
   .work-carousel .pcard{
     /* 100% of the flex container, not calc(100vw-...) — the container's own
