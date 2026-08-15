@@ -422,6 +422,28 @@
   #fintech-track.carousel-track { justify-content: flex-start; }
   #fintech-track .project-card { flex: 0 0 380px; max-width: 380px; }
 
+  /* Featured track — 4 curated pieces, one row on desktop */
+  #featured-track.carousel-track { justify-content: flex-start; }
+  #featured-track .project-card { flex: 0 0 calc(25% - 12px); max-width: calc(25% - 12px); }
+
+  .featured-badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--amber);
+    border: 1px solid rgba(217,119,6,0.4);
+    background: rgba(217,119,6,0.08);
+    padding: 2px 6px;
+    margin-left: 6px;
+    vertical-align: middle;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  .archive-label {
+    padding: 56px 40px 0;
+    border-top: 1px solid var(--border);
+  }
+
   /* ── Mobile: peek carousel ──
      Cards are narrower than the viewport so the next/previous card is
      visibly peeking in on both sides — a visual cue to swipe, and proof
@@ -431,10 +453,12 @@
   @media (max-width: 768px) {
     .carousel-track { padding: 0 9%; gap: 12px; }
     .project-card,
-    #fintech-track .project-card {
+    #fintech-track .project-card,
+    #featured-track .project-card {
       flex: 0 0 82%;
       max-width: 82%;
     }
+    .archive-label { padding: 40px 20px 0; }
   }
 
   .card-thumb {
@@ -808,6 +832,108 @@
   </div>
 </section>
 
+<!-- FEATURED WORK -->
+<section class="section" id="featured-work" style="padding-bottom:56px">
+  <div class="carousel-header">
+    <div>
+      <div class="section-eyebrow" style="color:var(--amber)">Featured Work</div>
+      <h2 class="section-title">The Strongest Case Studies, <em>Curated</em></h2>
+      <p class="section-desc" style="margin-bottom:0">Four pieces pulled from the full archive below — two live SQL dashboards, an interactive product prototype, and the site's only full A/B test experimentation case study.</p>
+    </div>
+    <div class="hero-stat-card" style="width:auto;min-width:220px;padding:16px 22px">
+      <div class="stat-label">Case Studies</div>
+      <div class="stat-value" style="font-size:28px">4</div>
+      <div class="stat-sub">Featured &middot; 10 total case studies</div>
+    </div>
+  </div>
+
+  <div class="carousel-track-wrap">
+    <div class="carousel-track" id="featured-track">
+
+      <div class="project-card" onclick="window.open('/consumer/investment','_blank')">
+        <div class="card-thumb thumb-fintech">
+          <div class="card-thumb-label">Fintech Psychology · Youth Investment</div>
+          <div class="thumb-visual">
+            <div class="thumb-bar-row"><span class="thumb-bar-label">No Investments</span><div class="thumb-bar" style="width:39%"></div></div>
+            <div class="thumb-bar-row"><span class="thumb-bar-label">Depth Gap</span><div class="thumb-bar" style="width:72%;background:var(--teal)"></div></div>
+            <div class="thumb-bar-row"><span class="thumb-bar-label">Gamification</span><div class="thumb-bar" style="width:28%;background:var(--red)"></div></div>
+            <div class="thumb-bar-row"><span class="thumb-bar-label">Transparency</span><div class="thumb-bar" style="width:81%;background:var(--green)"></div></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">The Depth Problem — Youth Investment &amp; Fintech Design<span class="featured-badge">FEATURED</span></div>
+          <div class="card-desc">Why the youth investment gap will not be closed by gamification — and what the winning product actually looks like. 39% of Canadians 18-34 have no investments at all; for the smaller population who can invest, the gap that remains is a product depth problem. Includes a live portfolio transparency dashboard and mobile prototype.</div>
+          <div class="card-tags">
+            <div class="card-tag primary">Fintech Psychology</div>
+            <div class="card-tag">Product Design</div>
+            <div class="card-tag">Interactive Prototype</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" onclick="window.open('/consumer/aeroplan-loyalty-economics.html','_blank')">
+        <div class="card-thumb thumb-fintech">
+          <div class="card-thumb-label">Loyalty Economics · Aeroplan</div>
+          <div class="thumb-visual">
+            <div class="thumb-bar-row"><span class="thumb-bar-label">Breakage Rate</span><div class="thumb-bar" style="width:10%;background:var(--red)"></div></div>
+            <div class="thumb-bar-row"><span class="thumb-bar-label">Entry Tier (of 5)</span><div class="thumb-bar" style="width:20%"></div></div>
+            <div class="thumb-bar-row"><span class="thumb-bar-label">Redemption Value Spread</span><div class="thumb-bar" style="width:65%;background:var(--teal)"></div></div>
+            <div class="thumb-bar-row"><span class="thumb-bar-label">Members Active</span><div class="thumb-bar" style="width:78%;background:var(--green)"></div></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">The Pity Timer Nobody Told You About — Aeroplan Loyalty Economics<span class="featured-badge">FEATURED</span></div>
+          <div class="card-desc">A breakage, tier-design, and redemption-value teardown of Air Canada's Aeroplan program — the only major Canadian loyalty scheme that publishes enough real data to model honestly. Live SQL console over ~10% disclosed breakage, 5 elite tiers, and redemption value across 50+ real bookings, framed as the same variable-ratio reward gate as a gacha pity system, just priced in credits instead of pulls.</div>
+          <div class="card-tags">
+            <div class="card-tag primary">Loyalty Economics</div>
+            <div class="card-tag">Fintech Psychology</div>
+            <div class="card-tag">Live Dashboard</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" onclick="window.open('/consumer/spotify-analysis.html','_blank')">
+        <div class="card-thumb thumb-sub" style="overflow:hidden">
+          <img src="/consumer/spotify-cover.jpg" alt="Spotify logo on phone screen" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;position:absolute;inset:0">
+          <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Subscription & Retention · Spotify</div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Spotify — Give Everything. Sell Comfort.<span class="featured-badge">FEATURED</span></div>
+          <div class="card-desc">How Spotify built the most powerful freemium model in streaming by giving away the thing that builds the relationship — full catalogue access, personalised discovery, social features — and charging only for the comfort of inhabiting it. Includes a live retention-heatmap tool comparing subscription and freemium cohort curves side by side.</div>
+          <div class="card-tags">
+            <div class="card-tag primary">Subscription Design</div>
+            <div class="card-tag">Live Dashboard</div>
+            <div class="card-tag">Spotify</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" onclick="window.open('/consumer/maya-before-after.html','_blank')">
+        <div class="card-thumb thumb-fintech">
+          <div class="card-thumb-label">Fintech Psychology · Credit UX</div>
+          <div class="thumb-visual">
+            <div class="thumb-bar-row"><span class="thumb-bar-label">Spend</span><div class="thumb-bar" style="width:80%"></div></div>
+            <div class="thumb-bar-row"><span class="thumb-bar-label">Save</span><div class="thumb-bar" style="width:45%;background:var(--teal)"></div></div>
+            <div class="thumb-bar-row"><span class="thumb-bar-label">Churn</span><div class="thumb-bar" style="width:62%;background:var(--red)"></div></div>
+            <div class="thumb-bar-row"><span class="thumb-bar-label">Return</span><div class="thumb-bar" style="width:38%;background:var(--green)"></div></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Encouraging Credit Transparency — Before &amp; After<span class="featured-badge">FEATURED</span></div>
+          <div class="card-desc">Redesigning credit visibility for everyday users, backed by a full experimentation pipeline: the qualitative research synthesis that shaped the redesign, and a complete A/B test design that validated it — hypothesis, sample size math presented plain-language first, a significance test against a labelled synthetic dataset, and a ship/no-ship call reasoned on statistical and practical significance.</div>
+          <div class="card-tags">
+            <div class="card-tag primary">A/B Testing</div>
+            <div class="card-tag">Fintech Psychology</div>
+            <div class="card-tag">Behavioural UX</div>
+            <div class="card-tag">UX Research</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- ABOUT -->
 <section class="section" id="about">
   <div class="section-eyebrow">About</div>
@@ -828,6 +954,13 @@
     </div>
   </div>
 </section>
+
+<!-- FULL ARCHIVE LABEL -->
+<div class="archive-label">
+  <div class="section-eyebrow">Full Archive</div>
+  <h2 class="section-title" style="font-size:clamp(22px,3vw,28px);margin-bottom:8px">Every Case Study, by Discipline</h2>
+  <p class="section-desc" style="margin-bottom:0">Fintech, Subscription &amp; Retention, and Media &amp; Entertainment — the complete set, including the four featured above.</p>
+</div>
 
 <!-- FINTECH CAROUSEL -->
 <section class="section" id="fintech">
