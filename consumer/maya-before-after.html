@@ -477,6 +477,111 @@ body {
 .nudge-body { font-size: 11px; color: rgba(255,255,255,0.9); line-height: 1.4; margin-bottom: 6px; }
 .nudge-body strong { color: white; }
 .nudge-cta { font-size: 10px; color: #4fc3f7; font-weight: 700; }
+
+/* ═══════════════════════════════════════════════════════════════
+   EXPERIMENT SECTION — scoped under .exp-embed, palette matched to
+   the Aeroplan/Spotify data pieces so this reads as the same family
+   of Fintech Psychology work despite the phone-mockup page above it.
+   ═══════════════════════════════════════════════════════════════ */
+.exp-embed {
+  --bg:#0a0b0f; --panel:#13151b; --panel-alt:#181b22; --border:#242832; --border-soft:#1c1f27;
+  --text:#e9eaed; --text-dim:#9498a3; --text-faint:#5c6070;
+  --critical:#e05a4c; --critical-dim:#7a3730; --high:#d9a23f; --good:#3fcf8e; --blue:#5b8def;
+  --mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  width: 100%;
+  max-width: 1040px;
+  margin: 8px auto 0;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 32px 36px 40px;
+  color: var(--text);
+  font-family: var(--sans);
+}
+.exp-embed * { box-sizing: border-box; }
+@media (max-width: 720px) { .exp-embed { padding: 24px 18px 32px; } }
+
+.exp-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--text-faint); text-transform: uppercase; margin-bottom: 10px; }
+.exp-title { font-size: clamp(22px, 3vw, 28px); font-weight: 700; letter-spacing: -0.01em; margin-bottom: 12px; }
+.exp-kicker { font-size: 13.5px; color: var(--text-dim); line-height: 1.7; max-width: 780px; margin-bottom: 24px; }
+.exp-kicker b { color: var(--text); font-weight: 600; }
+
+.exp-tabs { display: flex; gap: 4px; margin-bottom: 20px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.exp-tab-btn {
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text-faint); background: transparent; border: none; padding: 10px 16px 12px;
+  cursor: pointer; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s;
+}
+.exp-tab-btn.active { color: var(--text); border-bottom-color: var(--good); }
+.exp-tab-btn:hover:not(.active) { color: var(--text-dim); }
+.exp-tab-panel { display: none; }
+.exp-tab-panel.active { display: block; }
+
+.exp-synthetic-note {
+  margin-bottom: 22px; padding: 12px 16px;
+  border: 1px solid rgba(217,162,63,0.3); background: rgba(217,162,63,0.06);
+  border-radius: 8px; font-size: 12px; color: var(--text-dim); line-height: 1.6;
+}
+.exp-synthetic-note b { color: var(--high); }
+
+.exp-h3 { font-size: 15px; font-weight: 700; margin: 22px 0 10px; color: var(--text); }
+.exp-h3:first-child { margin-top: 0; }
+.exp-p { font-size: 13px; color: var(--text-dim); line-height: 1.75; max-width: 760px; margin-bottom: 12px; }
+.exp-p b { color: var(--text); font-weight: 600; }
+.exp-p code { font-family: var(--mono); font-size: 12px; background: var(--panel-alt); padding: 1px 5px; border-radius: 3px; color: var(--blue); }
+
+.exp-hypothesis-box {
+  border: 1px solid var(--border); border-radius: 8px; background: var(--panel);
+  padding: 18px 20px; margin: 10px 0 20px;
+}
+.exp-hypothesis-box .exp-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--good); margin-bottom: 8px; }
+.exp-hypothesis-box p { font-size: 14px; color: var(--text); line-height: 1.75; }
+
+.exp-design-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0 20px; }
+@media (max-width: 640px) { .exp-design-grid { grid-template-columns: 1fr; } }
+.exp-design-card { background: var(--panel); border: 1px solid var(--border-soft); border-radius: 8px; padding: 14px 16px; }
+.exp-design-card .exp-label { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px; }
+.exp-design-card .exp-val { font-size: 13px; color: var(--text); line-height: 1.6; }
+.exp-design-card .exp-val b { color: var(--good); }
+
+.exp-formula-block { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 14px 0 20px; }
+.exp-formula-head { padding: 10px 16px; border-bottom: 1px solid var(--border-soft); font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-dim); }
+.exp-formula-body { padding: 16px; font-family: var(--mono); font-size: 13px; line-height: 2; color: #c9cdd6; overflow-x: auto; }
+.exp-formula-body .fn { color: var(--blue); }
+.exp-formula-body .val { color: var(--good); }
+.exp-formula-body .result { color: var(--text); font-weight: 700; }
+
+.exp-kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 20px; }
+@media (max-width: 720px) { .exp-kpi-row { grid-template-columns: repeat(2,1fr); } }
+.exp-kpi-row .cell { background: var(--panel); padding: 16px 16px; }
+.exp-kpi-row .num { font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--good); }
+.exp-kpi-row .lbl { font-size: 10.5px; letter-spacing: 0.04em; color: var(--text-dim); text-transform: uppercase; margin-top: 4px; }
+
+.exp-stat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 22px; }
+@media (max-width: 720px) { .exp-stat-grid { grid-template-columns: 1fr 1fr; } }
+.exp-stat-box { background: var(--panel-alt); border: 1px solid var(--border-soft); border-radius: 6px; padding: 12px 14px; }
+.exp-stat-box .l { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-faint); }
+.exp-stat-box .v { font-family: var(--mono); font-size: 16px; font-weight: 600; margin-top: 5px; color: var(--text); }
+
+.exp-guardrail-row {
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+  padding: 12px 16px; background: var(--panel); border: 1px solid var(--border-soft); border-radius: 8px; margin-bottom: 8px;
+}
+.exp-guardrail-row .g-name { font-size: 12.5px; color: var(--text); font-weight: 600; }
+.exp-guardrail-row .g-detail { font-size: 11.5px; color: var(--text-dim); font-family: var(--mono); }
+.exp-pass { display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--good); border: 1px solid var(--good); border-radius: 12px; padding: 3px 9px; }
+
+.exp-verdict {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(63,207,142,0.08); border: 1px solid rgba(63,207,142,0.35);
+  border-radius: 8px; padding: 12px 20px; margin-bottom: 20px;
+}
+.exp-verdict .v-badge { font-family: var(--mono); font-size: 15px; font-weight: 800; letter-spacing: 0.06em; color: var(--good); }
+.exp-verdict .v-sub { font-size: 12px; color: var(--text-dim); }
+
+.exp-tags { display: flex; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
+.exp-tag { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em; text-transform: uppercase; padding: 6px 11px; border: 1px solid var(--border); border-radius: 4px; color: var(--text-dim); }
 </style>
 </head>
 <body>
@@ -1051,6 +1156,128 @@ body {
 
 </div><!-- /comparison -->
 
+<!-- ═══════════════════ EXPERIMENT DESIGN ═══════════════════ -->
+<div class="exp-embed">
+  <div class="exp-eyebrow">Experimentation Design · Not a Fielded Test</div>
+  <div class="exp-title">Would the Redesign Actually Change Behaviour?</div>
+  <div class="exp-kicker">Everything above is the interaction design. What follows is how I'd validate it before shipping — a full A/B test design, a synthetic-but-honestly-computed result, and a ship decision that reasons about statistical <b>and</b> practical significance, not just a p-value. <b>This experiment was not run on real users.</b> The underlying population is simulated specifically for this case study, clearly labelled at every step below — same honesty pattern as the synthetic population on the Aeroplan piece.</div>
+
+  <div class="exp-tabs">
+    <button class="exp-tab-btn active" data-exptab="design">Hypothesis &amp; Design</button>
+    <button class="exp-tab-btn" data-exptab="results">Results</button>
+    <button class="exp-tab-btn" data-exptab="rec">Recommendation</button>
+  </div>
+
+  <!-- TAB 1: HYPOTHESIS & DESIGN -->
+  <div class="exp-tab-panel active" id="exptab-design">
+
+    <div class="exp-hypothesis-box">
+      <div class="exp-label">Hypothesis</div>
+      <p>If we replace the dense, jargon-heavy credit report with a plain-language Credit Quick View — a visual score ring, on-time-payment and utilization stats stated in plain terms, and one concrete next action — then the rate at which users engage with a secondary credit element will increase, <b>because</b> removing jargon lowers the cognitive cost of engaging with the section, and a specific, quantified next action ("pay $200 to gain ~8 pts") gives users something to act on instead of a wall of undifferentiated data. This is the same behavioural argument made qualitatively above; the test below is how I'd check whether it actually holds.</p>
+    </div>
+
+    <div class="exp-h3">Experiment Design</div>
+    <div class="exp-design-grid">
+      <div class="exp-design-card">
+        <div class="exp-label">Control vs. Variant</div>
+        <div class="exp-val">50/50 split, randomized at the <b>user level</b> (not session) to avoid one person seeing both experiences across visits. Control = the existing dense report (Before). Variant = the plain-language Credit Quick View (After).</div>
+      </div>
+      <div class="exp-design-card">
+        <div class="exp-label">Primary Metric</div>
+        <div class="exp-val"><b>Credit Engagement Rate</b> — of users who view the Credit section in a session, the % who additionally interact with at least one secondary element (a menu item, a dropdown, or the next-action nudge) rather than just glancing at the score and leaving.</div>
+      </div>
+      <div class="exp-design-card">
+        <div class="exp-label">Guardrail 1</div>
+        <div class="exp-val">Credit-screen <b>bounce rate</b> — must not move adversely. A simplified screen that pushes people away faster would mean we removed detail people actually needed, not just jargon.</div>
+      </div>
+      <div class="exp-design-card">
+        <div class="exp-label">Guardrail 2</div>
+        <div class="exp-val">Next-action <b>nudge dismissal rate</b> (variant only) — must stay under a 25% acceptability ceiling, so the new nudge reads as useful, not as spam.</div>
+      </div>
+    </div>
+
+    <div class="exp-h3">Sample Size / Minimum Detectable Effect</div>
+    <p class="exp-p">Baseline control engagement rate is assumed at <code>11.0%</code> — a reasonable planning assumption for a secondary in-app feature in mobile banking (Maya is a composite/fictional product for this case study, so this isn't tied to one company's disclosed figure — it's a stated assumption, not a sourced one). Target MDE is <code>+2.2pp</code> absolute (11.0% → 13.2%, a 20% relative lift) — internal product norms treat relative lifts under ~15% on a secondary engagement metric as not worth a design change's engineering cost, so the test needs to reliably detect at least that.</p>
+
+    <div class="exp-formula-block">
+      <div class="exp-formula-head">two-proportion sample size — standard pooled formula, α=0.05 two-tailed, power=80%</div>
+      <div class="exp-formula-body">n = (<span class="fn">z</span><sub>α/2</sub>·√(2p̄(1−p̄)) + <span class="fn">z</span><sub>β</sub>·√(p₁(1−p₁)+p₂(1−p₂)))² / (p₂−p₁)²
+
+z<sub>0.025</sub> = <span class="val">1.960</span>    z<sub>0.80</sub> = <span class="val">0.8416</span>
+p₁ = <span class="val">0.110</span>    p₂ = <span class="val">0.132</span>    p̄ = <span class="val">0.121</span>
+
+n = <span class="result">3,449</span> per arm  →  planned <span class="result">3,500 per arm (7,000 total)</span>, rounded up for a small buffer</div>
+    </div>
+
+    <p class="exp-p" style="margin-top:4px">Decision rule, set before looking at results: ship if the primary-metric lift is statistically significant at α=0.05 <b>and</b> neither guardrail moves adversely — a clean win on engagement that costs us bounce or trains people to ignore nudges isn't actually a win.</p>
+  </div>
+
+  <!-- TAB 2: RESULTS -->
+  <div class="exp-tab-panel" id="exptab-results">
+
+    <div class="exp-synthetic-note"><b>Synthetic dataset.</b> No real users were tested. Conversions per arm are Bernoulli-simulated in Python at n=3,500/arm against assumed true rates, seeded once and reported as-drawn — the point estimates below carry ordinary sampling noise, exactly like a real experiment would. The statistical tests themselves are real: a two-proportion z-test and an equivalent chi-squared test, computed with <code>scipy.stats</code>, not hand-set to look clean.</div>
+
+    <div class="exp-kpi-row">
+      <div class="cell"><div class="num">11.51%</div><div class="lbl">Control · 403 / 3,500</div></div>
+      <div class="cell"><div class="num">13.71%</div><div class="lbl">Variant · 480 / 3,500</div></div>
+      <div class="cell"><div class="num">+2.20pp</div><div class="lbl">Absolute lift (+19.1% relative)</div></div>
+      <div class="cell"><div class="num">p=0.0056</div><div class="lbl">Two-tailed, two-proportion z-test</div></div>
+    </div>
+
+    <div class="exp-h3">Significance Detail</div>
+    <div class="exp-stat-grid">
+      <div class="exp-stat-box"><div class="l">Z-statistic</div><div class="v">2.772</div></div>
+      <div class="exp-stat-box"><div class="l">Chi-squared (df=1)</div><div class="v">7.684</div></div>
+      <div class="exp-stat-box"><div class="l">χ² p-value</div><div class="v">0.0056</div></div>
+      <div class="exp-stat-box"><div class="l">95% CI on lift</div><div class="v">+0.65pp to +3.75pp</div></div>
+      <div class="exp-stat-box"><div class="l">Relative lift</div><div class="v">+19.1%</div></div>
+      <div class="exp-stat-box"><div class="l">Sample per arm</div><div class="v">3,500</div></div>
+    </div>
+    <p class="exp-p">The chi-squared statistic (7.684) equals z² (2.772² = 7.684) exactly, as it should for a 2×2 table — two different tests, same underlying signal, cross-checked against each other rather than reported from a single method.</p>
+
+    <div class="exp-h3">Guardrails</div>
+    <div class="exp-guardrail-row">
+      <div>
+        <div class="g-name">Credit-screen bounce rate</div>
+        <div class="g-detail">control 32.71% (1,145/3,500) · variant 33.77% (1,182/3,500) · diff +1.06pp · z=0.94 · p=0.3479</div>
+      </div>
+      <span class="exp-pass">✓ no adverse move</span>
+    </div>
+    <div class="exp-guardrail-row">
+      <div>
+        <div class="g-name">Next-action nudge dismissal rate</div>
+        <div class="g-detail">18.51% (648/3,500) · 95% CI [17.23%, 19.80%] · ceiling 25%</div>
+      </div>
+      <span class="exp-pass">✓ below ceiling</span>
+    </div>
+  </div>
+
+  <!-- TAB 3: RECOMMENDATION -->
+  <div class="exp-tab-panel" id="exptab-rec">
+
+    <div class="exp-verdict">
+      <span class="v-badge">✓ SHIP</span>
+      <span class="v-sub">Significant, guardrails clean, effect direction matches the underlying hypothesis</span>
+    </div>
+
+    <div class="exp-h3">Statistical Significance</div>
+    <p class="exp-p">p=0.0056 clears the pre-registered α=0.05 threshold with room to spare. More useful than the p-value alone: the 95% confidence interval on the lift is <b>[+0.65pp, +3.75pp]</b> — even the low end of our uncertainty about the true effect is a genuine positive number, not a result that only looks significant because of exactly where the p-value line was drawn.</p>
+
+    <div class="exp-h3">Practical Significance</div>
+    <p class="exp-p">A 2.2pp absolute lift is a real number, but "statistically real" and "worth shipping" are different questions. Scaled against an assumed 42,000 monthly credit-section viewers — an illustrative figure for this exercise, not a disclosed metric — a 2.2pp lift works out to roughly <b>924 additional engaged sessions per month</b>. Three things push this from "modest" to "worth it": the change is a UI and copy redesign of an existing screen, not new infrastructure, so the cost to ship is low and a 19% relative lift clears that bar easily; both guardrails are clean, meaning the lift isn't quietly costing us bounce or training people to swipe past nudges; and the direction and mechanism match the stated hypothesis — jargon removal plus a concrete next action — rather than being an unexplained anomaly that happens to be significant.</p>
+
+    <div class="exp-h3">Caveats</div>
+    <p class="exp-p">A single simulated run — synthetic or real — is not proof of the true population effect; it's one draw from a distribution, which is exactly why the confidence interval matters more than the point estimate. In a real fielded version of this test I'd also worry about a <b>novelty effect</b>: interaction redesigns often get an initial curiosity-driven engagement bump that partially fades over 2–4 weeks as it stops being new. The honest next step isn't "ship and move on" — it's ship, then hold Credit Engagement Rate under continued monitoring for a few weeks before treating this result as the final word.</p>
+  </div>
+
+  <div class="exp-tags">
+    <span class="exp-tag">Experimentation</span>
+    <span class="exp-tag">A/B Testing</span>
+    <span class="exp-tag">Statistical Significance</span>
+    <span class="exp-tag">Sample Size Calculation</span>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1148,6 +1375,17 @@ body {
     document.querySelectorAll('.status-bar span:first-child').forEach(el => el.textContent = t);
   }
   clock(); setInterval(clock, 10000);
+
+  // ── Experiment section tabs ── scoped to .exp-embed so this can't
+  // collide with any other tab pattern that might appear on the page.
+  document.querySelectorAll('.exp-embed .exp-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.exp-embed .exp-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.exp-embed .exp-tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('exptab-' + btn.dataset.exptab).classList.add('active');
+    });
+  });
 </script>
 </body>
 </html>
