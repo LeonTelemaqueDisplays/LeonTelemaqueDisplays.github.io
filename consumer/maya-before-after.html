@@ -545,12 +545,37 @@ body {
 .exp-design-card .exp-val { font-size: 13px; color: var(--text); line-height: 1.6; }
 .exp-design-card .exp-val b { color: var(--good); }
 
-.exp-formula-block { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 14px 0 20px; }
+.exp-formula-block { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 4px 0 20px; }
 .exp-formula-head { padding: 10px 16px; border-bottom: 1px solid var(--border-soft); font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-dim); }
 .exp-formula-body { padding: 16px; font-family: var(--mono); font-size: 13px; line-height: 2; color: #c9cdd6; overflow-x: auto; }
 .exp-formula-body .fn { color: var(--blue); }
 .exp-formula-body .val { color: var(--good); }
 .exp-formula-body .result { color: var(--text); font-weight: 700; }
+
+/* Plain-language input list — the readable alternative to raw formula notation */
+.exp-input-list { border: 1px solid var(--border); border-radius: 8px; background: var(--panel); overflow: hidden; margin: 14px 0 16px; }
+.exp-input-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 12px 18px; border-bottom: 1px solid var(--border-soft); flex-wrap: wrap; }
+.exp-input-row:last-child { border-bottom: none; }
+.exp-input-label { font-size: 13px; color: var(--text-dim); }
+.exp-input-val { font-family: var(--mono); font-size: 14px; color: var(--text); font-weight: 600; text-align: right; }
+.exp-input-note { font-family: var(--sans); font-size: 11px; color: var(--text-faint); font-weight: 400; margin-left: 6px; }
+.exp-input-row.exp-input-result { background: rgba(63,207,142,0.06); }
+.exp-input-row.exp-input-result .exp-input-label { color: var(--good); font-weight: 600; }
+.exp-input-row.exp-input-result .exp-input-val { color: var(--good); font-size: 15px; }
+.exp-input-row.exp-input-result .exp-input-val b { color: var(--good); }
+
+/* Show/hide toggle for secondary technical detail */
+.exp-detail-toggle {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--text-faint); background: transparent; border: 1px solid var(--border); border-radius: 6px;
+  padding: 7px 12px; cursor: pointer; transition: color .15s, border-color .15s; margin-bottom: 4px;
+}
+.exp-detail-toggle:hover { color: var(--text-dim); border-color: var(--border); }
+.exp-detail-toggle .chev { display: inline-block; transition: transform .2s; font-size: 9px; }
+.exp-detail-toggle.open .chev { transform: rotate(180deg); }
+.exp-detail-panel { display: none; }
+.exp-detail-panel.open { display: block; }
 
 .exp-kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 20px; }
 @media (max-width: 720px) { .exp-kpi-row { grid-template-columns: repeat(2,1fr); } }
@@ -1200,16 +1225,29 @@ body {
     </div>
 
     <div class="exp-h3">Sample Size / Minimum Detectable Effect</div>
-    <p class="exp-p">Baseline control engagement rate is assumed at <code>11.0%</code> — a reasonable planning assumption for a secondary in-app feature in mobile banking (Maya is a composite/fictional product for this case study, so this isn't tied to one company's disclosed figure — it's a stated assumption, not a sourced one). Target MDE is <code>+2.2pp</code> absolute (11.0% → 13.2%, a 20% relative lift) — internal product norms treat relative lifts under ~15% on a secondary engagement metric as not worth a design change's engineering cost, so the test needs to reliably detect at least that.</p>
+    <p class="exp-p">The sample size needed depends on three things: how big a lift we actually care about detecting, how confident we want to be that a result isn't noise, and how much natural variability exists in the baseline rate itself.</p>
 
-    <div class="exp-formula-block">
-      <div class="exp-formula-head">two-proportion sample size — standard pooled formula, α=0.05 two-tailed, power=80%</div>
-      <div class="exp-formula-body">n = (<span class="fn">z</span><sub>α/2</sub>·√(2p̄(1−p̄)) + <span class="fn">z</span><sub>β</sub>·√(p₁(1−p₁)+p₂(1−p₂)))² / (p₂−p₁)²
+    <div class="exp-input-list">
+      <div class="exp-input-row"><span class="exp-input-label">Confidence level</span><span class="exp-input-val">95%<span class="exp-input-note">(α = 0.05, two-tailed)</span></span></div>
+      <div class="exp-input-row"><span class="exp-input-label">Statistical power</span><span class="exp-input-val">80%<span class="exp-input-note">chance of detecting the effect if it's real</span></span></div>
+      <div class="exp-input-row"><span class="exp-input-label">Baseline rate (control)</span><span class="exp-input-val">11.0%</span></div>
+      <div class="exp-input-row"><span class="exp-input-label">Target rate (variant)</span><span class="exp-input-val">13.2%<span class="exp-input-note">+2.2pp, a 20% relative lift</span></span></div>
+      <div class="exp-input-row exp-input-result"><span class="exp-input-label">→ Required sample size</span><span class="exp-input-val">3,449 per arm — rounded to <b>3,500</b></span></div>
+    </div>
+
+    <p class="exp-p">The 11.0% baseline is a planning assumption for a secondary in-app feature in mobile banking — Maya is a composite/fictional product for this case study, so this isn't tied to one company's disclosed figure, it's a stated assumption, not a sourced one. The 13.2% target reflects internal product norms treating relative lifts under ~15% on a secondary engagement metric as not worth a design change's engineering cost — the test needs to reliably detect at least that much.</p>
+
+    <button class="exp-detail-toggle" onclick="toggleExpDetail(this,'exp-formula-samplesize')">Show the formula <span class="chev">▾</span></button>
+    <div class="exp-detail-panel" id="exp-formula-samplesize">
+      <div class="exp-formula-block">
+        <div class="exp-formula-head">two-proportion sample size — standard pooled formula, α=0.05 two-tailed, power=80%</div>
+        <div class="exp-formula-body">n = (<span class="fn">z</span><sub>α/2</sub>·√(2p̄(1−p̄)) + <span class="fn">z</span><sub>β</sub>·√(p₁(1−p₁)+p₂(1−p₂)))² / (p₂−p₁)²
 
 z<sub>0.025</sub> = <span class="val">1.960</span>    z<sub>0.80</sub> = <span class="val">0.8416</span>
 p₁ = <span class="val">0.110</span>    p₂ = <span class="val">0.132</span>    p̄ = <span class="val">0.121</span>
 
 n = <span class="result">3,449</span> per arm  →  planned <span class="result">3,500 per arm (7,000 total)</span>, rounded up for a small buffer</div>
+      </div>
     </div>
 
     <p class="exp-p" style="margin-top:4px">Decision rule, set before looking at results: ship if the primary-metric lift is statistically significant at α=0.05 <b>and</b> neither guardrail moves adversely — a clean win on engagement that costs us bounce or trains people to ignore nudges isn't actually a win.</p>
@@ -1228,15 +1266,26 @@ n = <span class="result">3,449</span> per arm  →  planned <span class="result"
     </div>
 
     <div class="exp-h3">Significance Detail</div>
-    <div class="exp-stat-grid">
-      <div class="exp-stat-box"><div class="l">Z-statistic</div><div class="v">2.772</div></div>
-      <div class="exp-stat-box"><div class="l">Chi-squared (df=1)</div><div class="v">7.684</div></div>
-      <div class="exp-stat-box"><div class="l">χ² p-value</div><div class="v">0.0056</div></div>
-      <div class="exp-stat-box"><div class="l">95% CI on lift</div><div class="v">+0.65pp to +3.75pp</div></div>
-      <div class="exp-stat-box"><div class="l">Relative lift</div><div class="v">+19.1%</div></div>
-      <div class="exp-stat-box"><div class="l">Sample per arm</div><div class="v">3,500</div></div>
+    <p class="exp-p">In plain terms: the difference we saw is very unlikely to be random chance — there's roughly a 1-in-180 probability (p = 0.0056) of seeing a gap this large if the redesign actually did nothing. The true lift is most likely somewhere between <b>+0.65pp and +3.75pp</b>, and two independent tests (a z-test and a chi-squared test) agree with each other, which is a good cross-check that the result isn't a quirk of one particular method.</p>
+
+    <div class="exp-input-list">
+      <div class="exp-input-row"><span class="exp-input-label">p-value</span><span class="exp-input-val">0.0056<span class="exp-input-note">chance this result is just noise</span></span></div>
+      <div class="exp-input-row"><span class="exp-input-label">95% confidence interval on lift</span><span class="exp-input-val">+0.65pp to +3.75pp</span></div>
+      <div class="exp-input-row exp-input-result"><span class="exp-input-label">→ Relative lift</span><span class="exp-input-val"><b>+19.1%</b></span></div>
     </div>
-    <p class="exp-p">The chi-squared statistic (7.684) equals z² (2.772² = 7.684) exactly, as it should for a 2×2 table — two different tests, same underlying signal, cross-checked against each other rather than reported from a single method.</p>
+
+    <button class="exp-detail-toggle" onclick="toggleExpDetail(this,'exp-stats-detail')">Show the full statistical detail <span class="chev">▾</span></button>
+    <div class="exp-detail-panel" id="exp-stats-detail">
+      <div class="exp-stat-grid" style="margin-top:14px">
+        <div class="exp-stat-box"><div class="l">Z-statistic</div><div class="v">2.772</div></div>
+        <div class="exp-stat-box"><div class="l">Chi-squared (df=1)</div><div class="v">7.684</div></div>
+        <div class="exp-stat-box"><div class="l">χ² p-value</div><div class="v">0.0056</div></div>
+        <div class="exp-stat-box"><div class="l">95% CI on lift</div><div class="v">+0.65pp to +3.75pp</div></div>
+        <div class="exp-stat-box"><div class="l">Relative lift</div><div class="v">+19.1%</div></div>
+        <div class="exp-stat-box"><div class="l">Sample per arm</div><div class="v">3,500</div></div>
+      </div>
+      <p class="exp-p" style="margin-top:12px">The chi-squared statistic (7.684) equals z² (2.772² = 7.684) exactly, as it should for a 2×2 table — two different tests, same underlying signal, cross-checked against each other rather than reported from a single method.</p>
+    </div>
 
     <div class="exp-h3">Guardrails</div>
     <div class="exp-guardrail-row">
@@ -1389,6 +1438,17 @@ n = <span class="result">3,449</span> per arm  →  planned <span class="result"
       document.getElementById('exptab-' + btn.dataset.exptab).classList.add('active');
     });
   });
+
+  function toggleExpDetail(btn, panelId) {
+    const panel = document.getElementById(panelId);
+    if (!panel) return;
+    const isOpen = panel.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    btn.firstChild.textContent = isOpen ? 'Hide the formula ' : 'Show the formula ';
+    if (panelId === 'exp-stats-detail') {
+      btn.firstChild.textContent = isOpen ? 'Hide the full statistical detail ' : 'Show the full statistical detail ';
+    }
+  }
 </script>
 </body>
 </html>
