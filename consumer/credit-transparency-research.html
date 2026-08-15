@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What People Actually Do With a Credit Score They Don't Understand — UX Research</title>
+<style>
+  :root{
+    --bg:#0a0b0f; --panel:#13151b; --panel-alt:#181b22; --border:#242832; --border-soft:#1c1f27;
+    --text:#e9eaed; --text-dim:#9498a3; --text-faint:#5c6070;
+    --critical:#e05a4c; --critical-dim:#7a3730; --high:#d9a23f; --good:#3fcf8e; --blue:#5b8def; --purple:#a78bda;
+    --mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:1040px; margin:0 auto; padding:48px 24px 80px; }
+
+  .back-link{ display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:11.5px; color:var(--text-faint); text-decoration:none; margin-bottom:28px; transition:color .15s; }
+  .back-link:hover{ color:var(--text-dim); }
+
+  .eyebrow{ font-family:var(--mono); font-size:11px; letter-spacing:0.14em; color:var(--purple); text-transform:uppercase; margin-bottom:14px; }
+  h1{ font-size:clamp(26px,4vw,38px); font-weight:700; letter-spacing:-0.02em; line-height:1.2; margin-bottom:18px; }
+  .kicker{ font-size:14.5px; color:var(--text-dim); line-height:1.8; max-width:760px; margin-bottom:28px; }
+  .kicker b{ color:var(--text); font-weight:600; }
+
+  .disclosure{
+    margin-bottom:36px; padding:18px 20px; border-radius:8px;
+    border:1px solid rgba(91,141,239,0.3); background:rgba(91,141,239,0.06);
+  }
+  .disclosure .d-label{ font-family:var(--mono); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--blue); margin-bottom:8px; }
+  .disclosure p{ font-size:13px; color:var(--text-dim); line-height:1.75; }
+  .disclosure b{ color:var(--text); font-weight:600; }
+
+  h2{ font-size:20px; font-weight:700; margin:44px 0 8px; letter-spacing:-0.01em; }
+  h2:first-of-type{ margin-top:0; }
+  .section-sub{ font-size:13px; color:var(--text-faint); margin-bottom:20px; }
+
+  .method-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:12px; }
+  @media (max-width:680px){ .method-grid{ grid-template-columns:1fr; } }
+  .method-card{ background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:18px 20px; }
+  .method-card .m-label{ font-family:var(--mono); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint); margin-bottom:10px; }
+  .method-card p{ font-size:13.5px; color:var(--text); line-height:1.7; }
+  .method-card .m-meta{ margin-top:10px; font-size:11.5px; color:var(--text-dim); font-family:var(--mono); }
+
+  /* Personas */
+  .persona-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:16px 0 8px; }
+  @media (max-width:860px){ .persona-grid{ grid-template-columns:1fr; } }
+  .persona-card{ background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:18px 18px 20px; display:flex; flex-direction:column; }
+  .persona-badge{ display:inline-flex; align-self:flex-start; font-family:var(--mono); font-size:8.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--purple); border:1px solid rgba(167,139,218,0.4); background:rgba(167,139,218,0.08); border-radius:10px; padding:3px 8px; margin-bottom:12px; }
+  .persona-name{ font-size:15px; font-weight:700; color:var(--text); margin-bottom:2px; }
+  .persona-context{ font-size:11.5px; color:var(--text-faint); margin-bottom:14px; }
+  .persona-quote{ font-size:13px; color:var(--text-dim); line-height:1.65; font-style:italic; border-left:2px solid var(--border); padding-left:12px; margin-bottom:12px; flex:1; }
+  .persona-note{ font-size:10.5px; color:var(--text-faint); line-height:1.5; margin-top:auto; padding-top:10px; border-top:1px solid var(--border-soft); }
+
+  /* Affinity board */
+  .affinity-board{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0 8px; }
+  @media (max-width:720px){ .affinity-board{ grid-template-columns:1fr; } }
+  .cluster{ background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:18px 20px; border-top:3px solid var(--cluster-color, var(--blue)); }
+  .cluster-a{ --cluster-color:#5b8def; }
+  .cluster-b{ --cluster-color:#e05a4c; }
+  .cluster-c{ --cluster-color:#3fcf8e; }
+  .cluster-d{ --cluster-color:#d9a23f; }
+  .cluster-title{ font-size:14.5px; font-weight:700; color:var(--text); margin-bottom:6px; line-height:1.4; }
+  .cluster-sourced{ font-family:var(--mono); font-size:9.5px; letter-spacing:0.04em; text-transform:uppercase; color:var(--text-faint); margin-bottom:10px; }
+  .cluster-body{ font-size:12.5px; color:var(--text-dim); line-height:1.7; }
+  .cluster-obs{ margin-top:10px; padding-top:10px; border-top:1px solid var(--border-soft); font-size:11.5px; color:var(--text-faint); font-style:italic; }
+
+  /* Mapping table */
+  .map-table{ width:100%; border-collapse:collapse; margin:16px 0 8px; font-size:12.5px; }
+  .map-table th{ text-align:left; padding:10px 14px; background:var(--panel-alt); font-family:var(--mono); font-size:10px; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-faint); border-bottom:1px solid var(--border); }
+  .map-table td{ padding:12px 14px; border-bottom:1px solid var(--border-soft); color:var(--text-dim); vertical-align:top; line-height:1.6; }
+  .map-table tr:last-child td{ border-bottom:none; }
+  .map-table td.theme-cell{ color:var(--text); font-weight:600; }
+  .map-table td.arrow-cell{ text-align:center; color:var(--text-faint); font-size:16px; }
+
+  .sources{ margin-top:36px; padding:18px 20px; border:1px solid var(--border-soft); border-radius:8px; background:var(--panel-alt); }
+  .sources .l{ font-family:var(--mono); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint); margin-bottom:10px; }
+  .sources p{ font-size:12px; color:var(--text-dim); line-height:1.75; margin-bottom:8px; }
+  .sources p:last-child{ margin-bottom:0; }
+  .sources b{ color:var(--text); }
+
+  .companion-link{
+    display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+    margin-top:24px; padding:16px 20px; border:1px solid rgba(63,207,142,0.3); background:rgba(63,207,142,0.06);
+    border-radius:8px;
+  }
+  .companion-link p{ font-size:12.5px; color:var(--text-dim); line-height:1.6; }
+  .companion-link p b{ color:var(--text); }
+  .companion-link a{ font-family:var(--mono); font-size:11.5px; color:var(--good); text-decoration:none; white-space:nowrap; border:1px solid var(--good); border-radius:6px; padding:8px 14px; transition:background .15s; }
+  .companion-link a:hover{ background:rgba(63,207,142,0.12); }
+
+  .tags{ display:flex; gap:8px; margin-top:24px; flex-wrap:wrap; }
+  .tag{ font-family:var(--mono); font-size:10.5px; letter-spacing:0.04em; text-transform:uppercase; padding:6px 11px; border:1px solid var(--border); border-radius:4px; color:var(--text-dim); }
+  .tag.mode{ border-color:var(--purple); color:var(--purple); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back-link" href="/consumer/maya-before-after.html">← Back to the Credit Transparency redesign</a>
+
+  <div class="eyebrow">UX Research · Companion to Credit Transparency Redesign</div>
+  <h1>What People Actually Do With a Credit Score They Don't Understand</h1>
+  <div class="kicker">A qualitative research synthesis exploring why the Before experience's credit section wasn't working — and how the resulting themes directly shaped the redesign visible in the <b>Encouraging Credit Transparency</b> case study. This piece exists to demonstrate qualitative research methodology and synthesis specifically; the quantitative half of the same redesign — hypothesis, sample size math, and a significance test — lives in the Experimentation section of the companion piece.</div>
+
+  <div class="disclosure">
+    <div class="d-label">Illustrative Synthesis — Read Before Anything Else</div>
+    <p>The sessions and personas described on this page did not happen with real participants. This is a <b>methodology demonstration</b>: the research approach (moderated usability testing, semi-structured interviews, affinity mapping) is standard, real qualitative UX research practice, and the themes below are built from well-documented patterns in fintech UX research and behavioural-design literature — but the specific personas, sessions, and quotes are composite and synthesized for this case study, not verbatim transcripts from real individuals. Every quote below is explicitly attributed to a labeled composite persona, never to a real name. This is the same honesty standard as the synthetic member population disclosed on the Aeroplan piece — synthetic where the underlying data has to be, real everywhere the methodology and reasoning can be.</p>
+  </div>
+
+  <h2>Research Question &amp; Method</h2>
+  <div class="method-grid">
+    <div class="method-card">
+      <div class="m-label">Research Question</div>
+      <p>When someone opens the Credit section of their banking app, do they leave understanding what to do next — or just aware of a number?</p>
+    </div>
+    <div class="method-card">
+      <div class="m-label">Method</div>
+      <p>Moderated, think-aloud usability sessions on the existing (Before) credit experience — locate your score, explain what it means, describe what you'd do next — each followed by a short semi-structured interview probing how the experience felt and what participants wished the app had told them.</p>
+      <div class="m-meta">6 composite sessions · ~20 min each · task-based + retrospective probe</div>
+    </div>
+  </div>
+
+  <h2>Personas</h2>
+  <div class="section-sub">Three composite personas, each synthesized from a common pattern across the sessions — not individual people.</div>
+  <div class="persona-grid">
+    <div class="persona-card">
+      <span class="persona-badge">Composite Persona</span>
+      <div class="persona-name">Amara</div>
+      <div class="persona-context">8 months into her first credit card</div>
+      <div class="persona-quote">"I know the number's supposed to be good, but I don't actually know what 742 means for anything I'm trying to do."</div>
+      <div class="persona-note">Represents new-to-credit users who can recite their score but can't translate it into progress toward a goal.</div>
+    </div>
+    <div class="persona-card">
+      <span class="persona-badge">Composite Persona</span>
+      <div class="persona-name">Devon</div>
+      <div class="persona-context">Rebuilding credit after a missed-payment period</div>
+      <div class="persona-quote">"Every time I open this I brace for bad news. It doesn't feel like it's on my side."</div>
+      <div class="persona-note">Represents users in an anxious or recovery-oriented relationship with their credit, sensitive to tone.</div>
+    </div>
+    <div class="persona-card">
+      <span class="persona-badge">Composite Persona</span>
+      <div class="persona-name">Priya</div>
+      <div class="persona-context">Mortgage-shopping within the next two years</div>
+      <div class="persona-quote">"I don't want a score, I want to know if I'm mortgage-ready and what's standing in the way."</div>
+      <div class="persona-note">Represents goal-directed users who want their credit info tied to a specific real-world outcome.</div>
+    </div>
+  </div>
+
+  <h2>Key Themes — Affinity Mapping</h2>
+  <div class="section-sub">Four clusters, synthesized across the composite sessions above.</div>
+  <div class="affinity-board">
+    <div class="cluster cluster-a">
+      <div class="cluster-title">A Number Without a Reference Point Isn't Information</div>
+      <div class="cluster-sourced">Clustered from: Amara, Priya</div>
+      <div class="cluster-body">Participants could recall their score accurately but consistently couldn't translate it into progress toward something they actually cared about — a car, a mortgage, a "good enough" threshold. The number was memorized, not understood.</div>
+      <div class="cluster-obs">Composite observation: "I'd pass a quiz on my score. I couldn't tell you if it's actually good for what I need it for."</div>
+    </div>
+    <div class="cluster cluster-b">
+      <div class="cluster-title">Dense Reports Read as Gatekeeping, Not Disclosure</div>
+      <div class="cluster-sourced">Clustered from: Devon, Amara</div>
+      <div class="cluster-body">The bureau-style report — tradeline tables, "FICO® Score 8 (Bankcard Enhanced)," R1/I1/O1 status codes — was technically the participant's own data, but several described feeling like it was written for someone else to read, not for them.</div>
+      <div class="cluster-obs">Composite observation: "This looks like it's for the bank, not for me. I don't know what half these codes mean and I'm supposed to."</div>
+    </div>
+    <div class="cluster cluster-c">
+      <div class="cluster-title">A Diagnosis Without a Next Step Is a Dead End</div>
+      <div class="cluster-sourced">Clustered from: Amara, Devon, Priya (all three)</div>
+      <div class="cluster-body">Even participants who understood their score correctly had no sense of what to do this week to move it. A static number, however accurate, read as backward-looking — a report card, not a plan.</div>
+      <div class="cluster-obs">Composite observation: "Okay, so it's 742. Now what? What do I actually do today?"</div>
+    </div>
+    <div class="cluster cluster-d">
+      <div class="cluster-title">Warning-Only Language Increases Avoidance, Not Correction</div>
+      <div class="cluster-sourced">Clustered from: Devon, echoed by Amara</div>
+      <div class="cluster-body">Being told "you are behind on payments" with no accompanying guidance made participants want to close the app rather than open it more. Urgency without a path forward read as blame.</div>
+      <div class="cluster-obs">Composite observation: "That warning just makes me not want to look. It doesn't tell me what fixes it."</div>
+    </div>
+  </div>
+
+  <h2>From Research to Redesign</h2>
+  <div class="section-sub">The explicit line from what these sessions surfaced to the specific decisions visible in the After experience.</div>
+  <table class="map-table">
+    <thead><tr><th>Theme</th><th>Before</th><th></th><th>After — design decision</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="theme-cell">A number without a reference point</td>
+        <td>A bare score (742/850) with no framing for what it enables</td>
+        <td class="arrow-cell">→</td>
+        <td>Milestone ladder (first card → 700 → 760 → mortgage-ready 780+) and score-band icons tied to real products (🚗 auto, 🏢 general, ✈️ premium, 🏆 top tier)</td>
+      </tr>
+      <tr>
+        <td class="theme-cell">Dense reports read as gatekeeping</td>
+        <td>Bureau-jargon tradeline table (FICO® Score 8 Bankcard Enhanced, R1/I1/O1 codes)</td>
+        <td class="arrow-cell">→</td>
+        <td>Plain-language Credit Quick View — utilization and on-time-payment stats stated in everyday terms, no bureau codes on the primary surface</td>
+      </tr>
+      <tr>
+        <td class="theme-cell">Diagnosis without a next step</td>
+        <td>Static score display, no guidance on what changes it</td>
+        <td class="arrow-cell">→</td>
+        <td>Next-action nudge card: "Pay $200 toward your LOC to drop utilization to ~15% and gain an estimated +8pts" — specific and quantified</td>
+      </tr>
+      <tr>
+        <td class="theme-cell">Warnings increase avoidance</td>
+        <td>"⚠️ You are behind on credit payments — repeat failure may impact your credit score"</td>
+        <td class="arrow-cell">→</td>
+        <td>Encouraging, momentum-framed tone ("Keep it up Maya!") with urgency reserved for genuinely actionable moments, not blanket warnings</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="companion-link">
+    <p>These four themes are what the <b>Credit Transparency</b> redesign is built on. The resulting hypothesis — that plain language plus a concrete next action increases engagement — was then tested quantitatively in a full A/B test design.</p>
+    <a href="/consumer/maya-before-after.html">See the redesign + A/B test →</a>
+  </div>
+
+  <div class="sources">
+    <div class="l">Methodology &amp; Sourcing</div>
+    <p><b>Real:</b> the research methods themselves — moderated think-aloud usability testing, semi-structured retrospective interviews, and affinity mapping to synthesize themes across sessions — are standard, real qualitative UX research practice, described accurately here.</p>
+    <p><b>Synthetic:</b> the specific sessions, the three composite personas (Amara, Devon, Priya), and every quote attributed to them are composite constructions built to illustrate common, well-documented patterns from fintech UX research and behavioural-design literature — not transcripts from real individuals. No quote on this page should be read as something a real, identifiable person said.</p>
+  </div>
+
+  <div class="tags">
+    <span class="tag mode">UX Research</span>
+    <span class="tag">Qualitative Research</span>
+    <span class="tag">Affinity Mapping</span>
+    <span class="tag">Usability Testing</span>
+  </div>
+
+</div>
+</body>
+</html>
