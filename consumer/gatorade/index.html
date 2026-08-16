@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gatorade — How a Sports Drink Became a Category</title>
+<style>
+  :root {
+    --navy: #0a0f1e;
+    --navy-2: #111827;
+    --navy-3: #1a2035;
+    --navy-4: #222d45;
+    --border: #1e2d4a;
+    --border-2: #2a3d5e;
+    --yellow: #f5c518;
+    --yellow-dim: rgba(245,197,24,0.10);
+    --yellow-glow: rgba(245,197,24,0.05);
+    --orange: #ff6b35;
+    --orange-dim: rgba(255,107,53,0.10);
+    --green: #22c55e;
+    --green-dim: rgba(34,197,94,0.10);
+    --text: #f0f0f0;
+    --text-mid: #8899bb;
+    --text-dim: #3d5070;
+    --mono: 'Courier New', monospace;
+    --sans: system-ui, -apple-system, sans-serif;
+    --condensed: Impact, 'Arial Narrow', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 60px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 10% 90%, rgba(245,197,24,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 10%, rgba(245,197,24,0.03) 0%, transparent 45%),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 80px,
+        rgba(245,197,24,0.015) 80px,
+        rgba(245,197,24,0.015) 81px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 80px,
+        rgba(255,255,255,0.01) 80px,
+        rgba(255,255,255,0.01) 81px
+      );
+    pointer-events: none;
+  }
+
+  /* Scoreboard ticker effect */
+  .hero-ticker {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--yellow), var(--orange), var(--yellow));
+    background-size: 200% 100%;
+    animation: ticker 3s linear infinite;
+  }
+
+  @keyframes ticker {
+    0% { background-position: 0% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .hero-meta {
+    position: absolute;
+    top: 32px;
+    right: 60px;
+    text-align: right;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    line-height: 2;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--yellow);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .hero-market {
+    font-family: var(--condensed);
+    font-size: clamp(80px, 14vw, 180px);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 0.85;
+    color: var(--yellow);
+    margin-bottom: 0;
+    text-shadow: 0 0 80px rgba(245,197,24,0.2);
+  }
+
+  .hero-market-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    margin-top: 4px;
+  }
+
+  .hero-title {
+    font-family: var(--condensed);
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .hero-subtitle {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .hero-thesis {
+    font-size: 17px;
+    color: var(--text-mid);
+    max-width: 640px;
+    line-height: 1.75;
+    border-left: 3px solid var(--yellow);
+    padding-left: 20px;
+    margin-bottom: 32px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat-value {
+    font-family: var(--condensed);
+    font-size: 28px;
+    color: var(--yellow);
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+
+  .hero-stat-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+  }
+
+  /* BODY */
+  .doc-body {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 60px;
+  }
+
+  .section {
+    margin-bottom: 80px;
+    padding-bottom: 80px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: var(--condensed);
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .section-title em { color: var(--yellow); font-style: normal; }
+
+  .body-text {
+    font-size: 15px;
+    color: var(--text-mid);
+    line-height: 1.85;
+    max-width: 720px;
+    margin-bottom: 24px;
+  }
+
+  /* PULL QUOTE */
+  .pull-quote {
+    border-left: 3px solid var(--yellow);
+    padding: 16px 24px;
+    margin: 32px 0;
+    background: var(--yellow-glow);
+  }
+
+  .pull-quote-text {
+    font-size: 18px;
+    color: var(--text);
+    line-height: 1.6;
+    font-weight: 500;
+    max-width: 640px;
+  }
+
+  /* MARKET SHARE BAR */
+  .market-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 32px 0;
+  }
+
+  .market-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .market-bar-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-mid);
+    width: 90px;
+    flex-shrink: 0;
+    letter-spacing: 0.04em;
+  }
+
+  .market-bar-track {
+    flex: 1;
+    height: 6px;
+    background: var(--navy-3);
+    position: relative;
+  }
+
+  .market-bar-fill {
+    height: 100%;
+    transition: width 1s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .market-bar-fill.gatorade { background: var(--yellow); }
+  .market-bar-fill.powerade { background: var(--text-dim); }
+  .market-bar-fill.bodyarmor { background: var(--orange); }
+  .market-bar-fill.prime { background: #a855f7; }
+
+  .market-bar-value {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    width: 42px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .market-bar-value.gatorade { color: var(--yellow); }
+  .market-bar-value.powerade { color: var(--text-dim); }
+  .market-bar-value.bodyarmor { color: var(--orange); }
+  .market-bar-value.prime { color: #a855f7; }
+
+  /* OCCASION MAP */
+  .occasion-map {
+    margin: 32px 0;
+    background: var(--navy-2);
+    border: 1px solid var(--border);
+    padding: 28px;
+  }
+
+  .occasion-map-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .occasion-map-title {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--yellow);
+    text-transform: uppercase;
+  }
+
+  .occasion-legend {
+    display: flex;
+    gap: 16px;
+  }
+
+  .occasion-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .legend-dot.owned { background: var(--yellow); }
+  .legend-dot.contested { background: var(--orange); }
+  .legend-dot.unaddressed { background: var(--text-dim); opacity: 0.4; }
+
+  .occasion-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  .occasion-cell {
+    padding: 14px 16px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .occasion-cell.owned {
+    background: var(--yellow-dim);
+    border-color: rgba(245,197,24,0.2);
+  }
+
+  .occasion-cell.contested {
+    background: var(--orange-dim);
+    border-color: rgba(255,107,53,0.2);
+  }
+
+  .occasion-cell.unaddressed {
+    background: rgba(255,255,255,0.02);
+    border-color: var(--border);
+    opacity: 0.6;
+  }
+
+  .occasion-cell:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    opacity: 1;
+  }
+
+  .occasion-cell.owned:hover { border-color: var(--yellow); }
+  .occasion-cell.contested:hover { border-color: var(--orange); }
+  .occasion-cell.unaddressed:hover { border-color: var(--text-dim); }
+
+  .occasion-icon {
+    font-size: 18px;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .occasion-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 3px;
+    line-height: 1.3;
+  }
+
+  .occasion-status {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .occasion-cell.owned .occasion-status { color: var(--yellow); }
+  .occasion-cell.contested .occasion-status { color: var(--orange); }
+  .occasion-cell.unaddressed .occasion-status { color: var(--text-dim); }
+
+  /* OCCASION DETAIL */
+  .occasion-detail {
+    margin-top: 16px;
+    padding: 16px;
+    background: var(--navy-3);
+    border-left: 3px solid var(--yellow);
+    min-height: 60px;
+    transition: all 0.2s;
+  }
+
+  .occasion-detail-name {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--yellow);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .occasion-detail-text {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  /* TIMELINE */
+  .timeline {
+    margin: 32px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+
+  .timeline-item:last-child { border-bottom: none; }
+
+  .timeline-year {
+    font-family: var(--condensed);
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--yellow);
+    letter-spacing: -0.01em;
+    padding-top: 2px;
+  }
+
+  .timeline-content { }
+
+  .timeline-event {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+
+  .timeline-detail {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.5;
+    font-family: var(--mono);
+  }
+
+  /* COMPARISON TABLE */
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 32px;
+  }
+
+  .comparison-table th {
+    text-align: left;
+    padding: 12px 16px;
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    background: var(--navy-2);
+  }
+
+  .comparison-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  .comparison-table tr:nth-child(even) td { background: var(--navy-2); }
+  .comparison-table tr:nth-child(odd) td { background: var(--navy-3); }
+
+  .td-dim { color: var(--text-mid); }
+  .td-yellow { color: var(--yellow); font-weight: 600; }
+  .td-orange { color: var(--orange); }
+  .td-grey { color: var(--text-dim); }
+
+  /* CPG VOCAB CALLOUT */
+  .vocab-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  .vocab-card {
+    background: var(--navy-2);
+    padding: 20px;
+  }
+
+  .vocab-term {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--yellow);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .vocab-definition {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  .vocab-gatorade {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 8px;
+    font-style: italic;
+    font-family: var(--mono);
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+  }
+
+  /* FOOTER */
+  .doc-footer {
+    padding: 40px 60px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-credit {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    line-height: 2;
+  }
+
+  .footer-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .footer-tag {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--text-dim);
+    padding: 3px 8px;
+    border: 1px solid var(--border-2);
+    letter-spacing: 0.08em;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-ticker"></div>
+
+  <div class="hero-meta">
+    CPG Consumer Behaviour Analysis<br>
+    Category Creation · Sports Drink Market<br>
+    Leon Telemaque · 2026
+  </div>
+
+  <div class="hero-eyebrow">CPG · Consumer Behaviour · Category Creation</div>
+  <div class="hero-market">65%</div>
+  <div class="hero-market-label">US Sports Drink Market Share — Gatorade 2026</div>
+
+  <h1 class="hero-title">How a Sports Drink<br>Became a Category</h1>
+  <div class="hero-subtitle">Gatorade · Penetration Strategy · Occasion Ownership · Mental Availability</div>
+
+  <p class="hero-thesis">
+    Gatorade didn't win the sports drink category. It created it — and then made the category definition synonymous with competitive advantage over water. By embedding itself into the NBA, NFL, and MLB simultaneously, Gatorade didn't need to outmarket competitors. It needed to out-position water. The real competitive frame was never Powerade. It was the assumption that water was sufficient.
+  </p>
+
+  <div class="hero-stats">
+    <div>
+      <div class="hero-stat-value">1965</div>
+      <div class="hero-stat-label">Founded — University of Florida</div>
+    </div>
+    <div>
+      <div class="hero-stat-value">6</div>
+      <div class="hero-stat-label">Major League Partnerships — NFL, NBA, MLB, MLS, WNBA, NHL</div>
+    </div>
+    <div>
+      <div class="hero-stat-value">$7.5B+</div>
+      <div class="hero-stat-label">Annual US Retail Sales 2025</div>
+    </div>
+    <div>
+      <div class="hero-stat-value">$11.5B</div>
+      <div class="hero-stat-label">Total US Category Size — Gatorade Built This</div>
+    </div>
+  </div>
+</section>
+
+<!-- BODY -->
+<div class="doc-body">
+
+  <!-- OPENING -->
+  <section class="section">
+    <div class="section-label">The Category</div>
+    <h2 class="section-title">One Brand. <em>Every League.</em></h2>
+
+    <p class="body-text">Gatorade was invented in 1965 by a team of scientists at the University of Florida College of Medicine at the request of football coach Ray Graves. The formulation was simple — replace the fluids, carbohydrates, and electrolytes that players lost during exertion. The product worked. Players who drank it performed better in the fourth quarter. That is the entire functional story of Gatorade. Everything that followed was a consumer behaviour story.</p>
+
+    <p class="body-text">Sixty years later Gatorade holds 65% of a $11.5 billion US sports drink market — a market that did not exist before Gatorade created it. The brand is the official drink of the NFL, NBA, MLB, MLS, WNBA, and NHL simultaneously. Its closest competitor, BodyArmor, holds 12% — after Coca-Cola spent $5.6 billion acquiring it in the largest brand acquisition in Coke's history. Powerade, Coke's own sports drink with decades of marketing behind it, holds 16% and has never meaningfully challenged Gatorade's position.</p>
+
+    <div class="market-bars">
+      <div class="market-bar-row">
+        <div class="market-bar-label">Gatorade</div>
+        <div class="market-bar-track"><div class="market-bar-fill gatorade" style="width:65%"></div></div>
+        <div class="market-bar-value gatorade">65%</div>
+      </div>
+      <div class="market-bar-row">
+        <div class="market-bar-label">Powerade</div>
+        <div class="market-bar-track"><div class="market-bar-fill powerade" style="width:16%"></div></div>
+        <div class="market-bar-value powerade">16%</div>
+      </div>
+      <div class="market-bar-row">
+        <div class="market-bar-label">BodyArmor</div>
+        <div class="market-bar-track"><div class="market-bar-fill bodyarmor" style="width:12%"></div></div>
+        <div class="market-bar-value bodyarmor">12%</div>
+      </div>
+      <div class="market-bar-row">
+        <div class="market-bar-label">Prime</div>
+        <div class="market-bar-track"><div class="market-bar-fill prime" style="width:5%"></div></div>
+        <div class="market-bar-value prime">5%</div>
+      </div>
+    </div>
+
+    <p class="body-text">The numbers are not a product story. Powerade has comparable formulation, Coca-Cola's distribution infrastructure, and decades of marketing spend. It has never broken 20% market share. BodyArmor had Kobe Bryant as an equity partner, LeBron James, Naomi Osaka, and eventually the full weight of Coca-Cola's investment. It reached 12%. The gap between Gatorade and every competitor is not explained by what is in the bottle. It is explained by what is in the consumer's mind.</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">Gatorade's dominance is a mental availability story built on occasion ownership. The question was never which sports drink do consumers prefer. It was which brand comes to mind the moment an athletic occasion arises. Gatorade answered that question before Powerade knew it was being asked.</div>
+    </div>
+  </section>
+
+  <!-- ARGUMENT 01 — MULTI-LEAGUE PENETRATION -->
+  <section class="section">
+    <div class="section-label">Argument 01</div>
+    <h2 class="section-title">The Multi-League Strategy as <em>Mass Penetration</em></h2>
+
+    <p class="body-text">Gatorade's simultaneous partnership with the NFL, NBA, and MLB was not an athlete marketing strategy. It was a household penetration strategy executed through broadcast reach. The target audience was not the professional athlete. It was every person who watches professional sport — which in North America means most households.</p>
+
+    <p class="body-text">The mechanism is simple and powerful. Every timeout in an NBA game, every sideline shot in an NFL broadcast, every dugout cutaway in an MLB game shows a Gatorade cooler, a Gatorade cup, or a Gatorade towel. These are not paid advertisements. They are context — the visual language of what professional sport looks like. The consumer does not process these as brand impressions. They process them as part of what sport is.</p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year">1965</div>
+        <div class="timeline-content">
+          <div class="timeline-event">Category Created — University of Florida</div>
+          <div class="timeline-detail">Scientists develop electrolyte formula for Gators football team. First instance of a drink designed specifically for athletic performance. The sports drink category begins here.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1983</div>
+        <div class="timeline-content">
+          <div class="timeline-event">NFL Official Sponsorship — First Major League Deal</div>
+          <div class="timeline-detail">Gatorade becomes the official sports drink of the NFL. Every sideline cooler, every broadcast cutaway begins building the association between American football and Gatorade that will persist for decades.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1984</div>
+        <div class="timeline-content">
+          <div class="timeline-event">The Gatorade Dunk — Accidental Cultural Ritual</div>
+          <div class="timeline-detail">New York Giants players dump a cooler of Gatorade on coach Bill Parcells after a victory. The "Gatorade shower" becomes a victory ritual replicated across every level of sport. Gatorade is now embedded in the cultural grammar of winning.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1991</div>
+        <div class="timeline-content">
+          <div class="timeline-event">Michael Jordan — "Be Like Mike" Campaign</div>
+          <div class="timeline-detail">Gatorade signs Michael Jordan at the height of his cultural dominance. The campaign establishes aspirational proxy consumption as the brand's core mechanic. Young athletes want what Jordan drinks. The product becomes identity before it becomes hydration.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2001</div>
+        <div class="timeline-content">
+          <div class="timeline-event">PepsiCo Acquisition — $13.4 Billion</div>
+          <div class="timeline-detail">PepsiCo acquires Quaker Oats to get Gatorade. The largest acquisition in PepsiCo's history. Coca-Cola's board rejects the same deal — widely considered one of the biggest strategic mistakes in beverage history.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2015</div>
+        <div class="timeline-content">
+          <div class="timeline-event">Peak Market Share — 77%</div>
+          <div class="timeline-detail">Gatorade holds 77% of the US sports drink market. Powerade at 18%. BodyArmor at 0.5%. The gap between Gatorade and every competitor is larger than at any point in category history.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2021</div>
+        <div class="timeline-content">
+          <div class="timeline-event">BodyArmor Acquisition — $5.6B Coca-Cola Response</div>
+          <div class="timeline-detail">Coca-Cola pays $5.6 billion for BodyArmor — its largest acquisition in company history — specifically to compete with Gatorade. The response to Gatorade's position requires the largest brand acquisition Coke has ever made. This is what category leadership costs to challenge.</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="body-text">The result of the multi-league strategy is that "Gatorade break" entered everyday vocabulary. Not "sports drink break." Not "hydration break." Gatorade break. The brand name became the category noun — the same linguistic capture that Kleenex achieved in tissues and Google achieved in search. When the brand name becomes the generic term for the behaviour, the category creation is complete.</p>
+
+    <p class="body-text">This is Byron Sharp's penetration logic operating at category scale. Gatorade does not need loyal customers — it needs every household that watches sport to associate athletic occasions with Gatorade automatically. The broadcast presence across six major leagues ensures that association is reinforced thousands of times per year in every sports-watching household in North America without a single traditional advertisement.</p>
+  </section>
+
+  <!-- ARGUMENT 02 — OCCASION OWNERSHIP -->
+  <section class="section">
+    <div class="section-label">Argument 02</div>
+    <h2 class="section-title">Occasion Ownership — <em>The CPG Moat</em></h2>
+
+    <p class="body-text">In consumer packaged goods the most durable competitive advantage is not product superiority, price, or distribution — it is occasion ownership. The brand that becomes the automatic mental response to a specific consumption situation has built a moat that competitors cannot replicate with marketing spend because the association is built into habit, not preference.</p>
+
+    <p class="body-text">Gatorade's occasion strategy is the clearest example of this principle in the sports drink category. The map below shows which occasions Gatorade currently owns, which are contested, and which remain unaddressed — creating the blueprint for where the next competitive threat will emerge.</p>
+
+    <div class="occasion-map">
+      <div class="occasion-map-header">
+        <div class="occasion-map-title">Occasion Map — Gatorade vs The Field</div>
+        <div class="occasion-legend">
+          <div class="occasion-legend-item"><div class="legend-dot owned"></div>Gatorade Owned</div>
+          <div class="occasion-legend-item"><div class="legend-dot contested"></div>Contested</div>
+          <div class="occasion-legend-item"><div class="legend-dot unaddressed"></div>Unaddressed</div>
+        </div>
+      </div>
+
+      <div class="occasion-grid">
+        <div class="occasion-cell owned" onclick="showOccasion('sideline', this)">
+          <span class="occasion-icon">🏟️</span>
+          <div class="occasion-name">Professional Sideline</div>
+          <div class="occasion-status">Gatorade Owned</div>
+        </div>
+        <div class="occasion-cell owned" onclick="showOccasion('victory', this)">
+          <span class="occasion-icon">🏆</span>
+          <div class="occasion-name">Victory Ritual</div>
+          <div class="occasion-status">Gatorade Owned</div>
+        </div>
+        <div class="occasion-cell owned" onclick="showOccasion('youth', this)">
+          <span class="occasion-icon">⚽</span>
+          <div class="occasion-name">Youth Sport</div>
+          <div class="occasion-status">Gatorade Owned</div>
+        </div>
+        <div class="occasion-cell owned" onclick="showOccasion('gym', this)">
+          <span class="occasion-icon">🏋️</span>
+          <div class="occasion-name">Gym Session</div>
+          <div class="occasion-status">Gatorade Owned</div>
+        </div>
+        <div class="occasion-cell contested" onclick="showOccasion('elite', this)">
+          <span class="occasion-icon">💪</span>
+          <div class="occasion-name">Elite Athlete Training</div>
+          <div class="occasion-status">Contested — BodyArmor</div>
+        </div>
+        <div class="occasion-cell contested" onclick="showOccasion('health', this)">
+          <span class="occasion-icon">🥗</span>
+          <div class="occasion-name">Health-Conscious Consumer</div>
+          <div class="occasion-status">Contested — Liquid IV</div>
+        </div>
+        <div class="occasion-cell contested" onclick="showOccasion('genz', this)">
+          <span class="occasion-icon">📱</span>
+          <div class="occasion-name">Gen Z Lifestyle</div>
+          <div class="occasion-status">Contested — Prime</div>
+        </div>
+        <div class="occasion-cell unaddressed" onclick="showOccasion('recovery', this)">
+          <span class="occasion-icon">😴</span>
+          <div class="occasion-name">Sleep Recovery</div>
+          <div class="occasion-status">Unaddressed</div>
+        </div>
+        <div class="occasion-cell unaddressed" onclick="showOccasion('women', this)">
+          <span class="occasion-icon">🏃‍♀️</span>
+          <div class="occasion-name">Women's Performance</div>
+          <div class="occasion-status">Unaddressed</div>
+        </div>
+        <div class="occasion-cell unaddressed" onclick="showOccasion('cognitive', this)">
+          <span class="occasion-icon">🧠</span>
+          <div class="occasion-name">Mental Performance</div>
+          <div class="occasion-status">Unaddressed</div>
+        </div>
+        <div class="occasion-cell unaddressed" onclick="showOccasion('aging', this)">
+          <span class="occasion-icon">🧘</span>
+          <div class="occasion-name">Active Aging</div>
+          <div class="occasion-status">Unaddressed</div>
+        </div>
+        <div class="occasion-cell contested" onclick="showOccasion('esports', this)">
+          <span class="occasion-icon">🎮</span>
+          <div class="occasion-name">Esports & Gaming</div>
+          <div class="occasion-status">Partial — NBA 2K</div>
+        </div>
+      </div>
+
+      <div class="occasion-detail" id="occasion-detail">
+        <div class="occasion-detail-name" id="occasion-detail-name">Select an occasion above</div>
+        <div class="occasion-detail-text" id="occasion-detail-text">Click any occasion cell to see Gatorade's position and the competitive dynamics at play.</div>
+      </div>
+    </div>
+
+    <p class="body-text">The owned occasions share a common characteristic — they are all visible, socially legible sporting contexts. The professional sideline, the youth sport touchline, the gym floor. Gatorade's occasion ownership is concentrated in settings where sport is performed in front of witnesses. The brand built its position precisely where aspiration and visibility intersect.</p>
+
+    <p class="body-text">The contested and unaddressed occasions reveal the map's strategic insight. BodyArmor and Prime are attacking Gatorade's position not on its owned occasions but on adjacent ones — elite athlete identity and Gen Z lifestyle. These are occasions where Gatorade's traditional broadcast penetration strategy has lower reach because they are personal rather than public. The women's performance and active aging occasions remain largely unaddressed by any brand — representing the clearest white space in the category.</p>
+  </section>
+
+  <!-- ARGUMENT 03 — ASPIRATIONAL PROXY -->
+  <section class="section">
+    <div class="section-label">Argument 03</div>
+    <h2 class="section-title">Aspirational Proxy Consumption — <em>The Identity Engine</em></h2>
+
+    <p class="body-text">The Gatorade purchase decision for most consumers has nothing to do with electrolyte science. It has everything to do with who the consumer sees themselves as — or who they want to become — in the moment of purchase.</p>
+
+    <p class="body-text">When Michael Jordan's face appeared on Gatorade's "Be Like Mike" campaign in 1991, the brand made explicit what its broadcast strategy had been building implicitly for years. The product is not a hydration solution. It is a proxy for elite performance. The consumer who reaches for Gatorade on the way to a recreational basketball game is not making a nutritional calculation. They are approximating what the best in the world look like when they compete.</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">The recreational athlete is not buying what Jordan drinks because they believe it will make them perform like Jordan. They are buying it because it closes the distance between who they are and who they aspire to be. That distance is what Gatorade's entire marketing architecture was built to manufacture and then sell access to.</div>
+    </div>
+
+    <p class="body-text">This mechanism — aspirational proxy consumption — is identical in structure to what drives Lego's adult audience, luxury brand adoption, and prestige athletic wear purchases. The product is secondary. The identity signal is primary. What Gatorade understood earlier than almost any CPG brand is that this mechanism operates at mass market scale. You do not need to sell to Jordan's actual peers. You need to sell Jordan's identity to the 242 million Americans who participate in sport or fitness activities annually — most of whom will never compete at any level close to his.</p>
+
+    <p class="body-text">The Gen Z demographic tells this story in data. At 78% penetration among 13 to 28 year olds, Gatorade reaches the generation furthest from professional sport participation — and does so precisely because the aspirational proxy mechanism is strongest among consumers who are still forming their athletic identities. The brand does not follow athletic participation. It precedes it. By the time a young consumer begins participating in sport, Gatorade is already what sport looks like to them.</p>
+
+    <p class="body-text">NBA 2K extends the aspirational proxy mechanism into its most powerful form. In a broadcast context the consumer watches Jordan drink Gatorade and approximates the identity from a distance. In NBA 2K the consumer plays as Jordan — or as a created player whose performance statistics improve when Gatorade is consumed within the game mechanics. The proxy is no longer observational. It is participatory. The consumer is not watching elite performance and reaching for Gatorade. They are performing as an elite athlete and the game tells them Gatorade is what that performance requires. The identity mechanism moves from aspiration to simulation. That is a meaningfully stronger form of the same psychological architecture Gatorade built in broadcast — and it reaches the exact demographic that Prime is trying to contest with influencer reach from the outside.</p>
+  </section>
+
+  <!-- ARGUMENT 04 — FRAME REDEFINITION -->
+  <section class="section">
+    <div class="section-label">Argument 04</div>
+    <h2 class="section-title">Reframing the Competitive Set — <em>Water Was the Enemy</em></h2>
+
+    <p class="body-text">The most important strategic decision in Gatorade's history was not which leagues to partner with or which athletes to sign. It was the decision to position the product against water rather than against other beverages. This frame redefinition is the foundation of everything that followed.</p>
+
+    <p class="body-text">In the standard beverage competitive frame Gatorade competes in a crowded market — against Powerade, BodyArmor, energy drinks, flavoured waters, and dozens of other options. In that frame it is a product with functional claims competing on taste, price, and distribution. That is a frame Gatorade would lose eventually to a better-funded competitor or a cheaper alternative.</p>
+
+    <p class="body-text">By positioning against water Gatorade created a binary choice: passive hydration or active performance. Water is what you drink when you are not competing seriously. Gatorade is what you drink when the outcome matters. This frame makes the product's price irrelevant — the consumer is not choosing between a $2 Gatorade and a free water fountain. They are choosing between two different attitudes toward their athletic performance.</p>
+
+    <div style="overflow-x:auto;margin-top:32px">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th style="color:var(--text-dim);width:18%">Dimension</th>
+            <th style="color:var(--yellow);width:20%">Gatorade</th>
+            <th style="color:var(--text-dim);width:16%">Powerade</th>
+            <th style="color:var(--orange);width:16%">BodyArmor</th>
+            <th style="color:#a855f7;width:16%">Prime</th>
+            <th style="color:var(--text-dim);width:14%">Water</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-dim" style="font-weight:700">Mental Availability</td>
+            <td class="td-yellow">Automatic — decades of broadcast association. First brand recalled at any athletic occasion.</td>
+            <td class="td-grey">Low. Decades of spend have not closed the gap. Consumer does not default to Powerade.</td>
+            <td class="td-orange">Growing. Elite athlete signing strategy building association with premium performance.</td>
+            <td class="td-grey">High with Gen Z only. Influencer origin limits cross-demographic reach.</td>
+            <td class="td-grey">Passive default. No occasion specificity — which is what Gatorade positioned against.</td>
+          </tr>
+          <tr>
+            <td class="td-dim" style="font-weight:700">Occasion Ownership</td>
+            <td class="td-yellow">Professional sport, youth sport, recreational athletics, gym. Owns the visible sporting context.</td>
+            <td class="td-grey">No distinct occasion. Shelf presence without occasion specificity.</td>
+            <td class="td-orange">Elite training. Contesting the performance upper end through athlete partnerships.</td>
+            <td class="td-grey">Content consumption, gaming, social settings. Adjacent to sport but not sport itself.</td>
+            <td class="td-grey">Neutral — all occasions. Generalism is its weakness against an occasion-specific brand.</td>
+          </tr>
+          <tr>
+            <td class="td-dim" style="font-weight:700">Aspirational Anchor</td>
+            <td class="td-yellow">Jordan, LeBron, every league. The aspirational ceiling of sport itself.</td>
+            <td class="td-grey">No consistent athlete anchor. Sponsorship without cultural embedding.</td>
+            <td class="td-orange">Kobe, LeBron (early), Naomi Osaka. Premium athlete curation strategy.</td>
+            <td class="td-grey">KSI, Logan Paul — influencer aspiration, not athletic aspiration. Different consumer psychology.</td>
+            <td class="td-grey">None. Water has no aspirational proxy — which is the gap Gatorade was built to fill.</td>
+          </tr>
+          <tr>
+            <td class="td-dim" style="font-weight:700">Competitive Frame</td>
+            <td class="td-yellow">Performance vs passivity. Gatorade vs water — not Gatorade vs Powerade.</td>
+            <td class="td-grey">Competing in Gatorade's frame. Never redefined the category on its own terms.</td>
+            <td class="td-orange">Natural vs artificial. Contesting on ingredient narrative rather than occasion ownership.</td>
+            <td class="td-grey">Entertainment vs athletic. Carved a new occasion rather than competing on Gatorade's terms.</td>
+            <td class="td-grey">Adequacy. Positioned as sufficient — which Gatorade turned into the brand's competitive advantage.</td>
+          </tr>
+          <tr>
+            <td class="td-dim" style="font-weight:700">Brand Penetration</td>
+            <td class="td-yellow">65% market share. 78% Gen Z penetration. Six major league platforms.</td>
+            <td class="td-grey">16% share despite full Coca-Cola distribution. Cannot close the mental availability gap.</td>
+            <td class="td-orange">12% share after $5.6B Coke acquisition. Fastest growing major brand in category.</td>
+            <td class="td-grey">5% share in under 3 years. Fastest new brand entry in category history — but from a small base.</td>
+            <td class="td-grey">Zero brand share — not a competitor in the CPG sense. It is the foil Gatorade was built against.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- COUNTERARGUMENT -->
+  <section class="section">
+    <div class="section-label">The Strongest Objection</div>
+    <h2 class="section-title">Did BodyArmor <em>Crack the Moat?</em></h2>
+
+    <p class="body-text">The most credible challenge to the category creation argument is BodyArmor's rise. In 2015 BodyArmor had 0.5% of the US sports drink market. By 2021 it had grown to 18% — the fastest expansion by any sports drink brand in category history. Kobe Bryant backed it. LeBron James backed it. Naomi Osaka backed it. Coca-Cola ultimately paid $5.6 billion to acquire it — the single largest acquisition in Coke's 130-year history. If Gatorade's category moat were truly impenetrable, would the world's largest beverage company have needed to spend that much to compete?</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">BodyArmor's rise actually confirms the category creation argument rather than defeating it. Gatorade's market share declined from 77% to 65% over a decade — but the category's total size expanded dramatically during the same period. BodyArmor did not take share from Gatorade. It expanded the market Gatorade created.</div>
+    </div>
+
+    <p class="body-text">Between 2018 and 2021 BodyArmor's US sales grew from $250 million to $1.4 billion. The category's total dollar size grew simultaneously — suggesting BodyArmor was primarily recruiting new consumers into the category rather than converting Gatorade users. The most damning evidence: despite Coca-Cola's full acquisition, distribution muscle, and athlete roster, BodyArmor sits at 12% market share while Gatorade sits at 65%. The moat held.</p>
+
+    <p class="body-text">The deeper confirmation is Coca-Cola's decision itself. Coke owned Powerade for decades and could not close the gap. Their response was not to invest further in Powerade — it was to spend $5.6 billion on a different brand. That decision implicitly acknowledges that once Gatorade defined what the category is, every brand competing within Gatorade's frame was playing on Gatorade's terms. BodyArmor competed on Gatorade's terms with a better athlete roster and a natural ingredient narrative. Gatorade held 65% anyway. The category creation moat compounds over time in a way that market spend alone cannot reverse.</p>
+  </section>
+
+  <!-- CPG VOCAB -->
+  <section class="section">
+    <div class="section-label">CPG Framework Applied</div>
+    <h2 class="section-title">What Gatorade Teaches <em>Brand Builders</em></h2>
+
+    <p class="body-text">The Gatorade case study is a masterclass in the CPG principles that separate category leaders from category participants. Each mechanism Gatorade deployed maps directly to a framework that brand teams at P&G, Unilever, and PepsiCo apply to every portfolio decision.</p>
+
+    <div class="vocab-grid">
+      <div class="vocab-card">
+        <div class="vocab-term">Mental Availability</div>
+        <div class="vocab-definition">How easily a brand comes to mind when a purchase occasion arises. The goal of CPG marketing is to be the first brand recalled in the relevant situation — not the most loved or preferred brand overall.</div>
+        <div class="vocab-gatorade">Gatorade — "Gatorade break" entered vocabulary. The brand name became the generic term for the behaviour. This is mental availability operating at its ceiling.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="vocab-term">Occasion Ownership</div>
+        <div class="vocab-definition">The brand that becomes the automatic mental response to a specific consumption situation. When the consumer is in the occasion, they do not choose — they reach. Occasion ownership converts preference into habit.</div>
+        <div class="vocab-gatorade">Gatorade — owns the professional sideline, the youth sport touchline, the gym floor, and the victory ritual. Four anchored occasions that broadcast ensures are reinforced thousands of times per year.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="vocab-term">Brand Penetration</div>
+        <div class="vocab-definition">How many different households buy the product at least once in a given period. Byron Sharp's research shows that growth comes from reaching more buyers, not deepening loyalty among existing ones.</div>
+        <div class="vocab-gatorade">Gatorade — 65% market share and 78% Gen Z penetration. The broadcast multi-league strategy is penetration at scale. Every sports-watching household in North America is a Gatorade impression.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="vocab-term">Competitive Frame of Reference</div>
+        <div class="vocab-definition">The category the consumer places your brand in when making a purchase decision. Defining the competitive frame correctly determines who you are actually competing with — and who you are not.</div>
+        <div class="vocab-gatorade">Gatorade — redefined its frame from beverages to performance. The question became performance vs adequacy, not Gatorade vs Powerade. Water is the competitor. Water loses that comparison every time.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="vocab-term">Aspirational Proxy Consumption</div>
+        <div class="vocab-definition">When a consumer buys a product primarily to access the identity associated with its most visible users rather than for its functional benefits. The purchase is an act of identity approximation.</div>
+        <div class="vocab-gatorade">Gatorade — Jordan, LeBron, every professional league. The recreational athlete is not buying electrolytes. They are buying proximity to elite performance. The mechanism operates at mass market scale.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="vocab-term">Category Creation</div>
+        <div class="vocab-definition">Building a new product category rather than competing within an existing one. Category creators write the rules that every subsequent competitor is forced to play by — including the definition of what success in the category looks like.</div>
+        <div class="vocab-gatorade">Gatorade — there was no sports drink category in 1965. There was just beverage. Gatorade created the category and defined what membership meant. Sixty years later every competitor is still playing by those rules.</div>
+      </div>
+    </div>
+
+    <p class="body-text" style="margin-top:32px">The lesson for CPG brand builders is precise and uncomfortable. Product superiority is the entry requirement — not the competitive advantage. Powerade's formula is comparable to Gatorade's. BodyArmor's natural ingredient story is genuinely differentiated. Neither has closed a gap that is now measured in decades of broadcast association, cultural ritual, and occasion ownership.</p>
+
+    <p class="body-text">The competitive advantage that compounds — the one that requires Coca-Cola to spend $5.6 billion to attempt to replicate — is not made in the laboratory. It is made in the mind of the consumer, reinforced by thousands of visible occasions, and anchored to the aspirational identity of the people they most want to be like.</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">Gatorade did not win because it was the best sports drink. It won because it made sport itself look a certain way — and then made sure its bottle was always in the frame when it did. That is category creation. That is what a 65% market share built over sixty years actually costs to replicate. That is what $5.6 billion bought Coca-Cola a chance to try.</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="doc-footer">
+  <div class="footer-credit">
+    Leon Telemaque · CPG Consumer Behaviour Analysis<br>
+    Gatorade — How a Sports Drink Became a Category · 2026<br>
+    Category Creation · Penetration Strategy · Occasion Ownership
+  </div>
+  <div class="footer-tags">
+    <div class="footer-tag">CPG Strategy</div>
+    <div class="footer-tag">Consumer Behaviour</div>
+    <div class="footer-tag">Category Creation</div>
+    <div class="footer-tag">Brand Penetration</div>
+    <div class="footer-tag">Occasion Ownership</div>
+    <div class="footer-tag">Mental Availability</div>
+  </div>
+</footer>
+
+<script>
+const occasionData = {
+  sideline: {
+    name: 'Professional Sideline — Owned',
+    text: 'The origin occasion. Six major leagues — NFL, NBA, MLB, MLS, WNBA, NHL. Every timeout, every broadcast cutaway, every post-game interview shows a Gatorade cooler or cup. This is not advertising. It is context. The visual language of professional sport is inseparable from Gatorade. No competitor can purchase access to this occasion without Gatorade\'s six existing league contracts.'
+  },
+  victory: {
+    name: 'Victory Ritual — Owned',
+    text: 'The Gatorade shower. Since 1984 when New York Giants players dumped a cooler on coach Bill Parcells, the victory dunk has been replicated at every level of sport globally. The brand is now embedded in the cultural grammar of winning itself — not as a product association but as a ritual object. This is occasion ownership that cannot be bought or replicated.'
+  },
+  youth: {
+    name: 'Youth Sport — Owned',
+    text: 'The penetration cascade. Children who watch professional sport see Gatorade before they ever participate. When they begin playing sport the cooler on their sideline mirrors what they\'ve seen on television. By the time a consumer is old enough to make independent purchase decisions, Gatorade is already what sport looks like to them. Youth sport is where mental availability becomes permanent.'
+  },
+  gym: {
+    name: 'Gym Session — Owned',
+    text: 'The extension of the athletic occasion into everyday life. The gym floor is Gatorade\'s most commercially important owned occasion because it reaches consumers who are not professional athletes but participate in athletic activity regularly. Gym penetration through convenience retail placement adjacent to facilities reinforces the physical availability dimension of Gatorade\'s category dominance.'
+  },
+  elite: {
+    name: 'Elite Athlete Training — Contested by BodyArmor',
+    text: 'BodyArmor\'s primary strategy has been to recruit athletes Gatorade passed on — most notably signing LeBron James before Gatorade could renew, and building a roster that includes athletes who explicitly endorse BodyArmor as a healthier alternative. The natural ingredient narrative and premium formulation gives elite athletes a reason to publicly switch. This is the occasion most likely to shift if BodyArmor\'s athlete strategy compounds.'
+  },
+  health: {
+    name: 'Health-Conscious Consumer — Contested by Liquid IV',
+    text: 'Liquid IV has emerged as the leading sports drink mix brand in the US — surpassing $905 million in annual sales and growing 28.2% year over year. The health-conscious consumer occasion is being won not by Gatorade or BodyArmor but by a Unilever-owned brand that repositioned the category around precise hydration rather than athletic performance. Gatorade\'s sugar content is a liability in this occasion.'
+  },
+  genz: {
+    name: 'Gen Z Lifestyle — Contested by Prime',
+    text: 'Prime Hydration — launched by YouTubers KSI and Logan Paul in January 2022 — captured 5% of the US sports drink market in under three years. The growth is built entirely on influencer aspiration rather than athletic aspiration. Gen Z\'s consumption occasion is content and social rather than sport specifically. Gatorade\'s broadcast strategy does not reach this occasion effectively because the occasion does not have a broadcast medium.'
+  },
+  recovery: {
+    name: 'Sleep Recovery — Unaddressed',
+    text: 'No major sports drink brand has successfully owned the sleep and overnight recovery occasion. The electrolyte need is real — hydration during sleep affects performance the following day — but no brand has built the occasion association. This represents white space in the category that a challenger brand with a recovery-first positioning could capture before Gatorade extends into it.'
+  },
+  women: {
+    name: "Women's Performance — Unaddressed",
+    text: "Women's consumption of sports drinks has surged 45% since 2019, driven by the rise of women's sports culture and female-targeted hydration brands. Despite this growth, no major brand has built a distinct occasion ownership around women's athletic performance. Gatorade's aspiration anchors are overwhelmingly male. The occasion is underserved and growing — which is precisely the condition that makes it attractive for a new entrant."
+  },
+  cognitive: {
+    name: 'Mental Performance — Unaddressed',
+    text: 'The cognitive performance occasion — focused on mental clarity, focus, and brain hydration rather than physical performance — is entirely unaddressed by the sports drink category. Energy drinks partially serve this occasion but without a hydration or electrolyte narrative. As esports, remote work, and cognitive performance culture grow, the occasion represents a potential category extension that could reach demographics outside Gatorade\'s current penetration base.'
+  },
+  aging: {
+    name: 'Active Aging — Unaddressed',
+    text: 'The 55+ active consumer is the fastest-growing demographic in fitness participation globally. This consumer has the disposable income to pay premium prices, the health motivation to seek functional beverages, and the time to maintain consistent athletic habits. No sports drink brand has built occasion ownership for active aging specifically. The aspiration anchor required — active older athletes rather than young elite performers — does not exist in the current category.'
+  },
+  esports: {
+    name: 'Esports & Gaming — Partial via NBA 2K',
+    text: 'Gatorade has a meaningful foothold here through NBA 2K — one of the most played sports simulation franchises globally. In-game Gatorade coolers, branded hydration stations, and gameplay mechanics that reward Gatorade consumption with player performance boosts embed the brand directly into the digital athletic experience. The 2K player base skews 13 to 25 — exactly the demographic Gatorade needs to retain as broadcast viewership among young people declines. Prime is contesting this occasion from the outside with influencer reach. Gatorade is contesting it from the inside with participatory mechanics. The occasion is not unaddressed — it is the next front in the penetration war.'
+  }
+};
+
+function showOccasion(id, cell) {
+  const data = occasionData[id];
+  if (!data) return;
+
+  document.querySelectorAll('.occasion-cell').forEach(c => c.style.outline = 'none');
+  cell.style.outline = '2px solid var(--yellow)';
+
+  const detail = document.getElementById('occasion-detail');
+  const name = document.getElementById('occasion-detail-name');
+  const text = document.getElementById('occasion-detail-text');
+
+  name.textContent = data.name;
+  text.textContent = data.text;
+
+  if (cell.classList.contains('owned')) {
+    detail.style.borderLeftColor = 'var(--yellow)';
+    name.style.color = 'var(--yellow)';
+  } else if (cell.classList.contains('contested')) {
+    detail.style.borderLeftColor = 'var(--orange)';
+    name.style.color = 'var(--orange)';
+  } else {
+    detail.style.borderLeftColor = 'var(--text-dim)';
+    name.style.color = 'var(--text-dim)';
+  }
+}
+
+// Animate market bars on load
+window.addEventListener('load', () => {
+  document.querySelectorAll('.market-bar-fill').forEach(bar => {
+    const target = bar.style.width;
+    bar.style.width = '0%';
+    setTimeout(() => { bar.style.width = target; }, 300);
+  });
+});
+</script>
+
+</body>
+</html>
