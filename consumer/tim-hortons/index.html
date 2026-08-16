@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tim Hortons — The Cost of Leaving Your Lane</title>
+<style>
+  :root {
+    --bg: #0a0806;
+    --surface: #13100d;
+    --surface-2: #1a1612;
+    --surface-3: #221e18;
+    --border: #2a2420;
+    --border-2: #3a3228;
+    --red: #c8102e;
+    --red-dim: rgba(200,16,46,0.10);
+    --red-glow: rgba(200,16,46,0.04);
+    --brown: #8b4513;
+    --tan: #d4a96a;
+    --tan-dim: rgba(212,169,106,0.10);
+    --tan-glow: rgba(212,169,106,0.04);
+    --text: #f0ede8;
+    --text-mid: #9a8e80;
+    --text-dim: #4a4038;
+    --mono: 'Courier New', monospace;
+    --sans: system-ui, -apple-system, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 60px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 15% 85%, rgba(200,16,46,0.07) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 15%, rgba(200,16,46,0.04) 0%, transparent 45%),
+      repeating-linear-gradient(
+        -12deg,
+        transparent,
+        transparent 60px,
+        rgba(200,16,46,0.015) 60px,
+        rgba(200,16,46,0.015) 61px
+      );
+    pointer-events: none;
+  }
+
+  .hero-meta {
+    position: absolute;
+    top: 32px;
+    right: 60px;
+    text-align: right;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    line-height: 2;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .hero-title {
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .hero-title span { color: var(--red); display: block; }
+
+  .hero-subtitle {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  .hero-thesis {
+    font-size: 17px;
+    color: var(--text-mid);
+    max-width: 660px;
+    line-height: 1.75;
+    border-left: 3px solid var(--red);
+    padding-left: 20px;
+    margin-bottom: 32px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat-value {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--red);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .hero-stat-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+  }
+
+  /* BODY */
+  .doc-body {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 60px;
+  }
+
+  .section {
+    margin-bottom: 80px;
+    padding-bottom: 80px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 24px;
+    line-height: 1.15;
+  }
+
+  .section-title em { color: var(--red); font-style: normal; }
+
+  .body-text {
+    font-size: 15px;
+    color: var(--text-mid);
+    line-height: 1.85;
+    max-width: 720px;
+    margin-bottom: 24px;
+  }
+
+  /* PULL QUOTE */
+  .pull-quote {
+    border-left: 3px solid var(--red);
+    padding: 16px 24px;
+    margin: 32px 0;
+    background: var(--red-glow);
+  }
+
+  .pull-quote-text {
+    font-size: 18px;
+    color: var(--text);
+    line-height: 1.6;
+    font-weight: 500;
+    max-width: 640px;
+  }
+
+  /* TIMELINE — BRAND DRIFT */
+  .drift-timeline {
+    margin: 32px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .drift-item {
+    background: var(--surface);
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 20px;
+    align-items: start;
+    position: relative;
+  }
+
+  .drift-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+  }
+
+  .drift-item.core::before { background: var(--tan); }
+  .drift-item.warning::before { background: var(--red); opacity: 0.5; }
+  .drift-item.damage::before { background: var(--red); }
+
+  .drift-year {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--tan);
+    letter-spacing: -0.02em;
+    font-family: var(--mono);
+  }
+
+  .drift-item.damage .drift-year { color: var(--red); }
+
+  .drift-content { }
+
+  .drift-event {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .drift-detail {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.5;
+    font-family: var(--mono);
+  }
+
+  .drift-badge {
+    font-family: var(--mono);
+    font-size: 8px;
+    padding: 3px 8px;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    align-self: flex-start;
+  }
+
+  .drift-badge.core { background: var(--tan-dim); color: var(--tan); }
+  .drift-badge.warning { background: var(--red-dim); color: var(--red); opacity: 0.7; }
+  .drift-badge.damage { background: var(--red-dim); color: var(--red); }
+
+  /* MENU BLOAT VISUAL */
+  .menu-visual {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  .menu-panel {
+    background: var(--surface);
+    padding: 24px;
+  }
+
+  .menu-panel-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .menu-panel-label.core { color: var(--tan); }
+  .menu-panel-label.bloat { color: var(--red); }
+
+  .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-mid);
+    font-family: var(--mono);
+  }
+
+  .menu-item:last-child { border-bottom: none; }
+
+  .menu-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .menu-dot.core { background: var(--tan); }
+  .menu-dot.bloat { background: var(--red); }
+  .menu-dot.lost { background: var(--text-dim); }
+
+  .menu-item-note {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-left: auto;
+    font-style: italic;
+  }
+
+  /* BRAND PERMISSION GRID */
+  .permission-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  .permission-card {
+    background: var(--surface);
+    padding: 22px;
+  }
+
+  .permission-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .permission-label.yes { color: var(--tan); }
+  .permission-label.no { color: var(--red); }
+  .permission-label.maybe { color: #d97706; }
+
+  .permission-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .permission-body {
+    font-size: 11px;
+    color: var(--text-mid);
+    line-height: 1.6;
+    font-family: var(--mono);
+  }
+
+  /* COMPARISON TABLE */
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 32px;
+  }
+
+  .comparison-table th {
+    text-align: left;
+    padding: 12px 16px;
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .comparison-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  .comparison-table tr:nth-child(even) td { background: var(--surface-2); }
+  .comparison-table tr:nth-child(odd) td { background: var(--surface); }
+
+  .td-label { color: var(--text-mid); font-weight: 600; }
+  .td-tims { color: var(--text-mid); }
+  .td-good { color: var(--tan); }
+  .td-bad { color: var(--red); }
+  .td-dim { color: var(--text-dim); }
+
+  /* CPG LESSON CARDS */
+  .lesson-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  .lesson-card {
+    background: var(--surface);
+    padding: 24px;
+    position: relative;
+  }
+
+  .lesson-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .lesson-card.positive::before { background: var(--tan); }
+  .lesson-card.negative::before { background: var(--red); }
+
+  .lesson-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .lesson-card.positive .lesson-label { color: var(--tan); }
+  .lesson-card.negative .lesson-label { color: var(--red); }
+
+  .lesson-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .lesson-body {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+
+  /* FOOTER */
+  .doc-footer {
+    padding: 40px 60px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-credit {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    line-height: 2;
+  }
+
+  .footer-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .footer-tag {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--text-dim);
+    padding: 3px 8px;
+    border: 1px solid var(--border-2);
+    letter-spacing: 0.08em;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+
+  <div class="hero-meta">
+    CPG Consumer Behaviour Analysis<br>
+    Brand Contract · Identity Dilution<br>
+    Leon Telemaque · 2026
+  </div>
+
+  <div class="hero-eyebrow">CPG · Brand Strategy · Canada · RBI</div>
+  <h1 class="hero-title">
+    The Cost of
+    <span>Leaving Your Lane</span>
+  </h1>
+  <div class="hero-subtitle">Tim Hortons · Brand Contract Violation · Menu Bloat · Identity Dilution</div>
+
+  <p class="hero-thesis">
+    Tim Hortons built the most defensible brand position in Canadian food service — the ubiquitous morning ritual that no competitor could replicate. Then it abandoned it. Not by changing its coffee or closing locations. By gradually becoming something Canadians never gave it permission to be — a jack of all trades fast food restaurant competing in categories where it had no structural advantage and no consumer permission to be.
+  </p>
+
+  <div class="hero-stats">
+    <div>
+      <div class="hero-stat-value">4th → 50th</div>
+      <div class="hero-stat-label">Most Admired Brand Ranking — 2018 after RBI acquisition</div>
+    </div>
+    <div>
+      <div class="hero-stat-value">8</div>
+      <div class="hero-stat-label">Consecutive quarters of declining same-store sales — post-acquisition</div>
+    </div>
+    <div>
+      <div class="hero-stat-value">5,800+</div>
+      <div class="hero-stat-label">Global locations — still the largest QSR in Canada</div>
+    </div>
+    <div>
+      <div class="hero-stat-value">1964</div>
+      <div class="hero-stat-label">Founded — six decades of Canadian morning ritual</div>
+    </div>
+  </div>
+</section>
+
+<!-- BODY -->
+<div class="doc-body">
+
+  <!-- OPENING -->
+  <section class="section">
+    <div class="section-label">The Brand</div>
+    <h2 class="section-title">What Tim Hortons <em>Actually Was</em></h2>
+
+    <p class="body-text">Tim Hortons was not a coffee chain. It was a Canadian ritual. The double-double, the Timbits, the Roll Up The Rim — these were not menu items competing with Starbucks or McDonald's McCafé on product quality. They were cultural touchstones that three generations of Canadians had built their mornings around. The queue at 7am. The drive-through on the highway. The cup on the desk before the meeting starts. Tim Hortons was not what Canadians drank. It was what Canadian mornings looked like.</p>
+
+    <p class="body-text">That distinction is everything in CPG brand analysis. A product competes on taste, price, and quality. A ritual competes on nothing — because leaving a ritual requires the consumer to consciously disrupt a pattern they have repeated thousands of times. The switching cost of abandoning a morning ritual is not about finding a better coffee. It is about restructuring how the day begins. Tim Hortons did not earn that position through superior product. It earned it through decades of consistent ubiquity — the same cup, the same experience, the same occasion, everywhere in Canada, every morning.</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">The brand's competitive moat was not the double-double. It was the habit the double-double anchored. And habits are extraordinarily resistant to change — until the brand that anchors them starts behaving differently. Then the habit does not migrate to a competitor. It simply dissolves.</div>
+    </div>
+
+    <p class="body-text">When RBI acquired Tim Hortons in 2014 for $11.4 billion it acquired not just a restaurant chain but the most deeply embedded brand ritual in Canadian consumer life. The question was whether RBI understood what it had purchased — and the decade that followed suggests it did not.</p>
+  </section>
+
+  <!-- ARGUMENT 01 — MENU BLOAT -->
+  <section class="section">
+    <div class="section-label">Argument 01</div>
+    <h2 class="section-title">Menu Bloat as <em>Identity Dilution</em></h2>
+
+    <p class="body-text">Every item a brand adds to its menu is an implicit statement about what the brand is. Tim Hortons adding a rice bowl does not simply give consumers a new choice. It tells consumers that Tim Hortons is a place where you get a rice bowl. That statement does not expand the brand's identity. It erodes the specificity that made the original identity legible.</p>
+
+    <p class="body-text">The original Tim Hortons menu had a precise identity — coffee, tea, donuts, Timbits, baked goods, and simple sandwiches. Every item on the menu belonged to the morning occasion. Everything was fast, familiar, and consistent. The menu was not expansive. It was disciplined. And discipline is what made the brand's identity clear enough to become a national ritual.</p>
+
+    <div class="menu-visual">
+      <div class="menu-panel">
+        <div class="menu-panel-label core">The Original Core — Owned the Morning</div>
+        <div class="menu-item"><div class="menu-dot core"></div>Coffee & Tea — double-double as cultural shorthand<div class="menu-item-note">Ritual anchor</div></div>
+        <div class="menu-item"><div class="menu-dot core"></div>Timbits — the distinctly Canadian snack<div class="menu-item-note">Brand icon</div></div>
+        <div class="menu-item"><div class="menu-dot core"></div>Donuts & Muffins — morning pastry occasion<div class="menu-item-note">Occasion fit</div></div>
+        <div class="menu-item"><div class="menu-dot core"></div>Bagels & Simple Sandwiches — quick breakfast<div class="menu-item-note">Occasion fit</div></div>
+        <div class="menu-item"><div class="menu-dot core"></div>Soups — acquired in 1993, cold weather ritual<div class="menu-item-note">Seasonal fit</div></div>
+        <div class="menu-item"><div class="menu-dot lost"></div>Grilled cheese — fan favourite, removed<div class="menu-item-note">Lost — 2022</div></div>
+      </div>
+      <div class="menu-panel">
+        <div class="menu-panel-label bloat">The Expansion — Competing Without Permission</div>
+        <div class="menu-item"><div class="menu-dot bloat"></div>Rice & Quinoa Bowls — competing with Chipotle<div class="menu-item-note">Added 2022</div></div>
+        <div class="menu-item"><div class="menu-dot bloat"></div>Loaded Wraps — competing with Subway<div class="menu-item-note">Added 2022</div></div>
+        <div class="menu-item"><div class="menu-dot bloat"></div>Crispy Chicken Sandwiches — competing with McDonald's<div class="menu-item-note">Added 2022</div></div>
+        <div class="menu-item"><div class="menu-dot bloat"></div>Flatbread Pizzas — competing with Pizza Pizza<div class="menu-item-note">Added 2024</div></div>
+        <div class="menu-item"><div class="menu-dot bloat"></div>Harry Potter themed drinks & donuts — IP partnership<div class="menu-item-note">Added 2026</div></div>
+        <div class="menu-item"><div class="menu-dot bloat"></div>Constant limited-time offerings — operational strain<div class="menu-item-note">Ongoing</div></div>
+      </div>
+    </div>
+
+    <p class="body-text">The grilled cheese removal is the sharpest evidence that the menu expansion was not additive. Tim Hortons did not add rice bowls alongside the grilled cheese. It removed a proven fan-favourite item to make operational room for aspirational competitor imitations. That is not menu expansion. That is identity substitution — replacing what consumers came for with what management hoped consumers might come for.</p>
+
+    <p class="body-text">The consumer who built their morning around a grilled cheese and a double-double did not need Tim Hortons to become Chipotle. They needed Tim Hortons to keep being Tim Hortons. When the grilled cheese disappeared the implicit message was clear — the brand's priority was no longer the loyal morning customer. It was the lunch consumer Tim Hortons hoped to attract. The loyal morning customer noticed.</p>
+  </section>
+
+  <!-- ARGUMENT 02 — BRAND CONTRACT -->
+  <section class="section">
+    <div class="section-label">Argument 02</div>
+    <h2 class="section-title">The Brand Contract — <em>Permission Was Never Granted</em></h2>
+
+    <p class="body-text">In CPG brand strategy the concept of consumer permission defines which extensions a brand can make without damaging its core identity. Gatorade had consumer permission to extend into protein bars and energy chews because athletic performance was the occasion it already owned — the extension fit inside the existing brand contract. Heinz has consumer permission to make ketchup, mustard, and vinegar because the flavour accompaniment occasion extends naturally.</p>
+
+    <p class="body-text">Consumer permission is not given by asking. It is earned through the accumulated trust of a brand relationship built over years. And it has a specific shape — the extension must fit inside the consumer's mental model of what the brand is for. Tim Hortons' mental model was the Canadian morning ritual. Every extension that fit that model — soups, simple sandwiches, breakfast wraps — carried permission. Every extension that broke outside it required consumer trust that had not been earned.</p>
+
+    <div class="permission-grid">
+      <div class="permission-card">
+        <div class="permission-label yes">Permission — Yes</div>
+        <div class="permission-title">Coffee, Timbits, Donuts, Bagels, Soups</div>
+        <div class="permission-body">Fits the morning and quick-stop occasion. Consumer mental model includes these categories when they think "Tim Hortons." No contract violation. Trust intact.</div>
+      </div>
+      <div class="permission-card">
+        <div class="permission-label maybe">Permission — Marginal</div>
+        <div class="permission-title">Simple Sandwiches, Breakfast Wraps</div>
+        <div class="permission-body">Extends the morning occasion into light breakfast food. Plausible for a coffee shop. Consumer mental model can accommodate these without significant dissonance. Earned trust covers it.</div>
+      </div>
+      <div class="permission-card">
+        <div class="permission-label no">Permission — No</div>
+        <div class="permission-title">Rice Bowls, Flatbread Pizza, Chicken Sandwiches</div>
+        <div class="permission-body">Breaks outside the morning occasion entirely. Consumer mental model does not include Tim Hortons when considering lunch or dinner. Brand trust was not earned in these categories. Each addition costs more identity equity than it generates revenue.</div>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">A consumer who wants a burger does not go to Tim Hortons for a chicken sandwich. They have a mental model of what a burger destination looks like — McDonald's, Wendy's, A&W — and Tim Hortons does not appear in that model regardless of what it adds to its menu. Consumer permission is not manufactured by putting a product on the menu. It is earned by being the brand that fits the occasion before the consumer is even hungry.</div>
+    </div>
+
+    <p class="body-text">The competitive framing failure is the clearest evidence that permission was never in place. Chipotle wins on ingredient quality and customisation. McDonald's wins on speed and price consistency. Pizza Pizza wins on the family dinner occasion. Tim Hortons' structural advantage was none of those things — it was ubiquity, ritual, and the specific emotional warmth of the Canadian morning. The brand tried to compete on dimensions where it had no structural advantage while gradually eroding the dimensions where it had no competition.</p>
+  </section>
+
+  <!-- ARGUMENT 03 — NOSTALGIA MOAT -->
+  <section class="section">
+    <div class="section-label">Argument 03</div>
+    <h2 class="section-title">The Nostalgia Moat — <em>The Asset That Was Risked</em></h2>
+
+    <p class="body-text">Tim Hortons is a nostalgic brand in the most commercially significant sense of the word. Three generations of Canadians have childhood memories attached to it — the Timbits at the hockey arena, the Roll Up The Rim with a grandparent, the first time ordering your own coffee. That emotional depth is not a soft brand asset. It is the primary competitive moat. No competitor can manufacture six decades of Canadian memory.</p>
+
+    <p class="body-text">Nostalgia as a brand asset has a specific behavioural property — it is self-reinforcing as long as the brand behaves consistently with the memory. Every time a Canadian walks into a Tim Hortons and the experience matches their memory the nostalgic association strengthens. Every time the experience breaks from the memory — a menu that looks like a generic fast food chain, a product that was removed, an experience that feels corporate rather than Canadian — the nostalgic association weakens. Not because the memory disappears. Because the brand stops matching it.</p>
+
+    <div class="drift-timeline">
+      <div class="drift-item core">
+        <div class="drift-year">1964</div>
+        <div class="drift-content">
+          <div class="drift-event">Founded — Tim Horton opens first location in Hamilton</div>
+          <div class="drift-detail">Coffee, donuts, the beginning of a Canadian morning ritual that would span six decades and become inseparable from national identity.</div>
+        </div>
+        <div class="drift-badge core">Core Identity</div>
+      </div>
+      <div class="drift-item core">
+        <div class="drift-year">1986</div>
+        <div class="drift-content">
+          <div class="drift-event">Roll Up The Rim — the ritual inside the ritual</div>
+          <div class="drift-detail">One of the most successful promotional mechanics in Canadian QSR history. Roll Up The Rim deepened the morning ritual with a participation element that became its own cultural moment.</div>
+        </div>
+        <div class="drift-badge core">Peak Identity</div>
+      </div>
+      <div class="drift-item core">
+        <div class="drift-year">1995</div>
+        <div class="drift-content">
+          <div class="drift-event">Merger with Wendy's — first ownership change</div>
+          <div class="drift-detail">Wendy's acquires Tim Hortons. The brand identity remains intact. Canadian operations continue with the same menu and cultural positioning.</div>
+        </div>
+        <div class="drift-badge core">Identity Intact</div>
+      </div>
+      <div class="drift-item warning">
+        <div class="drift-year">2014</div>
+        <div class="drift-content">
+          <div class="drift-event">RBI Acquisition — $11.4 billion</div>
+          <div class="drift-detail">Restaurant Brands International acquires Tim Hortons. Cost-cutting begins. Employee benefit reductions. Franchise relationship tensions emerge. The brand falls from 4th to 50th most admired in Canada by 2018.</div>
+        </div>
+        <div class="drift-badge warning">Warning Signal</div>
+      </div>
+      <div class="drift-item damage">
+        <div class="drift-year">2022</div>
+        <div class="drift-content">
+          <div class="drift-event">Menu Expansion — Rice Bowls, Loaded Wraps, Chicken Sandwiches</div>
+          <div class="drift-detail">The first major occasion breach. Items designed to capture lunch traffic replace fan favourites including the grilled cheese. The menu begins competing with Chipotle and Subway rather than deepening the morning ritual.</div>
+        </div>
+        <div class="drift-badge damage">Identity Breach</div>
+      </div>
+      <div class="drift-item damage">
+        <div class="drift-year">2024</div>
+        <div class="drift-content">
+          <div class="drift-event">Flatbread Pizzas — permanent menu addition</div>
+          <div class="drift-detail">The furthest departure from the original occasion. A pizza at Tim Hortons represents the complete dissolution of the morning ritual identity into a generic fast food positioning.</div>
+        </div>
+        <div class="drift-badge damage">Maximum Drift</div>
+      </div>
+    </div>
+
+    <p class="body-text">The specific danger of eroding a nostalgia-anchored brand is that the damage is invisible until it is severe. The nostalgic consumer does not immediately churn when the brand starts drifting. They give it the benefit of accumulated trust — returning because the memory is still stronger than the disappointment. But each visit that breaks from the memory consumes that trust without replenishing it. By the time the brand notices the erosion in same-store sales data the trust balance has already been spent.</p>
+  </section>
+
+  <!-- COUNTERARGUMENT -->
+  <section class="section">
+    <div class="section-label">The Strongest Objection</div>
+    <h2 class="section-title">Is the PM Expansion <em>Actually Working?</em></h2>
+
+    <p class="body-text">The most credible defence of Tim Hortons' expansion strategy comes from RBI's own data. Flatbread pizza sales show that 70% of purchases occur after 2pm or on weekends — and consumers who buy the flatbreads spend on average 2.5 times more than other customers. RBI's CEO has described the afternoon daypart expansion as a "long-term initiative" that is "well on the way" to building new habits. Tim Hortons delivered strong 2025 results with Q4 beverage sales rising 3.2% year-over-year. By the commercial metrics the expansion is generating incremental revenue.</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">The PM flatbread consumer spending 2.5x more than the average customer is commercially encouraging and analytically misleading. The relevant question is not whether the new items generate revenue. It is whether they generate revenue without costing brand equity that was worth more than the revenue gained.</div>
+    </div>
+
+    <p class="body-text">The defeat of the commercial success argument is in the brand trust data rather than the sales data. A brand that falls from 4th to 50th most admired in Canada in a single year is spending trust faster than it is generating revenue. A loyalty programme that has to compensate for declining emotional connection with points mechanics is a loyalty programme managing withdrawal — not growth. The consumer who visits Tim Hortons for a flatbread pizza on a Saturday afternoon is not a Tim Hortons customer in the sense that built the brand. They are a convenience customer who happened to be near a Tim Hortons. The moment a better option appears at that convenience moment they will take it.</p>
+
+    <p class="body-text">The morning ritual customer — the consumer who chose Tim Hortons before the alternatives were considered — is the customer the brand was built on and the customer the expansion strategy is gradually losing. That customer is not measurable in flatbread pizza sales. They are measurable in the generational customer survey data that shows Tim Hortons slipping behind competitors it once dominated without effort.</p>
+  </section>
+
+  <!-- COMPARISON -->
+  <section class="section">
+    <div class="section-label">The Competitive Landscape</div>
+    <h2 class="section-title">Who Tim Hortons Is <em>Actually Competing With</em></h2>
+
+    <p class="body-text">The irony of Tim Hortons' expansion strategy is that it created new competitors while failing to win in their categories — and simultaneously weakened its position against the one competitor it could not afford to lose to: the consumer's own morning habit without Tim Hortons in it.</p>
+
+    <div style="overflow-x:auto;margin-top:32px">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th style="color:var(--text-dim);width:16%">Dimension</th>
+            <th style="color:var(--tan);width:21%">Tim Hortons — Morning</th>
+            <th style="color:var(--red);width:21%">Tim Hortons — Expansion</th>
+            <th style="color:var(--text-dim);width:21%">McDonald's</th>
+            <th style="color:var(--text-dim);width:21%">Starbucks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-label">Core Occasion</td>
+            <td class="td-good">Morning ritual. The daily habit built over decades. Canadians choose Tim Hortons before considering alternatives.</td>
+            <td class="td-bad">Lunch and dinner. An occasion where Tim Hortons has no structural advantage and no established habit.</td>
+            <td class="td-dim">Speed and price across all dayparts. Consistent execution at scale.</td>
+            <td class="td-dim">Premium coffee experience. Third place positioning. Identity and lifestyle signal.</td>
+          </tr>
+          <tr>
+            <td class="td-label">Consumer Permission</td>
+            <td class="td-good">Complete. Canadians gave Tim Hortons their morning automatically. No decision required.</td>
+            <td class="td-bad">Absent. Canadians have established mental models for lunch and dinner that do not include Tim Hortons.</td>
+            <td class="td-dim">Complete for fast food. McDonald's owns its occasion as fully as Tim Hortons once owned the morning.</td>
+            <td class="td-dim">Complete for premium coffee. The consumer who chooses Starbucks is making a deliberate identity statement.</td>
+          </tr>
+          <tr>
+            <td class="td-label">Brand Contract</td>
+            <td class="td-good">Intact until approximately 2014. The Canadian morning ritual with a consistent product and familiar experience.</td>
+            <td class="td-bad">Violated. Rice bowls and flatbread pizzas break the implicit promise of the brand — we are the Canadian morning, nothing more and nothing less.</td>
+            <td class="td-dim">Intact. McDonald's has not tried to become a fine dining establishment. It knows its lane.</td>
+            <td class="td-dim">Intact. Starbucks has extended into merchandise and food but never into QSR positioning. The premium identity holds.</td>
+          </tr>
+          <tr>
+            <td class="td-label">Nostalgia Asset</td>
+            <td class="td-good">Exceptional. Three generations of Canadian memory. Roll Up The Rim. Hockey arenas. The double-double. No competitor can manufacture this.</td>
+            <td class="td-bad">Being spent. Every flatbread pizza, every rice bowl consumes trust built by the nostalgia asset without replenishing it.</td>
+            <td class="td-dim">Moderate. McDonald's has nostalgia but it is global and generic rather than specifically Canadian.</td>
+            <td class="td-dim">Low. Starbucks does not compete on nostalgia. Its asset is current aspiration not accumulated memory.</td>
+          </tr>
+          <tr>
+            <td class="td-label">Identity Clarity</td>
+            <td class="td-good">Total. In 1990 every Canadian could describe Tim Hortons in one sentence. That sentence was always the same.</td>
+            <td class="td-bad">Lost. In 2025 the description varies. A coffee shop. A fast food place. A Canadian thing. The inconsistency is the damage.</td>
+            <td class="td-dim">Total. McDonald's identity is the same sentence in every language in every country. The golden arches mean one thing.</td>
+            <td class="td-dim">Strong. Starbucks means premium, personalised, and Instagram-worthy. The identity is current rather than nostalgic but it is clear.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="section">
+    <div class="section-label">Closing Argument</div>
+    <h2 class="section-title">What Tim Hortons Teaches <em>Every CPG Brand Builder</em></h2>
+
+    <p class="body-text">The Tim Hortons case study is the most instructive brand contract violation in Canadian consumer history because the asset that was risked — six decades of morning ritual embedded in national identity — was worth more than any revenue the expansion could generate in the categories it entered.</p>
+
+    <div class="lesson-grid">
+      <div class="lesson-card positive">
+        <div class="lesson-label">The Right Play</div>
+        <div class="lesson-title">Deepen the Occasion You Own</div>
+        <div class="lesson-body">Gatorade's response to category maturity was to extend into adjacent athletic occasions — energy chews, protein bars, recovery drinks — all within the performance occasion it already owned. Tim Hortons' equivalent would have been to make the morning ritual more valuable — better coffee, more customisation, improved consistency, a loyalty mechanic that reinforced the morning habit. The defensible move is always to go deeper before going wider.</div>
+      </div>
+      <div class="lesson-card negative">
+        <div class="lesson-label">The Mistake</div>
+        <div class="lesson-title">Competing Without Consumer Permission</div>
+        <div class="lesson-body">Every rice bowl, every flatbread pizza was money spent competing in a category where Tim Hortons had no structural advantage — against Chipotle's customisation model, against Pizza Pizza's family occasion, against McDonald's price-speed equation. The brand was not equipped to win those battles and the attempt to fight them cost equity that was built over six decades in the one battle it was already winning.</div>
+      </div>
+      <div class="lesson-card positive">
+        <div class="lesson-label">The Recovery Path</div>
+        <div class="lesson-title">The Nostalgia Asset Is Still There</div>
+        <div class="lesson-body">The most important observation about Tim Hortons' brand situation is that the asset has not been destroyed — it has been neglected. The Canadian morning memory still exists in millions of consumers. The double-double is still shorthand for a Canadian cultural experience that no competitor has replicated. The recovery path is not reinvention. It is recommitment — to the grilled cheese, to the morning occasion, to the consistent experience that made the brand a ritual rather than a restaurant.</div>
+      </div>
+      <div class="lesson-card negative">
+        <div class="lesson-label">The Warning</div>
+        <div class="lesson-title">Commercial Success Masks Brand Erosion</div>
+        <div class="lesson-body">The flatbread pizza data — 70% purchased after 2pm, 2.5x spend per transaction — looks like success in the quarterly report. It is not visible in the brand trust survey that shows Tim Hortons slipping behind competitors it once dominated. Brand equity erodes slowly and recovers slowly. The commercial metrics that look healthy today are being funded by trust that was built before the expansion began.</div>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">Tim Hortons does not need to become everything to survive. It needs to become Tim Hortons again. The brand that owned the Canadian morning without effort, without flatbread pizza, without rice bowls — just coffee, Timbits, and six decades of accumulated habit. That brand still exists in the memory of every Canadian who grew up with it. The question is whether the company that owns it understands what it has before the memory fades.</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="doc-footer">
+  <div class="footer-credit">
+    Leon Telemaque · CPG Consumer Behaviour Analysis<br>
+    Tim Hortons — The Cost of Leaving Your Lane · 2026<br>
+    Brand Contract · Identity Dilution · Nostalgia Economics
+  </div>
+  <div class="footer-tags">
+    <div class="footer-tag">CPG Strategy</div>
+    <div class="footer-tag">Brand Contract</div>
+    <div class="footer-tag">Identity Dilution</div>
+    <div class="footer-tag">Nostalgia Economics</div>
+    <div class="footer-tag">Consumer Permission</div>
+    <div class="footer-tag">RBI</div>
+  </div>
+</footer>
+
+</body>
+</html>
