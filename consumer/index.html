@@ -628,47 +628,6 @@
     line-height: 1.5;
   }
 
-  /* ── SNAPSHOTS ── */
-  .snapshots-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--border);
-  }
-
-  .snapshot-card {
-    background: var(--surface);
-    padding: 0;
-    overflow: hidden;
-  }
-
-  .snapshot-thumb {
-    height: 160px;
-    background: var(--surface-2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-
-  .snapshot-body {
-    padding: 16px 20px;
-  }
-
-  .snapshot-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 4px;
-  }
-
-  .snapshot-sub {
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--text-dim);
-    letter-spacing: 0.08em;
-  }
-
   /* ── CONTACT ── */
   .contact-section {
     padding: 80px 40px;
@@ -743,9 +702,6 @@
     /* About */
     .about-grid { grid-template-columns: 1fr; }
 
-    /* Snapshots */
-    .snapshots-grid { grid-template-columns: 1fr; }
-
     /* Carousel header — let the arrows wrap under the title instead of squeezing */
     .carousel-header { flex-wrap: wrap; gap: 12px; }
   }
@@ -761,7 +717,6 @@
     <li><a href="#media">Brand &amp; CPG</a></li>
     <li><a href="#fintech">Fintech</a></li>
     <li><a href="#subscription">Subscription</a></li>
-    <li><a href="#snapshots">Snapshots</a></li>
   </ul>
   <div class="nav-actions" style="display:flex;align-items:center;gap:20px">
     <a href="mailto:leon@email.com" class="nav-cta">Let's talk →</a>
@@ -1253,43 +1208,6 @@
         </div>
       </div>
 
-    </div>
-  </div>
-</section>
-
-<!-- SNAPSHOTS -->
-<section class="section" id="snapshots">
-  <div class="section-eyebrow">Snapshots</div>
-  <h2 class="section-title">Analytical work <em>in progress</em></h2>
-  <p class="section-desc">Frameworks, models, and visualisations from the consumer behaviour research pipeline — built as the pieces develop.</p>
-
-  <div class="snapshots-grid">
-    <div class="snapshot-card">
-      <div class="snapshot-thumb" style="background:linear-gradient(135deg,#080808,#0f1a2e)">
-        <div style="font-family:var(--mono);font-size:9px;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase">Consumer Decision Model</div>
-      </div>
-      <div class="snapshot-body">
-        <div class="snapshot-title">Decision Architecture Framework</div>
-        <div class="snapshot-sub">Behavioural Economics · In Development</div>
-      </div>
-    </div>
-    <div class="snapshot-card">
-      <div class="snapshot-thumb" style="background:linear-gradient(135deg,#080808,#0d1a14)">
-        <div style="font-family:var(--mono);font-size:9px;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase">Retention Funnel Model</div>
-      </div>
-      <div class="snapshot-body">
-        <div class="snapshot-title">Consumer Retention Mapping</div>
-        <div class="snapshot-sub">Subscription Design · In Development</div>
-      </div>
-    </div>
-    <div class="snapshot-card">
-      <div class="snapshot-thumb" style="background:linear-gradient(135deg,#080808,#1a1008)">
-        <div style="font-family:var(--mono);font-size:9px;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase">Spending Psychology</div>
-      </div>
-      <div class="snapshot-body">
-        <div class="snapshot-title">Fintech Behavioural Signals</div>
-        <div class="snapshot-sub">Fintech Psychology · In Development</div>
-      </div>
     </div>
   </div>
 </section>
