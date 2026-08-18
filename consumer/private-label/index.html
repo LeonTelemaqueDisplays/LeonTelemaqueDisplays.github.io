@@ -730,6 +730,115 @@
 
     <p class="body-text">The pattern is exact. Bakery, meat, frozen foods, and generic grocery — all low visibility, low identity, and low perceivable quality differential categories — are where private label has captured the most share. Condiments, laundry, and branded beverages — categories with visible consumption, identity signals, and perceivable taste profiles — remain heavily protected despite comparable price gaps.</p>
 
+    <!-- BUBBLE CHART -->
+    <div style="margin:32px 0;background:var(--surface);border:1px solid var(--border);padding:28px;">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;color:var(--green);text-transform:uppercase;margin-bottom:6px;">Brand Vulnerability Map — Prestige vs Commodity</div>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-bottom:20px;">Position = social visibility (X) vs identity signal strength (Y). Colour = private label vulnerability.</div>
+      <svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+        <line x1="80" y1="20" x2="80" y2="380" stroke="#222a22" stroke-width="1"/>
+        <line x1="80" y1="380" x2="680" y2="380" stroke="#222a22" stroke-width="1"/>
+        <line x1="80" y1="200" x2="680" y2="200" stroke="#1c221c" stroke-width="1" stroke-dasharray="4,4"/>
+        <line x1="380" y1="20" x2="380" y2="380" stroke="#1c221c" stroke-width="1" stroke-dasharray="4,4"/>
+        <text x="375" y="410" fill="#3a4a3a" font-size="10" font-family="Courier New" text-anchor="middle" letter-spacing="1">SOCIAL VISIBILITY</text>
+        <text x="20" y="205" fill="#3a4a3a" font-size="10" font-family="Courier New" text-anchor="middle" transform="rotate(-90 20 205)" letter-spacing="1">IDENTITY SIGNAL</text>
+        <!-- Protected brands — top right green -->
+        <circle cx="580" cy="80" r="32" fill="rgba(34,197,94,0.15)" stroke="#22c55e" stroke-width="1.5"/>
+        <text x="580" y="77" fill="#22c55e" font-size="10" font-family="Courier New" text-anchor="middle" font-weight="bold">Heinz</text>
+        <text x="580" y="90" fill="#22c55e" font-size="8" font-family="Courier New" text-anchor="middle" opacity="0.7">ketchup</text>
+        <circle cx="630" cy="130" r="36" fill="rgba(34,197,94,0.12)" stroke="#22c55e" stroke-width="1.5"/>
+        <text x="630" y="127" fill="#22c55e" font-size="10" font-family="Courier New" text-anchor="middle" font-weight="bold">Coca-Cola</text>
+        <text x="630" y="140" fill="#22c55e" font-size="8" font-family="Courier New" text-anchor="middle" opacity="0.7">cola</text>
+        <circle cx="480" cy="100" r="34" fill="rgba(34,197,94,0.12)" stroke="#22c55e" stroke-width="1.5"/>
+        <text x="480" y="97" fill="#22c55e" font-size="10" font-family="Courier New" text-anchor="middle" font-weight="bold">Tide</text>
+        <text x="480" y="110" fill="#22c55e" font-size="8" font-family="Courier New" text-anchor="middle" opacity="0.7">laundry</text>
+        <circle cx="550" cy="165" r="24" fill="rgba(34,197,94,0.12)" stroke="#22c55e" stroke-width="1.5"/>
+        <text x="550" y="162" fill="#22c55e" font-size="9" font-family="Courier New" text-anchor="middle" font-weight="bold">Hellmann's</text>
+        <text x="550" y="174" fill="#22c55e" font-size="8" font-family="Courier New" text-anchor="middle" opacity="0.7">mayo</text>
+        <!-- Contested — middle amber -->
+        <circle cx="400" cy="170" r="22" fill="rgba(245,158,11,0.12)" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="400" y="167" fill="#f59e0b" font-size="9" font-family="Courier New" text-anchor="middle" font-weight="bold">Folgers</text>
+        <text x="400" y="179" fill="#f59e0b" font-size="8" font-family="Courier New" text-anchor="middle" opacity="0.7">coffee</text>
+        <circle cx="450" cy="230" r="20" fill="rgba(245,158,11,0.12)" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="450" y="227" fill="#f59e0b" font-size="9" font-family="Courier New" text-anchor="middle" font-weight="bold">Lay's</text>
+        <text x="450" y="239" fill="#f59e0b" font-size="8" font-family="Courier New" text-anchor="middle" opacity="0.7">chips</text>
+        <!-- Vulnerable — bottom left red -->
+        <circle cx="200" cy="310" r="20" fill="rgba(239,68,68,0.12)" stroke="#ef4444" stroke-width="1.5"/>
+        <text x="200" y="307" fill="#ef4444" font-size="9" font-family="Courier New" text-anchor="middle" font-weight="bold">Canada Dry</text>
+        <text x="200" y="319" fill="#ef4444" font-size="8" font-family="Courier New" text-anchor="middle" opacity="0.7">ginger ale</text>
+        <circle cx="140" cy="345" r="22" fill="rgba(239,68,68,0.12)" stroke="#ef4444" stroke-width="1.5"/>
+        <text x="140" y="342" fill="#ef4444" font-size="9" font-family="Courier New" text-anchor="middle" font-weight="bold">Barilla</text>
+        <text x="140" y="354" fill="#ef4444" font-size="8" font-family="Courier New" text-anchor="middle" opacity="0.7">pasta</text>
+        <circle cx="255" cy="338" r="19" fill="rgba(239,68,68,0.12)" stroke="#ef4444" stroke-width="1.5"/>
+        <text x="255" y="335" fill="#ef4444" font-size="9" font-family="Courier New" text-anchor="middle" font-weight="bold">Ragu</text>
+        <text x="255" y="347" fill="#ef4444" font-size="8" font-family="Courier New" text-anchor="middle" opacity="0.7">pasta sauce</text>
+        <circle cx="165" cy="288" r="17" fill="rgba(239,68,68,0.12)" stroke="#ef4444" stroke-width="1.5"/>
+        <text x="165" y="285" fill="#ef4444" font-size="8" font-family="Courier New" text-anchor="middle" font-weight="bold">McCormick</text>
+        <text x="165" y="296" fill="#ef4444" font-size="8" font-family="Courier New" text-anchor="middle" opacity="0.7">spices</text>
+        <circle cx="115" cy="360" r="15" fill="rgba(239,68,68,0.12)" stroke="#ef4444" stroke-width="1.5"/>
+        <text x="115" y="357" fill="#ef4444" font-size="8" font-family="Courier New" text-anchor="middle" font-weight="bold">Green Giant</text>
+        <text x="115" y="368" fill="#ef4444" font-size="8" font-family="Courier New" text-anchor="middle" opacity="0.7">frozen veg</text>
+        <!-- Legend -->
+        <circle cx="110" cy="30" r="6" fill="rgba(34,197,94,0.15)" stroke="#22c55e" stroke-width="1.5"/>
+        <text x="122" y="34" fill="#3a4a3a" font-size="9" font-family="Courier New">Protected</text>
+        <circle cx="190" cy="30" r="6" fill="rgba(245,158,11,0.12)" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="202" y="34" fill="#3a4a3a" font-size="9" font-family="Courier New">Contested</text>
+        <circle cx="275" cy="30" r="6" fill="rgba(239,68,68,0.12)" stroke="#ef4444" stroke-width="1.5"/>
+        <text x="287" y="34" fill="#3a4a3a" font-size="9" font-family="Courier New">Vulnerable</text>
+      </svg>
+    </div>
+
+    <!-- PERSONAL CALLOUT -->
+    <div style="margin:32px 0;background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--amber);padding:24px;">
+      <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.15em;color:var(--amber);text-transform:uppercase;margin-bottom:10px;">Real Purchase Decision — The Framework Applied</div>
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;">Selection Ginger Ale vs Canada Dry — Why the Switch Costs Nothing</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:14px;">
+        <div>
+          <div style="font-family:var(--mono);font-size:8px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Quality Perceivable?</div>
+          <div style="font-size:13px;color:var(--red);font-weight:700;">No</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--text-dim);margin-top:4px;line-height:1.5;">Carbonation, sweetness, and ginger flavour indistinguishable once poured into a glass.</div>
+        </div>
+        <div>
+          <div style="font-family:var(--mono);font-size:8px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Socially Visible?</div>
+          <div style="font-size:13px;color:var(--red);font-weight:700;">No</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--text-dim);margin-top:4px;line-height:1.5;">Consumed privately or mixed into a drink. Nobody sees the can. Zero social information.</div>
+        </div>
+        <div>
+          <div style="font-family:var(--mono);font-size:8px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Identity Signal?</div>
+          <div style="font-size:13px;color:var(--red);font-weight:700;">No</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--text-dim);margin-top:4px;line-height:1.5;">Ginger ale brand loyalty signals nothing specific about the consumer who maintains it.</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--text-mid);line-height:1.6;font-family:var(--mono);border-top:1px solid var(--border);padding-top:12px;">Verdict: Three variables. Three zeros. The Canada Dry premium is structurally indefensible once Selection achieves quality parity — which it has. The switch is not a preference change. It is a rational consumer responding correctly to a brand that was never worth paying extra for in this category.</div>
+    </div>
+
+    <!-- CANADIAN RETAILER DATA -->
+    <div style="margin:32px 0;">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;color:var(--green);text-transform:uppercase;margin-bottom:16px;">The Canadian Private Label Ecosystem — Who Is Taking the Share</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);">
+        <div style="background:var(--surface);padding:20px;border-top:2px solid var(--green);">
+          <div style="font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Loblaw — Market Leader</div>
+          <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px;">President's Choice + No Name</div>
+          <div style="font-size:11px;color:var(--text-mid);line-height:1.6;font-family:var(--mono);">Canada's #1 preferred private label brand. PC launched in 1984 with chocolate chip cookies — now 2,000+ products. No Name is the value tier. PC and No Name growing ahead of overall Loblaw sales in 2025.</div>
+          <div style="margin-top:10px;font-family:var(--mono);font-size:9px;color:var(--text-dim);">Threatening: packaged foods, beverages, household, dairy</div>
+        </div>
+        <div style="background:var(--surface);padding:20px;border-top:2px solid var(--amber);">
+          <div style="font-family:var(--mono);font-size:9px;color:var(--amber);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Metro — Quebec Strength</div>
+          <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px;">Selection + Irresistible</div>
+          <div style="font-size:11px;color:var(--text-mid);line-height:1.6;font-family:var(--mono);">Selection accounts for ~24% of Metro grocery sales in Quebec with 68% brand recognition — the most recognised private label in the province. Irresistible positions against PC at premium tier.</div>
+          <div style="margin-top:10px;font-family:var(--mono);font-size:9px;color:var(--text-dim);">Threatening: grocery staples, frozen, dairy, bakery</div>
+        </div>
+        <div style="background:var(--surface);padding:20px;border-top:2px solid var(--border-2);">
+          <div style="font-family:var(--mono);font-size:9px;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Sobeys — National Scale</div>
+          <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px;">Compliments + Panache</div>
+          <div style="font-size:11px;color:var(--text-mid);line-height:1.6;font-family:var(--mono);">Spans Safeway, FreshCo, Farm Boy, IGA, and Longo's. Empire reported continued store brand expansion in its 2024 annual report. Panache is the premium tier targeting PC-equivalent positioning.</div>
+          <div style="margin-top:10px;font-family:var(--mono);font-size:9px;color:var(--text-dim);">Threatening: packaged grocery, prepared foods, household</div>
+        </div>
+      </div>
+      <div style="margin-top:1px;background:var(--surface);border:1px solid var(--border);padding:14px 20px;">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text-dim);line-height:1.6;">Canadian private label house brand share: 19% of total grocery (NielsenIQ 2024). 76% of shoppers choose private label to save money. 53% believe quality equals national brands. All three major Canadian grocery chains growing private label faster than national brands simultaneously — the competitive pressure is structural and national.</div>
+      </div>
+    </div>
+
     <div class="matrix-wrap">
       <div class="matrix">
         <div class="matrix-header dim">Category</div>
