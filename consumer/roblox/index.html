@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roblox — A Platform Problem</title>
+<style>
+  :root {
+    --bg: #060a0f;
+    --surface: #0d1520;
+    --surface-2: #111f30;
+    --surface-3: #1a2d42;
+    --border: #1a2d42;
+    --border-2: #244060;
+    --red: #e53935;
+    --red-dim: rgba(229,57,53,0.10);
+    --red-glow: rgba(229,57,53,0.04);
+    --blue: #2979ff;
+    --blue-dim: rgba(41,121,255,0.10);
+    --blue-glow: rgba(41,121,255,0.04);
+    --amber: #f59e0b;
+    --amber-dim: rgba(245,158,11,0.10);
+    --green: #22c55e;
+    --green-dim: rgba(34,197,94,0.08);
+    --text: #e8f0f8;
+    --text-mid: #7a9ab8;
+    --text-dim: #2a4060;
+    --mono: 'Courier New', monospace;
+    --sans: system-ui, -apple-system, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 60px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 80%, rgba(229,57,53,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(41,121,255,0.04) 0%, transparent 45%),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 60px,
+        rgba(41,121,255,0.008) 60px,
+        rgba(41,121,255,0.008) 61px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 60px,
+        rgba(229,57,53,0.006) 60px,
+        rgba(229,57,53,0.006) 61px
+      );
+    pointer-events: none;
+  }
+
+  .hero-meta {
+    position: absolute;
+    top: 32px;
+    right: 60px;
+    text-align: right;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    line-height: 2;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .hero-title {
+    font-size: clamp(52px, 9vw, 110px);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 0.88;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .hero-title span { color: var(--red); display: block; }
+
+  .hero-subtitle {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  .hero-thesis {
+    font-size: 17px;
+    color: var(--text-mid);
+    max-width: 680px;
+    line-height: 1.75;
+    border-left: 3px solid var(--red);
+    padding-left: 20px;
+    margin-bottom: 40px;
+  }
+
+  .hero-dau {
+    display: flex;
+    align-items: flex-end;
+    gap: 32px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .dau-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 60px;
+  }
+
+  .dau-bar {
+    width: 28px;
+    background: var(--red);
+    opacity: 0.7;
+    position: relative;
+    transition: opacity 0.2s;
+  }
+
+  .dau-bar:hover { opacity: 1; }
+
+  .dau-bar.peak { background: var(--blue); opacity: 0.9; }
+
+  .dau-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--text-dim);
+    text-align: center;
+    margin-top: 4px;
+    letter-spacing: 0.04em;
+  }
+
+  .dau-stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dau-stat-value {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .dau-stat-value.down { color: var(--red); }
+  .dau-stat-value.peak { color: var(--blue); }
+
+  .dau-stat-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 4px;
+  }
+
+  /* PLATFORM DIAGRAM */
+  .platform-diagram {
+    margin: 32px 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px;
+  }
+
+  .diagram-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .diagram-sublabel {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+  }
+
+  .diagram-nodes {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  .diagram-node {
+    border: 1px solid var(--border-2);
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .diagram-node:hover { transform: translateY(-2px); }
+
+  .diagram-node.content { border-color: rgba(245,158,11,0.4); }
+  .diagram-node.trust { border-color: rgba(229,57,53,0.4); }
+  .diagram-node.social { border-color: rgba(41,121,255,0.4); }
+  .diagram-node.monetisation { border-color: rgba(34,197,94,0.4); }
+
+  .diagram-node.content:hover { background: var(--amber-dim); border-color: var(--amber); }
+  .diagram-node.trust:hover { background: var(--red-dim); border-color: var(--red); }
+  .diagram-node.social:hover { background: var(--blue-dim); border-color: var(--blue); }
+  .diagram-node.monetisation:hover { background: var(--green-dim); border-color: var(--green); }
+
+  .node-icon { font-size: 20px; margin-bottom: 8px; display: block; }
+
+  .node-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .node-status {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .diagram-node.content .node-status { color: var(--amber); }
+  .diagram-node.trust .node-status { color: var(--red); }
+  .diagram-node.social .node-status { color: var(--blue); }
+  .diagram-node.monetisation .node-status { color: var(--green); }
+
+  .diagram-detail {
+    margin-top: 16px;
+    padding: 16px;
+    background: var(--surface-2);
+    border-left: 3px solid var(--blue);
+    min-height: 60px;
+  }
+
+  .diagram-detail-name {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    color: var(--blue);
+  }
+
+  .diagram-detail-text {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  /* BODY */
+  .doc-body {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 60px;
+  }
+
+  .section {
+    margin-bottom: 80px;
+    padding-bottom: 80px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 24px;
+    line-height: 1.15;
+  }
+
+  .section-title em { color: var(--red); font-style: normal; }
+  .section-title em.blue { color: var(--blue); }
+  .section-title em.amber { color: var(--amber); }
+  .section-title em.green { color: var(--green); }
+
+  .body-text {
+    font-size: 15px;
+    color: var(--text-mid);
+    line-height: 1.85;
+    max-width: 720px;
+    margin-bottom: 24px;
+  }
+
+  .pull-quote {
+    border-left: 3px solid var(--red);
+    padding: 16px 24px;
+    margin: 32px 0;
+    background: var(--red-glow);
+  }
+
+  .pull-quote.blue { border-left-color: var(--blue); background: var(--blue-glow); }
+  .pull-quote.amber { border-left-color: var(--amber); background: var(--amber-dim); opacity: 0.8; }
+
+  .pull-quote-text {
+    font-size: 18px;
+    color: var(--text);
+    line-height: 1.6;
+    font-weight: 500;
+    max-width: 640px;
+  }
+
+  /* DAU DECLINE VISUAL */
+  .dau-decline {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  .dau-quarter {
+    background: var(--surface);
+    padding: 20px;
+    text-align: center;
+  }
+
+  .dau-quarter-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .dau-quarter-value {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .dau-quarter-value.peak { color: var(--blue); }
+  .dau-quarter-value.decline { color: var(--red); }
+
+  .dau-quarter-sublabel {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+  }
+
+  /* TOP GAMES GRID */
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  .game-card {
+    background: var(--surface);
+    padding: 20px;
+    position: relative;
+  }
+
+  .game-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--amber);
+    opacity: 0.6;
+  }
+
+  .game-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .game-genre {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--amber);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .game-insight {
+    font-size: 11px;
+    color: var(--text-mid);
+    line-height: 1.5;
+    font-family: var(--mono);
+  }
+
+  /* SOCIAL HUB MOCKUP */
+  .hub-mockup {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px;
+    margin: 32px 0;
+  }
+
+  .hub-mockup-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .hub-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .hub-feature {
+    background: var(--surface-2);
+    padding: 20px;
+  }
+
+  .hub-feature-icon {
+    font-size: 20px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .hub-feature-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .hub-feature-body {
+    font-size: 11px;
+    color: var(--text-mid);
+    line-height: 1.6;
+    font-family: var(--mono);
+  }
+
+  .hub-safety-note {
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: var(--red-dim);
+    border-left: 2px solid var(--red);
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  /* IP REVENUE MODEL */
+  .ip-model {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  .ip-card {
+    background: var(--surface);
+    padding: 20px;
+    text-align: center;
+  }
+
+  .ip-card-icon { font-size: 24px; margin-bottom: 8px; display: block; }
+
+  .ip-card-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+
+  .ip-card-body {
+    font-size: 10px;
+    color: var(--text-mid);
+    line-height: 1.5;
+    font-family: var(--mono);
+  }
+
+  .ip-card-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--green);
+    margin-top: 10px;
+    font-family: var(--mono);
+  }
+
+  /* MONETISATION COMPARISON */
+  .mono-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  .mono-panel {
+    background: var(--surface);
+    padding: 24px;
+    position: relative;
+  }
+
+  .mono-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .mono-panel.good::before { background: var(--green); }
+  .mono-panel.bad::before { background: var(--red); }
+
+  .mono-panel-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .mono-panel.good .mono-panel-label { color: var(--green); }
+  .mono-panel.bad .mono-panel-label { color: var(--red); }
+
+  .mono-panel-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .mono-attr {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+    align-items: flex-start;
+  }
+
+  .mono-attr-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--text-dim);
+    width: 80px;
+    flex-shrink: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-top: 2px;
+  }
+
+  .mono-attr-value {
+    font-size: 11px;
+    color: var(--text-mid);
+    line-height: 1.5;
+    font-family: var(--mono);
+  }
+
+  /* RECOMMENDATION CARDS */
+  .rec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  .rec-card {
+    background: var(--surface);
+    padding: 24px;
+    position: relative;
+  }
+
+  .rec-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--blue);
+  }
+
+  .rec-num {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--blue);
+    opacity: 0.3;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .rec-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .rec-body {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+
+  /* FOOTER */
+  .doc-footer {
+    padding: 40px 60px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-credit {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    line-height: 2;
+  }
+
+  .footer-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .footer-tag {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--text-dim);
+    padding: 3px 8px;
+    border: 1px solid var(--border-2);
+    letter-spacing: 0.08em;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+
+  <div class="hero-meta">
+    Product Strategy Analysis<br>
+    Platform Architecture · Roblox Corporation<br>
+    Leon Telemaque · 2026
+  </div>
+
+  <div class="hero-eyebrow">Product Strategy · Platform Analysis · Gaming · UGC</div>
+  <h1 class="hero-title">
+    Roblox
+    <span>A Platform Problem</span>
+  </h1>
+  <div class="hero-subtitle">Why the CEO's Diagnosis Is Wrong — and What the Data Actually Shows</div>
+
+  <p class="hero-thesis">
+    Roblox's CEO says the platform needs more viral games. He is wrong. 123 million daily active users is not a content scarcity problem. It is four simultaneous platform architecture failures — a content strategy built around luck, a trust deficit blocking new player acquisition, a social infrastructure that is fundamentally underbuilt for what the platform actually is, and a monetisation quality gap that is eroding the player experience from the inside.
+  </p>
+
+  <div class="dau-decline">
+    <div class="dau-quarter">
+      <div class="dau-quarter-label">Q3 2025 — Peak</div>
+      <div class="dau-quarter-value peak">152M</div>
+      <div class="dau-quarter-sublabel">Daily Active Users</div>
+    </div>
+    <div class="dau-quarter">
+      <div class="dau-quarter-label">Q4 2025</div>
+      <div class="dau-quarter-value decline">144M</div>
+      <div class="dau-quarter-sublabel">−8M from peak</div>
+    </div>
+    <div class="dau-quarter">
+      <div class="dau-quarter-label">Q1 2026</div>
+      <div class="dau-quarter-value decline">132M</div>
+      <div class="dau-quarter-sublabel">−20M from peak</div>
+    </div>
+    <div class="dau-quarter">
+      <div class="dau-quarter-label">Q2 2026</div>
+      <div class="dau-quarter-value decline">123M</div>
+      <div class="dau-quarter-sublabel">−29M from peak · $70B lost</div>
+    </div>
+  </div>
+</section>
+
+<!-- BODY -->
+<div class="doc-body">
+
+  <!-- OPENING -->
+  <section class="section">
+    <div class="section-label">The Diagnosis</div>
+    <h2 class="section-title">The CEO Said <em>Content.</em> The Data Says Platform.</h2>
+
+    <p class="body-text">When Roblox reported a $70 billion loss in market value alongside declining daily active users in 2026, CEO David Baszucki attributed the shortfall to a shortage of viral games. The platform, he argued, needed more breakout hits to drive engagement and monetisation. It was a supply argument for what is fundamentally a structural problem — and it is the wrong diagnosis at every level of analysis.</p>
+
+    <p class="body-text">Roblox is not a game. It is a platform. The distinction matters because games and platforms fail for different reasons and require different solutions. A game without good content is dying. A platform with 123 million daily active users, millions of available experiences, and consistent quality hits across multiple genres is not dying from content scarcity. It is failing from platform architecture — the systems, incentives, and infrastructure that determine how players find content, trust the environment, connect with each other, and decide to spend.</p>
+
+    <p class="body-text">The four platform failures are independent problems that compound each other. Each has a specific cause, a specific player behaviour consequence, and a specific product recommendation. None of them are solved by waiting for the next viral game.</p>
+
+    <div class="platform-diagram">
+      <div class="diagram-label">The Four Platform Failures — Click Any Node</div>
+      <div class="diagram-sublabel">Each failure operates independently and compounds the others.</div>
+      <div class="diagram-nodes">
+        <div class="diagram-node content" onclick="showNode('content', this)">
+          <span class="node-icon">🎮</span>
+          <div class="node-title">Content Strategy</div>
+          <div class="node-status">Misdiagnosed</div>
+        </div>
+        <div class="diagram-node trust" onclick="showNode('trust', this)">
+          <span class="node-icon">🛡️</span>
+          <div class="node-title">Parental Trust</div>
+          <div class="node-status">Acquisition Blocker</div>
+        </div>
+        <div class="diagram-node social" onclick="showNode('social', this)">
+          <span class="node-icon">💬</span>
+          <div class="node-title">Social Infrastructure</div>
+          <div class="node-status">Underbuilt</div>
+        </div>
+        <div class="diagram-node monetisation" onclick="showNode('monetisation', this)">
+          <span class="node-icon">💰</span>
+          <div class="node-title">Monetisation Quality</div>
+          <div class="node-status">Platform Gap</div>
+        </div>
+      </div>
+      <div class="diagram-detail" id="diagram-detail">
+        <div class="diagram-detail-name" id="diagram-detail-name">Select a failure node above</div>
+        <div class="diagram-detail-text" id="diagram-detail-text">Click any of the four platform failure nodes to see the diagnosis, player behaviour consequence, and product recommendation.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARGUMENT 01 — CONTENT -->
+  <section class="section">
+    <div class="section-label">Argument 01</div>
+    <h2 class="section-title">The Content Is There. <em class="amber">The Strategy Isn't.</em></h2>
+
+    <p class="body-text">The viral game argument fails immediately against the platform's own top games. Dress to Impress, Blox Fruits, Grow a Garden, Become a Deep Sea Explorer, BloxBurg — these are not accidental viral moments. They are consistent, quality, niche-specific experiences that have sustained large player counts over extended periods across completely different genres and demographics. The platform does not lack content. It lacks a strategy to leverage what it already has.</p>
+
+    <div class="games-grid">
+      <div class="game-card">
+        <div class="game-genre">Fashion · Social</div>
+        <div class="game-name">Dress to Impress</div>
+        <div class="game-insight">Serves the fashion and social expression demographic with consistent quality. VIP monetisation — one time purchase, clear benefits, fair price — is the model the platform should enforce category-wide.</div>
+      </div>
+      <div class="game-card">
+        <div class="game-genre">Anime · Combat · RPG</div>
+        <div class="game-name">Blox Fruits</div>
+        <div class="game-insight">One Piece-inspired open world RPG. Proves that beloved IP rebuilt natively on Roblox generates massive player counts and strong monetisation. The licensed IP formalisation argument begins here.</div>
+      </div>
+      <div class="game-card">
+        <div class="game-genre">Simulation · Casual</div>
+        <div class="game-name">Grow a Garden</div>
+        <div class="game-insight">Casual simulation with deep progression. Serves an audience completely different from Blox Fruits on the same platform. Platform breadth is already real — the strategy question is how to surface it.</div>
+      </div>
+      <div class="game-card">
+        <div class="game-genre">Exploration · Sim</div>
+        <div class="game-name">Become a Deep Sea Explorer</div>
+        <div class="game-insight">Discovery and exploration genre. Consistent player base. Serves the curiosity-driven player who exists nowhere else in the mainstream gaming market at this price point.</div>
+      </div>
+      <div class="game-card">
+        <div class="game-genre">Life Sim · Builder</div>
+        <div class="game-name">BloxBurg</div>
+        <div class="game-insight">Life simulation and home building. Multi-year sustained engagement. One of the clearest examples of platform-level retention through quality experience design rather than viral mechanics.</div>
+      </div>
+      <div class="game-card">
+        <div class="game-genre">Anime · PvP</div>
+        <div class="game-name">Type Soul + Battlegrounds</div>
+        <div class="game-insight">Bleach and anime-adjacent combat games with massive concurrent player counts. The organic IP approximation that licensed formalisation would convert into a structured revenue partnership.</div>
+      </div>
+    </div>
+
+    <p class="body-text">The pattern across every top performing Roblox experience is the same — quality, consistency, and niche specificity serving a defined audience over time. None of them are viral accidents. All of them are examples of what the platform already does well when creators build with genuine intent rather than viral optimisation.</p>
+
+    <p class="body-text">The content strategy failure is not a shortage of games. It is a discovery architecture that surfaces viral content rather than quality content — and a licensing opportunity that is being left entirely to creators when it should be formalised at the platform level. Blox Fruits and Type Soul are proving that beloved IP rebuilt on Roblox generates extraordinary engagement. Roblox should be formalising licensed partnerships with anime studios, comics publishers, and trending IP holders to build what creators are already building organically — but with official licensing, platform-level marketing support, and structured revenue sharing that makes the economics work for both parties.</p>
+
+    <div class="pull-quote amber">
+      <div class="pull-quote-text">The licensed IP opportunity is a multi-surface revenue model. A single anime partnership generates gameplay revenue, cosmetics revenue from character skins and accessories, social hub customisation items tied to the IP, and new player acquisition from the IP's existing fanbase. The licensing fee is not a cost. It is an acquisition investment with four simultaneous return streams.</div>
+    </div>
+  </section>
+
+  <!-- ARGUMENT 02 — TRUST -->
+  <section class="section">
+    <div class="section-label">Argument 02</div>
+    <h2 class="section-title">The Trust Problem Happens <em>Before the Install</em></h2>
+
+    <p class="body-text">Roblox's CEO cited age verification friction as a cause of declining engagement — 35% of US users cannot fully use social features after the age check rollout. This diagnosis addresses the wrong point in the acquisition funnel. Age verification is a friction problem for existing users. Parental deterrence is an acquisition problem that prevents new younger players from ever joining in the first place.</p>
+
+    <p class="body-text">Roblox's core demographic has always been 9 to 15 year olds. That demographic does not self-acquire — they acquire through parental permission. A parent who has heard news stories about predatory behaviour, inappropriate content, or online safety incidents on Roblox does not download the app for their child regardless of what age verification features exist inside the platform. The safety concern happens before the install. Age verification addresses what happens after the install. The two solutions are targeting completely different points in the funnel.</p>
+
+    <p class="body-text">The data supports this framing. The 18 to 34 demographic on Roblox is growing 50% year over year. The platform is aging up not because older players are joining at an extraordinary rate but because younger players are not being replenished. Parental deterrence among the 8 to 12 demographic — the cohort that requires explicit parental permission — is the most logical explanation for why the youngest acquisition cohort is declining while older demographics grow.</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">Stricter enforcement protocols on grooming and child endangerment — and making those protocols highly visible to under-18 accounts and their parents — is not just a safety initiative. It is the platform's primary acquisition strategy. A parent who can see exactly what Roblox does when a predatory account is detected is a parent who gives their child permission to play.</div>
+    </div>
+
+    <p class="body-text">The product recommendation is three-part. First, enforce visibly — real-time moderation transparency showing how quickly reports are actioned and how many accounts are removed monthly. Numbers that prove the system works rather than policy language that asserts it does. Second, build under-18 account architecture with restricted communication defaults, parental dashboard visibility, and explicit grooming detection surfaced to both the account and the parent contact. Third, market safety to parents not players — a dedicated campaign targeting the permission gatekeepers with the enforcement data they need to make the download decision confidently.</p>
+  </section>
+
+  <!-- ARGUMENT 03 — SOCIAL -->
+  <section class="section">
+    <div class="section-label">Argument 03</div>
+    <h2 class="section-title">Roblox Is a Social Platform. <em class="blue">The Games Are the Context.</em></h2>
+
+    <p class="body-text">The most important misunderstanding in Roblox's product strategy is what the platform actually is. Players routinely join a Roblox experience and spend the majority of their session talking to friends rather than playing the game. The game is the excuse. The friend group is the reason. A player who opens Blox Fruits with three friends and spends forty minutes in the lobby before anyone touches a quest is not a low-engagement player — they are a high-retention player whose primary relationship with the platform is social, not ludic.</p>
+
+    <p class="body-text">This distinction matters enormously because Roblox measures and optimises for gameplay engagement hours. Those metrics capture sessions where players are actively interacting with game mechanics. They do not capture the social sessions where players are present on the platform because that is where their friends are. Those sessions are invisible in the reported numbers but they are the sessions that build the habit of returning — because the habit is not returning to play a specific game, it is returning to be with specific people.</p>
+
+    <div class="hub-mockup">
+      <div class="hub-mockup-label">Product Recommendation — Private Social Hubs</div>
+      <div class="hub-features">
+        <div class="hub-feature">
+          <span class="hub-feature-icon">🏠</span>
+          <div class="hub-feature-title">Persistent Private Spaces</div>
+          <div class="hub-feature-body">Invite-only customisable spaces that belong to a friend group rather than to any specific game. The hub exists independently of the game library — players can be on the platform without being in a game.</div>
+        </div>
+        <div class="hub-feature">
+          <span class="hub-feature-icon">🎨</span>
+          <div class="hub-feature-title">Creator Preset Marketplace</div>
+          <div class="hub-feature-body">Players and creators design hub templates — themed environments, licensed IP spaces, seasonal presets. Extends the existing UGC creator economy into social infrastructure and creates a new Robux revenue surface.</div>
+        </div>
+        <div class="hub-feature">
+          <span class="hub-feature-icon">🎌</span>
+          <div class="hub-feature-title">Licensed IP Decals</div>
+          <div class="hub-feature-body">Anime, comics, and entertainment IP expressed as hub customisation items. A One Piece hub template. An Avengers base. The licensed IP partnership revenue extends beyond games into the social layer.</div>
+        </div>
+        <div class="hub-feature">
+          <span class="hub-feature-icon">👁️</span>
+          <div class="hub-feature-title">Parental Dashboard for Under-18</div>
+          <div class="hub-feature-body">Under-18 social hubs have mandatory parent visibility — who is in the hub, when, and for how long. Converts the private space from a safety concern into a monitored safe zone. The safety trade-off managed by design.</div>
+        </div>
+      </div>
+      <div class="hub-safety-note">Safety note — Private social hubs reduce random predator contact from public game servers. The risk of isolation in a private space is real but manageable through parental visibility architecture. A monitored private space is safer than an unmonitored public server — and safer than losing the player to an off-platform communication tool entirely.</div>
+    </div>
+
+    <p class="body-text">The age verification rollout that Roblox's CEO cited as causing short-term friction did more damage than restricting chat features. It broke the primary retention mechanic of a platform whose stickiness is fundamentally social. Rebuilding the social layer within the safety constraint — rather than removing either the safety or the social features — is the product priority that no amount of new viral games can substitute for.</p>
+  </section>
+
+  <!-- ARGUMENT 04 — MONETISATION -->
+  <section class="section">
+    <div class="section-label">Argument 04</div>
+    <h2 class="section-title">Monetisation Quality Is a <em class="green">Platform Responsibility</em></h2>
+
+    <p class="body-text">Roblox's server monetisation is its primary revenue driver. When players make purchase decisions inside a Roblox experience they are making a decision about the platform as much as the game — and the platform currently has no quality standards for how that decision is presented to them. The result is a spectrum from exemplary monetisation that builds long-term player investment to predatory pop-up design that extracts a single transaction and destroys the session experience simultaneously.</p>
+
+    <div class="mono-compare">
+      <div class="mono-panel good">
+        <div class="mono-panel-label">Model — What Works</div>
+        <div class="mono-panel-title">Dress to Impress VIP Mode</div>
+        <div class="mono-attr">
+          <div class="mono-attr-label">Structure</div>
+          <div class="mono-attr-value">One-time purchase. Permanent benefits. No recurring pressure.</div>
+        </div>
+        <div class="mono-attr">
+          <div class="mono-attr-label">Price point</div>
+          <div class="mono-attr-value">Equivalent to approximately $4 USD. Accessible without feeling disposable.</div>
+        </div>
+        <div class="mono-attr">
+          <div class="mono-attr-label">Player experience</div>
+          <div class="mono-attr-value">Clear value proposition presented once. Player decides without pressure. Purchase deepens investment in the game.</div>
+        </div>
+        <div class="mono-attr">
+          <div class="mono-attr-label">Retention impact</div>
+          <div class="mono-attr-value">Player who bought VIP has invested in the game and returns to justify that investment. Purchase creates loyalty rather than extracting from it.</div>
+        </div>
+      </div>
+      <div class="mono-panel bad">
+        <div class="mono-panel-label">Anti-Model — What Fails</div>
+        <div class="mono-panel-title">Pop-Up Bombardment Design</div>
+        <div class="mono-attr">
+          <div class="mono-attr-label">Structure</div>
+          <div class="mono-attr-value">5 to 10 purchase prompts on screen simultaneously from session start.</div>
+        </div>
+        <div class="mono-attr">
+          <div class="mono-attr-label">Price point</div>
+          <div class="mono-attr-value">Equivalent to approximately $4 USD for a one-time consumable effect lasting seconds.</div>
+        </div>
+        <div class="mono-attr">
+          <div class="mono-attr-label">Player experience</div>
+          <div class="mono-attr-value">Immediate pressure before the player has established any attachment to the game. The monetisation arrives before the value proposition. Player leaves or pays and leaves.</div>
+        </div>
+        <div class="mono-attr">
+          <div class="mono-attr-label">Retention impact</div>
+          <div class="mono-attr-value">Zero loyalty created. Single transaction extracted. Player does not return. Parent who observes confirms safety concern about extractive platform design.</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="body-text">The platform currently treats both monetisation models identically in its discovery algorithm. A game with fair VIP mechanics and a game with jumpscare pop-up spam rank equally in search and recommendation. Creators have no incentive to adopt the Dress to Impress model over the pop-up model if both perform equally in discovery — and the rational individual creator decision is to maximise immediate conversion regardless of session experience impact.</p>
+
+    <p class="body-text">The product recommendation is a platform-level monetisation quality score built into the discovery algorithm. Games with higher average session length, higher repeat purchase rates, lower churn after first purchase, and lower pop-up frequency surface higher in recommendations. Games with high prompt density and low repeat engagement surface lower. The algorithm becomes the quality enforcement mechanism — rewarding sustainable monetisation without requiring manual moderation of every creator's design choices.</p>
+
+    <div class="pull-quote blue">
+      <div class="pull-quote-text">Players who find a game that monetises fairly will stick with it for months. An outfit purchased in Dress to Impress is worn for a season. A VIP pass in a well-designed game becomes part of a player's Roblox identity. The platform's job is to make fair monetisation the path of least resistance for creators — not through policing but through the incentive structure of the discovery algorithm itself.</div>
+    </div>
+  </section>
+
+  <!-- COUNTERARGUMENT -->
+  <section class="section">
+    <div class="section-label">The Strongest Objection</div>
+    <h2 class="section-title">Viral Games <em>Do Drive Revenue.</em> Why Isn't That Enough?</h2>
+
+    <p class="body-text">The most credible defence of the CEO's viral game argument is commercial rather than strategic. High-monetising viral hits do drive bookings spikes. When a game like Escape Tsunami reaches 5 million concurrent users it generates extraordinary revenue in a compressed period. The CFO's observation that weaker engagement shifted toward "lower hourly monetisation" experiences is arithmetically correct — fewer hours on high-monetising games means lower total bookings regardless of total DAU.</p>
+
+    <p class="body-text">The defeat of this argument is that viral cycles cannot be engineered. A platform strategy built around waiting for the next viral game is a platform strategy built around luck. The four platform improvements above — licensed IP formalisation, parental trust infrastructure, social hub architecture, and monetisation quality enforcement — generate durable revenue from structural improvements that compound over time. Viral games generate revenue spikes that decay when the next trend emerges.</p>
+
+    <p class="body-text">The deeper problem is that Roblox's monetisation model is currently too dependent on viral concentration — a small number of games generating a disproportionate share of total bookings. That concentration makes the platform vulnerable to the exact dynamic the CFO described — a shift in engagement away from high-monetising games produces an outsized bookings decline. The structural fix is broadening the monetisation base so that mid-tier, consistent, quality experiences generate reliable revenue rather than leaving total bookings dependent on which viral game happens to be trending.</p>
+  </section>
+
+  <!-- RECOMMENDATIONS -->
+  <section class="section">
+    <div class="section-label">The Product Strategy</div>
+    <h2 class="section-title">Four Recommendations. <em class="blue">None of Them Are More Viral Games.</em></h2>
+
+    <div class="rec-grid">
+      <div class="rec-card">
+        <div class="rec-num">01</div>
+        <div class="rec-title">Formalise Licensed IP Partnerships</div>
+        <div class="rec-body">Build on what Blox Fruits and Type Soul are already proving. Structured licensing agreements with anime studios, comics publishers, and trending IP holders. Multi-surface revenue model across gameplay, cosmetics, and social hub customisation. The licensing fee is an acquisition investment — the IP partner's fanbase arrives with spending intent pre-established.</div>
+      </div>
+      <div class="rec-card">
+        <div class="rec-num">02</div>
+        <div class="rec-title">Build Parental Trust Infrastructure</div>
+        <div class="rec-body">Real-time moderation transparency with enforcement numbers published and accessible. Under-18 account architecture with restricted communication defaults and mandatory parental dashboard. Safety marketing campaign targeted at parents — the permission gatekeepers — not players. Enforcement visibility is the acquisition strategy for the 8 to 12 demographic.</div>
+      </div>
+      <div class="rec-card">
+        <div class="rec-num">03</div>
+        <div class="rec-title">Launch Private Social Hubs</div>
+        <div class="rec-body">Invite-only persistent spaces with full customisation and creator preset marketplace. Licensed IP decals extending the partnership revenue into social infrastructure. Under-18 hubs with mandatory parental visibility converting private space from safety risk to monitored safe zone. The platform's social retention mechanic rebuilt within the safety constraint.</div>
+      </div>
+      <div class="rec-card">
+        <div class="rec-num">04</div>
+        <div class="rec-title">Enforce Monetisation Quality Through the Algorithm</div>
+        <div class="rec-body">Platform-level monetisation quality score built into discovery ranking. Session length, repeat purchase rate, and prompt frequency all factor into recommendations. Dress to Impress VIP is the benchmark model. Pop-up bombardment is algorithmically penalised. Sustainable monetisation becomes the path of least resistance for creators without requiring manual moderation.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="section">
+    <div class="section-label">Closing Argument</div>
+    <h2 class="section-title">What Roblox Teaches <em>Every Platform Product Analyst</em></h2>
+
+    <p class="body-text">The Roblox case study is the clearest current example of a platform misdiagnosing its own problems because it is measuring the wrong things. DAUs and engagement hours capture gameplay. They do not capture social presence. Bookings capture total monetisation. They do not capture monetisation quality or sustainability. The metrics that matter in a quarterly earnings call are not always the metrics that explain what is actually happening to the platform.</p>
+
+    <p class="body-text">The distinction between a game and a platform is not scale — it is architecture. A game retains players through content. A platform retains players through infrastructure — social infrastructure, trust infrastructure, discovery infrastructure, monetisation quality infrastructure. Roblox built game-level content thinking on top of platform-level social potential and is now optimising for the wrong solution to the wrong problem.</p>
+
+    <p class="body-text">123 million daily active users is not a platform in decline. It is a platform that has not yet built the infrastructure to be what it already is — the largest social gaming platform in the world, sitting on an extraordinary licensed IP opportunity, with a creator economy that is already producing the content the CEO claims is missing. The content is there. The platform architecture to leverage it is not.</p>
+
+    <div class="pull-quote blue">
+      <div class="pull-quote-text">Roblox's CEO is looking for the next Escape Tsunami. The platform strategy analyst's job is to explain why that is the wrong question — and what building the infrastructure that makes every experience more discoverable, the environment safer for its youngest users, the social layer stickier for its most retained ones, and the monetisation fairer for everyone would actually do to the revenue line.</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="doc-footer">
+  <div class="footer-credit">
+    Leon Telemaque · Product Strategy Analysis<br>
+    Roblox — A Platform Problem · 2026<br>
+    Platform Architecture · UGC · Gaming · Product Strategy
+  </div>
+  <div class="footer-tags">
+    <div class="footer-tag">Product Strategy</div>
+    <div class="footer-tag">Platform Analysis</div>
+    <div class="footer-tag">UGC</div>
+    <div class="footer-tag">Gaming</div>
+    <div class="footer-tag">Monetisation</div>
+    <div class="footer-tag">Social Infrastructure</div>
+  </div>
+</footer>
+
+<script>
+const nodeData = {
+  content: {
+    name: 'Content Strategy — Misdiagnosed',
+    text: 'The platform has quality content. Dress to Impress, Blox Fruits, Grow a Garden, BloxBurg, Type Soul — consistent, niche-specific experiences serving defined audiences at scale. The CEO\'s viral game argument misses what is already working. The real opportunity is formalising licensed IP partnerships across anime, comics, and trending demographics — building on what creators are already proving works organically.',
+    color: 'var(--amber)'
+  },
+  trust: {
+    name: 'Parental Trust — Acquisition Blocker',
+    text: 'Age verification addresses friction inside the platform. Parental deterrence blocks acquisition before the install. Parents who have heard about safety incidents on Roblox don\'t download the app for their children regardless of what safety features exist inside it. Enforcement visibility, under-18 account architecture, and safety marketing to parents — not players — is the fix for the youngest cohort\'s declining acquisition rate.',
+    color: 'var(--red)'
+  },
+  social: {
+    name: 'Social Infrastructure — Underbuilt',
+    text: 'Players join Roblox to be with friends. The game is the context. The friendship is the retention mechanic. Roblox measures gameplay hours but not social presence hours — the sessions where players are on the platform because their friends are there, not because a game is holding their attention. Private invite-only social hubs with creator customisation and parental visibility for under-18 accounts rebuilds the social layer the age verification rollout damaged.',
+    color: 'var(--blue)'
+  },
+  monetisation: {
+    name: 'Monetisation Quality — Platform Gap',
+    text: 'The platform has no quality standards for creator monetisation. A game with fair VIP mechanics and a game with 10 simultaneous pop-ups rank equally in discovery. The result is a race toward predatory design because it is individually rational even when it is collectively damaging. A monetisation quality score built into the discovery algorithm — rewarding session length, repeat purchase rate, and low prompt frequency — makes fair monetisation the path of least resistance without manual moderation.',
+    color: 'var(--green)'
+  }
+};
+
+function showNode(id, cell) {
+  const data = nodeData[id];
+  if (!data) return;
+
+  document.querySelectorAll('.diagram-node').forEach(n => n.style.outline = 'none');
+  cell.style.outline = `2px solid ${data.color}`;
+
+  document.getElementById('diagram-detail').style.borderLeftColor = data.color;
+  document.getElementById('diagram-detail-name').style.color = data.color;
+  document.getElementById('diagram-detail-name').textContent = data.name;
+  document.getElementById('diagram-detail-text').textContent = data.text;
+}
+</script>
+
+</body>
+</html>
