@@ -416,11 +416,17 @@
 
   .project-card:hover { border-color: var(--border-2); transform: translateY(-3px); }
 
-  /* Fintech track has fewer pieces published so far — fixed card width instead of
-     percentage-based sizing avoids implying missing siblings, and scales cleanly
-     as more pieces are added. */
-  #fintech-track.carousel-track { justify-content: flex-start; }
-  #fintech-track .project-card { flex: 0 0 380px; max-width: 380px; }
+  /* All archive carousels use fixed card width instead of percentage-based
+     sizing — keeps every card the same physical size regardless of how many
+     pieces are in a given track, and scales cleanly as more pieces are added. */
+  #fintech-track.carousel-track,
+  #media-track.carousel-track,
+  #systems-track.carousel-track,
+  #sub-track.carousel-track { justify-content: flex-start; }
+  #fintech-track .project-card,
+  #media-track .project-card,
+  #systems-track .project-card,
+  #sub-track .project-card { flex: 0 0 380px; max-width: 380px; }
 
   /* Featured track — 4 curated pieces, one row on desktop */
   #featured-track.carousel-track { justify-content: flex-start; }
@@ -600,8 +606,8 @@
   }
 
   .coming-soon-card {
-    flex: 0 0 calc(33.333% - 1px);
-    max-width: calc(33.333% - 1px);
+    flex: 0 0 380px;
+    max-width: 380px;
     min-width: 0;
     background: var(--surface);
     border: 1px solid var(--border);
