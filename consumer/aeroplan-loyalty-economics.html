@@ -185,6 +185,7 @@
   <div class="header">
     <div class="title-block">
       <div class="eyebrow">Loyalty Economics · Aeroplan</div>
+      <div style="font-family:var(--mono);font-size:10.5px;letter-spacing:0.1em;color:var(--blue);text-transform:uppercase;margin-bottom:6px">[ Live SQL Query Console ]</div>
       <h1>The Pity Timer Nobody Told You About</h1>
       <div class="kicker-line">
         A breakage, tier-design, and redemption-value teardown of <b>Air Canada's Aeroplan</b> program —
@@ -200,6 +201,10 @@
   </div>
 
   <div id="boot-error-slot"></div>
+
+  <div style="border:1px solid var(--border-soft);border-left:3px solid var(--high);border-radius:8px;background:var(--panel-alt);padding:12px 16px;margin-bottom:18px;font-family:var(--mono);font-size:11px;color:var(--text-dim);line-height:1.6">
+    <b style="color:var(--text)">Constraints:</b> elite tier thresholds (25K&ndash;125K SQC), the ~10% breakage figure, and the 1.6&cent;/pt blended redemption value are Air Canada&rsquo;s own disclosures. The member-level transaction ledger underneath is a synthetic population, seeded to reproduce that blended breakage rate &mdash; not scraped account data. The SQL engine and every query result below are real and re-executable against that simulated ledger.
+  </div>
 
   <div class="kpi-top">
     <div class="cell"><div class="num">~10%</div><div class="lbl">Air Canada–disclosed breakage rate</div></div>
@@ -334,6 +339,12 @@
     <p>A pity counter and a status ladder solve the same design problem: how do you keep someone spending toward a reward whose exact value they can't see? Genshin's soft/hard pity hides the true odds behind a counter that only becomes legible after dozens of pulls. Aeroplan's SQC ladder does the same thing with money instead of pulls — the jump from 25K to Super Elite (125,000 SQC) isn't priced anywhere on Aeroplan's site in dollars, only in credits.</p>
     <p>The breakage data makes the parallel sharper. In both systems, the people who understand the mechanism best extract close to full value. Everyone else pays the "obscured value tax": in Genshin it's players who quit pulling right before soft pity; in Aeroplan it's the ~84% of the member base with no status who let points expire because there was never a status deadline forcing them to look at the balance.</p>
     <p>This is the same argument made on the game-systems side of this portfolio in <b>Mid-Loop Engagement Architecture</b> and <b>Economy Architecture</b> — reward pacing, scarcity, and threshold design aren't cosmetic differences between industries. They're the same three levers, priced in different currencies.</p>
+  </div>
+
+  <div class="thesis" style="margin-top:16px">
+    <h3>The strongest objection to this framing</h3>
+    <p>No one spends real money for a chance at Aeroplan status the way a player spends real money for a chance at a 5★ pull. SQC is earned through purchases most members would make anyway — flights, a co-branded card, everyday spend. By that logic, breakage isn't extraction, it's just forgetfulness, and the gacha comparison is a stretch.</p>
+    <p>That objection holds cleanly for members who never intended to chase status — most of the base, and most of the breakage. It holds less well for the tier-chasing minority: the query results above show they are making deliberate incremental decisions (which card, which route, which partner redemption) specifically to clear a threshold whose dollar value Aeroplan never publishes. For that group the mechanism is closer than it first looks — informational asymmetry doing the same work a hidden pull-rate does in a gacha system, just denominated in credits instead of pulls.</p>
   </div>
 
   <div class="sources">
