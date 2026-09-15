@@ -6,22 +6,25 @@
 <title>Leon Telemaque — Consumer Behaviour & Product Systems</title>
 <style>
   :root {
-    --bg: #080808;
-    --surface: #0f0f0f;
-    --surface-2: #141414;
-    --border: #1e1e1e;
-    --border-2: #2a2a2a;
-    --blue: #c2714f;
-    --blue-dim: rgba(194,113,79,0.08);
-    --blue-mid: rgba(194,113,79,0.15);
+    --bg: #0a0c10;
+    --surface: #111520;
+    --surface-2: #161c2e;
+    --border: #1e2840;
+    --border-2: #2a3a5a;
+    --blue: #2563eb;
+    --blue-dim: rgba(37,99,235,0.10);
+    --blue-mid: rgba(37,99,235,0.18);
+    --blue-glow: rgba(37,99,235,0.05);
+    --terra: #c2714f;
+    --terra-dim: rgba(194,113,79,0.10);
     --teal: #0d9488;
     --teal-dim: rgba(13,148,136,0.08);
     --amber: #d97706;
     --red: #c0392b;
-    --green: #16a34a;
-    --text: #e8e8e8;
-    --text-mid: #888;
-    --text-dim: #444;
+    --green: #22c55e;
+    --text: #f0f0f0;
+    --text-mid: #8899bb;
+    --text-dim: #56628a;
     --mono: 'Courier New', monospace;
     --sans: system-ui, -apple-system, sans-serif;
     --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
@@ -35,20 +38,59 @@
     background: var(--bg);
     color: var(--text);
     font-family: var(--sans);
+    overflow-x: hidden;
+  }
+
+  /* ── SCROLL PROGRESS ── */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--blue), var(--terra));
+    z-index: 300;
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 0.1s linear;
+    width: 100%;
+  }
+
+  /* ── PARTICLES ── */
+  .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .particle {
+    position: absolute;
+    width: 1px; height: 1px;
+    background: var(--blue);
+    border-radius: 50%;
+    animation: particleFloat linear infinite;
+    opacity: 0;
+  }
+  @keyframes particleFloat {
+    0% { transform: translateY(100vh); opacity: 0; }
+    10% { opacity: 0.3; }
+    90% { opacity: 0.15; }
+    100% { transform: translateY(-10vh) translateX(15px); opacity: 0; }
   }
 
   /* ── NAV ── */
   nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    background: transparent;
+    border-bottom: 1px solid transparent;
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: 52px;
+    transition: background 0.3s, backdrop-filter 0.3s, border-color 0.3s;
+  }
+
+  nav.scrolled {
+    background: rgba(10,12,16,0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-color: var(--border);
   }
 
   .nav-logo {
@@ -82,15 +124,15 @@
     font-family: var(--mono);
     font-size: 10px;
     letter-spacing: 0.12em;
-    color: var(--blue);
+    color: var(--terra);
     text-decoration: none;
     text-transform: uppercase;
-    border: 1px solid var(--blue);
+    border: 1px solid var(--terra);
     padding: 6px 14px;
     transition: var(--transition);
   }
 
-  .nav-cta:hover { background: var(--blue-dim); }
+  .nav-cta:hover { background: var(--terra-dim); }
 
   .nav-resume {
     font-family: var(--mono);
@@ -124,18 +166,44 @@
     display: grid;
     grid-template-columns: 1fr 420px;
     gap: 0;
-    padding: 80px 40px 60px;
+    padding: 132px 40px 60px;
     position: relative;
     border-bottom: 1px solid var(--border);
     overflow: hidden;
   }
 
-  .hero::before {
+  .hero-bg { position: absolute; inset: 0; pointer-events: none; }
+
+  .hero-bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    animation: orbDrift 10s ease-in-out infinite;
+  }
+  .hero-bg-orb-1 { width: 700px; height: 700px; background: var(--blue-glow); top: -200px; right: -150px; }
+  .hero-bg-orb-2 { width: 500px; height: 500px; background: rgba(194,113,79,0.04); bottom: -150px; left: 5%; animation-delay: -5s; }
+
+  @keyframes orbDrift {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(25px,-18px) scale(1.04); }
+    66% { transform: translate(-18px,25px) scale(0.96); }
+  }
+
+  .hero-bg::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at 70% 30%, rgba(37,99,235,0.04) 0%, transparent 60%);
-    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(37,99,235,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(37,99,235,0.035) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+    animation: gridPan 25s linear infinite;
+  }
+
+  @keyframes gridPan {
+    0% { background-position: 0 0, 0 0; }
+    100% { background-position: 60px 60px, 60px 60px; }
   }
 
   .hero-left {
@@ -143,7 +211,19 @@
     flex-direction: column;
     justify-content: flex-end;
     padding-bottom: 20px;
+    position: relative;
+    z-index: 1;
   }
+
+  /* ENTRANCE ANIMATIONS */
+  .animate-in { opacity: 0; transform: translateY(24px); animation: slideUp 0.7s cubic-bezier(0.4,0,0.2,1) forwards; }
+  @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+  .d1 { animation-delay: 0.1s; }
+  .d2 { animation-delay: 0.25s; }
+  .d3 { animation-delay: 0.4s; }
+  .d4 { animation-delay: 0.55s; }
+  .d5 { animation-delay: 0.7s; }
+  .d6 { animation-delay: 0.85s; }
 
   .hero-subtitle {
     font-family: var(--mono);
@@ -163,7 +243,26 @@
     margin-bottom: 12px;
   }
 
-  .hero-headline .accent { color: var(--blue); display: block; }
+  .hero-headline .accent { color: var(--terra); display: block; position: relative; }
+
+  .hero-headline .accent::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 2px; top: 0;
+    color: var(--blue);
+    clip-path: polygon(0 30%, 100% 30%, 100% 50%, 0 50%);
+    animation: glitch 5s infinite;
+    opacity: 0;
+  }
+
+  @keyframes glitch {
+    0%, 88%, 100% { opacity: 0; }
+    89% { opacity: 0.5; transform: translate(-2px, 1px); }
+    90% { opacity: 0.5; transform: translate(2px, -1px); }
+    91% { opacity: 0; }
+    93% { opacity: 0.3; transform: translate(-1px, 2px); }
+    94% { opacity: 0; }
+  }
 
   .hero-supporting {
     font-size: clamp(18px, 2.5vw, 26px);
@@ -224,7 +323,11 @@
     padding: 4px 10px;
     border: 1px solid var(--border);
     text-transform: uppercase;
+    transition: all 0.2s;
+    cursor: default;
   }
+
+  .hero-tag:hover { color: var(--blue); border-color: var(--blue); background: var(--blue-dim); }
 
   .hero-avail {
     font-family: var(--mono);
@@ -241,12 +344,13 @@
     height: 6px;
     border-radius: 50%;
     background: var(--green);
-    animation: pulse 2s infinite;
+    box-shadow: 0 0 8px var(--green);
+    animation: dotPulse 2s ease-in-out infinite;
   }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
+  @keyframes dotPulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--green); }
+    50% { opacity: 0.4; box-shadow: 0 0 2px var(--green); }
   }
 
   /* HERO RIGHT */
@@ -257,6 +361,8 @@
     align-items: flex-end;
     gap: 16px;
     padding-left: 40px;
+    position: relative;
+    z-index: 1;
   }
 
   .hero-stat-card {
@@ -266,6 +372,19 @@
     width: 100%;
     position: relative;
     overflow: hidden;
+    opacity: 0;
+    animation: slideFromRight 0.7s cubic-bezier(0.4,0,0.2,1) forwards;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .hero-stat-card:nth-child(1) { animation-delay: 0.3s; }
+  .hero-stat-card:nth-child(2) { animation-delay: 0.45s; }
+  .hero-stat-card:nth-child(3) { animation-delay: 0.6s; }
+  .hero-stat-card:nth-child(4) { animation-delay: 0.75s; }
+
+  @keyframes slideFromRight {
+    from { opacity: 0; transform: translateX(28px); }
+    to { opacity: 1; transform: translateX(0); }
   }
 
   .hero-stat-card::before {
@@ -273,9 +392,25 @@
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: var(--blue);
-    opacity: 0.5;
+    background: linear-gradient(90deg, var(--blue), var(--terra));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
   }
+
+  .hero-stat-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 40%, rgba(37,99,235,0.04) 50%, transparent 60%);
+    transform: translateX(-100%);
+    transition: transform 0.5s;
+    pointer-events: none;
+  }
+
+  .hero-stat-card:hover { border-color: rgba(37,99,235,0.35); transform: translateX(-4px); }
+  .hero-stat-card:hover::before { transform: scaleX(1); }
+  .hero-stat-card:hover::after { transform: translateX(100%); }
 
   .stat-label {
     font-family: var(--mono);
@@ -290,9 +425,10 @@
     font-size: 32px;
     font-weight: 700;
     letter-spacing: -0.03em;
-    color: var(--blue);
+    color: var(--terra);
     line-height: 1;
     margin-bottom: 4px;
+    font-variant-numeric: tabular-nums;
   }
 
   .stat-sub {
@@ -325,7 +461,7 @@
     line-height: 1.15;
   }
 
-  .section-title em { color: var(--blue); font-style: normal; }
+  .section-title em { color: var(--terra); font-style: normal; }
 
   .section-desc {
     font-size: 14px;
@@ -334,6 +470,21 @@
     line-height: 1.7;
     margin-bottom: 40px;
   }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1), transform 0.6s cubic-bezier(0.4,0,0.2,1);
+  }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
 
   /* ── ABOUT ── */
   .about-grid {
@@ -409,12 +560,51 @@
     background: var(--surface);
     border: 1px solid transparent;
     cursor: pointer;
-    transition: border-color 0.2s, transform 0.18s;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.35s, transform 0.35s, box-shadow 0.35s;
     display: flex;
     flex-direction: column;
+    opacity: 0;
+    transform: translateY(20px);
   }
 
-  .project-card:hover { border-color: var(--border-2); transform: translateY(-3px); }
+  .project-card.card-visible,
+  .coming-soon-card.card-visible {
+    animation: cardReveal 0.5s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
+
+  @keyframes cardReveal { to { opacity: 1; transform: translateY(0); } }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--blue), var(--terra));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+    z-index: 2;
+  }
+
+  .project-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 40%, rgba(37,99,235,0.03) 50%, transparent 60%);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+    pointer-events: none;
+  }
+
+  .project-card:hover {
+    border-color: rgba(37,99,235,0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+  }
+  .project-card:hover::before { transform: scaleX(1); }
+  .project-card:hover::after { transform: translateX(100%); }
 
   /* All archive carousels use fixed card width instead of percentage-based
      sizing — keeps every card the same physical size regardless of how many
@@ -488,7 +678,7 @@
 
   /* Fintech thumb */
   .thumb-fintech {
-    background: linear-gradient(135deg, #080808 0%, #0f1a2e 100%);
+    background: linear-gradient(135deg, #0a0c10 0%, #0f1a2e 100%);
   }
 
   .thumb-fintech .thumb-visual {
@@ -515,13 +705,13 @@
 
   .thumb-bar {
     height: 3px;
-    background: var(--blue);
+    background: var(--terra);
     border-radius: 0;
   }
 
   /* Subscription thumb */
   .thumb-sub {
-    background: linear-gradient(135deg, #080808 0%, #0d1a14 100%);
+    background: linear-gradient(135deg, #0a0c10 0%, #0d1a14 100%);
   }
 
   .thumb-sub .thumb-visual {
@@ -542,7 +732,7 @@
 
   /* Media thumb */
   .thumb-media {
-    background: linear-gradient(135deg, #080808 0%, #1a1008 100%);
+    background: linear-gradient(135deg, #0a0c10 0%, #1a1008 100%);
   }
 
   .thumb-media .thumb-visual {
@@ -571,7 +761,10 @@
     color: var(--text);
     margin-bottom: 10px;
     line-height: 1.3;
+    transition: color 0.2s;
   }
+
+  .project-card:hover .card-title { color: var(--terra); }
 
   .card-desc {
     font-size: 12px;
@@ -612,8 +805,9 @@
   }
 
   .card-tag.primary {
-    color: var(--blue);
-    border-color: rgba(37,99,235,0.3);
+    color: var(--terra);
+    border-color: rgba(194,113,79,0.4);
+    background: var(--terra-dim);
   }
 
   .coming-soon-card {
@@ -628,6 +822,8 @@
     justify-content: center;
     height: 340px;
     gap: 12px;
+    opacity: 0;
+    transform: translateY(20px);
   }
 
   .coming-soon-label {
@@ -708,8 +904,13 @@
   @media (max-width: 768px) {
     html, body { overflow-x: hidden; }
 
-    /* Nav — drop the anchor-link row and let logo / actions wrap instead of overflowing */
-    nav { flex-wrap: wrap; height: auto; padding: 12px 16px; row-gap: 10px; }
+    /* Nav — drop the anchor-link row and let logo / actions wrap instead of
+       overflowing. Also drop back to position:sticky (solid bg, no blur):
+       the fixed+blur nav is a desktop enhancement, but at this width the
+       wrapped logo+actions row has a variable height that a fixed nav can't
+       reserve layout space for, so hero content would end up sliding under
+       it. Sticky still occupies flow height, so nothing else needs to change. */
+    nav { position: sticky; flex-wrap: wrap; height: auto; padding: 12px 16px; row-gap: 10px; background: var(--bg); border-bottom: 1px solid var(--border); backdrop-filter: none; }
     .nav-links { display: none; }
     .nav-actions { gap: 10px; flex-wrap: wrap; }
     .nav-toggle { font-size: 8px; padding: 5px 8px; }
@@ -727,8 +928,14 @@
 </head>
 <body>
 
+<!-- SCROLL PROGRESS -->
+<div class="progress-bar" id="progress"></div>
+
+<!-- PARTICLES -->
+<div class="particles" id="particles"></div>
+
 <!-- NAV -->
-<nav>
+<nav id="nav">
   <a href="#" class="nav-logo">LT — Consumer Systems</a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
@@ -745,19 +952,24 @@
 
 <!-- HERO -->
 <section class="hero">
+  <div class="hero-bg">
+    <div class="hero-bg-orb hero-bg-orb-1"></div>
+    <div class="hero-bg-orb hero-bg-orb-2"></div>
+  </div>
+
   <div class="hero-left">
-    <div class="hero-subtitle">I'm Leon — consumer behaviour analyst & product systems designer</div>
-    <h1 class="hero-headline">
+    <div class="hero-subtitle animate-in d1">I'm Leon — consumer behaviour analyst & product systems designer</div>
+    <h1 class="hero-headline animate-in d2">
       I study why
-      <span class="accent">consumers act</span>
+      <span class="accent" data-text="consumers act">consumers act</span>
       the way they do
     </h1>
-    <p class="hero-supporting">
+    <p class="hero-supporting animate-in d3">
       the decisions, the patterns, the systems underneath.
       <em>The data just makes the argument stronger.</em>
     </p>
 
-    <ul class="hero-points">
+    <ul class="hero-points animate-in d4">
       <li>
         <span class="point-num">1.</span>
         <span>Consumer behaviour analyst and product designer — retention architecture, decision psychology, and the behavioural systems underneath</span>
@@ -772,7 +984,7 @@
       </li>
     </ul>
 
-    <div class="hero-tags">
+    <div class="hero-tags animate-in d5">
       <div class="hero-tag">Consumer Behaviour</div>
       <div class="hero-tag">Product Management</div>
       <div class="hero-tag">UX Research</div>
@@ -780,7 +992,7 @@
       <div class="hero-tag">Behavioural Analytics</div>
     </div>
 
-    <div class="hero-avail">
+    <div class="hero-avail animate-in d6">
       <div class="avail-dot"></div>
       Available for internship and junior roles — product management and UXR. Toronto based, open to remote and international.
     </div>
@@ -794,7 +1006,7 @@
     </div>
     <div class="hero-stat-card">
       <div class="stat-label">Disciplines</div>
-      <div class="stat-value">3</div>
+      <div class="stat-value" data-target="3">0</div>
       <div class="stat-sub">Systems &amp; Strategy · Fintech · Subscription</div>
     </div>
     <div class="hero-stat-card">
@@ -809,13 +1021,13 @@
 <section class="section" id="featured-work" style="padding-bottom:56px">
   <div class="carousel-header">
     <div>
-      <div class="section-eyebrow" style="color:var(--amber)">Featured Work</div>
-      <h2 class="section-title">The Strongest Case Studies, <em>Curated</em></h2>
-      <p class="section-desc" style="margin-bottom:0">Four pieces pulled from the full archive below, chosen for range and rigor over polish — a live SQL loyalty-economics console, a cohort retention heatmap model, a four-part lifetime-value breakdown, and the site's only full A/B test experimentation case study. Each states its assumptions up front and argues the strongest case against itself.</p>
+      <div class="section-eyebrow reveal-left" style="color:var(--amber)">Featured Work</div>
+      <h2 class="section-title reveal-left" style="transition-delay:0.1s">The Strongest Case Studies, <em>Curated</em></h2>
+      <p class="section-desc reveal-left" style="margin-bottom:0;transition-delay:0.2s">Four pieces pulled from the full archive below, chosen for range and rigor over polish — a live SQL loyalty-economics console, a cohort retention heatmap model, a four-part lifetime-value breakdown, and the site's only full A/B test experimentation case study. Each states its assumptions up front and argues the strongest case against itself.</p>
     </div>
     <div class="hero-stat-card" style="width:auto;min-width:220px;padding:16px 22px">
       <div class="stat-label">Case Studies</div>
-      <div class="stat-value" style="font-size:28px">4</div>
+      <div class="stat-value" style="font-size:28px" data-target="4">0</div>
       <div class="stat-sub">Featured &middot; 12 total case studies</div>
     </div>
   </div>
@@ -903,18 +1115,18 @@
 
 <!-- ABOUT -->
 <section class="section" id="about">
-  <div class="section-eyebrow">About</div>
-  <h2 class="section-title">Consumer behaviour is not a <em>discipline.</em> It's a lens.</h2>
+  <div class="section-eyebrow reveal-left">About</div>
+  <h2 class="section-title reveal-left" style="transition-delay:0.1s">Consumer behaviour is not a <em>discipline.</em> It's a lens.</h2>
 
   <div class="about-grid">
-    <div class="about-panel">
+    <div class="about-panel reveal">
       <div class="about-pull">
         The data tells you where the system broke. The behaviour tells you why.
       </div>
       <p>I didn't come to product and UX research through a design program. I came through <strong>consumer behaviour</strong> — and it turns out the frameworks for understanding why people buy things, why they stay, and why they leave are closer to product design than most designers think.</p>
       <p>My academic background in Marketing and Consumer Culture gives me a different entry point into product systems. I study why consumers make decisions the same way a behavioural economist would — through the lens of psychology, incentive design, and system architecture. That lens applies directly to brand and CPG strategy, fintech products, and subscription platforms.</p>
     </div>
-    <div class="about-panel">
+    <div class="about-panel reveal" style="transition-delay:0.1s">
       <p>On the research side I analyse consumer decision patterns, retention funnels, and behavioural signals across designed systems — building the case for why users act the way they do and what product decisions can shift those patterns.</p>
       <p>On the design side I think in systems — mapping how individual product decisions ripple across user segments, time horizons, and business outcomes simultaneously. Every design decision serves some users and challenges others. The question is whether that trade-off is intentional.</p>
       <p><strong>The two sides are not separate disciplines. The research tells you where the design broke. The design tells you why the research looks the way it does.</strong></p>
@@ -924,18 +1136,18 @@
 
 <!-- FULL ARCHIVE LABEL -->
 <div class="archive-label">
-  <div class="section-eyebrow">Full Archive</div>
-  <h2 class="section-title" style="font-size:clamp(22px,3vw,28px);margin-bottom:8px">Every Case Study, by Discipline</h2>
-  <p class="section-desc" style="margin-bottom:0">Systems &amp; Strategy, Fintech, and Subscription &amp; Retention — the complete set, including the four featured above.</p>
+  <div class="section-eyebrow reveal-left">Full Archive</div>
+  <h2 class="section-title reveal-left" style="font-size:clamp(22px,3vw,28px);margin-bottom:8px;transition-delay:0.1s">Every Case Study, by Discipline</h2>
+  <p class="section-desc reveal-left" style="margin-bottom:0;transition-delay:0.2s">Systems &amp; Strategy, Fintech, and Subscription &amp; Retention — the complete set, including the four featured above.</p>
 </div>
 
 <!-- FINTECH CAROUSEL -->
 <section class="section" id="fintech">
   <div class="carousel-header">
     <div>
-      <div class="section-eyebrow">Fintech Psychology</div>
-      <h2 class="section-title">Why people make <em>financial decisions</em> the way they do</h2>
-      <p class="section-desc">Spending behaviour, savings mechanics, habit formation, and the psychology of money — consumer behaviour theory applied to financial product design.</p>
+      <div class="section-eyebrow reveal-left">Fintech Psychology</div>
+      <h2 class="section-title reveal-left" style="transition-delay:0.1s">Why people make <em>financial decisions</em> the way they do</h2>
+      <p class="section-desc reveal-left" style="transition-delay:0.2s">Spending behaviour, savings mechanics, habit formation, and the psychology of money — consumer behaviour theory applied to financial product design.</p>
     </div>
   </div>
 
@@ -1024,9 +1236,9 @@
 <section class="section" id="systems-strategy">
   <div class="carousel-header">
     <div>
-      <div class="section-eyebrow">Systems &amp; Strategy</div>
-      <h2 class="section-title">How brands and platforms <em>build, defend, and decide</em></h2>
-      <p class="section-desc">Decision architecture and brand architecture turn out to be the same problem: what to build, what to protect, and what to walk away from. Costco's flat margins, Tim Hortons' menu bloat, Wealthsimple's product sequencing, Roblox's platform failures, and Gatorade's category defense are the same question in five different industries — how a team decides what a brand or platform actually is, and defends that decision under pressure. This is the connective layer between the brand, fintech, and retention work above.</p>
+      <div class="section-eyebrow reveal-left">Systems &amp; Strategy</div>
+      <h2 class="section-title reveal-left" style="transition-delay:0.1s">How brands and platforms <em>build, defend, and decide</em></h2>
+      <p class="section-desc reveal-left" style="transition-delay:0.2s">Decision architecture and brand architecture turn out to be the same problem: what to build, what to protect, and what to walk away from. Costco's flat margins, Tim Hortons' menu bloat, Wealthsimple's product sequencing, Roblox's platform failures, and Gatorade's category defense are the same question in five different industries — how a team decides what a brand or platform actually is, and defends that decision under pressure. This is the connective layer between the brand, fintech, and retention work above.</p>
     </div>
   </div>
 
@@ -1126,9 +1338,9 @@
 <section class="section" id="subscription">
   <div class="carousel-header">
     <div>
-      <div class="section-eyebrow">Subscription & Retention Design</div>
-      <h2 class="section-title">Why users <em>stay, lapse,</em> and come back</h2>
-      <p class="section-desc">Retention architecture, churn psychology, and the behavioural design of subscription products — the same thinking that drives LiveOps applied to consumer platforms.</p>
+      <div class="section-eyebrow reveal-left">Subscription & Retention Design</div>
+      <h2 class="section-title reveal-left" style="transition-delay:0.1s">Why users <em>stay, lapse,</em> and come back</h2>
+      <p class="section-desc reveal-left" style="transition-delay:0.2s">Retention architecture, churn psychology, and the behavioural design of subscription products — the same thinking that drives LiveOps applied to consumer platforms.</p>
     </div>
   </div>
 
@@ -1191,10 +1403,10 @@
 </section>
 
 <!-- CONTACT -->
-<div class="contact-section">
+<div class="contact-section reveal">
   <div class="contact-headline">Working on a product —</div>
   <div class="contact-headline">or trying to understand</div>
-  <div class="contact-cta">your users better? <span style="color:var(--blue)">Let's talk.</span> 👋</div>
+  <div class="contact-cta">your users better? <span style="color:var(--terra)">Let's talk.</span> 👋</div>
 </div>
 
 <!-- FOOTER -->
@@ -1210,10 +1422,80 @@
   </div>
 </footer>
 
-<!-- No carousel JS left — .carousel-track-wrap scrolls natively (overflow-x:
-     auto + scroll-snap-type:x proximity), so touch drag, trackpad, mouse-
-     wheel-shift, and keyboard arrow-key scrolling all work without any
-     hand-rolled position tracking to keep in sync. -->
+<!-- No carousel position-tracking JS — .carousel-track-wrap still scrolls
+     natively (overflow-x: auto + scroll-snap-type:x proximity), so touch
+     drag, trackpad, mouse-wheel-shift, and keyboard arrow-key scrolling all
+     work without any hand-rolled position tracking to keep in sync. The
+     script below only handles visual polish (progress bar, particles, nav
+     blur, entrance/reveal animations, stat counters) — none of it touches
+     carousel scroll position. -->
+<script>
+// ── SCROLL PROGRESS ──
+const progress = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  progress.style.transform = `scaleX(${pct})`;
+}, { passive: true });
+
+// ── NAV BLUR ──
+const navEl = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  navEl.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+// ── COUNTER ANIMATIONS ──
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target, 10);
+  const duration = 1400;
+  const start = performance.now();
+  function update(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(target * ease).toLocaleString();
+    if (p < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.querySelectorAll('.stat-value[data-target]').forEach(animateCounter);
+  }, 500);
+});
+
+// ── SCROLL REVEAL ──
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal, .reveal-left').forEach(el => revealObserver.observe(el));
+
+// ── CARD STAGGER REVEAL ──
+const cardObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const cards = entry.target.querySelectorAll('.project-card, .coming-soon-card');
+      cards.forEach((card, i) => {
+        setTimeout(() => card.classList.add('card-visible'), i * 90);
+      });
+      cardObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.carousel-track').forEach(t => cardObserver.observe(t));
+
+// ── FLOATING PARTICLES ──
+const particleContainer = document.getElementById('particles');
+for (let i = 0; i < 18; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.left = (Math.random() * 100) + 'vw';
+  p.style.width = p.style.height = (Math.random() * 2 + 1) + 'px';
+  p.style.animationDuration = (Math.random() * 18 + 10) + 's';
+  p.style.animationDelay = (Math.random() * 18) + 's';
+  particleContainer.appendChild(p);
+}
+</script>
 
 </body>
 </html>
