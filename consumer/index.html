@@ -489,14 +489,18 @@
   /* ── ABOUT ── */
   .about-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1px;
-    background: var(--border);
+    grid-template-columns: 1fr 360px;
+    gap: 60px;
+    align-items: center;
+    margin-top: 40px;
   }
+
+  .about-text { display: flex; flex-direction: column; gap: 24px; }
 
   .about-panel {
     background: var(--surface);
-    padding: 40px;
+    border: 1px solid var(--border);
+    padding: 32px;
   }
 
   .about-panel p {
@@ -518,6 +522,117 @@
     border-left: 2px solid var(--blue);
     padding-left: 20px;
     margin-bottom: 24px;
+  }
+
+  /* PHOTO */
+  .photo-wrap { position: relative; height: 440px; }
+
+  .photo-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    animation: photoFloat 6s ease-in-out infinite;
+  }
+
+  @keyframes photoFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .photo-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .photo-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(37,99,235,0.28) 0%, rgba(194,113,79,0.18) 50%, rgba(37,99,235,0.14) 100%);
+    background-size: 300% 300%;
+    animation: gradShift 8s ease-in-out infinite;
+    mix-blend-mode: color;
+    pointer-events: none;
+  }
+
+  @keyframes gradShift {
+    0%, 100% { background-position: 0% 50%; }
+    33% { background-position: 100% 0%; }
+    66% { background-position: 0% 100%; }
+  }
+
+  .photo-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 35%, rgba(10,12,16,0.5) 70%, rgba(10,12,16,0.9) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .photo-scanlines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(10,12,16,0.07) 3px, rgba(10,12,16,0.07) 4px);
+    pointer-events: none;
+    z-index: 3;
+    opacity: 0.4;
+  }
+
+  .photo-icon {
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .photo-icon svg { width: 55px; height: 55px; fill: var(--text-dim); }
+
+  .photo-chip {
+    position: absolute;
+    background: rgba(10,12,16,0.92);
+    border: 1px solid var(--border);
+    padding: 7px 12px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-mid);
+    letter-spacing: 0.06em;
+    z-index: 10;
+    backdrop-filter: blur(8px);
+    animation: chipFloat 5s ease-in-out infinite;
+    white-space: nowrap;
+  }
+
+  .photo-chip::before {
+    content: '';
+    display: inline-block;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+    animation: dotPulse 2s ease-in-out infinite;
+  }
+
+  .chip-1 { top: -12px; left: -16px; animation-delay: 0s; }
+  .chip-1::before { background: var(--blue); }
+  .chip-2 { bottom: 48px; right: -16px; animation-delay: -2s; }
+  .chip-2::before { background: var(--terra); }
+  .chip-3 { bottom: -12px; left: 24px; animation-delay: -4s; }
+  .chip-3::before { background: var(--green); }
+
+  @keyframes chipFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
   }
 
   /* ── CAROUSEL ── */
@@ -919,7 +1034,8 @@
     .hero { grid-template-columns: 1fr; min-height: auto; padding: 32px 20px 40px; gap: 32px; }
 
     /* About */
-    .about-grid { grid-template-columns: 1fr; }
+    .about-grid { grid-template-columns: 1fr; gap: 32px; }
+    .photo-wrap { height: 280px; margin: 0 8px; }
 
     /* Carousel header — let the arrows wrap under the title instead of squeezing */
     .carousel-header { flex-wrap: wrap; gap: 12px; }
@@ -1119,17 +1235,39 @@
   <h2 class="section-title reveal-left" style="transition-delay:0.1s">Consumer behaviour is not a <em>discipline.</em> It's a lens.</h2>
 
   <div class="about-grid">
-    <div class="about-panel reveal">
-      <div class="about-pull">
-        The data tells you where the system broke. The behaviour tells you why.
+    <div class="about-text">
+      <div class="about-panel reveal">
+        <div class="about-pull">
+          The data tells you where the system broke. The behaviour tells you why.
+        </div>
+        <p>I didn't come to product and UX research through a design program. I came through <strong>consumer behaviour</strong> — and it turns out the frameworks for understanding why people buy things, why they stay, and why they leave are closer to product design than most designers think.</p>
+        <p>My academic background in Marketing and Consumer Culture gives me a different entry point into product systems. I study why consumers make decisions the same way a behavioural economist would — through the lens of psychology, incentive design, and system architecture. That lens applies directly to brand and CPG strategy, fintech products, and subscription platforms.</p>
       </div>
-      <p>I didn't come to product and UX research through a design program. I came through <strong>consumer behaviour</strong> — and it turns out the frameworks for understanding why people buy things, why they stay, and why they leave are closer to product design than most designers think.</p>
-      <p>My academic background in Marketing and Consumer Culture gives me a different entry point into product systems. I study why consumers make decisions the same way a behavioural economist would — through the lens of psychology, incentive design, and system architecture. That lens applies directly to brand and CPG strategy, fintech products, and subscription platforms.</p>
+      <div class="about-panel reveal" style="transition-delay:0.1s">
+        <p>On the research side I analyse consumer decision patterns, retention funnels, and behavioural signals across designed systems — building the case for why users act the way they do and what product decisions can shift those patterns.</p>
+        <p>On the design side I think in systems — mapping how individual product decisions ripple across user segments, time horizons, and business outcomes simultaneously. Every design decision serves some users and challenges others. The question is whether that trade-off is intentional.</p>
+        <p><strong>The two sides are not separate disciplines. The research tells you where the design broke. The design tells you why the research looks the way it does.</strong></p>
+      </div>
     </div>
-    <div class="about-panel reveal" style="transition-delay:0.1s">
-      <p>On the research side I analyse consumer decision patterns, retention funnels, and behavioural signals across designed systems — building the case for why users act the way they do and what product decisions can shift those patterns.</p>
-      <p>On the design side I think in systems — mapping how individual product decisions ripple across user segments, time horizons, and business outcomes simultaneously. Every design decision serves some users and challenges others. The question is whether that trade-off is intentional.</p>
-      <p><strong>The two sides are not separate disciplines. The research tells you where the design broke. The design tells you why the research looks the way it does.</strong></p>
+
+    <!-- PHOTO -->
+    <div class="photo-wrap reveal" style="transition-delay:0.15s">
+      <div class="photo-container" id="parallaxPhoto">
+        <div class="photo-placeholder">
+          <!-- Replace with: <img src="your-photo.jpg" style="width:100%;height:100%;object-fit:cover;position:relative;z-index:1;"> -->
+          <div class="photo-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+            </svg>
+          </div>
+          <div class="photo-overlay"></div>
+          <div class="photo-scanlines"></div>
+          <div class="photo-vignette"></div>
+        </div>
+      </div>
+      <div class="photo-chip chip-1">Consumer Analyst</div>
+      <div class="photo-chip chip-2">12 Portfolio Pieces</div>
+      <div class="photo-chip chip-3">Toronto, ON</div>
     </div>
   </div>
 </section>
@@ -1441,6 +1579,12 @@ window.addEventListener('scroll', () => {
 const navEl = document.getElementById('nav');
 window.addEventListener('scroll', () => {
   navEl.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+// ── PARALLAX PHOTO ──
+const photoEl = document.getElementById('parallaxPhoto');
+window.addEventListener('scroll', () => {
+  if (photoEl) photoEl.style.transform = `translateY(${window.scrollY * 0.1}px)`;
 }, { passive: true });
 
 // ── COUNTER ANIMATIONS ──
