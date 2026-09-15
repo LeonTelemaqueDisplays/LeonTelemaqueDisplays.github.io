@@ -957,6 +957,134 @@
     line-height: 1.5;
   }
 
+  /* ── SKILLS TICKER ── */
+  .skills-ticker-section {
+    padding: 60px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .skills-ticker-section::before, .skills-ticker-section::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 120px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .skills-ticker-section::before { left: 0; background: linear-gradient(90deg, var(--bg), transparent); }
+  .skills-ticker-section::after { right: 0; background: linear-gradient(-90deg, var(--bg), transparent); }
+
+  .ticker-eyebrow {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .ticker-overflow { overflow: hidden; }
+
+  .ticker-row { display: flex; gap: 12px; margin-bottom: 12px; width: max-content; }
+
+  .ticker-row-1 { animation: tickLeft 35s linear infinite; }
+  .ticker-row-2 { animation: tickRight 40s linear infinite; }
+  .ticker-row-3 { animation: tickLeft 30s linear infinite; }
+
+  @keyframes tickLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  @keyframes tickRight { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+
+  .ticker-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    white-space: nowrap;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--text-mid);
+    flex-shrink: 0;
+    transition: all 0.2s;
+    cursor: default;
+  }
+
+  .ticker-tag:hover { border-color: var(--blue); color: var(--text); background: var(--blue-dim); }
+  .ticker-tag .tag-icon { font-size: 13px; line-height: 1; }
+  .ticker-tag.tool { border-left: 2px solid var(--blue); }
+  .ticker-tag.skill { border-left: 2px solid var(--terra); }
+  .ticker-tag.domain { border-left: 2px solid var(--green); }
+  .ticker-tag.framework { border-left: 2px solid var(--amber); }
+
+  /* ── SKILL FLIP CARDS ── */
+  .skill-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .skill-card {
+    background: var(--surface);
+    perspective: 1000px;
+    height: 200px;
+    cursor: default;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+
+  .skill-card.skill-visible { opacity: 1; transform: translateY(0); }
+
+  .skill-card-inner {
+    position: relative;
+    width: 100%; height: 100%;
+    transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+    transform-style: preserve-3d;
+  }
+
+  .skill-card:hover .skill-card-inner { transform: rotateY(180deg); }
+
+  .skill-front, .skill-back {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .skill-front { background: var(--surface); }
+  .skill-back { background: var(--surface-2); transform: rotateY(180deg); border-top: 2px solid var(--blue); }
+
+  .skill-front-icon { font-size: 26px; line-height: 1; margin-bottom: 10px; }
+  .skill-front-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .skill-front-cat { font-family: var(--mono); font-size: 8px; letter-spacing: 0.12em; color: var(--text-dim); text-transform: uppercase; }
+
+  .skill-front-indicator { display: flex; gap: 3px; margin-top: auto; }
+
+  .indicator-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
+  .indicator-dot.active { background: var(--blue); }
+  .indicator-dot.active.terra { background: var(--terra); }
+  .indicator-dot.active.green { background: var(--green); }
+  .indicator-dot.active.amber { background: var(--amber); }
+
+  .skill-back-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.15em; color: var(--blue); text-transform: uppercase; margin-bottom: 8px; }
+  .skill-back-desc { font-size: 11px; color: var(--text-mid); line-height: 1.6; flex: 1; }
+  .skill-back-proof { font-family: var(--mono); font-size: 9px; color: var(--text-dim); margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); line-height: 1.5; }
+
+  @media (max-width: 768px) {
+    .skill-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
   /* ── CONTACT ── */
   .contact-section {
     padding: 80px 40px;
@@ -1540,6 +1668,227 @@
   </div>
 </section>
 
+<!-- SKILLS TICKER -->
+<div class="skills-ticker-section">
+  <div class="ticker-eyebrow">Tools · Skills · Frameworks · Domains</div>
+
+  <div class="ticker-overflow">
+    <div class="ticker-row ticker-row-1">
+      <div class="ticker-tag tool"><span class="tag-icon">📊</span>SQL</div>
+      <div class="ticker-tag tool"><span class="tag-icon">🐍</span>Python</div>
+      <div class="ticker-tag tool"><span class="tag-icon">📈</span>Tableau</div>
+      <div class="ticker-tag tool"><span class="tag-icon">📋</span>Excel</div>
+      <div class="ticker-tag skill"><span class="tag-icon">🧠</span>Consumer Insights</div>
+      <div class="ticker-tag skill"><span class="tag-icon">📉</span>Churn Analysis</div>
+      <div class="ticker-tag skill"><span class="tag-icon">🔁</span>Cohort Analysis</div>
+      <div class="ticker-tag domain"><span class="tag-icon">🏪</span>CPG Strategy</div>
+      <div class="ticker-tag domain"><span class="tag-icon">💳</span>Fintech Psychology</div>
+      <div class="ticker-tag framework"><span class="tag-icon">📐</span>MECE Framework</div>
+      <div class="ticker-tag framework"><span class="tag-icon">🎯</span>Market Sizing</div>
+      <div class="ticker-tag tool"><span class="tag-icon">📊</span>SQL</div>
+      <div class="ticker-tag tool"><span class="tag-icon">🐍</span>Python</div>
+      <div class="ticker-tag tool"><span class="tag-icon">📈</span>Tableau</div>
+      <div class="ticker-tag tool"><span class="tag-icon">📋</span>Excel</div>
+      <div class="ticker-tag skill"><span class="tag-icon">🧠</span>Consumer Insights</div>
+      <div class="ticker-tag skill"><span class="tag-icon">📉</span>Churn Analysis</div>
+      <div class="ticker-tag skill"><span class="tag-icon">🔁</span>Cohort Analysis</div>
+      <div class="ticker-tag domain"><span class="tag-icon">🏪</span>CPG Strategy</div>
+      <div class="ticker-tag domain"><span class="tag-icon">💳</span>Fintech Psychology</div>
+      <div class="ticker-tag framework"><span class="tag-icon">📐</span>MECE Framework</div>
+      <div class="ticker-tag framework"><span class="tag-icon">🎯</span>Market Sizing</div>
+    </div>
+
+    <div class="ticker-row ticker-row-2">
+      <div class="ticker-tag domain"><span class="tag-icon">🔄</span>Subscription Retention</div>
+      <div class="ticker-tag skill"><span class="tag-icon">📊</span>Pivot Tables</div>
+      <div class="ticker-tag framework"><span class="tag-icon">🏗️</span>Strategy Modelling</div>
+      <div class="ticker-tag skill"><span class="tag-icon">🎯</span>Brand Positioning</div>
+      <div class="ticker-tag domain"><span class="tag-icon">🏬</span>Retail Analytics</div>
+      <div class="ticker-tag skill"><span class="tag-icon">🔍</span>Market Research</div>
+      <div class="ticker-tag tool"><span class="tag-icon">📉</span>Heatmap Analysis</div>
+      <div class="ticker-tag skill"><span class="tag-icon">💡</span>Behavioural Economics</div>
+      <div class="ticker-tag tool"><span class="tag-icon">🧮</span>LTV Modelling</div>
+      <div class="ticker-tag domain"><span class="tag-icon">🔄</span>Subscription Retention</div>
+      <div class="ticker-tag skill"><span class="tag-icon">📊</span>Pivot Tables</div>
+      <div class="ticker-tag framework"><span class="tag-icon">🏗️</span>Strategy Modelling</div>
+      <div class="ticker-tag skill"><span class="tag-icon">🎯</span>Brand Positioning</div>
+      <div class="ticker-tag domain"><span class="tag-icon">🏬</span>Retail Analytics</div>
+      <div class="ticker-tag skill"><span class="tag-icon">🔍</span>Market Research</div>
+      <div class="ticker-tag tool"><span class="tag-icon">📉</span>Heatmap Analysis</div>
+      <div class="ticker-tag skill"><span class="tag-icon">💡</span>Behavioural Economics</div>
+      <div class="ticker-tag tool"><span class="tag-icon">🧮</span>LTV Modelling</div>
+    </div>
+
+    <div class="ticker-row ticker-row-3">
+      <div class="ticker-tag skill"><span class="tag-icon">📝</span>Executive Reporting</div>
+      <div class="ticker-tag domain"><span class="tag-icon">🏦</span>Fintech · Banking</div>
+      <div class="ticker-tag tool"><span class="tag-icon">🖥️</span>PowerPoint · Slides</div>
+      <div class="ticker-tag skill"><span class="tag-icon">🔗</span>Category Analysis</div>
+      <div class="ticker-tag domain"><span class="tag-icon">🍔</span>QSR · CPG · Retail</div>
+      <div class="ticker-tag framework"><span class="tag-icon">📌</span>Occasion Mapping</div>
+      <div class="ticker-tag tool"><span class="tag-icon">🌐</span>HTML · CSS · JS</div>
+      <div class="ticker-tag domain"><span class="tag-icon">📱</span>Digital Product Strategy</div>
+      <div class="ticker-tag skill"><span class="tag-icon">⚙️</span>Funnel Analysis</div>
+      <div class="ticker-tag framework"><span class="tag-icon">🗺️</span>Brand Penetration</div>
+      <div class="ticker-tag skill"><span class="tag-icon">📈</span>Sample Size Calculation</div>
+      <div class="ticker-tag skill"><span class="tag-icon">📝</span>Executive Reporting</div>
+      <div class="ticker-tag domain"><span class="tag-icon">🏦</span>Fintech · Banking</div>
+      <div class="ticker-tag tool"><span class="tag-icon">🖥️</span>PowerPoint · Slides</div>
+      <div class="ticker-tag skill"><span class="tag-icon">🔗</span>Category Analysis</div>
+      <div class="ticker-tag domain"><span class="tag-icon">🍔</span>QSR · CPG · Retail</div>
+      <div class="ticker-tag framework"><span class="tag-icon">📌</span>Occasion Mapping</div>
+      <div class="ticker-tag tool"><span class="tag-icon">🌐</span>HTML · CSS · JS</div>
+      <div class="ticker-tag domain"><span class="tag-icon">📱</span>Digital Product Strategy</div>
+      <div class="ticker-tag skill"><span class="tag-icon">⚙️</span>Funnel Analysis</div>
+      <div class="ticker-tag framework"><span class="tag-icon">🗺️</span>Brand Penetration</div>
+      <div class="ticker-tag skill"><span class="tag-icon">📈</span>Sample Size Calculation</div>
+    </div>
+  </div>
+</div>
+
+<!-- SKILL FLIP CARDS -->
+<section class="section" id="skills">
+  <div class="carousel-header">
+    <div>
+      <div class="section-eyebrow reveal-left">Skills &amp; Tools</div>
+      <h2 class="section-title reveal-left" style="transition-delay:0.1s">What I bring to <em>the work</em></h2>
+      <p class="section-desc reveal-left" style="transition-delay:0.2s">Hover any card to see what the skill looks like in practice and where it's demonstrated in the portfolio.</p>
+    </div>
+  </div>
+
+  <div class="skill-grid" id="skillGrid">
+
+    <div class="skill-card">
+      <div class="skill-card-inner">
+        <div class="skill-front">
+          <div><div class="skill-front-icon">📊</div><div class="skill-front-title">SQL &amp; Python</div><div class="skill-front-cat">Technical Tools</div></div>
+          <div class="skill-front-indicator">
+            <div class="indicator-dot active"></div><div class="indicator-dot active"></div><div class="indicator-dot active"></div><div class="indicator-dot"></div><div class="indicator-dot"></div>
+          </div>
+        </div>
+        <div class="skill-back">
+          <div class="skill-back-label">Technical Tools</div>
+          <div class="skill-back-desc">Real, re-executable SQL — CTEs and window functions running in-browser against a database, not screenshots of queries.</div>
+          <div class="skill-back-proof">Demonstrated → Aeroplan Loyalty Economics (live SQL console)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-inner">
+        <div class="skill-front">
+          <div><div class="skill-front-icon">📈</div><div class="skill-front-title">Data Visualisation</div><div class="skill-front-cat">Analytics</div></div>
+          <div class="skill-front-indicator">
+            <div class="indicator-dot active terra"></div><div class="indicator-dot active terra"></div><div class="indicator-dot active terra"></div><div class="indicator-dot"></div><div class="indicator-dot"></div>
+          </div>
+        </div>
+        <div class="skill-back" style="border-top-color:var(--terra)">
+          <div class="skill-back-label" style="color:var(--terra)">Analytics</div>
+          <div class="skill-back-desc">Cohort heatmaps, risk-ranked dashboards, and interactive charts built to make a dataset's argument legible at a glance.</div>
+          <div class="skill-back-proof">Demonstrated → Spotify Cohort Heatmap · GTA Insurance Risk Monitor</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-inner">
+        <div class="skill-front">
+          <div><div class="skill-front-icon">🧠</div><div class="skill-front-title">Consumer Insights</div><div class="skill-front-cat">Core Discipline</div></div>
+          <div class="skill-front-indicator">
+            <div class="indicator-dot active green"></div><div class="indicator-dot active green"></div><div class="indicator-dot active green"></div><div class="indicator-dot active green"></div><div class="indicator-dot active green"></div>
+          </div>
+        </div>
+        <div class="skill-back" style="border-top-color:var(--green)">
+          <div class="skill-back-label" style="color:var(--green)">Core Discipline</div>
+          <div class="skill-back-desc">Behavioural economics, decision psychology, and retention architecture applied across fintech, CPG, subscription, and platform strategy.</div>
+          <div class="skill-back-proof">Demonstrated → Full consumer portfolio · 12 case studies</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-inner">
+        <div class="skill-front">
+          <div><div class="skill-front-icon">🏗️</div><div class="skill-front-title">Strategy Modelling</div><div class="skill-front-cat">Analytical Framework</div></div>
+          <div class="skill-front-indicator">
+            <div class="indicator-dot active amber"></div><div class="indicator-dot active amber"></div><div class="indicator-dot active amber"></div><div class="indicator-dot"></div><div class="indicator-dot"></div>
+          </div>
+        </div>
+        <div class="skill-back" style="border-top-color:var(--amber)">
+          <div class="skill-back-label" style="color:var(--amber)">Analytical Framework</div>
+          <div class="skill-back-desc">MECE decomposition, market sizing, and LTV modelling built from stated, challengeable assumptions rather than a single black-box number.</div>
+          <div class="skill-back-proof">Demonstrated → Tim Hortons LTV Model</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-inner">
+        <div class="skill-front">
+          <div><div class="skill-front-icon">🏪</div><div class="skill-front-title">CPG Brand Strategy</div><div class="skill-front-cat">Domain Knowledge</div></div>
+          <div class="skill-front-indicator">
+            <div class="indicator-dot active"></div><div class="indicator-dot active"></div><div class="indicator-dot active"></div><div class="indicator-dot"></div><div class="indicator-dot"></div>
+          </div>
+        </div>
+        <div class="skill-back">
+          <div class="skill-back-label">Domain Knowledge</div>
+          <div class="skill-back-desc">Category creation, occasion ownership, brand contract, and mental availability applied to real CPG and QSR brands.</div>
+          <div class="skill-back-proof">Demonstrated → Gatorade · Tim Hortons</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-inner">
+        <div class="skill-front">
+          <div><div class="skill-front-icon">💳</div><div class="skill-front-title">Fintech Psychology</div><div class="skill-front-cat">Domain Knowledge</div></div>
+          <div class="skill-front-indicator">
+            <div class="indicator-dot active terra"></div><div class="indicator-dot active terra"></div><div class="indicator-dot active terra"></div><div class="indicator-dot active terra"></div><div class="indicator-dot"></div>
+          </div>
+        </div>
+        <div class="skill-back" style="border-top-color:var(--terra)">
+          <div class="skill-back-label" style="color:var(--terra)">Domain Knowledge</div>
+          <div class="skill-back-desc">Loyalty economics, product-expansion decisions, and risk analytics applied to real, sourced financial-services data.</div>
+          <div class="skill-back-proof">Demonstrated → Aeroplan · Wealthsimple · GTA Insurance Risk Monitor</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-inner">
+        <div class="skill-front">
+          <div><div class="skill-front-icon">🔄</div><div class="skill-front-title">Retention Design</div><div class="skill-front-cat">Product Thinking</div></div>
+          <div class="skill-front-indicator">
+            <div class="indicator-dot active green"></div><div class="indicator-dot active green"></div><div class="indicator-dot active green"></div><div class="indicator-dot active green"></div><div class="indicator-dot"></div>
+          </div>
+        </div>
+        <div class="skill-back" style="border-top-color:var(--green)">
+          <div class="skill-back-label" style="color:var(--green)">Product Thinking</div>
+          <div class="skill-back-desc">Churn signal detection, cohort mapping, and freemium conversion architecture across subscription platforms.</div>
+          <div class="skill-back-proof">Demonstrated → Hinge · Spotify Freemium Analysis</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-inner">
+        <div class="skill-front">
+          <div><div class="skill-front-icon">📝</div><div class="skill-front-title">Executive Communication</div><div class="skill-front-cat">Soft Skills</div></div>
+          <div class="skill-front-indicator">
+            <div class="indicator-dot active amber"></div><div class="indicator-dot active amber"></div><div class="indicator-dot active amber"></div><div class="indicator-dot active amber"></div><div class="indicator-dot active amber"></div>
+          </div>
+        </div>
+        <div class="skill-back" style="border-top-color:var(--amber)">
+          <div class="skill-back-label" style="color:var(--amber)">Soft Skills</div>
+          <div class="skill-back-desc">Translating consumer behaviour data into clear strategic arguments a senior stakeholder can act on without a follow-up meeting.</div>
+          <div class="skill-back-proof">Demonstrated → All 12 portfolio pieces</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- CONTACT -->
 <div class="contact-section reveal">
   <div class="contact-headline">Working on a product —</div>
@@ -1627,6 +1976,19 @@ const cardObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.08 });
 document.querySelectorAll('.carousel-track').forEach(t => cardObserver.observe(t));
+
+// ── SKILL CARD STAGGER REVEAL ──
+const skillCards = document.querySelectorAll('.skill-card');
+const skillObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = Array.from(skillCards).indexOf(entry.target);
+      setTimeout(() => entry.target.classList.add('skill-visible'), idx * 80);
+      skillObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+skillCards.forEach(c => skillObserver.observe(c));
 
 // ── FLOATING PARTICLES ──
 const particleContainer = document.getElementById('particles');
