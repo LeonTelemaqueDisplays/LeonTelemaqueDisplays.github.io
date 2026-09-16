@@ -715,8 +715,9 @@
 
   .project-card:hover {
     border-color: rgba(37,99,235,0.3);
-    transform: translateY(-5px);
+    transform: translateY(-5px) scale(1.03);
     box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+    z-index: 3;
   }
   .project-card:hover::before { transform: scaleX(1); }
   .project-card:hover::after { transform: translateX(100%); }
@@ -939,6 +940,14 @@
     gap: 12px;
     opacity: 0;
     transform: translateY(20px);
+    transition: border-color 0.35s, transform 0.35s, box-shadow 0.35s;
+  }
+
+  .coming-soon-card:hover {
+    border-color: var(--border-2);
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+    z-index: 3;
   }
 
   .coming-soon-label {
