@@ -1183,6 +1183,33 @@
 .card-tag-blue{ color: var(--blue); border-color: rgba(37,99,235,.35); }
 .card-tag-live{ color: var(--green); border-color: rgba(34,197,94,.35); }
 
+/* ── HERO GIF DECORATION ── */
+.hero-deco{
+  position:absolute;
+  top:72px;
+  right:18%;
+  width:220px;
+  z-index:10;
+  pointer-events:none;
+}
+.hero-deco img{
+  width:100%;
+  display:block;
+  mix-blend-mode:lighten;
+  filter:contrast(1.05) brightness(0.95);
+}
+.hero-deco::after{
+  content:'';
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:60px;
+  background:linear-gradient(to bottom,transparent,var(--bg));
+  pointer-events:none;
+}
+@media(max-width:960px){
+  .hero-deco{display:none}
+}
+
 /* ── MODAL ── */
 .modal-bg{
   position:fixed;inset:0;z-index:2000;
@@ -1421,6 +1448,9 @@
 
 <!-- HERO -->
 <section class="hero">
+  <div class="hero-deco">
+    <img src="https://raw.githubusercontent.com/TanZng/TanZng/master/assets/hollor_knight3.gif" alt="" aria-hidden="true"/>
+  </div>
   <div class="hero-bg">
     <div class="hero-bg-orb hero-bg-orb-1"></div>
     <div class="hero-bg-orb hero-bg-orb-2"></div>
