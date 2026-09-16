@@ -654,12 +654,58 @@
      position tracking, touch/trackpad/mouse-drag all work for free, and
      there's no JS left to get out of sync. */
   .carousel-track-wrap {
+    position: relative;
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: none;
     scroll-snap-type: x proximity;
   }
   .carousel-track-wrap::-webkit-scrollbar { display: none; }
+
+  /* Edge fades hint that a track scrolls further — pinned to the wrap's
+     own box (not the scrolling track) since they're absolutely positioned
+     pseudo-elements of the position:relative wrap itself, so they stay
+     fixed at the edges regardless of scroll position. JS toggles
+     .at-start/.at-end/.no-overflow on the wrap to fade them out. */
+  .carousel-track-wrap::before,
+  .carousel-track-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 56px;
+    z-index: 4;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.25s ease;
+  }
+  .carousel-track-wrap::before { left: 0; background: linear-gradient(90deg, var(--bg), transparent); }
+  .carousel-track-wrap::after  { right: 0; background: linear-gradient(-90deg, var(--bg), transparent); }
+  .carousel-track-wrap.at-start::before { opacity: 0; }
+  .carousel-track-wrap.at-end::after { opacity: 0; }
+  .carousel-track-wrap.no-overflow::before,
+  .carousel-track-wrap.no-overflow::after { opacity: 0; }
+
+  .carousel-arrows { display: flex; gap: 8px; }
+  .carousel-arrow-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border-2);
+    background: var(--surface);
+    color: var(--text-mid);
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+  .carousel-arrow-btn:hover:not(:disabled) {
+    border-color: var(--terra);
+    color: var(--terra);
+    background: var(--terra-dim);
+  }
+  .carousel-arrow-btn:disabled { opacity: 0.25; cursor: default; }
 
   .carousel-track {
     display: flex;
@@ -684,12 +730,20 @@
     transform: translateY(20px);
   }
 
-  .project-card.card-visible,
-  .coming-soon-card.card-visible {
+  .project-card.card-visible {
     animation: cardReveal 0.5s cubic-bezier(0.4,0,0.2,1) forwards;
   }
 
   @keyframes cardReveal { to { opacity: 1; transform: translateY(0); } }
+
+  /* Coming-soon cards rest at reduced opacity with a dashed border so an
+     empty roadmap placeholder doesn't compete visually with dense real
+     case-study cards — hover brings it back toward full opacity. */
+  .coming-soon-card.card-visible {
+    animation: comingSoonReveal 0.5s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
+
+  @keyframes comingSoonReveal { to { opacity: 0.55; transform: translateY(0); } }
 
   .project-card::before {
     content: '';
@@ -931,7 +985,7 @@
     max-width: 380px;
     min-width: 0;
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1px dashed var(--border);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -940,10 +994,11 @@
     gap: 12px;
     opacity: 0;
     transform: translateY(20px);
-    transition: border-color 0.35s, transform 0.35s, box-shadow 0.35s;
+    transition: border-color 0.35s, transform 0.35s, box-shadow 0.35s, opacity 0.35s;
   }
 
   .coming-soon-card:hover {
+    opacity: 0.85;
     border-color: var(--border-2);
     transform: translateY(-5px) scale(1.03);
     box-shadow: 0 16px 40px rgba(0,0,0,0.4);
@@ -1278,10 +1333,16 @@
       <h2 class="section-title reveal-left" style="transition-delay:0.1s">The Strongest Case Studies, <em>Curated</em></h2>
       <p class="section-desc reveal-left" style="margin-bottom:0;transition-delay:0.2s">Four pieces pulled from the full archive below, chosen for range and rigor over polish — a live SQL loyalty-economics console, a cohort retention heatmap model, a four-part lifetime-value breakdown, and the site's only full A/B test experimentation case study. Each states its assumptions up front and argues the strongest case against itself.</p>
     </div>
-    <div class="hero-stat-card" style="width:auto;min-width:220px;padding:16px 22px">
-      <div class="stat-label">Case Studies</div>
-      <div class="stat-value" style="font-size:28px" data-target="4">0</div>
-      <div class="stat-sub">Featured &middot; 12 total case studies</div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="hero-stat-card" style="width:auto;min-width:220px;padding:16px 22px">
+        <div class="stat-label">Case Studies</div>
+        <div class="stat-value" style="font-size:28px" data-target="4">0</div>
+        <div class="stat-sub">Featured &middot; 12 total case studies</div>
+      </div>
+      <div class="carousel-arrows">
+        <button class="carousel-arrow-btn" data-dir="-1" aria-label="Scroll left">&larr;</button>
+        <button class="carousel-arrow-btn" data-dir="1" aria-label="Scroll right">&rarr;</button>
+      </div>
     </div>
   </div>
 
@@ -1424,6 +1485,10 @@
       <h2 class="section-title reveal-left" style="transition-delay:0.1s">Why people make <em>financial decisions</em> the way they do</h2>
       <p class="section-desc reveal-left" style="transition-delay:0.2s">Spending behaviour, savings mechanics, habit formation, and the psychology of money — consumer behaviour theory applied to financial product design.</p>
     </div>
+    <div class="carousel-arrows">
+      <button class="carousel-arrow-btn" data-dir="-1" aria-label="Scroll left">&larr;</button>
+      <button class="carousel-arrow-btn" data-dir="1" aria-label="Scroll right">&rarr;</button>
+    </div>
   </div>
 
   <div class="carousel-track-wrap">
@@ -1514,6 +1579,10 @@
       <div class="section-eyebrow reveal-left">Systems &amp; Strategy</div>
       <h2 class="section-title reveal-left" style="transition-delay:0.1s">How brands and platforms <em>build, defend, and decide</em></h2>
       <p class="section-desc reveal-left" style="transition-delay:0.2s">Decision architecture and brand architecture turn out to be the same problem: what to build, what to protect, and what to walk away from. Costco's flat margins, Tim Hortons' menu bloat, Wealthsimple's product sequencing, Roblox's platform failures, and Gatorade's category defense are the same question in five different industries — how a team decides what a brand or platform actually is, and defends that decision under pressure. This is the connective layer between the brand, fintech, and retention work above.</p>
+    </div>
+    <div class="carousel-arrows">
+      <button class="carousel-arrow-btn" data-dir="-1" aria-label="Scroll left">&larr;</button>
+      <button class="carousel-arrow-btn" data-dir="1" aria-label="Scroll right">&rarr;</button>
     </div>
   </div>
 
@@ -1616,6 +1685,10 @@
       <div class="section-eyebrow reveal-left">Subscription & Retention Design</div>
       <h2 class="section-title reveal-left" style="transition-delay:0.1s">Why users <em>stay, lapse,</em> and come back</h2>
       <p class="section-desc reveal-left" style="transition-delay:0.2s">Retention architecture, churn psychology, and the behavioural design of subscription products — the same thinking that drives LiveOps applied to consumer platforms.</p>
+    </div>
+    <div class="carousel-arrows">
+      <button class="carousel-arrow-btn" data-dir="-1" aria-label="Scroll left">&larr;</button>
+      <button class="carousel-arrow-btn" data-dir="1" aria-label="Scroll right">&rarr;</button>
     </div>
   </div>
 
@@ -1965,11 +2038,15 @@ window.addEventListener('load', () => {
 });
 
 // ── SCROLL REVEAL ──
+// rootMargin extends the observer's root box 200px past the bottom of the
+// actual viewport, so elements start revealing slightly before they
+// scroll into view instead of appearing to sit blank in a "dead" gap for
+// the length of the fade-in transition.
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) entry.target.classList.add('visible');
   });
-}, { threshold: 0.12 });
+}, { threshold: 0.12, rootMargin: '0px 0px 200px 0px' });
 document.querySelectorAll('.reveal, .reveal-left').forEach(el => revealObserver.observe(el));
 
 // ── CARD STAGGER REVEAL ──
@@ -1983,7 +2060,7 @@ const cardObserver = new IntersectionObserver((entries) => {
       cardObserver.unobserve(entry.target);
     }
   });
-}, { threshold: 0.08 });
+}, { threshold: 0.08, rootMargin: '0px 0px 200px 0px' });
 document.querySelectorAll('.carousel-track').forEach(t => cardObserver.observe(t));
 
 // ── SKILL CARD STAGGER REVEAL ──
@@ -1996,7 +2073,7 @@ const skillObserver = new IntersectionObserver((entries) => {
       skillObserver.unobserve(entry.target);
     }
   });
-}, { threshold: 0.1 });
+}, { threshold: 0.1, rootMargin: '0px 0px 200px 0px' });
 skillCards.forEach(c => skillObserver.observe(c));
 
 // ── FLOATING PARTICLES ──
@@ -2010,6 +2087,49 @@ for (let i = 0; i < 18; i++) {
   p.style.animationDelay = (Math.random() * 18) + 's';
   particleContainer.appendChild(p);
 }
+
+// ── CAROUSEL SCROLL CONTROLS ──
+// Native-scroll carousels give no visual cue that a track has more cards
+// off-screen. This wires up the edge fades (via .at-start/.at-end/
+// .no-overflow classes toggled on the wrap) and the prev/next arrow
+// buttons in each carousel-header, scrolling by ~90% of the wrap's own
+// width — no per-card-width math, so it can't drift out of sync the way
+// the old hand-rolled carousel position tracker used to.
+document.querySelectorAll('.carousel-track-wrap').forEach(wrap => {
+  const track = wrap.querySelector('.carousel-track');
+  if (!track) return;
+  const header = wrap.previousElementSibling;
+  const arrows = header ? header.querySelector('.carousel-arrows') : null;
+
+  function updateState() {
+    const max = track.scrollWidth - wrap.clientWidth;
+    const noOverflow = max <= 2;
+    wrap.classList.toggle('no-overflow', noOverflow);
+    wrap.classList.toggle('at-start', wrap.scrollLeft <= 2);
+    wrap.classList.toggle('at-end', wrap.scrollLeft >= max - 2);
+    if (arrows) {
+      arrows.style.display = noOverflow ? 'none' : 'flex';
+      arrows.querySelectorAll('.carousel-arrow-btn').forEach(btn => {
+        const dir = parseFloat(btn.dataset.dir);
+        btn.disabled = (dir < 0 && wrap.scrollLeft <= 2) || (dir > 0 && wrap.scrollLeft >= max - 2);
+      });
+    }
+  }
+
+  wrap.addEventListener('scroll', updateState, { passive: true });
+  window.addEventListener('resize', updateState);
+
+  if (arrows) {
+    arrows.querySelectorAll('.carousel-arrow-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const dir = parseFloat(btn.dataset.dir);
+        wrap.scrollBy({ left: dir * wrap.clientWidth * 0.9, behavior: 'smooth' });
+      });
+    });
+  }
+
+  updateState();
+});
 </script>
 
 </body>
