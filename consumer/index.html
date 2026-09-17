@@ -2130,6 +2130,33 @@ document.querySelectorAll('.carousel-track-wrap').forEach(wrap => {
 
   updateState();
 });
+
+// ── CAROUSEL "PEEK" NUDGE ──
+// One-time hint that a track scrolls further: nudge right ~60px and ease
+// back the first time each track scrolls substantially into view. Never
+// repeats, and skips entirely for prefers-reduced-motion — this is a
+// hint, not a permanent auto-scroll, so it never fights someone actually
+// reading a card.
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const peekObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const wrap = entry.target;
+      peekObserver.unobserve(wrap);
+      const track = wrap.querySelector('.carousel-track');
+      if (!track) return;
+      setTimeout(() => {
+        const max = track.scrollWidth - wrap.clientWidth;
+        if (max <= 2 || wrap.scrollLeft > 2) return; // no overflow, or user already scrolled
+        wrap.scrollBy({ left: 60, behavior: 'smooth' });
+        setTimeout(() => {
+          if (wrap.scrollLeft <= 62) wrap.scrollTo({ left: 0, behavior: 'smooth' });
+        }, 550);
+      }, 700);
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.carousel-track-wrap').forEach(wrap => peekObserver.observe(wrap));
+}
 </script>
 
 </body>
