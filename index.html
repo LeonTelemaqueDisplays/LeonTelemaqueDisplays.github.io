@@ -102,23 +102,103 @@
     text-decoration: none;
   }
 
-  .nav-links {
+  .nav-menu-btn {
     display: flex;
-    gap: 28px;
-    list-style: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 38px;
+    height: 38px;
+    background: transparent;
+    border: 1px solid var(--border-2);
+    cursor: pointer;
+    transition: var(--transition);
   }
 
-  .nav-links a {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    color: var(--text-dim);
+  .nav-menu-btn span {
+    display: block;
+    width: 15px;
+    height: 1px;
+    background: var(--text-mid);
+    transition: var(--transition);
+  }
+
+  .nav-menu-btn:hover { border-color: var(--text-dim); }
+  .nav-menu-btn:hover span { background: var(--text); }
+
+  body.nav-open { overflow: hidden; }
+
+  .nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: rgba(10,12,16,0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-14px);
+    transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1), visibility 0.35s;
+  }
+
+  .nav-overlay.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .nav-overlay-close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--border-2);
+    color: var(--text-mid);
+    font-size: 16px;
+    font-family: var(--sans);
+    line-height: 1;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .nav-overlay-close:hover { color: var(--text); border-color: var(--text-dim); }
+
+  .nav-overlay-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 56px;
+  }
+
+  .nav-overlay-links a {
+    font-family: var(--sans);
+    font-size: clamp(32px, 6vw, 56px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-mid);
     text-decoration: none;
-    text-transform: uppercase;
     transition: color 0.2s;
   }
 
-  .nav-links a:hover { color: var(--text); }
+  .nav-overlay-links a:hover { color: var(--text); }
+
+  .nav-overlay-actions {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
 
   .nav-cta {
     font-family: var(--mono);
@@ -510,22 +590,22 @@
   }
 
   .section-title {
-    font-size: clamp(28px, 4vw, 40px);
+    font-size: clamp(40px, 6.5vw, 72px);
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
     color: var(--text);
-    margin-bottom: 12px;
-    line-height: 1.15;
+    margin-bottom: 20px;
+    line-height: 1.02;
   }
 
   .section-title em { color: var(--terra); font-style: normal; }
 
   .section-desc {
-    font-size: 14px;
+    font-size: 15px;
     color: var(--text-mid);
     max-width: 600px;
     line-height: 1.7;
-    margin-bottom: 40px;
+    margin-bottom: 48px;
   }
 
   /* ── SCROLL REVEAL ── */
@@ -843,7 +923,7 @@
   #fintech-track .project-card,
   #systems-track .project-card,
   #sub-track .project-card,
-  #featured-track .project-card { flex: 0 0 380px; max-width: 380px; }
+  #featured-track .project-card { flex: 0 0 480px; max-width: 480px; }
 
   .featured-badge {
     font-family: var(--mono);
@@ -883,7 +963,7 @@
 
   .card-thumb {
     width: 100%;
-    aspect-ratio: 16/9.5;
+    aspect-ratio: 16/11;
     background: var(--surface-2);
     position: relative;
     overflow: hidden;
@@ -975,7 +1055,7 @@
   }
 
   .card-body {
-    padding: 20px 24px 24px;
+    padding: 28px 32px 32px;
     border-top: 1px solid var(--border);
     flex: 1;
     display: flex;
@@ -983,10 +1063,10 @@
   }
 
   .card-title {
-    font-size: 16px;
+    font-size: 19px;
     font-weight: 700;
     color: var(--text);
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     line-height: 1.3;
     transition: color 0.2s;
   }
@@ -994,10 +1074,14 @@
   .project-card:hover .card-title { color: var(--terra); }
 
   .card-desc {
-    font-size: 12px;
+    font-size: 12.5px;
     color: var(--text-mid);
     line-height: 1.7;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .card-source {
@@ -1301,18 +1385,25 @@
 <!-- NAV -->
 <nav id="nav">
   <a href="#" class="nav-logo">LT — Consumer Systems</a>
-  <ul class="nav-links">
+  <button class="nav-menu-btn" id="navMenuBtn" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="nav-overlay" id="navOverlay">
+  <button class="nav-overlay-close" id="navOverlayClose" aria-label="Close menu">✕</button>
+  <ul class="nav-overlay-links">
     <li><a href="#about">About</a></li>
     <li><a href="#process">Process</a></li>
     <li><a href="#systems-strategy">Systems</a></li>
     <li><a href="#fintech">Fintech</a></li>
     <li><a href="#subscription">Subscription</a></li>
   </ul>
-  <div class="nav-actions" style="display:flex;align-items:center;gap:20px">
+  <div class="nav-overlay-actions">
     <a href="mailto:leon@email.com" class="nav-cta">Let's talk →</a>
     <a href="/resume.pdf" target="_blank" class="nav-resume">Resume ↗</a>
   </div>
-</nav>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -1332,34 +1423,6 @@
       I look at the patterns and systems underneath people's decisions.
       <em>The data just makes the argument stronger.</em>
     </p>
-
-    <ul class="hero-points animate-in d4">
-      <li>
-        <span class="point-num">1.</span>
-        <span>Consumer behaviour analyst and product designer — retention architecture, decision psychology, and the behavioural systems underneath</span>
-      </li>
-      <li>
-        <span class="point-num">2.</span>
-        <span>I think in ecosystems — every user segment, every system interaction, every design trade-off simultaneously</span>
-      </li>
-      <li>
-        <span class="point-num">3.</span>
-        <span>Academic training in consumer behaviour applied at product scale — why people decide the way they do across every designed system</span>
-      </li>
-    </ul>
-
-    <div class="hero-tags animate-in d5">
-      <div class="hero-tag">Consumer Behaviour</div>
-      <div class="hero-tag">Product Management</div>
-      <div class="hero-tag">UX Research</div>
-      <div class="hero-tag">Retention Design</div>
-      <div class="hero-tag">Behavioural Analytics</div>
-    </div>
-
-    <div class="hero-avail animate-in d6">
-      <div class="avail-dot"></div>
-      Available for internship and junior roles — product management and UXR. Toronto based, open to remote and international.
-    </div>
   </div>
 
   <div class="hero-right">
@@ -1518,6 +1581,21 @@
         <p>On the design side I think in systems — mapping how individual product decisions ripple across user segments, time horizons, and business outcomes simultaneously. Every design decision serves some users and challenges others. The question is whether that trade-off is intentional.</p>
         <p><strong>The two sides are not separate disciplines. The research tells you where the design broke. The design tells you why the research looks the way it does.</strong></p>
       </div>
+
+      <ul class="hero-points reveal" style="transition-delay:0.15s">
+        <li>
+          <span class="point-num">1.</span>
+          <span>Consumer behaviour analyst and product designer — retention architecture, decision psychology, and the behavioural systems underneath</span>
+        </li>
+        <li>
+          <span class="point-num">2.</span>
+          <span>I think in ecosystems — every user segment, every system interaction, every design trade-off simultaneously</span>
+        </li>
+        <li>
+          <span class="point-num">3.</span>
+          <span>Academic training in consumer behaviour applied at product scale — why people decide the way they do across every designed system</span>
+        </li>
+      </ul>
     </div>
 
     <!-- PHOTO -->
@@ -2075,6 +2153,10 @@
 
 <!-- CONTACT -->
 <div class="contact-section reveal">
+  <div class="hero-avail" style="justify-content:center;margin-bottom:20px">
+    <div class="avail-dot"></div>
+    Available for internship and junior roles — product management and UXR. Toronto based, open to remote and international.
+  </div>
   <div class="contact-headline">Working on a product —</div>
   <div class="contact-headline">or trying to understand</div>
   <div class="contact-cta">your users better? <span style="color:var(--terra)">Let's talk.</span> 👋</div>
@@ -2118,6 +2200,35 @@ const photoEl = document.getElementById('parallaxPhoto');
 window.addEventListener('scroll', () => {
   if (photoEl) photoEl.style.transform = `translateY(${window.scrollY * 0.1}px)`;
 }, { passive: true });
+
+// ── NAV MENU OVERLAY ──
+const navMenuBtn = document.getElementById('navMenuBtn');
+const navOverlay = document.getElementById('navOverlay');
+const navOverlayClose = document.getElementById('navOverlayClose');
+
+function openNavOverlay() {
+  navOverlay.classList.add('open');
+  navMenuBtn.setAttribute('aria-expanded', 'true');
+  document.body.classList.add('nav-open');
+}
+function closeNavOverlay() {
+  navOverlay.classList.remove('open');
+  navMenuBtn.setAttribute('aria-expanded', 'false');
+  document.body.classList.remove('nav-open');
+}
+if (navMenuBtn && navOverlay) {
+  navMenuBtn.addEventListener('click', () => {
+    navOverlay.classList.contains('open') ? closeNavOverlay() : openNavOverlay();
+  });
+  navOverlayClose.addEventListener('click', closeNavOverlay);
+  navOverlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNavOverlay));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeNavOverlay();
+  });
+  navOverlay.addEventListener('click', (e) => {
+    if (e.target === navOverlay) closeNavOverlay();
+  });
+}
 
 // ── COUNTER ANIMATIONS ──
 function animateCounter(el) {
