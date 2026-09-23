@@ -75,7 +75,7 @@
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
-    z-index: 200;
+    z-index: 260;
     background: transparent;
     border-bottom: 1px solid transparent;
     padding: 0 40px;
@@ -133,15 +133,11 @@
   .nav-overlay {
     position: fixed;
     inset: 0;
-    z-index: 300;
-    background: rgba(10,12,16,0.98);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 40px;
+    z-index: 250;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 92px 24px 24px;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-14px);
@@ -154,78 +150,78 @@
     transform: translateY(0);
   }
 
-  .nav-overlay-close {
-    position: absolute;
-    top: 20px;
-    right: 40px;
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: 1px solid var(--border-2);
-    color: var(--text-mid);
-    font-size: 16px;
-    font-family: var(--sans);
-    line-height: 1;
-    cursor: pointer;
-    transition: var(--transition);
+  .nav-overlay-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    overflow: hidden;
   }
 
-  .nav-overlay-close:hover { color: var(--text); border-color: var(--text-dim); }
+  .nav-overlay-preview {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+  }
+
+  .nav-preview-card {
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    flex-shrink: 0;
+    background: var(--surface-2);
+  }
+
+  .nav-preview-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
   .nav-overlay-links {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    margin-bottom: 56px;
+    padding: 8px 0;
+    overflow-y: auto;
   }
+
+  .nav-overlay-links li { border-bottom: 1px solid var(--border); }
+  .nav-overlay-links li:last-child { border-bottom: none; }
 
   .nav-overlay-links a {
-    font-family: var(--sans);
-    font-size: clamp(32px, 6vw, 56px);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--text-mid);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  .nav-overlay-links a:hover { color: var(--text); }
-
-  .nav-overlay-actions {
     display: flex;
     align-items: center;
-    gap: 24px;
-  }
-
-  .nav-cta {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    color: var(--terra);
+    justify-content: space-between;
+    gap: 16px;
+    padding: 30px 44px;
+    font-family: var(--sans);
+    font-size: clamp(20px, 2.2vw, 28px);
+    font-weight: 400;
+    color: var(--text);
     text-decoration: none;
-    text-transform: uppercase;
-    border: 1px solid var(--terra);
-    padding: 6px 14px;
-    transition: var(--transition);
+    transition: background 0.2s, color 0.2s;
   }
 
-  .nav-cta:hover { background: var(--terra-dim); }
+  .nav-overlay-links a:hover { background: var(--surface-2); }
 
-  .nav-resume {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    color: var(--text-dim);
-    text-decoration: none;
-    text-transform: uppercase;
-    transition: color 0.2s;
+  .nav-overlay-links a svg {
+    width: 18px;
+    height: 18px;
+    color: var(--text-mid);
+    flex-shrink: 0;
+    transition: transform 0.2s;
   }
 
-  .nav-resume:hover { color: var(--text); }
+  .nav-overlay-links a:hover svg { transform: translate(3px, -3px); }
+
+  @media (max-width: 900px) {
+    .nav-overlay { padding: 84px 12px 12px; }
+    .nav-overlay-panel { grid-template-columns: 1fr; }
+    .nav-overlay-preview { display: none; }
+    .nav-overlay-links a { padding: 22px 22px; font-size: 20px; }
+  }
 
 
   /* ── HERO ── */
@@ -1534,16 +1530,20 @@
 </nav>
 
 <div class="nav-overlay" id="navOverlay">
-  <button class="nav-overlay-close" id="navOverlayClose" aria-label="Close menu">✕</button>
-  <ul class="nav-overlay-links">
-    <li><a href="/">Home</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#process">Process</a></li>
-    <li><a href="/case-studies.html">Case Studies</a></li>
-  </ul>
-  <div class="nav-overlay-actions">
-    <a href="mailto:leon@email.com" class="nav-cta">Let's talk →</a>
-    <a href="/resume.pdf" target="_blank" class="nav-resume">Resume ↗</a>
+  <div class="nav-overlay-panel">
+    <div class="nav-overlay-preview">
+      <div class="nav-preview-card"><img src="/consumer/tim-hortons-cover.avif" alt="Tim Hortons case study preview"></div>
+      <div class="nav-preview-card"><img src="/consumer/spotify-cover.jpg" alt="Spotify case study preview"></div>
+      <div class="nav-preview-card"><img src="/consumer/aeroplan-cover.jpeg" alt="Aeroplan case study preview"></div>
+    </div>
+    <ul class="nav-overlay-links">
+      <li><a href="/">Home <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a></li>
+      <li><a href="#about">About <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a></li>
+      <li><a href="#process">Process <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a></li>
+      <li><a href="/case-studies.html">Case Studies <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a></li>
+      <li><a href="mailto:leon.telemaque@gmail.com">Let's talk <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a></li>
+      <li><a href="/resume.pdf" target="_blank">Download Resume <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a></li>
+    </ul>
   </div>
 </div>
 
@@ -1785,7 +1785,6 @@ window.addEventListener('scroll', () => {
 // ── NAV MENU OVERLAY ──
 const navMenuBtn = document.getElementById('navMenuBtn');
 const navOverlay = document.getElementById('navOverlay');
-const navOverlayClose = document.getElementById('navOverlayClose');
 
 function openNavOverlay() {
   navOverlay.classList.add('open');
@@ -1801,7 +1800,6 @@ if (navMenuBtn && navOverlay) {
   navMenuBtn.addEventListener('click', () => {
     navOverlay.classList.contains('open') ? closeNavOverlay() : openNavOverlay();
   });
-  navOverlayClose.addEventListener('click', closeNavOverlay);
   navOverlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNavOverlay));
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeNavOverlay();
