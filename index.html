@@ -622,41 +622,74 @@
   }
   .reveal-left.visible { opacity: 1; transform: translateX(0); }
 
-  /* ── ABOUT ── */
-  .about-grid {
+  /* ── ABOUT / CAREER + SKILLS ── */
+  .career-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    max-width: 760px;
-    margin-top: 40px;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
   }
 
-  .about-text { display: flex; flex-direction: column; gap: 24px; }
-
-  .about-panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 32px;
-  }
-
-  .about-panel p {
-    font-size: 14px;
+  .career-text p {
+    font-size: 15px;
     color: var(--text-mid);
     line-height: 1.8;
-    margin-bottom: 16px;
+    margin-bottom: 22px;
+    max-width: 460px;
   }
 
-  .about-panel p:last-child { margin-bottom: 0; }
+  .career-text strong { color: var(--text); font-weight: 600; }
 
-  .about-panel strong { color: var(--text); font-weight: 600; }
+  .career-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    margin-top: 32px;
+  }
 
-  .about-pull {
-    font-size: 20px;
-    font-weight: 600;
+  .career-link {
+    font-family: var(--sans);
+    font-size: 17px;
+    font-weight: 400;
     color: var(--text);
-    line-height: 1.5;
-    border-left: 2px solid var(--blue);
-    padding-left: 20px;
-    margin-bottom: 24px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+  }
+
+  .career-link:hover { color: var(--text-mid); }
+
+  .skills-title {
+    font-size: clamp(30px, 4vw, 44px);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 28px;
+    line-height: 1.15;
+  }
+
+  .skills-pill-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .skills-pill {
+    padding: 12px 20px;
+    background: var(--surface);
+    border-radius: 12px;
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--text-mid);
+    transition: color 0.2s, background 0.2s;
+  }
+
+  .skills-pill:hover { color: var(--text); background: var(--surface-2); }
+
+  @media (max-width: 900px) {
+    .career-grid { grid-template-columns: 1fr; gap: 48px; }
   }
 
   /* PHOTO */
@@ -1635,38 +1668,36 @@
 
 <!-- ABOUT -->
 <section class="section" id="about">
-  <div class="section-eyebrow reveal-left">About</div>
-  <h2 class="section-title reveal-left" style="transition-delay:0.1s">Consumer behaviour is not a <em>discipline.</em> It's a lens.</h2>
+  <div class="career-grid">
+    <div class="career-text">
+      <h2 class="section-title reveal-left">Career So Far</h2>
+      <p class="reveal" style="transition-delay:0.1s">Consumer behaviour is not a discipline — it's a lens. I came to product and UX work through studying <strong>why people decide the way they do</strong>, not through a design program.</p>
+      <p class="reveal" style="transition-delay:0.15s">Academic training in Marketing and Consumer Culture at Trent University, applied through self-directed case studies — twelve pieces deep, across CPG, fintech, and subscription products.</p>
+      <p class="reveal" style="transition-delay:0.2s">Currently building behavioural analytics systems in <strong>SQL, Python, and Streamlit</strong> — the same thinking that drives retention design, applied wherever a product needs to explain why users act the way they do.</p>
 
-  <div class="about-grid">
-    <div class="about-text">
-      <div class="about-panel reveal">
-        <div class="about-pull">
-          The data tells you where the system broke. The behaviour tells you why.
-        </div>
-        <p>I didn't come to product and UX research through a design program. I came through <strong>consumer behaviour</strong> — and it turns out the frameworks for understanding why people buy things, why they stay, and why they leave are closer to product design than most designers think.</p>
-        <p>My academic background in Marketing and Consumer Culture gives me a different entry point into product systems. I study why consumers make decisions the same way a behavioural economist would — through the lens of psychology, incentive design, and system architecture. That lens applies directly to brand and CPG strategy, fintech products, and subscription platforms.</p>
+      <div class="career-links reveal" style="transition-delay:0.25s">
+        <a href="/case-studies.html" class="career-link">View Case Studies</a>
+        <a href="/resume.pdf" target="_blank" class="career-link">Download Resume ↓</a>
       </div>
-      <div class="about-panel reveal" style="transition-delay:0.1s">
-        <p>On the research side I analyse consumer decision patterns, retention funnels, and behavioural signals across designed systems — building the case for why users act the way they do and what product decisions can shift those patterns.</p>
-        <p>On the design side I think in systems — mapping how individual product decisions ripple across user segments, time horizons, and business outcomes simultaneously. Every design decision serves some users and challenges others. The question is whether that trade-off is intentional.</p>
-        <p><strong>The two sides are not separate disciplines. The research tells you where the design broke. The design tells you why the research looks the way it does.</strong></p>
-      </div>
+    </div>
 
-      <ul class="hero-points reveal" style="transition-delay:0.15s">
-        <li>
-          <span class="point-num">1.</span>
-          <span>Consumer behaviour analyst and product designer — retention architecture, decision psychology, and the behavioural systems underneath</span>
-        </li>
-        <li>
-          <span class="point-num">2.</span>
-          <span>I think in ecosystems — every user segment, every system interaction, every design trade-off simultaneously</span>
-        </li>
-        <li>
-          <span class="point-num">3.</span>
-          <span>Academic training in consumer behaviour applied at product scale — why people decide the way they do across every designed system</span>
-        </li>
-      </ul>
+    <div class="career-skills">
+      <h2 class="skills-title reveal-left" style="transition-delay:0.1s">Skills</h2>
+      <div class="skills-pill-grid">
+        <div class="skills-pill reveal" style="transition-delay:0.1s">Consumer Behaviour</div>
+        <div class="skills-pill reveal" style="transition-delay:0.13s">Product Analytics</div>
+        <div class="skills-pill reveal" style="transition-delay:0.16s">UX Research</div>
+        <div class="skills-pill reveal" style="transition-delay:0.19s">Retention Design</div>
+        <div class="skills-pill reveal" style="transition-delay:0.22s">A/B Testing</div>
+        <div class="skills-pill reveal" style="transition-delay:0.25s">Cohort Analysis</div>
+        <div class="skills-pill reveal" style="transition-delay:0.28s">Behavioural Modelling</div>
+        <div class="skills-pill reveal" style="transition-delay:0.31s">SQL</div>
+        <div class="skills-pill reveal" style="transition-delay:0.34s">Python</div>
+        <div class="skills-pill reveal" style="transition-delay:0.37s">Streamlit</div>
+        <div class="skills-pill reveal" style="transition-delay:0.4s">Data Visualization</div>
+        <div class="skills-pill reveal" style="transition-delay:0.43s">Brand Strategy</div>
+        <div class="skills-pill reveal" style="transition-delay:0.46s">Decision Architecture</div>
+      </div>
     </div>
   </div>
 </section>
