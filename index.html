@@ -103,28 +103,29 @@
   }
 
   .nav-menu-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
     gap: 4px;
-    width: 38px;
-    height: 38px;
+    align-items: center;
+    justify-items: center;
+    width: 32px;
+    height: 32px;
     background: transparent;
-    border: 1px solid var(--border-2);
+    border: none;
     cursor: pointer;
     transition: var(--transition);
   }
 
   .nav-menu-btn span {
     display: block;
-    width: 15px;
-    height: 1px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
     background: var(--text-mid);
     transition: var(--transition);
   }
 
-  .nav-menu-btn:hover { border-color: var(--text-dim); }
   .nav-menu-btn:hover span { background: var(--text); }
 
   body.nav-open { overflow: hidden; }
@@ -293,12 +294,16 @@
   .d6 { animation-delay: 0.85s; }
 
   .hero-subtitle {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    margin-bottom: 20px;
+    font-family: var(--sans);
+    font-size: clamp(16px, 1.8vw, 20px);
+    font-weight: 300;
+    letter-spacing: 0;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+
+  .hero-subtitle-group {
+    margin-bottom: 24px;
   }
 
   .hero-headline {
@@ -420,21 +425,44 @@
     50% { opacity: 0.4; box-shadow: 0 0 2px var(--green); }
   }
 
+  .hero-social {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 36px;
+  }
+
+  .social-icon {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-2);
+    border-radius: 50%;
+    color: var(--text-mid);
+    transition: var(--transition);
+  }
+
+  .social-icon svg { width: 15px; height: 15px; fill: currentColor; }
+
+  .social-icon:hover { color: var(--text); border-color: var(--text-dim); }
+
   /* HERO RIGHT */
   .hero-right {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 16px;
-    padding-left: 40px;
     position: relative;
     z-index: 1;
+    padding-left: 40px;
+    height: 100%;
+    min-height: 480px;
   }
+
+  .hero-photo-wrap { position: relative; height: 100%; min-height: 480px; border-radius: 24px; overflow: hidden; }
 
   .hero-stat-card {
     background: var(--surface);
     border: 1px solid var(--border);
+    border-radius: 14px;
     padding: 20px 24px;
     width: 100%;
     position: relative;
@@ -590,12 +618,12 @@
   }
 
   .section-title {
-    font-size: clamp(40px, 6.5vw, 72px);
-    font-weight: 700;
-    letter-spacing: -0.03em;
+    font-size: clamp(30px, 4vw, 44px);
+    font-weight: 300;
+    letter-spacing: -0.01em;
     color: var(--text);
     margin-bottom: 20px;
-    line-height: 1.02;
+    line-height: 1.15;
   }
 
   .section-title em { color: var(--terra); font-style: normal; }
@@ -857,6 +885,7 @@
     scroll-snap-align: center;
     background: var(--surface);
     border: 1px solid transparent;
+    border-radius: 20px;
     cursor: pointer;
     position: relative;
     overflow: hidden;
@@ -1127,6 +1156,7 @@
     min-width: 0;
     background: var(--surface);
     border: 1px dashed var(--border);
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1386,7 +1416,7 @@
 <nav id="nav">
   <a href="#" class="nav-logo">LT — Consumer Systems</a>
   <button class="nav-menu-btn" id="navMenuBtn" aria-label="Open menu" aria-expanded="false">
-    <span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
   </button>
 </nav>
 
@@ -1418,28 +1448,38 @@
       Building the argument.<br>
       <span class="accent" data-text="Proving it with data.">Proving it with data.</span>
     </h1>
-    <div class="hero-subtitle animate-in d2">Hi, I'm Leon — consumer behaviour analyst &amp; product systems designer</div>
+    <div class="hero-subtitle-group animate-in d2">
+      <div class="hero-subtitle">Hi, I'm Leon</div>
+      <div class="hero-subtitle">Consumer behaviour analyst &amp; product systems designer</div>
+    </div>
     <p class="hero-supporting animate-in d3">
       I look at the patterns and systems underneath people's decisions.
       <em>The data just makes the argument stronger.</em>
     </p>
+    <div class="hero-social animate-in d4">
+      <a href="https://linkedin.com/in/leontelemaque" target="_blank" class="social-icon" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+      </a>
+      <a href="mailto:leon.telemaque@gmail.com" class="social-icon" aria-label="Email">
+        <svg viewBox="0 0 24 24"><path d="M2 4h20v16H2V4zm2 2.4V18h16V6.4l-8 6-8-6zm.8-.4 7.2 5.4L19.2 6H4.8z"/></svg>
+      </a>
+    </div>
   </div>
 
   <div class="hero-right">
-    <div class="hero-stat-card">
-      <div class="stat-label">Academic Foundation</div>
-      <div class="stat-value">BBA</div>
-      <div class="stat-sub">Marketing & Consumer Culture — Trent University</div>
-    </div>
-    <div class="hero-stat-card">
-      <div class="stat-label">Disciplines</div>
-      <div class="stat-value" data-target="3">0</div>
-      <div class="stat-sub">Systems &amp; Strategy · Fintech · Subscription</div>
-    </div>
-    <div class="hero-stat-card">
-      <div class="stat-label">Core Lens</div>
-      <div class="stat-value" style="font-size:20px;color:var(--text)">Why do people decide the way they do?</div>
-      <div class="stat-sub">Applied across every designed consumer system</div>
+    <div class="hero-photo-wrap">
+      <div class="photo-container">
+        <div class="photo-placeholder">
+          <div class="photo-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+            </svg>
+          </div>
+          <div class="photo-overlay"></div>
+          <div class="photo-scanlines"></div>
+          <div class="photo-vignette"></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
