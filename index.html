@@ -534,36 +534,39 @@
   /* ── PROCESS ── */
   .process-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 24px;
   }
   .process-step {
-    padding: 28px 22px;
+    padding: 40px 36px 36px;
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1px solid transparent;
+    border-radius: 20px;
     transition: border-color 0.3s, transform 0.3s;
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
   }
   .process-step:hover { border-color: var(--border-2); transform: translateY(-4px); }
-  .process-num {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--terra);
-    letter-spacing: 0.1em;
-    margin-bottom: 14px;
+  .process-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    margin-bottom: 44px;
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255,255,255,0.95), rgba(255,255,255,0) 45%),
+      conic-gradient(from 200deg, #f2f2f2 var(--pct, 30%), #2c2c2f var(--pct, 30%));
   }
   .process-title {
-    font-size: 17px;
+    font-size: 19px;
     font-weight: 700;
     color: var(--text);
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
   .process-desc {
-    font-size: 13px;
+    font-size: 14px;
     color: var(--text-mid);
-    line-height: 1.6;
-  }
-  @media (max-width: 960px) {
-    .process-grid { grid-template-columns: 1fr 1fr; }
+    line-height: 1.65;
   }
   @media (max-width: 640px) {
     .process-grid { grid-template-columns: 1fr; }
@@ -1698,22 +1701,22 @@
 
   <div class="process-grid">
     <div class="process-step reveal" style="transition-delay:0s">
-      <div class="process-num">01</div>
+      <div class="process-icon" style="--pct:25%"></div>
       <div class="process-title">Frame the Question</div>
       <div class="process-desc">State the assumption or decision under scrutiny, and what's actually at stake if it's wrong.</div>
     </div>
     <div class="process-step reveal" style="transition-delay:0.08s">
-      <div class="process-num">02</div>
+      <div class="process-icon" style="--pct:65%"></div>
       <div class="process-title">Build the Model</div>
       <div class="process-desc">SQL, Python, Streamlit — construct the analysis from real or rigorously modelled data, not a template.</div>
     </div>
     <div class="process-step reveal" style="transition-delay:0.16s">
-      <div class="process-num">03</div>
+      <div class="process-icon" style="--pct:45%"></div>
       <div class="process-title">Argue Both Sides</div>
       <div class="process-desc">State the strongest case for the conclusion, then the strongest case against it. If it can't survive its own rebuttal, it isn't a conclusion yet.</div>
     </div>
     <div class="process-step reveal" style="transition-delay:0.24s">
-      <div class="process-num">04</div>
+      <div class="process-icon" style="--pct:15%"></div>
       <div class="process-title">Ship the Verdict</div>
       <div class="process-desc">A clear recommendation, reasoned on statistical and practical significance — not just correlation.</div>
     </div>
@@ -1999,227 +2002,6 @@
     </div>
   </div>
 </section>
-
-<!-- SKILL FLIP CARDS -->
-<section class="section" id="skills">
-  <div class="carousel-header">
-    <div>
-      <div class="section-eyebrow reveal-left">Skills &amp; Tools</div>
-      <h2 class="section-title reveal-left" style="transition-delay:0.1s">What I bring to <em>the work</em></h2>
-      <p class="section-desc reveal-left" style="transition-delay:0.2s">Hover any card to see what the skill looks like in practice and where it's demonstrated in the portfolio.</p>
-    </div>
-  </div>
-
-  <div class="skill-grid" id="skillGrid">
-
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <div class="skill-front">
-          <div><div class="skill-front-icon">📊</div><div class="skill-front-title">SQL &amp; Python</div><div class="skill-front-cat">Technical Tools</div></div>
-          <div class="skill-front-indicator">
-            <div class="indicator-dot active"></div><div class="indicator-dot active"></div><div class="indicator-dot active"></div><div class="indicator-dot"></div><div class="indicator-dot"></div>
-          </div>
-        </div>
-        <div class="skill-back">
-          <div class="skill-back-label">Technical Tools</div>
-          <div class="skill-back-desc">Real, re-executable SQL — CTEs and window functions running in-browser against a database, not screenshots of queries.</div>
-          <div class="skill-back-proof">Demonstrated → Aeroplan Loyalty Economics (live SQL console)</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <div class="skill-front">
-          <div><div class="skill-front-icon">📈</div><div class="skill-front-title">Data Visualisation</div><div class="skill-front-cat">Analytics</div></div>
-          <div class="skill-front-indicator">
-            <div class="indicator-dot active terra"></div><div class="indicator-dot active terra"></div><div class="indicator-dot active terra"></div><div class="indicator-dot"></div><div class="indicator-dot"></div>
-          </div>
-        </div>
-        <div class="skill-back" style="border-top-color:var(--terra)">
-          <div class="skill-back-label" style="color:var(--terra)">Analytics</div>
-          <div class="skill-back-desc">Cohort heatmaps, risk-ranked dashboards, and interactive charts built to make a dataset's argument legible at a glance.</div>
-          <div class="skill-back-proof">Demonstrated → Spotify Cohort Heatmap · GTA Insurance Risk Monitor</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <div class="skill-front">
-          <div><div class="skill-front-icon">🧠</div><div class="skill-front-title">Consumer Insights</div><div class="skill-front-cat">Core Discipline</div></div>
-          <div class="skill-front-indicator">
-            <div class="indicator-dot active green"></div><div class="indicator-dot active green"></div><div class="indicator-dot active green"></div><div class="indicator-dot active green"></div><div class="indicator-dot active green"></div>
-          </div>
-        </div>
-        <div class="skill-back" style="border-top-color:var(--green)">
-          <div class="skill-back-label" style="color:var(--green)">Core Discipline</div>
-          <div class="skill-back-desc">Behavioural economics, decision psychology, and retention architecture applied across fintech, CPG, subscription, and platform strategy.</div>
-          <div class="skill-back-proof">Demonstrated → Full consumer portfolio · 12 case studies</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <div class="skill-front">
-          <div><div class="skill-front-icon">🏗️</div><div class="skill-front-title">Strategy Modelling</div><div class="skill-front-cat">Analytical Framework</div></div>
-          <div class="skill-front-indicator">
-            <div class="indicator-dot active amber"></div><div class="indicator-dot active amber"></div><div class="indicator-dot active amber"></div><div class="indicator-dot"></div><div class="indicator-dot"></div>
-          </div>
-        </div>
-        <div class="skill-back" style="border-top-color:var(--amber)">
-          <div class="skill-back-label" style="color:var(--amber)">Analytical Framework</div>
-          <div class="skill-back-desc">MECE decomposition, market sizing, and LTV modelling built from stated, challengeable assumptions rather than a single black-box number.</div>
-          <div class="skill-back-proof">Demonstrated → Tim Hortons LTV Model</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <div class="skill-front">
-          <div><div class="skill-front-icon">🏪</div><div class="skill-front-title">CPG Brand Strategy</div><div class="skill-front-cat">Domain Knowledge</div></div>
-          <div class="skill-front-indicator">
-            <div class="indicator-dot active"></div><div class="indicator-dot active"></div><div class="indicator-dot active"></div><div class="indicator-dot"></div><div class="indicator-dot"></div>
-          </div>
-        </div>
-        <div class="skill-back">
-          <div class="skill-back-label">Domain Knowledge</div>
-          <div class="skill-back-desc">Category creation, occasion ownership, brand contract, and mental availability applied to real CPG and QSR brands.</div>
-          <div class="skill-back-proof">Demonstrated → Gatorade · Tim Hortons</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <div class="skill-front">
-          <div><div class="skill-front-icon">💳</div><div class="skill-front-title">Fintech Psychology</div><div class="skill-front-cat">Domain Knowledge</div></div>
-          <div class="skill-front-indicator">
-            <div class="indicator-dot active terra"></div><div class="indicator-dot active terra"></div><div class="indicator-dot active terra"></div><div class="indicator-dot active terra"></div><div class="indicator-dot"></div>
-          </div>
-        </div>
-        <div class="skill-back" style="border-top-color:var(--terra)">
-          <div class="skill-back-label" style="color:var(--terra)">Domain Knowledge</div>
-          <div class="skill-back-desc">Loyalty economics, product-expansion decisions, and risk analytics applied to real, sourced financial-services data.</div>
-          <div class="skill-back-proof">Demonstrated → Aeroplan · Wealthsimple · GTA Insurance Risk Monitor</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <div class="skill-front">
-          <div><div class="skill-front-icon">🔄</div><div class="skill-front-title">Retention Design</div><div class="skill-front-cat">Product Thinking</div></div>
-          <div class="skill-front-indicator">
-            <div class="indicator-dot active green"></div><div class="indicator-dot active green"></div><div class="indicator-dot active green"></div><div class="indicator-dot active green"></div><div class="indicator-dot"></div>
-          </div>
-        </div>
-        <div class="skill-back" style="border-top-color:var(--green)">
-          <div class="skill-back-label" style="color:var(--green)">Product Thinking</div>
-          <div class="skill-back-desc">Churn signal detection, cohort mapping, and freemium conversion architecture across subscription platforms.</div>
-          <div class="skill-back-proof">Demonstrated → Hinge · Spotify Freemium Analysis</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <div class="skill-front">
-          <div><div class="skill-front-icon">📝</div><div class="skill-front-title">Executive Communication</div><div class="skill-front-cat">Soft Skills</div></div>
-          <div class="skill-front-indicator">
-            <div class="indicator-dot active amber"></div><div class="indicator-dot active amber"></div><div class="indicator-dot active amber"></div><div class="indicator-dot active amber"></div><div class="indicator-dot active amber"></div>
-          </div>
-        </div>
-        <div class="skill-back" style="border-top-color:var(--amber)">
-          <div class="skill-back-label" style="color:var(--amber)">Soft Skills</div>
-          <div class="skill-back-desc">Translating consumer behaviour data into clear strategic arguments a senior stakeholder can act on without a follow-up meeting.</div>
-          <div class="skill-back-proof">Demonstrated → All 12 portfolio pieces</div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- SKILLS TICKER -->
-<div class="skills-ticker-section">
-  <div class="ticker-eyebrow">Tools · Skills · Frameworks · Domains</div>
-
-  <div class="ticker-overflow">
-    <div class="ticker-row ticker-row-1">
-      <div class="ticker-tag tool"><span class="tag-icon">📊</span>SQL</div>
-      <div class="ticker-tag tool"><span class="tag-icon">🐍</span>Python</div>
-      <div class="ticker-tag tool"><span class="tag-icon">📈</span>Tableau</div>
-      <div class="ticker-tag tool"><span class="tag-icon">📋</span>Excel</div>
-      <div class="ticker-tag skill"><span class="tag-icon">🧠</span>Consumer Insights</div>
-      <div class="ticker-tag skill"><span class="tag-icon">📉</span>Churn Analysis</div>
-      <div class="ticker-tag skill"><span class="tag-icon">🔁</span>Cohort Analysis</div>
-      <div class="ticker-tag domain"><span class="tag-icon">🏪</span>CPG Strategy</div>
-      <div class="ticker-tag domain"><span class="tag-icon">💳</span>Fintech Psychology</div>
-      <div class="ticker-tag framework"><span class="tag-icon">📐</span>MECE Framework</div>
-      <div class="ticker-tag framework"><span class="tag-icon">🎯</span>Market Sizing</div>
-      <div class="ticker-tag tool"><span class="tag-icon">📊</span>SQL</div>
-      <div class="ticker-tag tool"><span class="tag-icon">🐍</span>Python</div>
-      <div class="ticker-tag tool"><span class="tag-icon">📈</span>Tableau</div>
-      <div class="ticker-tag tool"><span class="tag-icon">📋</span>Excel</div>
-      <div class="ticker-tag skill"><span class="tag-icon">🧠</span>Consumer Insights</div>
-      <div class="ticker-tag skill"><span class="tag-icon">📉</span>Churn Analysis</div>
-      <div class="ticker-tag skill"><span class="tag-icon">🔁</span>Cohort Analysis</div>
-      <div class="ticker-tag domain"><span class="tag-icon">🏪</span>CPG Strategy</div>
-      <div class="ticker-tag domain"><span class="tag-icon">💳</span>Fintech Psychology</div>
-      <div class="ticker-tag framework"><span class="tag-icon">📐</span>MECE Framework</div>
-      <div class="ticker-tag framework"><span class="tag-icon">🎯</span>Market Sizing</div>
-    </div>
-
-    <div class="ticker-row ticker-row-2">
-      <div class="ticker-tag domain"><span class="tag-icon">🔄</span>Subscription Retention</div>
-      <div class="ticker-tag skill"><span class="tag-icon">📊</span>Pivot Tables</div>
-      <div class="ticker-tag framework"><span class="tag-icon">🏗️</span>Strategy Modelling</div>
-      <div class="ticker-tag skill"><span class="tag-icon">🎯</span>Brand Positioning</div>
-      <div class="ticker-tag domain"><span class="tag-icon">🏬</span>Retail Analytics</div>
-      <div class="ticker-tag skill"><span class="tag-icon">🔍</span>Market Research</div>
-      <div class="ticker-tag tool"><span class="tag-icon">📉</span>Heatmap Analysis</div>
-      <div class="ticker-tag skill"><span class="tag-icon">💡</span>Behavioural Economics</div>
-      <div class="ticker-tag tool"><span class="tag-icon">🧮</span>LTV Modelling</div>
-      <div class="ticker-tag domain"><span class="tag-icon">🔄</span>Subscription Retention</div>
-      <div class="ticker-tag skill"><span class="tag-icon">📊</span>Pivot Tables</div>
-      <div class="ticker-tag framework"><span class="tag-icon">🏗️</span>Strategy Modelling</div>
-      <div class="ticker-tag skill"><span class="tag-icon">🎯</span>Brand Positioning</div>
-      <div class="ticker-tag domain"><span class="tag-icon">🏬</span>Retail Analytics</div>
-      <div class="ticker-tag skill"><span class="tag-icon">🔍</span>Market Research</div>
-      <div class="ticker-tag tool"><span class="tag-icon">📉</span>Heatmap Analysis</div>
-      <div class="ticker-tag skill"><span class="tag-icon">💡</span>Behavioural Economics</div>
-      <div class="ticker-tag tool"><span class="tag-icon">🧮</span>LTV Modelling</div>
-    </div>
-
-    <div class="ticker-row ticker-row-3">
-      <div class="ticker-tag skill"><span class="tag-icon">📝</span>Executive Reporting</div>
-      <div class="ticker-tag domain"><span class="tag-icon">🏦</span>Fintech · Banking</div>
-      <div class="ticker-tag tool"><span class="tag-icon">🖥️</span>PowerPoint · Slides</div>
-      <div class="ticker-tag skill"><span class="tag-icon">🔗</span>Category Analysis</div>
-      <div class="ticker-tag domain"><span class="tag-icon">🍔</span>QSR · CPG · Retail</div>
-      <div class="ticker-tag framework"><span class="tag-icon">📌</span>Occasion Mapping</div>
-      <div class="ticker-tag tool"><span class="tag-icon">🌐</span>HTML · CSS · JS</div>
-      <div class="ticker-tag domain"><span class="tag-icon">📱</span>Digital Product Strategy</div>
-      <div class="ticker-tag skill"><span class="tag-icon">⚙️</span>Funnel Analysis</div>
-      <div class="ticker-tag framework"><span class="tag-icon">🗺️</span>Brand Penetration</div>
-      <div class="ticker-tag skill"><span class="tag-icon">📈</span>Sample Size Calculation</div>
-      <div class="ticker-tag skill"><span class="tag-icon">📝</span>Executive Reporting</div>
-      <div class="ticker-tag domain"><span class="tag-icon">🏦</span>Fintech · Banking</div>
-      <div class="ticker-tag tool"><span class="tag-icon">🖥️</span>PowerPoint · Slides</div>
-      <div class="ticker-tag skill"><span class="tag-icon">🔗</span>Category Analysis</div>
-      <div class="ticker-tag domain"><span class="tag-icon">🍔</span>QSR · CPG · Retail</div>
-      <div class="ticker-tag framework"><span class="tag-icon">📌</span>Occasion Mapping</div>
-      <div class="ticker-tag tool"><span class="tag-icon">🌐</span>HTML · CSS · JS</div>
-      <div class="ticker-tag domain"><span class="tag-icon">📱</span>Digital Product Strategy</div>
-      <div class="ticker-tag skill"><span class="tag-icon">⚙️</span>Funnel Analysis</div>
-      <div class="ticker-tag framework"><span class="tag-icon">🗺️</span>Brand Penetration</div>
-      <div class="ticker-tag skill"><span class="tag-icon">📈</span>Sample Size Calculation</div>
-    </div>
-  </div>
-</div>
 
 <!-- CONTACT -->
 <div class="contact-section reveal">
