@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Leon Telemaque — Consumer Behaviour & Product Systems</title>
+<title>Case Studies — Leon Telemaque</title>
 <style>
   :root {
     --bg: #060607;
@@ -1484,6 +1484,22 @@
     .carousel-header { flex-wrap: wrap; gap: 12px; }
   }
 </style>
+<style>
+  /* ── CASE STUDIES INDEX EXTRAS ── */
+  .archive-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 8px;
+  }
+  @media (max-width: 768px) {
+    .archive-grid .project-card { flex: 1 1 100%; max-width: 100%; }
+  }
+  .page-header {
+    padding: 152px 40px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+</style>
 </head>
 <body>
 
@@ -1495,7 +1511,7 @@
 
 <!-- NAV -->
 <nav id="nav">
-  <a href="#" class="nav-logo">LT — Consumer Systems</a>
+  <a href="/" class="nav-logo">LT — Consumer Systems</a>
   <button class="nav-menu-btn" id="navMenuBtn" aria-label="Open menu" aria-expanded="false">
     <span></span><span></span><span></span><span></span>
   </button>
@@ -1505,233 +1521,265 @@
   <button class="nav-overlay-close" id="navOverlayClose" aria-label="Close menu">✕</button>
   <ul class="nav-overlay-links">
     <li><a href="/">Home</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#process">Process</a></li>
+    <li><a href="/#about">About</a></li>
+    <li><a href="/#process">Process</a></li>
     <li><a href="/case-studies.html">Case Studies</a></li>
   </ul>
   <div class="nav-overlay-actions">
-    <a href="mailto:leon@email.com" class="nav-cta">Let's talk →</a>
+    <a href="mailto:leon.telemaque@gmail.com" class="nav-cta">Let's talk →</a>
     <a href="/resume.pdf" target="_blank" class="nav-resume">Resume ↗</a>
   </div>
 </div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg">
-    <div class="hero-bg-orb hero-bg-orb-1"></div>
-    <div class="hero-bg-orb hero-bg-orb-2"></div>
-  </div>
-
-  <div class="hero-left">
-    <h1 class="hero-headline animate-in d1">
-      Understanding people.<br>
-      Building the argument.<br>
-      <span class="accent" data-text="Proving it with data.">Proving it with data.</span>
-    </h1>
-    <div class="hero-subtitle-group animate-in d2">
-      <div class="hero-subtitle">Hi, I'm Leon</div>
-      <div class="hero-subtitle">Consumer behaviour analyst &amp; product systems designer</div>
-    </div>
-    <p class="hero-supporting animate-in d3">
-      I look at the patterns and systems underneath people's decisions.
-      <em>The data just makes the argument stronger.</em>
-    </p>
-    <div class="hero-social animate-in d4">
-      <a href="https://linkedin.com/in/leontelemaque" target="_blank" class="social-icon" aria-label="LinkedIn">
-        <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
-      </a>
-      <a href="mailto:leon.telemaque@gmail.com" class="social-icon" aria-label="Email">
-        <svg viewBox="0 0 24 24"><path d="M2 4h20v16H2V4zm2 2.4V18h16V6.4l-8 6-8-6zm.8-.4 7.2 5.4L19.2 6H4.8z"/></svg>
-      </a>
-    </div>
-  </div>
-
-  <div class="hero-right">
-    <div class="hero-photo-wrap">
-      <div class="photo-container">
-        <div class="photo-placeholder">
-          <div class="photo-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-            </svg>
-          </div>
-          <div class="photo-overlay"></div>
-          <div class="photo-scanlines"></div>
-          <div class="photo-vignette"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- BRANDS ANALYZED -->
-<div class="brands-strip reveal">
-  <div class="brands-label">Brands &amp; Products Analyzed</div>
-  <div class="brands-row">
-    <span class="brand-name">Tim Hortons</span>
-    <span class="brand-name">Aeroplan</span>
-    <span class="brand-name">Spotify</span>
-    <span class="brand-name">Costco</span>
-    <span class="brand-name">Wealthsimple</span>
-    <span class="brand-name">Roblox</span>
-    <span class="brand-name">Gatorade</span>
-    <span class="brand-name">Hinge</span>
-    <span class="brand-name">Duolingo</span>
-  </div>
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="section-eyebrow reveal-left">Case Studies</div>
+  <h1 class="section-title reveal-left" style="transition-delay:0.1s">Every case study, <em>by discipline</em></h1>
+  <p class="section-desc reveal-left" style="margin-bottom:0;transition-delay:0.2s">Systems &amp; Strategy, Fintech Psychology, and Subscription &amp; Retention Design — the complete archive, including the pieces featured on the home page.</p>
 </div>
 
-<!-- FEATURED WORK -->
-<section class="section" id="featured-work" style="padding-bottom:56px">
-  <div class="section-eyebrow reveal-left">The Showcase</div>
-  <h2 class="section-title reveal-left" style="transition-delay:0.1s">The strongest case studies, <em>curated</em></h2>
-  <p class="section-desc reveal-left" style="transition-delay:0.2s">Four pieces pulled from the full archive below, chosen for range and rigor over polish — a live SQL loyalty-economics console, a cohort retention heatmap model, a four-part lifetime-value breakdown, and the site's only full A/B test experimentation case study.</p>
+<!-- SYSTEMS & STRATEGY -->
+<section class="section" id="systems-strategy">
+  <div class="section-eyebrow reveal-left">Systems &amp; Strategy</div>
+  <h2 class="section-title reveal-left" style="transition-delay:0.1s">How brands and platforms <em>build, defend, and decide</em></h2>
+  <p class="section-desc reveal-left" style="transition-delay:0.2s">Decision architecture and brand architecture turn out to be the same problem: what to build, what to protect, and what to walk away from. Costco's flat margins, Tim Hortons' menu bloat, Wealthsimple's product sequencing, Roblox's platform failures, and Gatorade's category defense are the same question in five different industries — how a team decides what a brand or platform actually is, and defends that decision under pressure.</p>
 
-  <div class="showcase-list">
+  <div class="archive-grid" id="systems-grid">
 
-    <div class="showcase-card" onclick="window.open('/consumer/tim-hortons','_blank')">
-      <img class="showcase-bg" src="/consumer/tim-hortons-cover.avif" alt="Tim Hortons signage at night">
-      <div class="showcase-content">
-        <div class="showcase-eyebrow">[ LTV Model ] &middot; Tim Hortons</div>
-        <div class="showcase-title">The Cost of Leaving Your Lane — Tim Hortons' Brand Contract Violation</div>
-        <p class="showcase-desc">A live lifetime-value model, broken into four challengeable assumptions, quantifying what RBI's menu-bloat strategy is actually costing Tim Hortons in lost morning-ritual customers.</p>
-        <div class="showcase-source">Sources: RBI Earnings &middot; Ipsos/L&eacute;ger</div>
-        <a class="showcase-link" href="/consumer/tim-hortons" onclick="event.stopPropagation()">View more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
+    <div class="project-card" onclick="window.open('/consumer/costco','_blank')">
+      <div class="card-thumb thumb-fintech" style="overflow:hidden">
+        <img src="/consumer/costco-cover.jpeg" alt="Costco Wholesale storefront and parking lot" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;position:absolute;inset:0">
+        <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Platform Strategy &middot; Costco</div>
       </div>
-    </div>
-
-    <div class="showcase-card" onclick="window.open('/consumer/aeroplan-loyalty-economics.html','_blank')">
-      <img class="showcase-bg" src="/consumer/aeroplan-cover.jpeg" alt="Aeroplan credit card">
-      <div class="showcase-content">
-        <div class="showcase-eyebrow">[ Live SQL Console ] &middot; Aeroplan</div>
-        <div class="showcase-title">The Pity Timer Nobody Told You About — Aeroplan Loyalty Economics</div>
-        <p class="showcase-desc">A breakage, tier-design, and redemption-value teardown of Air Canada's Aeroplan program, framed as the same variable-ratio reward gate as a gacha pity system, just priced in credits instead of pulls.</p>
-        <div class="showcase-source">Sources: Air Canada Q2 2026 &middot; Prince of Travel</div>
-        <a class="showcase-link" href="/consumer/aeroplan-loyalty-economics.html" onclick="event.stopPropagation()">View more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
-      </div>
-    </div>
-
-    <div class="showcase-card" onclick="window.open('/consumer/spotify-analysis.html','_blank')">
-      <img class="showcase-bg" src="/consumer/spotify-cover.jpg" alt="Spotify logo on phone screen">
-      <div class="showcase-content">
-        <div class="showcase-eyebrow">[ Cohort Heatmap Model ] &middot; Spotify</div>
-        <div class="showcase-title">Spotify — Give Everything. Sell Comfort.</div>
-        <p class="showcase-desc">How Spotify built the most powerful freemium model in streaming by giving away the thing that builds the relationship, and charging only for the comfort of inhabiting it.</p>
-        <div class="showcase-source">Sources: Spotify Q2 2026</div>
-        <a class="showcase-link" href="/consumer/spotify-analysis.html" onclick="event.stopPropagation()">View more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
-      </div>
-    </div>
-
-    <div class="showcase-card" onclick="window.open('/consumer/maya-before-after.html','_blank')" style="background:linear-gradient(135deg, #0a0c10 0%, #0f1a2e 100%)">
-      <div class="showcase-content">
-        <div class="showcase-eyebrow">[ Sample Size &amp; Power Pipeline ] &middot; Credit UX</div>
-        <div class="showcase-title">Encouraging Credit Transparency — Before &amp; After</div>
-        <p class="showcase-desc">Redesigning credit visibility for everyday users, backed by a full experimentation pipeline: hypothesis, sample size math, a significance test against a labelled synthetic dataset, and a ship/no-ship call.</p>
-        <div class="showcase-source">Basis: Synthetic dataset, labelled &amp; computed</div>
-        <a class="showcase-link" href="/consumer/maya-before-after.html" onclick="event.stopPropagation()">View more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ABOUT -->
-<section class="section" id="about">
-  <div class="section-eyebrow reveal-left">About</div>
-  <h2 class="section-title reveal-left" style="transition-delay:0.1s">Consumer behaviour is not a <em>discipline.</em> It's a lens.</h2>
-
-  <div class="about-grid">
-    <div class="about-text">
-      <div class="about-panel reveal">
-        <div class="about-pull">
-          The data tells you where the system broke. The behaviour tells you why.
-        </div>
-        <p>I didn't come to product and UX research through a design program. I came through <strong>consumer behaviour</strong> — and it turns out the frameworks for understanding why people buy things, why they stay, and why they leave are closer to product design than most designers think.</p>
-        <p>My academic background in Marketing and Consumer Culture gives me a different entry point into product systems. I study why consumers make decisions the same way a behavioural economist would — through the lens of psychology, incentive design, and system architecture. That lens applies directly to brand and CPG strategy, fintech products, and subscription platforms.</p>
-      </div>
-      <div class="about-panel reveal" style="transition-delay:0.1s">
-        <p>On the research side I analyse consumer decision patterns, retention funnels, and behavioural signals across designed systems — building the case for why users act the way they do and what product decisions can shift those patterns.</p>
-        <p>On the design side I think in systems — mapping how individual product decisions ripple across user segments, time horizons, and business outcomes simultaneously. Every design decision serves some users and challenges others. The question is whether that trade-off is intentional.</p>
-        <p><strong>The two sides are not separate disciplines. The research tells you where the design broke. The design tells you why the research looks the way it does.</strong></p>
-      </div>
-
-      <ul class="hero-points reveal" style="transition-delay:0.15s">
-        <li>
-          <span class="point-num">1.</span>
-          <span>Consumer behaviour analyst and product designer — retention architecture, decision psychology, and the behavioural systems underneath</span>
-        </li>
-        <li>
-          <span class="point-num">2.</span>
-          <span>I think in ecosystems — every user segment, every system interaction, every design trade-off simultaneously</span>
-        </li>
-        <li>
-          <span class="point-num">3.</span>
-          <span>Academic training in consumer behaviour applied at product scale — why people decide the way they do across every designed system</span>
-        </li>
-      </ul>
-    </div>
-
-    <!-- PHOTO -->
-    <div class="photo-wrap reveal" style="transition-delay:0.15s">
-      <div class="photo-container" id="parallaxPhoto">
-        <div class="photo-placeholder">
-          <!-- Replace with: <img src="your-photo.jpg" style="width:100%;height:100%;object-fit:cover;position:relative;z-index:1;"> -->
-          <div class="photo-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-            </svg>
-          </div>
-          <div class="photo-overlay"></div>
-          <div class="photo-scanlines"></div>
-          <div class="photo-vignette"></div>
+      <div class="card-body">
+        <div class="card-title">A Lifestyle Platform — Why Costco's "Broken" Model Works</div>
+        <div class="card-desc">2 to 3% retail margin. A $1.50 hot dog unchanged since 1985. A paid membership every competitor has tried and failed to copy. A teardown of why Costco isn't a retailer at all — it's a membership platform engineered around the psychology of winning, and why Walmart+ can subsidise the same hot dog and still can't buy the trust behind it.</div>
+        <div class="card-source"><b>Sources:</b> Costco Earnings Calls</div>
+        <div class="card-tags">
+          <div class="card-tag primary">Consumer Psychology</div>
+          <div class="card-tag">Platform Strategy</div>
+          <div class="card-tag">Costco</div>
         </div>
       </div>
-      <div class="photo-chip chip-1">Consumer Analyst</div>
-      <div class="photo-chip chip-2">12 Portfolio Pieces</div>
-      <div class="photo-chip chip-3">Toronto, ON</div>
     </div>
+
+    <div class="project-card" onclick="window.open('/consumer/tim-hortons','_blank')">
+      <div class="card-thumb thumb-media" style="overflow:hidden">
+        <img src="/consumer/tim-hortons-cover.avif" alt="Tim Hortons signage at night" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;position:absolute;inset:0">
+        <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Brand Strategy &middot; Tim Hortons</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">The Cost of Leaving Your Lane — Tim Hortons' Brand Contract Violation</div>
+        <div class="card-desc">Tim Hortons built the most defensible brand position in Canadian food service — the ubiquitous morning ritual no competitor could replicate — then abandoned it, one menu extension at a time. A CPG teardown of consumer permission, menu bloat as identity dilution, and how a nostalgia moat gets spent without anyone noticing until the brand trust data catches up.</div>
+        <div class="card-source"><b>Sources:</b> RBI Earnings &middot; Ipsos/L&eacute;ger</div>
+        <div class="card-tags">
+          <div class="card-tag primary">CPG Strategy</div>
+          <div class="card-tag">Brand Contract</div>
+          <div class="card-tag">Tim Hortons</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" onclick="window.open('/consumer/wealthsimple','_blank')">
+      <div class="card-thumb thumb-fintech" style="overflow:hidden">
+        <img src="/consumer/wealthsimple-cover.avif" alt="Wealthsimple app on a phone in front of the website" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;position:absolute;inset:0">
+        <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Platform Strategy &middot; Wealthsimple</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Why Wealthsimple Became a Bank</div>
+        <div class="card-desc">Canada's most trusted investment platform launched a chequing account, then a credit card, then a line of credit — the textbook definition of brand dilution and product cannibalism. A product-sequencing teardown of why the decision was correct anyway, and the structural ceiling — no banking licence, no deposit-funded lending margins — that caps how far it can go.</div>
+        <div class="card-source"><b>Sources:</b> Wealthsimple &middot; BetaKit</div>
+        <div class="card-tags">
+          <div class="card-tag primary">Product Strategy</div>
+          <div class="card-tag">Decision Architecture</div>
+          <div class="card-tag">Wealthsimple</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" onclick="window.open('/consumer/roblox','_blank')">
+      <div class="card-thumb thumb-fintech" style="overflow:hidden">
+        <img src="/consumer/roblox-cover.jpg" alt="Roblox game tile collage with logo" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;position:absolute;inset:0">
+        <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Platform Strategy &middot; Roblox</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">A Platform Problem — Why Roblox's CEO Has the Wrong Diagnosis</div>
+        <div class="card-desc">Roblox lost $70B in market value and 29M daily active users from peak, and its CEO blamed a shortage of viral games. An interactive platform-architecture teardown of the real four failures — content discovery, parental trust, social infrastructure, and monetisation quality — with a product recommendation for each.</div>
+        <div class="card-source"><b>Sources:</b> Roblox Shareholder Letters</div>
+        <div class="card-tags">
+          <div class="card-tag primary">Product Strategy</div>
+          <div class="card-tag">Platform Analysis</div>
+          <div class="card-tag">Interactive Diagram</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" onclick="window.open('/consumer/gatorade','_blank')">
+      <div class="card-thumb thumb-media" style="overflow:hidden">
+        <img src="/consumer/gatorade-cover.avif" alt="Gatorade sports bottle" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;position:absolute;inset:0">
+        <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Brand Strategy &middot; Gatorade</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">How a Sports Drink Became a Category — Gatorade's CPG Playbook</div>
+        <div class="card-desc">Gatorade didn't win the sports drink category — it created it, then made the category definition synonymous with competitive advantage over water. A CPG teardown of mental availability, occasion ownership, and aspirational proxy consumption behind a 65% market share that cost Coca-Cola $5.6B just to begin contesting.</div>
+        <div class="card-source"><b>Sources:</b> Beverage Digest &middot; SFIA</div>
+        <div class="card-tags">
+          <div class="card-tag primary">CPG Strategy</div>
+          <div class="card-tag">Category Creation</div>
+          <div class="card-tag">Gatorade</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
-<!-- PROCESS -->
-<section class="section" id="process">
-  <div class="section-eyebrow reveal-left">How I Work</div>
-  <h2 class="section-title reveal-left" style="transition-delay:0.1s">Process? <em>Yeah, I have one.</em></h2>
-  <p class="section-desc reveal-left" style="transition-delay:0.2s">Every case study on this site follows the same four moves — whether it's a two-day teardown or a six-week build.</p>
+<!-- FINTECH PSYCHOLOGY -->
+<section class="section" id="fintech">
+  <div class="section-eyebrow reveal-left">Fintech Psychology</div>
+  <h2 class="section-title reveal-left" style="transition-delay:0.1s">Why people make <em>financial decisions</em> the way they do</h2>
+  <p class="section-desc reveal-left" style="transition-delay:0.2s">Spending behaviour, savings mechanics, habit formation, and the psychology of money — consumer behaviour theory applied to financial product design.</p>
 
-  <div class="process-grid">
-    <div class="process-step reveal" style="transition-delay:0s">
-      <div class="process-icon" style="--pct:25%"></div>
-      <div class="process-title">Frame the Question</div>
-      <div class="process-desc">State the assumption or decision under scrutiny, and what's actually at stake if it's wrong.</div>
+  <div class="archive-grid" id="fintech-grid">
+
+    <div class="project-card" onclick="window.open('/consumer/investment','_blank')">
+      <div class="card-thumb thumb-fintech" style="overflow:hidden">
+        <img src="/consumer/youth-investment-cover.avif" alt="Stock market candlestick chart on dark screen" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;position:absolute;inset:0">
+        <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Fintech Psychology &middot; Youth Investment</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">The Depth Problem — Youth Investment &amp; Fintech Design</div>
+        <div class="card-desc">Why the youth investment gap will not be closed by gamification — and what the winning product actually looks like. 41% of Gen Z and Millennial TFSA holders leave that money sitting in cash instead of investing it; for the smaller population who can invest, the gap that remains is a product depth problem. Includes a live portfolio transparency dashboard and mobile prototype.</div>
+        <div class="card-source"><b>Sources:</b> TD Bank Group &middot; Nov 2025</div>
+        <div class="card-tags">
+          <div class="card-tag primary">Fintech Psychology</div>
+          <div class="card-tag">Product Design</div>
+          <div class="card-tag">Interactive Prototype</div>
+        </div>
+      </div>
     </div>
-    <div class="process-step reveal" style="transition-delay:0.08s">
-      <div class="process-icon" style="--pct:65%"></div>
-      <div class="process-title">Build the Model</div>
-      <div class="process-desc">SQL, Python, Streamlit — construct the analysis from real or rigorously modelled data, not a template.</div>
+
+    <div class="project-card" onclick="window.open('/consumer/insurance-risk','_blank')">
+      <div class="card-thumb thumb-fintech" style="overflow:hidden">
+        <img src="/consumer/insurance-risk-cover.png" alt="Cars parked on a road" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;position:absolute;inset:0">
+        <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Risk Analytics &middot; Auto Insurance</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Who's Paying for Auto Theft — GTA Insurance Risk Monitor</div>
+        <div class="card-desc">An interactive risk breakdown of the 10 highest-risk vehicles for auto insurance in the Greater Toronto Area, where average premiums run 32% above the Ontario average. Drill into each vehicle to see how theft exposure, driver demographics, and repair cost separately drive the price a real owner pays.</div>
+        <div class="card-source"><b>Sources:</b> &Eacute;quit&eacute; Association &middot; IBC &middot; FSRA</div>
+        <div class="card-tags">
+          <div class="card-tag primary">Risk Analytics</div>
+          <div class="card-tag">Fintech Psychology</div>
+          <div class="card-tag">Interactive Prototype</div>
+        </div>
+      </div>
     </div>
-    <div class="process-step reveal" style="transition-delay:0.16s">
-      <div class="process-icon" style="--pct:45%"></div>
-      <div class="process-title">Argue Both Sides</div>
-      <div class="process-desc">State the strongest case for the conclusion, then the strongest case against it. If it can't survive its own rebuttal, it isn't a conclusion yet.</div>
+
+    <div class="project-card" onclick="window.open('/consumer/maya-before-after.html','_blank')">
+      <div class="card-thumb thumb-fintech">
+        <div class="card-thumb-label">Fintech Psychology &middot; Credit UX</div>
+        <div class="thumb-visual">
+          <div class="thumb-bar-row"><span class="thumb-bar-label">Spend</span><div class="thumb-bar" style="width:80%"></div></div>
+          <div class="thumb-bar-row"><span class="thumb-bar-label">Save</span><div class="thumb-bar" style="width:45%;background:var(--teal)"></div></div>
+          <div class="thumb-bar-row"><span class="thumb-bar-label">Churn</span><div class="thumb-bar" style="width:62%;background:var(--red)"></div></div>
+          <div class="thumb-bar-row"><span class="thumb-bar-label">Return</span><div class="thumb-bar" style="width:38%;background:var(--green)"></div></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Encouraging Credit Transparency — Before &amp; After</div>
+        <div class="card-desc">Redesigning credit visibility for everyday users. A before/after UX comparison showing how surfacing the right credit signals — in plain language, at the right moment — changes how users relate to their financial health. Includes the qualitative research synthesis that shaped the redesign and a full A/B test design that validated it.</div>
+        <div class="card-source"><b>Basis:</b> Synthetic dataset, labelled &amp; computed</div>
+        <div class="card-tags">
+          <div class="card-tag primary">Fintech Psychology</div>
+          <div class="card-tag">Behavioural UX</div>
+          <div class="card-tag">UX Research</div>
+          <div class="card-tag">A/B Testing</div>
+        </div>
+      </div>
     </div>
-    <div class="process-step reveal" style="transition-delay:0.24s">
-      <div class="process-icon" style="--pct:15%"></div>
-      <div class="process-title">Ship the Verdict</div>
-      <div class="process-desc">A clear recommendation, reasoned on statistical and practical significance — not just correlation.</div>
+
+    <div class="project-card" onclick="window.open('/consumer/aeroplan-loyalty-economics.html','_blank')">
+      <div class="card-thumb thumb-fintech" style="overflow:hidden">
+        <img src="/consumer/aeroplan-cover.jpeg" alt="Aeroplan credit card" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;position:absolute;inset:0">
+        <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Loyalty Economics &middot; Aeroplan</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">The Pity Timer Nobody Told You About — Aeroplan Loyalty Economics</div>
+        <div class="card-desc">A breakage, tier-design, and redemption-value teardown of Air Canada's Aeroplan program — the only major Canadian loyalty scheme that publishes enough real data to model honestly. Live SQL console over ~10% disclosed breakage, 5 elite tiers, and redemption value across 50+ real bookings, framed as the same variable-ratio reward gate as a gacha pity system, just priced in credits instead of pulls.</div>
+        <div class="card-source"><b>Sources:</b> Air Canada Q2 2026 &middot; Prince of Travel</div>
+        <div class="card-tags">
+          <div class="card-tag primary">Loyalty Economics</div>
+          <div class="card-tag">Fintech Psychology</div>
+          <div class="card-tag">Live Dashboard</div>
+        </div>
+      </div>
     </div>
+
   </div>
 </section>
 
-<!-- CONTACT -->
-<div class="contact-section reveal">
-  <div class="hero-avail" style="justify-content:center;margin-bottom:20px">
-    <div class="avail-dot"></div>
-    Available for internship and junior roles — product management and UXR. Toronto based, open to remote and international.
+<!-- SUBSCRIPTION & RETENTION -->
+<section class="section" id="subscription" style="border-bottom:none">
+  <div class="section-eyebrow reveal-left">Subscription &amp; Retention Design</div>
+  <h2 class="section-title reveal-left" style="transition-delay:0.1s">Why users <em>stay, lapse,</em> and come back</h2>
+  <p class="section-desc reveal-left" style="transition-delay:0.2s">Retention architecture, churn psychology, and the behavioural design of subscription products — the same thinking that drives LiveOps applied to consumer platforms.</p>
+
+  <div class="archive-grid" id="sub-grid">
+
+    <div class="project-card" onclick="window.open('/consumer/hinge-analysis.html','_blank')">
+      <div class="card-thumb thumb-sub" style="overflow:hidden">
+        <img src="/consumer/hinge-cover-2.jpg" alt="Hinge campaign — plush H mascot" style="width:100%;height:100%;object-fit:cover;object-position:center 40%;display:block;position:absolute;inset:0">
+        <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Subscription &amp; Retention &middot; Hinge</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Hinge — The Most Efficient Carrot on a Stick</div>
+        <div class="card-desc">How Hinge built the most emotionally efficient subscription model in the consumer app market by anchoring its entire product architecture to the one desire that is universal, urgent, and immune to saturation — love, not a feature, dangled as the carrot no other subscription category has ever matched.</div>
+        <div class="card-source"><b>Sources:</b> Match Group Earnings</div>
+        <div class="card-tags">
+          <div class="card-tag primary">Subscription Design</div>
+          <div class="card-tag">Retention Psychology</div>
+          <div class="card-tag">Hinge</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" onclick="window.open('/consumer/language-learning-analysis.html','_blank')">
+      <div class="card-thumb thumb-sub" style="overflow:hidden">
+        <img src="/consumer/duolingo-cover.jpg" alt="Duolingo owl mascot" style="width:100%;height:100%;object-fit:cover;object-position:center 35%;display:block;position:absolute;inset:0">
+        <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Subscription &amp; Retention &middot; Language Learning</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Language Learning Apps — The Balance Problem</div>
+        <div class="card-desc">Why language learning subscription apps struggle to serve two fundamentally incompatible audiences — the casual hobbyist and the hardcore learner — and what most platforms give up when they design for one over the other. Includes an interactive model for identifying learner archetypes and their 90-day retention curves.</div>
+        <div class="card-source"><b>Sources:</b> Duolingo (NASDAQ: DUOL)</div>
+        <div class="card-tags">
+          <div class="card-tag primary">Subscription Design</div>
+          <div class="card-tag">Interactive Model</div>
+          <div class="card-tag">Duolingo &middot; Babbel</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" onclick="window.open('/consumer/spotify-analysis.html','_blank')">
+      <div class="card-thumb thumb-sub" style="overflow:hidden">
+        <img src="/consumer/spotify-cover.jpg" alt="Spotify logo on phone screen" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;position:absolute;inset:0">
+        <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Subscription &amp; Retention &middot; Spotify</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Spotify — Give Everything. Sell Comfort.</div>
+        <div class="card-desc">How Spotify built the most powerful freemium model in streaming by giving away the thing that builds the relationship — full catalogue access, personalised discovery, social features — and charging only for the comfort of inhabiting it. The upgrade is a restoration of what the user already knows they want, not an introduction to something new.</div>
+        <div class="card-source"><b>Sources:</b> Spotify Q2 2026</div>
+        <div class="card-tags">
+          <div class="card-tag primary">Subscription Design</div>
+          <div class="card-tag">Freemium Model</div>
+          <div class="card-tag">Spotify</div>
+        </div>
+      </div>
+    </div>
+
   </div>
-  <div class="contact-headline">Working on a product —</div>
-  <div class="contact-headline">or trying to understand</div>
-  <div class="contact-cta">your users better? <span style="color:var(--terra)">Let's talk.</span> 👋</div>
-</div>
+</section>
 
 <!-- FOOTER -->
 <footer>
@@ -1741,17 +1789,10 @@
   </div>
   <div class="footer-links">
     <a href="https://linkedin.com/in/leontelemaque" class="footer-link">LinkedIn ↗</a>
-    <a href="mailto:leon@email.com" class="footer-link">Mail ↗</a>
+    <a href="mailto:leon.telemaque@gmail.com" class="footer-link">Mail ↗</a>
   </div>
 </footer>
 
-<!-- No carousel position-tracking JS — .carousel-track-wrap still scrolls
-     natively (overflow-x: auto + scroll-snap-type:x proximity), so touch
-     drag, trackpad, mouse-wheel-shift, and keyboard arrow-key scrolling all
-     work without any hand-rolled position tracking to keep in sync. The
-     script below only handles visual polish (progress bar, particles, nav
-     blur, entrance/reveal animations, stat counters) — none of it touches
-     carousel scroll position. -->
 <script>
 // ── SCROLL PROGRESS ──
 const progress = document.getElementById('progress');
@@ -1764,12 +1805,6 @@ window.addEventListener('scroll', () => {
 const navEl = document.getElementById('nav');
 window.addEventListener('scroll', () => {
   navEl.classList.toggle('scrolled', window.scrollY > 40);
-}, { passive: true });
-
-// ── PARALLAX PHOTO ──
-const photoEl = document.getElementById('parallaxPhoto');
-window.addEventListener('scroll', () => {
-  if (photoEl) photoEl.style.transform = `translateY(${window.scrollY * 0.1}px)`;
 }, { passive: true });
 
 // ── NAV MENU OVERLAY ──
@@ -1801,30 +1836,7 @@ if (navMenuBtn && navOverlay) {
   });
 }
 
-// ── COUNTER ANIMATIONS ──
-function animateCounter(el) {
-  const target = parseInt(el.dataset.target, 10);
-  const duration = 1400;
-  const start = performance.now();
-  function update(now) {
-    const p = Math.min((now - start) / duration, 1);
-    const ease = 1 - Math.pow(1 - p, 3);
-    el.textContent = Math.round(target * ease).toLocaleString();
-    if (p < 1) requestAnimationFrame(update);
-  }
-  requestAnimationFrame(update);
-}
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.querySelectorAll('.stat-value[data-target]').forEach(animateCounter);
-  }, 500);
-});
-
 // ── SCROLL REVEAL ──
-// rootMargin extends the observer's root box 200px past the bottom of the
-// actual viewport, so elements start revealing slightly before they
-// scroll into view instead of appearing to sit blank in a "dead" gap for
-// the length of the fade-in transition.
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) entry.target.classList.add('visible');
@@ -1844,20 +1856,7 @@ const cardObserver = new IntersectionObserver((entries) => {
     }
   });
 }, { threshold: 0.08, rootMargin: '0px 0px 200px 0px' });
-document.querySelectorAll('.carousel-track, .showcase-list').forEach(t => cardObserver.observe(t));
-
-// ── SKILL CARD STAGGER REVEAL ──
-const skillCards = document.querySelectorAll('.skill-card');
-const skillObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const idx = Array.from(skillCards).indexOf(entry.target);
-      setTimeout(() => entry.target.classList.add('skill-visible'), idx * 80);
-      skillObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px 200px 0px' });
-skillCards.forEach(c => skillObserver.observe(c));
+document.querySelectorAll('.archive-grid').forEach(t => cardObserver.observe(t));
 
 // ── FLOATING PARTICLES ──
 const particleContainer = document.getElementById('particles');
@@ -1869,76 +1868,6 @@ for (let i = 0; i < 18; i++) {
   p.style.animationDuration = (Math.random() * 18 + 10) + 's';
   p.style.animationDelay = (Math.random() * 18) + 's';
   particleContainer.appendChild(p);
-}
-
-// ── CAROUSEL SCROLL CONTROLS ──
-// Native-scroll carousels give no visual cue that a track has more cards
-// off-screen. This wires up the edge fades (via .at-start/.at-end/
-// .no-overflow classes toggled on the wrap) and the prev/next arrow
-// buttons in each carousel-header, scrolling by ~90% of the wrap's own
-// width — no per-card-width math, so it can't drift out of sync the way
-// the old hand-rolled carousel position tracker used to.
-document.querySelectorAll('.carousel-track-wrap').forEach(wrap => {
-  const track = wrap.querySelector('.carousel-track');
-  if (!track) return;
-  const header = wrap.previousElementSibling;
-  const arrows = header ? header.querySelector('.carousel-arrows') : null;
-
-  function updateState() {
-    const max = track.scrollWidth - wrap.clientWidth;
-    const noOverflow = max <= 2;
-    wrap.classList.toggle('no-overflow', noOverflow);
-    wrap.classList.toggle('at-start', wrap.scrollLeft <= 2);
-    wrap.classList.toggle('at-end', wrap.scrollLeft >= max - 2);
-    if (arrows) {
-      arrows.style.display = noOverflow ? 'none' : 'flex';
-      arrows.querySelectorAll('.carousel-arrow-btn').forEach(btn => {
-        const dir = parseFloat(btn.dataset.dir);
-        btn.disabled = (dir < 0 && wrap.scrollLeft <= 2) || (dir > 0 && wrap.scrollLeft >= max - 2);
-      });
-    }
-  }
-
-  wrap.addEventListener('scroll', updateState, { passive: true });
-  window.addEventListener('resize', updateState);
-
-  if (arrows) {
-    arrows.querySelectorAll('.carousel-arrow-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const dir = parseFloat(btn.dataset.dir);
-        wrap.scrollBy({ left: dir * wrap.clientWidth * 0.9, behavior: 'smooth' });
-      });
-    });
-  }
-
-  updateState();
-});
-
-// ── CAROUSEL "PEEK" NUDGE ──
-// One-time hint that a track scrolls further: nudge right ~60px and ease
-// back the first time each track scrolls substantially into view. Never
-// repeats, and skips entirely for prefers-reduced-motion — this is a
-// hint, not a permanent auto-scroll, so it never fights someone actually
-// reading a card.
-if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  const peekObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const wrap = entry.target;
-      peekObserver.unobserve(wrap);
-      const track = wrap.querySelector('.carousel-track');
-      if (!track) return;
-      setTimeout(() => {
-        const max = track.scrollWidth - wrap.clientWidth;
-        if (max <= 2 || wrap.scrollLeft > 2) return; // no overflow, or user already scrolled
-        wrap.scrollBy({ left: 60, behavior: 'smooth' });
-        setTimeout(() => {
-          if (wrap.scrollLeft <= 62) wrap.scrollTo({ left: 0, behavior: 'smooth' });
-        }, 550);
-      }, 700);
-    });
-  }, { threshold: 0.4 });
-  document.querySelectorAll('.carousel-track-wrap').forEach(wrap => peekObserver.observe(wrap));
 }
 </script>
 
