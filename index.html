@@ -972,113 +972,77 @@
   }
 
   /* ── SHOWCASE (Featured Work) ── */
-  .showcase-list {
+  .showcase-hero {
     display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  .showcase-card {
+    align-items: center;
+    justify-content: center;
     position: relative;
     border-radius: 24px;
-    overflow: hidden;
-    min-height: 480px;
+    aspect-ratio: 21/9;
     background: var(--surface-2);
+    border: 1px dashed var(--border-2);
+    margin-bottom: 56px;
     cursor: pointer;
-    display: flex;
-    align-items: flex-end;
+    text-decoration: none;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: border-color 0.2s;
+  }
+
+  .showcase-hero:hover { border-color: var(--text-dim); }
+
+  .showcase-hero.card-visible { animation: cardReveal 0.5s cubic-bezier(0.4,0,0.2,1) forwards; }
+
+  .showcase-hero-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .showcase-tile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 56px 32px;
+  }
+
+  .showcase-tile {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
     opacity: 0;
     transform: translateY(20px);
   }
 
-  .showcase-card.card-visible {
-    animation: cardReveal 0.5s cubic-bezier(0.4,0,0.2,1) forwards;
-  }
+  .showcase-tile.card-visible { animation: cardReveal 0.5s cubic-bezier(0.4,0,0.2,1) forwards; }
 
-  .showcase-bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
-  }
-
-  .showcase-card:hover .showcase-bg { transform: scale(1.05); }
-
-  .showcase-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, rgba(6,6,7,0.94) 0%, rgba(6,6,7,0.72) 36%, rgba(6,6,7,0.2) 62%, transparent 100%);
-    pointer-events: none;
-  }
-
-  .showcase-content {
-    position: relative;
-    z-index: 2;
-    padding: 44px 48px;
-    max-width: 540px;
-  }
-
-  .showcase-eyebrow {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin-bottom: 14px;
-  }
-
-  .showcase-title {
-    font-size: clamp(22px, 2.6vw, 30px);
-    font-weight: 700;
-    color: var(--text);
-    line-height: 1.25;
-    margin-bottom: 14px;
-  }
-
-  .showcase-desc {
-    font-size: 14px;
-    color: var(--text-mid);
-    line-height: 1.7;
-    margin-bottom: 12px;
-    max-width: 480px;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .showcase-source {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.06em;
-    color: var(--text-dim);
-    opacity: 0.8;
-    text-transform: uppercase;
-    margin-bottom: 22px;
-  }
-
-  .showcase-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+  .showcase-tile-label {
     font-family: var(--sans);
-    font-size: 16px;
+    font-size: clamp(22px, 2.6vw, 30px);
     font-weight: 400;
     color: var(--text);
-    text-decoration: none;
+    line-height: 1.3;
+    margin-bottom: 18px;
+    transition: color 0.2s;
   }
 
-  .showcase-link svg { width: 16px; height: 16px; transition: transform 0.25s; }
-  .showcase-card:hover .showcase-link svg { transform: translate(3px, -3px); }
+  .showcase-tile:hover .showcase-tile-label { color: var(--text-mid); }
+
+  .showcase-tile-placeholder {
+    border-radius: 20px;
+    aspect-ratio: 4/3;
+    background: var(--surface-2);
+    border: 1px dashed var(--border-2);
+    transition: border-color 0.2s;
+  }
+
+  .showcase-tile:hover .showcase-tile-placeholder { border-color: var(--text-dim); }
 
   @media (max-width: 768px) {
-    .showcase-card { min-height: 380px; }
-    .showcase-content { padding: 28px 24px; max-width: 100%; }
-    .showcase-card::after { background: linear-gradient(0deg, rgba(6,6,7,0.96) 0%, rgba(6,6,7,0.75) 45%, rgba(6,6,7,0.25) 75%, transparent 100%); }
+    .showcase-hero { aspect-ratio: 4/3; }
+    .showcase-tile-grid { grid-template-columns: 1fr; gap: 40px; }
   }
 
   /* ── Mobile: peek carousel ──
@@ -1618,50 +1582,26 @@
   <h2 class="section-title reveal-left" style="transition-delay:0.1s">The strongest case studies, <em>curated</em></h2>
   <p class="section-desc reveal-left" style="transition-delay:0.2s">Four pieces pulled from the full archive below, chosen for range and rigor over polish — a live SQL loyalty-economics console, a cohort retention heatmap model, a four-part lifetime-value breakdown, and the site's only full A/B test experimentation case study.</p>
 
-  <div class="showcase-list">
+  <a class="showcase-hero" href="/consumer/tim-hortons" target="_blank">
+    <div class="showcase-hero-label">[ LTV Model ] &middot; Tim Hortons — image coming soon</div>
+  </a>
 
-    <div class="showcase-card" onclick="window.open('/consumer/tim-hortons','_blank')">
-      <img class="showcase-bg" src="/consumer/tim-hortons-cover.avif" alt="Tim Hortons signage at night">
-      <div class="showcase-content">
-        <div class="showcase-eyebrow">[ LTV Model ] &middot; Tim Hortons</div>
-        <div class="showcase-title">The Cost of Leaving Your Lane — Tim Hortons' Brand Contract Violation</div>
-        <p class="showcase-desc">A live lifetime-value model, broken into four challengeable assumptions, quantifying what RBI's menu-bloat strategy is actually costing Tim Hortons in lost morning-ritual customers.</p>
-        <div class="showcase-source">Sources: RBI Earnings &middot; Ipsos/L&eacute;ger</div>
-        <a class="showcase-link" href="/consumer/tim-hortons" onclick="event.stopPropagation()">View more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
-      </div>
-    </div>
+  <div class="showcase-tile-grid">
 
-    <div class="showcase-card" onclick="window.open('/consumer/aeroplan-loyalty-economics.html','_blank')">
-      <img class="showcase-bg" src="/consumer/aeroplan-cover.jpeg" alt="Aeroplan credit card">
-      <div class="showcase-content">
-        <div class="showcase-eyebrow">[ Live SQL Console ] &middot; Aeroplan</div>
-        <div class="showcase-title">The Pity Timer Nobody Told You About — Aeroplan Loyalty Economics</div>
-        <p class="showcase-desc">A breakage, tier-design, and redemption-value teardown of Air Canada's Aeroplan program, framed as the same variable-ratio reward gate as a gacha pity system, just priced in credits instead of pulls.</p>
-        <div class="showcase-source">Sources: Air Canada Q2 2026 &middot; Prince of Travel</div>
-        <a class="showcase-link" href="/consumer/aeroplan-loyalty-economics.html" onclick="event.stopPropagation()">View more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
-      </div>
-    </div>
+    <a class="showcase-tile" href="/consumer/aeroplan-loyalty-economics.html" target="_blank">
+      <div class="showcase-tile-label">The Pity Timer Nobody Told You About — Aeroplan Loyalty Economics</div>
+      <div class="showcase-tile-placeholder"></div>
+    </a>
 
-    <div class="showcase-card" onclick="window.open('/consumer/spotify-analysis.html','_blank')">
-      <img class="showcase-bg" src="/consumer/spotify-cover.jpg" alt="Spotify logo on phone screen">
-      <div class="showcase-content">
-        <div class="showcase-eyebrow">[ Cohort Heatmap Model ] &middot; Spotify</div>
-        <div class="showcase-title">Spotify — Give Everything. Sell Comfort.</div>
-        <p class="showcase-desc">How Spotify built the most powerful freemium model in streaming by giving away the thing that builds the relationship, and charging only for the comfort of inhabiting it.</p>
-        <div class="showcase-source">Sources: Spotify Q2 2026</div>
-        <a class="showcase-link" href="/consumer/spotify-analysis.html" onclick="event.stopPropagation()">View more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
-      </div>
-    </div>
+    <a class="showcase-tile" href="/consumer/spotify-analysis.html" target="_blank">
+      <div class="showcase-tile-label">Spotify — Give Everything. Sell Comfort.</div>
+      <div class="showcase-tile-placeholder"></div>
+    </a>
 
-    <div class="showcase-card" onclick="window.open('/consumer/maya-before-after.html','_blank')" style="background:linear-gradient(135deg, #0a0c10 0%, #0f1a2e 100%)">
-      <div class="showcase-content">
-        <div class="showcase-eyebrow">[ Sample Size &amp; Power Pipeline ] &middot; Credit UX</div>
-        <div class="showcase-title">Encouraging Credit Transparency — Before &amp; After</div>
-        <p class="showcase-desc">Redesigning credit visibility for everyday users, backed by a full experimentation pipeline: hypothesis, sample size math, a significance test against a labelled synthetic dataset, and a ship/no-ship call.</p>
-        <div class="showcase-source">Basis: Synthetic dataset, labelled &amp; computed</div>
-        <a class="showcase-link" href="/consumer/maya-before-after.html" onclick="event.stopPropagation()">View more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
-      </div>
-    </div>
+    <a class="showcase-tile" href="/consumer/maya-before-after.html" target="_blank">
+      <div class="showcase-tile-label">Encouraging Credit Transparency — Before &amp; After</div>
+      <div class="showcase-tile-placeholder"></div>
+    </a>
 
   </div>
 </section>
@@ -1844,15 +1784,20 @@ document.querySelectorAll('.reveal, .reveal-left').forEach(el => revealObserver.
 const cardObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      const cards = entry.target.querySelectorAll('.project-card, .coming-soon-card, .showcase-card');
-      cards.forEach((card, i) => {
-        setTimeout(() => card.classList.add('card-visible'), i * 90);
-      });
+      if (entry.target.matches('.showcase-hero')) {
+        entry.target.classList.add('card-visible');
+      } else {
+        const cards = entry.target.querySelectorAll('.project-card, .coming-soon-card, .showcase-tile');
+        cards.forEach((card, i) => {
+          setTimeout(() => card.classList.add('card-visible'), i * 90);
+        });
+      }
       cardObserver.unobserve(entry.target);
     }
   });
 }, { threshold: 0.08, rootMargin: '0px 0px 200px 0px' });
-document.querySelectorAll('.carousel-track, .showcase-list').forEach(t => cardObserver.observe(t));
+document.querySelectorAll('.carousel-track, .showcase-tile-grid').forEach(t => cardObserver.observe(t));
+document.querySelectorAll('.showcase-hero').forEach(el => cardObserver.observe(el));
 
 // ── SKILL CARD STAGGER REVEAL ──
 const skillCards = document.querySelectorAll('.skill-card');
