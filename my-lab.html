@@ -1604,9 +1604,9 @@
     position: relative;
     width: 100%;
     max-width: 1120px;
-    height: 560px;
+    height: 680px;
     margin: 0 auto;
-    perspective: 1400px;
+    perspective: 1500px;
     perspective-origin: 50% 50%;
     transition: height 0.3s ease;
   }
@@ -1616,12 +1616,42 @@
     perspective: none;
   }
 
+  /* Axis — tilts the whole cylinder onto a diagonal so the helix climbs
+     across the frame instead of sitting on a flat, upright ring. Stays
+     fixed; only the stage inside it spins. */
+  .lab-spiral-axis {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transform: rotateZ(-27deg) rotateX(12deg);
+    transition: transform 0.4s ease;
+  }
+
+  .lab-spiral-wrap.list-view .lab-spiral-axis {
+    transform: none;
+  }
+
   .lab-spiral-stage {
     position: relative;
     width: 100%;
     height: 100%;
     transform-style: preserve-3d;
-    transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+    animation: spiralSpin 34s linear infinite;
+  }
+
+  .lab-spiral-wrap:hover .lab-spiral-stage,
+  .lab-spiral-stage:focus-within {
+    animation-play-state: paused;
+  }
+
+  @keyframes spiralSpin {
+    from { transform: rotateY(0deg); }
+    to   { transform: rotateY(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lab-spiral-stage { animation: none; }
   }
 
   .lab-spiral-wrap.list-view .lab-spiral-stage {
@@ -1630,31 +1660,33 @@
     align-items: center;
     gap: 16px;
     height: auto;
+    animation: none;
     transform: none;
   }
 
-  /* Scattered spiral field — each card gets its own hand-placed offset,
-     depth and tilt via custom properties, rather than an even geometric
-     ring, so the cluster reads as organically arranged. */
+  /* Helical cylinder — each card sits at an even 72° step around the
+     stage's own Y-axis, climbing along that same axis via translateY.
+     Because the axis itself is tilted diagonally (see .lab-spiral-axis),
+     the whole ascending stack reads as a diagonal spiral, not a flat
+     circle. */
   .lab-spiral-card {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 230px;
-    height: 280px;
-    margin: -140px 0 0 -115px;
+    width: 222px;
+    height: 264px;
+    margin: -132px 0 0 -111px;
     transform-style: preserve-3d;
-    transform: translate3d(var(--x), var(--y), var(--z)) rotate(var(--rot)) scale(var(--s));
-    transition: transform 0.6s cubic-bezier(0.22,1,0.36,1);
+    transform: rotateY(calc(var(--i) * 72deg)) translateZ(var(--radius, 260px)) translateY(calc((var(--i) - 2) * var(--spacing, 108px)));
     text-decoration: none;
     color: var(--text);
   }
 
-  .lab-spiral-card:nth-child(1) { --x: -260px; --y: -30px;  --rot: -8deg;  --s: 1.05; --z: 60px; z-index: 5; }
-  .lab-spiral-card:nth-child(2) { --x: -30px;  --y: -160px; --rot: 6deg;   --s: 0.94; --z: 20px; z-index: 3; }
-  .lab-spiral-card:nth-child(3) { --x: 235px;  --y: -95px;  --rot: -5deg;  --s: 1;    --z: 40px; z-index: 4; }
-  .lab-spiral-card:nth-child(4) { --x: 150px;  --y: 140px;  --rot: 9deg;   --s: 0.9;  --z: 10px; z-index: 2; }
-  .lab-spiral-card:nth-child(5) { --x: -150px; --y: 175px;  --rot: -11deg; --s: 0.97; --z: 30px; z-index: 1; }
+  .lab-spiral-card:nth-child(1) { --i: 0; }
+  .lab-spiral-card:nth-child(2) { --i: 1; }
+  .lab-spiral-card:nth-child(3) { --i: 2; }
+  .lab-spiral-card:nth-child(4) { --i: 3; }
+  .lab-spiral-card:nth-child(5) { --i: 4; }
 
   .lab-spiral-wrap.list-view .lab-spiral-card {
     position: static;
@@ -1665,17 +1697,20 @@
     z-index: auto;
   }
 
+  /* Counter-rotates by the axis's tilt angle so card text stays upright
+     on screen even though the cylinder it sits on is diagonal. */
   .lab-spiral-card-inner {
     width: 100%;
     height: 100%;
     background: var(--surface);
     border: 1px solid var(--border-2);
     border-radius: 20px;
-    padding: 28px 26px;
+    padding: 26px 24px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     backface-visibility: hidden;
+    transform: rotate(27deg);
     transition: border-color 0.25s, background 0.25s, transform 0.25s;
   }
 
@@ -1683,7 +1718,15 @@
   a.lab-spiral-card:hover .lab-spiral-card-inner {
     border-color: var(--terra);
     background: var(--surface-2);
-    transform: translateZ(14px);
+    transform: rotate(27deg) translateZ(14px);
+  }
+
+  .lab-spiral-wrap.list-view .lab-spiral-card-inner {
+    transform: none;
+  }
+
+  .lab-spiral-wrap.list-view a.lab-spiral-card:hover .lab-spiral-card-inner {
+    transform: none;
   }
 
   .lab-spiral-index {
@@ -1729,14 +1772,11 @@
 
   @media (max-width: 768px) {
     .lab-spiral-section { padding: 40px 20px 0; }
-    .lab-spiral-wrap { height: 460px; }
-    .lab-spiral-card { width: 178px; height: 224px; margin: -112px 0 0 -89px; }
-    .lab-spiral-card:nth-child(1) { --x: -70px; --y: -110px; }
-    .lab-spiral-card:nth-child(2) { --x: 60px;  --y: -60px; }
-    .lab-spiral-card:nth-child(3) { --x: -70px; --y: 20px; }
-    .lab-spiral-card:nth-child(4) { --x: 65px;  --y: 90px; }
-    .lab-spiral-card:nth-child(5) { --x: -60px; --y: 175px; }
-    .lab-spiral-card-inner { padding: 20px 18px; }
+    .lab-spiral-wrap { height: 520px; --radius: 150px; --spacing: 74px; }
+    .lab-spiral-axis { transform: rotateZ(-22deg) rotateX(10deg); }
+    .lab-spiral-card-inner { padding: 20px 18px; transform: rotate(22deg); }
+    a.lab-spiral-card:hover .lab-spiral-card-inner { transform: rotate(22deg) translateZ(14px); }
+    .lab-spiral-card { width: 172px; height: 216px; margin: -108px 0 0 -86px; }
     .lab-spiral-title { font-size: 16px; }
     .lab-spiral-desc { font-size: 11.5px; }
     .lab-zones-note { padding: 0 20px; }
@@ -1793,6 +1833,7 @@
     <button type="button" id="labViewList">list</button>
   </div>
   <div class="lab-spiral-wrap reveal" style="transition-delay:0.15s" id="labSpiralWrap">
+   <div class="lab-spiral-axis" id="labSpiralAxis">
     <div class="lab-spiral-stage" id="labSpiralStage">
       <a class="lab-spiral-card" href="/player-systems-lab.html">
         <div class="lab-spiral-card-inner">
@@ -1855,6 +1896,7 @@
         </div>
       </div>
     </div>
+   </div>
   </div>
   <p class="lab-zones-note reveal" style="transition-delay:0.3s">The lab keeps turning — hover to pause and look around. Professor's Desk is live; the rest link out as they're built.</p>
 </section>
@@ -1922,14 +1964,14 @@ const revealObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.12, rootMargin: '0px 0px 200px 0px' });
 document.querySelectorAll('.reveal, .reveal-left').forEach(el => revealObserver.observe(el));
 
-// ── LAB SPIRAL / LIST TOGGLE + PARALLAX TILT ──
+// ── LAB SPIRAL / LIST TOGGLE ──
+// The spiral itself auto-rotates via CSS animation (paused on hover); this
+// just swaps the wrap into/out of list-view, which the stylesheet handles.
 const labWrap = document.getElementById('labSpiralWrap');
-const labStage = document.getElementById('labSpiralStage');
 const labBtnSpiral = document.getElementById('labViewSpiral');
 const labBtnList = document.getElementById('labViewList');
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-if (labWrap && labStage && labBtnSpiral && labBtnList) {
+if (labWrap && labBtnSpiral && labBtnList) {
   labBtnSpiral.addEventListener('click', () => {
     labWrap.classList.remove('list-view');
     labBtnSpiral.classList.add('active');
@@ -1939,21 +1981,7 @@ if (labWrap && labStage && labBtnSpiral && labBtnList) {
     labWrap.classList.add('list-view');
     labBtnList.classList.add('active');
     labBtnSpiral.classList.remove('active');
-    labStage.style.transform = '';
   });
-
-  if (!prefersReducedMotion) {
-    labWrap.addEventListener('mousemove', (e) => {
-      if (labWrap.classList.contains('list-view')) return;
-      const rect = labWrap.getBoundingClientRect();
-      const px = (e.clientX - rect.left) / rect.width - 0.5;
-      const py = (e.clientY - rect.top) / rect.height - 0.5;
-      labStage.style.transform = `rotateX(${(-py * 10).toFixed(2)}deg) rotateY(${(px * 14).toFixed(2)}deg)`;
-    });
-    labWrap.addEventListener('mouseleave', () => {
-      if (!labWrap.classList.contains('list-view')) labStage.style.transform = 'rotateX(0deg) rotateY(0deg)';
-    });
-  }
 }
 
 // ── FLOATING PARTICLES ──
