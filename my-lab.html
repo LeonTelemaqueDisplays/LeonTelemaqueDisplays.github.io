@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Leon Telemaque — Consumer Behaviour & Product Systems</title>
+<title>My Lab — Leon Telemaque</title>
 <style>
   :root {
     --bg: #060607;
@@ -239,7 +239,7 @@
   .hero {
     min-height: 100vh;
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 460px;
     gap: 0;
     padding: 132px 40px 60px;
     position: relative;
@@ -629,74 +629,42 @@
   }
   .reveal-left.visible { opacity: 1; transform: translateX(0); }
 
-  /* ── ABOUT / CAREER + SKILLS ── */
-  .career-grid {
+  /* ── ABOUT ── */
+  .about-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: start;
-  }
-
-  .career-text p {
-    font-size: 15px;
-    color: var(--text-mid);
-    line-height: 1.8;
-    margin-bottom: 22px;
-    max-width: 460px;
-  }
-
-  .career-text strong { color: var(--text); font-weight: 600; }
-
-  .career-links {
-    display: flex;
+    grid-template-columns: 1fr 360px;
+    gap: 60px;
     align-items: center;
-    gap: 36px;
-    margin-top: 32px;
+    margin-top: 40px;
   }
 
-  .career-link {
-    font-family: var(--sans);
-    font-size: 17px;
-    font-weight: 400;
-    color: var(--text);
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: color 0.2s;
-  }
+  .about-text { display: flex; flex-direction: column; gap: 24px; }
 
-  .career-link:hover { color: var(--text-mid); }
-
-  .skills-title {
-    font-size: clamp(30px, 4vw, 44px);
-    font-weight: 300;
-    letter-spacing: -0.01em;
-    color: var(--text);
-    margin-bottom: 28px;
-    line-height: 1.15;
-  }
-
-  .skills-pill-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .skills-pill {
-    padding: 12px 20px;
+  .about-panel {
     background: var(--surface);
-    border-radius: 12px;
-    font-family: var(--sans);
+    border: 1px solid var(--border);
+    padding: 32px;
+  }
+
+  .about-panel p {
     font-size: 14px;
     color: var(--text-mid);
-    transition: color 0.2s, background 0.2s;
+    line-height: 1.8;
+    margin-bottom: 16px;
   }
 
-  .skills-pill:hover { color: var(--text); background: var(--surface-2); }
+  .about-panel p:last-child { margin-bottom: 0; }
 
-  @media (max-width: 900px) {
-    .career-grid { grid-template-columns: 1fr; gap: 48px; }
+  .about-panel strong { color: var(--text); font-weight: 600; }
+
+  .about-pull {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.5;
+    border-left: 2px solid var(--blue);
+    padding-left: 20px;
+    margin-bottom: 24px;
   }
 
   /* PHOTO */
@@ -983,88 +951,113 @@
   }
 
   /* ── SHOWCASE (Featured Work) ── */
-  .showcase-hero {
+  .showcase-list {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .showcase-card {
     position: relative;
     border-radius: 24px;
-    width: min(100%, 1120px);
-    aspect-ratio: 2/1;
-    max-height: 560px;
-    background: var(--surface-2);
-    border: 1px dashed var(--border-2);
-    margin: 0 auto 56px;
-    cursor: pointer;
-    text-decoration: none;
     overflow: hidden;
+    min-height: 480px;
+    background: var(--surface-2);
+    cursor: pointer;
+    display: flex;
+    align-items: flex-end;
     opacity: 0;
     transform: translateY(20px);
-    transition: border-color 0.2s;
   }
 
-  .showcase-hero:hover { border-color: var(--text-dim); }
+  .showcase-card.card-visible {
+    animation: cardReveal 0.5s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
 
-  .showcase-hero img { transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); }
-  .showcase-hero:hover img { transform: scale(1.06); }
+  .showcase-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
+  }
 
-  .showcase-hero.card-visible { animation: cardReveal 0.5s cubic-bezier(0.4,0,0.2,1) forwards; }
+  .showcase-card:hover .showcase-bg { transform: scale(1.05); }
 
-  .showcase-hero-label {
+  .showcase-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(6,6,7,0.94) 0%, rgba(6,6,7,0.72) 36%, rgba(6,6,7,0.2) 62%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .showcase-content {
+    position: relative;
+    z-index: 2;
+    padding: 44px 48px;
+    max-width: 540px;
+  }
+
+  .showcase-eyebrow {
     font-family: var(--mono);
     font-size: 11px;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--text-dim);
+    margin-bottom: 14px;
   }
 
-  .showcase-tile-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 56px 32px;
-  }
-
-  .showcase-tile {
-    display: block;
-    text-decoration: none;
-    cursor: pointer;
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  .showcase-tile.card-visible { animation: cardReveal 0.5s cubic-bezier(0.4,0,0.2,1) forwards; }
-
-  .showcase-tile-label {
-    font-family: var(--sans);
+  .showcase-title {
     font-size: clamp(22px, 2.6vw, 30px);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.25;
+    margin-bottom: 14px;
+  }
+
+  .showcase-desc {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.7;
+    margin-bottom: 12px;
+    max-width: 480px;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .showcase-source {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    opacity: 0.8;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+  }
+
+  .showcase-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 16px;
     font-weight: 400;
     color: var(--text);
-    line-height: 1.3;
-    margin-bottom: 18px;
-    transition: color 0.2s;
+    text-decoration: none;
   }
 
-  .showcase-tile:hover .showcase-tile-label { color: var(--text-mid); }
-
-  .showcase-tile-placeholder {
-    border-radius: 20px;
-    width: min(100%, 620px);
-    aspect-ratio: 1/1;
-    max-height: 620px;
-    margin: 0 auto;
-    background: var(--surface-2);
-    border: 1px dashed var(--border-2);
-    transition: border-color 0.2s;
-  }
-
-  .showcase-tile:hover .showcase-tile-placeholder { border-color: var(--text-dim); }
-
-  .showcase-tile-placeholder img { transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); }
-  .showcase-tile:hover .showcase-tile-placeholder img { transform: scale(1.08); }
+  .showcase-link svg { width: 16px; height: 16px; transition: transform 0.25s; }
+  .showcase-card:hover .showcase-link svg { transform: translate(3px, -3px); }
 
   @media (max-width: 768px) {
-    .showcase-hero { aspect-ratio: 4/3; max-height: 420px; }
-    .showcase-tile-grid { grid-template-columns: 1fr; gap: 40px; }
+    .showcase-card { min-height: 380px; }
+    .showcase-content { padding: 28px 24px; max-width: 100%; }
+    .showcase-card::after { background: linear-gradient(0deg, rgba(6,6,7,0.96) 0%, rgba(6,6,7,0.75) 45%, rgba(6,6,7,0.25) 75%, transparent 100%); }
   }
 
   /* ── Mobile: peek carousel ──
@@ -1095,6 +1088,9 @@
     align-items: center;
     justify-content: center;
   }
+
+  .card-thumb img { transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); }
+  .project-card:hover .card-thumb img { transform: scale(1.08); }
 
   .card-thumb-label {
     font-family: var(--mono);
@@ -1498,6 +1494,148 @@
     .carousel-header { flex-wrap: wrap; gap: 12px; }
   }
 </style>
+<style>
+  /* ── CASE STUDIES INDEX EXTRAS ── */
+  .archive-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px 32px;
+    margin-top: 8px;
+  }
+
+  .cs-tile {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .cs-tile.card-visible {
+    animation: cardReveal 0.5s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
+
+  .cs-tile-img {
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    background: var(--surface-2);
+    margin-bottom: 18px;
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .cs-tile:hover .cs-tile-img { transform: scale(1.02); }
+
+  .cs-tile-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .cs-tile-decorative {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cs-tile-label {
+    font-family: var(--sans);
+    font-size: clamp(20px, 2.2vw, 26px);
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.3;
+    transition: color 0.2s;
+  }
+
+  .cs-tile:hover .cs-tile-label { color: var(--text-mid); }
+
+  @media (max-width: 768px) {
+    .archive-grid { grid-template-columns: 1fr; gap: 32px; }
+  }
+
+  .page-header {
+    padding: 152px 40px 48px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── MY LAB EXTRAS ── */
+  .lab-intro {
+    max-width: 720px;
+    margin-top: 16px;
+  }
+
+  .lab-embed-section {
+    padding: 40px 40px 0;
+  }
+
+  .lab-embed-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    aspect-ratio: 16/10;
+    border-radius: 24px;
+    overflow: hidden;
+    background: var(--surface-2);
+    border: 1px solid var(--border-2);
+  }
+
+  .lab-embed-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
+  .lab-attribution {
+    max-width: 1120px;
+    margin: 12px auto 0;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .lab-attribution a { color: var(--blue); font-weight: 600; text-decoration: none; }
+  .lab-attribution a:hover { text-decoration: underline; }
+
+  .lab-zones {
+    max-width: 1120px;
+    margin: 40px auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .lab-zone-pill {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--text-mid);
+    padding: 10px 18px;
+    border: 1px solid var(--border-2);
+    border-radius: 999px;
+    background: var(--surface);
+  }
+
+  .lab-zones-note {
+    max-width: 1120px;
+    margin: 20px auto 0;
+    font-size: 13px;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  @media (max-width: 768px) {
+    .lab-embed-section { padding: 32px 20px 0; }
+    .lab-embed-wrap { aspect-ratio: 4/3; }
+    .lab-zones { margin: 32px auto 0; padding: 0 20px; }
+    .lab-zones-note { padding: 0 20px; }
+  }
+</style>
 </head>
 <body>
 <canvas id="gradient-canvas"></canvas>
@@ -1510,7 +1648,7 @@
 
 <!-- NAV -->
 <nav id="nav">
-  <a href="#" class="nav-logo">LT — Consumer Systems</a>
+  <a href="/" class="nav-logo">LT — Consumer Systems</a>
   <button class="nav-menu-btn" id="navMenuBtn" aria-label="Open menu" aria-expanded="false">
     <span></span><span></span><span></span><span></span>
   </button>
@@ -1525,8 +1663,8 @@
     </div>
     <ul class="nav-overlay-links">
       <li><a href="/">Home <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a></li>
-      <li><a href="#about">About <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a></li>
-      <li><a href="#process">Process <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a></li>
+      <li><a href="/#about">About <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a></li>
+      <li><a href="/#process">Process <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a></li>
       <li><a href="/case-studies.html">Case Studies <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a></li>
       <li><a href="/my-lab.html">My Lab <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a></li>
       <li><a href="mailto:leon.telemaque@gmail.com">Let's talk <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a></li>
@@ -1535,166 +1673,34 @@
   </div>
 </div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg">
-    <div class="hero-bg-orb hero-bg-orb-1"></div>
-    <div class="hero-bg-orb hero-bg-orb-2"></div>
-  </div>
-
-  <div class="hero-left">
-    <h1 class="hero-headline animate-in d1">
-      Understanding people.<br>
-      Building the argument.<br>
-      <span class="accent" data-text="Proving it with data.">Proving it with data.</span>
-    </h1>
-    <div class="hero-subtitle-group animate-in d2">
-      <div class="hero-subtitle">Hi, I'm Leon</div>
-      <div class="hero-subtitle">Consumer behaviour analyst &amp; product systems designer</div>
-    </div>
-    <p class="hero-supporting animate-in d3">
-      I look at the patterns and systems underneath people's decisions.
-      <em>The data just makes the argument stronger.</em>
-    </p>
-    <div class="hero-social animate-in d4">
-      <a href="https://linkedin.com/in/leontelemaque" target="_blank" class="social-icon" aria-label="LinkedIn">
-        <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
-      </a>
-      <a href="mailto:leon.telemaque@gmail.com" class="social-icon" aria-label="Email">
-        <svg viewBox="0 0 24 24"><path d="M2 4h20v16H2V4zm2 2.4V18h16V6.4l-8 6-8-6zm.8-.4 7.2 5.4L19.2 6H4.8z"/></svg>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- BRANDS ANALYZED -->
-<div class="brands-strip reveal">
-  <div class="brands-label">Brands &amp; Products Analyzed</div>
-  <div class="brands-row">
-    <span class="brand-name">Tim Hortons</span>
-    <span class="brand-name">Aeroplan</span>
-    <span class="brand-name">Spotify</span>
-    <span class="brand-name">Costco</span>
-    <span class="brand-name">Wealthsimple</span>
-    <span class="brand-name">Roblox</span>
-    <span class="brand-name">Gatorade</span>
-    <span class="brand-name">Hinge</span>
-    <span class="brand-name">Duolingo</span>
-  </div>
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <h1 class="section-title reveal-left" style="margin-bottom:0">My Lab</h1>
+  <p class="lab-intro reveal-left" style="transition-delay:0.1s">The tools behind the case studies — a working research station, not a portfolio piece. Each zone is a different kind of instrument I reach for when a strategic or consumer question needs more than a hunch.</p>
 </div>
 
-<!-- FEATURED WORK -->
-<section class="section" id="featured-work" style="padding-bottom:56px">
-  <h2 class="section-title reveal-left">Case Studies</h2>
-  <p class="section-desc reveal-left" style="transition-delay:0.1s">A few pieces pulled from the full archive — real data, real sources, argued from both sides before landing on a verdict.</p>
-
-  <a class="showcase-hero" href="/case-studies.html" style="border-style:solid;background:#000">
-    <img src="/consumer/case-studies-cover.jpeg" alt="Collage of case study mockups — Aeroplan, Costco, Hinge apps and a data dashboard" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block">
-    <div class="showcase-hero-label" style="position:absolute;left:24px;bottom:20px;background:rgba(6,6,7,0.75);padding:8px 14px;border-radius:8px">View the Full Case Study Archive — 12 pieces</div>
-  </a>
-
-  <div class="showcase-tile-grid">
-
-    <a class="showcase-tile" href="/consumer/tim-hortons" target="_blank">
-      <div class="showcase-tile-label">Systems &amp; Strategy</div>
-      <div class="showcase-tile-placeholder" style="border-style:solid;overflow:hidden;background:var(--surface-2)">
-        <img src="/consumer/systems-strategy-cover.png" alt="Aeroplan member tier breakage-risk dashboard" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block">
-      </div>
-    </a>
-
-    <a class="showcase-tile" href="/consumer/aeroplan-loyalty-economics.html" target="_blank">
-      <div class="showcase-tile-label">Fintech Psychology</div>
-      <div class="showcase-tile-placeholder" style="border-style:solid;overflow:hidden;background:var(--surface-2)">
-        <img src="/consumer/aeroplan-fintech-cover.jpeg" alt="MacBook displaying the Aeroplan rewards website" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block">
-      </div>
-    </a>
-
-    <a class="showcase-tile" href="/consumer/spotify-analysis.html" target="_blank">
-      <div class="showcase-tile-label">Subscription &amp; Retention</div>
-      <div class="showcase-tile-placeholder" style="border-style:solid;overflow:hidden;background:var(--surface-2)">
-        <img src="/consumer/subscription-retention-cover.jpeg" alt="Hand holding a phone showing a music app's genre selection screen" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block">
-      </div>
-    </a>
-
+<!-- LAB EMBED -->
+<section class="lab-embed-section">
+  <div class="lab-embed-wrap reveal" style="transition-delay:0.15s">
+    <iframe title="Professor Oak's Lab" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share src="https://sketchfab.com/models/b635af0cc1514450b2027b1b161a4550/embed"></iframe>
   </div>
+  <p class="lab-attribution reveal" style="transition-delay:0.2s">
+    <a href="https://sketchfab.com/3d-models/professor-oaks-lab-b635af0cc1514450b2027b1b161a4550" target="_blank" rel="nofollow">Professor Oak's Lab</a>
+    by <a href="https://sketchfab.com/JoshBowman" target="_blank" rel="nofollow">Josh Bowman</a>
+    on <a href="https://sketchfab.com" target="_blank" rel="nofollow">Sketchfab</a>
+  </p>
+
+  <div class="lab-zones reveal" style="transition-delay:0.25s">
+    <span class="lab-zone-pill">Professor's Desk</span>
+    <span class="lab-zone-pill">Computer Terminals</span>
+    <span class="lab-zone-pill">Bookshelves</span>
+    <span class="lab-zone-pill">Specimen Jars / Research Area</span>
+    <span class="lab-zone-pill">Pokédex Station</span>
+  </div>
+  <p class="lab-zones-note reveal" style="transition-delay:0.3s">Each zone will link out to a live tool — wiring that up next.</p>
 </section>
 
-<!-- ABOUT -->
-<section class="section" id="about">
-  <div class="career-grid">
-    <div class="career-text">
-      <h2 class="section-title reveal-left">Career So Far</h2>
-      <p class="reveal" style="transition-delay:0.1s">Consumer behaviour is not a discipline — it's a lens. I came to product and UX work through studying <strong>why people decide the way they do</strong>, not through a design program.</p>
-      <p class="reveal" style="transition-delay:0.15s">Academic training in Marketing and Consumer Culture at Trent University, applied through self-directed case studies — twelve pieces deep, across CPG, fintech, and subscription products.</p>
-      <p class="reveal" style="transition-delay:0.2s">Currently building behavioural analytics systems in <strong>SQL, Python, and Streamlit</strong> — the same thinking that drives retention design, applied wherever a product needs to explain why users act the way they do.</p>
-
-      <div class="career-links reveal" style="transition-delay:0.25s">
-        <a href="/case-studies.html" class="career-link">View Case Studies</a>
-        <a href="/resume.pdf" target="_blank" class="career-link">Download Resume ↓</a>
-      </div>
-    </div>
-
-    <div class="career-skills">
-      <h2 class="skills-title reveal-left" style="transition-delay:0.1s">Skills</h2>
-      <div class="skills-pill-grid">
-        <div class="skills-pill reveal" style="transition-delay:0.1s">Consumer Behaviour</div>
-        <div class="skills-pill reveal" style="transition-delay:0.13s">Product Analytics</div>
-        <div class="skills-pill reveal" style="transition-delay:0.16s">UX Research</div>
-        <div class="skills-pill reveal" style="transition-delay:0.19s">Retention Design</div>
-        <div class="skills-pill reveal" style="transition-delay:0.22s">A/B Testing</div>
-        <div class="skills-pill reveal" style="transition-delay:0.25s">Cohort Analysis</div>
-        <div class="skills-pill reveal" style="transition-delay:0.28s">Behavioural Modelling</div>
-        <div class="skills-pill reveal" style="transition-delay:0.31s">SQL</div>
-        <div class="skills-pill reveal" style="transition-delay:0.34s">Python</div>
-        <div class="skills-pill reveal" style="transition-delay:0.37s">Streamlit</div>
-        <div class="skills-pill reveal" style="transition-delay:0.4s">Data Visualization</div>
-        <div class="skills-pill reveal" style="transition-delay:0.43s">Brand Strategy</div>
-        <div class="skills-pill reveal" style="transition-delay:0.46s">Decision Architecture</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PROCESS -->
-<section class="section" id="process">
-  <div class="section-eyebrow reveal-left">How I Work</div>
-  <h2 class="section-title reveal-left" style="transition-delay:0.1s">Process? <em>Yeah, I have one.</em></h2>
-  <p class="section-desc reveal-left" style="transition-delay:0.2s">Every case study on this site follows the same four moves — whether it's a two-day teardown or a six-week build.</p>
-
-  <div class="process-grid">
-    <div class="process-step reveal" style="transition-delay:0s">
-      <div class="process-icon" style="--pct:25%"></div>
-      <div class="process-title">Frame the Question</div>
-      <div class="process-desc">State the assumption or decision under scrutiny, and what's actually at stake if it's wrong.</div>
-    </div>
-    <div class="process-step reveal" style="transition-delay:0.08s">
-      <div class="process-icon" style="--pct:65%"></div>
-      <div class="process-title">Build the Model</div>
-      <div class="process-desc">SQL, Python, Streamlit — construct the analysis from real or rigorously modelled data, not a template.</div>
-    </div>
-    <div class="process-step reveal" style="transition-delay:0.16s">
-      <div class="process-icon" style="--pct:45%"></div>
-      <div class="process-title">Argue Both Sides</div>
-      <div class="process-desc">State the strongest case for the conclusion, then the strongest case against it. If it can't survive its own rebuttal, it isn't a conclusion yet.</div>
-    </div>
-    <div class="process-step reveal" style="transition-delay:0.24s">
-      <div class="process-icon" style="--pct:15%"></div>
-      <div class="process-title">Ship the Verdict</div>
-      <div class="process-desc">A clear recommendation, reasoned on statistical and practical significance — not just correlation.</div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<div class="contact-section reveal">
-  <div class="hero-avail" style="justify-content:center;margin-bottom:20px">
-    <div class="avail-dot"></div>
-    Available for internship and junior roles — product management and UXR. Toronto based, open to remote and international.
-  </div>
-  <div class="contact-headline">Working on a product —</div>
-  <div class="contact-headline">or trying to understand</div>
-  <div class="contact-cta">your users better? <span style="color:var(--terra)">Let's talk.</span> 👋</div>
-</div>
+<div style="height:120px"></div>
 
 <!-- FOOTER -->
 <footer>
@@ -1704,17 +1710,10 @@
   </div>
   <div class="footer-links">
     <a href="https://linkedin.com/in/leontelemaque" class="footer-link">LinkedIn ↗</a>
-    <a href="mailto:leon@email.com" class="footer-link">Mail ↗</a>
+    <a href="mailto:leon.telemaque@gmail.com" class="footer-link">Mail ↗</a>
   </div>
 </footer>
 
-<!-- No carousel position-tracking JS — .carousel-track-wrap still scrolls
-     natively (overflow-x: auto + scroll-snap-type:x proximity), so touch
-     drag, trackpad, mouse-wheel-shift, and keyboard arrow-key scrolling all
-     work without any hand-rolled position tracking to keep in sync. The
-     script below only handles visual polish (progress bar, particles, nav
-     blur, entrance/reveal animations, stat counters) — none of it touches
-     carousel scroll position. -->
 <script>
 // ── SCROLL PROGRESS ──
 const progress = document.getElementById('progress');
@@ -1727,12 +1726,6 @@ window.addEventListener('scroll', () => {
 const navEl = document.getElementById('nav');
 window.addEventListener('scroll', () => {
   navEl.classList.toggle('scrolled', window.scrollY > 40);
-}, { passive: true });
-
-// ── PARALLAX PHOTO ──
-const photoEl = document.getElementById('parallaxPhoto');
-window.addEventListener('scroll', () => {
-  if (photoEl) photoEl.style.transform = `translateY(${window.scrollY * 0.1}px)`;
 }, { passive: true });
 
 // ── NAV MENU OVERLAY ──
@@ -1762,68 +1755,13 @@ if (navMenuBtn && navOverlay) {
   });
 }
 
-// ── COUNTER ANIMATIONS ──
-function animateCounter(el) {
-  const target = parseInt(el.dataset.target, 10);
-  const duration = 1400;
-  const start = performance.now();
-  function update(now) {
-    const p = Math.min((now - start) / duration, 1);
-    const ease = 1 - Math.pow(1 - p, 3);
-    el.textContent = Math.round(target * ease).toLocaleString();
-    if (p < 1) requestAnimationFrame(update);
-  }
-  requestAnimationFrame(update);
-}
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.querySelectorAll('.stat-value[data-target]').forEach(animateCounter);
-  }, 500);
-});
-
 // ── SCROLL REVEAL ──
-// rootMargin extends the observer's root box 200px past the bottom of the
-// actual viewport, so elements start revealing slightly before they
-// scroll into view instead of appearing to sit blank in a "dead" gap for
-// the length of the fade-in transition.
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) entry.target.classList.add('visible');
   });
 }, { threshold: 0.12, rootMargin: '0px 0px 200px 0px' });
 document.querySelectorAll('.reveal, .reveal-left').forEach(el => revealObserver.observe(el));
-
-// ── CARD STAGGER REVEAL ──
-const cardObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      if (entry.target.matches('.showcase-hero')) {
-        entry.target.classList.add('card-visible');
-      } else {
-        const cards = entry.target.querySelectorAll('.project-card, .coming-soon-card, .showcase-tile');
-        cards.forEach((card, i) => {
-          setTimeout(() => card.classList.add('card-visible'), i * 90);
-        });
-      }
-      cardObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.08, rootMargin: '0px 0px 200px 0px' });
-document.querySelectorAll('.carousel-track, .showcase-tile-grid').forEach(t => cardObserver.observe(t));
-document.querySelectorAll('.showcase-hero').forEach(el => cardObserver.observe(el));
-
-// ── SKILL CARD STAGGER REVEAL ──
-const skillCards = document.querySelectorAll('.skill-card');
-const skillObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const idx = Array.from(skillCards).indexOf(entry.target);
-      setTimeout(() => entry.target.classList.add('skill-visible'), idx * 80);
-      skillObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px 200px 0px' });
-skillCards.forEach(c => skillObserver.observe(c));
 
 // ── FLOATING PARTICLES ──
 const particleContainer = document.getElementById('particles');
@@ -1836,78 +1774,7 @@ for (let i = 0; i < 18; i++) {
   p.style.animationDelay = (Math.random() * 18) + 's';
   particleContainer.appendChild(p);
 }
-
-// ── CAROUSEL SCROLL CONTROLS ──
-// Native-scroll carousels give no visual cue that a track has more cards
-// off-screen. This wires up the edge fades (via .at-start/.at-end/
-// .no-overflow classes toggled on the wrap) and the prev/next arrow
-// buttons in each carousel-header, scrolling by ~90% of the wrap's own
-// width — no per-card-width math, so it can't drift out of sync the way
-// the old hand-rolled carousel position tracker used to.
-document.querySelectorAll('.carousel-track-wrap').forEach(wrap => {
-  const track = wrap.querySelector('.carousel-track');
-  if (!track) return;
-  const header = wrap.previousElementSibling;
-  const arrows = header ? header.querySelector('.carousel-arrows') : null;
-
-  function updateState() {
-    const max = track.scrollWidth - wrap.clientWidth;
-    const noOverflow = max <= 2;
-    wrap.classList.toggle('no-overflow', noOverflow);
-    wrap.classList.toggle('at-start', wrap.scrollLeft <= 2);
-    wrap.classList.toggle('at-end', wrap.scrollLeft >= max - 2);
-    if (arrows) {
-      arrows.style.display = noOverflow ? 'none' : 'flex';
-      arrows.querySelectorAll('.carousel-arrow-btn').forEach(btn => {
-        const dir = parseFloat(btn.dataset.dir);
-        btn.disabled = (dir < 0 && wrap.scrollLeft <= 2) || (dir > 0 && wrap.scrollLeft >= max - 2);
-      });
-    }
-  }
-
-  wrap.addEventListener('scroll', updateState, { passive: true });
-  window.addEventListener('resize', updateState);
-
-  if (arrows) {
-    arrows.querySelectorAll('.carousel-arrow-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const dir = parseFloat(btn.dataset.dir);
-        wrap.scrollBy({ left: dir * wrap.clientWidth * 0.9, behavior: 'smooth' });
-      });
-    });
-  }
-
-  updateState();
-});
-
-// ── CAROUSEL "PEEK" NUDGE ──
-// One-time hint that a track scrolls further: nudge right ~60px and ease
-// back the first time each track scrolls substantially into view. Never
-// repeats, and skips entirely for prefers-reduced-motion — this is a
-// hint, not a permanent auto-scroll, so it never fights someone actually
-// reading a card.
-if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  const peekObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const wrap = entry.target;
-      peekObserver.unobserve(wrap);
-      const track = wrap.querySelector('.carousel-track');
-      if (!track) return;
-      setTimeout(() => {
-        const max = track.scrollWidth - wrap.clientWidth;
-        if (max <= 2 || wrap.scrollLeft > 2) return; // no overflow, or user already scrolled
-        wrap.scrollBy({ left: 60, behavior: 'smooth' });
-        setTimeout(() => {
-          if (wrap.scrollLeft <= 62) wrap.scrollTo({ left: 0, behavior: 'smooth' });
-        }, 550);
-      }, 700);
-    });
-  }, { threshold: 0.4 });
-  document.querySelectorAll('.carousel-track-wrap').forEach(wrap => peekObserver.observe(wrap));
-}
 </script>
-
 <!-- ── NEAT GRADIENT BACKGROUND ── -->
 <script type="module">
 import { NeatGradient } from "https://esm.sh/@firecms/neat";
