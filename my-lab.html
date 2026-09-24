@@ -1621,6 +1621,17 @@
     background: var(--surface);
   }
 
+  a.lab-zone-pill {
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  a.lab-zone-pill:hover {
+    color: var(--text);
+    border-color: var(--text-dim);
+  }
+
   .lab-zones-note {
     max-width: 1120px;
     margin: 20px auto 0;
@@ -1691,7 +1702,7 @@
   </p>
 
   <div class="lab-zones reveal" style="transition-delay:0.25s">
-    <span class="lab-zone-pill">Professor's Desk</span>
+    <a class="lab-zone-pill" href="/player-systems-lab.html">Professor's Desk</a>
     <span class="lab-zone-pill">Computer Terminals</span>
     <span class="lab-zone-pill">Bookshelves</span>
     <span class="lab-zone-pill">Specimen Jars / Research Area</span>
