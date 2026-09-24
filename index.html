@@ -989,11 +989,12 @@
     justify-content: center;
     position: relative;
     border-radius: 24px;
+    width: min(100%, 1120px);
     aspect-ratio: 2/1;
     max-height: 560px;
     background: var(--surface-2);
     border: 1px dashed var(--border-2);
-    margin-bottom: 56px;
+    margin: 0 auto 56px;
     cursor: pointer;
     text-decoration: none;
     overflow: hidden;
@@ -1044,8 +1045,10 @@
 
   .showcase-tile-placeholder {
     border-radius: 20px;
+    width: min(100%, 620px);
     aspect-ratio: 1/1;
     max-height: 620px;
+    margin: 0 auto;
     background: var(--surface-2);
     border: 1px dashed var(--border-2);
     transition: border-color 0.2s;
