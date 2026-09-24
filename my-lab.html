@@ -1571,8 +1571,36 @@
     padding: 56px 40px 0;
   }
 
+  .lab-spiral-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 28px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .lab-spiral-toggle button {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    cursor: pointer;
+    padding: 4px 2px;
+    transition: color 0.2s;
+  }
+
+  .lab-spiral-toggle button:hover { color: var(--text-mid); }
+  .lab-spiral-toggle button.active { color: var(--text); }
+  .lab-spiral-toggle .toggle-dot { color: var(--border-2); font-size: 8px; }
+
   .lab-spiral-wrap {
-    --spiral-radius: 380px;
     position: relative;
     width: 100%;
     max-width: 1120px;
@@ -1580,6 +1608,12 @@
     margin: 0 auto;
     perspective: 1400px;
     perspective-origin: 50% 50%;
+    transition: height 0.3s ease;
+  }
+
+  .lab-spiral-wrap.list-view {
+    height: auto;
+    perspective: none;
   }
 
   .lab-spiral-stage {
@@ -1587,34 +1621,48 @@
     width: 100%;
     height: 100%;
     transform-style: preserve-3d;
-    animation: spiralSpin 40s linear infinite;
+    transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
   }
 
-  .lab-spiral-wrap:hover .lab-spiral-stage,
-  .lab-spiral-stage:focus-within {
-    animation-play-state: paused;
+  .lab-spiral-wrap.list-view .lab-spiral-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    height: auto;
+    transform: none;
   }
 
-  @keyframes spiralSpin {
-    from { transform: rotateX(10deg) rotateY(0deg); }
-    to   { transform: rotateX(10deg) rotateY(360deg); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .lab-spiral-stage { animation: none; transform: rotateX(10deg) rotateY(0deg); }
-  }
-
+  /* Scattered spiral field — each card gets its own hand-placed offset,
+     depth and tilt via custom properties, rather than an even geometric
+     ring, so the cluster reads as organically arranged. */
   .lab-spiral-card {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 240px;
-    height: 286px;
-    margin: -143px 0 0 -120px;
+    width: 230px;
+    height: 280px;
+    margin: -140px 0 0 -115px;
     transform-style: preserve-3d;
-    transform: rotateY(calc(var(--i) * 72deg)) translateZ(var(--spiral-radius)) translateY(calc((var(--i) - 2) * 40px));
+    transform: translate3d(var(--x), var(--y), var(--z)) rotate(var(--rot)) scale(var(--s));
+    transition: transform 0.6s cubic-bezier(0.22,1,0.36,1);
     text-decoration: none;
     color: var(--text);
+  }
+
+  .lab-spiral-card:nth-child(1) { --x: -260px; --y: -30px;  --rot: -8deg;  --s: 1.05; --z: 60px; z-index: 5; }
+  .lab-spiral-card:nth-child(2) { --x: -30px;  --y: -160px; --rot: 6deg;   --s: 0.94; --z: 20px; z-index: 3; }
+  .lab-spiral-card:nth-child(3) { --x: 235px;  --y: -95px;  --rot: -5deg;  --s: 1;    --z: 40px; z-index: 4; }
+  .lab-spiral-card:nth-child(4) { --x: 150px;  --y: 140px;  --rot: 9deg;   --s: 0.9;  --z: 10px; z-index: 2; }
+  .lab-spiral-card:nth-child(5) { --x: -150px; --y: 175px;  --rot: -11deg; --s: 0.97; --z: 30px; z-index: 1; }
+
+  .lab-spiral-wrap.list-view .lab-spiral-card {
+    position: static;
+    width: 100%;
+    max-width: 480px;
+    margin: 0;
+    transform: none;
+    z-index: auto;
   }
 
   .lab-spiral-card-inner {
@@ -1681,8 +1729,13 @@
 
   @media (max-width: 768px) {
     .lab-spiral-section { padding: 40px 20px 0; }
-    .lab-spiral-wrap { --spiral-radius: 190px; height: 420px; }
-    .lab-spiral-card { width: 176px; height: 236px; margin: -118px 0 0 -88px; }
+    .lab-spiral-wrap { height: 460px; }
+    .lab-spiral-card { width: 178px; height: 224px; margin: -112px 0 0 -89px; }
+    .lab-spiral-card:nth-child(1) { --x: -70px; --y: -110px; }
+    .lab-spiral-card:nth-child(2) { --x: 60px;  --y: -60px; }
+    .lab-spiral-card:nth-child(3) { --x: -70px; --y: 20px; }
+    .lab-spiral-card:nth-child(4) { --x: 65px;  --y: 90px; }
+    .lab-spiral-card:nth-child(5) { --x: -60px; --y: 175px; }
     .lab-spiral-card-inner { padding: 20px 18px; }
     .lab-spiral-title { font-size: 16px; }
     .lab-spiral-desc { font-size: 11.5px; }
@@ -1734,9 +1787,14 @@
 
 <!-- LAB SPIRAL CAROUSEL -->
 <section class="lab-spiral-section">
+  <div class="lab-spiral-toggle reveal" style="transition-delay:0.1s">
+    <button type="button" id="labViewSpiral" class="active">spiral</button>
+    <span class="toggle-dot">●</span>
+    <button type="button" id="labViewList">list</button>
+  </div>
   <div class="lab-spiral-wrap reveal" style="transition-delay:0.15s" id="labSpiralWrap">
     <div class="lab-spiral-stage" id="labSpiralStage">
-      <a class="lab-spiral-card" style="--i:0" href="/player-systems-lab.html">
+      <a class="lab-spiral-card" href="/player-systems-lab.html">
         <div class="lab-spiral-card-inner">
           <div>
             <div class="lab-spiral-index">ZONE 01</div>
@@ -1748,7 +1806,7 @@
           </div>
         </div>
       </a>
-      <div class="lab-spiral-card" style="--i:1">
+      <div class="lab-spiral-card">
         <div class="lab-spiral-card-inner">
           <div>
             <div class="lab-spiral-index">ZONE 02</div>
@@ -1760,7 +1818,7 @@
           </div>
         </div>
       </div>
-      <div class="lab-spiral-card" style="--i:2">
+      <div class="lab-spiral-card">
         <div class="lab-spiral-card-inner">
           <div>
             <div class="lab-spiral-index">ZONE 03</div>
@@ -1772,7 +1830,7 @@
           </div>
         </div>
       </div>
-      <div class="lab-spiral-card" style="--i:3">
+      <div class="lab-spiral-card">
         <div class="lab-spiral-card-inner">
           <div>
             <div class="lab-spiral-index">ZONE 04</div>
@@ -1784,7 +1842,7 @@
           </div>
         </div>
       </div>
-      <div class="lab-spiral-card" style="--i:4">
+      <div class="lab-spiral-card">
         <div class="lab-spiral-card-inner">
           <div>
             <div class="lab-spiral-index">ZONE 05</div>
@@ -1863,6 +1921,40 @@ const revealObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.12, rootMargin: '0px 0px 200px 0px' });
 document.querySelectorAll('.reveal, .reveal-left').forEach(el => revealObserver.observe(el));
+
+// ── LAB SPIRAL / LIST TOGGLE + PARALLAX TILT ──
+const labWrap = document.getElementById('labSpiralWrap');
+const labStage = document.getElementById('labSpiralStage');
+const labBtnSpiral = document.getElementById('labViewSpiral');
+const labBtnList = document.getElementById('labViewList');
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (labWrap && labStage && labBtnSpiral && labBtnList) {
+  labBtnSpiral.addEventListener('click', () => {
+    labWrap.classList.remove('list-view');
+    labBtnSpiral.classList.add('active');
+    labBtnList.classList.remove('active');
+  });
+  labBtnList.addEventListener('click', () => {
+    labWrap.classList.add('list-view');
+    labBtnList.classList.add('active');
+    labBtnSpiral.classList.remove('active');
+    labStage.style.transform = '';
+  });
+
+  if (!prefersReducedMotion) {
+    labWrap.addEventListener('mousemove', (e) => {
+      if (labWrap.classList.contains('list-view')) return;
+      const rect = labWrap.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      labStage.style.transform = `rotateX(${(-py * 10).toFixed(2)}deg) rotateY(${(px * 14).toFixed(2)}deg)`;
+    });
+    labWrap.addEventListener('mouseleave', () => {
+      if (!labWrap.classList.contains('list-view')) labStage.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    });
+  }
+}
 
 // ── FLOATING PARTICLES ──
 const particleContainer = document.getElementById('particles');
