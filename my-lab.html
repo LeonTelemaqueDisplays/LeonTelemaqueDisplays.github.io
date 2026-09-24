@@ -1567,219 +1567,52 @@
     margin-top: 16px;
   }
 
-  .lab-spiral-section {
+  .lab-zones-section {
     padding: 56px 40px 0;
   }
 
-  .lab-spiral-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 28px;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-  }
-
-  .lab-spiral-toggle button {
-    background: transparent;
-    border: none;
-    color: inherit;
-    font: inherit;
-    letter-spacing: inherit;
-    text-transform: inherit;
-    cursor: pointer;
-    padding: 4px 2px;
-    transition: color 0.2s;
-  }
-
-  .lab-spiral-toggle button:hover { color: var(--text-mid); }
-  .lab-spiral-toggle button.active { color: var(--text); }
-  .lab-spiral-toggle .toggle-dot { color: var(--border-2); font-size: 8px; }
-
-  .lab-spiral-wrap {
-    position: relative;
-    width: 100%;
+  .lab-zones {
     max-width: 1120px;
-    height: 680px;
     margin: 0 auto;
-    perspective: 1500px;
-    perspective-origin: 50% 50%;
-    transition: height 0.3s ease;
-  }
-
-  .lab-spiral-wrap.list-view {
-    height: auto;
-    perspective: none;
-  }
-
-  /* Axis — tilts the whole cylinder onto a diagonal so the helix climbs
-     across the frame instead of sitting on a flat, upright ring. Stays
-     fixed; only the stage inside it spins. */
-  .lab-spiral-axis {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    transform: rotateZ(-27deg) rotateX(12deg);
-    transition: transform 0.4s ease;
-  }
-
-  .lab-spiral-wrap.list-view .lab-spiral-axis {
-    transform: none;
-  }
-
-  .lab-spiral-stage {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    animation: spiralSpin 34s linear infinite;
-  }
-
-  .lab-spiral-wrap:hover .lab-spiral-stage,
-  .lab-spiral-stage:focus-within {
-    animation-play-state: paused;
-  }
-
-  @keyframes spiralSpin {
-    from { transform: rotateY(0deg); }
-    to   { transform: rotateY(360deg); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .lab-spiral-stage { animation: none; }
-  }
-
-  .lab-spiral-wrap.list-view .lab-spiral-stage {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    height: auto;
-    animation: none;
-    transform: none;
+    flex-wrap: wrap;
+    gap: 12px;
   }
 
-  /* Helical cylinder — each card sits at an even 72° step around the
-     stage's own Y-axis, climbing along that same axis via translateY.
-     Because the axis itself is tilted diagonally (see .lab-spiral-axis),
-     the whole ascending stack reads as a diagonal spiral, not a flat
-     circle. */
-  .lab-spiral-card {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 222px;
-    height: 264px;
-    margin: -132px 0 0 -111px;
-    transform-style: preserve-3d;
-    transform: rotateY(calc(var(--i) * 72deg)) translateZ(var(--radius, 260px)) translateY(calc((var(--i) - 2) * var(--spacing, 108px)));
-    text-decoration: none;
-    color: var(--text);
-  }
-
-  .lab-spiral-card:nth-child(1) { --i: 0; }
-  .lab-spiral-card:nth-child(2) { --i: 1; }
-  .lab-spiral-card:nth-child(3) { --i: 2; }
-  .lab-spiral-card:nth-child(4) { --i: 3; }
-  .lab-spiral-card:nth-child(5) { --i: 4; }
-
-  .lab-spiral-wrap.list-view .lab-spiral-card {
-    position: static;
-    width: 100%;
-    max-width: 480px;
-    margin: 0;
-    transform: none;
-    z-index: auto;
-  }
-
-  /* Counter-rotates by the axis's tilt angle so card text stays upright
-     on screen even though the cylinder it sits on is diagonal. */
-  .lab-spiral-card-inner {
-    width: 100%;
-    height: 100%;
-    background: var(--surface);
-    border: 1px solid var(--border-2);
-    border-radius: 20px;
-    padding: 26px 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    backface-visibility: hidden;
-    transform: rotate(27deg);
-    transition: border-color 0.25s, background 0.25s, transform 0.25s;
-  }
-
-  a.lab-spiral-card .lab-spiral-card-inner { cursor: pointer; }
-  a.lab-spiral-card:hover .lab-spiral-card-inner {
-    border-color: var(--terra);
-    background: var(--surface-2);
-    transform: rotate(27deg) translateZ(14px);
-  }
-
-  .lab-spiral-wrap.list-view .lab-spiral-card-inner {
-    transform: none;
-  }
-
-  .lab-spiral-wrap.list-view a.lab-spiral-card:hover .lab-spiral-card-inner {
-    transform: none;
-  }
-
-  .lab-spiral-index {
+  .lab-zone-pill {
     font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    color: var(--text-dim);
-    margin-bottom: 10px;
-  }
-
-  .lab-spiral-title {
-    font-size: 19px;
-    font-weight: 700;
-    color: var(--text);
-    line-height: 1.3;
-  }
-
-  .lab-spiral-desc {
-    font-size: 12.5px;
+    font-size: 12px;
+    letter-spacing: 0.04em;
     color: var(--text-mid);
-    line-height: 1.65;
-    margin-bottom: 16px;
+    padding: 10px 18px;
+    border: 1px solid var(--border-2);
+    border-radius: 999px;
+    background: var(--surface);
   }
 
-  .lab-spiral-cta {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--terra);
+  a.lab-zone-pill {
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
   }
 
-  .lab-spiral-cta.disabled { color: var(--text-dim); }
+  a.lab-zone-pill:hover {
+    color: var(--text);
+    border-color: var(--terra);
+  }
 
   .lab-zones-note {
     max-width: 1120px;
-    margin: 28px auto 0;
+    margin: 20px auto 0;
     font-size: 13px;
     color: var(--text-dim);
     font-style: italic;
-    text-align: center;
   }
 
   @media (max-width: 768px) {
-    .lab-spiral-section { padding: 40px 20px 0; }
-    .lab-spiral-wrap { height: 520px; --radius: 150px; --spacing: 74px; }
-    .lab-spiral-axis { transform: rotateZ(-22deg) rotateX(10deg); }
-    .lab-spiral-card-inner { padding: 20px 18px; transform: rotate(22deg); }
-    a.lab-spiral-card:hover .lab-spiral-card-inner { transform: rotate(22deg) translateZ(14px); }
-    .lab-spiral-card { width: 172px; height: 216px; margin: -108px 0 0 -86px; }
-    .lab-spiral-title { font-size: 16px; }
-    .lab-spiral-desc { font-size: 11.5px; }
-    .lab-zones-note { padding: 0 20px; }
+    .lab-zones-section { padding: 40px 20px 0; }
+    .lab-zones { padding: 0 0; }
+    .lab-zones-note { padding: 0; }
   }
 </style>
 </head>
@@ -1825,80 +1658,16 @@
   <p class="lab-intro reveal-left" style="transition-delay:0.1s">The tools behind the case studies — a working research station, not a portfolio piece. Each zone is a different kind of instrument I reach for when a strategic or consumer question needs more than a hunch.</p>
 </div>
 
-<!-- LAB SPIRAL CAROUSEL -->
-<section class="lab-spiral-section">
-  <div class="lab-spiral-toggle reveal" style="transition-delay:0.1s">
-    <button type="button" id="labViewSpiral" class="active">spiral</button>
-    <span class="toggle-dot">●</span>
-    <button type="button" id="labViewList">list</button>
+<!-- LAB ZONES -->
+<section class="lab-zones-section">
+  <div class="lab-zones reveal" style="transition-delay:0.1s">
+    <a class="lab-zone-pill" href="/player-systems-lab.html">Professor's Desk</a>
+    <span class="lab-zone-pill">Computer Terminals</span>
+    <span class="lab-zone-pill">Bookshelves</span>
+    <span class="lab-zone-pill">Specimen Jars / Research Area</span>
+    <span class="lab-zone-pill">Pokédex Station</span>
   </div>
-  <div class="lab-spiral-wrap reveal" style="transition-delay:0.15s" id="labSpiralWrap">
-   <div class="lab-spiral-axis" id="labSpiralAxis">
-    <div class="lab-spiral-stage" id="labSpiralStage">
-      <a class="lab-spiral-card" href="/player-systems-lab.html">
-        <div class="lab-spiral-card-inner">
-          <div>
-            <div class="lab-spiral-index">ZONE 01</div>
-            <div class="lab-spiral-title">Professor's Desk</div>
-          </div>
-          <div>
-            <p class="lab-spiral-desc">Interactive sliders modeling how XP curves, unlock speed, and build diversity shape player behavior.</p>
-            <div class="lab-spiral-cta">Enter the lab →</div>
-          </div>
-        </div>
-      </a>
-      <div class="lab-spiral-card">
-        <div class="lab-spiral-card-inner">
-          <div>
-            <div class="lab-spiral-index">ZONE 02</div>
-            <div class="lab-spiral-title">Computer Terminals</div>
-          </div>
-          <div>
-            <p class="lab-spiral-desc">Query and segment tools for pulling structured answers out of raw behavioral data.</p>
-            <div class="lab-spiral-cta disabled">In development</div>
-          </div>
-        </div>
-      </div>
-      <div class="lab-spiral-card">
-        <div class="lab-spiral-card-inner">
-          <div>
-            <div class="lab-spiral-index">ZONE 03</div>
-            <div class="lab-spiral-title">Bookshelves</div>
-          </div>
-          <div>
-            <p class="lab-spiral-desc">The mental models and frameworks I reach for before I ever open a spreadsheet.</p>
-            <div class="lab-spiral-cta disabled">In development</div>
-          </div>
-        </div>
-      </div>
-      <div class="lab-spiral-card">
-        <div class="lab-spiral-card-inner">
-          <div>
-            <div class="lab-spiral-index">ZONE 04</div>
-            <div class="lab-spiral-title">Specimen Jars &amp; Research Area</div>
-          </div>
-          <div>
-            <p class="lab-spiral-desc">Raw research notes and hypothesis logs behind the published case studies.</p>
-            <div class="lab-spiral-cta disabled">In development</div>
-          </div>
-        </div>
-      </div>
-      <div class="lab-spiral-card">
-        <div class="lab-spiral-card-inner">
-          <div>
-            <div class="lab-spiral-index">ZONE 05</div>
-            <div class="lab-spiral-title">Pokédex Station</div>
-          </div>
-          <div>
-            <p class="lab-spiral-desc">A catalogued index of frameworks, sorted by the kind of decision they're built for.</p>
-            <div class="lab-spiral-cta disabled">In development</div>
-          </div>
-        </div>
-      </div>
-    </div>
-   </div>
-  </div>
-  <p class="lab-zones-note reveal" style="transition-delay:0.3s">The lab keeps turning — hover to pause and look around. Professor's Desk is live; the rest link out as they're built.</p>
+  <p class="lab-zones-note reveal" style="transition-delay:0.15s">Each zone will link out to a live tool. Professor's Desk is live; the rest are wiring up next.</p>
 </section>
 
 <div style="height:120px"></div>
@@ -1963,26 +1732,6 @@ const revealObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.12, rootMargin: '0px 0px 200px 0px' });
 document.querySelectorAll('.reveal, .reveal-left').forEach(el => revealObserver.observe(el));
-
-// ── LAB SPIRAL / LIST TOGGLE ──
-// The spiral itself auto-rotates via CSS animation (paused on hover); this
-// just swaps the wrap into/out of list-view, which the stylesheet handles.
-const labWrap = document.getElementById('labSpiralWrap');
-const labBtnSpiral = document.getElementById('labViewSpiral');
-const labBtnList = document.getElementById('labViewList');
-
-if (labWrap && labBtnSpiral && labBtnList) {
-  labBtnSpiral.addEventListener('click', () => {
-    labWrap.classList.remove('list-view');
-    labBtnSpiral.classList.add('active');
-    labBtnList.classList.remove('active');
-  });
-  labBtnList.addEventListener('click', () => {
-    labWrap.classList.add('list-view');
-    labBtnList.classList.add('active');
-    labBtnSpiral.classList.remove('active');
-  });
-}
 
 // ── FLOATING PARTICLES ──
 const particleContainer = document.getElementById('particles');
