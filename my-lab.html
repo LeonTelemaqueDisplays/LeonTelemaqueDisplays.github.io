@@ -145,57 +145,40 @@
     position: fixed;
     inset: 0;
     z-index: 250;
-    background: rgba(0,0,0,0.55);
+    background: rgba(0,0,0,0.6);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    padding: 92px 24px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-14px);
+    transform: translateY(-14px) scale(0.98);
     transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1), visibility 0.35s;
   }
 
   .nav-overlay.open {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 
   .nav-overlay-panel {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 28px;
-    height: 100%;
-    display: grid;
-    grid-template-columns: 420px 1fr;
-    overflow: hidden;
-  }
-
-  .nav-overlay-preview {
-    padding: 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 82vh;
     overflow-y: auto;
-    border-right: 1px solid var(--border);
   }
-
-  .nav-preview-card {
-    border-radius: 20px;
-    overflow: hidden;
-    aspect-ratio: 4/3;
-    flex-shrink: 0;
-    background: var(--surface-2);
-  }
-
-  .nav-preview-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
   .nav-overlay-links {
     list-style: none;
     display: flex;
     flex-direction: column;
     padding: 8px 0;
-    overflow-y: auto;
   }
 
   .nav-overlay-links li { border-bottom: 1px solid var(--border); }
@@ -206,9 +189,9 @@
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    padding: 30px 44px;
+    padding: 20px 28px;
     font-family: var(--sans);
-    font-size: clamp(20px, 2.2vw, 28px);
+    font-size: 18px;
     font-weight: 400;
     color: var(--text);
     text-decoration: none;
@@ -218,8 +201,8 @@
   .nav-overlay-links a:hover { background: var(--surface-2); }
 
   .nav-overlay-links a svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     color: var(--text-mid);
     flex-shrink: 0;
     transition: transform 0.2s;
@@ -228,10 +211,9 @@
   .nav-overlay-links a:hover svg { transform: translate(3px, -3px); }
 
   @media (max-width: 900px) {
-    .nav-overlay { padding: 84px 12px 12px; }
-    .nav-overlay-panel { grid-template-columns: 1fr; }
-    .nav-overlay-preview { display: none; }
-    .nav-overlay-links a { padding: 22px 22px; font-size: 20px; }
+    .nav-overlay { padding: 16px; }
+    .nav-overlay-panel { max-width: 100%; }
+    .nav-overlay-links a { padding: 18px 20px; font-size: 17px; }
   }
 
 
@@ -1635,11 +1617,6 @@
 
 <div class="nav-overlay" id="navOverlay">
   <div class="nav-overlay-panel">
-    <div class="nav-overlay-preview">
-      <div class="nav-preview-card"><img src="/consumer/tim-hortons-cover.avif" alt="Tim Hortons case study preview"></div>
-      <div class="nav-preview-card"><img src="/consumer/spotify-cover.jpg" alt="Spotify case study preview"></div>
-      <div class="nav-preview-card"><img src="/consumer/aeroplan-cover.jpeg" alt="Aeroplan case study preview"></div>
-    </div>
     <ul class="nav-overlay-links">
       <li><a href="/">Home <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a></li>
       <li><a href="/#about">About <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a></li>
