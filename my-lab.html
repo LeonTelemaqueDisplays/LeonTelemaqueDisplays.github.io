@@ -1602,7 +1602,7 @@
     position: relative;
     width: 100%;
     max-width: 1120px;
-    height: 600px;
+    height: 760px;
     margin: 0 auto 20px;
     cursor: grab;
     touch-action: pan-y;
@@ -1649,7 +1649,7 @@
     .lab-zones-section { padding: 40px 20px 0; }
     .lab-zones { padding: 0 0; }
     .lab-zones-note { padding: 0; }
-    .lab-carousel3d-wrap { height: 480px; }
+    .lab-carousel3d-wrap { height: 560px; }
   }
 </style>
 </head>
@@ -1933,7 +1933,7 @@ try {
     { label: 'ZONE 05', title: 'Decision Index', desc: "A catalogued index of frameworks, sorted by the kind of decision they're built for.", cta: 'In development', href: null, disabled: true },
   ];
 
-  const TEX_W = 680, TEX_H = 860, TEX_R = 48;
+  const TEX_W = 780, TEX_H = 1050, TEX_R = 48;
 
   try {
     const THREE = await import('https://esm.sh/three@0.160.0');
@@ -2021,164 +2021,72 @@ try {
       return tex;
     }
 
-    // ── LIVE NEATGRADIENT CARD (Player Systems Lab) ──
-    // Renders the @firecms/neat animated gradient into an offscreen canvas,
-    // then every frame copies it (clipped to the same rounded-rect shape
-    // as the other cards) into this card's own texture canvas along with
-    // the title/desc/CTA text drawn on top.
-    let liveCardUpdate = null;
-    try {
-      const { NeatGradient } = await import('https://esm.sh/@firecms/neat');
+    // ── LIVE GRADIENT CARD (Player Systems Lab) ──
+    // First attempt used @firecms/neat rendered on a second WebGL canvas
+    // and copied across via drawImage() each frame — but that library
+    // renders with preserveDrawingBuffer off by default, so by the time
+    // our own rAF loop read the canvas its WebGL buffer had already been
+    // cleared, producing a transparent card. Painting the gradient
+    // directly with Canvas 2D (same 6-color palette, animated angle/stop
+    // drift) avoids the cross-context read entirely, so the colors always
+    // show up reliably.
+    const LIVE_COLORS = ['#899D99', '#5f2727', '#373c38', '#0099bb', '#303B42', '#2E7075'];
 
-      const neatCanvas = document.createElement('canvas');
-      neatCanvas.width = TEX_W;
-      neatCanvas.height = TEX_H;
-      neatCanvas.style.cssText = `position:absolute;left:-99999px;top:0;width:${TEX_W}px;height:${TEX_H}px;pointer-events:none;`;
-      document.body.appendChild(neatCanvas);
+    const liveCanvas = document.createElement('canvas');
+    liveCanvas.width = TEX_W; liveCanvas.height = TEX_H;
+    const liveCtx = liveCanvas.getContext('2d');
+    const liveTexture = new THREE.CanvasTexture(liveCanvas);
+    liveTexture.colorSpace = THREE.SRGBColorSpace;
+    liveTexture.anisotropy = 4;
 
-      const neatGradient = new NeatGradient({
-        ref: neatCanvas,
-        colors: [
-          { color: '#899D99', enabled: true },
-          { color: '#5f2727', enabled: true },
-          { color: '#373c38', enabled: true },
-          { color: '#0099bb', enabled: true },
-          { color: '#303B42', enabled: true },
-          { color: '#2E7075', enabled: true },
-        ],
-        speed: 1.5,
-        horizontalPressure: 5,
-        verticalPressure: 4,
-        waveFrequencyX: 4,
-        waveFrequencyY: 5,
-        waveAmplitude: 0,
-        secondaryWaveEnabled: false,
-        secondaryWaveFrequencyX: 3,
-        secondaryWaveFrequencyY: 3,
-        secondaryWaveAmplitude: 5,
-        secondaryWaveSpeed: 0.6,
-        secondaryWaveAngle: 1,
-        shadows: 4,
-        highlights: 4,
-        colorBrightness: 1,
-        colorSaturation: 0,
-        wireframe: true,
-        antialias: false,
-        colorBlending: 3,
-        backgroundColor: '#202020',
-        backgroundAlpha: 0.95,
-        grainScale: 2,
-        grainSparsity: 0,
-        grainIntensity: 0.575,
-        grainSpeed: 0.1,
-        resolution: 0.7,
-        yOffset: 0,
-        yOffsetWaveMultiplier: 5.5,
-        yOffsetColorMultiplier: 5.2,
-        yOffsetFlowMultiplier: 6,
-        flowDistortionA: 3.7,
-        flowDistortionB: 1.4,
-        flowScale: 2.9,
-        flowEase: 0.32,
-        flowEnabled: true,
-        enableProceduralTexture: true,
-        transparentTextureVoid: false,
-        textureMode: 'bitmap',
-        bakeEdgeSoftness: 1,
-        textureVoidLikelihood: 0.27,
-        textureVoidWidthMin: 60,
-        textureVoidWidthMax: 420,
-        textureBandDensity: 1.2,
-        textureColorBlending: 0.06,
-        textureSeed: 333,
-        textureEase: 1,
-        proceduralBackgroundColor: '#0E0707',
-        textureShapeTriangles: 20,
-        textureShapeCircles: 15,
-        textureShapeBars: 15,
-        textureShapeSquiggles: 10,
-        domainWarpEnabled: false,
-        domainWarpIntensity: 0,
-        domainWarpScale: 3,
-        vignetteIntensity: 0,
-        vignetteRadius: 0.8,
-        fresnelEnabled: false,
-        fresnelPower: 2,
-        fresnelIntensity: 0.5,
-        fresnelColor: '#FFFFFF',
-        iridescenceEnabled: false,
-        iridescenceIntensity: 0.5,
-        iridescenceSpeed: 1,
-        prismEdgeEnabled: false,
-        prismEdgeIntensity: 0.5,
-        prismEdgeThinness: 3,
-        prismEdgeSpread: 1,
-        prismEdgeSpeed: 0.5,
-        prismEdgeRipple: 1,
-        bloomIntensity: 0,
-        bloomThreshold: 0.7,
-        chromaticAberration: 0,
-        shapeType: 'plane',
-        shapeRotationX: 0,
-        shapeRotationY: 0,
-        shapeRotationZ: 0,
-        shapeAutoRotateSpeedX: 0,
-        shapeAutoRotateSpeedY: 0,
-        sphereRadius: 15,
-        torusRadius: 15,
-        torusTube: 5,
-        cylinderRadius: 10,
-        cylinderHeight: 40,
-        planeBend: 0,
-        planeTwist: 0,
-        silhouetteFade: 0.25,
-        cylinderFade: 0.08,
-        ribbonFade: 0.05,
-        flatShading: true,
-        cameraLock: true,
-        cameraX: 0,
-        cameraY: 0,
-        cameraZ: 0,
-        cameraRotationX: 0,
-        cameraRotationY: 0,
-        cameraRotationZ: 0,
-        cameraZoom: 1,
+    function liveCardUpdate(t) {
+      const angle = (t || 0) * 0.00012;
+      const cx = TEX_W / 2, cy = TEX_H / 2;
+      const r = Math.max(TEX_W, TEX_H) * 0.75;
+      const x0 = cx + Math.cos(angle) * r, y0 = cy + Math.sin(angle) * r;
+      const x1 = cx - Math.cos(angle) * r, y1 = cy - Math.sin(angle) * r;
+
+      liveCtx.clearRect(0, 0, TEX_W, TEX_H);
+      liveCtx.save();
+      roundedRectPath(liveCtx, 3, 3, TEX_W - 6, TEX_H - 6, TEX_R);
+      liveCtx.clip();
+
+      liveCtx.fillStyle = '#202020';
+      liveCtx.fillRect(0, 0, TEX_W, TEX_H);
+
+      const grad = liveCtx.createLinearGradient(x0, y0, x1, y1);
+      LIVE_COLORS.forEach((c, i) => {
+        const shift = Math.sin(angle * 3 + i) * 0.06;
+        grad.addColorStop(Math.min(1, Math.max(0, i / (LIVE_COLORS.length - 1) + shift)), c);
       });
+      liveCtx.globalAlpha = 0.95;
+      liveCtx.fillStyle = grad;
+      liveCtx.fillRect(0, 0, TEX_W, TEX_H);
+      liveCtx.globalAlpha = 1;
 
-      const liveCanvas = document.createElement('canvas');
-      liveCanvas.width = TEX_W; liveCanvas.height = TEX_H;
-      const liveCtx = liveCanvas.getContext('2d');
-      const liveTexture = new THREE.CanvasTexture(liveCanvas);
-      liveTexture.colorSpace = THREE.SRGBColorSpace;
-      liveTexture.anisotropy = 4;
+      const glow = liveCtx.createRadialGradient(cx, cy * 0.7, 0, cx, cy * 0.7, TEX_H * 0.7);
+      glow.addColorStop(0, 'rgba(255,255,255,0.12)');
+      glow.addColorStop(1, 'rgba(255,255,255,0)');
+      liveCtx.fillStyle = glow;
+      liveCtx.fillRect(0, 0, TEX_W, TEX_H);
 
-      liveCardUpdate = () => {
-        liveCtx.clearRect(0, 0, TEX_W, TEX_H);
-        liveCtx.save();
-        roundedRectPath(liveCtx, 3, 3, TEX_W - 6, TEX_H - 6, TEX_R);
-        liveCtx.clip();
-        liveCtx.drawImage(neatCanvas, 0, 0, TEX_W, TEX_H);
-        liveCtx.restore();
+      liveCtx.restore();
 
-        roundedRectPath(liveCtx, 3, 3, TEX_W - 6, TEX_H - 6, TEX_R);
-        liveCtx.lineWidth = 4;
-        liveCtx.strokeStyle = 'rgba(255,255,255,0.35)';
-        liveCtx.stroke();
+      roundedRectPath(liveCtx, 3, 3, TEX_W - 6, TEX_H - 6, TEX_R);
+      liveCtx.lineWidth = 4;
+      liveCtx.strokeStyle = 'rgba(255,255,255,0.35)';
+      liveCtx.stroke();
 
-        drawCardText(liveCtx, zones[0]);
-        liveTexture.needsUpdate = true;
-      };
-      liveCardUpdate();
-
-      zones[0]._texture = liveTexture;
-    } catch (neatErr) {
-      console.warn('NeatGradient card background failed to load; using flat fallback.', neatErr);
+      drawCardText(liveCtx, zones[0]);
+      liveTexture.needsUpdate = true;
     }
+    liveCardUpdate(0);
+    zones[0]._texture = liveTexture;
 
     // ── SCENE SETUP ──
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(44, 1, 0.1, 100);
-    camera.position.set(0, 0, 13);
+    const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 100);
+    camera.position.set(0, 0, 17);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setClearColor(0x000000, 0);
@@ -2192,9 +2100,9 @@ try {
     const group = new THREE.Group();
     scene.add(group);
 
-    const RADIUS = 5.3;
-    const CARD_W = 2.3, CARD_H = 2.9;
-    const BEND = 0.3;
+    const RADIUS = 7.5;
+    const CARD_W = 3.4, CARD_H = 4.6;
+    const BEND = 0.4;
     const count = zones.length;
     const anglePer = (Math.PI * 2) / count;
 
@@ -2371,7 +2279,7 @@ try {
       group.rotation.y = rotation;
       currentIndex = nearestIndexFor(rotation);
 
-      if (liveCardUpdate) liveCardUpdate();
+      liveCardUpdate(now);
 
       cards.forEach((mesh) => {
         let dist = Math.abs(mesh.userData.index - currentIndex);
