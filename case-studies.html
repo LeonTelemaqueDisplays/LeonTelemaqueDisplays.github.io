@@ -41,6 +41,30 @@
     overflow-x: hidden;
   }
 
+  /* ── ANIMATED GRADIENT BACKGROUND ── */
+  /* Fixed behind all content — slow, subtle drift between black and dark
+     greys so it reads as texture, not decoration. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(135deg, #060607 0%, #0d0d0f 25%, #17171a 50%, #0d0d0f 75%, #060607 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 24s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body::before { animation: none; }
+  }
+
   /* ── SCROLL PROGRESS ── */
   .progress-bar {
     position: fixed;
