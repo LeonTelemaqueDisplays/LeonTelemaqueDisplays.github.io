@@ -1567,83 +1567,125 @@
     margin-top: 16px;
   }
 
-  .lab-embed-section {
-    padding: 40px 40px 0;
+  .lab-spiral-section {
+    padding: 56px 40px 0;
   }
 
-  .lab-embed-wrap {
+  .lab-spiral-wrap {
+    --spiral-radius: 380px;
     position: relative;
     width: 100%;
     max-width: 1120px;
+    height: 560px;
     margin: 0 auto;
-    aspect-ratio: 16/10;
-    border-radius: 24px;
-    overflow: hidden;
-    background: var(--surface-2);
-    border: 1px solid var(--border-2);
+    perspective: 1400px;
+    perspective-origin: 50% 50%;
   }
 
-  .lab-embed-wrap iframe {
-    position: absolute;
-    inset: 0;
+  .lab-spiral-stage {
+    position: relative;
     width: 100%;
     height: 100%;
-    border: 0;
-    display: block;
+    transform-style: preserve-3d;
+    animation: spiralSpin 40s linear infinite;
   }
 
-  .lab-attribution {
-    max-width: 1120px;
-    margin: 12px auto 0;
-    font-size: 12px;
-    color: var(--text-dim);
+  .lab-spiral-wrap:hover .lab-spiral-stage,
+  .lab-spiral-stage:focus-within {
+    animation-play-state: paused;
   }
 
-  .lab-attribution a { color: var(--blue); font-weight: 600; text-decoration: none; }
-  .lab-attribution a:hover { text-decoration: underline; }
-
-  .lab-zones {
-    max-width: 1120px;
-    margin: 40px auto 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
+  @keyframes spiralSpin {
+    from { transform: rotateX(10deg) rotateY(0deg); }
+    to   { transform: rotateX(10deg) rotateY(360deg); }
   }
 
-  .lab-zone-pill {
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 0.04em;
-    color: var(--text-mid);
-    padding: 10px 18px;
-    border: 1px solid var(--border-2);
-    border-radius: 999px;
-    background: var(--surface);
+  @media (prefers-reduced-motion: reduce) {
+    .lab-spiral-stage { animation: none; transform: rotateX(10deg) rotateY(0deg); }
   }
 
-  a.lab-zone-pill {
+  .lab-spiral-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 240px;
+    height: 286px;
+    margin: -143px 0 0 -120px;
+    transform-style: preserve-3d;
+    transform: rotateY(calc(var(--i) * 72deg)) translateZ(var(--spiral-radius)) translateY(calc((var(--i) - 2) * 40px));
     text-decoration: none;
-    cursor: pointer;
-    transition: color 0.2s, border-color 0.2s;
+    color: var(--text);
   }
 
-  a.lab-zone-pill:hover {
-    color: var(--text);
-    border-color: var(--text-dim);
+  .lab-spiral-card-inner {
+    width: 100%;
+    height: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border-2);
+    border-radius: 20px;
+    padding: 28px 26px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    backface-visibility: hidden;
+    transition: border-color 0.25s, background 0.25s, transform 0.25s;
   }
+
+  a.lab-spiral-card .lab-spiral-card-inner { cursor: pointer; }
+  a.lab-spiral-card:hover .lab-spiral-card-inner {
+    border-color: var(--terra);
+    background: var(--surface-2);
+    transform: translateZ(14px);
+  }
+
+  .lab-spiral-index {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  .lab-spiral-title {
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .lab-spiral-desc {
+    font-size: 12.5px;
+    color: var(--text-mid);
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+
+  .lab-spiral-cta {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--terra);
+  }
+
+  .lab-spiral-cta.disabled { color: var(--text-dim); }
 
   .lab-zones-note {
     max-width: 1120px;
-    margin: 20px auto 0;
+    margin: 28px auto 0;
     font-size: 13px;
     color: var(--text-dim);
     font-style: italic;
+    text-align: center;
   }
 
   @media (max-width: 768px) {
-    .lab-embed-section { padding: 32px 20px 0; }
-    .lab-embed-wrap { aspect-ratio: 4/3; }
-    .lab-zones { margin: 32px auto 0; padding: 0 20px; }
+    .lab-spiral-section { padding: 40px 20px 0; }
+    .lab-spiral-wrap { --spiral-radius: 190px; height: 420px; }
+    .lab-spiral-card { width: 176px; height: 236px; margin: -118px 0 0 -88px; }
+    .lab-spiral-card-inner { padding: 20px 18px; }
+    .lab-spiral-title { font-size: 16px; }
+    .lab-spiral-desc { font-size: 11.5px; }
     .lab-zones-note { padding: 0 20px; }
   }
 </style>
@@ -1690,25 +1732,73 @@
   <p class="lab-intro reveal-left" style="transition-delay:0.1s">The tools behind the case studies — a working research station, not a portfolio piece. Each zone is a different kind of instrument I reach for when a strategic or consumer question needs more than a hunch.</p>
 </div>
 
-<!-- LAB EMBED -->
-<section class="lab-embed-section">
-  <div class="lab-embed-wrap reveal" style="transition-delay:0.15s">
-    <iframe title="Professor Oak's Lab" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share src="https://sketchfab.com/models/b635af0cc1514450b2027b1b161a4550/embed"></iframe>
+<!-- LAB SPIRAL CAROUSEL -->
+<section class="lab-spiral-section">
+  <div class="lab-spiral-wrap reveal" style="transition-delay:0.15s" id="labSpiralWrap">
+    <div class="lab-spiral-stage" id="labSpiralStage">
+      <a class="lab-spiral-card" style="--i:0" href="/player-systems-lab.html">
+        <div class="lab-spiral-card-inner">
+          <div>
+            <div class="lab-spiral-index">ZONE 01</div>
+            <div class="lab-spiral-title">Professor's Desk</div>
+          </div>
+          <div>
+            <p class="lab-spiral-desc">Interactive sliders modeling how XP curves, unlock speed, and build diversity shape player behavior.</p>
+            <div class="lab-spiral-cta">Enter the lab →</div>
+          </div>
+        </div>
+      </a>
+      <div class="lab-spiral-card" style="--i:1">
+        <div class="lab-spiral-card-inner">
+          <div>
+            <div class="lab-spiral-index">ZONE 02</div>
+            <div class="lab-spiral-title">Computer Terminals</div>
+          </div>
+          <div>
+            <p class="lab-spiral-desc">Query and segment tools for pulling structured answers out of raw behavioral data.</p>
+            <div class="lab-spiral-cta disabled">In development</div>
+          </div>
+        </div>
+      </div>
+      <div class="lab-spiral-card" style="--i:2">
+        <div class="lab-spiral-card-inner">
+          <div>
+            <div class="lab-spiral-index">ZONE 03</div>
+            <div class="lab-spiral-title">Bookshelves</div>
+          </div>
+          <div>
+            <p class="lab-spiral-desc">The mental models and frameworks I reach for before I ever open a spreadsheet.</p>
+            <div class="lab-spiral-cta disabled">In development</div>
+          </div>
+        </div>
+      </div>
+      <div class="lab-spiral-card" style="--i:3">
+        <div class="lab-spiral-card-inner">
+          <div>
+            <div class="lab-spiral-index">ZONE 04</div>
+            <div class="lab-spiral-title">Specimen Jars &amp; Research Area</div>
+          </div>
+          <div>
+            <p class="lab-spiral-desc">Raw research notes and hypothesis logs behind the published case studies.</p>
+            <div class="lab-spiral-cta disabled">In development</div>
+          </div>
+        </div>
+      </div>
+      <div class="lab-spiral-card" style="--i:4">
+        <div class="lab-spiral-card-inner">
+          <div>
+            <div class="lab-spiral-index">ZONE 05</div>
+            <div class="lab-spiral-title">Pokédex Station</div>
+          </div>
+          <div>
+            <p class="lab-spiral-desc">A catalogued index of frameworks, sorted by the kind of decision they're built for.</p>
+            <div class="lab-spiral-cta disabled">In development</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <p class="lab-attribution reveal" style="transition-delay:0.2s">
-    <a href="https://sketchfab.com/3d-models/professor-oaks-lab-b635af0cc1514450b2027b1b161a4550" target="_blank" rel="nofollow">Professor Oak's Lab</a>
-    by <a href="https://sketchfab.com/JoshBowman" target="_blank" rel="nofollow">Josh Bowman</a>
-    on <a href="https://sketchfab.com" target="_blank" rel="nofollow">Sketchfab</a>
-  </p>
-
-  <div class="lab-zones reveal" style="transition-delay:0.25s">
-    <a class="lab-zone-pill" href="/player-systems-lab.html">Professor's Desk</a>
-    <span class="lab-zone-pill">Computer Terminals</span>
-    <span class="lab-zone-pill">Bookshelves</span>
-    <span class="lab-zone-pill">Specimen Jars / Research Area</span>
-    <span class="lab-zone-pill">Pokédex Station</span>
-  </div>
-  <p class="lab-zones-note reveal" style="transition-delay:0.3s">Each zone will link out to a live tool — wiring that up next.</p>
+  <p class="lab-zones-note reveal" style="transition-delay:0.3s">The lab keeps turning — hover to pause and look around. Professor's Desk is live; the rest link out as they're built.</p>
 </section>
 
 <div style="height:120px"></div>
