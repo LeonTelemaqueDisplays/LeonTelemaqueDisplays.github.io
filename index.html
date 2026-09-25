@@ -268,13 +268,7 @@
     font-weight: 800;
     letter-spacing: -0.04em;
     line-height: 0.92;
-    color: var(--text);
     margin-bottom: 12px;
-  }
-
-  .hero-headline .accent {
-    display: block;
-    position: relative;
     background: linear-gradient(90deg, #4a4a4a, #ffffff, #4a4a4a);
     background-size: 200% auto;
     background-clip: text;
@@ -288,6 +282,8 @@
     0% { background-position: 0% 50%; }
     100% { background-position: 200% 50%; }
   }
+
+  .hero-headline .accent { display: block; position: relative; }
 
   .hero-headline .accent::after {
     content: attr(data-text);
