@@ -99,6 +99,29 @@
 
   .masthead-meta-divider { color: var(--rule); }
 
+  .cover-photo {
+    max-width: 860px;
+    margin: 40px auto 0;
+    padding: 0 40px;
+  }
+  .cover-photo img {
+    width: 100%;
+    display: block;
+    border-radius: 2px;
+    filter: grayscale(1) contrast(1.05);
+  }
+  .cover-photo-caption {
+    font-family: 'Special Elite', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--ink-dim);
+    margin-top: 10px;
+    text-align: center;
+  }
+  @media (max-width: 700px) {
+    .cover-photo { padding: 0 20px; margin-top: 28px; }
+  }
+
   .lab-back-link {
     display: inline-block;
     font-family: 'Special Elite', monospace;
@@ -364,6 +387,12 @@
       <span class="masthead-meta-divider">·</span>
       <span>Black America · 1910s – Present</span>
     </div>
+  </div>
+
+  <!-- COVER PHOTO -->
+  <div class="cover-photo">
+    <img src="/lab/images/ford-mustang-cover.jpg" alt="Front grille of a 1965 Ford Mustang Shelby GT350, black and white" loading="lazy">
+    <div class="cover-photo-caption">1965 Ford Mustang Shelby GT350 &mdash; the car this piece is about</div>
   </div>
 
   <!-- BODY -->
