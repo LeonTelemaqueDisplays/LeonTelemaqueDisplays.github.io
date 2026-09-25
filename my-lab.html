@@ -1700,11 +1700,11 @@
   <div class="lab-zones reveal" id="labZonesFallback" style="transition-delay:0.1s">
     <a class="lab-zone-pill" href="/player-systems-lab.html">Player Systems Lab</a>
     <span class="lab-zone-pill">Data Terminals</span>
-    <span class="lab-zone-pill">Framework Library</span>
+    <a class="lab-zone-pill" href="/lab/ford-black-consumer-framework.html">Framework Library</a>
     <span class="lab-zone-pill">Research Archive</span>
     <span class="lab-zone-pill">Decision Index</span>
   </div>
-  <p class="lab-zones-note reveal" style="transition-delay:0.15s">Drag or use the arrows to spin the ring. Player Systems Lab is live; the rest link out as they're built.</p>
+  <p class="lab-zones-note reveal" style="transition-delay:0.15s">Drag or use the arrows to spin the ring. Player Systems Lab and Framework Library are live; the rest link out as they're built.</p>
 </section>
 
 <div style="height:120px"></div>
@@ -1928,7 +1928,7 @@ try {
   const zones = [
     { label: 'ZONE 01', title: 'Player Systems Lab', desc: 'Interactive sliders modeling how XP curves, unlock speed, and build diversity shape player behavior.', cta: 'Enter the lab', href: '/player-systems-lab.html', disabled: false, live: true },
     { label: 'ZONE 02', title: 'Data Terminals', desc: 'Query and segment tools for pulling structured answers out of raw behavioral data.', cta: 'In development', href: null, disabled: true },
-    { label: 'ZONE 03', title: 'Framework Library', desc: 'The mental models and frameworks I reach for before I ever open a spreadsheet.', cta: 'In development', href: null, disabled: true },
+    { label: 'ZONE 03', title: 'Framework Library', desc: '"The Conditioned Consumer" — how a century of economic history became a Ford purchasing decision nobody remembers making.', cta: 'Read the framework', href: '/lab/ford-black-consumer-framework.html', disabled: false },
     { label: 'ZONE 04', title: 'Research Archive', desc: 'Raw research notes and hypothesis logs behind the published case studies.', cta: 'In development', href: null, disabled: true },
     { label: 'ZONE 05', title: 'Decision Index', desc: "A catalogued index of frameworks, sorted by the kind of decision they're built for.", cta: 'In development', href: null, disabled: true },
   ];
@@ -2010,7 +2010,7 @@ try {
       ctx.fillStyle = '#0d0d0f';
       ctx.fill();
       ctx.lineWidth = 4;
-      ctx.strokeStyle = '#2e2e32';
+      ctx.strokeStyle = zone.disabled ? '#2e2e32' : '#c2714f';
       ctx.stroke();
 
       drawCardText(ctx, zone);
