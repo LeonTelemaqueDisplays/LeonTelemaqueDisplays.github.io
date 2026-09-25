@@ -268,22 +268,11 @@
     font-weight: 800;
     letter-spacing: -0.04em;
     line-height: 0.92;
+    color: var(--text);
     margin-bottom: 12px;
-    background: linear-gradient(90deg, #4a4a4a, #ffffff, #4a4a4a);
-    background-size: 200% auto;
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-    animation: gradientShift 4s linear infinite;
   }
 
-  @keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 200% 50%; }
-  }
-
-  .hero-headline .accent { display: block; position: relative; }
+  .hero-headline .accent { display: block; position: relative; color: var(--text); }
 
   .hero-headline .accent::after {
     content: attr(data-text);
@@ -488,7 +477,7 @@
     font-size: 32px;
     font-weight: 700;
     letter-spacing: -0.03em;
-    color: var(--terra);
+    color: var(--text);
     line-height: 1;
     margin-bottom: 4px;
     font-variant-numeric: tabular-nums;
@@ -597,7 +586,7 @@
     line-height: 1.15;
   }
 
-  .section-title em { color: var(--terra); font-style: normal; }
+  .section-title em { color: var(--text); font-style: normal; }
 
   .section-desc {
     font-size: 15px;
@@ -1189,7 +1178,7 @@
     transition: color 0.2s;
   }
 
-  .project-card:hover .card-title { color: var(--terra); }
+  .project-card:hover .card-title { color: var(--text); }
 
   .card-desc {
     font-size: 12.5px;
@@ -1234,7 +1223,7 @@
   }
 
   .card-tag.primary {
-    color: var(--terra);
+    color: var(--text);
     border-color: rgba(194,113,79,0.4);
     background: var(--terra-dim);
   }
@@ -1700,7 +1689,7 @@
   </div>
   <div class="contact-headline">Working on a product —</div>
   <div class="contact-headline">or trying to understand</div>
-  <div class="contact-cta">your users better? <span style="color:var(--terra)">Let's talk.</span> 👋</div>
+  <div class="contact-cta">your users better? <span style="color:var(--text)">Let's talk.</span> 👋</div>
 </div>
 
 <!-- FOOTER -->
