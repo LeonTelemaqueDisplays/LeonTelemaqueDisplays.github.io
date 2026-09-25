@@ -681,6 +681,76 @@
     .career-grid { grid-template-columns: 1fr; gap: 48px; }
   }
 
+  /* ── CULTURE & CONSUMERISM HUB LINK CARD ── */
+  .hub-link-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    padding: 36px 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    text-decoration: none;
+    transition: border-color 0.25s, transform 0.25s, background 0.25s;
+  }
+
+  .hub-link-card:hover {
+    border-color: var(--terra);
+    background: var(--surface-2);
+    transform: translateY(-4px);
+  }
+
+  .hub-link-text { max-width: 640px; }
+
+  .hub-link-kicker {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--terra);
+    margin-bottom: 10px;
+  }
+
+  .hub-link-title {
+    font-family: var(--sans);
+    font-size: clamp(20px, 2.4vw, 26px);
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .hub-link-desc {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  .hub-link-arrow {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-mid);
+    transition: transform 0.25s, color 0.25s, border-color 0.25s;
+  }
+  .hub-link-arrow svg { width: 18px; height: 18px; }
+  .hub-link-card:hover .hub-link-arrow {
+    transform: translate(4px, -4px);
+    color: var(--terra);
+    border-color: var(--terra);
+  }
+
+  @media (max-width: 700px) {
+    .hub-link-card { flex-direction: column; align-items: flex-start; gap: 20px; padding: 28px 24px; }
+    .hub-link-arrow { align-self: flex-end; }
+  }
+
   /* PHOTO */
   .photo-wrap { position: relative; height: 440px; }
 
@@ -1630,6 +1700,20 @@
       </div>
     </div>
   </div>
+</section>
+
+<!-- CULTURE & CONSUMERISM HUB LINK -->
+<section class="section" style="padding:0 40px 40px;border-bottom:none">
+  <a href="/lab/framework-library.html" class="hub-link-card reveal">
+    <div class="hub-link-text">
+      <div class="hub-link-kicker">Culture & Consumerism Hub</div>
+      <div class="hub-link-title">Standalone essays on how history, incentive, and design script the decisions people believe they're making freely</div>
+      <div class="hub-link-desc">No client, no dataset — just an argument worked all the way through. Currently three pieces, on Ford, hip-hop and luxury brands, and manufactured scarcity.</div>
+    </div>
+    <div class="hub-link-arrow">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+    </div>
+  </a>
 </section>
 
 <!-- PROCESS -->
