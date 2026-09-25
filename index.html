@@ -272,7 +272,22 @@
     margin-bottom: 12px;
   }
 
-  .hero-headline .accent { color: var(--terra); display: block; position: relative; }
+  .hero-headline .accent {
+    display: block;
+    position: relative;
+    background: linear-gradient(90deg, #4a4a4a, #ffffff, #4a4a4a);
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 4s linear infinite;
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
 
   .hero-headline .accent::after {
     content: attr(data-text);
