@@ -1934,6 +1934,13 @@ try {
   ];
 
   const TEX_W = 1050, TEX_H = 780, TEX_R = 48;
+  // Canvas textures are drawn at TEX_W×TEX_H "logical" pixels, then the
+  // physical <canvas> backing them is supersampled by TEX_SCALE and every
+  // draw call scaled up to match (via a single ctx.scale() applied once).
+  // Without this the text reads soft/blurry once GPU-mipmapped and
+  // rendered onto the bent card geometry — a plain 1:1 canvas doesn't have
+  // enough source pixels for crisp edges at the card's on-screen size.
+  const TEX_SCALE = 2;
 
   try {
     const THREE = await import('https://esm.sh/three@0.160.0');
@@ -2002,8 +2009,9 @@ try {
 
     function makeCardTexture(zone) {
       const canvas = document.createElement('canvas');
-      canvas.width = TEX_W; canvas.height = TEX_H;
+      canvas.width = TEX_W * TEX_SCALE; canvas.height = TEX_H * TEX_SCALE;
       const ctx = canvas.getContext('2d');
+      ctx.scale(TEX_SCALE, TEX_SCALE);
       ctx.clearRect(0, 0, TEX_W, TEX_H);
 
       roundedRectPath(ctx, 3, 3, TEX_W - 6, TEX_H - 6, TEX_R);
@@ -2017,7 +2025,6 @@ try {
 
       const tex = new THREE.CanvasTexture(canvas);
       tex.colorSpace = THREE.SRGBColorSpace;
-      tex.anisotropy = 4;
       return tex;
     }
 
@@ -2033,11 +2040,11 @@ try {
     const LIVE_COLORS = ['#899D99', '#5f2727', '#373c38', '#0099bb', '#303B42', '#2E7075'];
 
     const liveCanvas = document.createElement('canvas');
-    liveCanvas.width = TEX_W; liveCanvas.height = TEX_H;
+    liveCanvas.width = TEX_W * TEX_SCALE; liveCanvas.height = TEX_H * TEX_SCALE;
     const liveCtx = liveCanvas.getContext('2d');
+    liveCtx.scale(TEX_SCALE, TEX_SCALE);
     const liveTexture = new THREE.CanvasTexture(liveCanvas);
     liveTexture.colorSpace = THREE.SRGBColorSpace;
-    liveTexture.anisotropy = 4;
 
     function liveCardUpdate(t) {
       const angle = (t || 0) * 0.00012;
@@ -2091,6 +2098,7 @@ try {
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setClearColor(0x000000, 0);
     wrap.appendChild(renderer.domElement);
+    const maxAnisotropy = renderer.capabilities.getMaxAnisotropy();
 
     scene.add(new THREE.AmbientLight(0xffffff, 0.7));
     const point = new THREE.PointLight(0xffffff, 0.6);
@@ -2118,6 +2126,7 @@ try {
       geometry.computeVertexNormals();
 
       const texture = zone._texture || makeCardTexture(zone);
+      texture.anisotropy = maxAnisotropy;
       const material = new THREE.MeshStandardMaterial({
         map: texture,
         transparent: true,
