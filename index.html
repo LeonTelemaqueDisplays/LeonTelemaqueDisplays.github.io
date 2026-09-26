@@ -426,18 +426,25 @@
   .hero-scroll-indicator { display: none; }
 
   /* HERO RIGHT — portrait bleeds into the dark background rather than
-     sitting in a framed card, echoing Neelesh Chaudhary's hero layout. */
+     sitting in a framed card, echoing Neelesh Chaudhary's hero layout.
+     Sized from the photo's own aspect ratio and capped with max-height,
+     rather than stretched to match hero-left's height — that keeps the
+     figure's height predictable and guarantees headroom above it instead
+     of letting a tall row push the head toward (or past) the top edge. */
   .hero-right {
     position: relative;
     z-index: 0;
-    height: 100%;
-    min-height: 460px;
+    align-self: end;
+    width: 100%;
   }
 
   .hero-photo-wrap {
     position: relative;
-    height: 100%;
-    min-height: 460px;
+    width: 100%;
+    max-width: 480px;
+    aspect-ratio: 798 / 1215;
+    max-height: min(64vh, 620px);
+    margin-left: auto;
   }
 
   /* The source photo is a pre-cut PNG (transparent background), so the
@@ -1573,7 +1580,8 @@
 
     /* Hero */
     .hero { grid-template-columns: 1fr; min-height: auto; padding: 32px 20px 40px; gap: 32px; }
-    .hero-right, .hero-photo-wrap { min-height: 320px; height: 320px; }
+    .hero-right { align-self: center; }
+    .hero-photo-wrap { max-width: 280px; max-height: 46vh; margin: 0 auto; }
 
     /* About */
     .about-grid { grid-template-columns: 1fr; gap: 32px; }
