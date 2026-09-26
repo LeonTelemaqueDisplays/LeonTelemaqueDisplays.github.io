@@ -52,6 +52,21 @@
     background: var(--bg);
   }
 
+  /* The @firecms/neat gradient library renders a small "NEAT" watermark
+     baked directly into the canvas pixels (bottom-right) on its free
+     tier — there's no DOM element or config flag to hide it, so it's
+     covered with a small opaque patch matching the page background. */
+  #neat-watermark-cover {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: 90px;
+    height: 28px;
+    background: var(--bg);
+    z-index: 1;
+    pointer-events: none;
+  }
+
   /* ── SCROLL PROGRESS ── */
   .progress-bar {
     position: fixed;
@@ -405,6 +420,11 @@
 
   .social-icon:hover { color: var(--text); border-color: var(--text-dim); }
 
+  /* Desktop default: icon-only circular button, no visible label, no
+     scroll-affordance chevron — both are mobile-only additions. */
+  .social-icon-label { display: none; }
+  .hero-scroll-indicator { display: none; }
+
   /* HERO RIGHT */
   .hero-right {
     position: relative;
@@ -519,6 +539,12 @@
     transition: color 0.2s;
   }
   .brand-name:hover { color: var(--text); }
+
+  /* Desktop default: wrapper divs are transparent to the flex layout above,
+     and the duplicated (aria-hidden) track used only for the mobile
+     marquee loop stays out of the desktop flow entirely. */
+  .brands-marquee-track { display: contents; }
+  .brands-marquee-track[aria-hidden="true"] { display: none; }
 
   /* ── PROCESS ── */
   .process-grid {
@@ -1029,6 +1055,10 @@
 
   .showcase-tile:hover .showcase-tile-label { color: var(--text-mid); }
 
+  .showcase-tile-desc { display: none; }
+
+  .showcase-tile-dots { display: none; }
+
   .showcase-tile-placeholder {
     border-radius: 20px;
     width: min(100%, 620px);
@@ -1047,7 +1077,62 @@
 
   @media (max-width: 768px) {
     .showcase-hero { aspect-ratio: 4/3; max-height: 420px; }
-    .showcase-tile-grid { grid-template-columns: 1fr; gap: 40px; }
+
+    /* 9 — horizontal swipeable carousel with peek + snap + dots */
+    .showcase-tile-grid {
+      display: flex;
+      grid-template-columns: none;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 20px;
+      padding: 4px 5% 4px;
+      margin: 0 -20px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .showcase-tile {
+      flex: 0 0 90%;
+      max-width: 90%;
+      scroll-snap-align: center;
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 24px;
+      opacity: 1;
+      transform: none;
+    }
+    .showcase-tile-placeholder {
+      order: -1;
+      width: 100%;
+      aspect-ratio: 16/10;
+      max-height: none;
+      margin: 0 0 16px;
+    }
+    .showcase-tile-label {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .showcase-tile-desc {
+      display: block;
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+    .showcase-tile-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .showcase-tile-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--border-2);
+      transition: background 0.2s, transform 0.2s;
+    }
+    .showcase-tile-dot.active { background: var(--text); transform: scale(1.4); }
   }
 
   /* ── Mobile: peek carousel ──
@@ -1480,10 +1565,164 @@
     /* Carousel header — let the arrows wrap under the title instead of squeezing */
     .carousel-header { flex-wrap: wrap; gap: 12px; }
   }
+
+  /* ══════════════════════════════════════════════
+     MOBILE REDESIGN PASS — items numbered per the
+     client punch-list, for traceability.
+     ══════════════════════════════════════════════ */
+  @media (max-width: 768px) {
+
+    /* 7 / 16 — uniform section padding + consistent inter-section gap.
+       !important is needed because several sections carry bespoke inline
+       padding (Featured Work, Culture & Consumerism Hub); the client asked
+       for those to fall in line with everything else on mobile. */
+    .section { padding: 32px 20px !important; }
+    .contact-section { padding: 32px 20px !important; }
+    .brands-strip { padding: 20px 20px !important; }
+
+    /* 10 — typography hierarchy: smaller section headers, distinct eyebrows */
+    .section-title { font-size: 24px; }
+    .section-eyebrow { font-size: 10px; letter-spacing: 0.2em; }
+
+    /* 8 — card thumbnails never overflow horizontally */
+    .showcase-tile-placeholder img,
+    .showcase-hero img,
+    .card-photo img,
+    img { max-width: 100%; height: auto; }
+
+    /* 17 — clickable cards: minimum tap-friendly height + tap feedback */
+    .showcase-tile, .showcase-hero {
+      min-height: 280px;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .showcase-tile:active, .showcase-hero:active {
+      transform: scale(1.02);
+      border-color: var(--text-dim);
+    }
+
+    /* 6 — hamburger icon instead of dot grid (overlay itself is already
+       fullscreen with 44px+ link rows, see .nav-overlay-links a below) */
+    .nav-menu-btn {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 24px;
+      height: 24px;
+    }
+    .nav-menu-btn span {
+      width: 24px;
+      height: 2px;
+      border-radius: 0;
+      background: #fff;
+    }
+    .nav-menu-btn span:nth-child(4) { display: none; }
+    .nav-overlay-links a { min-height: 44px; }
+
+    /* 13 — hero social icons: 44px tap target + visible text label */
+    .hero-social { gap: 12px; }
+    .social-icon {
+      width: auto;
+      height: 44px;
+      min-width: 44px;
+      padding: 0 16px;
+      border-radius: 22px;
+      gap: 8px;
+    }
+    .social-icon-label {
+      display: inline;
+      font-size: 12px;
+      color: var(--text-mid);
+    }
+
+    /* 15 — pulsing scroll indicator below hero social icons */
+    .hero-scroll-indicator {
+      display: flex;
+      justify-content: center;
+      margin-top: 28px;
+      color: var(--text-dim);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    .hero-scroll-indicator svg { width: 20px; height: 20px; }
+
+    /* 14 — contact headline: fixed size, tighter line-height */
+    .contact-headline, .contact-cta {
+      font-size: 32px;
+      line-height: 1.2;
+    }
+
+    /* 12 — Culture & Consumerism Hub card: stronger legibility gradient */
+    .culture-hub-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.85) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* 11 — brands row: infinite left-scrolling marquee instead of a
+       wrapping list. .brands-marquee-track is display:contents by default
+       (desktop); here it becomes the actual scrolling flex row, duplicated
+       so the loop reads as continuous. */
+    .brands-row {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      overflow: hidden;
+      width: 100%;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+              mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    }
+    .brands-marquee-track {
+      display: flex !important;
+      flex-shrink: 0;
+      align-items: center;
+      gap: 28px;
+      padding-right: 28px;
+      animation: brandsMarquee 22s linear infinite;
+    }
+
+    /* 4 — process section: single-open accordion. Title stays visible at
+       18px bold; description collapses to 0 height until the step carries
+       .open (toggled by the accordion JS below). Icon shrinks to 40px. */
+    .process-grid { grid-template-columns: 1fr; gap: 12px; }
+    .process-step {
+      min-height: auto;
+      padding: 18px 20px;
+      cursor: pointer;
+    }
+    .process-icon { width: 40px; height: 40px; margin-bottom: 10px; }
+    .process-title { font-size: 18px; margin-bottom: 0; }
+    .process-desc {
+      font-size: 14px;
+      max-height: 0;
+      overflow: hidden;
+      margin-top: 0;
+      opacity: 0;
+      transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+    }
+    .process-step.open .process-desc {
+      max-height: 240px;
+      opacity: 1;
+      margin-top: 10px;
+    }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { transform: translateY(0); opacity: 0.5; }
+    50% { transform: translateY(6px); opacity: 1; }
+  }
+
+  @keyframes brandsMarquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
+  }
 </style>
 </head>
 <body>
 <canvas id="gradient-canvas"></canvas>
+<div id="neat-watermark-cover" aria-hidden="true"></div>
 
 <!-- SCROLL PROGRESS -->
 <div class="progress-bar" id="progress"></div>
@@ -1528,7 +1767,7 @@
     </h1>
     <div class="hero-subtitle-group animate-in d2">
       <div class="hero-subtitle">Hi, I'm Leon</div>
-      <div class="hero-subtitle">Consumer behaviour analyst &amp; product systems designer</div>
+      <div class="hero-subtitle">Consumer Behaviour Analyst &middot; Product Analytics &middot; UX Research</div>
     </div>
     <p class="hero-supporting animate-in d3">
       I look at the patterns and systems underneath people's decisions.
@@ -1537,10 +1776,15 @@
     <div class="hero-social animate-in d4">
       <a href="https://linkedin.com/in/leontelemaque" target="_blank" class="social-icon" aria-label="LinkedIn">
         <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+        <span class="social-icon-label">LinkedIn</span>
       </a>
       <a href="mailto:leon.telemaque@gmail.com" class="social-icon" aria-label="Email">
         <svg viewBox="0 0 24 24"><path d="M2 4h20v16H2V4zm2 2.4V18h16V6.4l-8 6-8-6zm.8-.4 7.2 5.4L19.2 6H4.8z"/></svg>
+        <span class="social-icon-label">Email</span>
       </a>
+    </div>
+    <div class="hero-scroll-indicator animate-in d5" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
     </div>
   </div>
 </section>
@@ -1549,15 +1793,28 @@
 <div class="brands-strip reveal">
   <div class="brands-label">Brands &amp; Products Analyzed</div>
   <div class="brands-row">
-    <span class="brand-name">Tim Hortons</span>
-    <span class="brand-name">Aeroplan</span>
-    <span class="brand-name">Spotify</span>
-    <span class="brand-name">Costco</span>
-    <span class="brand-name">Wealthsimple</span>
-    <span class="brand-name">Roblox</span>
-    <span class="brand-name">Gatorade</span>
-    <span class="brand-name">Hinge</span>
-    <span class="brand-name">Duolingo</span>
+    <div class="brands-marquee-track">
+      <span class="brand-name">Tim Hortons</span>
+      <span class="brand-name">Aeroplan</span>
+      <span class="brand-name">Spotify</span>
+      <span class="brand-name">Costco</span>
+      <span class="brand-name">Wealthsimple</span>
+      <span class="brand-name">Roblox</span>
+      <span class="brand-name">Gatorade</span>
+      <span class="brand-name">Hinge</span>
+      <span class="brand-name">Duolingo</span>
+    </div>
+    <div class="brands-marquee-track" aria-hidden="true">
+      <span class="brand-name">Tim Hortons</span>
+      <span class="brand-name">Aeroplan</span>
+      <span class="brand-name">Spotify</span>
+      <span class="brand-name">Costco</span>
+      <span class="brand-name">Wealthsimple</span>
+      <span class="brand-name">Roblox</span>
+      <span class="brand-name">Gatorade</span>
+      <span class="brand-name">Hinge</span>
+      <span class="brand-name">Duolingo</span>
+    </div>
   </div>
 </div>
 
@@ -1575,6 +1832,7 @@
 
     <a class="showcase-tile" href="/consumer/tim-hortons" target="_blank">
       <div class="showcase-tile-label">Systems &amp; Strategy</div>
+      <div class="showcase-tile-desc">How decision architecture and menu strategy shape everyday choices.</div>
       <div class="showcase-tile-placeholder" style="border-style:solid;overflow:hidden;background:var(--surface-2)">
         <img src="/consumer/systems-strategy-cover.png" alt="Aeroplan member tier breakage-risk dashboard" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block">
       </div>
@@ -1582,6 +1840,7 @@
 
     <a class="showcase-tile" href="/consumer/aeroplan-loyalty-economics.html" target="_blank">
       <div class="showcase-tile-label">Fintech Psychology</div>
+      <div class="showcase-tile-desc">Modelling how loyalty points and breakage risk shape financial behaviour.</div>
       <div class="showcase-tile-placeholder" style="border-style:solid;overflow:hidden;background:var(--surface-2)">
         <img src="/consumer/aeroplan-fintech-cover.jpeg" alt="MacBook displaying the Aeroplan rewards website" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block">
       </div>
@@ -1589,11 +1848,17 @@
 
     <a class="showcase-tile" href="/consumer/spotify-analysis.html" target="_blank">
       <div class="showcase-tile-label">Subscription &amp; Retention</div>
+      <div class="showcase-tile-desc">What keeps someone paying for a subscription month after month.</div>
       <div class="showcase-tile-placeholder" style="border-style:solid;overflow:hidden;background:var(--surface-2)">
         <img src="/consumer/subscription-retention-cover.jpeg" alt="Hand holding a phone showing a music app's genre selection screen" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block">
       </div>
     </a>
 
+  </div>
+  <div class="showcase-tile-dots" aria-hidden="true">
+    <span class="showcase-tile-dot active"></span>
+    <span class="showcase-tile-dot"></span>
+    <span class="showcase-tile-dot"></span>
   </div>
 </section>
 
@@ -1604,7 +1869,6 @@
       <h2 class="section-title reveal-left">About Me</h2>
       <p class="reveal" style="transition-delay:0.1s">Consumer behaviour is not a discipline — it's a lens. I came to product and UX work through studying <strong>why people decide the way they do</strong>, not through a design program.</p>
       <p class="reveal" style="transition-delay:0.15s">Academic training in Marketing and Consumer Culture at Trent University, applied through self-directed case studies — sixteen pieces across CPG, fintech, subscription products, and platform strategy.</p>
-      <p class="reveal" style="transition-delay:0.2s">Currently building behavioural analytics systems in <strong>SQL, Python, and Streamlit</strong> — the same thinking that drives retention design, applied wherever a product needs to explain why users act the way they do.</p>
 
       <div class="career-links reveal" style="transition-delay:0.25s">
         <a href="/case-studies.html" class="career-link">View Case Studies</a>
@@ -1638,9 +1902,9 @@
   <h2 class="section-title reveal-left">Culture & Consumerism Hub</h2>
   <p class="section-desc reveal-left" style="transition-delay:0.1s">Standalone essays on how history, incentive, and design script the decisions people believe they're making freely. No client, no dataset — just an argument worked all the way through.</p>
 
-  <a class="showcase-hero" href="/lab/framework-library.html" style="border-style:solid;background:#000">
+  <a class="showcase-hero culture-hub-hero" href="/lab/framework-library.html" style="border-style:solid;background:#000">
     <img src="/lab/images/ford-mustang-cover.jpg" alt="Front grille of a 1965 Ford Mustang Shelby GT350, black and white" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;filter:grayscale(1) contrast(1.05)">
-    <div class="showcase-hero-label" style="position:absolute;left:24px;bottom:20px;background:rgba(6,6,7,0.75);padding:8px 14px;border-radius:8px">Culture & Consumerism Hub — 3 pieces</div>
+    <div class="showcase-hero-label" style="position:absolute;left:24px;bottom:20px;background:rgba(6,6,7,0.75);padding:8px 14px;border-radius:8px;z-index:2">Culture & Consumerism Hub — 3 pieces</div>
   </a>
 </section>
 
@@ -1895,6 +2159,51 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   }, { threshold: 0.4 });
   document.querySelectorAll('.carousel-track-wrap').forEach(wrap => peekObserver.observe(wrap));
 }
+
+// ── MOBILE PROCESS ACCORDION ──
+// Below 768px, each process step collapses to its title; tapping opens it
+// (closing any other open step). Desktop keeps the existing full-card
+// hover treatment untouched — this listener only ever adds/removes .open,
+// which has no effect above the 768px breakpoint since the CSS rule for it
+// lives inside that media query.
+(function () {
+  const steps = document.querySelectorAll('.process-step');
+  if (!steps.length) return;
+  steps.forEach(step => {
+    step.addEventListener('click', () => {
+      if (!window.matchMedia('(max-width: 768px)').matches) return;
+      const alreadyOpen = step.classList.contains('open');
+      steps.forEach(s => s.classList.remove('open'));
+      if (!alreadyOpen) step.classList.add('open');
+    });
+  });
+})();
+
+// ── FEATURED WORK CAROUSEL DOTS (mobile) ──
+// Tracks which of the three showcase tiles is centered in the horizontal
+// swipe carousel and updates the dot indicators to match.
+(function () {
+  const grid = document.querySelector('.showcase-tile-grid');
+  const dots = document.querySelectorAll('.showcase-tile-dots .showcase-tile-dot');
+  if (!grid || !dots.length) return;
+  const tiles = Array.from(grid.querySelectorAll('.showcase-tile'));
+  let ticking = false;
+  function updateActiveDot() {
+    ticking = false;
+    const center = grid.scrollLeft + grid.clientWidth / 2;
+    let closest = 0;
+    let closestDist = Infinity;
+    tiles.forEach((tile, i) => {
+      const dist = Math.abs((tile.offsetLeft + tile.offsetWidth / 2) - center);
+      if (dist < closestDist) { closestDist = dist; closest = i; }
+    });
+    dots.forEach((dot, i) => dot.classList.toggle('active', i === closest));
+  }
+  grid.addEventListener('scroll', () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(updateActiveDot); }
+  }, { passive: true });
+  window.addEventListener('resize', updateActiveDot);
+})();
 </script>
 
 <!-- ── NEAT GRADIENT BACKGROUND ── -->
