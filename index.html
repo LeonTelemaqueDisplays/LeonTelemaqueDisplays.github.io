@@ -236,8 +236,8 @@
   .hero {
     min-height: 100vh;
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 0;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 24px;
     padding: 132px 40px 60px;
     position: relative;
     background: transparent;
@@ -425,16 +425,40 @@
   .social-icon-label { display: none; }
   .hero-scroll-indicator { display: none; }
 
-  /* HERO RIGHT */
+  /* HERO RIGHT — portrait bleeds into the dark background rather than
+     sitting in a framed card, echoing Neelesh Chaudhary's hero layout. */
   .hero-right {
     position: relative;
-    z-index: 1;
-    padding-left: 40px;
+    z-index: 0;
     height: 100%;
-    min-height: 480px;
+    min-height: 460px;
   }
 
-  .hero-photo-wrap { position: relative; height: 100%; min-height: 480px; border-radius: 24px; overflow: hidden; }
+  .hero-photo-wrap {
+    position: relative;
+    height: 100%;
+    min-height: 460px;
+  }
+
+  .hero-photo-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    filter: grayscale(0.55) contrast(1.05) brightness(0.92);
+  }
+
+  /* Masks fade the photo's top/left/bottom edges to transparent so it
+     dissolves into the page background instead of ending in a hard edge. */
+  .hero-photo-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, var(--bg) 0%, transparent 18%, transparent 78%, var(--bg) 100%),
+                linear-gradient(90deg, var(--bg) 0%, transparent 22%);
+    pointer-events: none;
+  }
 
   .hero-stat-card {
     background: var(--surface);
@@ -1557,6 +1581,10 @@
 
     /* Hero */
     .hero { grid-template-columns: 1fr; min-height: auto; padding: 32px 20px 40px; gap: 32px; }
+    .hero-right, .hero-photo-wrap { min-height: 320px; height: 320px; }
+    .hero-photo-wrap::after {
+      background: linear-gradient(180deg, var(--bg) 0%, transparent 20%, transparent 80%, var(--bg) 100%);
+    }
 
     /* About */
     .about-grid { grid-template-columns: 1fr; gap: 32px; }
@@ -1785,6 +1813,12 @@
     </div>
     <div class="hero-scroll-indicator animate-in d5" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+  </div>
+
+  <div class="hero-right animate-in d3" aria-hidden="true">
+    <div class="hero-photo-wrap">
+      <img src="/images/leon-portrait.jpg" alt="" loading="eager">
     </div>
   </div>
 </section>
