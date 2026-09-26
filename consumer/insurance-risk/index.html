@@ -591,7 +591,7 @@
       <div class="topbar-stat-label">Ontario Avg Premium / yr</div>
     </div>
     <div class="topbar-divider"></div>
-    <div class="source-tag">Sources: FSRA · Équité Association · IBC · Rates.ca · 2025–2026</div>
+    <div class="source-tag">Sources: FSRA · Équité Association · IBC · Rates.ca · 2025 to 2026</div>
   </div>
 </div>
 
@@ -620,7 +620,7 @@
   <div class="summary-cell neutral">
     <div class="summary-label">Rate Trend 2026</div>
     <div class="summary-value" style="font-size:14px;padding-top:3px">Stabilising</div>
-    <div class="summary-sub">+5–6% expected increases<br>Rates.ca Auto Rate Index</div>
+    <div class="summary-sub">+5 to 6% expected increases<br>Rates.ca Auto Rate Index</div>
   </div>
 </div>
 
@@ -630,7 +630,7 @@
   <!-- VEHICLE LIST -->
   <div class="vehicle-panel">
     <div class="panel-header">
-      <div class="panel-title">Top 10 Highest Risk Vehicles — GTA</div>
+      <div class="panel-title">Top 10 Highest Risk Vehicles: GTA</div>
       <div class="panel-hint">select to drill down →</div>
     </div>
 
@@ -659,7 +659,7 @@ const vehicles = [
   {
     rank: 1,
     name: 'Lexus RX Series',
-    sub: '2016–2021 model years · Luxury SUV',
+    sub: '2016 to 2021 model years · Luxury SUV',
     riskScore: 96,
     riskLevel: 'CRITICAL',
     riskClass: 'critical',
@@ -669,22 +669,22 @@ const vehicles = [
     fraud: 40,
     theftCount: '2,083 thefts in Ontario 2024',
     theftFreq: '1.9% theft frequency',
-    avgPremium: '$4,200–$5,800/yr',
-    repairCost: 'Very High — ADAS, luxury parts',
+    avgPremium: '$4,200 to $5,800/yr',
+    repairCost: 'Very High: ADAS, luxury parts',
     driverProfile: 'Affluent adult, moderate risk',
     factors: [
-      { type: 'red', text: 'Most stolen vehicle in Ontario 2024 with 2,083 thefts — targeted by organized crime networks for international resale via Port of Montreal' },
+      { type: 'red', text: 'Most stolen vehicle in Ontario 2024 with 2,083 thefts, targeted by organized crime networks for international resale via Port of Montreal' },
       { type: 'red', text: 'Keyless entry relay attack vulnerability makes theft possible in under 60 seconds without physical key access' },
-      { type: 'amber', text: 'Luxury repair costs are significantly elevated — ADAS sensors, cameras, and specialty parts drive claims costs well above average' },
-      { type: 'amber', text: 'Brampton and Vaughan corridors have concentrated Lexus RX theft activity — within quick highway access of 400-series routes to port export' },
+      { type: 'amber', text: 'Luxury repair costs are significantly elevated, ADAS sensors, cameras, and specialty parts drive claims costs well above average' },
+      { type: 'amber', text: 'Brampton and Vaughan corridors have concentrated Lexus RX theft activity, within quick highway access of 400-series routes to port export' },
       { type: 'dim', text: 'Driver demographic is lower risk than sports vehicles but premium reflects overwhelmingly high theft exposure' }
     ],
-    insight: 'The Lexus RX is the clearest example of theft risk dominating the premium calculation. The driver profile is relatively low risk — affluent adult, typical commuter — but the vehicle itself has become a primary target for organized export crime. Owners in Brampton, Vaughan, and Markham face the highest exposure.'
+    insight: 'The Lexus RX is the clearest example of theft risk dominating the premium calculation. The driver profile is relatively low risk, affluent adult, typical commuter, but the vehicle itself has become a primary target for organized export crime. Owners in Brampton, Vaughan, and Markham face the highest exposure.'
   },
   {
     rank: 2,
     name: 'Honda CR-V',
-    sub: '2019–2024 model years · Compact SUV',
+    sub: '2019 to 2024 model years · Compact SUV',
     riskScore: 88,
     riskLevel: 'CRITICAL',
     riskClass: 'critical',
@@ -694,14 +694,14 @@ const vehicles = [
     fraud: 35,
     theftCount: '1,309 thefts in Ontario 2024',
     theftFreq: '1.1% theft frequency',
-    avgPremium: '$2,800–$4,200/yr',
-    repairCost: 'Moderate-High — parts demand',
-    driverProfile: 'Mixed — family to young adult',
+    avgPremium: '$2,800 to $4,200/yr',
+    repairCost: 'Moderate-High: parts demand',
+    driverProfile: 'Mixed: family to young adult',
     factors: [
-      { type: 'red', text: 'Led Ontario theft volume for multiple consecutive years — high demand for parts and resale value makes it a consistent organized crime target' },
+      { type: 'red', text: 'Led Ontario theft volume for multiple consecutive years, high demand for parts and resale value makes it a consistent organized crime target' },
       { type: 'red', text: 'Honda CR-V alone generated $371M+ in Toronto theft claims in 2023 alongside other high-volume Honda models' },
       { type: 'amber', text: 'Parts availability and high volume of insured vehicles makes this a high-frequency claim vehicle across all GTA postal codes' },
-      { type: 'dim', text: 'Driver demographic spans family buyers to young adults — broader risk profile than pure luxury targets' }
+      { type: 'dim', text: 'Driver demographic spans family buyers to young adults, broader risk profile than pure luxury targets' }
     ],
     insight: 'The CR-V is the high-volume theft vehicle. Where the Lexus RX is targeted by professional organized crime for export, the CR-V is targeted by opportunistic and organized theft alike for parts value. Repair costs are lower but frequency of claims is extremely high across the GTA.'
   },
@@ -717,17 +717,17 @@ const vehicles = [
     repair: 90,
     fraud: 38,
     theftCount: '1 in 4 vehicles stolen in Ontario 2024',
-    theftFreq: '25%+ theft frequency — highest in province',
-    avgPremium: '$5,200–$7,000/yr',
-    repairCost: 'Very High — new luxury platform',
+    theftFreq: '25%+ theft frequency: highest in province',
+    avgPremium: '$5,200 to $7,000/yr',
+    repairCost: 'Very High: new luxury platform',
     driverProfile: 'Affluent adult, lower behavioural risk',
     factors: [
-      { type: 'red', text: 'Highest theft frequency of any vehicle in Ontario 2024 — approximately 1 in 4 insured TX Series vehicles were stolen within the year' },
-      { type: 'red', text: 'New model year made it a priority target — high resale value and parts scarcity both drive theft demand' },
-      { type: 'amber', text: 'As a 2024 model, repair costs are among the highest in the province — new platform, limited aftermarket parts availability' },
+      { type: 'red', text: 'Highest theft frequency of any vehicle in Ontario 2024, approximately 1 in 4 insured TX Series vehicles were stolen within the year' },
+      { type: 'red', text: 'New model year made it a priority target, high resale value and parts scarcity both drive theft demand' },
+      { type: 'amber', text: 'As a 2024 model, repair costs are among the highest in the province, new platform, limited aftermarket parts availability' },
       { type: 'dim', text: 'Driver profile carries low behavioural risk but ownership cost and theft exposure push premiums to the highest tier in Ontario' }
     ],
-    insight: 'The TX Series represents a new category of theft risk — the freshly released luxury SUV that becomes a priority target precisely because it is new. The 25% theft frequency is statistically extraordinary. Owning this vehicle in the GTA currently comes with near-certain premium escalation regardless of driver history.'
+    insight: 'The TX Series represents a new category of theft risk, the freshly released luxury SUV that becomes a priority target precisely because it is new. The 25% theft frequency is statistically extraordinary. Owning this vehicle in the GTA currently comes with near-certain premium escalation regardless of driver history.'
   },
   {
     rank: 4,
@@ -742,16 +742,16 @@ const vehicles = [
     fraud: 50,
     theftCount: '2,600 thefts Ontario (peak year)',
     theftFreq: '0.5% theft frequency',
-    avgPremium: '$3,200–$4,800/yr',
-    repairCost: 'High — truck platform, specialty parts',
+    avgPremium: '$3,200 to $4,800/yr',
+    repairCost: 'High: truck platform, specialty parts',
     driverProfile: 'Young male skew, higher behavioural risk',
     factors: [
-      { type: 'red', text: 'Peak theft volume reached 2,600 in Ontario — among the highest absolute numbers of any vehicle on the list' },
-      { type: 'amber', text: 'Driver demographic skews male and younger — associated with higher collision frequency and traffic infraction rates in insurer actuarial data' },
-      { type: 'amber', text: 'Truck platform carries higher repair costs than equivalent car — frame, drivetrain, and specialty components' },
+      { type: 'red', text: 'Peak theft volume reached 2,600 in Ontario, among the highest absolute numbers of any vehicle on the list' },
+      { type: 'amber', text: 'Driver demographic skews male and younger, associated with higher collision frequency and traffic infraction rates in insurer actuarial data' },
+      { type: 'amber', text: 'Truck platform carries higher repair costs than equivalent car, frame, drivetrain, and specialty components' },
       { type: 'dim', text: 'Fraud exposure elevated in Brampton and Peel Region where staged collision rates remain higher than GTA average' }
     ],
-    insight: 'The RAM 1500 combines high theft volume with a driver demographic that carries genuine behavioural risk. Unlike the Lexus RX where the driver is low risk and the vehicle is high risk, the RAM presents both simultaneously — creating a compounding premium effect for young male owners in particular.'
+    insight: 'The RAM 1500 combines high theft volume with a driver demographic that carries genuine behavioural risk. Unlike the Lexus RX where the driver is low risk and the vehicle is high risk, the RAM presents both simultaneously, creating a compounding premium effect for young male owners in particular.'
   },
   {
     rank: 5,
@@ -766,21 +766,21 @@ const vehicles = [
     fraud: 30,
     theftCount: '1,759 thefts Ontario',
     theftFreq: '1.5% theft frequency',
-    avgPremium: '$2,800–$4,000/yr',
-    repairCost: 'Moderate-High — hybrid systems',
+    avgPremium: '$2,800 to $4,000/yr',
+    repairCost: 'Moderate-High: hybrid systems',
     driverProfile: 'Family buyers, moderate risk',
     factors: [
-      { type: 'red', text: 'Consistently top 5 in Ontario theft volume — 1.5% theft frequency significantly above average for the segment' },
-      { type: 'red', text: 'Toyota Grand Highlander 2024 ranked as one of Ontario\'s most frequently stolen vehicles — newer iterations increasing exposure' },
-      { type: 'amber', text: 'Hybrid drivetrain adds repair complexity — hybrid battery and systems raise claim costs above equivalent non-hybrid SUVs' },
+      { type: 'red', text: 'Consistently top 5 in Ontario theft volume, 1.5% theft frequency significantly above average for the segment' },
+      { type: 'red', text: 'Toyota Grand Highlander 2024 ranked as one of Ontario\'s most frequently stolen vehicles, newer iterations increasing exposure' },
+      { type: 'amber', text: 'Hybrid drivetrain adds repair complexity, hybrid battery and systems raise claim costs above equivalent non-hybrid SUVs' },
       { type: 'dim', text: 'Family buyer demographic is relatively low behavioural risk but theft frequency elevates the overall premium calculation' }
     ],
-    insight: 'The Highlander is the family vehicle that ended up on the wrong list. Its theft exposure comes from the same keyless entry vulnerability and organized export demand that affects the Lexus lineup — not from driver behaviour. A family in Markham or Mississauga driving a 2021 Highlander is paying for someone else\'s criminal network.'
+    insight: 'The Highlander is the family vehicle that ended up on the wrong list. Its theft exposure comes from the same keyless entry vulnerability and organized export demand that affects the Lexus lineup, not from driver behaviour. A family in Markham or Mississauga driving a 2021 Highlander is paying for someone else\'s criminal network.'
   },
   {
     rank: 6,
     name: 'Ford F-150 Series',
-    sub: '2020–2024 model years · Full-size Pickup',
+    sub: '2020 to 2024 model years · Full-size Pickup',
     riskScore: 72,
     riskLevel: 'HIGH',
     riskClass: 'high',
@@ -790,21 +790,21 @@ const vehicles = [
     fraud: 45,
     theftCount: '613 thefts Ontario 2024',
     theftFreq: '0.4% theft frequency',
-    avgPremium: '$2,800–$4,400/yr',
-    repairCost: 'High — aluminum body, technology content',
+    avgPremium: '$2,800 to $4,400/yr',
+    repairCost: 'High: aluminum body, technology content',
     driverProfile: 'Working adult to young male, elevated risk',
     factors: [
-      { type: 'amber', text: 'Aluminum body construction makes collision repairs significantly more expensive than steel — specialized repair shops required' },
-      { type: 'amber', text: 'Driver demographic spans tradespeople to young male owners — the latter group associated with elevated collision frequency' },
+      { type: 'amber', text: 'Aluminum body construction makes collision repairs significantly more expensive than steel, specialized repair shops required' },
+      { type: 'amber', text: 'Driver demographic spans tradespeople to young male owners, the latter group associated with elevated collision frequency' },
       { type: 'amber', text: 'F-150 technology content (Pro Power Onboard, SYNC 4, trailer systems) increases total vehicle value and repair cost simultaneously' },
       { type: 'dim', text: 'Theft volume lower than peak-theft SUVs but repair cost inflation from aluminum and tech content sustains high premiums independently' }
     ],
-    insight: 'The F-150\'s premium is driven more by repair cost than theft risk. The aluminum body was an engineering achievement that made collision repair costs climb significantly. Combined with a driver demographic that includes younger male buyers — the highest collision-frequency group — the F-150 ends up in the high-risk tier despite relatively lower theft exposure.'
+    insight: 'The F-150\'s premium is driven more by repair cost than theft risk. The aluminum body was an engineering achievement that made collision repair costs climb significantly. Combined with a driver demographic that includes younger male buyers, the highest collision-frequency group, the F-150 ends up in the high-risk tier despite relatively lower theft exposure.'
   },
   {
     rank: 7,
     name: 'Honda Civic',
-    sub: '2019–2022 model years · Compact Sedan/Hatch',
+    sub: '2019 to 2022 model years · Compact Sedan/Hatch',
     riskScore: 68,
     riskLevel: 'HIGH',
     riskClass: 'high',
@@ -814,16 +814,16 @@ const vehicles = [
     fraud: 38,
     theftCount: '1,309 thefts Ontario 2024',
     theftFreq: '0.2% theft frequency',
-    avgPremium: '$2,200–$3,800/yr · age-dependent',
-    repairCost: 'Moderate — common parts, high volume',
-    driverProfile: 'Young adult dominant — highest risk demographic',
+    avgPremium: '$2,200 to $3,800/yr · age-dependent',
+    repairCost: 'Moderate: common parts, high volume',
+    driverProfile: 'Young adult dominant: highest risk demographic',
     factors: [
-      { type: 'red', text: 'The Civic Type R and Si variants are strongly associated with young male drivers — the highest collision frequency demographic in Ontario actuarial data' },
-      { type: 'amber', text: 'Theft volume remains high despite lower frequency — 1,309 Ontario thefts in 2024 for an affordable vehicle reflects demand for parts at all price points' },
-      { type: 'amber', text: 'Young drivers on a Civic policy often face premiums exceeding the vehicle\'s value — common scenario for 18-24 year olds in the GTA' },
+      { type: 'red', text: 'The Civic Type R and Si variants are strongly associated with young male drivers, the highest collision frequency demographic in Ontario actuarial data' },
+      { type: 'amber', text: 'Theft volume remains high despite lower frequency, 1,309 Ontario thefts in 2024 for an affordable vehicle reflects demand for parts at all price points' },
+      { type: 'amber', text: 'Young drivers on a Civic policy often face premiums exceeding the vehicle\'s value, common scenario for 18-24 year olds in the GTA' },
       { type: 'dim', text: 'Standard Civic repair costs are moderate but after-market modifications common in young driver community can complicate claims and void coverage' }
     ],
-    insight: 'The Civic\'s risk profile is almost entirely driver-demographic driven. A 40-year-old commuter driving a standard Civic pays a reasonable premium. A 19-year-old in Scarborough or Brampton driving the same vehicle pays multiples more. The car is not high risk. The self-selection of young male drivers into the Civic is what puts it on this list — particularly the Type R and Si variants marketed directly at performance-oriented young buyers.'
+    insight: 'The Civic\'s risk profile is almost entirely driver-demographic driven. A 40-year-old commuter driving a standard Civic pays a reasonable premium. A 19-year-old in Scarborough or Brampton driving the same vehicle pays multiples more. The car is not high risk. The self-selection of young male drivers into the Civic is what puts it on this list, particularly the Type R and Si variants marketed directly at performance-oriented young buyers.'
   },
   {
     rank: 8,
@@ -838,16 +838,16 @@ const vehicles = [
     fraud: 35,
     theftCount: '1 in 14 vehicles stolen in Ontario 2023',
     theftFreq: '7% theft frequency (2023 data)',
-    avgPremium: '$5,800–$8,500/yr',
-    repairCost: 'Extreme — bespoke luxury parts, limited supply',
+    avgPremium: '$5,800 to $8,500/yr',
+    repairCost: 'Extreme: bespoke luxury parts, limited supply',
     driverProfile: 'Affluent adult, low behavioural risk',
     factors: [
-      { type: 'red', text: 'Historically one of the highest theft frequency vehicles in Ontario — 1 in 14 stolen in 2023 peak data from Équité Association' },
+      { type: 'red', text: 'Historically one of the highest theft frequency vehicles in Ontario, 1 in 14 stolen in 2023 peak data from Équité Association' },
       { type: 'red', text: 'Extremely high resale value and parts scarcity make it a premier organized crime target for international export networks' },
-      { type: 'amber', text: 'Bespoke luxury repair parts are sourced internationally — claim settlement times and costs among the highest of any vehicle in Ontario' },
-      { type: 'dim', text: 'Driver risk profile is low — affluent owners with clean records — but theft frequency alone creates extreme premium pressure' }
+      { type: 'amber', text: 'Bespoke luxury repair parts are sourced internationally, claim settlement times and costs among the highest of any vehicle in Ontario' },
+      { type: 'dim', text: 'Driver risk profile is low, affluent owners with clean records, but theft frequency alone creates extreme premium pressure' }
     ],
-    insight: 'The Range Rover is where luxury meets organized crime in the most financially painful way for the insurer and the owner. The repair cost is extreme and the theft frequency is historically among the highest in the province. Owners typically have clean driving records and low collision risk — but the vehicle makes them a target for theft networks regardless of where they park it.'
+    insight: 'The Range Rover is where luxury meets organized crime in the most financially painful way for the insurer and the owner. The repair cost is extreme and the theft frequency is historically among the highest in the province. Owners typically have clean driving records and low collision risk, but the vehicle makes them a target for theft networks regardless of where they park it.'
   },
   {
     rank: 9,
@@ -862,16 +862,16 @@ const vehicles = [
     fraud: 42,
     theftCount: '1,349 thefts Ontario',
     theftFreq: '1.1% theft frequency',
-    avgPremium: '$2,600–$3,800/yr',
-    repairCost: 'Moderate-High — 4WD systems, technology',
-    driverProfile: 'Mixed — family to young adult male',
+    avgPremium: '$2,600 to $3,800/yr',
+    repairCost: 'Moderate-High: 4WD systems, technology',
+    driverProfile: 'Mixed: family to young adult male',
     factors: [
-      { type: 'amber', text: 'Top 10 Ontario theft vehicle — 1,349 thefts with 1.1% frequency reflects consistent demand from theft networks' },
-      { type: 'amber', text: 'Driver demographic bifurcated — family buyers present moderate risk, younger male buyers associated with higher collision rates' },
+      { type: 'amber', text: 'Top 10 Ontario theft vehicle, 1,349 thefts with 1.1% frequency reflects consistent demand from theft networks' },
+      { type: 'amber', text: 'Driver demographic bifurcated, family buyers present moderate risk, younger male buyers associated with higher collision rates' },
       { type: 'amber', text: '4WD and off-road system complexity elevates repair costs above equivalent 2WD SUVs in collision scenarios' },
-      { type: 'dim', text: 'Fraud exposure moderate — Peel Region and parts of Brampton show elevated staged collision rates affecting Jeep models' }
+      { type: 'dim', text: 'Fraud exposure moderate, Peel Region and parts of Brampton show elevated staged collision rates affecting Jeep models' }
     ],
-    insight: 'The Grand Cherokee sits at the intersection of moderate theft risk and moderate driver risk — neither as extreme as the Lexus RX nor as driver-dependent as the Civic. Its presence on the high-risk list reflects a compounding of several factors rather than one dominant driver, making it harder to mitigate through any single behavioural or security change.'
+    insight: 'The Grand Cherokee sits at the intersection of moderate theft risk and moderate driver risk, neither as extreme as the Lexus RX nor as driver-dependent as the Civic. Its presence on the high-risk list reflects a compounding of several factors rather than one dominant driver, making it harder to mitigate through any single behavioural or security change.'
   },
   {
     rank: 10,
@@ -886,16 +886,16 @@ const vehicles = [
     fraud: 28,
     theftCount: '459 thefts Ontario (2022 data)',
     theftFreq: '1.2% theft frequency',
-    avgPremium: '$2,400–$3,600/yr',
-    repairCost: 'Moderate-High — luxury platform, Honda parts premium',
+    avgPremium: '$2,400 to $3,600/yr',
+    repairCost: 'Moderate-High: luxury platform, Honda parts premium',
     driverProfile: 'Young professional, moderate risk',
     factors: [
-      { type: 'amber', text: 'Shares theft vulnerability with Honda CR-V platform — keyless entry relay attack exposure documented across Acura lineup' },
-      { type: 'amber', text: 'Young professional demographic carries moderate collision risk — aspirational vehicle for 25-35 year olds in GTA urban areas' },
-      { type: 'dim', text: 'Luxury platform repair costs elevated above standard Honda — Acura-specific parts pricing and dealer service requirements' },
-      { type: 'dim', text: 'Lower theft volume than top-tier vehicles but frequency remains elevated — organized crime networks targeting Honda-Acura platforms broadly' }
+      { type: 'amber', text: 'Shares theft vulnerability with Honda CR-V platform, keyless entry relay attack exposure documented across Acura lineup' },
+      { type: 'amber', text: 'Young professional demographic carries moderate collision risk, aspirational vehicle for 25-35 year olds in GTA urban areas' },
+      { type: 'dim', text: 'Luxury platform repair costs elevated above standard Honda, Acura-specific parts pricing and dealer service requirements' },
+      { type: 'dim', text: 'Lower theft volume than top-tier vehicles but frequency remains elevated, organized crime networks targeting Honda-Acura platforms broadly' }
     ],
-    insight: 'The RDX represents the entry-level luxury SUV risk profile — high enough theft exposure to matter, expensive enough to repair, and popular with a demographic (young GTA professionals) that sits in a moderate collision risk band. It is the least extreme vehicle on this list but the risk profile is consistent enough to sustain materially elevated premiums.'
+    insight: 'The RDX represents the entry-level luxury SUV risk profile, high enough theft exposure to matter, expensive enough to repair, and popular with a demographic (young GTA professionals) that sits in a moderate collision risk band. It is the least extreme vehicle on this list but the risk profile is consistent enough to sustain materially elevated premiums.'
   }
 ];
 
@@ -959,7 +959,7 @@ function selectVehicle(rank) {
     </div>
 
     <div class="risk-visual">
-      <div class="risk-visual-label">Risk Factor Breakdown — Composite Score ${v.riskScore}/100</div>
+      <div class="risk-visual-label">Risk Factor Breakdown, Composite Score ${v.riskScore}/100</div>
       <div class="risk-bars">
         <div class="risk-bar-row">
           <div class="risk-bar-label">Theft Risk</div>
@@ -1019,7 +1019,7 @@ function selectVehicle(rank) {
 
     <div class="source-footer">
       <div class="source-label">Data Sources</div>
-      <div class="source-text">Équité Association Annual Auto Theft Report 2024–2025 · Insurance Bureau of Canada (IBC) · Financial Services Regulatory Authority of Ontario (FSRA) · Rates.ca Auto Insurance Rate Index · ThinkInsure Ontario Premium Data · CBC News · All data reflects reported 2024–2025 figures.</div>
+      <div class="source-text">Équité Association Annual Auto Theft Report 2024 to 2025 · Insurance Bureau of Canada (IBC) · Financial Services Regulatory Authority of Ontario (FSRA) · Rates.ca Auto Insurance Rate Index · ThinkInsure Ontario Premium Data · CBC News · All data reflects reported 2024 to 2025 figures.</div>
     </div>
   `;
 

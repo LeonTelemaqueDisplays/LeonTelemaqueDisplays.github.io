@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Case Studies — Leon Telemaque</title>
+<title>Case Studies: Leon Telemaque</title>
 <style>
   :root {
     --bg: #060607;
@@ -768,7 +768,7 @@
     margin-bottom: 32px;
   }
 
-  /* ── CAROUSEL — native scroll, no arrows ──
+  /* ── CAROUSEL: native scroll, no arrows ──
      Arrow buttons drove a JS transform() + hand-rolled position tracker
      (scroll()/positions{}) that had to recompute card width and cards-
      per-view on every click. That math broke for the fintech track
@@ -787,7 +787,7 @@
   }
   .carousel-track-wrap::-webkit-scrollbar { display: none; }
 
-  /* Edge fades hint that a track scrolls further — pinned to the wrap's
+  /* Edge fades hint that a track scrolls further, pinned to the wrap's
      own box (not the scrolling track) since they're absolutely positioned
      pseudo-elements of the position:relative wrap itself, so they stay
      fixed at the edges regardless of scroll position. JS toggles
@@ -864,7 +864,7 @@
 
   /* Coming-soon cards rest at reduced opacity with a dashed border so an
      empty roadmap placeholder doesn't compete visually with dense real
-     case-study cards — hover brings it back toward full opacity. */
+     case-study cards, hover brings it back toward full opacity. */
   .coming-soon-card.card-visible {
     animation: comingSoonReveal 0.5s cubic-bezier(0.4,0,0.2,1) forwards;
   }
@@ -903,7 +903,7 @@
   .project-card:hover::after { transform: translateX(100%); }
 
   /* All archive carousels use fixed card width instead of percentage-based
-     sizing — keeps every card the same physical size regardless of how many
+     sizing, keeps every card the same physical size regardless of how many
      pieces are in a given track, and scales cleanly as more pieces are added. */
   #fintech-track.carousel-track,
   #systems-track.carousel-track,
@@ -1044,7 +1044,7 @@
 
   /* ── Mobile: peek carousel ──
      Cards are narrower than the viewport so the next/previous card is
-     visibly peeking in on both sides — a visual cue to swipe, and proof
+     visibly peeking in on both sides, a visual cue to swipe, and proof
      the carousel keeps going even with no arrows on screen. Side padding
      on the track (not the wrap) centers the peek evenly and lets the
      first/last card still snap to center. */
@@ -1455,7 +1455,7 @@
   @media (max-width: 768px) {
     html, body { overflow-x: hidden; }
 
-    /* Nav — drop the anchor-link row and let logo / actions wrap instead of
+    /* Nav, drop the anchor-link row and let logo / actions wrap instead of
        overflowing. Also drop back to position:sticky (solid bg, no blur):
        the fixed+blur nav is a desktop enhancement, but at this width the
        wrapped logo+actions row has a variable height that a fixed nav can't
@@ -1472,7 +1472,7 @@
     .about-grid { grid-template-columns: 1fr; gap: 32px; }
     .photo-wrap { height: 280px; margin: 0 8px; }
 
-    /* Carousel header — let the arrows wrap under the title instead of squeezing */
+    /* Carousel header, let the arrows wrap under the title instead of squeezing */
     .carousel-header { flex-wrap: wrap; gap: 12px; }
   }
 </style>
@@ -1555,7 +1555,7 @@
 
 <!-- NAV -->
 <nav id="nav">
-  <a href="/" class="nav-logo">LT — Consumer Systems</a>
+  <a href="/" class="nav-logo">LT: Consumer Systems</a>
   <button class="nav-menu-btn" id="navMenuBtn" aria-label="Open menu" aria-expanded="false">
     <span></span><span></span><span></span><span></span>
   </button>
@@ -1586,7 +1586,7 @@
     <div>
       <div class="section-eyebrow reveal-left">Systems &amp; Strategy</div>
       <h2 class="section-title reveal-left" style="transition-delay:0.1s">How brands and platforms <em>build, defend, and decide</em></h2>
-      <p class="section-desc reveal-left" style="transition-delay:0.2s">Decision architecture and brand architecture turn out to be the same problem: what to build, what to protect, and what to walk away from. Costco's flat margins, Tim Hortons' menu bloat, Wealthsimple's product sequencing, Roblox's platform failures, and Gatorade's category defense are the same question in five different industries — how a team decides what a brand or platform actually is, and defends that decision under pressure.</p>
+      <p class="section-desc reveal-left" style="transition-delay:0.2s">Decision architecture and brand architecture turn out to be the same problem: what to build, what to protect, and what to walk away from. Costco's flat margins, Tim Hortons' menu bloat, Wealthsimple's product sequencing, Roblox's platform failures, and Gatorade's category defense are the same question in five different industries, how a team decides what a brand or platform actually is, and defends that decision under pressure.</p>
     </div>
     <div class="carousel-arrows">
       <button class="carousel-arrow-btn" data-dir="-1" aria-label="Scroll left">&larr;</button>
@@ -1603,8 +1603,8 @@
           <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Platform Strategy &middot; Costco</div>
         </div>
         <div class="card-body">
-          <div class="card-title">A Lifestyle Platform — Why Costco's "Broken" Model Works</div>
-          <div class="card-desc">2 to 3% retail margin. A $1.50 hot dog unchanged since 1985. A paid membership every competitor has tried and failed to copy. A teardown of why Costco isn't a retailer at all — it's a membership platform engineered around the psychology of winning, and why Walmart+ can subsidise the same hot dog and still can't buy the trust behind it.</div>
+          <div class="card-title">A Lifestyle Platform: Why Costco's "Broken" Model Works</div>
+          <div class="card-desc">2 to 3% retail margin. A $1.50 hot dog unchanged since 1985. A paid membership every competitor has tried and failed to copy. A teardown of why Costco isn't a retailer at all, it's a membership platform engineered around the psychology of winning, and why Walmart+ can subsidise the same hot dog and still can't buy the trust behind it.</div>
           <div class="card-source"><b>Sources:</b> Costco Earnings Calls</div>
           <div class="card-tags">
             <div class="card-tag primary">Consumer Psychology</div>
@@ -1620,8 +1620,8 @@
           <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Brand Strategy &middot; Tim Hortons</div>
         </div>
         <div class="card-body">
-          <div class="card-title">The Cost of Leaving Your Lane — Tim Hortons' Brand Contract Violation</div>
-          <div class="card-desc">Tim Hortons built the most defensible brand position in Canadian food service — the ubiquitous morning ritual no competitor could replicate — then abandoned it, one menu extension at a time. A CPG teardown of consumer permission, menu bloat as identity dilution, and how a nostalgia moat gets spent without anyone noticing until the brand trust data catches up.</div>
+          <div class="card-title">The Cost of Leaving Your Lane: Tim Hortons' Brand Contract Violation</div>
+          <div class="card-desc">Tim Hortons built the most defensible brand position in Canadian food service, the ubiquitous morning ritual no competitor could replicate, then abandoned it, one menu extension at a time. A CPG teardown of consumer permission, menu bloat as identity dilution, and how a nostalgia moat gets spent without anyone noticing until the brand trust data catches up.</div>
           <div class="card-source"><b>Sources:</b> RBI Earnings &middot; Ipsos/L&eacute;ger</div>
           <div class="card-tags">
             <div class="card-tag primary">CPG Strategy</div>
@@ -1638,7 +1638,7 @@
         </div>
         <div class="card-body">
           <div class="card-title">Why Wealthsimple Became a Bank</div>
-          <div class="card-desc">Canada's most trusted investment platform launched a chequing account, then a credit card, then a line of credit — the textbook definition of brand dilution and product cannibalism. A product-sequencing teardown of why the decision was correct anyway, and the structural ceiling — no banking licence, no deposit-funded lending margins — that caps how far it can go.</div>
+          <div class="card-desc">Canada's most trusted investment platform launched a chequing account, then a credit card, then a line of credit, the textbook definition of brand dilution and product cannibalism. A product-sequencing teardown of why the decision was correct anyway, and the structural ceiling, no banking licence, no deposit-funded lending margins, that caps how far it can go.</div>
           <div class="card-source"><b>Sources:</b> Wealthsimple &middot; BetaKit</div>
           <div class="card-tags">
             <div class="card-tag primary">Product Strategy</div>
@@ -1654,8 +1654,8 @@
           <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Platform Strategy &middot; Roblox</div>
         </div>
         <div class="card-body">
-          <div class="card-title">A Platform Problem — Why Roblox's CEO Has the Wrong Diagnosis</div>
-          <div class="card-desc">Roblox lost $70B in market value and 29M daily active users from peak, and its CEO blamed a shortage of viral games. An interactive platform-architecture teardown of the real four failures — content discovery, parental trust, social infrastructure, and monetisation quality — with a product recommendation for each.</div>
+          <div class="card-title">A Platform Problem: Why Roblox's CEO Has the Wrong Diagnosis</div>
+          <div class="card-desc">Roblox lost $70B in market value and 29M daily active users from peak, and its CEO blamed a shortage of viral games. An interactive platform-architecture teardown of the real four failures, content discovery, parental trust, social infrastructure, and monetisation quality, with a product recommendation for each.</div>
           <div class="card-source"><b>Sources:</b> Roblox Shareholder Letters</div>
           <div class="card-tags">
             <div class="card-tag primary">Product Strategy</div>
@@ -1671,8 +1671,8 @@
           <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Brand Strategy &middot; Gatorade</div>
         </div>
         <div class="card-body">
-          <div class="card-title">How a Sports Drink Became a Category — Gatorade's CPG Playbook</div>
-          <div class="card-desc">Gatorade didn't win the sports drink category — it created it, then made the category definition synonymous with competitive advantage over water. A CPG teardown of mental availability, occasion ownership, and aspirational proxy consumption behind a 65% market share that cost Coca-Cola $5.6B just to begin contesting.</div>
+          <div class="card-title">How a Sports Drink Became a Category: Gatorade's CPG Playbook</div>
+          <div class="card-desc">Gatorade didn't win the sports drink category, it created it, then made the category definition synonymous with competitive advantage over water. A CPG teardown of mental availability, occasion ownership, and aspirational proxy consumption behind a 65% market share that cost Coca-Cola $5.6B just to begin contesting.</div>
           <div class="card-source"><b>Sources:</b> Beverage Digest &middot; SFIA</div>
           <div class="card-tags">
             <div class="card-tag primary">CPG Strategy</div>
@@ -1692,7 +1692,7 @@
     <div>
       <div class="section-eyebrow reveal-left">Fintech Psychology</div>
       <h2 class="section-title reveal-left" style="transition-delay:0.1s">Why people make <em>financial decisions</em> the way they do</h2>
-      <p class="section-desc reveal-left" style="transition-delay:0.2s">Spending behaviour, savings mechanics, habit formation, and the psychology of money — consumer behaviour theory applied to financial product design.</p>
+      <p class="section-desc reveal-left" style="transition-delay:0.2s">Spending behaviour, savings mechanics, habit formation, and the psychology of money, consumer behaviour theory applied to financial product design.</p>
     </div>
     <div class="carousel-arrows">
       <button class="carousel-arrow-btn" data-dir="-1" aria-label="Scroll left">&larr;</button>
@@ -1709,8 +1709,8 @@
           <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Fintech Psychology &middot; Youth Investment</div>
         </div>
         <div class="card-body">
-          <div class="card-title">The Depth Problem — Youth Investment &amp; Fintech Design</div>
-          <div class="card-desc">Why the youth investment gap will not be closed by gamification — and what the winning product actually looks like. 41% of Gen Z and Millennial TFSA holders leave that money sitting in cash instead of investing it; for the smaller population who can invest, the gap that remains is a product depth problem. Includes a live portfolio transparency dashboard and mobile prototype.</div>
+          <div class="card-title">The Depth Problem: Youth Investment &amp; Fintech Design</div>
+          <div class="card-desc">Why the youth investment gap will not be closed by gamification, and what the winning product actually looks like. 41% of Gen Z and Millennial TFSA holders leave that money sitting in cash instead of investing it; for the smaller population who can invest, the gap that remains is a product depth problem. Includes a live portfolio transparency dashboard and mobile prototype.</div>
           <div class="card-source"><b>Sources:</b> TD Bank Group &middot; Nov 2025</div>
           <div class="card-tags">
             <div class="card-tag primary">Fintech Psychology</div>
@@ -1726,7 +1726,7 @@
           <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Risk Analytics &middot; Auto Insurance</div>
         </div>
         <div class="card-body">
-          <div class="card-title">Who's Paying for Auto Theft — GTA Insurance Risk Monitor</div>
+          <div class="card-title">Who's Paying for Auto Theft: GTA Insurance Risk Monitor</div>
           <div class="card-desc">An interactive risk breakdown of the 10 highest-risk vehicles for auto insurance in the Greater Toronto Area, where average premiums run 32% above the Ontario average. Drill into each vehicle to see how theft exposure, driver demographics, and repair cost separately drive the price a real owner pays.</div>
           <div class="card-source"><b>Sources:</b> &Eacute;quit&eacute; Association &middot; IBC &middot; FSRA</div>
           <div class="card-tags">
@@ -1748,8 +1748,8 @@
           </div>
         </div>
         <div class="card-body">
-          <div class="card-title">Encouraging Credit Transparency — Before &amp; After</div>
-          <div class="card-desc">Redesigning credit visibility for everyday users. A before/after UX comparison showing how surfacing the right credit signals — in plain language, at the right moment — changes how users relate to their financial health. Includes the qualitative research synthesis that shaped the redesign and a full A/B test design that validated it.</div>
+          <div class="card-title">Encouraging Credit Transparency: Before &amp; After</div>
+          <div class="card-desc">Redesigning credit visibility for everyday users. A before/after UX comparison showing how surfacing the right credit signals, in plain language, at the right moment, changes how users relate to their financial health. Includes the qualitative research synthesis that shaped the redesign and a full A/B test design that validated it.</div>
           <div class="card-source"><b>Basis:</b> Synthetic dataset, labelled &amp; computed</div>
           <div class="card-tags">
             <div class="card-tag primary">Fintech Psychology</div>
@@ -1766,8 +1766,8 @@
           <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Loyalty Economics &middot; Aeroplan</div>
         </div>
         <div class="card-body">
-          <div class="card-title">The Pity Timer Nobody Told You About — Aeroplan Loyalty Economics</div>
-          <div class="card-desc">A breakage, tier-design, and redemption-value teardown of Air Canada's Aeroplan program — the only major Canadian loyalty scheme that publishes enough real data to model honestly. Live SQL console over ~10% disclosed breakage, 5 elite tiers, and redemption value across 50+ real bookings, framed as the same variable-ratio reward gate as a gacha pity system, just priced in credits instead of pulls.</div>
+          <div class="card-title">The Pity Timer Nobody Told You About: Aeroplan Loyalty Economics</div>
+          <div class="card-desc">A breakage, tier-design, and redemption-value teardown of Air Canada's Aeroplan program, the only major Canadian loyalty scheme that publishes enough real data to model honestly. Live SQL console over ~10% disclosed breakage, 5 elite tiers, and redemption value across 50+ real bookings, framed as the same variable-ratio reward gate as a gacha pity system, just priced in credits instead of pulls.</div>
           <div class="card-source"><b>Sources:</b> Air Canada Q2 2026 &middot; Prince of Travel</div>
           <div class="card-tags">
             <div class="card-tag primary">Loyalty Economics</div>
@@ -1787,7 +1787,7 @@
     <div>
       <div class="section-eyebrow reveal-left">Subscription &amp; Retention Design</div>
       <h2 class="section-title reveal-left" style="transition-delay:0.1s">Why users <em>stay, lapse,</em> and come back</h2>
-      <p class="section-desc reveal-left" style="transition-delay:0.2s">Retention architecture, churn psychology, and the behavioural design of subscription products — the same thinking that drives LiveOps applied to consumer platforms.</p>
+      <p class="section-desc reveal-left" style="transition-delay:0.2s">Retention architecture, churn psychology, and the behavioural design of subscription products, the same thinking that drives LiveOps applied to consumer platforms.</p>
     </div>
     <div class="carousel-arrows">
       <button class="carousel-arrow-btn" data-dir="-1" aria-label="Scroll left">&larr;</button>
@@ -1800,12 +1800,12 @@
 
       <div class="project-card" onclick="window.open('/consumer/hinge-analysis.html','_blank')">
         <div class="card-thumb thumb-sub" style="overflow:hidden">
-          <img src="/consumer/hinge-cover-2.jpg" alt="Hinge campaign — plush H mascot" style="width:100%;height:100%;object-fit:cover;object-position:center 40%;display:block;position:absolute;inset:0">
+          <img src="/consumer/hinge-cover-2.jpg" alt="Hinge campaign, plush H mascot" style="width:100%;height:100%;object-fit:cover;object-position:center 40%;display:block;position:absolute;inset:0">
           <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Subscription &amp; Retention &middot; Hinge</div>
         </div>
         <div class="card-body">
-          <div class="card-title">Hinge — The Most Efficient Carrot on a Stick</div>
-          <div class="card-desc">How Hinge built the most emotionally efficient subscription model in the consumer app market by anchoring its entire product architecture to the one desire that is universal, urgent, and immune to saturation — love, not a feature, dangled as the carrot no other subscription category has ever matched.</div>
+          <div class="card-title">Hinge: The Most Efficient Carrot on a Stick</div>
+          <div class="card-desc">How Hinge built the most emotionally efficient subscription model in the consumer app market by anchoring its entire product architecture to the one desire that is universal, urgent, and immune to saturation, love, not a feature, dangled as the carrot no other subscription category has ever matched.</div>
           <div class="card-source"><b>Sources:</b> Match Group Earnings</div>
           <div class="card-tags">
             <div class="card-tag primary">Subscription Design</div>
@@ -1821,8 +1821,8 @@
           <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Subscription &amp; Retention &middot; Language Learning</div>
         </div>
         <div class="card-body">
-          <div class="card-title">Language Learning Apps — The Balance Problem</div>
-          <div class="card-desc">Why language learning subscription apps struggle to serve two fundamentally incompatible audiences — the casual hobbyist and the hardcore learner — and what most platforms give up when they design for one over the other. Includes an interactive model for identifying learner archetypes and their 90-day retention curves.</div>
+          <div class="card-title">Language Learning Apps: The Balance Problem</div>
+          <div class="card-desc">Why language learning subscription apps struggle to serve two fundamentally incompatible audiences, the casual hobbyist and the hardcore learner, and what most platforms give up when they design for one over the other. Includes an interactive model for identifying learner archetypes and their 90-day retention curves.</div>
           <div class="card-source"><b>Sources:</b> Duolingo (NASDAQ: DUOL)</div>
           <div class="card-tags">
             <div class="card-tag primary">Subscription Design</div>
@@ -1838,8 +1838,8 @@
           <div class="card-thumb-label" style="z-index:1;color:#e8e8e8;text-shadow:0 1px 4px rgba(0,0,0,.8)">Subscription &amp; Retention &middot; Spotify</div>
         </div>
         <div class="card-body">
-          <div class="card-title">Spotify — Give Everything. Sell Comfort.</div>
-          <div class="card-desc">How Spotify built the most powerful freemium model in streaming by giving away the thing that builds the relationship — full catalogue access, personalised discovery, social features — and charging only for the comfort of inhabiting it. The upgrade is a restoration of what the user already knows they want, not an introduction to something new.</div>
+          <div class="card-title">Spotify, Give Everything. Sell Comfort.</div>
+          <div class="card-desc">How Spotify built the most powerful freemium model in streaming by giving away the thing that builds the relationship, full catalogue access, personalised discovery, social features, and charging only for the comfort of inhabiting it. The upgrade is a restoration of what the user already knows they want, not an introduction to something new.</div>
           <div class="card-source"><b>Sources:</b> Spotify Q2 2026</div>
           <div class="card-tags">
             <div class="card-tag primary">Subscription Design</div>
@@ -1945,7 +1945,7 @@ for (let i = 0; i < 18; i++) {
 // off-screen. This wires up the edge fades (via .at-start/.at-end/
 // .no-overflow classes toggled on the wrap) and the prev/next arrow
 // buttons in each carousel-header, scrolling by ~90% of the wrap's own
-// width — no per-card-width math, so it can't drift out of sync the way
+// width, no per-card-width math, so it can't drift out of sync the way
 // the old hand-rolled carousel position tracker used to.
 document.querySelectorAll('.carousel-track-wrap').forEach(wrap => {
   const track = wrap.querySelector('.carousel-track');
@@ -1986,7 +1986,7 @@ document.querySelectorAll('.carousel-track-wrap').forEach(wrap => {
 // ── CAROUSEL "PEEK" NUDGE ──
 // One-time hint that a track scrolls further: nudge right ~60px and ease
 // back the first time each track scrolls substantially into view. Never
-// repeats, and skips entirely for prefers-reduced-motion — this is a
+// repeats, and skips entirely for prefers-reduced-motion: this is a
 // hint, not a permanent auto-scroll, so it never fights someone actually
 // reading a card.
 if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {

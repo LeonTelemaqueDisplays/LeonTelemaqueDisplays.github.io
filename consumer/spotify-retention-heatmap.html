@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Same Curve, Different Currency — Spotify Subscription Retention</title>
+<title>Same Curve, Different Currency: Spotify Subscription Retention</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
 <style>
   :root{
@@ -169,16 +169,16 @@
       <div class="eyebrow">Subscription Retention · Spotify</div>
       <h1>Same Curve, Different Currency</h1>
       <div class="kicker-line">
-        A cohort retention teardown of <b>Spotify's</b> free-to-Premium funnel — real disclosed MAU, subscriber,
+        A cohort retention teardown of <b>Spotify's</b> free-to-Premium funnel: real disclosed MAU, subscriber,
         and ARPU figures from Spotify's own Q2 2026 investor materials, with churn shape calibrated to
         RevenueCat's <b>State of Subscription Apps 2026</b> benchmarks where Spotify doesn't disclose granular
-        cohort data (which is always — no streaming service publishes month-by-month churn).
+        cohort data (which is always, no streaming service publishes month-by-month churn).
       </div>
     </div>
     <div class="status-block">
       <div class="live-pill loading" id="db-status"><span class="live-dot"></span><span id="db-status-text">LOADING SQLITE (WASM)…</span></div>
       <button class="regen-btn" id="regen-btn" disabled>⟳ Regenerate synthetic population</button>
-      <div class="db-meta" id="db-meta">—</div>
+      <div class="db-meta" id="db-meta">: </div>
     </div>
   </div>
 
@@ -189,22 +189,22 @@
     <div class="cell"><div class="num">300M</div><div class="lbl">Premium Subscribers, Q2 2026</div></div>
     <div class="cell"><div class="num">38.6%</div><div class="lbl">Premium share of MAU (calculated)</div></div>
   </div>
-  <div class="src-line">Sources: Spotify Q2 2026 shareholder letter &amp; earnings call, reported Aug 4, 2026. 38.6% = 300M ÷ 777M, our calculation from the two disclosed figures — not a number Spotify itself publishes.</div>
+  <div class="src-line">Sources: Spotify Q2 2026 shareholder letter &amp; earnings call, reported Aug 4, 2026. 38.6% = 300M ÷ 777M, our calculation from the two disclosed figures, not a number Spotify itself publishes.</div>
 
   <div class="kpi-bottom">
     <div class="cell"><div class="eyebrow2">Premium ARPU</div><div class="val">€4.89</div><div class="sub">≈ $5.69, +7.4% YoY</div><span class="badge real">REAL · SPOTIFY Q2'26</span></div>
     <div class="cell"><div class="eyebrow2">Premium revenue growth</div><div class="val">+16% YoY</div><div class="sub">constant currency</div><span class="badge real">REAL · SPOTIFY Q2'26</span></div>
-    <div class="cell"><div class="eyebrow2">Trial-to-paid conversion</div><div class="val">11.5%–69.5%</div><div class="sub">Media &amp; Entertainment spread</div><span class="badge bench">BENCHMARK · REVENUECAT</span></div>
+    <div class="cell"><div class="eyebrow2">Trial-to-paid conversion</div><div class="val">11.5%: 69.5%</div><div class="sub">Media &amp; Entertainment spread</div><span class="badge bench">BENCHMARK · REVENUECAT</span></div>
     <div class="cell"><div class="eyebrow2">Annual reactivation rate</div><div class="val">~5%</div><div class="sub">monthly reactivates ~4× faster</div><span class="badge bench">BENCHMARK · REVENUECAT</span></div>
     <div class="cell"><div class="eyebrow2">Europe share of Premium</div><div class="val">36%</div><div class="sub">NA 25% · LatAm 24% · RoW 15%</div><span class="badge real">REAL · SPOTIFY Q2'26</span></div>
   </div>
 
   <div class="signature">
-    <div class="signature-head"><h3>Blended retention curve — live, computed from the query below</h3><span>weighted average across all 12 cohorts</span></div>
+    <div class="signature-head"><h3>Blended retention curve: live, computed from the query below</h3><span>weighted average across all 12 cohorts</span></div>
     <div class="spark-row" id="spark-row"></div>
-    <div class="dbd-callout" id="dbd-callout">⚡ For reference: Dead by Daylight's D7 cohort retention (gaming side, Lifecycle Churn System) sits at 42.3% — a near-identical decay shape, priced in players instead of dollars.</div>
+    <div class="dbd-callout" id="dbd-callout">⚡ For reference: Dead by Daylight's D7 cohort retention (gaming side, Lifecycle Churn System) sits at 42.3%, a near-identical decay shape, priced in players instead of dollars.</div>
     <div class="signature-note">
-      This isn't a designed chart — it's the live output of <code>Query 1</code> below, re-aggregated across cohorts and
+      This isn't a designed chart: it's the live output of <code>Query 1</code> below, re-aggregated across cohorts and
       re-drawn every time you hit <b>Regenerate</b>. The steep early drop (trial abandonment + first-renewal risk)
       followed by a flattening curve is the same shape RevenueCat documents industry-wide: renewal risk falls the
       longer a subscriber survives their first few cycles.
@@ -237,7 +237,7 @@
   <div class="tab-panel" id="tab-sql">
     <div class="sql-grid">
       <div class="code-block">
-        <div class="code-block-head"><span>cohort_retention.sql — CTE (drives the heatmap)</span><span id="q1-status">not yet run</span></div>
+        <div class="code-block-head"><span>cohort_retention.sql, CTE (drives the heatmap)</span><span id="q1-status">not yet run</span></div>
         <pre><span class="cm">-- Core cohort retention query. For every signup cohort and every
 -- months-since-signup offset actually observable by 2025-12-31,
 -- what share of that cohort was an active Premium subscriber.
@@ -272,11 +272,11 @@
 <span class="kw">GROUP BY</span> so.cohort_month, ms.m <span class="kw">ORDER BY</span> so.cohort_month, ms.m;</pre>
         <div class="run-row"><button class="run-btn" id="run-q1" disabled>▶ Run Query</button><span class="exec-time" id="q1-time"></span></div>
         <div class="result-wrap"><table class="result-table" id="result-table-1"><thead><tr><th>cohort_month</th><th>months_since_signup</th><th>cohort_size</th><th>active_count</th><th>retention_pct</th></tr></thead><tbody></tbody></table></div>
-        <div class="schema-note">Runs directly against the in-browser SQLite database (sql.js/WASM). The heatmap above renders this exact result set — not a separate visualization built on hardcoded numbers.</div>
+        <div class="schema-note">Runs directly against the in-browser SQLite database (sql.js/WASM). The heatmap above renders this exact result set, not a separate visualization built on hardcoded numbers.</div>
       </div>
 
       <div class="code-block">
-        <div class="code-block-head"><span>churn_by_channel.sql — window functions</span><span id="q2-status">not yet run</span></div>
+        <div class="code-block-head"><span>churn_by_channel.sql, window functions</span><span id="q2-status">not yet run</span></div>
         <pre><span class="cm">-- Cumulative churn by acquisition channel, month over month, plus
 -- each month's worst-performing channel. Same SUM-OVER-running-frame
 -- + RANK-OVER-partition pattern as the Aeroplan breakage query on
@@ -302,7 +302,7 @@
 <span class="kw">FROM</span> monthly_churn <span class="kw">ORDER BY</span> acquisition_channel, churn_month_offset;</pre>
         <div class="run-row"><button class="run-btn" id="run-q2" disabled>▶ Run Query</button><span class="exec-time" id="q2-time"></span></div>
         <div class="result-wrap"><table class="result-table" id="result-table-2"><thead><tr><th>acquisition_channel</th><th>churn_month_offset</th><th>churned_count</th><th>cumulative_churned</th><th>rank_in_month</th></tr></thead><tbody></tbody></table></div>
-        <div class="schema-note">SUM() OVER a running frame plus RANK() OVER a monthly partition — real window functions against real rows.</div>
+        <div class="schema-note">SUM() OVER a running frame plus RANK() OVER a monthly partition, real window functions against real rows.</div>
       </div>
     </div>
   </div>
@@ -313,9 +313,9 @@
 
   <div class="thesis">
     <h3>Why this is the same analysis as the Lifecycle Churn System, just priced differently</h3>
-    <p>A cohort retention heatmap and a live-service game's D1/D7/D30 retention curve are answering the identical question: of everyone who arrived in the same window, what fraction is still here N periods later? The gaming side of this portfolio's <b>Lifecycle Churn System</b> tracks that exact shape for Dead by Daylight — rage quits and loss streaks standing in for cancel events, D7/D30 standing in for months-since-signup. The mechanism underneath is a survival curve either way: steep early drop-off from the people who were never really committed, followed by a flattening tail of subscribers (or players) who've crossed whatever threshold makes them sticky.</p>
-    <p>The currencies just look different on the surface. A game studio prices retention in session frequency and eventual monetization; Spotify prices it directly in ARPU — €4.89/month per Premium subscriber, real and disclosed. But the query that produces both charts is structurally the same query: bucket by acquisition cohort, track survivorship over time, aggregate. The heatmap above and the churn dashboard on the gaming side could, with a few column renames, run on each other's schema.</p>
-    <p>The behavioural driver is the same too. Subscribers who survive their first renewal are dramatically less likely to churn later — RevenueCat's data shows renewal rates climbing from a 23–40% range at the first cycle to 56–70% by the third. That's the same "committed player" inflection the churn dashboard is built to detect: once someone crosses the early-risk window, the product has earned a different kind of trust, and the retention curve bends to prove it.</p>
+    <p>A cohort retention heatmap and a live-service game's D1/D7/D30 retention curve are answering the identical question: of everyone who arrived in the same window, what fraction is still here N periods later? The gaming side of this portfolio's <b>Lifecycle Churn System</b> tracks that exact shape for Dead by Daylight, rage quits and loss streaks standing in for cancel events, D7/D30 standing in for months-since-signup. The mechanism underneath is a survival curve either way: steep early drop-off from the people who were never really committed, followed by a flattening tail of subscribers (or players) who've crossed whatever threshold makes them sticky.</p>
+    <p>The currencies just look different on the surface. A game studio prices retention in session frequency and eventual monetization; Spotify prices it directly in ARPU, €4.89/month per Premium subscriber, real and disclosed. But the query that produces both charts is structurally the same query: bucket by acquisition cohort, track survivorship over time, aggregate. The heatmap above and the churn dashboard on the gaming side could, with a few column renames, run on each other's schema.</p>
+    <p>The behavioural driver is the same too. Subscribers who survive their first renewal are dramatically less likely to churn later, RevenueCat's data shows renewal rates climbing from a 23 to 40% range at the first cycle to 56 to 70% by the third. That's the same "committed player" inflection the churn dashboard is built to detect: once someone crosses the early-risk window, the product has earned a different kind of trust, and the retention curve bends to prove it.</p>
   </div>
 
   <div class="sources">
@@ -323,8 +323,8 @@
     <h4 class="real">Real, disclosed (Spotify Q2 2026, reported Aug 4, 2026)</h4>
     <p>Monthly Active Users: 777 million, +12% YoY. Premium Subscribers: 300 million, +7 million net adds, +9% YoY. Premium monthly ARPU: €4.89 (≈$5.69), +7.4% YoY at constant currency. Premium revenue growth: +16% YoY at constant currency. Regional Premium subscriber mix: Europe 36%, North America 25%, Latin America 24%, Rest of World 15%. Source: Spotify Q2 2026 shareholder letter, investor presentation, and earnings call. The 38.6% Premium-to-MAU figure shown above is our own calculation (300M ÷ 777M) from these two disclosed numbers, not a metric Spotify itself reports.</p>
     <h4 class="bench">Industry benchmark, used to calibrate synthetic churn shape (RevenueCat State of Subscription Apps 2026)</h4>
-    <p>Media &amp; Entertainment trial-to-paid conversion spread: 11.5%–69.5% (wide variance category). Annual reactivation rate: ~5%, with monthly subscribers reactivating roughly 4× as fast. Renewal-rate progression across successive cycles: 23–40% median at the first annual renewal, rising to 44–64% at the second and 56–70% at the third. We use the <i>shape</i> of that progression — renewal risk falling the longer a subscriber survives — to build the monthly churn hazard curve in this dataset. We do not apply RevenueCat's annual-plan percentages directly as monthly numbers; Spotify Premium bills monthly, RevenueCat's cited figures are annual-plan-specific, and treating the two as equivalent would overstate the sourcing. The specific per-cohort retention percentages, subscriber population, plan-type mix, and acquisition-channel split are entirely synthetic, generated in-browser, and calibrated only to the general shape described above — not to any Spotify-specific number, because Spotify does not disclose cohort-level retention.</p>
-    <p style="margin-top:10px">The database engine (SQLite via sql.js/WASM), the schema, and every query result on this page are real and re-executable — only the underlying subscriber population is synthetic.</p>
+    <p>Media &amp; Entertainment trial-to-paid conversion spread: 11.5%, 69.5% (wide variance category). Annual reactivation rate: ~5%, with monthly subscribers reactivating roughly 4× as fast. Renewal-rate progression across successive cycles: 23 to 40% median at the first annual renewal, rising to 44 to 64% at the second and 56 to 70% at the third. We use the <i>shape</i> of that progression, renewal risk falling the longer a subscriber survives, to build the monthly churn hazard curve in this dataset. We do not apply RevenueCat's annual-plan percentages directly as monthly numbers; Spotify Premium bills monthly, RevenueCat's cited figures are annual-plan-specific, and treating the two as equivalent would overstate the sourcing. The specific per-cohort retention percentages, subscriber population, plan-type mix, and acquisition-channel split are entirely synthetic, generated in-browser, and calibrated only to the general shape described above, not to any Spotify-specific number, because Spotify does not disclose cohort-level retention.</p>
+    <p style="margin-top:10px">The database engine (SQLite via sql.js/WASM), the schema, and every query result on this page are real and re-executable, only the underlying subscriber population is synthetic.</p>
   </div>
 
   <div class="tags">
@@ -359,9 +359,9 @@ const COHORT_MONTHS = Array.from({length:12}, (_,i)=>`2025-${String(i+1).padStar
 const OBS_END = new Date(2025,11,31);
 
 const MONTH_INSIGHTS = {
-  early: "Month 0 retention already reflects trial drop-off, not just cancellations — RevenueCat's 2026 data shows more than half of trial cancellations happen on day one. A subscriber who never converts counts as inactive from the start, so this cell is really measuring the whole top-of-funnel, not a single churn event.",
-  mid: "This band is the first-renewal risk window. RevenueCat's cross-category data shows renewal rates climbing from a 23–40% range at the first cycle toward 44–64% by the second — subscribers who make it past this point are meaningfully less likely to leave than the raw month-0 number suggests.",
-  late: "By this point the curve is flattening — the subscribers left in this cohort have crossed whatever threshold makes them sticky. This is the same 'committed player' inflection the Lifecycle Churn System looks for on the gaming side: once someone survives the early window, the retention curve bends."
+  early: "Month 0 retention already reflects trial drop-off, not just cancellations, RevenueCat's 2026 data shows more than half of trial cancellations happen on day one. A subscriber who never converts counts as inactive from the start, so this cell is really measuring the whole top-of-funnel, not a single churn event.",
+  mid: "This band is the first-renewal risk window. RevenueCat's cross-category data shows renewal rates climbing from a 23 to 40% range at the first cycle toward 44 to 64% by the second, subscribers who make it past this point are meaningfully less likely to leave than the raw month-0 number suggests.",
+  late: "By this point the curve is flattening, the subscribers left in this cohort have crossed whatever threshold makes them sticky. This is the same 'committed player' inflection the Lifecycle Churn System looks for on the gaming side: once someone survives the early window, the retention curve bends."
 };
 function insightFor(m){ return m<=1 ? MONTH_INSIGHTS.early : m<=4 ? MONTH_INSIGHTS.mid : MONTH_INSIGHTS.late; }
 
@@ -385,7 +385,7 @@ function setStatus(mode, text){
 }
 function showBootError(msg){
   document.getElementById('boot-error-slot').innerHTML =
-    `<div class="boot-error"><b>Couldn't load the SQL engine.</b> ${msg} This artifact loads sql.js (SQLite compiled to WebAssembly) from cdnjs at runtime — if your network blocks that request, the live database can't initialize.</div>`;
+    `<div class="boot-error"><b>Couldn't load the SQL engine.</b> ${msg} This artifact loads sql.js (SQLite compiled to WebAssembly) from cdnjs at runtime, if your network blocks that request, the live database can't initialize.</div>`;
 }
 
 function pickWeighted(items, rand){
@@ -522,7 +522,7 @@ FROM monthly_churn ORDER BY acquisition_channel, churn_month_offset;`;
 let q1Cache = [];
 
 // =================================================================
-// RENDER — heatmap
+// RENDER: heatmap
 // =================================================================
 function retentionColor(pct){
   const hue = Math.max(0, Math.min(120, (pct/45)*120));

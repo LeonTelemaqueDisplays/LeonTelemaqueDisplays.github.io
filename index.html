@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Leon Telemaque — Consumer Behaviour & Product Systems</title>
+<title>Leon Telemaque: Consumer Behaviour & Product Systems</title>
 <style>
   :root {
     --bg: #060607;
@@ -54,7 +54,7 @@
 
   /* The @firecms/neat gradient library renders a small "NEAT" watermark
      baked directly into the canvas pixels (bottom-right) on its free
-     tier — there's no DOM element or config flag to hide it, so it's
+     tier: there's no DOM element or config flag to hide it, so it's
      covered with a small opaque patch matching the page background. */
   #neat-watermark-cover {
     position: fixed;
@@ -421,15 +421,15 @@
   .social-icon:hover { color: var(--text); border-color: var(--text-dim); }
 
   /* Desktop default: icon-only circular button, no visible label, no
-     scroll-affordance chevron — both are mobile-only additions. */
+     scroll-affordance chevron, both are mobile-only additions. */
   .social-icon-label { display: none; }
   .hero-scroll-indicator { display: none; }
 
-  /* HERO RIGHT — portrait bleeds into the dark background rather than
+  /* HERO RIGHT: portrait bleeds into the dark background rather than
      sitting in a framed card, echoing Neelesh Chaudhary's hero layout.
      Height is a definite viewport-relative value (not a percentage of the
      grid row), so it's completely decoupled from hero-left's content
-     height — that's what guarantees the head is never pushed toward, or
+     height, that's what guarantees the head is never pushed toward, or
      past, the top edge on an unusually wide/short window. Width derives
      from that height via aspect-ratio, and the figure is right-aligned
      and bottom-anchored within the column like Neelesh's layout. */
@@ -453,7 +453,7 @@
   }
 
   /* The source photo is a pre-cut PNG (transparent background), so the
-     figure itself floats directly on the page's dark background — no
+     figure itself floats directly on the page's dark background: no
      rectangular photo edge to fade out. */
   .hero-photo-wrap img {
     width: 100%;
@@ -855,7 +855,7 @@
     margin-bottom: 32px;
   }
 
-  /* ── CAROUSEL — native scroll, no arrows ──
+  /* ── CAROUSEL: native scroll, no arrows ──
      Arrow buttons drove a JS transform() + hand-rolled position tracker
      (scroll()/positions{}) that had to recompute card width and cards-
      per-view on every click. That math broke for the fintech track
@@ -874,7 +874,7 @@
   }
   .carousel-track-wrap::-webkit-scrollbar { display: none; }
 
-  /* Edge fades hint that a track scrolls further — pinned to the wrap's
+  /* Edge fades hint that a track scrolls further, pinned to the wrap's
      own box (not the scrolling track) since they're absolutely positioned
      pseudo-elements of the position:relative wrap itself, so they stay
      fixed at the edges regardless of scroll position. JS toggles
@@ -951,7 +951,7 @@
 
   /* Coming-soon cards rest at reduced opacity with a dashed border so an
      empty roadmap placeholder doesn't compete visually with dense real
-     case-study cards — hover brings it back toward full opacity. */
+     case-study cards, hover brings it back toward full opacity. */
   .coming-soon-card.card-visible {
     animation: comingSoonReveal 0.5s cubic-bezier(0.4,0,0.2,1) forwards;
   }
@@ -990,7 +990,7 @@
   .project-card:hover::after { transform: translateX(100%); }
 
   /* All archive carousels use fixed card width instead of percentage-based
-     sizing — keeps every card the same physical size regardless of how many
+     sizing, keeps every card the same physical size regardless of how many
      pieces are in a given track, and scales cleanly as more pieces are added. */
   #fintech-track.carousel-track,
   #systems-track.carousel-track,
@@ -1106,7 +1106,7 @@
   @media (max-width: 768px) {
     .showcase-hero { aspect-ratio: 4/3; max-height: 420px; }
 
-    /* 9 — horizontal swipeable carousel with peek + snap + dots */
+    /* 9: horizontal swipeable carousel with peek + snap + dots */
     .showcase-tile-grid {
       display: flex;
       grid-template-columns: none;
@@ -1165,7 +1165,7 @@
 
   /* ── Mobile: peek carousel ──
      Cards are narrower than the viewport so the next/previous card is
-     visibly peeking in on both sides — a visual cue to swipe, and proof
+     visibly peeking in on both sides, a visual cue to swipe, and proof
      the carousel keeps going even with no arrows on screen. Side padding
      on the track (not the wrap) centers the peek evenly and lets the
      first/last card still snap to center. */
@@ -1573,7 +1573,7 @@
   @media (max-width: 768px) {
     html, body { overflow-x: hidden; }
 
-    /* Nav — drop the anchor-link row and let logo / actions wrap instead of
+    /* Nav, drop the anchor-link row and let logo / actions wrap instead of
        overflowing. Also drop back to position:sticky (solid bg, no blur):
        the fixed+blur nav is a desktop enhancement, but at this width the
        wrapped logo+actions row has a variable height that a fixed nav can't
@@ -1592,17 +1592,17 @@
     .about-grid { grid-template-columns: 1fr; gap: 32px; }
     .photo-wrap { height: 280px; margin: 0 8px; }
 
-    /* Carousel header — let the arrows wrap under the title instead of squeezing */
+    /* Carousel header, let the arrows wrap under the title instead of squeezing */
     .carousel-header { flex-wrap: wrap; gap: 12px; }
   }
 
   /* ══════════════════════════════════════════════
-     MOBILE REDESIGN PASS — items numbered per the
+     MOBILE REDESIGN PASS: items numbered per the
      client punch-list, for traceability.
      ══════════════════════════════════════════════ */
   @media (max-width: 768px) {
 
-    /* 7 / 16 — uniform section padding + consistent inter-section gap.
+    /* 7 / 16, uniform section padding + consistent inter-section gap.
        !important is needed because several sections carry bespoke inline
        padding (Featured Work, Culture & Consumerism Hub); the client asked
        for those to fall in line with everything else on mobile. */
@@ -1610,17 +1610,17 @@
     .contact-section { padding: 32px 20px !important; }
     .brands-strip { padding: 20px 20px !important; }
 
-    /* 10 — typography hierarchy: smaller section headers, distinct eyebrows */
+    /* 10, typography hierarchy: smaller section headers, distinct eyebrows */
     .section-title { font-size: 24px; }
     .section-eyebrow { font-size: 10px; letter-spacing: 0.2em; }
 
-    /* 8 — card thumbnails never overflow horizontally */
+    /* 8: card thumbnails never overflow horizontally */
     .showcase-tile-placeholder img,
     .showcase-hero img,
     .card-photo img,
     img { max-width: 100%; height: auto; }
 
-    /* 17 — clickable cards: minimum tap-friendly height + tap feedback */
+    /* 17, clickable cards: minimum tap-friendly height + tap feedback */
     .showcase-tile, .showcase-hero {
       min-height: 280px;
       transition: transform 0.15s ease, border-color 0.15s ease;
@@ -1630,7 +1630,7 @@
       border-color: var(--text-dim);
     }
 
-    /* 6 — hamburger icon instead of dot grid (overlay itself is already
+    /* 6, hamburger icon instead of dot grid (overlay itself is already
        fullscreen with 44px+ link rows, see .nav-overlay-links a below) */
     .nav-menu-btn {
       display: flex;
@@ -1649,7 +1649,7 @@
     .nav-menu-btn span:nth-child(4) { display: none; }
     .nav-overlay-links a { min-height: 44px; }
 
-    /* 13 — hero social icons: 44px tap target + visible text label */
+    /* 13: hero social icons: 44px tap target + visible text label */
     .hero-social { gap: 12px; }
     .social-icon {
       width: auto;
@@ -1665,7 +1665,7 @@
       color: var(--text-mid);
     }
 
-    /* 15 — pulsing scroll indicator below hero social icons */
+    /* 15: pulsing scroll indicator below hero social icons */
     .hero-scroll-indicator {
       display: flex;
       justify-content: center;
@@ -1675,13 +1675,13 @@
     }
     .hero-scroll-indicator svg { width: 20px; height: 20px; }
 
-    /* 14 — contact headline: fixed size, tighter line-height */
+    /* 14: contact headline: fixed size, tighter line-height */
     .contact-headline, .contact-cta {
       font-size: 32px;
       line-height: 1.2;
     }
 
-    /* 12 — Culture & Consumerism Hub card: stronger legibility gradient */
+    /* 12, Culture & Consumerism Hub card: stronger legibility gradient */
     .culture-hub-hero::after {
       content: '';
       position: absolute;
@@ -1691,7 +1691,7 @@
       z-index: 1;
     }
 
-    /* 11 — brands row: infinite left-scrolling marquee instead of a
+    /* 11: brands row: infinite left-scrolling marquee instead of a
        wrapping list. .brands-marquee-track is display:contents by default
        (desktop); here it becomes the actual scrolling flex row, duplicated
        so the loop reads as continuous. */
@@ -1713,7 +1713,7 @@
       animation: brandsMarquee 22s linear infinite;
     }
 
-    /* 4 — process section: single-open accordion. Title stays visible at
+    /* 4, process section: single-open accordion. Title stays visible at
        18px bold; description collapses to 0 height until the step carries
        .open (toggled by the accordion JS below). Icon shrinks to 40px. */
     .process-grid { grid-template-columns: 1fr; gap: 12px; }
@@ -1762,7 +1762,7 @@
 
 <!-- NAV -->
 <nav id="nav">
-  <a href="#" class="nav-logo">LT — Consumer Systems</a>
+  <a href="#" class="nav-logo">LT: Consumer Systems</a>
   <button class="nav-menu-btn" id="navMenuBtn" aria-label="Open menu" aria-expanded="false">
     <span></span><span></span><span></span><span></span>
   </button>
@@ -1857,11 +1857,11 @@
 <!-- FEATURED WORK -->
 <section class="section" id="featured-work" style="padding-bottom:56px">
   <h2 class="section-title reveal-left">Case Studies</h2>
-  <p class="section-desc reveal-left" style="transition-delay:0.1s">A few pieces pulled from the full archive — real data, real sources, argued from both sides before landing on a verdict.</p>
+  <p class="section-desc reveal-left" style="transition-delay:0.1s">A few pieces pulled from the full archive, real data, real sources, argued from both sides before landing on a verdict.</p>
 
   <a class="showcase-hero" href="/case-studies.html" style="border-style:solid;background:#000">
-    <img src="/consumer/case-studies-cover.jpeg" alt="Collage of case study mockups — Aeroplan, Costco, Hinge apps and a data dashboard" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block">
-    <div class="showcase-hero-label" style="position:absolute;left:24px;bottom:20px;background:rgba(6,6,7,0.75);padding:8px 14px;border-radius:8px">View the Full Case Study Archive — 12 pieces</div>
+    <img src="/consumer/case-studies-cover.jpeg" alt="Collage of case study mockups, Aeroplan, Costco, Hinge apps and a data dashboard" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block">
+    <div class="showcase-hero-label" style="position:absolute;left:24px;bottom:20px;background:rgba(6,6,7,0.75);padding:8px 14px;border-radius:8px">View the Full Case Study Archive: 12 pieces</div>
   </a>
 
   <div class="showcase-tile-grid">
@@ -1903,8 +1903,8 @@
   <div class="career-grid">
     <div class="career-text">
       <h2 class="section-title reveal-left">About Me</h2>
-      <p class="reveal" style="transition-delay:0.1s">Consumer behaviour is not a discipline — it's a lens. I came to product and UX work through studying <strong>why people decide the way they do</strong>, not through a design program.</p>
-      <p class="reveal" style="transition-delay:0.15s">Academic training in Marketing and Consumer Culture at Trent University, applied through self-directed case studies — 12 pieces across CPG, fintech, subscription products, and platform strategy.</p>
+      <p class="reveal" style="transition-delay:0.1s">Consumer behaviour is not a discipline, it's a lens. I came to product and UX work through studying <strong>why people decide the way they do</strong>, not through a design program.</p>
+      <p class="reveal" style="transition-delay:0.15s">Academic training in Marketing and Consumer Culture at Trent University, applied through self-directed case studies, 12 pieces across CPG, fintech, subscription products, and platform strategy.</p>
 
       <div class="career-links reveal" style="transition-delay:0.25s">
         <a href="/case-studies.html" class="career-link">View Case Studies</a>
@@ -1935,11 +1935,11 @@
 <!-- CULTURE & CONSUMERISM HUB LINK -->
 <section class="section" style="padding:0 40px 56px;border-bottom:none">
   <h2 class="section-title reveal-left">Culture & Consumerism Hub</h2>
-  <p class="section-desc reveal-left" style="transition-delay:0.1s">Standalone essays on how history, incentive, and design script the decisions people believe they're making freely. No client, no dataset — just an argument worked all the way through.</p>
+  <p class="section-desc reveal-left" style="transition-delay:0.1s">Standalone essays on how history, incentive, and design script the decisions people believe they're making freely. No client, no dataset, just an argument worked all the way through.</p>
 
   <a class="showcase-hero culture-hub-hero" href="/lab/framework-library.html" style="border-style:solid;background:#000">
     <img src="/lab/images/ford-mustang-cover.jpg" alt="Front grille of a 1965 Ford Mustang Shelby GT350, black and white" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;filter:grayscale(1) contrast(1.05)">
-    <div class="showcase-hero-label" style="position:absolute;left:24px;bottom:20px;background:rgba(6,6,7,0.75);padding:8px 14px;border-radius:8px;z-index:2">Culture & Consumerism Hub — 3 pieces</div>
+    <div class="showcase-hero-label" style="position:absolute;left:24px;bottom:20px;background:rgba(6,6,7,0.75);padding:8px 14px;border-radius:8px;z-index:2">Culture & Consumerism Hub: 3 pieces</div>
   </a>
 </section>
 
@@ -1947,7 +1947,7 @@
 <section class="section" id="process">
   <div class="section-eyebrow reveal-left">How I Work</div>
   <h2 class="section-title reveal-left" style="transition-delay:0.1s">Process? <em>Yeah, I have one.</em></h2>
-  <p class="section-desc reveal-left" style="transition-delay:0.2s">Every case study on this site follows the same four moves — whether it's a two-day teardown or a six-week build.</p>
+  <p class="section-desc reveal-left" style="transition-delay:0.2s">Every case study on this site follows the same four moves, whether it's a two-day teardown or a six-week build.</p>
 
   <div class="process-grid">
     <div class="process-step reveal" style="transition-delay:0s">
@@ -1958,7 +1958,7 @@
     <div class="process-step reveal" style="transition-delay:0.08s">
       <div class="process-icon" style="--pct:65%"></div>
       <div class="process-title">Build the Model</div>
-      <div class="process-desc">SQL, AI-assisted prototyping — construct the analysis from real or rigorously modelled data, not a template.</div>
+      <div class="process-desc">SQL, AI-assisted prototyping, construct the analysis from real or rigorously modelled data, not a template.</div>
     </div>
     <div class="process-step reveal" style="transition-delay:0.16s">
       <div class="process-icon" style="--pct:45%"></div>
@@ -1968,7 +1968,7 @@
     <div class="process-step reveal" style="transition-delay:0.24s">
       <div class="process-icon" style="--pct:15%"></div>
       <div class="process-title">Ship the Verdict</div>
-      <div class="process-desc">A clear recommendation, reasoned on statistical and practical significance — not just correlation.</div>
+      <div class="process-desc">A clear recommendation, reasoned on statistical and practical significance, not just correlation.</div>
     </div>
   </div>
 </section>
@@ -1977,9 +1977,9 @@
 <div class="contact-section reveal">
   <div class="hero-avail" style="justify-content:center;margin-bottom:20px">
     <div class="avail-dot"></div>
-    Available for internship and junior roles — product management and UXR. Toronto based, open to remote and international.
+    Available for internship and junior roles, product management and UXR. Toronto based, open to remote and international.
   </div>
-  <div class="contact-headline">Working on a product —</div>
+  <div class="contact-headline">Working on a product : </div>
   <div class="contact-headline">or trying to understand</div>
   <div class="contact-cta">your users better? <span style="color:var(--text)">Let's talk.</span> 👋</div>
 </div>
@@ -1996,12 +1996,12 @@
   </div>
 </footer>
 
-<!-- No carousel position-tracking JS — .carousel-track-wrap still scrolls
+<!-- No carousel position-tracking JS, .carousel-track-wrap still scrolls
      natively (overflow-x: auto + scroll-snap-type:x proximity), so touch
      drag, trackpad, mouse-wheel-shift, and keyboard arrow-key scrolling all
      work without any hand-rolled position tracking to keep in sync. The
      script below only handles visual polish (progress bar, particles, nav
-     blur, entrance/reveal animations, stat counters) — none of it touches
+     blur, entrance/reveal animations, stat counters), none of it touches
      carousel scroll position. -->
 <script>
 // ── SCROLL PROGRESS ──
@@ -2130,7 +2130,7 @@ for (let i = 0; i < 18; i++) {
 // off-screen. This wires up the edge fades (via .at-start/.at-end/
 // .no-overflow classes toggled on the wrap) and the prev/next arrow
 // buttons in each carousel-header, scrolling by ~90% of the wrap's own
-// width — no per-card-width math, so it can't drift out of sync the way
+// width, no per-card-width math, so it can't drift out of sync the way
 // the old hand-rolled carousel position tracker used to.
 document.querySelectorAll('.carousel-track-wrap').forEach(wrap => {
   const track = wrap.querySelector('.carousel-track');
@@ -2171,7 +2171,7 @@ document.querySelectorAll('.carousel-track-wrap').forEach(wrap => {
 // ── CAROUSEL "PEEK" NUDGE ──
 // One-time hint that a track scrolls further: nudge right ~60px and ease
 // back the first time each track scrolls substantially into view. Never
-// repeats, and skips entirely for prefers-reduced-motion — this is a
+// repeats, and skips entirely for prefers-reduced-motion: this is a
 // hint, not a permanent auto-scroll, so it never fights someone actually
 // reading a card.
 if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -2198,7 +2198,7 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 // ── MOBILE PROCESS ACCORDION ──
 // Below 768px, each process step collapses to its title; tapping opens it
 // (closing any other open step). Desktop keeps the existing full-card
-// hover treatment untouched — this listener only ever adds/removes .open,
+// hover treatment untouched, this listener only ever adds/removes .open,
 // which has no effect above the 768px breakpoint since the CSS rule for it
 // lives inside that media query.
 (function () {

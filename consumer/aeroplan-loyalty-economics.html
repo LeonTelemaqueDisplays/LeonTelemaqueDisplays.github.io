@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Pity Timer Nobody Told You About — Aeroplan Loyalty Economics</title>
+<title>The Pity Timer Nobody Told You About: Aeroplan Loyalty Economics</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
 <style>
   :root{
@@ -123,7 +123,7 @@
   .why-head{ font-size:11.5px; letter-spacing:0.04em; text-transform:uppercase; color:var(--text-dim); margin:18px 0 8px; }
   .why-list{ list-style:none; }
   .why-list li{ font-size:12.5px; color:var(--text-dim); padding-left:14px; position:relative; margin-bottom:8px; }
-  .why-list li::before{ content:"—"; position:absolute; left:0; color:var(--text-faint); }
+  .why-list li::before{ content:", "; position:absolute; left:0; color:var(--text-faint); }
 
   .insight{ margin-top:16px; padding:12px 14px; background:rgba(224,90,76,0.07); border:1px solid var(--critical-dim); border-radius:6px; }
   .insight .l{ font-family:var(--mono); font-size:9.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--critical); margin-bottom:6px; }
@@ -188,7 +188,7 @@
       <div style="font-family:var(--mono);font-size:10.5px;letter-spacing:0.1em;color:var(--blue);text-transform:uppercase;margin-bottom:6px">[ Live SQL Query Console ]</div>
       <h1>The Pity Timer Nobody Told You About</h1>
       <div class="kicker-line">
-        A breakage, tier-design, and redemption-value teardown of <b>Air Canada's Aeroplan</b> program —
+        A breakage, tier-design, and redemption-value teardown of <b>Air Canada's Aeroplan</b> program : 
         the only major Canadian loyalty scheme that publishes enough real data (elite tier thresholds, an
         18-month expiry policy, and a company-disclosed breakage rate) to model honestly instead of guessing.
       </div>
@@ -196,7 +196,7 @@
     <div class="status-block">
       <div class="live-pill loading" id="db-status"><span class="live-dot"></span><span id="db-status-text">LOADING SQLITE (WASM)…</span></div>
       <button class="regen-btn" id="regen-btn" disabled>⟳ Regenerate synthetic population</button>
-      <div class="db-meta" id="db-meta">—</div>
+      <div class="db-meta" id="db-meta">: </div>
     </div>
   </div>
 
@@ -207,24 +207,24 @@
   </div>
 
   <div class="kpi-top">
-    <div class="cell"><div class="num">~10%</div><div class="lbl">Air Canada–disclosed breakage rate</div></div>
+    <div class="cell"><div class="num">~10%</div><div class="lbl">Air Canada: disclosed breakage rate</div></div>
     <div class="cell"><div class="num">18mo</div><div class="lbl">Points expiry window (resumes Nov 30, 2026)</div></div>
     <div class="cell"><div class="num">10M+</div><div class="lbl">Active Aeroplan members</div></div>
   </div>
-  <div class="src-line">Sources: Air Canada Q2 2026 earnings call · Air Canada 2021 Consolidated Financial Statements · aircanada.com program notices · 2025–2026</div>
+  <div class="src-line">Sources: Air Canada Q2 2026 earnings call · Air Canada 2021 Consolidated Financial Statements · aircanada.com program notices · 2025 to 2026</div>
 
   <div class="kpi-bottom">
     <div class="cell"><div class="eyebrow2">Elite tiers</div><div class="val">5</div><div class="sub">25K → Super&nbsp;Elite</div><div class="src">Aeroplan program terms, 2026</div></div>
     <div class="cell"><div class="eyebrow2">Entry threshold</div><div class="val">25,000 SQC</div><div class="sub">≈ $6,250 Flex spend</div><div class="src">Milesopedia · FlyerTalk, 2026</div></div>
-    <div class="cell"><div class="eyebrow2">Redemption range</div><div class="val">0.7¢–2.0¢</div><div class="sub">merchandise → premium partner</div><div class="src">Prince of Travel, Q2 2026</div></div>
+    <div class="cell"><div class="eyebrow2">Redemption range</div><div class="val">0.7¢: 2.0¢</div><div class="sub">merchandise → premium partner</div><div class="src">Prince of Travel, Q2 2026</div></div>
     <div class="cell"><div class="eyebrow2">Blended realized value</div><div class="val">~1.6¢/pt</div><div class="sub">across 50+ booked flights</div><div class="src">NerdWallet analysis, 2026</div></div>
     <div class="cell"><div class="eyebrow2">Expiry resumes</div><div class="val">Nov 30 '26</div><div class="sub">ends 6-yr pandemic pause</div><div class="src">Air Canada notice, Nov 2025</div></div>
   </div>
 
   <div class="parallel">
-    <div class="parallel-head"><h3>Reward gate comparison — status ladder vs. pity ladder</h3><span>same mechanism, different industry</span></div>
+    <div class="parallel-head"><h3>Reward gate comparison, status ladder vs. pity ladder</h3><span>same mechanism, different industry</span></div>
     <div class="gate-row">
-      <div class="gate-label"><span>Aeroplan Elite — Status Qualifying Credits</span><b>50,000 / 125,000 SQC</b></div>
+      <div class="gate-label"><span>Aeroplan Elite: Status Qualifying Credits</span><b>50,000 / 125,000 SQC</b></div>
       <div class="gate-track">
         <div class="gate-fill aero" style="width:40%"></div>
         <div class="gate-marks">
@@ -237,7 +237,7 @@
       </div>
     </div>
     <div class="gate-row">
-      <div class="gate-label"><span>Genshin Impact — pulls since last 5★</span><b>62 / 90 pulls (avg)</b></div>
+      <div class="gate-label"><span>Genshin Impact: pulls since last 5★</span><b>62 / 90 pulls (avg)</b></div>
       <div class="gate-track">
         <div class="gate-fill gacha" style="width:69%"></div>
         <div class="gate-marks">
@@ -248,7 +248,7 @@
     </div>
     <div class="parallel-note">
       Both systems obscure the true cost of the next reward until you're already committed to chasing it.
-      Aeroplan's SQC ladder and Genshin's pity counter are both <b>variable-ratio gates dressed as progress bars</b> —
+      Aeroplan's SQC ladder and Genshin's pity counter are both <b>variable-ratio gates dressed as progress bars</b> : 
       neither program publishes the exact value of what you're accumulating. See <b>Economy Architecture</b> and
       <b>Mid-Loop Engagement Architecture</b> on the game-systems side of this portfolio for the pity-timer half
       of this argument.
@@ -274,7 +274,7 @@
   <div class="tab-panel" id="tab-sql">
     <div class="sql-grid">
       <div class="code-block">
-        <div class="code-block-head"><span>breakage_by_tier.sql — CTE</span><span id="q1-status">not yet run</span></div>
+        <div class="code-block-head"><span>breakage_by_tier.sql, CTE</span><span id="q1-status">not yet run</span></div>
         <pre><span class="cm">-- Breakage rate by tier: the share of points issued to members
 -- in a given tier that are never redeemed (expired or dormant).
 -- Same "obscured value" pattern as a gacha pity counter --
@@ -297,11 +297,11 @@
 <span class="kw">FROM</span> tier_points <span class="kw">ORDER BY</span> breakage_rate_pct <span class="kw">DESC</span>;</pre>
         <div class="run-row"><button class="run-btn" id="run-q1" disabled>▶ Run Query</button><span class="exec-time" id="q1-time"></span></div>
         <div class="result-wrap"><table class="result-table" id="result-table-1"><thead><tr><th>tier</th><th>points_earned</th><th>points_redeemed</th><th>points_expired</th><th>breakage_rate_pct</th></tr></thead><tbody></tbody></table></div>
-        <div class="schema-note">Runs directly against the in-browser SQLite database (sql.js/WASM) built on page load — real CTE, real GROUP BY, real output.</div>
+        <div class="schema-note">Runs directly against the in-browser SQLite database (sql.js/WASM) built on page load, real CTE, real GROUP BY, real output.</div>
       </div>
 
       <div class="code-block">
-        <div class="code-block-head"><span>cumulative_breakage.sql — window function</span><span id="q2-status">not yet run</span></div>
+        <div class="code-block-head"><span>cumulative_breakage.sql, window function</span><span id="q2-status">not yet run</span></div>
         <pre><span class="cm">-- Cumulative breakage by tier, month over month, plus each
 -- month's breakage-rank across tiers. Demonstrates the same
 -- "value evaporates quietly" pattern as a running pity counter
@@ -323,7 +323,7 @@
 <span class="kw">FROM</span> monthly_expiry <span class="kw">ORDER BY</span> tier, month;</pre>
         <div class="run-row"><button class="run-btn" id="run-q2" disabled>▶ Run Query</button><span class="exec-time" id="q2-time"></span></div>
         <div class="result-wrap"><table class="result-table" id="result-table-2"><thead><tr><th>tier</th><th>month</th><th>points_expired_month</th><th>cumulative_expired</th><th>rank_in_month</th></tr></thead><tbody></tbody></table></div>
-        <div class="schema-note">SUM() OVER a running frame plus RANK() OVER a monthly partition — real window functions, not a JS running total.</div>
+        <div class="schema-note">SUM() OVER a running frame plus RANK() OVER a monthly partition, real window functions, not a JS running total.</div>
       </div>
     </div>
   </div>
@@ -336,20 +336,20 @@
 
   <div class="thesis">
     <h3>Why this sits next to Genshin Impact, not just other loyalty programs</h3>
-    <p>A pity counter and a status ladder solve the same design problem: how do you keep someone spending toward a reward whose exact value they can't see? Genshin's soft/hard pity hides the true odds behind a counter that only becomes legible after dozens of pulls. Aeroplan's SQC ladder does the same thing with money instead of pulls — the jump from 25K to Super Elite (125,000 SQC) isn't priced anywhere on Aeroplan's site in dollars, only in credits.</p>
+    <p>A pity counter and a status ladder solve the same design problem: how do you keep someone spending toward a reward whose exact value they can't see? Genshin's soft/hard pity hides the true odds behind a counter that only becomes legible after dozens of pulls. Aeroplan's SQC ladder does the same thing with money instead of pulls, the jump from 25K to Super Elite (125,000 SQC) isn't priced anywhere on Aeroplan's site in dollars, only in credits.</p>
     <p>The breakage data makes the parallel sharper. In both systems, the people who understand the mechanism best extract close to full value. Everyone else pays the "obscured value tax": in Genshin it's players who quit pulling right before soft pity; in Aeroplan it's the ~84% of the member base with no status who let points expire because there was never a status deadline forcing them to look at the balance.</p>
-    <p>This is the same argument made on the game-systems side of this portfolio in <b>Mid-Loop Engagement Architecture</b> and <b>Economy Architecture</b> — reward pacing, scarcity, and threshold design aren't cosmetic differences between industries. They're the same three levers, priced in different currencies.</p>
+    <p>This is the same argument made on the game-systems side of this portfolio in <b>Mid-Loop Engagement Architecture</b> and <b>Economy Architecture</b>, reward pacing, scarcity, and threshold design aren't cosmetic differences between industries. They're the same three levers, priced in different currencies.</p>
   </div>
 
   <div class="thesis" style="margin-top:16px">
     <h3>The strongest objection to this framing</h3>
-    <p>No one spends real money for a chance at Aeroplan status the way a player spends real money for a chance at a 5★ pull. SQC is earned through purchases most members would make anyway — flights, a co-branded card, everyday spend. By that logic, breakage isn't extraction, it's just forgetfulness, and the gacha comparison is a stretch.</p>
-    <p>That objection holds cleanly for members who never intended to chase status — most of the base, and most of the breakage. It holds less well for the tier-chasing minority: the query results above show they are making deliberate incremental decisions (which card, which route, which partner redemption) specifically to clear a threshold whose dollar value Aeroplan never publishes. For that group the mechanism is closer than it first looks — informational asymmetry doing the same work a hidden pull-rate does in a gacha system, just denominated in credits instead of pulls.</p>
+    <p>No one spends real money for a chance at Aeroplan status the way a player spends real money for a chance at a 5★ pull. SQC is earned through purchases most members would make anyway, flights, a co-branded card, everyday spend. By that logic, breakage isn't extraction, it's just forgetfulness, and the gacha comparison is a stretch.</p>
+    <p>That objection holds cleanly for members who never intended to chase status, most of the base, and most of the breakage. It holds less well for the tier-chasing minority: the query results above show they are making deliberate incremental decisions (which card, which route, which partner redemption) specifically to clear a threshold whose dollar value Aeroplan never publishes. For that group the mechanism is closer than it first looks, informational asymmetry doing the same work a hidden pull-rate does in a gacha system, just denominated in credits instead of pulls.</p>
   </div>
 
   <div class="sources">
     <div class="l">Data sources</div>
-    <p>Air Canada Q2 2026 earnings call (breakage rate disclosure, Craig Landry, President of Aeroplan) · Air Canada 2021 Consolidated Financial Statements (breakage &amp; deferred revenue accounting methodology) · Aeroplan Elite Status program terms via Milesopedia and FlyerTalk (SQC thresholds, 2026) · Air Canada / Open Jaw / Prince of Travel / FrequentMiler (18-month points expiry policy, resuming Nov 30, 2026) · Prince of Travel Quarterly Valuation Update, Q2 2026 (2.0¢/pt CAD redemption valuation) · NerdWallet Canada, 2026 (1.60¢/pt blended average across 50+ booked flights) · Prince of Travel Points Valuations (0.667¢/pt merchandise/gift-card floor). Member population, transactions, and tier assignment are a synthetic dataset generated in-browser and calibrated to the public ~10% blended breakage figure — not official Aeroplan reporting. The database engine (SQLite via sql.js/WASM) and every query result are real and re-executable.</p>
+    <p>Air Canada Q2 2026 earnings call (breakage rate disclosure, Craig Landry, President of Aeroplan) · Air Canada 2021 Consolidated Financial Statements (breakage &amp; deferred revenue accounting methodology) · Aeroplan Elite Status program terms via Milesopedia and FlyerTalk (SQC thresholds, 2026) · Air Canada / Open Jaw / Prince of Travel / FrequentMiler (18-month points expiry policy, resuming Nov 30, 2026) · Prince of Travel Quarterly Valuation Update, Q2 2026 (2.0¢/pt CAD redemption valuation) · NerdWallet Canada, 2026 (1.60¢/pt blended average across 50+ booked flights) · Prince of Travel Points Valuations (0.667¢/pt merchandise/gift-card floor). Member population, transactions, and tier assignment are a synthetic dataset generated in-browser and calibrated to the public ~10% blended breakage figure, not official Aeroplan reporting. The database engine (SQLite via sql.js/WASM) and every query result are real and re-executable.</p>
   </div>
 
   <div class="tags">
@@ -363,11 +363,11 @@
 
 <script>
 // =================================================================
-// CONFIG — tiers, distributions, and per-tier value assumptions
+// CONFIG: tiers, distributions, and per-tier value assumptions
 // (the only hand-set inputs; everything else is generated + queried)
 // =================================================================
 const TIERS = [
-  { key:'none', name:'No Status (Base Member)', sqc:0,      share:0.84,  breakage:0.17,   cpp:0.9, meanEarn:8500,  spendNote:'no SQC requirement — card & retail earn only' },
+  { key:'none', name:'No Status (Base Member)', sqc:0,      share:0.84,  breakage:0.17,   cpp:0.9, meanEarn:8500,  spendNote:'no SQC requirement, card & retail earn only' },
   { key:'25k',  name:'Aeroplan 25K',             sqc:25000,  share:0.09,  breakage:0.07,   cpp:1.3, meanEarn:42000, spendNote:'≈ $6,250 Flex fare spend' },
   { key:'35k',  name:'Aeroplan 35K',             sqc:35000,  share:0.035, breakage:0.05,   cpp:1.6, meanEarn:68000, spendNote:'≈ $8,750 Flex fare spend' },
   { key:'50k',  name:'Aeroplan 50K',             sqc:50000,  share:0.02,  breakage:0.03,   cpp:1.8, meanEarn:95000, spendNote:'≈ $12,500 Flex fare spend' },
@@ -379,12 +379,12 @@ const MARKETS = ['Toronto','Vancouver','Montreal','Calgary','Ottawa','Winnipeg',
 const CHANNELS = ['credit_card','flight','partner','estore'];
 
 const INSIGHTS = {
-  none: "Base members carry no SQC deadline, no milestone countdown, and no visible \"you're this close\" signal — the exact opposite of a pity counter. Where Genshin shows pulls-since-last-5★ constantly, Aeroplan shows a base member nothing that creates urgency. Silence, not stinginess, drives this tier's breakage.",
-  '25k': "25K is reachable without flying (Everyday Status Qualification), drawing members who chase status through spend alone — engaged enough to track a threshold, not yet fluent in redemption strategy. The same profile as a player who knows soft pity exists but hasn't learned to time pulls around it.",
+  none: "Base members carry no SQC deadline, no milestone countdown, and no visible \"you're this close\" signal, the exact opposite of a pity counter. Where Genshin shows pulls-since-last-5★ constantly, Aeroplan shows a base member nothing that creates urgency. Silence, not stinginess, drives this tier's breakage.",
+  '25k': "25K is reachable without flying (Everyday Status Qualification), drawing members who chase status through spend alone, engaged enough to track a threshold, not yet fluent in redemption strategy. The same profile as a player who knows soft pity exists but hasn't learned to time pulls around it.",
   '35k': "Once a member clears one status renewal, SQC becomes legible the way pity count becomes legible after your first hard pity. Breakage drops sharply here, mirroring how players who've hit hard pity once rarely waste pulls carelessly again.",
   '50k': "Star Alliance Gold kicks in at 50K, adding a second, airline-agnostic reason to stay engaged. Comparable to a game layering a battle pass on top of an existing pity system to compound retention pressure.",
-  '75k': "75K members get free Preferred Seats and heavier baggage allowances — immediate, felt benefits rather than deferred ones. Immediate reward feedback is exactly why breakage keeps falling as tiers get harder to reach.",
-  se: "125,000 SQC (≈$31,250 in Flex fares) buys near-total fluency in how the program prices its own rewards — the Aeroplan equivalent of a completionist who tracks pity to the exact pull. The obscured-value tax stops working on someone who's done the math."
+  '75k': "75K members get free Preferred Seats and heavier baggage allowances, immediate, felt benefits rather than deferred ones. Immediate reward feedback is exactly why breakage keeps falling as tiers get harder to reach.",
+  se: "125,000 SQC (≈$31,250 in Flex fares) buys near-total fluency in how the program prices its own rewards, the Aeroplan equivalent of a completionist who tracks pity to the exact pull. The obscured-value tax stops working on someone who's done the math."
 };
 
 // =================================================================
@@ -416,11 +416,11 @@ function setStatus(mode, text){
 
 function showBootError(msg){
   document.getElementById('boot-error-slot').innerHTML =
-    `<div class="boot-error"><b>Couldn't load the SQL engine.</b> ${msg} This artifact loads sql.js (SQLite compiled to WebAssembly) from cdnjs at runtime — if your network blocks that request, the live database can't initialize. Everything else on the page still reflects the intended design; only the live query execution is affected.</div>`;
+    `<div class="boot-error"><b>Couldn't load the SQL engine.</b> ${msg} This artifact loads sql.js (SQLite compiled to WebAssembly) from cdnjs at runtime, if your network blocks that request, the live database can't initialize. Everything else on the page still reflects the intended design; only the live query execution is affected.</div>`;
 }
 
 // =================================================================
-// BUILD DATABASE — real INSERTs into a real SQLite instance
+// BUILD DATABASE: real INSERTs into a real SQLite instance
 // =================================================================
 function buildDatabase(){
   const rand = mulberry32(seedCounter++);
@@ -550,7 +550,7 @@ function flagFor(pct){
 }
 
 // =================================================================
-// RENDER — Tier Explorer (query 1 drives the ranked list)
+// RENDER: Tier Explorer (query 1 drives the ranked list)
 // =================================================================
 const Q1 = `
 WITH tier_points AS (
@@ -653,7 +653,7 @@ function selectTier(tierKey){
     <div class="detail-sub">${t.sqc.toLocaleString()} SQC threshold · ${t.spendNote}</div>
     <div class="detail-query-tag">⚡ live SQL · ${memberCount} members · ${cashRes.ms}ms</div>
 
-    <div class="detail-score-head">Risk factor breakdown — composite breakage ${breakagePct.toFixed(1)}%</div>
+    <div class="detail-score-head">Risk factor breakdown, composite breakage ${breakagePct.toFixed(1)}%</div>
     <div class="factor"><div class="factor-row"><span>Engagement Gap</span><b>${engagementGap}</b></div><div class="factor-track"><div class="factor-fill" style="width:${engagementGap}%; background:var(--critical)"></div></div></div>
     <div class="factor"><div class="factor-row"><span>Member Fluency</span><b>${memberFluency}</b></div><div class="factor-track"><div class="factor-fill" style="width:${memberFluency}%; background:var(--blue)"></div></div></div>
     <div class="factor"><div class="factor-row"><span>Value Left on Table</span><b>${valueLeftOnTable}</b></div><div class="factor-track"><div class="factor-fill" style="width:${valueLeftOnTable}%; background:var(--high)"></div></div></div>
@@ -668,9 +668,9 @@ function selectTier(tierKey){
 
     <div class="why-head">Why breakage sits here</div>
     <ul class="why-list">
-      <li>Realized redemption value modeled at ${t.cpp}¢/pt CAD — ${t.key==='none' ? 'near the merchandise/gift-card floor Prince of Travel tracks' : t.key==='se' ? "above Prince of Travel's blended 2.0¢/pt valuation" : 'between the merchandise floor and premium partner ceiling'}.</li>
+      <li>Realized redemption value modeled at ${t.cpp}¢/pt CAD, ${t.key==='none' ? 'near the merchandise/gift-card floor Prince of Travel tracks' : t.key==='se' ? "above Prince of Travel's blended 2.0¢/pt valuation" : 'between the merchandise floor and premium partner ceiling'}.</li>
       <li>${t.key==='none' ? 'No SQC deadline exists at this tier, so there is no annual forcing function to redeem before status resets.' : 'Status must be re-earned each qualification year, creating a recurring deadline that pulls points out of dormancy.'}</li>
-      <li>Share of modeled member base: ${(t.share*100).toFixed(1)}% — ${t.key==='none' ? 'the large base population is why its breakage rate dominates the program-wide ~10% figure' : 'a small, highly engaged population with proportionally minor impact on blended breakage'}.</li>
+      <li>Share of modeled member base: ${(t.share*100).toFixed(1)}%, ${t.key==='none' ? 'the large base population is why its breakage rate dominates the program-wide ~10% figure' : 'a small, highly engaged population with proportionally minor impact on blended breakage'}.</li>
     </ul>
 
     <div class="insight"><div class="l">Consumer Behaviour Insight</div><p>${INSIGHTS[tierKey]}</p></div>
@@ -678,7 +678,7 @@ function selectTier(tierKey){
 }
 
 // =================================================================
-// RENDER — SQL Console
+// RENDER: SQL Console
 // =================================================================
 function renderResultTable(tableId, columns, rows, formatCell){
   const table = document.getElementById(tableId);
@@ -713,7 +713,7 @@ function runQuery2(){
 }
 
 // =================================================================
-// RENDER — Schema tab (live introspection, not static text)
+// RENDER: Schema tab (live introspection, not static text)
 // =================================================================
 function renderSchema(){
   const tables = runSQL("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;").rows.map(r=>r[0]);
