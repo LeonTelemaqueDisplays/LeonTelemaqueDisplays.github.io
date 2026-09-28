@@ -6,6 +6,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
+<script type="module">
+  import 'https://esm.sh/number-flow';
+</script>
 <title>GTA Auto Insurance Risk Monitor</title>
 <style>
   :root {
@@ -592,29 +595,96 @@
     line-height: 1.7;
   }
 
+  /* ===== MOTION: aurora glow, spotlight hover, stagger, click-spark, number-flow ===== */
+  .topbar { position: relative; overflow: hidden; }
+  .topbar-glow { position: absolute; inset: -60% -5% auto -5%; height: 260px; pointer-events: none; z-index: 0; }
+  .topbar-glow span { position: absolute; width: 280px; height: 280px; border-radius: 50%; filter: blur(60px); opacity: 0.30; mix-blend-mode: screen; animation: auroraDrift 16s ease-in-out infinite alternate; }
+  .topbar-glow span:nth-child(1) { background: var(--red); left: -60px; top: 20px; }
+  .topbar-glow span:nth-child(2) { background: var(--amber); left: 38%; top: -20px; animation-delay: -5s; }
+  .topbar-glow span:nth-child(3) { background: var(--teal); right: -80px; top: 10px; animation-delay: -10s; }
+  .topbar > *:not(.topbar-glow) { position: relative; z-index: 1; }
+  @keyframes auroraDrift {
+    0% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(30px, 15px) scale(1.12); }
+    100% { transform: translate(-24px, 8px) scale(0.94); }
+  }
+  @media (prefers-reduced-motion: reduce) { .topbar-glow span { animation: none; } }
+
+  .spot { position: relative; }
+  .spot::after {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(220px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.07), transparent 70%);
+    opacity: 0;
+    transition: opacity .25s ease;
+    pointer-events: none;
+  }
+  .spot:hover::after { opacity: 1; }
+
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .summary-cell { animation: fadeInUp .5s ease both; }
+  .summary-cell:nth-child(1) { animation-delay: .02s; }
+  .summary-cell:nth-child(2) { animation-delay: .08s; }
+  .summary-cell:nth-child(3) { animation-delay: .14s; }
+  .summary-cell:nth-child(4) { animation-delay: .20s; }
+  .summary-cell:nth-child(5) { animation-delay: .26s; }
+
+  .vehicle-row { animation: fadeInUp .45s ease both; }
+  .vehicle-row:nth-child(1) { animation-delay: .03s; }
+  .vehicle-row:nth-child(2) { animation-delay: .07s; }
+  .vehicle-row:nth-child(3) { animation-delay: .11s; }
+  .vehicle-row:nth-child(4) { animation-delay: .15s; }
+  .vehicle-row:nth-child(5) { animation-delay: .19s; }
+  .vehicle-row:nth-child(6) { animation-delay: .23s; }
+  .vehicle-row:nth-child(7) { animation-delay: .27s; }
+  .vehicle-row:nth-child(8) { animation-delay: .31s; }
+  .vehicle-row:nth-child(9) { animation-delay: .35s; }
+  .vehicle-row:nth-child(10) { animation-delay: .39s; }
+
+  .detail-stat { animation: fadeInUp .4s ease both; }
+  .detail-stat:nth-child(1) { animation-delay: .04s; }
+  .detail-stat:nth-child(2) { animation-delay: .09s; }
+  .detail-stat:nth-child(3) { animation-delay: .14s; }
+
+  .spark-particle {
+    position: fixed;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    animation: sparkFly .5s ease-out forwards;
+  }
+  @keyframes sparkFly {
+    to { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+  }
+
+  number-flow { line-height: 1; font-variant-numeric: tabular-nums; }
+
 </style>
 </head>
 <body>
 
 <!-- TOP BAR -->
 <div class="topbar">
+  <div class="topbar-glow" aria-hidden="true"><span></span><span></span><span></span></div>
   <div class="topbar-left">
     <div class="topbar-title">GTA Auto Insurance Risk Monitor</div>
     <div class="topbar-badge">● Live Data</div>
   </div>
   <div class="topbar-right">
     <div class="topbar-stat">
-      <div class="topbar-stat-value" style="color:var(--red)">$3,997</div>
+      <div class="topbar-stat-value" style="color:var(--red)"><number-flow data-nf-value="3997" data-nf-prefix="$"></number-flow></div>
       <div class="topbar-stat-label">Toronto Avg Premium / yr</div>
     </div>
     <div class="topbar-divider"></div>
     <div class="topbar-stat">
-      <div class="topbar-stat-value" style="color:var(--amber)">$3,848</div>
+      <div class="topbar-stat-value" style="color:var(--amber)"><number-flow data-nf-value="3848" data-nf-prefix="$"></number-flow></div>
       <div class="topbar-stat-label">Brampton Avg Premium / yr</div>
     </div>
     <div class="topbar-divider"></div>
     <div class="topbar-stat">
-      <div class="topbar-stat-value">$2,120</div>
+      <div class="topbar-stat-value"><number-flow data-nf-value="2120" data-nf-prefix="$"></number-flow></div>
       <div class="topbar-stat-label">Ontario Avg Premium / yr</div>
     </div>
     <div class="topbar-divider"></div>
@@ -624,27 +694,27 @@
 
 <!-- SUMMARY STRIP -->
 <div class="summary-strip">
-  <div class="summary-cell red">
+  <div class="summary-cell red spot">
     <div class="summary-label">GTA Premium Avg</div>
-    <div class="summary-value red">$2,765</div>
+    <div class="summary-value red"><number-flow data-nf-value="2765" data-nf-prefix="$"></number-flow></div>
     <div class="summary-sub">+32% above Ontario avg<br>FSRA data, 2025</div>
   </div>
-  <div class="summary-cell red">
+  <div class="summary-cell red spot">
     <div class="summary-label">GTA Theft Claims 2025</div>
-    <div class="summary-value red">$485M</div>
+    <div class="summary-value red"><number-flow data-nf-value="485000000" data-nf-prefix="$" data-nf-format='{"notation":"compact","maximumFractionDigits":0}'></number-flow></div>
     <div class="summary-sub">Down 33% from 2024 peak<br>IBC · Insurance Bureau of Canada</div>
   </div>
-  <div class="summary-cell amber">
+  <div class="summary-cell amber spot">
     <div class="summary-label">Ontario Thefts 2025</div>
-    <div class="summary-value amber">19,319</div>
+    <div class="summary-value amber"><number-flow data-nf-value="19319"></number-flow></div>
     <div class="summary-sub">Down 22% from 2024 peak<br>Équité Association</div>
   </div>
-  <div class="summary-cell amber">
+  <div class="summary-cell amber spot">
     <div class="summary-label">SUV Share of Thefts</div>
-    <div class="summary-value amber">46%</div>
+    <div class="summary-value amber"><number-flow data-nf-value="0.46" data-nf-format='{"style":"percent","maximumFractionDigits":0}'></number-flow></div>
     <div class="summary-sub">SUVs dominate Ontario theft list<br>Équité Association 2024</div>
   </div>
-  <div class="summary-cell neutral">
+  <div class="summary-cell neutral spot">
     <div class="summary-label">Rate Trend 2026</div>
     <div class="summary-value" style="font-size:14px;padding-top:3px">Stabilising</div>
     <div class="summary-sub">+5 to 6% expected increases<br>Rates.ca Auto Rate Index</div>
@@ -932,15 +1002,64 @@ function getRiskColor(level) {
   return '#9b59b6';
 }
 
+function clickSpark(x, y, color) {
+  const n = 10;
+  for (let i = 0; i < n; i++) {
+    const angle = (Math.PI * 2 * i) / n;
+    const dist = 30 + Math.random() * 20;
+    const dx = Math.cos(angle) * dist;
+    const dy = Math.sin(angle) * dist;
+    const spark = document.createElement('span');
+    spark.className = 'spark-particle';
+    spark.style.left = x + 'px';
+    spark.style.top = y + 'px';
+    spark.style.background = color;
+    spark.style.setProperty('--dx', dx + 'px');
+    spark.style.setProperty('--dy', dy + 'px');
+    document.body.appendChild(spark);
+    spark.addEventListener('animationend', () => spark.remove());
+  }
+}
+
+document.addEventListener('mousemove', (e) => {
+  const el = e.target.closest('.spot');
+  if (!el) return;
+  const rect = el.getBoundingClientRect();
+  el.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+  el.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+});
+
+function initNumberFlow(el, value, opts) {
+  if (!el) return;
+  opts = opts || {};
+  if (opts.format) el.format = opts.format;
+  if (opts.prefix) el.numberPrefix = opts.prefix;
+  if (opts.suffix) el.numberSuffix = opts.suffix;
+  el.update(value);
+}
+
+function initAllNumberFlows(root) {
+  root = root || document;
+  root.querySelectorAll('number-flow[data-nf-value]').forEach(el => {
+    const value = parseFloat(el.dataset.nfValue);
+    let format;
+    try { format = el.dataset.nfFormat ? JSON.parse(el.dataset.nfFormat) : undefined; } catch (e) {}
+    initNumberFlow(el, value, { format: format, prefix: el.dataset.nfPrefix, suffix: el.dataset.nfSuffix });
+  });
+}
+
+customElements.whenDefined('number-flow').then(() => initAllNumberFlows());
+
 function renderVehicleList() {
   const list = document.getElementById('vehicle-list');
   vehicles.forEach(v => {
     const row = document.createElement('div');
-    row.className = 'vehicle-row';
+    row.className = 'vehicle-row spot';
     row.id = 'row-' + v.rank;
-    row.onclick = () => selectVehicle(v.rank);
 
     const color = getRiskColor(v.riskLevel);
+
+    row.onclick = (e) => { clickSpark(e.clientX, e.clientY, color); selectVehicle(v.rank); };
 
     row.innerHTML = `
       <div class="vehicle-rank">${String(v.rank).padStart(2,'0')}</div>
@@ -954,7 +1073,7 @@ function renderVehicleList() {
         <div class="risk-segment repair" style="width:${v.repair * 0.7}%"></div>
       </div>
       <div>
-        <div class="risk-score" style="color:${color}">${v.riskScore}</div>
+        <div class="risk-score" style="color:${color}"><number-flow data-nf-value="${v.riskScore}"></number-flow></div>
         <div class="risk-label" style="color:${color}">${v.riskLevel}</div>
       </div>
     `;
@@ -986,43 +1105,43 @@ function selectVehicle(rank) {
     </div>
 
     <div class="risk-visual">
-      <div class="risk-visual-label">Risk Factor Breakdown, Composite Score ${v.riskScore}/100</div>
+      <div class="risk-visual-label">Risk Factor Breakdown, Composite Score <number-flow data-nf-value="${v.riskScore}"></number-flow>/100</div>
       <div class="risk-bars">
         <div class="risk-bar-row">
           <div class="risk-bar-label">Theft Risk</div>
           <div class="risk-bar-track"><div class="risk-bar-fill theft" style="width:0%" data-target="${v.theft}"></div></div>
-          <div class="risk-bar-value" style="color:var(--red)">${v.theft}</div>
+          <div class="risk-bar-value" style="color:var(--red)"><number-flow data-nf-value="${v.theft}"></number-flow></div>
         </div>
         <div class="risk-bar-row">
           <div class="risk-bar-label">Driver Profile</div>
           <div class="risk-bar-track"><div class="risk-bar-fill driver" style="width:0%" data-target="${v.driver}"></div></div>
-          <div class="risk-bar-value" style="color:var(--amber)">${v.driver}</div>
+          <div class="risk-bar-value" style="color:var(--amber)"><number-flow data-nf-value="${v.driver}"></number-flow></div>
         </div>
         <div class="risk-bar-row">
           <div class="risk-bar-label">Repair Cost</div>
           <div class="risk-bar-track"><div class="risk-bar-fill repair" style="width:0%" data-target="${v.repair}"></div></div>
-          <div class="risk-bar-value" style="color:var(--text-dim)">${v.repair}</div>
+          <div class="risk-bar-value" style="color:var(--text-dim)"><number-flow data-nf-value="${v.repair}"></number-flow></div>
         </div>
         <div class="risk-bar-row">
           <div class="risk-bar-label">Fraud Exposure</div>
           <div class="risk-bar-track"><div class="risk-bar-fill fraud" style="width:0%" data-target="${v.fraud}"></div></div>
-          <div class="risk-bar-value" style="color:#9b59b6">${v.fraud}</div>
+          <div class="risk-bar-value" style="color:#9b59b6"><number-flow data-nf-value="${v.fraud}"></number-flow></div>
         </div>
       </div>
     </div>
 
     <div class="detail-stats">
-      <div class="detail-stat">
+      <div class="detail-stat spot">
         <div class="detail-stat-label">Theft Volume</div>
         <div class="detail-stat-value red" style="font-size:12px;line-height:1.3">${v.theftCount}</div>
         <div class="detail-stat-sub">${v.theftFreq}</div>
       </div>
-      <div class="detail-stat">
+      <div class="detail-stat spot">
         <div class="detail-stat-label">GTA Premium Range</div>
         <div class="detail-stat-value amber" style="font-size:12px;line-height:1.3">${v.avgPremium}</div>
         <div class="detail-stat-sub">Varies by postal code + driver</div>
       </div>
-      <div class="detail-stat">
+      <div class="detail-stat spot">
         <div class="detail-stat-label">Repair Cost Index</div>
         <div class="detail-stat-value" style="font-size:11px;line-height:1.4;color:var(--text-mid)">${v.repairCost}</div>
         <div class="detail-stat-sub">Driver: ${v.driverProfile}</div>
@@ -1056,6 +1175,8 @@ function selectVehicle(rank) {
       bar.style.width = bar.dataset.target + '%';
     });
   }, 50);
+
+  customElements.whenDefined('number-flow').then(() => initAllNumberFlows(content));
 
   document.getElementById('detail-panel').scrollTop = 0;
 }

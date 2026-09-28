@@ -6,6 +6,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
+<script type="module">
+  import 'https://esm.sh/number-flow';
+</script>
 <title>The Pity Timer Nobody Told You About: Aeroplan Loyalty Economics</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
 <style>
@@ -187,12 +190,75 @@
   .boot-error{ margin:14px 0; padding:15px 17px; border:1px solid var(--critical-dim); background:rgba(239,68,68,0.06); border-radius:var(--radius-lg); font-size:12.5px; color:var(--text-dim); }
   .boot-error b{ color:var(--critical); }
 
+  /* ===== MOTION: aurora glow, spotlight hover, stagger, click-spark, number-flow ===== */
+  .header{ position:relative; overflow:hidden; }
+  .header-glow{ position:absolute; inset:-40% -5% auto -5%; height:220px; pointer-events:none; z-index:0; }
+  .header-glow span{ position:absolute; width:260px; height:260px; border-radius:50%; filter:blur(60px); opacity:0.25; mix-blend-mode:screen; animation:auroraDrift 16s ease-in-out infinite alternate; }
+  .header-glow span:nth-child(1){ background:var(--critical); left:-40px; top:10px; }
+  .header-glow span:nth-child(2){ background:var(--blue); left:40%; top:-10px; animation-delay:-5s; }
+  .header-glow span:nth-child(3){ background:var(--good); right:-60px; top:0; animation-delay:-10s; }
+  .header > *:not(.header-glow){ position:relative; z-index:1; }
+  @keyframes auroraDrift{ 0%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(24px,12px) scale(1.1); } 100%{ transform:translate(-20px,6px) scale(0.95); } }
+  @media (prefers-reduced-motion: reduce){ .header-glow span{ animation:none; } }
+
+  .spot{ position:relative; }
+  .spot::after{
+    content:'';
+    position:absolute; inset:0;
+    border-radius:inherit;
+    background:radial-gradient(200px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.06), transparent 70%);
+    opacity:0;
+    transition:opacity .25s ease;
+    pointer-events:none;
+  }
+  .spot:hover::after{ opacity:1; }
+
+  @keyframes fadeInUp{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:translateY(0); } }
+  .kpi-top .cell{ animation:fadeInUp .5s ease both; }
+  .kpi-top .cell:nth-child(1){ animation-delay:.02s; }
+  .kpi-top .cell:nth-child(2){ animation-delay:.08s; }
+  .kpi-top .cell:nth-child(3){ animation-delay:.14s; }
+
+  .kpi-bottom .cell{ animation:fadeInUp .5s ease both; }
+  .kpi-bottom .cell:nth-child(1){ animation-delay:.02s; }
+  .kpi-bottom .cell:nth-child(2){ animation-delay:.07s; }
+  .kpi-bottom .cell:nth-child(3){ animation-delay:.12s; }
+  .kpi-bottom .cell:nth-child(4){ animation-delay:.17s; }
+  .kpi-bottom .cell:nth-child(5){ animation-delay:.22s; }
+
+  .tier-row{ animation:fadeInUp .4s ease both; }
+  .tier-row:nth-child(1){ animation-delay:.03s; }
+  .tier-row:nth-child(2){ animation-delay:.07s; }
+  .tier-row:nth-child(3){ animation-delay:.11s; }
+  .tier-row:nth-child(4){ animation-delay:.15s; }
+  .tier-row:nth-child(5){ animation-delay:.19s; }
+  .tier-row:nth-child(6){ animation-delay:.23s; }
+
+  .stat-box{ animation:fadeInUp .4s ease both; }
+  .stat-box:nth-child(1){ animation-delay:.04s; }
+  .stat-box:nth-child(2){ animation-delay:.09s; }
+  .stat-box:nth-child(3){ animation-delay:.14s; }
+  .stat-box:nth-child(4){ animation-delay:.19s; }
+
+  .spark-particle{
+    position:fixed;
+    width:5px; height:5px;
+    border-radius:50%;
+    pointer-events:none;
+    z-index:9999;
+    animation:sparkFly .5s ease-out forwards;
+  }
+  @keyframes sparkFly{ to{ transform:translate(var(--dx),var(--dy)) scale(0); opacity:0; } }
+
+  number-flow{ line-height:1; font-variant-numeric:tabular-nums; }
+
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <div class="header">
+    <div class="header-glow" aria-hidden="true"><span></span><span></span><span></span></div>
     <div class="title-block">
       <div class="eyebrow">Loyalty Economics · Aeroplan</div>
       <div style="font-family:var(--mono);font-size:10.5px;letter-spacing:0.1em;color:var(--blue);text-transform:uppercase;margin-bottom:6px">[ Live SQL Query Console ]</div>
@@ -217,18 +283,18 @@
   </div>
 
   <div class="kpi-top">
-    <div class="cell"><div class="num">~10%</div><div class="lbl">Air Canada: disclosed breakage rate</div></div>
-    <div class="cell"><div class="num">18mo</div><div class="lbl">Points expiry window (resumes Nov 30, 2026)</div></div>
-    <div class="cell"><div class="num">10M+</div><div class="lbl">Active Aeroplan members</div></div>
+    <div class="cell spot"><div class="num">~10%</div><div class="lbl">Air Canada: disclosed breakage rate</div></div>
+    <div class="cell spot"><div class="num">18mo</div><div class="lbl">Points expiry window (resumes Nov 30, 2026)</div></div>
+    <div class="cell spot"><div class="num">10M+</div><div class="lbl">Active Aeroplan members</div></div>
   </div>
   <div class="src-line">Sources: Air Canada Q2 2026 earnings call · Air Canada 2021 Consolidated Financial Statements · aircanada.com program notices · 2025 to 2026</div>
 
   <div class="kpi-bottom">
-    <div class="cell"><div class="eyebrow2">Elite tiers</div><div class="val">5</div><div class="sub">25K → Super&nbsp;Elite</div><div class="src">Aeroplan program terms, 2026</div></div>
-    <div class="cell"><div class="eyebrow2">Entry threshold</div><div class="val">25,000 SQC</div><div class="sub">≈ $6,250 Flex spend</div><div class="src">Milesopedia · FlyerTalk, 2026</div></div>
-    <div class="cell"><div class="eyebrow2">Redemption range</div><div class="val">0.7¢: 2.0¢</div><div class="sub">merchandise → premium partner</div><div class="src">Prince of Travel, Q2 2026</div></div>
-    <div class="cell"><div class="eyebrow2">Blended realized value</div><div class="val">~1.6¢/pt</div><div class="sub">across 50+ booked flights</div><div class="src">NerdWallet analysis, 2026</div></div>
-    <div class="cell"><div class="eyebrow2">Expiry resumes</div><div class="val">Nov 30 '26</div><div class="sub">ends 6-yr pandemic pause</div><div class="src">Air Canada notice, Nov 2025</div></div>
+    <div class="cell spot"><div class="eyebrow2">Elite tiers</div><div class="val"><number-flow data-nf-value="5"></number-flow></div><div class="sub">25K → Super&nbsp;Elite</div><div class="src">Aeroplan program terms, 2026</div></div>
+    <div class="cell spot"><div class="eyebrow2">Entry threshold</div><div class="val">25,000 SQC</div><div class="sub">≈ $6,250 Flex spend</div><div class="src">Milesopedia · FlyerTalk, 2026</div></div>
+    <div class="cell spot"><div class="eyebrow2">Redemption range</div><div class="val">0.7¢: 2.0¢</div><div class="sub">merchandise → premium partner</div><div class="src">Prince of Travel, Q2 2026</div></div>
+    <div class="cell spot"><div class="eyebrow2">Blended realized value</div><div class="val">~1.6¢/pt</div><div class="sub">across 50+ booked flights</div><div class="src">NerdWallet analysis, 2026</div></div>
+    <div class="cell spot"><div class="eyebrow2">Expiry resumes</div><div class="val">Nov 30 '26</div><div class="sub">ends 6-yr pandemic pause</div><div class="src">Air Canada notice, Nov 2025</div></div>
   </div>
 
   <div class="parallel">
@@ -560,6 +626,57 @@ function flagFor(pct){
 }
 
 // =================================================================
+// MOTION: click-spark, spotlight tracking, number-flow count-up
+// =================================================================
+function clickSpark(x, y, color){
+  const n = 10;
+  for(let i = 0; i < n; i++){
+    const angle = (Math.PI * 2 * i) / n;
+    const dist = 30 + Math.random() * 20;
+    const dx = Math.cos(angle) * dist;
+    const dy = Math.sin(angle) * dist;
+    const spark = document.createElement('span');
+    spark.className = 'spark-particle';
+    spark.style.left = x + 'px';
+    spark.style.top = y + 'px';
+    spark.style.background = color;
+    spark.style.setProperty('--dx', dx + 'px');
+    spark.style.setProperty('--dy', dy + 'px');
+    document.body.appendChild(spark);
+    spark.addEventListener('animationend', () => spark.remove());
+  }
+}
+
+document.addEventListener('mousemove', (e) => {
+  const el = e.target.closest('.spot');
+  if(!el) return;
+  const rect = el.getBoundingClientRect();
+  el.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+  el.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+});
+
+function initNumberFlow(el, value, opts){
+  if(!el) return;
+  opts = opts || {};
+  if(opts.format) el.format = opts.format;
+  if(opts.prefix) el.numberPrefix = opts.prefix;
+  if(opts.suffix) el.numberSuffix = opts.suffix;
+  el.update(value);
+}
+
+function initAllNumberFlows(root){
+  root = root || document;
+  root.querySelectorAll('number-flow[data-nf-value]').forEach(el => {
+    const value = parseFloat(el.dataset.nfValue);
+    let format;
+    try { format = el.dataset.nfFormat ? JSON.parse(el.dataset.nfFormat) : undefined; } catch(e){}
+    initNumberFlow(el, value, { format: format, prefix: el.dataset.nfPrefix, suffix: el.dataset.nfSuffix });
+  });
+}
+
+customElements.whenDefined('number-flow').then(() => initAllNumberFlows());
+
+// =================================================================
 // RENDER: Tier Explorer (query 1 drives the ranked list)
 // =================================================================
 const Q1 = `
@@ -606,16 +723,18 @@ function renderTierList(){
     const flag = flagFor(breakagePct);
     const count = countMap[tierKey] || 0;
     const row = document.createElement('div');
-    row.className = 'tier-row';
+    row.className = 'tier-row spot';
     row.dataset.tier = tierKey;
     row.innerHTML = `
       <div class="rank">${String(idx+1).padStart(2,'0')}</div>
       <div><div class="name">${tierDef.name}</div><div class="meta">${(count/N_MEMBERS*100).toFixed(1)}% of base · ${tierDef.spendNote}</div></div>
       <div class="tier-bar-wrap"><div class="tier-bar" style="width:${Math.min(100,breakagePct*7)}%; background:${flag.color}"></div></div>
-      <div class="tier-score"><div class="num" style="color:${flag.color}">${breakagePct.toFixed(1)}%</div><div class="flag" style="color:${flag.color}">${flag.label}</div></div>`;
-    row.addEventListener('click', () => selectTier(tierKey));
+      <div class="tier-score"><div class="num" style="color:${flag.color}"><number-flow data-nf-value="${breakagePct}" data-nf-format='{"maximumFractionDigits":1}' data-nf-suffix="%"></number-flow></div><div class="flag" style="color:${flag.color}">${flag.label}</div></div>`;
+    row.addEventListener('click', (e) => { clickSpark(e.clientX, e.clientY, flag.color); selectTier(tierKey); });
     listEl.appendChild(row);
   });
+
+  customElements.whenDefined('number-flow').then(() => initAllNumberFlows(listEl));
 
   if(rows.length){
     selectTier(selectedTier && tierStatsCache[selectedTier] ? selectedTier : rows[0][0]);
@@ -663,17 +782,17 @@ function selectTier(tierKey){
     <div class="detail-sub">${t.sqc.toLocaleString()} SQC threshold · ${t.spendNote}</div>
     <div class="detail-query-tag">⚡ live SQL · ${memberCount} members · ${cashRes.ms}ms</div>
 
-    <div class="detail-score-head">Risk factor breakdown, composite breakage ${breakagePct.toFixed(1)}%</div>
-    <div class="factor"><div class="factor-row"><span>Engagement Gap</span><b>${engagementGap}</b></div><div class="factor-track"><div class="factor-fill" style="width:${engagementGap}%; background:var(--critical)"></div></div></div>
-    <div class="factor"><div class="factor-row"><span>Member Fluency</span><b>${memberFluency}</b></div><div class="factor-track"><div class="factor-fill" style="width:${memberFluency}%; background:var(--blue)"></div></div></div>
-    <div class="factor"><div class="factor-row"><span>Value Left on Table</span><b>${valueLeftOnTable}</b></div><div class="factor-track"><div class="factor-fill" style="width:${valueLeftOnTable}%; background:var(--high)"></div></div></div>
-    <div class="factor"><div class="factor-row"><span>Obscured-Value Exposure</span><b>${obscuredExposure}</b></div><div class="factor-track"><div class="factor-fill" style="width:${obscuredExposure}%; background:var(--critical)"></div></div></div>
+    <div class="detail-score-head">Risk factor breakdown, composite breakage <number-flow data-nf-value="${breakagePct}" data-nf-format='{"maximumFractionDigits":1}' data-nf-suffix="%"></number-flow></div>
+    <div class="factor"><div class="factor-row"><span>Engagement Gap</span><b><number-flow data-nf-value="${engagementGap}"></number-flow></b></div><div class="factor-track"><div class="factor-fill" style="width:${engagementGap}%; background:var(--critical)"></div></div></div>
+    <div class="factor"><div class="factor-row"><span>Member Fluency</span><b><number-flow data-nf-value="${memberFluency}"></number-flow></b></div><div class="factor-track"><div class="factor-fill" style="width:${memberFluency}%; background:var(--blue)"></div></div></div>
+    <div class="factor"><div class="factor-row"><span>Value Left on Table</span><b><number-flow data-nf-value="${valueLeftOnTable}"></number-flow></b></div><div class="factor-track"><div class="factor-fill" style="width:${valueLeftOnTable}%; background:var(--high)"></div></div></div>
+    <div class="factor"><div class="factor-row"><span>Obscured-Value Exposure</span><b><number-flow data-nf-value="${obscuredExposure}"></number-flow></b></div><div class="factor-track"><div class="factor-fill" style="width:${obscuredExposure}%; background:var(--critical)"></div></div></div>
 
     <div class="stat-grid">
-      <div class="stat-box"><div class="l">Modeled members</div><div class="v">${memberCount.toLocaleString()}</div><div class="s">${(memberCount/N_MEMBERS*100).toFixed(1)}% of synthetic base</div></div>
-      <div class="stat-box"><div class="l">Points earned</div><div class="v">${earned.toLocaleString()}</div><div class="s">annualized, modeled</div></div>
-      <div class="stat-box"><div class="l">Points expired</div><div class="v">${expired.toLocaleString()}</div><div class="s">breakage volume</div></div>
-      <div class="stat-box"><div class="l">Redemption value</div><div class="v">$${Math.round(cashValue).toLocaleString()}</div><div class="s">at ${t.cpp}¢/pt modeled</div></div>
+      <div class="stat-box spot"><div class="l">Modeled members</div><div class="v"><number-flow data-nf-value="${memberCount}"></number-flow></div><div class="s">${(memberCount/N_MEMBERS*100).toFixed(1)}% of synthetic base</div></div>
+      <div class="stat-box spot"><div class="l">Points earned</div><div class="v"><number-flow data-nf-value="${earned}"></number-flow></div><div class="s">annualized, modeled</div></div>
+      <div class="stat-box spot"><div class="l">Points expired</div><div class="v"><number-flow data-nf-value="${expired}"></number-flow></div><div class="s">breakage volume</div></div>
+      <div class="stat-box spot"><div class="l">Redemption value</div><div class="v"><number-flow data-nf-value="${Math.round(cashValue)}" data-nf-prefix="$"></number-flow></div><div class="s">at ${t.cpp}¢/pt modeled</div></div>
     </div>
 
     <div class="why-head">Why breakage sits here</div>
@@ -685,6 +804,8 @@ function selectTier(tierKey){
 
     <div class="insight"><div class="l">Consumer Behaviour Insight</div><p>${INSIGHTS[tierKey]}</p></div>
   `;
+
+  customElements.whenDefined('number-flow').then(() => initAllNumberFlows(document.getElementById('detail-panel')));
 }
 
 // =================================================================
